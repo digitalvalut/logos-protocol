@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>LOGOS — The Unbreakable Truth Protocol</title>
+<meta name="description" content="Seal any file with mathematics. Works offline, on any phone or computer. No account, no server, no permission needed.">
+<meta name="theme-color" content="#0b0d10">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LOGOS">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
   :root{
     --bg:#0b0d10; --panel:#12161b; --panel2:#171d24; --line:#242c35;
@@ -80,7 +91,39 @@
     opacity:0;pointer-events:none;transition:opacity .2s}
   .toast.on{opacity:1}
   .hide{display:none!important}
-  @media(max-width:560px){h1{font-size:24px}.row{flex-direction:column;gap:2px}.row .k{min-width:0}}
+  .install{display:flex;align-items:center;gap:12px;background:var(--panel2);
+    border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:11px;
+    padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:var(--dim);line-height:1.55}
+  .install b{color:var(--ink);font-weight:600}
+  .install button{flex-shrink:0;background:var(--ink);color:#0b0d10;border:none;padding:9px 15px;
+    border-radius:8px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .install .x{background:none;color:var(--faint);padding:4px 8px;font-size:17px;font-weight:400}
+
+  /* ---- phones and small screens: everything reachable with one thumb ---- */
+  @media(max-width:640px){
+    .wrap{padding:16px 14px calc(56px + env(safe-area-inset-bottom))}
+    header{padding:calc(6px + env(safe-area-inset-top)) 0 4px}
+    h1{font-size:25px;letter-spacing:.18em}
+    .sub{font-size:13px}
+    .tagline{font-size:12px;margin-top:8px}
+    nav{gap:5px;margin:16px 0 14px}
+    nav button{padding:11px 15px;font-size:12.5px;letter-spacing:.06em;flex:1 1 auto;min-width:96px}
+    .drop{padding:34px 16px;border-radius:14px}
+    .drop .big{font-size:16.5px}
+    .card{padding:15px 15px;border-radius:12px}
+    .row{flex-direction:column;gap:2px;padding:9px 0}
+    .row .k{min-width:0;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em}
+    .row .v{font-size:11.5px}
+    .btns{gap:8px}
+    button.act{flex:1 1 100%;padding:14px 16px;font-size:14px}   /* full-width, thumb-sized */
+    input[type=text],textarea{font-size:16px;padding:12px}       /* 16px stops iOS zooming in */
+    .verdict .t{font-size:20px}
+    pre{font-size:11px}
+    .toast{bottom:calc(18px + env(safe-area-inset-bottom));font-size:12.5px}
+    .install{flex-wrap:wrap}
+    .install button{flex:1 1 auto;padding:11px 15px}
+  }
+  @media(max-width:640px) and (display-mode:standalone){ .install{display:none!important} }
 </style>
 </head>
 <body>
@@ -97,6 +140,12 @@
   <button id="tab-verify">VERIFY</button>
   <button id="tab-about">HOW IT WORKS</button>
 </nav>
+
+<div class="install hide" id="installBar">
+  <div style="flex:1 1 200px" id="installText"></div>
+  <button id="installBtn" class="hide">Install</button>
+  <button class="x" id="installClose" aria-label="close">×</button>
+</div>
 
 <!-- ============================ SEAL ============================ -->
 <section id="p-seal" class="panel on">
@@ -136,6 +185,7 @@
     <div class="card">
       <h3>Keep the proof</h3>
       <div class="btns">
+        <button class="act primary hide" id="btnShare">Share the seal</button>
         <button class="act primary" id="btnSeal">Download seal (.logos.json)</button>
         <button class="act" id="btnCert">Download certificate (.html)</button>
         <button class="act" id="btnCopy">Copy public attestation</button>
@@ -250,6 +300,24 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
   </ol>
   <p>An adversary would then have to erase every copy, in every country, and break Bitcoin, and break
     SHA-3. That is the point.</p>
+
+  <h2>On your phone, and on every computer</h2>
+  <p>LOGOS is one page that behaves like an app on every device, with nothing to buy and nothing to
+    sign up for:</p>
+  <ul>
+    <li><strong>iPhone and iPad</strong> — open this page in Safari, tap <strong>Share</strong>, then
+      <strong>Add to Home Screen</strong>. An icon appears like any other app.</li>
+    <li><strong>Android</strong> — open it in Chrome and tap <strong>Install</strong> when it offers,
+      or use the menu → <strong>Add to Home screen</strong>.</li>
+    <li><strong>Windows, Mac and Linux</strong> — click the install icon in the address bar of Chrome
+      or Edge, or simply save this page (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) and double-click
+      the saved file whenever you need it.</li>
+  </ul>
+  <p>Once installed, <strong>it works with no internet at all</strong>: on a plane, in a blackout, in a
+    country that has cut the network, or years from now if this website no longer exists. Only the
+    optional Bitcoin anchoring needs a connection, and only for a moment.</p>
+  <p>On a phone you also get <strong>Share the seal</strong>, which hands the proof directly to
+    WhatsApp, Signal, Telegram or email — because a proof matters once other people hold a copy.</p>
 
   <h2>Sovereignty</h2>
   <p>This page is one single file. It contains no libraries, no trackers, no analytics, no network calls
@@ -620,6 +688,19 @@ function fmtSize(n){
   while (v >= 1024 && i < 3){ v /= 1024; i++; }
   return v.toFixed(v < 10 ? 2 : 1) + ' ' + u[i] + ' (' + n.toLocaleString('en-US') + ' bytes)';
 }
+/* Progress line: percentage, speed, and how long is left — phones are slower,
+   so people need to know the wait is normal and finite. */
+function progressText(frac, bps, size){
+  let s = (frac * 100).toFixed(1) + '%';
+  if (bps > 0){
+    s += '   ·   ' + (bps / 1048576).toFixed(1) + ' MB/s';
+    const left = Math.round((size - frac * size) / bps);
+    if (left > 2){
+      s += '   ·   ' + (left >= 60 ? Math.floor(left/60) + 'm ' + (left%60) + 's' : left + 's') + ' left';
+    }
+  }
+  return s;
+}
 function download(name, text, mime){
   const blob = text instanceof Uint8Array ? new Blob([text], {type: mime||'application/octet-stream'})
                                           : new Blob([text], {type: (mime||'text/plain') + ';charset=utf-8'});
@@ -703,8 +784,7 @@ async function doSeal(file){
   try{
     hashes = await hashFile(file, (frac, bps) => {
       $('sealBar').style.width = (frac*100).toFixed(1) + '%';
-      $('sealStatus').textContent = (frac*100).toFixed(1) + '%' +
-        (bps > 0 ? '   ·   ' + (bps/1048576).toFixed(1) + ' MB/s' : '');
+      $('sealStatus').textContent = progressText(frac, bps, file.size);
     });
   }catch(err){
     $('sealProgress').classList.add('hide');
@@ -967,8 +1047,7 @@ async function tryVerify(){
   try{
     hashes = await hashFile(V_FILE, (frac, bps) => {
       $('verBar').style.width = (frac*100).toFixed(1) + '%';
-      $('verStatus').textContent = (frac*100).toFixed(1) + '%' +
-        (bps > 0 ? '   ·   ' + (bps/1048576).toFixed(1) + ' MB/s' : '');
+      $('verStatus').textContent = progressText(frac, bps, V_FILE.size);
     });
   }catch(e){
     $('verProgress').classList.add('hide'); toast('Could not read that file'); return;
@@ -1017,6 +1096,80 @@ async function tryVerify(){
   }
   $('verResult').innerHTML = html;
   $('verResult').classList.remove('hide');
+}
+
+/* ===================== phones: share, install, offline ===================== */
+
+/* On a phone, "download" is a dead end — sharing is how a proof reaches other
+   people. This hands the seal straight to WhatsApp, Signal, Telegram, email. */
+async function shareSeal(){
+  refreshSeal();
+  const name = safeName(CURRENT.file.name) + '.logos.json';
+  const text = attestationText(CURRENT);
+  try{
+    const file = new File([sealJSON()], name, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: 'LOGOS seal — ' + CURRENT.file.name, text });
+      return;
+    }
+  }catch(err){
+    if (err && err.name === 'AbortError') return;   // the person changed their mind
+  }
+  try{
+    if (navigator.share){
+      await navigator.share({ title: 'LOGOS seal — ' + CURRENT.file.name, text });
+      return;
+    }
+  }catch(err){
+    if (err && err.name === 'AbortError') return;
+  }
+  download(name, sealJSON(), 'application/json');
+  toast('Seal saved');
+}
+if (navigator.share){
+  $('btnShare').classList.remove('hide');
+  $('btnSeal').classList.remove('primary');
+  $('btnShare').addEventListener('click', shareSeal);
+}
+
+/* Install as a real app, so it survives without the internet and without this site. */
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                     window.navigator.standalone === true;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+let deferredPrompt = null;
+
+function showInstallBar(html, withButton){
+  if (isStandalone || localStorage.getItem('logos-install-dismissed') === '1') return;
+  $('installText').innerHTML = html;
+  $('installBtn').classList.toggle('hide', !withButton);
+  $('installBar').classList.remove('hide');
+}
+window.addEventListener('beforeinstallprompt', ev => {
+  ev.preventDefault();
+  deferredPrompt = ev;
+  showInstallBar('<b>Keep LOGOS on this device.</b> Install it and it works with no internet at all — forever, even if this website disappears.', true);
+});
+$('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  try{ await deferredPrompt.userChoice; }catch(e){}
+  deferredPrompt = null;
+  $('installBar').classList.add('hide');
+});
+$('installClose').addEventListener('click', () => {
+  $('installBar').classList.add('hide');
+  try{ localStorage.setItem('logos-install-dismissed', '1'); }catch(e){}
+});
+if (isIOS && !isStandalone && location.protocol.startsWith('http')){
+  showInstallBar('<b>Keep LOGOS on this iPhone or iPad.</b> Tap <b>Share</b> at the bottom of Safari, then <b>Add to Home Screen</b>. It then works with no internet at all — forever.', false);
+}
+
+/* Service worker: after one visit, the app belongs to the device, not to the network. */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
 }
 
 $('verNum').textContent = LOGOS_VERSION;

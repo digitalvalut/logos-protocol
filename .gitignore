@@ -4,3 +4,4 @@ verità.rtf
 *.certificate.html
 .DS_Store
 __pycache__/
+.claude/
