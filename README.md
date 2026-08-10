@@ -120,12 +120,65 @@ openssl dgst -sha3-512 evidence.mp4          # the SHA3-512 line
 
 If the numbers match the seal, the file is authentic. If a single bit changed, they cannot match.
 
+## Install it as an app — phone or computer
+
+LOGOS is one page that behaves like an app everywhere, with nothing to buy and nothing to sign up for.
+**Once installed it works with no internet at all** — on a plane, in a blackout, in a country that has
+cut the network, or years from now if this website no longer exists.
+
+- **iPhone / iPad** — open the page in Safari, tap **Share**, then **Add to Home Screen**.
+- **Android** — open it in Chrome and tap **Install**, or menu → **Add to Home screen**.
+- **Windows / Mac / Linux** — click the install icon in the address bar of Chrome or Edge, or simply
+  save the page (**Ctrl+S** / **⌘S**) and double-click it whenever you need it.
+
+On a phone you also get **Share the seal**, which hands the proof straight to WhatsApp, Signal,
+Telegram or email — because a proof counts once other people hold a copy.
+
+## It speaks 13 languages
+
+Arabic, Bengali, Chinese, English, French, German, Hindi, Indonesian, Italian, Portuguese, Russian,
+Spanish and Urdu — the whole interface, not just the buttons. The language is detected from your
+device and can be changed at any time. Arabic and Urdu are laid out right to left, while fingerprints
+and shell commands stay left to right so they remain readable.
+
+## Spread it — a proof matters when other people hold it
+
+The **SPREAD** tab sends your attestation in one tap to WhatsApp, Telegram, Signal, email, SMS, X,
+Bluesky or the system share sheet, and lists the official secure submission channels of investigative
+newsrooms and press-freedom organisations — SecureDrop's directory, ICIJ, OCCRP, Bellingcat, the
+Guardian, the New York Times, CPJ, RSF, Freedom of the Press Foundation and the ICC. Every one of those
+addresses was fetched and confirmed before being listed.
+
+Nothing passes through a LOGOS server, because there is none: these open the apps already on your
+device.
+
+## If I don't come back — the posthumous release
+
+For anyone going somewhere dangerous who holds something the world should know, but only if they do
+not come back.
+
+LOGOS encrypts the file on your device with **ChaCha20-Poly1305** and cuts the key into pieces with
+**Shamir's Secret Sharing**: you choose how many people hold a piece and how many of them must agree.
+With 3 of 5, two people can lose their piece — or be silenced — and the truth still comes out, while
+no two of them can open it behind your back.
+
+1. Lock the file. The locked `.logos-vault` file is unreadable: **publish it everywhere today**, and
+   it can never be taken out of the world.
+2. Give one piece of the key to each person you trust, in different countries, on different channels.
+3. Tell them plainly when to open it, and that it takes *k* of them together.
+
+**What cryptography cannot do:** no program publishes anything by itself after you are gone — a
+computer nobody switches on does nothing. What the mathematics guarantees is the hard part: nobody can
+read it early, no single person can betray it, and once the locked file is spread nobody can stop its
+release. The people you choose are the trigger. Choose them well.
+
 ## Files in this folder
 
 | File | What it is |
 |---|---|
 | `LOGOS.html` | The whole application, in one self-contained file. Double-click it. |
 | `logos.py` | The same protocol on the command line. Standard library only. |
+| `index.html`, `manifest.webmanifest`, `sw.js`, `icon-*.png` | What makes it installable and able to run with no internet. |
 | `README.md` | This document. |
 | `LICENSE` | MIT, © 2026 DigitalValut and the DigitalValut Team — free forever, for everyone, including commercially. |
 
@@ -174,9 +227,18 @@ gratuiti di OpenTimestamps: niente wallet, niente conto, niente pagamento, nessu
 viene inviata solo l'impronta di 32 byte. Da quel momento la data del tuo file è provata dalla rete
 Bitcoin e non più dal tuo orologio.
 
+LOGOS si **installa come app** su iPhone, Android, Windows, Mac e Linux, parla **13 lingue** e ha
+due strumenti in più: **DIFFONDI**, che manda l'attestazione in un tocco a WhatsApp, Signal,
+Telegram, email o ai canali sicuri ufficiali di redazioni e organizzazioni per i diritti umani
+(ogni indirizzo verificato uno per uno); e **SE NON TORNO**, il rilascio postumo — il file viene
+cifrato e la chiave tagliata in più pezzi, uno per ogni persona di cui ti fidi, in paesi diversi.
+Da soli non aprono nulla e nessuno di loro può tradirti; se abbastanza di loro decidono che il
+momento è arrivato, la verità si apre.
+
 Onestà sui limiti: il sigillo prova che il file **non è stato alterato**, non che il contenuto sia
-vero; e nessun software può rendere un file impossibile da cancellare — sopravvive perché ne
-esistono molte copie. Perciò: sigilla, ancora a Bitcoin, e **diffondi** l'attestazione a più
+vero; nessun software può rendere un file impossibile da cancellare — sopravvive perché ne
+esistono molte copie; e nessun programma pubblica qualcosa da solo dopo la tua morte: le persone
+che scegli sono l'innesco. Perciò: sigilla, ancora a Bitcoin, e **diffondi** l'attestazione a più
 persone in più paesi. Ogni copia è un testimone completo.
 
 Ideato e creato dal **Dr. Giuseppe Falsone** per **DigitalValut**.
