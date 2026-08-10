@@ -91,6 +91,17 @@
     opacity:0;pointer-events:none;transition:opacity .2s}
   .toast.on{opacity:1}
   .hide{display:none!important}
+  .langwrap{margin-top:12px}
+  #langSel{background:var(--panel);color:var(--dim);border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;font-family:inherit;font-size:12.5px;cursor:pointer;
+    max-width:100%}
+  #langSel:focus{outline:none;border-color:var(--accent)}
+  /* Arabic, Urdu, Persian read right to left — but fingerprints and commands never do. */
+  [dir=rtl] .row .v,[dir=rtl] code,[dir=rtl] pre,[dir=rtl] .status,[dir=rtl] .hash{
+    direction:ltr;text-align:left;unicode-bidi:isolate}
+  [dir=rtl] .warnbox{border-left:none;border-right:3px solid var(--warn);border-radius:9px 0 0 9px}
+  [dir=rtl] .install{border-left:1px solid var(--line);border-right:3px solid var(--accent)}
+  [dir=rtl] ul,[dir=rtl] ol{padding-right:22px;padding-left:0}
   .install{display:flex;align-items:center;gap:12px;background:var(--panel2);
     border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:11px;
     padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:var(--dim);line-height:1.55}
@@ -131,82 +142,83 @@
 
 <header>
   <h1>L O G O S</h1>
-  <div class="sub">The Unbreakable Truth Protocol</div>
-  <div class="tagline">Seal any file with mathematics. No account. No server. No permission needed.</div>
+  <div class="sub" data-i18n="sub">The Unbreakable Truth Protocol</div>
+  <div class="langwrap"><select id="langSel" aria-label="Language"></select></div>
+  <div class="tagline" data-i18n="tagline">Seal any file with mathematics. No account. No server. No permission needed.</div>
 </header>
 
 <nav>
-  <button id="tab-seal" class="on">SEAL</button>
-  <button id="tab-verify">VERIFY</button>
-  <button id="tab-about">HOW IT WORKS</button>
+  <button id="tab-seal" class="on" data-i18n="nav.seal">SEAL</button>
+  <button id="tab-verify" data-i18n="nav.verify">VERIFY</button>
+  <button id="tab-about" data-i18n="nav.about">HOW IT WORKS</button>
 </nav>
 
 <div class="install hide" id="installBar">
   <div style="flex:1 1 200px" id="installText"></div>
-  <button id="installBtn" class="hide">Install</button>
+  <button id="installBtn" class="hide" data-i18n="install.btn">Install</button>
   <button class="x" id="installClose" aria-label="close">×</button>
 </div>
 
 <!-- ============================ SEAL ============================ -->
 <section id="p-seal" class="panel on">
   <div class="drop" id="dropSeal">
-    <div class="big">Drop any file here</div>
-    <div class="small">document · photo · audio · video · anything</div>
-    <div class="tiny">Your file never leaves this device. Everything is computed locally, offline.</div>
+    <div class="big" data-i18n="drop.big">Drop any file here</div>
+    <div class="small" data-i18n="drop.small">document · photo · audio · video · anything</div>
+    <div class="tiny" data-i18n="drop.tiny">Your file never leaves this device. Everything is computed locally, offline.</div>
   </div>
   <input type="file" id="fileSeal" class="hide">
 
   <div id="sealProgress" class="card hide">
-    <h3>Sealing</h3>
+    <h3 data-i18n="prog.sealing">Sealing</h3>
     <div class="bar"><i id="sealBar"></i></div>
-    <div class="status" id="sealStatus">reading…</div>
+    <div class="status" id="sealStatus" data-i18n="prog.reading">reading…</div>
   </div>
 
   <div id="sealResult" class="hide">
     <div class="card">
-      <h3>Cryptographic Seal</h3>
-      <div class="row"><div class="k">File</div><div class="v" id="rName"></div></div>
-      <div class="row"><div class="k">Size</div><div class="v" id="rSize"></div></div>
+      <h3 data-i18n="seal.title">Cryptographic Seal</h3>
+      <div class="row"><div class="k" data-i18n="k.file">File</div><div class="v" id="rName"></div></div>
+      <div class="row"><div class="k" data-i18n="k.size">Size</div><div class="v" id="rSize"></div></div>
       <div class="row"><div class="k">SHA3-512</div><div class="v hash" id="rSha3"></div></div>
       <div class="row"><div class="k">SHA-256</div><div class="v hash" id="rSha2"></div></div>
-      <div class="row"><div class="k">Sealed at</div><div class="v" id="rTime"></div></div>
-      <div class="row"><div class="k">Seal ID</div><div class="v" id="rId"></div></div>
+      <div class="row"><div class="k" data-i18n="k.sealedAt">Sealed at</div><div class="v" id="rTime"></div></div>
+      <div class="row"><div class="k" data-i18n="k.sealId">Seal ID</div><div class="v" id="rId"></div></div>
     </div>
 
     <div class="card">
-      <h3>Optional — bind your identity and your words to this file</h3>
-      <label class="fld"><span>Author / who is sealing this</span>
-        <input type="text" id="fAuthor" placeholder="e.g. Jane Doe, Rome, Italy" autocomplete="off"></label>
-      <label class="fld"><span>Statement — what this file is, and why it matters</span>
-        <textarea id="fStatement" placeholder="This recording was made on… It shows…"></textarea></label>
-      <div class="note">Changing these fields changes the Seal ID. They become part of the sealed record.</div>
+      <h3 data-i18n="opt.title">Optional — bind your identity and your words to this file</h3>
+      <label class="fld"><span data-i18n="opt.author">Author / who is sealing this</span>
+        <input type="text" id="fAuthor" data-i18n-ph="opt.authorPh" placeholder="e.g. Jane Doe, Rome, Italy" autocomplete="off"></label>
+      <label class="fld"><span data-i18n="opt.stmt">Statement — what this file is, and why it matters</span>
+        <textarea id="fStatement" data-i18n-ph="opt.stmtPh" placeholder="This recording was made on… It shows…"></textarea></label>
+      <div class="note" data-i18n="opt.note">Changing these fields changes the Seal ID. They become part of the sealed record.</div>
     </div>
 
     <div class="card">
-      <h3>Keep the proof</h3>
+      <h3 data-i18n="keep.title">Keep the proof</h3>
       <div class="btns">
-        <button class="act primary hide" id="btnShare">Share the seal</button>
-        <button class="act primary" id="btnSeal">Download seal (.logos.json)</button>
-        <button class="act" id="btnCert">Download certificate (.html)</button>
-        <button class="act" id="btnCopy">Copy public attestation</button>
+        <button class="act primary hide" id="btnShare" data-i18n="btn.share">Share the seal</button>
+        <button class="act primary" id="btnSeal" data-i18n="btn.seal">Download seal (.logos.json)</button>
+        <button class="act" id="btnCert" data-i18n="btn.cert">Download certificate (.html)</button>
+        <button class="act" id="btnCopy" data-i18n="btn.copy">Copy public attestation</button>
       </div>
-      <div class="note">The seal is a few hundred bytes of plain text. Email it, post it, print it,
+      <div class="note" data-i18n="keep.note">The seal is a few hundred bytes of plain text. Email it, post it, print it,
         commit it to a repository, put it on ten USB sticks. Every copy is the original.
         Anyone with the file and the seal can verify it forever, offline.</div>
     </div>
 
     <div class="card">
-      <h3>Anchor to Bitcoin — independent proof of the date</h3>
-      <div class="note" style="margin-top:0">Your device clock proves nothing to a stranger: it can be
+      <h3 data-i18n="anchor.title">Anchor to Bitcoin — independent proof of the date</h3>
+      <div class="note" style="margin-top:0" data-i18n="anchor.note">Your device clock proves nothing to a stranger: it can be
         changed. Anchoring writes your fingerprint into the Bitcoin blockchain through free public
         calendar servers (<strong>no wallet, no account, no payment, no personal data</strong> — only the
         32-byte fingerprint of your file is ever sent). After that, the date of your file is proven by
         the whole Bitcoin network, not by you.</div>
       <div class="btns">
-        <button class="act primary" id="btnAnchor">Anchor now (needs internet, once)</button>
+        <button class="act primary" id="btnAnchor" data-i18n="btn.anchor">Anchor now (needs internet, once)</button>
       </div>
       <div class="status hide" id="anchorStatus" style="text-align:left;margin-top:12px"></div>
-      <div class="warnbox">Confirmation takes a few hours. Keep the downloaded <code>.ots</code> file next
+      <div class="warnbox" data-i18n="anchor.warn">Confirmation takes a few hours. Keep the downloaded <code>.ots</code> file next
         to your original file. After a day, upgrade and check it with the official free client:
         <code>pip install opentimestamps-client</code> then <code>ots upgrade file.ots</code> and
         <code>ots verify file.ots</code>. LOGOS never becomes necessary again — the proof is standard.</div>
@@ -217,34 +229,34 @@
 <!-- =========================== VERIFY =========================== -->
 <section id="p-verify" class="panel">
   <div class="drop" id="dropSealFile">
-    <div class="big">1 — Drop the seal</div>
-    <div class="small" id="sealLoaded">.logos.json or the certificate .html</div>
+    <div class="big" data-i18n="ver.step1">1 — Drop the seal</div>
+    <div class="small" id="sealLoaded" data-i18n="ver.step1sub">.logos.json or the certificate .html</div>
   </div>
   <div class="drop" id="dropOrig" style="margin-top:12px">
-    <div class="big">2 — Drop the original file</div>
-    <div class="small" id="origLoaded">the file that was sealed</div>
+    <div class="big" data-i18n="ver.step2">2 — Drop the original file</div>
+    <div class="small" id="origLoaded" data-i18n="ver.step2sub">the file that was sealed</div>
   </div>
   <input type="file" id="fileSealIn" class="hide">
   <input type="file" id="fileOrig" class="hide">
 
   <div id="verProgress" class="card hide">
-    <h3>Verifying</h3>
+    <h3 data-i18n="prog.verifying">Verifying</h3>
     <div class="bar"><i id="verBar"></i></div>
-    <div class="status" id="verStatus">reading…</div>
+    <div class="status" id="verStatus" data-i18n="prog.reading">reading…</div>
   </div>
 
   <div id="verResult" class="hide"></div>
 
   <div class="card">
-    <h3>Verify without LOGOS</h3>
-    <div class="note" style="margin-top:0">You never have to trust this program. Any computer on earth
+    <h3 data-i18n="ver.withoutTitle">Verify without LOGOS</h3>
+    <div class="note" style="margin-top:0" data-i18n="ver.without1">You never have to trust this program. Any computer on earth
       can check the same numbers with standard tools:</div>
     <pre>sha256sum  yourfile          # Linux
 shasum -a 256 yourfile        # macOS
 certutil -hashfile yourfile SHA256   # Windows
 
 openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
-    <div class="note">If the numbers match the seal, the file is bit-for-bit the one that was sealed.
+    <div class="note" data-i18n="ver.without2">If the numbers match the seal, the file is bit-for-bit the one that was sealed.
       If a single bit was changed, they cannot match.</div>
   </div>
 </section>
@@ -252,22 +264,22 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 <!-- =========================== ABOUT ============================ -->
 <section id="p-about" class="panel about">
   <div class="card">
-    <h3>The Manifesto</h3>
-    <p style="margin-top:0">Given to humanity so that anyone, anywhere, holds the inalienable power to
+    <h3 data-i18n="ab.manifestoT">The Manifesto</h3>
+    <p style="margin-top:0" data-i18n="ab.manifesto">Given to humanity so that anyone, anywhere, holds the inalienable power to
       speak, to bear witness, and to defend themselves against abuse. No server to shut down, no
       intermediary, no censorship. Pure mathematics and absolute freedom.</p>
   </div>
 
-  <h2>What LOGOS actually does</h2>
-  <p>It computes two cryptographic fingerprints of your file — <strong>SHA3-512</strong> and
+  <h2 data-i18n="ab.doesT">What LOGOS actually does</h2>
+  <p data-i18n="ab.does1">It computes two cryptographic fingerprints of your file — <strong>SHA3-512</strong> and
     <strong>SHA-256</strong> — entirely on your device. A fingerprint is a short number that could only
     have come from that exact file. Change one pixel, one syllable, one comma, and the fingerprint
     changes completely. Nobody in the world can build a different file with the same fingerprint.</p>
-  <p>It then binds that fingerprint to a moment in time and to your words, and hands you the result as a
+  <p data-i18n="ab.does2">It then binds that fingerprint to a moment in time and to your words, and hands you the result as a
     tiny text file — the <strong>seal</strong>. The seal is the proof. The file stays yours.</p>
 
-  <h2>What the seal proves</h2>
-  <ul>
+  <h2 data-i18n="ab.provesT">What the seal proves</h2>
+  <ul data-i18n="ab.proves">
     <li><strong>Integrity</strong> — that a file is exactly, bit for bit, the file that was sealed. This
       is absolute and permanent.</li>
     <li><strong>Priority</strong> — that the file already existed at a certain moment, provided the seal
@@ -275,9 +287,9 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
     <li><strong>Attribution</strong> — that a named person made a specific statement about that file.</li>
   </ul>
 
-  <h2>What it does not prove — read this</h2>
-  <p>Honesty is what makes a tool trustworthy, so here are its limits:</p>
-  <ul>
+  <h2 data-i18n="ab.limitsT">What it does not prove — read this</h2>
+  <p data-i18n="ab.limitsIntro">Honesty is what makes a tool trustworthy, so here are its limits:</p>
+  <ul data-i18n="ab.limits">
     <li>A seal <strong>does not prove the content is true</strong>. It proves the file has not been
       altered since it was sealed. A sealed lie is still a lie — but a sealed truth can no longer be
       quietly rewritten.</li>
@@ -290,21 +302,21 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
       substituted copy instantly detectable. Copying is the survival; mathematics is the proof.</li>
   </ul>
 
-  <h2>How to make a proof that cannot be erased</h2>
-  <ol>
+  <h2 data-i18n="ab.howT">How to make a proof that cannot be erased</h2>
+  <ol data-i18n="ab.how">
     <li>Seal the file. Keep the seal.</li>
     <li>Anchor it to Bitcoin (one click, free) — the date becomes independent of you.</li>
     <li>Send the attestation text to several people, in different countries, on different channels.
       Post it publicly. Each copy is a full witness.</li>
     <li>Keep copies of the original file in several places. The seal proves which copies are authentic.</li>
   </ol>
-  <p>An adversary would then have to erase every copy, in every country, and break Bitcoin, and break
+  <p data-i18n="ab.howEnd">An adversary would then have to erase every copy, in every country, and break Bitcoin, and break
     SHA-3. That is the point.</p>
 
-  <h2>On your phone, and on every computer</h2>
-  <p>LOGOS is one page that behaves like an app on every device, with nothing to buy and nothing to
+  <h2 data-i18n="ab.deviceT">On your phone, and on every computer</h2>
+  <p data-i18n="ab.deviceIntro">LOGOS is one page that behaves like an app on every device, with nothing to buy and nothing to
     sign up for:</p>
-  <ul>
+  <ul data-i18n="ab.device">
     <li><strong>iPhone and iPad</strong> — open this page in Safari, tap <strong>Share</strong>, then
       <strong>Add to Home Screen</strong>. An icon appears like any other app.</li>
     <li><strong>Android</strong> — open it in Chrome and tap <strong>Install</strong> when it offers,
@@ -313,23 +325,23 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
       or Edge, or simply save this page (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) and double-click
       the saved file whenever you need it.</li>
   </ul>
-  <p>Once installed, <strong>it works with no internet at all</strong>: on a plane, in a blackout, in a
+  <p data-i18n="ab.device2">Once installed, <strong>it works with no internet at all</strong>: on a plane, in a blackout, in a
     country that has cut the network, or years from now if this website no longer exists. Only the
     optional Bitcoin anchoring needs a connection, and only for a moment.</p>
-  <p>On a phone you also get <strong>Share the seal</strong>, which hands the proof directly to
+  <p data-i18n="ab.device3">On a phone you also get <strong>Share the seal</strong>, which hands the proof directly to
     WhatsApp, Signal, Telegram or email — because a proof matters once other people hold a copy.</p>
 
-  <h2>Sovereignty</h2>
-  <p>This page is one single file. It contains no libraries, no trackers, no analytics, no network calls
+  <h2 data-i18n="ab.sovT">Sovereignty</h2>
+  <p data-i18n="ab.sov">This page is one single file. It contains no libraries, no trackers, no analytics, no network calls
     of any kind — except the anchoring button, which you press yourself. Turn off your internet: it
     still works. Copy it to a USB stick, attach it to an email, host it anywhere: it still works. It is
     yours now, permanently, and it cannot be taken back.</p>
 
   <footer>
     <strong style="color:var(--dim)">LOGOS — The Unbreakable Truth Protocol</strong><br>
-    Created and conceived by Dr. Giuseppe Falsone for DigitalValut<br>
+    <span data-i18n="ab.credit">Created and conceived by Dr. Giuseppe Falsone for DigitalValut</span><br>
     © 2026 DigitalValut and the DigitalValut Team · MIT License · Open source<br>
-    <strong style="color:var(--dim)">Donated to humanity</strong><br>
+    <strong style="color:var(--dim)" data-i18n="ab.donated">Donated to humanity</strong><br>
     Version <span id="verNum"></span>
   </footer>
 </section>
@@ -339,7 +351,857 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.0";
+const LOGOS_VERSION = "1.1";
+
+/* ===== Languages. English lives in the page itself; these override it. ===== */
+const LANGS = [
+  ['en','English'], ['ar','العربية'], ['bn','বাংলা'], ['de','Deutsch'],
+  ['es','Español'], ['fr','Français'], ['hi','हिन्दी'], ['id','Bahasa Indonesia'],
+  ['it','Italiano'], ['pt','Português'], ['ru','Русский'], ['ur','اردو'], ['zh','中文']
+];
+let CURLANG = 'en';
+const I18N = {};
+Object.assign(I18N, {
+
+/* ------------------------------- 中文 (简体) ------------------------------- */
+zh: {
+"sub":"不可摧毁的真相协议",
+"tagline":"用数学为任何文件加封。无需账户，无需服务器，无需任何人的许可。",
+"nav.seal":"加封","nav.verify":"验证","nav.about":"工作原理","install.btn":"安装",
+"drop.big":"把任意文件拖到这里","drop.small":"文档 · 照片 · 录音 · 视频 · 任何格式",
+"drop.tiny":"文件永远不会离开你的设备。全部在本地离线计算。",
+"prog.sealing":"正在加封","prog.reading":"正在读取…","prog.verifying":"正在验证",
+"seal.title":"密码学封印","k.file":"文件","k.size":"大小","k.sealedAt":"加封时间","k.sealId":"封印编号",
+"k.author":"作者","k.statement":"声明","k.anchor":"比特币锚定",
+"opt.title":"可选 —— 把你的身份和你的话语绑定到这个文件",
+"opt.author":"作者 / 加封人","opt.stmt":"声明 —— 这是什么文件，为什么重要",
+"opt.authorPh":"例如：张伟，北京","opt.stmtPh":"这段录音摄于…… 它显示……",
+"opt.note":"修改这些内容会改变封印编号。它们将成为封存记录的一部分。",
+"keep.title":"保存证据",
+"btn.share":"分享封印","btn.seal":"下载封印 (.logos.json)","btn.cert":"下载证书 (.html)","btn.copy":"复制公开声明",
+"keep.note":"封印只有几百字节纯文本。用邮件发送、公开发布、打印出来、提交到代码仓库、存进十个U盘。每一份副本都是正本。任何拿到文件和封印的人，都能永远离线验证它。",
+"anchor.title":"锚定到比特币 —— 独立的日期证明",
+"anchor.note":"你设备上的时钟无法说服陌生人：时钟可以被修改。锚定会通过免费的公共日历服务器，把你的指纹写入比特币区块链（<strong>不需要钱包、账户、付款或任何个人资料</strong> —— 只发送文件的32字节指纹）。此后，你文件的日期由整个比特币网络证明，而不是由你自己证明。",
+"btn.anchor":"立即锚定（只需联网一次）",
+"anchor.warn":"确认需要几个小时。把下载的 <code>.ots</code> 文件与原始文件放在一起。一天后，用官方免费客户端升级并核验：<code>pip install opentimestamps-client</code>，然后 <code>ots upgrade file.ots</code> 和 <code>ots verify file.ots</code>。此后再也不需要 LOGOS —— 这个证明是通用标准。",
+"ver.step1":"1 —— 放入封印","ver.step1sub":".logos.json 文件或证书 .html",
+"ver.step2":"2 —— 放入原始文件","ver.step2sub":"被加封的那个文件",
+"ver.withoutTitle":"不用 LOGOS 也能验证",
+"ver.without1":"你不必信任这个程序。地球上任何一台电脑都能用标准工具核对同样的数字：",
+"ver.without2":"如果数字与封印一致，这个文件就与被加封时逐位相同。哪怕只改动一个比特，也绝不可能一致。",
+"ver.authentic":"真实无误","ver.authenticD":"这个文件与被加封的文件逐位完全相同。",
+"ver.altered":"已被篡改","ver.alteredD":"这不是被加封的那个文件。它被修改过，或者是另一个文件。",
+"ver.match":"一致","ver.different":"不一致","ver.notInSeal":"封印中没有",
+"ver.details":"详细信息","ver.sealIntegrity":"封印完整性",
+"ver.intact":"完好 —— 封印本身未被修改","ver.tampered":"被篡改 —— 封印文件在加封后被编辑过","ver.noSealId":"无封印编号",
+"ver.computed":"计算得出的 SHA-256","ver.sealedHash":"封印中的 SHA-256",
+"ver.passNote":"文件是真实的。请记住日期的含义：加封时间来自制作封印的设备。只有当封印在当时被公开或锚定，这个日期才获得独立证明。",
+"anchor.sending":"仅把32字节的指纹发送给多个独立的日历服务器…",
+"anchor.ok":"已接收指纹","anchor.fail":"无法连接",
+"anchor.none1":"无法连接任何日历服务器。请检查网络连接后重试。",
+"anchor.none2":"你的封印依然有效 —— 锚定只是额外增加一个独立日期。",
+"anchor.done":"已锚定到独立日历服务器数量：","anchor.saved":"证明文件 .ots 已下载 —— 请与原始文件放在一起：",
+"anchor.again":"请重新下载你的封印：它已记录锚定信息。",
+"btn.anchoring":"正在锚定…","btn.anchorRetry":"重试锚定","btn.anchored":"已锚定 ✓ —— 再次锚定",
+"install.generic":"<b>把 LOGOS 留在这台设备上。</b>安装后，它完全不需要网络也能运行 —— 永远有效，即使这个网站消失。",
+"install.ios":"<b>把 LOGOS 留在这台 iPhone 或 iPad 上。</b>点击 Safari 底部的<b>分享</b>，然后选择<b>添加到主屏幕</b>。此后完全不需要网络也能使用 —— 永远有效。",
+"toast.sealSaved":"封印已保存","toast.certSaved":"证书已保存","toast.copied":"声明已复制",
+"toast.copyFail":"复制失败 —— 请改为下载封印","toast.anchored":"已锚定到比特币",
+"toast.notSeal":"这不是 LOGOS 封印文件","toast.sealReadFail":"无法读取封印","toast.readFail":"无法读取该文件",
+"ab.manifestoT":"宣言",
+"ab.manifesto":"献给全人类，让任何人、在任何地方，都拥有不可剥夺的力量：发声、作证、并保护自己免受侵害。没有可以被关闭的服务器，没有中间人，没有审查。只有纯粹的数学与绝对的自由。",
+"ab.doesT":"LOGOS 究竟做了什么",
+"ab.does1":"它在你的设备上计算文件的两个密码学指纹 —— <strong>SHA3-512</strong> 和 <strong>SHA-256</strong>。指纹是一串只可能来自那个特定文件的数字。改动一个像素、一个音节、一个标点，指纹就会完全改变。世界上没有人能造出另一个文件拥有相同的指纹。",
+"ab.does2":"然后它把这个指纹与一个时刻、与你的话语绑定在一起，交给你一个很小的文本文件 —— <strong>封印</strong>。封印就是证据。文件始终属于你。",
+"ab.provesT":"封印能证明什么",
+"ab.proves":"<li><strong>完整性</strong> —— 某个文件与被加封时逐位完全相同。这是绝对且永久的。</li><li><strong>时间优先</strong> —— 文件在某一时刻已经存在，前提是封印在那时被公开或锚定。</li><li><strong>归属</strong> —— 某个具名的人对该文件作出了特定声明。</li>",
+"ab.limitsT":"它不能证明什么 —— 请务必读完",
+"ab.limitsIntro":"诚实才使工具值得信任，所以这里是它的界限：",
+"ab.limits":"<li>封印<strong>不能证明内容是真的</strong>。它证明文件自加封后未被改动。被加封的谎言依然是谎言 —— 但被加封的真相再也无法被悄悄改写。</li><li>来自你设备的时间戳是<strong>你自己的时钟</strong>，而时钟可以被修改。仅凭它无法说服任何人。当你把指纹公开的那一刻，它才成为真正的证据 —— 锚定到比特币、发布出去、用邮件寄出，或让任何其他人记录下来。</li><li>没有任何软件能让文件<strong>无法被删除</strong>。数据之所以存续，是因为副本存在于许多人手中。LOGOS 让证据小到可以传遍各处，并让任何被掉包的副本立刻暴露。复制才是存续，数学才是证据。</li>",
+"ab.howT":"如何造出无法被抹去的证据",
+"ab.how":"<li>为文件加封。保存好封印。</li><li>锚定到比特币（一次点击，免费）—— 日期从此不再取决于你。</li><li>把声明文本发给多个国家的多个人，通过不同渠道。公开发布。每一份副本都是完整的证人。</li><li>把原始文件的副本存放在多个地方。封印能证明哪些副本是真的。</li>",
+"ab.howEnd":"那么对手就必须抹去每个国家的每一份副本，并且攻破比特币，还要攻破 SHA-3。这正是关键所在。",
+"ab.deviceT":"在你的手机上，在每一台电脑上",
+"ab.deviceIntro":"LOGOS 只是一个页面，却能在任何设备上像应用一样运行，无需购买，也无需注册：",
+"ab.device":"<li><strong>iPhone 和 iPad</strong> —— 用 Safari 打开本页，点击<strong>分享</strong>，再点<strong>添加到主屏幕</strong>。</li><li><strong>安卓</strong> —— 用 Chrome 打开，出现提示时点击<strong>安装</strong>，或从菜单选择<strong>添加到主屏幕</strong>。</li><li><strong>Windows、Mac 和 Linux</strong> —— 点击 Chrome 或 Edge 地址栏中的安装图标，或直接保存本页（<strong>Ctrl+S</strong> / <strong>⌘S</strong>），需要时双击打开。</li>",
+"ab.device2":"安装之后，<strong>它完全不需要网络也能工作</strong>：在飞机上、在停电时、在网络被切断的国家，或者多年以后即使这个网站已不存在。只有可选的比特币锚定需要联网，而且只需片刻。",
+"ab.device3":"在手机上你还可以<strong>分享封印</strong>，把证据直接交给 WhatsApp、Signal、Telegram 或电子邮件 —— 因为证据只有在别人也持有副本时才真正有力量。",
+"ab.sovT":"主权",
+"ab.sov":"这个页面就是一个文件。它不含任何外部库、追踪器或统计代码，也不发出任何网络请求 —— 只有你亲手按下的锚定按钮除外。关掉网络：它照常工作。复制到U盘、附在邮件里、放到任何地方：它照常工作。它现在永远属于你，无法被收回。",
+"ab.credit":"由 Dr. Giuseppe Falsone 为 DigitalValut 构思与创造",
+"ab.donated":"献给全人类"
+},
+
+/* -------------------------------- Español -------------------------------- */
+es: {
+"sub":"El Protocolo de la Verdad Inatacable",
+"tagline":"Sella cualquier archivo con matemáticas. Sin cuenta. Sin servidor. Sin pedir permiso a nadie.",
+"nav.seal":"SELLAR","nav.verify":"VERIFICAR","nav.about":"CÓMO FUNCIONA","install.btn":"Instalar",
+"drop.big":"Arrastra aquí cualquier archivo","drop.small":"documento · foto · audio · vídeo · lo que sea",
+"drop.tiny":"Tu archivo nunca sale de este dispositivo. Todo se calcula localmente, sin conexión.",
+"prog.sealing":"Sellando","prog.reading":"leyendo…","prog.verifying":"Verificando",
+"seal.title":"Sello criptográfico","k.file":"Archivo","k.size":"Tamaño","k.sealedAt":"Sellado el","k.sealId":"ID del sello",
+"k.author":"Autor","k.statement":"Declaración","k.anchor":"Anclaje en Bitcoin",
+"opt.title":"Opcional — vincula tu identidad y tus palabras a este archivo",
+"opt.author":"Autor / quién sella esto","opt.stmt":"Declaración — qué es este archivo y por qué importa",
+"opt.authorPh":"p. ej. Ana García, Madrid, España","opt.stmtPh":"Esta grabación se hizo el… Muestra…",
+"opt.note":"Cambiar estos campos cambia el ID del sello. Pasan a formar parte del registro sellado.",
+"keep.title":"Conserva la prueba",
+"btn.share":"Compartir el sello","btn.seal":"Descargar sello (.logos.json)","btn.cert":"Descargar certificado (.html)","btn.copy":"Copiar atestación pública",
+"keep.note":"El sello son unos cientos de bytes de texto. Envíalo por correo, publícalo, imprímelo, guárdalo en diez memorias USB. Cada copia es el original. Cualquiera que tenga el archivo y el sello puede verificarlo para siempre, sin conexión.",
+"anchor.title":"Anclar a Bitcoin — prueba independiente de la fecha",
+"anchor.note":"El reloj de tu dispositivo no prueba nada ante un desconocido: se puede cambiar. El anclaje escribe tu huella en la cadena de bloques de Bitcoin a través de servidores de calendario públicos y gratuitos (<strong>sin monedero, sin cuenta, sin pago, sin datos personales</strong> — solo se envía la huella de 32 bytes de tu archivo). Después, la fecha de tu archivo la prueba toda la red Bitcoin, no tú.",
+"btn.anchor":"Anclar ahora (necesita internet, una vez)",
+"anchor.warn":"La confirmación tarda unas horas. Guarda el archivo <code>.ots</code> descargado junto a tu archivo original. Al día siguiente, actualízalo y compruébalo con el cliente oficial gratuito: <code>pip install opentimestamps-client</code>, luego <code>ots upgrade archivo.ots</code> y <code>ots verify archivo.ots</code>. LOGOS ya nunca vuelve a ser necesario: la prueba es un estándar abierto.",
+"ver.step1":"1 — Suelta el sello","ver.step1sub":".logos.json o el certificado .html",
+"ver.step2":"2 — Suelta el archivo original","ver.step2sub":"el archivo que fue sellado",
+"ver.withoutTitle":"Verificar sin LOGOS",
+"ver.without1":"Nunca tienes que confiar en este programa. Cualquier ordenador del mundo puede comprobar los mismos números con herramientas estándar:",
+"ver.without2":"Si los números coinciden con el sello, el archivo es bit a bit el que fue sellado. Si cambió un solo bit, es imposible que coincidan.",
+"ver.authentic":"AUTÉNTICO","ver.authenticD":"Este archivo es bit a bit el archivo que fue sellado.",
+"ver.altered":"ALTERADO","ver.alteredD":"Este NO es el archivo que fue sellado. Ha sido modificado, o es otro archivo.",
+"ver.match":"COINCIDE","ver.different":"DIFERENTE","ver.notInSeal":"no está en el sello",
+"ver.details":"Detalles","ver.sealIntegrity":"Integridad del sello",
+"ver.intact":"INTACTO — el sello mismo no fue editado","ver.tampered":"MANIPULADO — el sello fue editado después de sellar","ver.noSealId":"sin ID de sello",
+"ver.computed":"SHA-256 calculado","ver.sealedHash":"SHA-256 del sello",
+"ver.passNote":"El archivo es auténtico. Recuerda qué significa la fecha: la hora de sellado viene del dispositivo que hizo el sello. Solo queda probada de forma independiente si el sello se publicó o se ancló en ese momento.",
+"anchor.sending":"Enviando solo la huella de 32 bytes a servidores de calendario independientes…",
+"anchor.ok":"aceptó la huella","anchor.fail":"inaccesible",
+"anchor.none1":"No se pudo contactar con ningún calendario. Revisa tu conexión e inténtalo de nuevo.",
+"anchor.none2":"Tu sello sigue siendo válido — el anclaje solo añade una fecha independiente.",
+"anchor.done":"Anclado a calendarios independientes:","anchor.saved":"El archivo de prueba .ots se ha descargado — guárdalo junto a tu archivo:",
+"anchor.again":"Vuelve a descargar tu sello ahora: ya registra el anclaje.",
+"btn.anchoring":"Anclando…","btn.anchorRetry":"Reintentar el anclaje","btn.anchored":"Anclado ✓ — anclar de nuevo",
+"install.generic":"<b>Conserva LOGOS en este dispositivo.</b> Instálalo y funcionará sin internet en absoluto — para siempre, aunque este sitio desaparezca.",
+"install.ios":"<b>Conserva LOGOS en este iPhone o iPad.</b> Toca <b>Compartir</b> abajo en Safari y luego <b>Añadir a pantalla de inicio</b>. Después funciona sin internet en absoluto — para siempre.",
+"toast.sealSaved":"Sello guardado","toast.certSaved":"Certificado guardado","toast.copied":"Atestación copiada",
+"toast.copyFail":"No se pudo copiar — descarga el sello","toast.anchored":"Anclado a Bitcoin",
+"toast.notSeal":"Ese archivo no es un sello LOGOS","toast.sealReadFail":"No se pudo leer el sello","toast.readFail":"No se pudo leer ese archivo",
+"ab.manifestoT":"El Manifiesto",
+"ab.manifesto":"Entregado a la humanidad para que cualquiera, en cualquier lugar, tenga el poder inalienable de hablar, de dar testimonio y de defenderse de todo abuso. Ningún servidor que apagar, ningún intermediario, ninguna censura. Matemática pura y libertad absoluta.",
+"ab.doesT":"Qué hace LOGOS realmente",
+"ab.does1":"Calcula dos huellas criptográficas de tu archivo — <strong>SHA3-512</strong> y <strong>SHA-256</strong> — enteramente en tu dispositivo. Una huella es un número que solo pudo salir de ese archivo exacto. Cambia un píxel, una sílaba, una coma, y la huella cambia por completo. Nadie en el mundo puede construir otro archivo con la misma huella.",
+"ab.does2":"Luego vincula esa huella a un instante y a tus palabras, y te entrega el resultado como un pequeño archivo de texto: el <strong>sello</strong>. El sello es la prueba. El archivo sigue siendo tuyo.",
+"ab.provesT":"Qué prueba el sello",
+"ab.proves":"<li><strong>Integridad</strong> — que un archivo es exactamente, bit a bit, el que fue sellado. Esto es absoluto y permanente.</li><li><strong>Prioridad</strong> — que el archivo ya existía en cierto momento, siempre que el sello se hiciera público o se anclara entonces.</li><li><strong>Autoría</strong> — que una persona con nombre hizo una declaración concreta sobre ese archivo.</li>",
+"ab.limitsT":"Qué no prueba — lee esto",
+"ab.limitsIntro":"La honestidad es lo que hace fiable a una herramienta, así que estos son sus límites:",
+"ab.limits":"<li>Un sello <strong>no prueba que el contenido sea verdad</strong>. Prueba que el archivo no ha sido alterado desde que se selló. Una mentira sellada sigue siendo mentira — pero una verdad sellada ya no puede reescribirse en silencio.</li><li>La marca de tiempo de tu dispositivo es <strong>tu propio reloj</strong>, y un reloj se puede cambiar. Por sí sola no convence a nadie. Se convierte en prueba real en el momento en que haces pública la huella: anclándola a Bitcoin, publicándola, enviándola por correo o haciendo que otra persona la registre.</li><li>Ningún programa puede hacer que un archivo sea <strong>imposible de borrar</strong>. Los datos sobreviven porque existen copias en muchas manos. LOGOS hace la prueba tan pequeña que puede viajar a cualquier parte, y hace que cualquier copia sustituida se detecte al instante. Copiar es la supervivencia; la matemática es la prueba.</li>",
+"ab.howT":"Cómo hacer una prueba que no se pueda borrar",
+"ab.how":"<li>Sella el archivo. Guarda el sello.</li><li>Ánclalo a Bitcoin (un clic, gratis) — la fecha deja de depender de ti.</li><li>Envía el texto de atestación a varias personas, en distintos países, por distintos canales. Publícalo. Cada copia es un testigo completo.</li><li>Guarda copias del archivo original en varios lugares. El sello prueba qué copias son auténticas.</li>",
+"ab.howEnd":"Un adversario tendría entonces que borrar todas las copias, en todos los países, y romper Bitcoin, y romper SHA-3. De eso se trata.",
+"ab.deviceT":"En tu móvil y en cualquier ordenador",
+"ab.deviceIntro":"LOGOS es una sola página que se comporta como una app en cualquier dispositivo, sin comprar nada y sin registrarse:",
+"ab.device":"<li><strong>iPhone y iPad</strong> — abre esta página en Safari, toca <strong>Compartir</strong> y luego <strong>Añadir a pantalla de inicio</strong>.</li><li><strong>Android</strong> — ábrela en Chrome y toca <strong>Instalar</strong> cuando lo ofrezca, o usa el menú → <strong>Añadir a pantalla de inicio</strong>.</li><li><strong>Windows, Mac y Linux</strong> — pulsa el icono de instalar en la barra de direcciones de Chrome o Edge, o simplemente guarda esta página (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) y ábrela con doble clic cuando la necesites.</li>",
+"ab.device2":"Una vez instalada, <strong>funciona sin internet en absoluto</strong>: en un avión, en un apagón, en un país que ha cortado la red, o dentro de años aunque este sitio ya no exista. Solo el anclaje opcional a Bitcoin necesita conexión, y solo un instante.",
+"ab.device3":"En el móvil también tienes <strong>Compartir el sello</strong>, que entrega la prueba directamente a WhatsApp, Signal, Telegram o correo — porque una prueba cuenta cuando otras personas tienen una copia.",
+"ab.sovT":"Soberanía",
+"ab.sov":"Esta página es un único archivo. No contiene bibliotecas, ni rastreadores, ni analíticas, ni llamadas de red de ningún tipo — salvo el botón de anclaje, que pulsas tú. Apaga internet: sigue funcionando. Cópiala a un USB, adjúntala a un correo, alójala donde quieras: sigue funcionando. Ahora es tuya, para siempre, y no se puede retirar.",
+"ab.credit":"Creado y concebido por el Dr. Giuseppe Falsone para DigitalValut",
+"ab.donated":"Donado a la humanidad"
+},
+
+/* -------------------------------- Français -------------------------------- */
+fr: {
+"sub":"Le Protocole de la Vérité Inattaquable",
+"tagline":"Scellez n'importe quel fichier avec les mathématiques. Sans compte. Sans serveur. Sans demander la permission.",
+"nav.seal":"SCELLER","nav.verify":"VÉRIFIER","nav.about":"COMMENT ÇA MARCHE","install.btn":"Installer",
+"drop.big":"Déposez ici n'importe quel fichier","drop.small":"document · photo · audio · vidéo · tout format",
+"drop.tiny":"Votre fichier ne quitte jamais cet appareil. Tout est calculé localement, hors ligne.",
+"prog.sealing":"Scellement","prog.reading":"lecture…","prog.verifying":"Vérification",
+"seal.title":"Sceau cryptographique","k.file":"Fichier","k.size":"Taille","k.sealedAt":"Scellé le","k.sealId":"ID du sceau",
+"k.author":"Auteur","k.statement":"Déclaration","k.anchor":"Ancrage Bitcoin",
+"opt.title":"Facultatif — liez votre identité et vos mots à ce fichier",
+"opt.author":"Auteur / qui scelle ce fichier","opt.stmt":"Déclaration — ce qu'est ce fichier, et pourquoi il compte",
+"opt.authorPh":"ex. Marie Dupont, Paris, France","opt.stmtPh":"Cet enregistrement a été fait le… Il montre…",
+"opt.note":"Modifier ces champs change l'ID du sceau. Ils font partie de l'enregistrement scellé.",
+"keep.title":"Gardez la preuve",
+"btn.share":"Partager le sceau","btn.seal":"Télécharger le sceau (.logos.json)","btn.cert":"Télécharger le certificat (.html)","btn.copy":"Copier l'attestation publique",
+"keep.note":"Le sceau tient en quelques centaines d'octets de texte. Envoyez-le par courriel, publiez-le, imprimez-le, mettez-le sur dix clés USB. Chaque copie est l'original. Quiconque a le fichier et le sceau peut le vérifier pour toujours, hors ligne.",
+"anchor.title":"Ancrer à Bitcoin — preuve indépendante de la date",
+"anchor.note":"L'horloge de votre appareil ne prouve rien à un inconnu : elle peut être changée. L'ancrage inscrit votre empreinte dans la chaîne de blocs Bitcoin via des serveurs de calendrier publics et gratuits (<strong>sans portefeuille, sans compte, sans paiement, sans donnée personnelle</strong> — seule l'empreinte de 32 octets est envoyée). Ensuite, la date de votre fichier est prouvée par tout le réseau Bitcoin, et non par vous.",
+"btn.anchor":"Ancrer maintenant (internet requis, une fois)",
+"anchor.warn":"La confirmation prend quelques heures. Gardez le fichier <code>.ots</code> téléchargé à côté de votre fichier original. Le lendemain, mettez-le à jour et vérifiez-le avec le client officiel gratuit : <code>pip install opentimestamps-client</code>, puis <code>ots upgrade fichier.ots</code> et <code>ots verify fichier.ots</code>. LOGOS ne redevient jamais nécessaire : la preuve est un standard ouvert.",
+"ver.step1":"1 — Déposez le sceau","ver.step1sub":".logos.json ou le certificat .html",
+"ver.step2":"2 — Déposez le fichier original","ver.step2sub":"le fichier qui a été scellé",
+"ver.withoutTitle":"Vérifier sans LOGOS",
+"ver.without1":"Vous n'avez jamais à faire confiance à ce programme. N'importe quel ordinateur peut vérifier les mêmes nombres avec des outils standards :",
+"ver.without2":"Si les nombres correspondent au sceau, le fichier est bit pour bit celui qui a été scellé. Si un seul bit a changé, ils ne peuvent pas correspondre.",
+"ver.authentic":"AUTHENTIQUE","ver.authenticD":"Ce fichier est bit pour bit le fichier qui a été scellé.",
+"ver.altered":"ALTÉRÉ","ver.alteredD":"Ce n'est PAS le fichier qui a été scellé. Il a été modifié, ou c'est un autre fichier.",
+"ver.match":"IDENTIQUE","ver.different":"DIFFÉRENT","ver.notInSeal":"absent du sceau",
+"ver.details":"Détails","ver.sealIntegrity":"Intégrité du sceau",
+"ver.intact":"INTACT — le sceau lui-même n'a pas été modifié","ver.tampered":"FALSIFIÉ — le fichier du sceau a été modifié après le scellement","ver.noSealId":"pas d'ID de sceau",
+"ver.computed":"SHA-256 calculé","ver.sealedHash":"SHA-256 du sceau",
+"ver.passNote":"Le fichier est authentique. Souvenez-vous du sens de la date : l'heure de scellement vient de l'appareil qui a fait le sceau. Elle n'est prouvée de façon indépendante que si le sceau a été publié ou ancré à ce moment-là.",
+"anchor.sending":"Envoi de la seule empreinte de 32 octets à des serveurs de calendrier indépendants…",
+"anchor.ok":"a accepté l'empreinte","anchor.fail":"injoignable",
+"anchor.none1":"Aucun calendrier n'a pu être joint. Vérifiez votre connexion et réessayez.",
+"anchor.none2":"Votre sceau reste valide — l'ancrage ne fait qu'ajouter une date indépendante.",
+"anchor.done":"Ancré à des calendriers indépendants :","anchor.saved":"Le fichier de preuve .ots a été téléchargé — gardez-le près de votre fichier :",
+"anchor.again":"Retéléchargez votre sceau : il enregistre désormais l'ancrage.",
+"btn.anchoring":"Ancrage…","btn.anchorRetry":"Réessayer l'ancrage","btn.anchored":"Ancré ✓ — ancrer à nouveau",
+"install.generic":"<b>Gardez LOGOS sur cet appareil.</b> Installez-le et il fonctionne sans aucune connexion — pour toujours, même si ce site disparaît.",
+"install.ios":"<b>Gardez LOGOS sur cet iPhone ou iPad.</b> Touchez <b>Partager</b> en bas de Safari, puis <b>Sur l'écran d'accueil</b>. Il fonctionne ensuite sans aucune connexion — pour toujours.",
+"toast.sealSaved":"Sceau enregistré","toast.certSaved":"Certificat enregistré","toast.copied":"Attestation copiée",
+"toast.copyFail":"Copie impossible — téléchargez le sceau","toast.anchored":"Ancré à Bitcoin",
+"toast.notSeal":"Ce fichier n'est pas un sceau LOGOS","toast.sealReadFail":"Lecture du sceau impossible","toast.readFail":"Lecture du fichier impossible",
+"ab.manifestoT":"Le Manifeste",
+"ab.manifesto":"Donné à l'humanité pour que chacun, partout, détienne le pouvoir inaliénable de parler, de témoigner et de se défendre contre tout abus. Aucun serveur à éteindre, aucun intermédiaire, aucune censure. Mathématiques pures et liberté absolue.",
+"ab.doesT":"Ce que fait vraiment LOGOS",
+"ab.does1":"Il calcule deux empreintes cryptographiques de votre fichier — <strong>SHA3-512</strong> et <strong>SHA-256</strong> — entièrement sur votre appareil. Une empreinte est un nombre qui ne pouvait venir que de ce fichier exact. Changez un pixel, une syllabe, une virgule, et l'empreinte change du tout au tout. Personne au monde ne peut fabriquer un autre fichier ayant la même empreinte.",
+"ab.does2":"Il lie ensuite cette empreinte à un instant et à vos mots, et vous remet le résultat sous forme d'un minuscule fichier texte : le <strong>sceau</strong>. Le sceau est la preuve. Le fichier reste le vôtre.",
+"ab.provesT":"Ce que le sceau prouve",
+"ab.proves":"<li><strong>Intégrité</strong> — qu'un fichier est exactement, bit pour bit, celui qui a été scellé. C'est absolu et permanent.</li><li><strong>Antériorité</strong> — que le fichier existait déjà à un instant donné, à condition que le sceau ait été rendu public ou ancré à ce moment-là.</li><li><strong>Attribution</strong> — qu'une personne nommée a fait une déclaration précise sur ce fichier.</li>",
+"ab.limitsT":"Ce qu'il ne prouve pas — à lire",
+"ab.limitsIntro":"C'est l'honnêteté qui rend un outil digne de confiance ; voici donc ses limites :",
+"ab.limits":"<li>Un sceau <strong>ne prouve pas que le contenu est vrai</strong>. Il prouve que le fichier n'a pas été altéré depuis le scellement. Un mensonge scellé reste un mensonge — mais une vérité scellée ne peut plus être réécrite en silence.</li><li>L'horodatage pris sur votre appareil est <strong>votre propre horloge</strong>, et une horloge peut être changée. Seule, elle ne convainc personne. Elle devient une vraie preuve dès que vous rendez l'empreinte publique : en l'ancrant à Bitcoin, en la publiant, en l'envoyant, ou en la faisant enregistrer par quelqu'un d'autre.</li><li>Aucun logiciel ne peut rendre un fichier <strong>impossible à supprimer</strong>. Les données survivent parce que des copies existent en de nombreuses mains. LOGOS rend la preuve assez petite pour voyager partout, et rend toute copie substituée immédiatement détectable. Copier, c'est survivre ; les mathématiques, c'est la preuve.</li>",
+"ab.howT":"Comment faire une preuve qu'on ne peut pas effacer",
+"ab.how":"<li>Scellez le fichier. Gardez le sceau.</li><li>Ancrez-le à Bitcoin (un clic, gratuit) — la date ne dépend plus de vous.</li><li>Envoyez le texte d'attestation à plusieurs personnes, dans plusieurs pays, par plusieurs canaux. Publiez-le. Chaque copie est un témoin complet.</li><li>Gardez des copies du fichier original en plusieurs endroits. Le sceau prouve quelles copies sont authentiques.</li>",
+"ab.howEnd":"Un adversaire devrait alors effacer chaque copie, dans chaque pays, et casser Bitcoin, et casser SHA-3. C'est tout l'intérêt.",
+"ab.deviceT":"Sur votre téléphone et sur tout ordinateur",
+"ab.deviceIntro":"LOGOS est une seule page qui se comporte comme une application sur tout appareil, sans rien acheter ni s'inscrire :",
+"ab.device":"<li><strong>iPhone et iPad</strong> — ouvrez cette page dans Safari, touchez <strong>Partager</strong>, puis <strong>Sur l'écran d'accueil</strong>.</li><li><strong>Android</strong> — ouvrez-la dans Chrome et touchez <strong>Installer</strong> quand il le propose, ou menu → <strong>Ajouter à l'écran d'accueil</strong>.</li><li><strong>Windows, Mac et Linux</strong> — cliquez sur l'icône d'installation dans la barre d'adresse de Chrome ou Edge, ou enregistrez simplement cette page (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) et double-cliquez dessus au besoin.</li>",
+"ab.device2":"Une fois installé, <strong>il fonctionne sans aucune connexion</strong> : en avion, pendant une coupure, dans un pays qui a coupé le réseau, ou dans des années même si ce site n'existe plus. Seul l'ancrage Bitcoin, facultatif, demande une connexion, et seulement un instant.",
+"ab.device3":"Sur téléphone, vous avez aussi <strong>Partager le sceau</strong>, qui remet la preuve directement à WhatsApp, Signal, Telegram ou au courriel — car une preuve compte lorsque d'autres personnes en détiennent une copie.",
+"ab.sovT":"Souveraineté",
+"ab.sov":"Cette page est un seul fichier. Elle ne contient aucune bibliothèque, aucun traceur, aucune statistique, aucun appel réseau — sauf le bouton d'ancrage, que vous pressez vous-même. Coupez internet : elle fonctionne toujours. Copiez-la sur une clé USB, joignez-la à un courriel, hébergez-la n'importe où : elle fonctionne toujours. Elle est à vous, définitivement, et personne ne peut la reprendre.",
+"ab.credit":"Créé et conçu par le Dr Giuseppe Falsone pour DigitalValut",
+"ab.donated":"Donné à l'humanité"
+},
+
+/* ------------------------------- Português ------------------------------- */
+pt: {
+"sub":"O Protocolo da Verdade Inatacável",
+"tagline":"Sele qualquer arquivo com matemática. Sem conta. Sem servidor. Sem pedir permissão a ninguém.",
+"nav.seal":"SELAR","nav.verify":"VERIFICAR","nav.about":"COMO FUNCIONA","install.btn":"Instalar",
+"drop.big":"Solte aqui qualquer arquivo","drop.small":"documento · foto · áudio · vídeo · qualquer coisa",
+"drop.tiny":"Seu arquivo nunca sai deste dispositivo. Tudo é calculado localmente, sem internet.",
+"prog.sealing":"Selando","prog.reading":"lendo…","prog.verifying":"Verificando",
+"seal.title":"Selo criptográfico","k.file":"Arquivo","k.size":"Tamanho","k.sealedAt":"Selado em","k.sealId":"ID do selo",
+"k.author":"Autor","k.statement":"Declaração","k.anchor":"Ancoragem no Bitcoin",
+"opt.title":"Opcional — vincule sua identidade e suas palavras a este arquivo",
+"opt.author":"Autor / quem está selando","opt.stmt":"Declaração — o que é este arquivo e por que importa",
+"opt.authorPh":"ex.: Maria Silva, Lisboa, Portugal","opt.stmtPh":"Esta gravação foi feita em… Mostra…",
+"opt.note":"Alterar estes campos muda o ID do selo. Eles passam a fazer parte do registro selado.",
+"keep.title":"Guarde a prova",
+"btn.share":"Compartilhar o selo","btn.seal":"Baixar selo (.logos.json)","btn.cert":"Baixar certificado (.html)","btn.copy":"Copiar atestação pública",
+"keep.note":"O selo tem algumas centenas de bytes de texto. Envie por e-mail, publique, imprima, coloque em dez pendrives. Cada cópia é o original. Qualquer pessoa com o arquivo e o selo pode verificá-lo para sempre, sem internet.",
+"anchor.title":"Ancorar no Bitcoin — prova independente da data",
+"anchor.note":"O relógio do seu dispositivo não prova nada a um estranho: ele pode ser alterado. A ancoragem grava sua impressão digital na blockchain do Bitcoin através de servidores de calendário públicos e gratuitos (<strong>sem carteira, sem conta, sem pagamento, sem dados pessoais</strong> — só a impressão de 32 bytes é enviada). Depois disso, a data do seu arquivo é provada por toda a rede Bitcoin, não por você.",
+"btn.anchor":"Ancorar agora (precisa de internet, uma vez)",
+"anchor.warn":"A confirmação leva algumas horas. Guarde o arquivo <code>.ots</code> baixado junto ao arquivo original. No dia seguinte, atualize e confira com o cliente oficial gratuito: <code>pip install opentimestamps-client</code>, depois <code>ots upgrade arquivo.ots</code> e <code>ots verify arquivo.ots</code>. LOGOS nunca mais é necessário: a prova é um padrão aberto.",
+"ver.step1":"1 — Solte o selo","ver.step1sub":".logos.json ou o certificado .html",
+"ver.step2":"2 — Solte o arquivo original","ver.step2sub":"o arquivo que foi selado",
+"ver.withoutTitle":"Verificar sem o LOGOS",
+"ver.without1":"Você nunca precisa confiar neste programa. Qualquer computador do mundo pode conferir os mesmos números com ferramentas padrão:",
+"ver.without2":"Se os números baterem com o selo, o arquivo é bit a bit o que foi selado. Se um único bit mudou, é impossível baterem.",
+"ver.authentic":"AUTÊNTICO","ver.authenticD":"Este arquivo é bit a bit o arquivo que foi selado.",
+"ver.altered":"ALTERADO","ver.alteredD":"Este NÃO é o arquivo que foi selado. Foi modificado, ou é outro arquivo.",
+"ver.match":"CONFERE","ver.different":"DIFERENTE","ver.notInSeal":"não está no selo",
+"ver.details":"Detalhes","ver.sealIntegrity":"Integridade do selo",
+"ver.intact":"INTACTO — o próprio selo não foi editado","ver.tampered":"ADULTERADO — o arquivo do selo foi editado após a selagem","ver.noSealId":"sem ID de selo",
+"ver.computed":"SHA-256 calculado","ver.sealedHash":"SHA-256 do selo",
+"ver.passNote":"O arquivo é autêntico. Lembre-se do que a data significa: a hora da selagem vem do dispositivo que fez o selo. Ela só é provada de forma independente se o selo foi publicado ou ancorado naquele momento.",
+"anchor.sending":"Enviando apenas a impressão de 32 bytes a servidores de calendário independentes…",
+"anchor.ok":"aceitou a impressão","anchor.fail":"inacessível",
+"anchor.none1":"Nenhum calendário pôde ser contatado. Verifique sua conexão e tente de novo.",
+"anchor.none2":"Seu selo continua válido — a ancoragem só acrescenta uma data independente.",
+"anchor.done":"Ancorado em calendários independentes:","anchor.saved":"O arquivo de prova .ots foi baixado — guarde-o junto ao seu arquivo:",
+"anchor.again":"Baixe seu selo de novo: agora ele registra a ancoragem.",
+"btn.anchoring":"Ancorando…","btn.anchorRetry":"Tentar ancorar de novo","btn.anchored":"Ancorado ✓ — ancorar de novo",
+"install.generic":"<b>Mantenha o LOGOS neste dispositivo.</b> Instale e ele funciona sem internet nenhuma — para sempre, mesmo que este site desapareça.",
+"install.ios":"<b>Mantenha o LOGOS neste iPhone ou iPad.</b> Toque em <b>Compartilhar</b> na parte de baixo do Safari e depois em <b>Adicionar à Tela de Início</b>. Depois disso funciona sem internet nenhuma — para sempre.",
+"toast.sealSaved":"Selo salvo","toast.certSaved":"Certificado salvo","toast.copied":"Atestação copiada",
+"toast.copyFail":"Falha ao copiar — baixe o selo","toast.anchored":"Ancorado no Bitcoin",
+"toast.notSeal":"Esse arquivo não é um selo LOGOS","toast.sealReadFail":"Não foi possível ler o selo","toast.readFail":"Não foi possível ler esse arquivo",
+"ab.manifestoT":"O Manifesto",
+"ab.manifesto":"Doado à humanidade para que qualquer pessoa, em qualquer lugar, tenha o poder inalienável de falar, de testemunhar e de se defender de todo abuso. Nenhum servidor para desligar, nenhum intermediário, nenhuma censura. Matemática pura e liberdade absoluta.",
+"ab.doesT":"O que o LOGOS realmente faz",
+"ab.does1":"Ele calcula duas impressões digitais criptográficas do seu arquivo — <strong>SHA3-512</strong> e <strong>SHA-256</strong> — inteiramente no seu dispositivo. Uma impressão é um número que só poderia ter vindo daquele arquivo exato. Mude um pixel, uma sílaba, uma vírgula, e a impressão muda por completo. Ninguém no mundo consegue construir outro arquivo com a mesma impressão.",
+"ab.does2":"Depois ele liga essa impressão a um instante e às suas palavras, e entrega o resultado como um pequeno arquivo de texto: o <strong>selo</strong>. O selo é a prova. O arquivo continua sendo seu.",
+"ab.provesT":"O que o selo prova",
+"ab.proves":"<li><strong>Integridade</strong> — que um arquivo é exatamente, bit a bit, o que foi selado. Isso é absoluto e permanente.</li><li><strong>Anterioridade</strong> — que o arquivo já existia em certo momento, desde que o selo tenha sido tornado público ou ancorado naquele momento.</li><li><strong>Atribuição</strong> — que uma pessoa identificada fez uma declaração específica sobre aquele arquivo.</li>",
+"ab.limitsT":"O que ele não prova — leia isto",
+"ab.limitsIntro":"É a honestidade que torna uma ferramenta confiável, então estes são os seus limites:",
+"ab.limits":"<li>Um selo <strong>não prova que o conteúdo é verdadeiro</strong>. Prova que o arquivo não foi alterado desde que foi selado. Uma mentira selada continua sendo mentira — mas uma verdade selada não pode mais ser reescrita em silêncio.</li><li>O carimbo de tempo do seu dispositivo é <strong>o seu próprio relógio</strong>, e um relógio pode ser mudado. Sozinho, não convence ninguém. Ele vira prova real no momento em que você torna a impressão pública: ancorando no Bitcoin, publicando, enviando por e-mail, ou fazendo outra pessoa registrá-la.</li><li>Nenhum programa pode tornar um arquivo <strong>impossível de apagar</strong>. Os dados sobrevivem porque existem cópias em muitas mãos. O LOGOS torna a prova tão pequena que ela viaja para qualquer lugar, e faz qualquer cópia trocada ser detectada na hora. Copiar é a sobrevivência; a matemática é a prova.</li>",
+"ab.howT":"Como fazer uma prova que não pode ser apagada",
+"ab.how":"<li>Sele o arquivo. Guarde o selo.</li><li>Ancore no Bitcoin (um clique, grátis) — a data deixa de depender de você.</li><li>Envie o texto de atestação para várias pessoas, em países diferentes, por canais diferentes. Publique. Cada cópia é uma testemunha completa.</li><li>Guarde cópias do arquivo original em vários lugares. O selo prova quais cópias são autênticas.</li>",
+"ab.howEnd":"Um adversário teria então de apagar cada cópia, em cada país, e quebrar o Bitcoin, e quebrar o SHA-3. É esse o ponto.",
+"ab.deviceT":"No seu celular e em qualquer computador",
+"ab.deviceIntro":"O LOGOS é uma única página que se comporta como um aplicativo em qualquer aparelho, sem comprar nada e sem se cadastrar:",
+"ab.device":"<li><strong>iPhone e iPad</strong> — abra esta página no Safari, toque em <strong>Compartilhar</strong> e depois em <strong>Adicionar à Tela de Início</strong>.</li><li><strong>Android</strong> — abra no Chrome e toque em <strong>Instalar</strong> quando aparecer, ou use o menu → <strong>Adicionar à tela inicial</strong>.</li><li><strong>Windows, Mac e Linux</strong> — clique no ícone de instalar na barra de endereço do Chrome ou Edge, ou simplesmente salve esta página (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) e abra com dois cliques quando precisar.</li>",
+"ab.device2":"Depois de instalado, <strong>funciona sem internet nenhuma</strong>: num avião, num apagão, num país que cortou a rede, ou daqui a anos mesmo que este site não exista mais. Só a ancoragem opcional no Bitcoin precisa de conexão, e só por um instante.",
+"ab.device3":"No celular você também tem <strong>Compartilhar o selo</strong>, que entrega a prova direto ao WhatsApp, Signal, Telegram ou e-mail — porque uma prova vale quando outras pessoas têm uma cópia.",
+"ab.sovT":"Soberania",
+"ab.sov":"Esta página é um único arquivo. Não contém bibliotecas, rastreadores, análise de uso, nem chamadas de rede de qualquer tipo — exceto o botão de ancoragem, que você mesmo aperta. Desligue a internet: continua funcionando. Copie para um pendrive, anexe a um e-mail, hospede onde quiser: continua funcionando. Agora é sua, para sempre, e não pode ser tirada de volta.",
+"ab.credit":"Criado e concebido pelo Dr. Giuseppe Falsone para a DigitalValut",
+"ab.donated":"Doado à humanidade"
+}
+
+});
+
+Object.assign(I18N, {
+
+/* -------------------------------- العربية -------------------------------- */
+ar: {
+"sub":"بروتوكول الحقيقة التي لا تُمسّ",
+"tagline":"اختم أي ملف بالرياضيات. بلا حساب. بلا خادم. بلا إذن من أحد.",
+"nav.seal":"الختم","nav.verify":"التحقق","nav.about":"كيف يعمل","install.btn":"تثبيت",
+"drop.big":"أفلت أي ملف هنا","drop.small":"مستند · صورة · صوت · فيديو · أي شيء",
+"drop.tiny":"ملفك لا يغادر هذا الجهاز أبدًا. كل شيء يُحسب محليًا وبدون إنترنت.",
+"prog.sealing":"جارٍ الختم","prog.reading":"جارٍ القراءة…","prog.verifying":"جارٍ التحقق",
+"seal.title":"الختم التشفيري","k.file":"الملف","k.size":"الحجم","k.sealedAt":"وقت الختم","k.sealId":"معرّف الختم",
+"k.author":"المؤلف","k.statement":"الإفادة","k.anchor":"التثبيت في بيتكوين",
+"opt.title":"اختياري — اربط هويتك وكلماتك بهذا الملف",
+"opt.author":"المؤلف / من يقوم بالختم","opt.stmt":"الإفادة — ما هذا الملف، ولماذا يهم",
+"opt.authorPh":"مثال: سارة أحمد، القاهرة، مصر","opt.stmtPh":"سُجّل هذا في… ويُظهر…",
+"opt.note":"تغيير هذه الحقول يغيّر معرّف الختم. فهي تصبح جزءًا من السجل المختوم.",
+"keep.title":"احتفظ بالدليل",
+"btn.share":"مشاركة الختم","btn.seal":"تنزيل الختم (.logos.json)","btn.cert":"تنزيل الشهادة (.html)","btn.copy":"نسخ الإفادة العامة",
+"keep.note":"الختم بضع مئات من البايتات من النص فقط. أرسله بالبريد، انشره، اطبعه، ضعه على عشر ذاكرات USB. كل نسخة هي الأصل. أي شخص لديه الملف والختم يمكنه التحقق منه إلى الأبد وبدون إنترنت.",
+"anchor.title":"التثبيت في بيتكوين — إثبات مستقل للتاريخ",
+"anchor.note":"ساعة جهازك لا تثبت شيئًا لشخص غريب: يمكن تغييرها. التثبيت يكتب بصمة ملفك في سلسلة كتل بيتكوين عبر خوادم تقويم عامة ومجانية (<strong>بلا محفظة، بلا حساب، بلا دفع، بلا بيانات شخصية</strong> — تُرسل بصمة الملف البالغة 32 بايت فقط). بعد ذلك يصبح تاريخ ملفك مُثبتًا بشبكة بيتكوين بأكملها، لا بك أنت.",
+"btn.anchor":"ثبّت الآن (يحتاج إنترنت، مرة واحدة)",
+"anchor.warn":"يستغرق التأكيد بضع ساعات. احتفظ بملف <code>.ots</code> المنزَّل بجوار ملفك الأصلي. بعد يوم، حدّثه وتحقق منه بالعميل الرسمي المجاني: <code>pip install opentimestamps-client</code> ثم <code>ots upgrade file.ots</code> و<code>ots verify file.ots</code>. لن تحتاج LOGOS مرة أخرى أبدًا — فالدليل معيار مفتوح.",
+"ver.step1":"١ — أفلت الختم","ver.step1sub":"ملف ‎.logos.json‎ أو الشهادة ‎.html‎",
+"ver.step2":"٢ — أفلت الملف الأصلي","ver.step2sub":"الملف الذي جرى ختمه",
+"ver.withoutTitle":"التحقق بدون LOGOS",
+"ver.without1":"لست مضطرًا للوثوق بهذا البرنامج أبدًا. أي حاسوب على الأرض يمكنه فحص الأرقام نفسها بأدوات قياسية:",
+"ver.without2":"إذا طابقت الأرقام الختم، فالملف مطابق بتًّا ببت للملف المختوم. وإذا تغيّر بت واحد، يستحيل أن تتطابق.",
+"ver.authentic":"أصلي","ver.authenticD":"هذا الملف مطابق بتًّا ببت للملف الذي جرى ختمه.",
+"ver.altered":"مُعدَّل","ver.alteredD":"هذا ليس الملف الذي جرى ختمه. لقد عُدِّل، أو أنه ملف آخر.",
+"ver.match":"مطابق","ver.different":"مختلف","ver.notInSeal":"غير موجود في الختم",
+"ver.details":"التفاصيل","ver.sealIntegrity":"سلامة الختم",
+"ver.intact":"سليم — لم يُعدَّل الختم نفسه","ver.tampered":"مُتلاعَب به — عُدِّل ملف الختم بعد الختم","ver.noSealId":"لا يوجد معرّف ختم",
+"ver.computed":"‏SHA-256 المحسوب","ver.sealedHash":"‏SHA-256 في الختم",
+"ver.passNote":"الملف أصلي. تذكّر معنى التاريخ: وقت الختم مأخوذ من الجهاز الذي أنشأ الختم، ولا يصبح مُثبتًا بشكل مستقل إلا إذا نُشر الختم أو ثُبّت في بيتكوين في ذلك الوقت.",
+"anchor.sending":"يجري إرسال بصمة الـ32 بايت فقط إلى خوادم تقويم مستقلة…",
+"anchor.ok":"قَبِل البصمة","anchor.fail":"غير متاح",
+"anchor.none1":"تعذّر الوصول إلى أي خادم تقويم. تحقق من اتصالك وحاول مجددًا.",
+"anchor.none2":"ختمك ما زال صالحًا — التثبيت يضيف تاريخًا مستقلًا فقط.",
+"anchor.done":"تم التثبيت لدى خوادم تقويم مستقلة:","anchor.saved":"نُزِّل ملف الدليل ‎.ots‎ — احتفظ به بجوار ملفك:",
+"anchor.again":"نزّل ختمك من جديد الآن: صار يسجّل التثبيت.",
+"btn.anchoring":"جارٍ التثبيت…","btn.anchorRetry":"أعد محاولة التثبيت","btn.anchored":"مُثبَّت ✓ — ثبّت مرة أخرى",
+"install.generic":"<b>احتفظ بـ LOGOS على هذا الجهاز.</b> ثبّته فيعمل بدون إنترنت إطلاقًا — إلى الأبد، حتى لو اختفى هذا الموقع.",
+"install.ios":"<b>احتفظ بـ LOGOS على هذا الآيفون أو الآيباد.</b> اضغط <b>مشاركة</b> أسفل سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>. بعدها يعمل بدون إنترنت إطلاقًا — إلى الأبد.",
+"toast.sealSaved":"حُفظ الختم","toast.certSaved":"حُفظت الشهادة","toast.copied":"نُسخت الإفادة",
+"toast.copyFail":"تعذّر النسخ — نزّل الختم بدلًا من ذلك","toast.anchored":"تم التثبيت في بيتكوين",
+"toast.notSeal":"هذا الملف ليس ختم LOGOS","toast.sealReadFail":"تعذّرت قراءة الختم","toast.readFail":"تعذّرت قراءة هذا الملف",
+"ab.manifestoT":"البيان",
+"ab.manifesto":"مُهدى إلى البشرية ليملك كل إنسان، في أي مكان، القدرة التي لا تُسلب على أن يتكلم، وأن يشهد، وأن يدافع عن نفسه ضد كل تعسّف. لا خادم يُطفأ، ولا وسيط، ولا رقابة. رياضيات خالصة وحرية مطلقة.",
+"ab.doesT":"ماذا يفعل LOGOS فعلًا",
+"ab.does1":"يحسب بصمتين تشفيريتين لملفك — <strong>SHA3-512</strong> و<strong>SHA-256</strong> — على جهازك بالكامل. البصمة رقم لا يمكن أن يأتي إلا من ذلك الملف بعينه. غيّر بكسلًا واحدًا أو حرفًا أو فاصلة، فتتغير البصمة كليًا. لا أحد في العالم يستطيع بناء ملف مختلف له البصمة نفسها.",
+"ab.does2":"ثم يربط تلك البصمة بلحظة زمنية وبكلماتك، ويسلّمك النتيجة في ملف نصي صغير جدًا: <strong>الختم</strong>. الختم هو الدليل. أما الملف فيبقى لك.",
+"ab.provesT":"ماذا يثبت الختم",
+"ab.proves":"<li><strong>السلامة</strong> — أن الملف هو تمامًا، بتًّا ببت، الملف الذي جرى ختمه. هذا مطلق ودائم.</li><li><strong>الأسبقية</strong> — أن الملف كان موجودًا في لحظة معينة، بشرط أن يكون الختم قد نُشر أو ثُبّت في تلك اللحظة.</li><li><strong>النسبة</strong> — أن شخصًا محددًا بالاسم أدلى بإفادة معينة عن ذلك الملف.</li>",
+"ab.limitsT":"ما لا يثبته — اقرأ هذا",
+"ab.limitsIntro":"الصدق هو ما يجعل الأداة جديرة بالثقة، وهذه هي حدودها:",
+"ab.limits":"<li>الختم <strong>لا يثبت أن المحتوى صحيح</strong>. إنه يثبت أن الملف لم يُغيَّر منذ ختمه. الكذبة المختومة تبقى كذبة — لكن الحقيقة المختومة لم يعد ممكنًا إعادة كتابتها في صمت.</li><li>الطابع الزمني المأخوذ من جهازك هو <strong>ساعتك أنت</strong>، والساعة يمكن تغييرها. وحده لا يقنع أحدًا. يصير دليلًا حقيقيًا لحظة تجعل البصمة علنية: بتثبيتها في بيتكوين، أو نشرها، أو إرسالها، أو أن يسجّلها شخص آخر.</li><li>لا يستطيع أي برنامج أن يجعل ملفًا <strong>مستحيل الحذف</strong>. البيانات تبقى لأن نسخها موجودة بأيدٍ كثيرة. LOGOS يجعل الدليل صغيرًا بما يكفي ليسافر إلى أي مكان، ويجعل أي نسخة مستبدَلة تُكتشف فورًا. النسخ هو البقاء، والرياضيات هي الدليل.</li>",
+"ab.howT":"كيف تصنع دليلًا لا يمكن محوه",
+"ab.how":"<li>اختم الملف. احتفظ بالختم.</li><li>ثبّته في بيتكوين (نقرة واحدة، مجانًا) — فيصير التاريخ مستقلًا عنك.</li><li>أرسل نص الإفادة إلى عدة أشخاص، في بلدان مختلفة، عبر قنوات مختلفة. وانشره علنًا. كل نسخة شاهد كامل.</li><li>احتفظ بنسخ من الملف الأصلي في أماكن عدة. الختم يثبت أي النسخ أصلية.</li>",
+"ab.howEnd":"عندها سيضطر الخصم إلى محو كل نسخة، في كل بلد، وإلى كسر بيتكوين، وكسر SHA-3. وهذا هو المقصود.",
+"ab.deviceT":"على هاتفك، وعلى كل حاسوب",
+"ab.deviceIntro":"LOGOS صفحة واحدة تتصرف كتطبيق على أي جهاز، بلا شراء وبلا تسجيل:",
+"ab.device":"<li><strong>آيفون وآيباد</strong> — افتح هذه الصفحة في سفاري، اضغط <strong>مشاركة</strong> ثم <strong>إضافة إلى الشاشة الرئيسية</strong>.</li><li><strong>أندرويد</strong> — افتحها في كروم واضغط <strong>تثبيت</strong> عند ظهورها، أو من القائمة → <strong>إضافة إلى الشاشة الرئيسية</strong>.</li><li><strong>ويندوز وماك ولينكس</strong> — اضغط أيقونة التثبيت في شريط العنوان في كروم أو إيدج، أو احفظ الصفحة (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) وافتحها بنقرتين وقت الحاجة.</li>",
+"ab.device2":"بعد التثبيت <strong>يعمل بدون إنترنت إطلاقًا</strong>: في الطائرة، أو أثناء انقطاع الكهرباء، أو في بلد قطع الشبكة، أو بعد سنوات حتى لو لم يعد هذا الموقع موجودًا. التثبيت الاختياري في بيتكوين وحده يحتاج اتصالًا، وللحظة فقط.",
+"ab.device3":"على الهاتف لديك أيضًا <strong>مشاركة الختم</strong>، التي تسلّم الدليل مباشرة إلى واتساب أو سيغنال أو تيليغرام أو البريد — لأن الدليل يصبح ذا قيمة حين يحمل نسخته آخرون.",
+"ab.sovT":"السيادة",
+"ab.sov":"هذه الصفحة ملف واحد. لا تحتوي على مكتبات ولا متتبعات ولا تحليلات ولا أي اتصال بالشبكة — باستثناء زر التثبيت الذي تضغطه أنت. أطفئ الإنترنت: تظل تعمل. انسخها على USB، أرفقها ببريد، استضفها في أي مكان: تظل تعمل. صارت لك، دائمًا، ولا يمكن استردادها منك.",
+"ab.credit":"ابتكره وصمّمه الدكتور جوزيبي فالسوني لصالح DigitalValut",
+"ab.donated":"مُهدى إلى البشرية"
+},
+
+/* -------------------------------- हिन्दी -------------------------------- */
+hi: {
+"sub":"अखंड सत्य प्रोटोकॉल",
+"tagline":"किसी भी फ़ाइल पर गणित से मुहर लगाएँ। न खाता, न सर्वर, न किसी की अनुमति।",
+"nav.seal":"मुहर","nav.verify":"जाँच","nav.about":"यह कैसे काम करता है","install.btn":"इंस्टॉल करें",
+"drop.big":"कोई भी फ़ाइल यहाँ छोड़ें","drop.small":"दस्तावेज़ · तस्वीर · ऑडियो · वीडियो · कुछ भी",
+"drop.tiny":"आपकी फ़ाइल कभी इस उपकरण से बाहर नहीं जाती। सब कुछ यहीं, बिना इंटरनेट के गिना जाता है।",
+"prog.sealing":"मुहर लग रही है","prog.reading":"पढ़ा जा रहा है…","prog.verifying":"जाँच हो रही है",
+"seal.title":"क्रिप्टोग्राफ़िक मुहर","k.file":"फ़ाइल","k.size":"आकार","k.sealedAt":"मुहर का समय","k.sealId":"मुहर आईडी",
+"k.author":"लेखक","k.statement":"कथन","k.anchor":"बिटकॉइन लंगर",
+"opt.title":"वैकल्पिक — अपनी पहचान और अपने शब्द इस फ़ाइल से जोड़ें",
+"opt.author":"लेखक / मुहर लगाने वाला","opt.stmt":"कथन — यह फ़ाइल क्या है और क्यों मायने रखती है",
+"opt.authorPh":"जैसे: सुनीता शर्मा, दिल्ली, भारत","opt.stmtPh":"यह रिकॉर्डिंग … को की गई। इसमें दिखता है…",
+"opt.note":"इन खानों को बदलने से मुहर आईडी बदल जाती है। ये मुहरबंद रिकॉर्ड का हिस्सा बन जाते हैं।",
+"keep.title":"प्रमाण संभालकर रखें",
+"btn.share":"मुहर साझा करें","btn.seal":"मुहर डाउनलोड करें (.logos.json)","btn.cert":"प्रमाणपत्र डाउनलोड करें (.html)","btn.copy":"सार्वजनिक प्रमाणन कॉपी करें",
+"keep.note":"मुहर कुछ सौ बाइट का सादा पाठ है। इसे ईमेल करें, प्रकाशित करें, छापें, दस पेन ड्राइव में रखें। हर प्रति ही मूल है। जिसके पास फ़ाइल और मुहर है, वह इसे हमेशा, बिना इंटरनेट के जाँच सकता है।",
+"anchor.title":"बिटकॉइन से जोड़ें — तारीख़ का स्वतंत्र प्रमाण",
+"anchor.note":"आपके उपकरण की घड़ी किसी अजनबी के सामने कुछ साबित नहीं करती: उसे बदला जा सकता है। यह प्रक्रिया आपकी फ़िंगरप्रिंट को मुफ़्त सार्वजनिक कैलेंडर सर्वरों के ज़रिए बिटकॉइन ब्लॉकचेन में लिख देती है (<strong>न वॉलेट, न खाता, न भुगतान, न कोई निजी जानकारी</strong> — केवल 32 बाइट की फ़िंगरप्रिंट भेजी जाती है)। उसके बाद आपकी फ़ाइल की तारीख़ पूरा बिटकॉइन नेटवर्क प्रमाणित करता है, आप नहीं।",
+"btn.anchor":"अभी जोड़ें (एक बार इंटरनेट चाहिए)",
+"anchor.warn":"पुष्टि में कुछ घंटे लगते हैं। डाउनलोड की गई <code>.ots</code> फ़ाइल को अपनी मूल फ़ाइल के साथ रखें। एक दिन बाद आधिकारिक मुफ़्त क्लाइंट से जाँचें: <code>pip install opentimestamps-client</code>, फिर <code>ots upgrade file.ots</code> और <code>ots verify file.ots</code>। इसके बाद LOGOS की ज़रूरत कभी नहीं पड़ती — प्रमाण एक खुला मानक है।",
+"ver.step1":"1 — मुहर यहाँ छोड़ें","ver.step1sub":".logos.json या प्रमाणपत्र .html",
+"ver.step2":"2 — मूल फ़ाइल यहाँ छोड़ें","ver.step2sub":"वही फ़ाइल जिस पर मुहर लगी थी",
+"ver.withoutTitle":"LOGOS के बिना जाँच",
+"ver.without1":"आपको इस प्रोग्राम पर कभी भरोसा नहीं करना पड़ता। दुनिया का कोई भी कंप्यूटर वही अंक सामान्य औज़ारों से जाँच सकता है:",
+"ver.without2":"यदि अंक मुहर से मेल खाते हैं, तो फ़ाइल बिट-दर-बिट वही है जिस पर मुहर लगी थी। एक बिट भी बदला हो तो मेल असंभव है।",
+"ver.authentic":"प्रामाणिक","ver.authenticD":"यह फ़ाइल बिट-दर-बिट वही है जिस पर मुहर लगाई गई थी।",
+"ver.altered":"बदली गई","ver.alteredD":"यह वह फ़ाइल नहीं है जिस पर मुहर लगी थी। इसे बदला गया है, या यह दूसरी फ़ाइल है।",
+"ver.match":"मेल खाता है","ver.different":"भिन्न","ver.notInSeal":"मुहर में नहीं",
+"ver.details":"विवरण","ver.sealIntegrity":"मुहर की अखंडता",
+"ver.intact":"अक्षुण्ण — मुहर स्वयं बदली नहीं गई","ver.tampered":"छेड़छाड़ — मुहर फ़ाइल बाद में संपादित की गई","ver.noSealId":"कोई मुहर आईडी नहीं",
+"ver.computed":"गणना किया गया SHA-256","ver.sealedHash":"मुहर वाला SHA-256",
+"ver.passNote":"फ़ाइल प्रामाणिक है। तारीख़ का अर्थ याद रखें: मुहर का समय उसी उपकरण से आता है जिसने मुहर बनाई। यह तभी स्वतंत्र रूप से प्रमाणित होता है जब मुहर उसी समय प्रकाशित या बिटकॉइन से जोड़ी गई हो।",
+"anchor.sending":"केवल 32 बाइट की फ़िंगरप्रिंट स्वतंत्र कैलेंडर सर्वरों को भेजी जा रही है…",
+"anchor.ok":"ने फ़िंगरप्रिंट स्वीकार की","anchor.fail":"पहुँच से बाहर",
+"anchor.none1":"कोई कैलेंडर सर्वर उपलब्ध नहीं। अपना इंटरनेट जाँचें और फिर कोशिश करें।",
+"anchor.none2":"आपकी मुहर फिर भी वैध है — जोड़ना केवल एक स्वतंत्र तारीख़ जोड़ता है।",
+"anchor.done":"स्वतंत्र कैलेंडरों से जुड़ा:","anchor.saved":"प्रमाण फ़ाइल .ots डाउनलोड हो गई — इसे अपनी फ़ाइल के साथ रखें:",
+"anchor.again":"अब अपनी मुहर दोबारा डाउनलोड करें: उसमें यह जोड़ दर्ज है।",
+"btn.anchoring":"जोड़ा जा रहा है…","btn.anchorRetry":"फिर से जोड़ने की कोशिश करें","btn.anchored":"जुड़ गया ✓ — फिर से जोड़ें",
+"install.generic":"<b>LOGOS को इस उपकरण पर रखें।</b> इंस्टॉल करने पर यह बिना किसी इंटरनेट के चलता है — हमेशा, भले यह वेबसाइट न रहे।",
+"install.ios":"<b>LOGOS को इस iPhone या iPad पर रखें।</b> सफ़ारी में नीचे <b>Share</b> दबाएँ, फिर <b>Add to Home Screen</b>। उसके बाद यह बिना इंटरनेट के चलता है — हमेशा।",
+"toast.sealSaved":"मुहर सहेजी गई","toast.certSaved":"प्रमाणपत्र सहेजा गया","toast.copied":"प्रमाणन कॉपी हुआ",
+"toast.copyFail":"कॉपी विफल — मुहर डाउनलोड करें","toast.anchored":"बिटकॉइन से जुड़ गया",
+"toast.notSeal":"यह फ़ाइल LOGOS मुहर नहीं है","toast.sealReadFail":"मुहर पढ़ी नहीं जा सकी","toast.readFail":"यह फ़ाइल पढ़ी नहीं जा सकी",
+"ab.manifestoT":"घोषणापत्र",
+"ab.manifesto":"मानवता को समर्पित, ताकि कोई भी व्यक्ति, कहीं भी, बोलने, गवाही देने और हर अन्याय के विरुद्ध अपनी रक्षा करने की अविच्छेद्य शक्ति रखे। न बंद करने को कोई सर्वर, न कोई बिचौलिया, न कोई सेंसरशिप। शुद्ध गणित और पूर्ण स्वतंत्रता।",
+"ab.doesT":"LOGOS असल में क्या करता है",
+"ab.does1":"यह आपकी फ़ाइल की दो क्रिप्टोग्राफ़िक फ़िंगरप्रिंट — <strong>SHA3-512</strong> और <strong>SHA-256</strong> — पूरी तरह आपके ही उपकरण पर गिनता है। फ़िंगरप्रिंट एक ऐसी संख्या है जो केवल उसी फ़ाइल से आ सकती थी। एक पिक्सेल, एक अक्षर, एक अल्पविराम बदलिए और फ़िंगरप्रिंट पूरी तरह बदल जाती है। दुनिया में कोई भी अलग फ़ाइल उसी फ़िंगरप्रिंट के साथ नहीं बना सकता।",
+"ab.does2":"फिर यह उस फ़िंगरप्रिंट को एक क्षण और आपके शब्दों से जोड़कर एक छोटी-सी पाठ फ़ाइल देता है — <strong>मुहर</strong>। मुहर ही प्रमाण है। फ़ाइल आपकी ही रहती है।",
+"ab.provesT":"मुहर क्या साबित करती है",
+"ab.proves":"<li><strong>अखंडता</strong> — कि फ़ाइल ठीक वही है, बिट-दर-बिट, जिस पर मुहर लगी थी। यह पूर्ण और स्थायी है।</li><li><strong>पूर्वता</strong> — कि फ़ाइल एक निश्चित क्षण पर पहले से मौजूद थी, बशर्ते मुहर उसी समय प्रकाशित या जोड़ी गई हो।</li><li><strong>श्रेय</strong> — कि किसी नामित व्यक्ति ने उस फ़ाइल के बारे में एक विशेष कथन दिया।</li>",
+"ab.limitsT":"यह क्या साबित नहीं करता — यह ज़रूर पढ़ें",
+"ab.limitsIntro":"ईमानदारी ही किसी औज़ार को भरोसेमंद बनाती है, इसलिए ये हैं इसकी सीमाएँ:",
+"ab.limits":"<li>मुहर <strong>यह साबित नहीं करती कि सामग्री सच है</strong>। यह साबित करती है कि मुहर के बाद फ़ाइल बदली नहीं गई। मुहरबंद झूठ फिर भी झूठ है — पर मुहरबंद सच को अब चुपचाप दोबारा नहीं लिखा जा सकता।</li><li>आपके उपकरण का समय <strong>आपकी अपनी घड़ी</strong> है, और घड़ी बदली जा सकती है। अकेले वह किसी को नहीं मनाता। वह उसी क्षण असली प्रमाण बनता है जब आप फ़िंगरप्रिंट सार्वजनिक करते हैं — बिटकॉइन से जोड़कर, प्रकाशित करके, भेजकर, या किसी और से दर्ज करवाकर।</li><li>कोई भी सॉफ़्टवेयर किसी फ़ाइल को <strong>मिटाना असंभव</strong> नहीं बना सकता। डेटा इसलिए बचता है क्योंकि उसकी प्रतियाँ अनेक हाथों में होती हैं। LOGOS प्रमाण को इतना छोटा बना देता है कि वह कहीं भी पहुँच सके, और बदली हुई किसी भी प्रति को तुरंत पकड़वा देता है। प्रतिलिपि ही उत्तरजीविता है; गणित ही प्रमाण है।</li>",
+"ab.howT":"ऐसा प्रमाण कैसे बनाएँ जिसे मिटाया न जा सके",
+"ab.how":"<li>फ़ाइल पर मुहर लगाएँ। मुहर संभालें।</li><li>उसे बिटकॉइन से जोड़ें (एक क्लिक, मुफ़्त) — तारीख़ अब आप पर निर्भर नहीं रहती।</li><li>प्रमाणन पाठ अलग-अलग देशों में कई लोगों को, अलग-अलग माध्यमों से भेजें। सार्वजनिक करें। हर प्रति एक पूरा गवाह है।</li><li>मूल फ़ाइल की प्रतियाँ कई जगह रखें। मुहर बताती है कि कौन-सी प्रति असली है।</li>",
+"ab.howEnd":"तब विरोधी को हर देश की हर प्रति मिटानी पड़ेगी, और बिटकॉइन तोड़ना पड़ेगा, और SHA-3 भी। यही इसका सार है।",
+"ab.deviceT":"आपके फ़ोन पर, और हर कंप्यूटर पर",
+"ab.deviceIntro":"LOGOS एक ही पन्ना है जो हर उपकरण पर ऐप की तरह चलता है — कुछ ख़रीदना नहीं, कहीं पंजीकरण नहीं:",
+"ab.device":"<li><strong>iPhone और iPad</strong> — यह पन्ना सफ़ारी में खोलें, <strong>Share</strong> दबाएँ, फिर <strong>Add to Home Screen</strong>।</li><li><strong>Android</strong> — क्रोम में खोलें और <strong>Install</strong> दबाएँ, या मेन्यू → <strong>Add to Home screen</strong>।</li><li><strong>Windows, Mac और Linux</strong> — क्रोम या एज के पता-पट्टी में इंस्टॉल चिह्न दबाएँ, या यह पन्ना सहेज लें (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) और ज़रूरत पर खोल लें।</li>",
+"ab.device2":"इंस्टॉल के बाद <strong>यह बिना किसी इंटरनेट के चलता है</strong>: हवाई जहाज़ में, बिजली जाने पर, ऐसे देश में जहाँ नेटवर्क काट दिया गया हो, या वर्षों बाद भले यह वेबसाइट न रहे। केवल वैकल्पिक बिटकॉइन जोड़ने के लिए, वह भी एक पल के लिए, इंटरनेट चाहिए।",
+"ab.device3":"फ़ोन पर <strong>मुहर साझा करें</strong> भी मिलता है, जो प्रमाण सीधे WhatsApp, Signal, Telegram या ईमेल को सौंप देता है — क्योंकि प्रमाण तभी मायने रखता है जब उसकी प्रति दूसरों के पास हो।",
+"ab.sovT":"सार्वभौमिकता",
+"ab.sov":"यह पन्ना एक अकेली फ़ाइल है। इसमें कोई लाइब्रेरी, कोई ट्रैकर, कोई एनालिटिक्स, किसी तरह की कोई नेटवर्क कॉल नहीं — सिवाय उस जोड़ने वाले बटन के, जिसे आप स्वयं दबाते हैं। इंटरनेट बंद कर दीजिए: फिर भी चलता है। पेन ड्राइव में कॉपी कीजिए, ईमेल से भेजिए, कहीं भी रखिए: फिर भी चलता है। अब यह आपका है, हमेशा के लिए, और वापस नहीं लिया जा सकता।",
+"ab.credit":"डॉ. ज्यूज़ेप्पे फ़ालसोने द्वारा DigitalValut के लिए परिकल्पित और निर्मित",
+"ab.donated":"मानवता को समर्पित"
+},
+
+/* -------------------------------- বাংলা -------------------------------- */
+bn: {
+"sub":"অভেদ্য সত্যের প্রোটোকল",
+"tagline":"গণিত দিয়ে যেকোনো ফাইলে সিল দিন। অ্যাকাউন্ট নয়, সার্ভার নয়, কারও অনুমতি নয়।",
+"nav.seal":"সিল","nav.verify":"যাচাই","nav.about":"কীভাবে কাজ করে","install.btn":"ইনস্টল",
+"drop.big":"যেকোনো ফাইল এখানে ছাড়ুন","drop.small":"নথি · ছবি · অডিও · ভিডিও · যেকোনো কিছু",
+"drop.tiny":"আপনার ফাইল কখনও এই যন্ত্র ছেড়ে যায় না। সবকিছু এখানেই, ইন্টারনেট ছাড়া হিসাব হয়।",
+"prog.sealing":"সিল দেওয়া হচ্ছে","prog.reading":"পড়া হচ্ছে…","prog.verifying":"যাচাই হচ্ছে",
+"seal.title":"ক্রিপ্টোগ্রাফিক সিল","k.file":"ফাইল","k.size":"আকার","k.sealedAt":"সিলের সময়","k.sealId":"সিল আইডি",
+"k.author":"লেখক","k.statement":"বিবৃতি","k.anchor":"বিটকয়েন নোঙর",
+"opt.title":"ঐচ্ছিক — আপনার পরিচয় ও কথা এই ফাইলের সঙ্গে বাঁধুন",
+"opt.author":"লেখক / যিনি সিল দিচ্ছেন","opt.stmt":"বিবৃতি — এই ফাইলটি কী, আর কেন গুরুত্বপূর্ণ",
+"opt.authorPh":"যেমন: রুমা দাস, ঢাকা","opt.stmtPh":"এই রেকর্ডিং … তারিখে করা। এতে দেখা যায়…",
+"opt.note":"এই ঘরগুলো বদলালে সিল আইডি বদলে যায়। এগুলো সিলবদ্ধ নথির অংশ হয়ে যায়।",
+"keep.title":"প্রমাণ রেখে দিন",
+"btn.share":"সিল শেয়ার করুন","btn.seal":"সিল ডাউনলোড (.logos.json)","btn.cert":"সনদ ডাউনলোড (.html)","btn.copy":"প্রকাশ্য সাক্ষ্য কপি করুন",
+"keep.note":"সিল মাত্র কয়েকশো বাইটের সাধারণ লেখা। ইমেইল করুন, প্রকাশ করুন, ছাপুন, দশটা পেনড্রাইভে রাখুন। প্রতিটি কপিই আসল। যার কাছে ফাইল আর সিল আছে, সে চিরকাল, ইন্টারনেট ছাড়াই যাচাই করতে পারবে।",
+"anchor.title":"বিটকয়েনে নোঙর করুন — তারিখের স্বাধীন প্রমাণ",
+"anchor.note":"আপনার যন্ত্রের ঘড়ি অচেনা কারও কাছে কিছুই প্রমাণ করে না: ঘড়ি বদলানো যায়। নোঙর করলে আপনার আঙুলছাপ বিনামূল্যের সর্বজনীন ক্যালেন্ডার সার্ভারের মাধ্যমে বিটকয়েন ব্লকচেইনে লেখা হয় (<strong>ওয়ালেট নয়, অ্যাকাউন্ট নয়, টাকা নয়, কোনো ব্যক্তিগত তথ্য নয়</strong> — কেবল ৩২ বাইটের আঙুলছাপ পাঠানো হয়)। এরপর আপনার ফাইলের তারিখ প্রমাণ করে গোটা বিটকয়েন নেটওয়ার্ক, আপনি নন।",
+"btn.anchor":"এখনই নোঙর করুন (একবার ইন্টারনেট লাগবে)",
+"anchor.warn":"নিশ্চিত হতে কয়েক ঘণ্টা লাগে। ডাউনলোড করা <code>.ots</code> ফাইলটি মূল ফাইলের পাশে রাখুন। এক দিন পরে সরকারি বিনামূল্যের ক্লায়েন্ট দিয়ে দেখুন: <code>pip install opentimestamps-client</code>, তারপর <code>ots upgrade file.ots</code> ও <code>ots verify file.ots</code>। এরপর LOGOS আর কখনও দরকার হয় না — প্রমাণটি একটি উন্মুক্ত মান।",
+"ver.step1":"১ — সিলটি ছাড়ুন","ver.step1sub":".logos.json অথবা সনদ .html",
+"ver.step2":"২ — মূল ফাইলটি ছাড়ুন","ver.step2sub":"যে ফাইলে সিল দেওয়া হয়েছিল",
+"ver.withoutTitle":"LOGOS ছাড়াই যাচাই",
+"ver.without1":"এই প্রোগ্রামকে বিশ্বাস করার দরকার কখনও নেই। পৃথিবীর যেকোনো কম্পিউটার একই সংখ্যা সাধারণ সরঞ্জামে মিলিয়ে দেখতে পারে:",
+"ver.without2":"সংখ্যাগুলো সিলের সঙ্গে মিললে ফাইলটি বিট-বাই-বিট সেটিই যাতে সিল দেওয়া হয়েছিল। একটি বিটও বদলালে মেলা অসম্ভব।",
+"ver.authentic":"খাঁটি","ver.authenticD":"এই ফাইলটি বিট-বাই-বিট সেই ফাইল যাতে সিল দেওয়া হয়েছিল।",
+"ver.altered":"বদলানো হয়েছে","ver.alteredD":"এটি সেই ফাইল নয় যাতে সিল দেওয়া হয়েছিল। এটি বদলানো হয়েছে, অথবা এটি অন্য ফাইল।",
+"ver.match":"মিলেছে","ver.different":"ভিন্ন","ver.notInSeal":"সিলে নেই",
+"ver.details":"বিস্তারিত","ver.sealIntegrity":"সিলের অখণ্ডতা",
+"ver.intact":"অক্ষত — সিল নিজে বদলানো হয়নি","ver.tampered":"কারচুপি — সিল ফাইলটি পরে সম্পাদনা করা হয়েছে","ver.noSealId":"সিল আইডি নেই",
+"ver.computed":"গণনা করা SHA-256","ver.sealedHash":"সিলে থাকা SHA-256",
+"ver.passNote":"ফাইলটি খাঁটি। তারিখের অর্থ মনে রাখুন: সিলের সময় এসেছে সেই যন্ত্র থেকে যা সিলটি বানিয়েছে। সিলটি তখনই স্বাধীনভাবে প্রমাণিত, যদি সেই সময়েই তা প্রকাশ বা নোঙর করা হয়ে থাকে।",
+"anchor.sending":"কেবল ৩২ বাইটের আঙুলছাপ স্বাধীন ক্যালেন্ডার সার্ভারে পাঠানো হচ্ছে…",
+"anchor.ok":"আঙুলছাপ গ্রহণ করেছে","anchor.fail":"পৌঁছানো যায়নি",
+"anchor.none1":"কোনো ক্যালেন্ডার সার্ভারে পৌঁছানো গেল না। সংযোগ দেখে আবার চেষ্টা করুন।",
+"anchor.none2":"আপনার সিল এখনও বৈধ — নোঙর কেবল একটি স্বাধীন তারিখ যোগ করে।",
+"anchor.done":"স্বাধীন ক্যালেন্ডারে নোঙর হয়েছে:","anchor.saved":"প্রমাণ ফাইল .ots ডাউনলোড হয়েছে — আপনার ফাইলের পাশে রাখুন:",
+"anchor.again":"এখন আপনার সিলটি আবার ডাউনলোড করুন: তাতে নোঙরের তথ্য আছে।",
+"btn.anchoring":"নোঙর হচ্ছে…","btn.anchorRetry":"আবার নোঙরের চেষ্টা","btn.anchored":"নোঙর হয়েছে ✓ — আবার নোঙর",
+"install.generic":"<b>LOGOS এই যন্ত্রে রেখে দিন।</b> ইনস্টল করলে এটি ইন্টারনেট ছাড়াই চলে — চিরকাল, এই ওয়েবসাইট না থাকলেও।",
+"install.ios":"<b>LOGOS এই iPhone বা iPad-এ রাখুন।</b> সাফারির নিচে <b>Share</b> চাপুন, তারপর <b>Add to Home Screen</b>। এরপর ইন্টারনেট ছাড়াই চলে — চিরকাল।",
+"toast.sealSaved":"সিল সংরক্ষিত","toast.certSaved":"সনদ সংরক্ষিত","toast.copied":"সাক্ষ্য কপি হয়েছে",
+"toast.copyFail":"কপি ব্যর্থ — সিল ডাউনলোড করুন","toast.anchored":"বিটকয়েনে নোঙর হয়েছে",
+"toast.notSeal":"এই ফাইলটি LOGOS সিল নয়","toast.sealReadFail":"সিল পড়া গেল না","toast.readFail":"এই ফাইল পড়া গেল না",
+"ab.manifestoT":"ঘোষণাপত্র",
+"ab.manifesto":"মানবজাতিকে দান করা, যাতে যে কেউ, যেখানেই থাকুক, কথা বলার, সাক্ষ্য দেওয়ার এবং সব অন্যায়ের বিরুদ্ধে নিজেকে রক্ষা করার অলঙ্ঘনীয় ক্ষমতা রাখে। বন্ধ করার মতো কোনো সার্ভার নেই, কোনো মধ্যস্থ নেই, কোনো সেন্সরশিপ নেই। কেবল বিশুদ্ধ গণিত আর পূর্ণ স্বাধীনতা।",
+"ab.doesT":"LOGOS আসলে কী করে",
+"ab.does1":"এটি আপনার ফাইলের দুটি ক্রিপ্টোগ্রাফিক আঙুলছাপ — <strong>SHA3-512</strong> ও <strong>SHA-256</strong> — সম্পূর্ণ আপনার যন্ত্রেই গণনা করে। আঙুলছাপ এমন একটি সংখ্যা যা কেবল ওই নির্দিষ্ট ফাইল থেকেই আসতে পারত। একটি পিক্সেল, একটি অক্ষর, একটি কমা বদলান — আঙুলছাপ পুরো বদলে যায়। পৃথিবীর কেউ একই আঙুলছাপযুক্ত অন্য ফাইল বানাতে পারে না।",
+"ab.does2":"তারপর সেই আঙুলছাপকে একটি মুহূর্ত ও আপনার কথার সঙ্গে বেঁধে ফলাফল দেয় ছোট্ট একটি লেখা ফাইলে — <strong>সিল</strong>। সিলই প্রমাণ। ফাইল আপনারই থাকে।",
+"ab.provesT":"সিল কী প্রমাণ করে",
+"ab.proves":"<li><strong>অখণ্ডতা</strong> — ফাইলটি ঠিক সেটাই, বিট-বাই-বিট, যাতে সিল দেওয়া হয়েছিল। এটি চূড়ান্ত ও স্থায়ী।</li><li><strong>অগ্রাধিকার</strong> — ফাইলটি একটি নির্দিষ্ট মুহূর্তে আগে থেকেই ছিল, যদি সিলটি তখনই প্রকাশ বা নোঙর করা হয়ে থাকে।</li><li><strong>দায়ভার</strong> — নামসহ একজন ব্যক্তি ওই ফাইল সম্পর্কে একটি নির্দিষ্ট বিবৃতি দিয়েছেন।</li>",
+"ab.limitsT":"এটি কী প্রমাণ করে না — এটি পড়ুন",
+"ab.limitsIntro":"সততাই একটি সরঞ্জামকে বিশ্বাসযোগ্য করে, তাই এই হলো এর সীমা:",
+"ab.limits":"<li>সিল <strong>বিষয়বস্তু সত্য কিনা তা প্রমাণ করে না</strong>। এটি প্রমাণ করে সিলের পর ফাইল বদলানো হয়নি। সিলবদ্ধ মিথ্যা তবু মিথ্যাই — কিন্তু সিলবদ্ধ সত্যকে আর নীরবে বদলে ফেলা যায় না।</li><li>আপনার যন্ত্রের সময় <strong>আপনার নিজের ঘড়ি</strong>, আর ঘড়ি বদলানো যায়। একা তা কাউকে বোঝাতে পারে না। আঙুলছাপ প্রকাশ্য করার মুহূর্তেই তা সত্যিকারের প্রমাণ হয় — বিটকয়েনে নোঙর করে, প্রকাশ করে, পাঠিয়ে, বা অন্য কাউকে দিয়ে নথিভুক্ত করিয়ে।</li><li>কোনো সফটওয়্যার কোনো ফাইলকে <strong>মুছে ফেলা অসম্ভব</strong> করতে পারে না। তথ্য টিকে থাকে কারণ বহু হাতে তার কপি থাকে। LOGOS প্রমাণকে এত ছোট করে যে তা সর্বত্র যেতে পারে, আর বদলে দেওয়া যেকোনো কপি সঙ্গে সঙ্গে ধরা পড়ে। কপিই টিকে থাকা; গণিতই প্রমাণ।</li>",
+"ab.howT":"যে প্রমাণ মোছা যাবে না, তা কীভাবে বানাবেন",
+"ab.how":"<li>ফাইলে সিল দিন। সিল রেখে দিন।</li><li>বিটকয়েনে নোঙর করুন (এক ক্লিক, বিনামূল্যে) — তারিখ আর আপনার উপর নির্ভর করে না।</li><li>সাক্ষ্যের লেখাটি বিভিন্ন দেশে কয়েকজনকে, বিভিন্ন মাধ্যমে পাঠান। প্রকাশ্যে দিন। প্রতিটি কপিই পূর্ণ সাক্ষী।</li><li>মূল ফাইলের কপি কয়েক জায়গায় রাখুন। সিল বলে দেবে কোন কপি আসল।</li>",
+"ab.howEnd":"তখন প্রতিপক্ষকে প্রতিটি দেশের প্রতিটি কপি মুছতে হবে, বিটকয়েন ভাঙতে হবে, আর SHA-3-ও। এটাই মূল কথা।",
+"ab.deviceT":"আপনার ফোনে, আর প্রতিটি কম্পিউটারে",
+"ab.deviceIntro":"LOGOS একটিমাত্র পাতা, যা প্রতিটি যন্ত্রে অ্যাপের মতো চলে — কিছু কিনতে হয় না, নিবন্ধনও নয়:",
+"ab.device":"<li><strong>iPhone ও iPad</strong> — সাফারিতে এই পাতা খুলে <strong>Share</strong>, তারপর <strong>Add to Home Screen</strong>।</li><li><strong>Android</strong> — ক্রোমে খুলে <strong>Install</strong> চাপুন, বা মেনু → <strong>Add to Home screen</strong>।</li><li><strong>Windows, Mac ও Linux</strong> — ক্রোম বা এজের ঠিকানা বারে ইনস্টল আইকনে চাপুন, অথবা পাতাটি সংরক্ষণ করুন (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) এবং দরকারে খুলুন।</li>",
+"ab.device2":"ইনস্টলের পর <strong>এটি ইন্টারনেট ছাড়াই চলে</strong>: উড়োজাহাজে, বিদ্যুৎ না থাকলে, নেটওয়ার্ক বন্ধ করে দেওয়া দেশে, কিংবা বহু বছর পরে এই ওয়েবসাইট না থাকলেও। কেবল ঐচ্ছিক বিটকয়েন নোঙরের জন্য, তাও এক মুহূর্তের জন্য, সংযোগ লাগে।",
+"ab.device3":"ফোনে <strong>সিল শেয়ার করুন</strong>ও পাবেন, যা প্রমাণ সরাসরি WhatsApp, Signal, Telegram বা ইমেইলে দিয়ে দেয় — কারণ প্রমাণ তখনই কাজে লাগে যখন অন্যদের হাতেও তার কপি থাকে।",
+"ab.sovT":"সার্বভৌমত্ব",
+"ab.sov":"এই পাতাটি একটিমাত্র ফাইল। এতে কোনো লাইব্রেরি, ট্র্যাকার, অ্যানালিটিক্স বা কোনো ধরনের নেটওয়ার্ক কল নেই — কেবল নোঙরের বোতামটি ছাড়া, যা আপনি নিজে চাপেন। ইন্টারনেট বন্ধ করুন: তবু চলে। পেনড্রাইভে কপি করুন, ইমেইলে যুক্ত করুন, যেখানে খুশি রাখুন: তবু চলে। এটি এখন চিরকালের জন্য আপনার, আর ফিরিয়ে নেওয়া যাবে না।",
+"ab.credit":"ডঃ জুসেপ্পে ফালসোনে কর্তৃক DigitalValut-এর জন্য পরিকল্পিত ও নির্মিত",
+"ab.donated":"মানবজাতিকে উৎসর্গীকৃত"
+},
+
+/* --------------------------------- اردو --------------------------------- */
+ur: {
+"sub":"ناقابلِ شکست سچ کا پروٹوکول",
+"tagline":"کسی بھی فائل پر ریاضی کی مہر لگائیں۔ نہ اکاؤنٹ، نہ سرور، نہ کسی کی اجازت۔",
+"nav.seal":"مہر","nav.verify":"تصدیق","nav.about":"یہ کیسے کام کرتا ہے","install.btn":"انسٹال کریں",
+"drop.big":"کوئی بھی فائل یہاں چھوڑیں","drop.small":"دستاویز · تصویر · آڈیو · ویڈیو · کچھ بھی",
+"drop.tiny":"آپ کی فائل کبھی اس آلے سے باہر نہیں جاتی۔ سب کچھ یہیں، بغیر انٹرنیٹ کے شمار ہوتا ہے۔",
+"prog.sealing":"مہر لگ رہی ہے","prog.reading":"پڑھا جا رہا ہے…","prog.verifying":"تصدیق ہو رہی ہے",
+"seal.title":"خفیہ نگاری کی مہر","k.file":"فائل","k.size":"حجم","k.sealedAt":"وقتِ مہر","k.sealId":"مہر شناخت",
+"k.author":"مصنف","k.statement":"بیان","k.anchor":"بٹ کوائن لنگر",
+"opt.title":"اختیاری — اپنی شناخت اور اپنے الفاظ اس فائل سے جوڑیں",
+"opt.author":"مصنف / مہر لگانے والا","opt.stmt":"بیان — یہ فائل کیا ہے، اور کیوں اہم ہے",
+"opt.authorPh":"مثلاً: عائشہ خان، لاہور","opt.stmtPh":"یہ ریکارڈنگ … کو کی گئی۔ اس میں نظر آتا ہے…",
+"opt.note":"ان خانوں کو بدلنے سے مہر شناخت بدل جاتی ہے۔ یہ مہر شدہ ریکارڈ کا حصہ بن جاتے ہیں۔",
+"keep.title":"ثبوت سنبھال کر رکھیں",
+"btn.share":"مہر شیئر کریں","btn.seal":"مہر ڈاؤن لوڈ کریں (.logos.json)","btn.cert":"سرٹیفکیٹ ڈاؤن لوڈ کریں (.html)","btn.copy":"عوامی شہادت کاپی کریں",
+"keep.note":"مہر صرف چند سو بائٹ کا سادہ متن ہے۔ ای میل کریں، شائع کریں، چھاپیں، دس یو ایس بی میں رکھیں۔ ہر نقل ہی اصل ہے۔ جس کے پاس فائل اور مہر ہو، وہ ہمیشہ، بغیر انٹرنیٹ کے تصدیق کر سکتا ہے۔",
+"anchor.title":"بٹ کوائن سے جوڑیں — تاریخ کا آزاد ثبوت",
+"anchor.note":"آپ کے آلے کی گھڑی کسی اجنبی کے سامنے کچھ ثابت نہیں کرتی: اسے بدلا جا سکتا ہے۔ یہ عمل آپ کے فنگر پرنٹ کو مفت عوامی کیلنڈر سرورز کے ذریعے بٹ کوائن بلاک چین میں لکھ دیتا ہے (<strong>نہ والٹ، نہ اکاؤنٹ، نہ ادائیگی، نہ کوئی ذاتی معلومات</strong> — صرف 32 بائٹ کا فنگر پرنٹ بھیجا جاتا ہے)۔ اس کے بعد آپ کی فائل کی تاریخ پورا بٹ کوائن نیٹ ورک ثابت کرتا ہے، آپ نہیں۔",
+"btn.anchor":"ابھی جوڑیں (ایک بار انٹرنیٹ درکار)",
+"anchor.warn":"تصدیق میں چند گھنٹے لگتے ہیں۔ ڈاؤن لوڈ شدہ <code>.ots</code> فائل کو اصل فائل کے ساتھ رکھیں۔ ایک دن بعد سرکاری مفت کلائنٹ سے جانچیں: <code>pip install opentimestamps-client</code>، پھر <code>ots upgrade file.ots</code> اور <code>ots verify file.ots</code>۔ اس کے بعد LOGOS کی ضرورت کبھی نہیں رہتی — ثبوت ایک کھلا معیار ہے۔",
+"ver.step1":"۱ — مہر یہاں چھوڑیں","ver.step1sub":".logos.json یا سرٹیفکیٹ .html",
+"ver.step2":"۲ — اصل فائل یہاں چھوڑیں","ver.step2sub":"وہی فائل جس پر مہر لگی تھی",
+"ver.withoutTitle":"LOGOS کے بغیر تصدیق",
+"ver.without1":"آپ کو اس پروگرام پر بھروسہ کرنے کی ضرورت کبھی نہیں۔ دنیا کا کوئی بھی کمپیوٹر وہی اعداد عام اوزاروں سے جانچ سکتا ہے:",
+"ver.without2":"اگر اعداد مہر سے مل جائیں تو فائل بٹ در بٹ وہی ہے جس پر مہر لگی تھی۔ ایک بٹ بھی بدلا ہو تو ملنا ناممکن ہے۔",
+"ver.authentic":"اصلی","ver.authenticD":"یہ فائل بٹ در بٹ وہی ہے جس پر مہر لگائی گئی تھی۔",
+"ver.altered":"تبدیل شدہ","ver.alteredD":"یہ وہ فائل نہیں جس پر مہر لگی تھی۔ اسے بدلا گیا ہے، یا یہ کوئی اور فائل ہے۔",
+"ver.match":"مطابق","ver.different":"مختلف","ver.notInSeal":"مہر میں موجود نہیں",
+"ver.details":"تفصیلات","ver.sealIntegrity":"مہر کی سالمیت",
+"ver.intact":"سالم — مہر خود تبدیل نہیں ہوئی","ver.tampered":"چھیڑ چھاڑ — مہر فائل بعد میں بدلی گئی","ver.noSealId":"کوئی مہر شناخت نہیں",
+"ver.computed":"شمار شدہ SHA-256","ver.sealedHash":"مہر والا SHA-256",
+"ver.passNote":"فائل اصلی ہے۔ تاریخ کا مطلب یاد رکھیں: مہر کا وقت اسی آلے سے آیا ہے جس نے مہر بنائی۔ یہ تبھی آزادانہ طور پر ثابت ہوتا ہے جب مہر اسی وقت شائع یا بٹ کوائن سے جوڑی گئی ہو۔",
+"anchor.sending":"صرف 32 بائٹ کا فنگر پرنٹ آزاد کیلنڈر سرورز کو بھیجا جا رہا ہے…",
+"anchor.ok":"نے فنگر پرنٹ قبول کیا","anchor.fail":"دستیاب نہیں",
+"anchor.none1":"کوئی کیلنڈر سرور دستیاب نہیں۔ اپنا انٹرنیٹ دیکھ کر دوبارہ کوشش کریں۔",
+"anchor.none2":"آپ کی مہر بدستور درست ہے — جوڑنا صرف ایک آزاد تاریخ کا اضافہ کرتا ہے۔",
+"anchor.done":"آزاد کیلنڈرز سے جڑ گیا:","anchor.saved":"ثبوت فائل .ots ڈاؤن لوڈ ہو گئی — اسے اپنی فائل کے ساتھ رکھیں:",
+"anchor.again":"اب اپنی مہر دوبارہ ڈاؤن لوڈ کریں: اس میں یہ اندراج محفوظ ہے۔",
+"btn.anchoring":"جوڑا جا رہا ہے…","btn.anchorRetry":"دوبارہ جوڑنے کی کوشش","btn.anchored":"جڑ گیا ✓ — دوبارہ جوڑیں",
+"install.generic":"<b>LOGOS کو اسی آلے پر رکھیں۔</b> انسٹال کرنے پر یہ بغیر انٹرنیٹ کے چلتا ہے — ہمیشہ، چاہے یہ ویب سائٹ ختم ہو جائے۔",
+"install.ios":"<b>LOGOS کو اس آئی فون یا آئی پیڈ پر رکھیں۔</b> سفاری میں نیچے <b>Share</b> دبائیں، پھر <b>Add to Home Screen</b>۔ اس کے بعد یہ بغیر انٹرنیٹ کے چلتا ہے — ہمیشہ۔",
+"toast.sealSaved":"مہر محفوظ ہو گئی","toast.certSaved":"سرٹیفکیٹ محفوظ ہو گیا","toast.copied":"شہادت کاپی ہو گئی",
+"toast.copyFail":"کاپی ناکام — مہر ڈاؤن لوڈ کریں","toast.anchored":"بٹ کوائن سے جڑ گیا",
+"toast.notSeal":"یہ فائل LOGOS مہر نہیں ہے","toast.sealReadFail":"مہر پڑھی نہیں جا سکی","toast.readFail":"یہ فائل پڑھی نہیں جا سکی",
+"ab.manifestoT":"منشور",
+"ab.manifesto":"انسانیت کے نام، تاکہ ہر شخص، جہاں کہیں بھی ہو، بولنے، گواہی دینے اور ہر زیادتی کے خلاف اپنے دفاع کی ناقابلِ سلب طاقت رکھے۔ نہ بند کرنے کو کوئی سرور، نہ کوئی بیچ والا، نہ کوئی سنسرشپ۔ خالص ریاضی اور مکمل آزادی۔",
+"ab.doesT":"LOGOS اصل میں کیا کرتا ہے",
+"ab.does1":"یہ آپ کی فائل کے دو خفیہ نگاری فنگر پرنٹ — <strong>SHA3-512</strong> اور <strong>SHA-256</strong> — مکمل طور پر آپ ہی کے آلے پر شمار کرتا ہے۔ فنگر پرنٹ ایسا عدد ہے جو صرف اسی فائل سے نکل سکتا تھا۔ ایک پکسل، ایک حرف، ایک وقفہ بدلیں اور فنگر پرنٹ مکمل بدل جاتا ہے۔ دنیا میں کوئی بھی اسی فنگر پرنٹ والی مختلف فائل نہیں بنا سکتا۔",
+"ab.does2":"پھر یہ اس فنگر پرنٹ کو ایک لمحے اور آپ کے الفاظ سے جوڑ کر نتیجہ ایک ننھی سی متن فائل میں دیتا ہے — <strong>مہر</strong>۔ مہر ہی ثبوت ہے۔ فائل آپ ہی کی رہتی ہے۔",
+"ab.provesT":"مہر کیا ثابت کرتی ہے",
+"ab.proves":"<li><strong>سالمیت</strong> — کہ فائل بعینہٖ وہی ہے، بٹ در بٹ، جس پر مہر لگی تھی۔ یہ قطعی اور مستقل ہے۔</li><li><strong>تقدم</strong> — کہ فائل ایک خاص لمحے پر پہلے سے موجود تھی، بشرطیکہ مہر اسی وقت شائع یا جوڑی گئی ہو۔</li><li><strong>انتساب</strong> — کہ ایک نامزد شخص نے اس فائل کے بارے میں ایک مخصوص بیان دیا۔</li>",
+"ab.limitsT":"یہ کیا ثابت نہیں کرتا — یہ ضرور پڑھیں",
+"ab.limitsIntro":"دیانت ہی کسی اوزار کو قابلِ اعتماد بناتی ہے، سو یہ ہیں اس کی حدود:",
+"ab.limits":"<li>مہر <strong>یہ ثابت نہیں کرتی کہ مواد سچ ہے</strong>۔ یہ ثابت کرتی ہے کہ مہر کے بعد فائل بدلی نہیں گئی۔ مہر شدہ جھوٹ پھر بھی جھوٹ ہے — مگر مہر شدہ سچ کو اب خاموشی سے دوبارہ نہیں لکھا جا سکتا۔</li><li>آپ کے آلے کا وقت <strong>آپ کی اپنی گھڑی</strong> ہے، اور گھڑی بدلی جا سکتی ہے۔ تنہا یہ کسی کو قائل نہیں کرتا۔ یہ اسی لمحے حقیقی ثبوت بنتا ہے جب آپ فنگر پرنٹ عام کر دیں — بٹ کوائن سے جوڑ کر، شائع کر کے، بھیج کر، یا کسی اور سے ریکارڈ کروا کر۔</li><li>کوئی سافٹ ویئر کسی فائل کو <strong>مٹانا ناممکن</strong> نہیں بنا سکتا۔ ڈیٹا اس لیے بچتا ہے کہ اس کی نقلیں بہت سے ہاتھوں میں ہوتی ہیں۔ LOGOS ثبوت کو اتنا چھوٹا کر دیتا ہے کہ وہ ہر جگہ پہنچ سکے، اور بدلی ہوئی ہر نقل فوراً پکڑی جائے۔ نقل ہی بقا ہے؛ ریاضی ہی ثبوت ہے۔</li>",
+"ab.howT":"ایسا ثبوت کیسے بنائیں جو مٹایا نہ جا سکے",
+"ab.how":"<li>فائل پر مہر لگائیں۔ مہر سنبھالیں۔</li><li>اسے بٹ کوائن سے جوڑیں (ایک کلک، مفت) — تاریخ اب آپ پر منحصر نہیں رہتی۔</li><li>شہادت کا متن مختلف ممالک میں کئی لوگوں کو، مختلف ذرائع سے بھیجیں۔ عام کریں۔ ہر نقل ایک مکمل گواہ ہے۔</li><li>اصل فائل کی نقلیں کئی جگہ رکھیں۔ مہر بتاتی ہے کہ کون سی نقل اصلی ہے۔</li>",
+"ab.howEnd":"تب مخالف کو ہر ملک کی ہر نقل مٹانی پڑے گی، اور بٹ کوائن توڑنا پڑے گا، اور SHA-3 بھی۔ یہی اصل بات ہے۔",
+"ab.deviceT":"آپ کے فون پر، اور ہر کمپیوٹر پر",
+"ab.deviceIntro":"LOGOS ایک ہی صفحہ ہے جو ہر آلے پر ایپ کی طرح چلتا ہے — نہ کچھ خریدنا، نہ رجسٹریشن:",
+"ab.device":"<li><strong>آئی فون اور آئی پیڈ</strong> — یہ صفحہ سفاری میں کھولیں، <strong>Share</strong> دبائیں، پھر <strong>Add to Home Screen</strong>۔</li><li><strong>اینڈرائیڈ</strong> — کروم میں کھولیں اور <strong>Install</strong> دبائیں، یا مینو → <strong>Add to Home screen</strong>۔</li><li><strong>ونڈوز، میک اور لینکس</strong> — کروم یا ایج کی ایڈریس بار میں انسٹال کا نشان دبائیں، یا صفحہ محفوظ کر لیں (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) اور ضرورت پر کھول لیں۔</li>",
+"ab.device2":"انسٹال کے بعد <strong>یہ بغیر کسی انٹرنیٹ کے چلتا ہے</strong>: جہاز میں، بجلی نہ ہونے پر، ایسے ملک میں جہاں نیٹ ورک بند کر دیا گیا ہو، یا برسوں بعد چاہے یہ ویب سائٹ باقی نہ رہے۔ صرف اختیاری بٹ کوائن لنگر کے لیے، وہ بھی ایک لمحے کو، رابطہ درکار ہے۔",
+"ab.device3":"فون پر <strong>مہر شیئر کریں</strong> بھی ملتا ہے، جو ثبوت سیدھا WhatsApp، Signal، Telegram یا ای میل کو دے دیتا ہے — کیونکہ ثبوت تبھی معنی رکھتا ہے جب اس کی نقل دوسروں کے پاس بھی ہو۔",
+"ab.sovT":"خودمختاری",
+"ab.sov":"یہ صفحہ ایک اکیلی فائل ہے۔ اس میں کوئی لائبریری، کوئی ٹریکر، کوئی تجزیہ کار، کسی قسم کی کوئی نیٹ ورک کال نہیں — سوائے جوڑنے والے بٹن کے، جسے آپ خود دباتے ہیں۔ انٹرنیٹ بند کر دیں: پھر بھی چلتا ہے۔ یو ایس بی میں نقل کریں، ای میل سے بھیجیں، کہیں بھی رکھیں: پھر بھی چلتا ہے۔ اب یہ ہمیشہ کے لیے آپ کا ہے، اور واپس نہیں لیا جا سکتا۔",
+"ab.credit":"ڈاکٹر جوزیپے فالسونے نے DigitalValut کے لیے تخلیق کیا",
+"ab.donated":"انسانیت کے نام"
+}
+
+});
+
+Object.assign(I18N, {
+
+/* -------------------------------- Русский -------------------------------- */
+ru: {
+"sub":"Протокол неуязвимой правды",
+"tagline":"Запечатайте любой файл математикой. Без аккаунта. Без сервера. Ни у кого не спрашивая разрешения.",
+"nav.seal":"ПЕЧАТЬ","nav.verify":"ПРОВЕРКА","nav.about":"КАК ЭТО РАБОТАЕТ","install.btn":"Установить",
+"drop.big":"Перетащите сюда любой файл","drop.small":"документ · фото · аудио · видео · что угодно",
+"drop.tiny":"Ваш файл никогда не покидает это устройство. Всё считается локально, без интернета.",
+"prog.sealing":"Запечатывание","prog.reading":"чтение…","prog.verifying":"Проверка",
+"seal.title":"Криптографическая печать","k.file":"Файл","k.size":"Размер","k.sealedAt":"Запечатано","k.sealId":"ID печати",
+"k.author":"Автор","k.statement":"Заявление","k.anchor":"Привязка к Bitcoin",
+"opt.title":"Необязательно — свяжите с файлом своё имя и свои слова",
+"opt.author":"Автор / кто ставит печать","opt.stmt":"Заявление — что это за файл и почему он важен",
+"opt.authorPh":"напр. Анна Иванова, Москва","opt.stmtPh":"Эта запись сделана… На ней видно…",
+"opt.note":"Изменение этих полей меняет ID печати. Они становятся частью запечатанной записи.",
+"keep.title":"Сохраните доказательство",
+"btn.share":"Поделиться печатью","btn.seal":"Скачать печать (.logos.json)","btn.cert":"Скачать сертификат (.html)","btn.copy":"Скопировать публичное свидетельство",
+"keep.note":"Печать — это несколько сотен байт обычного текста. Отправьте её письмом, опубликуйте, распечатайте, запишите на десять флешек. Каждая копия — оригинал. Любой, у кого есть файл и печать, сможет проверить его всегда и без интернета.",
+"anchor.title":"Привязать к Bitcoin — независимое доказательство даты",
+"anchor.note":"Часы вашего устройства ничего не докажут постороннему: их можно перевести. Привязка записывает отпечаток вашего файла в блокчейн Bitcoin через бесплатные общедоступные серверы-календари (<strong>без кошелька, без аккаунта, без оплаты, без личных данных</strong> — отправляется только 32-байтный отпечаток). После этого дату вашего файла подтверждает вся сеть Bitcoin, а не вы сами.",
+"btn.anchor":"Привязать сейчас (интернет нужен один раз)",
+"anchor.warn":"Подтверждение занимает несколько часов. Храните скачанный файл <code>.ots</code> рядом с оригиналом. Через сутки обновите и проверьте его официальным бесплатным клиентом: <code>pip install opentimestamps-client</code>, затем <code>ots upgrade file.ots</code> и <code>ots verify file.ots</code>. LOGOS больше никогда не понадобится — доказательство соответствует открытому стандарту.",
+"ver.step1":"1 — Перетащите печать","ver.step1sub":".logos.json или сертификат .html",
+"ver.step2":"2 — Перетащите исходный файл","ver.step2sub":"тот файл, который был запечатан",
+"ver.withoutTitle":"Проверка без LOGOS",
+"ver.without1":"Вам не обязательно доверять этой программе. Любой компьютер на земле проверит те же числа стандартными средствами:",
+"ver.without2":"Если числа совпадают с печатью, файл бит в бит тот самый. Если изменился хотя бы один бит, совпадение невозможно.",
+"ver.authentic":"ПОДЛИННЫЙ","ver.authenticD":"Этот файл бит в бит совпадает с тем, который был запечатан.",
+"ver.altered":"ИЗМЕНЁН","ver.alteredD":"Это НЕ тот файл, который был запечатан. Он изменён либо это другой файл.",
+"ver.match":"СОВПАДАЕТ","ver.different":"ОТЛИЧАЕТСЯ","ver.notInSeal":"нет в печати",
+"ver.details":"Подробности","ver.sealIntegrity":"Целостность печати",
+"ver.intact":"ЦЕЛА — сама печать не изменялась","ver.tampered":"ПОДДЕЛАНА — файл печати редактировали после запечатывания","ver.noSealId":"нет ID печати",
+"ver.computed":"Вычисленный SHA-256","ver.sealedHash":"SHA-256 из печати",
+"ver.passNote":"Файл подлинный. Помните, что означает дата: время запечатывания взято с устройства, которое ставило печать. Независимо оно подтверждено только если печать была опубликована или привязана к Bitcoin в тот момент.",
+"anchor.sending":"Отправляется только 32-байтный отпечаток на независимые серверы-календари…",
+"anchor.ok":"принял отпечаток","anchor.fail":"недоступен",
+"anchor.none1":"Ни один календарь недоступен. Проверьте соединение и попробуйте снова.",
+"anchor.none2":"Ваша печать по-прежнему действительна — привязка лишь добавляет независимую дату.",
+"anchor.done":"Привязано к независимым календарям:","anchor.saved":"Файл доказательства .ots скачан — храните его рядом с вашим файлом:",
+"anchor.again":"Скачайте печать заново: теперь в ней записана привязка.",
+"btn.anchoring":"Привязка…","btn.anchorRetry":"Повторить привязку","btn.anchored":"Привязано ✓ — привязать ещё раз",
+"install.generic":"<b>Оставьте LOGOS на этом устройстве.</b> Установите — и он работает вообще без интернета, всегда, даже если этот сайт исчезнет.",
+"install.ios":"<b>Оставьте LOGOS на этом iPhone или iPad.</b> Нажмите <b>Поделиться</b> внизу Safari, затем <b>На экран «Домой»</b>. После этого он работает вообще без интернета — всегда.",
+"toast.sealSaved":"Печать сохранена","toast.certSaved":"Сертификат сохранён","toast.copied":"Свидетельство скопировано",
+"toast.copyFail":"Не удалось скопировать — скачайте печать","toast.anchored":"Привязано к Bitcoin",
+"toast.notSeal":"Это не печать LOGOS","toast.sealReadFail":"Не удалось прочитать печать","toast.readFail":"Не удалось прочитать файл",
+"ab.manifestoT":"Манифест",
+"ab.manifesto":"Подарено человечеству, чтобы каждый и повсюду обладал неотчуждаемой силой говорить, свидетельствовать и защищать себя от любого произвола. Нет сервера, который можно выключить, нет посредника, нет цензуры. Только чистая математика и абсолютная свобода.",
+"ab.doesT":"Что LOGOS делает на самом деле",
+"ab.does1":"Он вычисляет два криптографических отпечатка вашего файла — <strong>SHA3-512</strong> и <strong>SHA-256</strong> — целиком на вашем устройстве. Отпечаток — это число, которое могло получиться только из этого файла. Измените один пиксель, один слог, одну запятую — отпечаток изменится полностью. Никто в мире не сможет собрать другой файл с таким же отпечатком.",
+"ab.does2":"Затем он связывает отпечаток с моментом времени и с вашими словами и отдаёт результат крошечным текстовым файлом — <strong>печатью</strong>. Печать и есть доказательство. Файл остаётся вашим.",
+"ab.provesT":"Что доказывает печать",
+"ab.proves":"<li><strong>Целостность</strong> — что файл бит в бит тот самый, который был запечатан. Это абсолютно и навсегда.</li><li><strong>Первенство</strong> — что файл уже существовал в определённый момент, если печать тогда же была опубликована или привязана.</li><li><strong>Авторство</strong> — что названный человек сделал конкретное заявление об этом файле.</li>",
+"ab.limitsT":"Чего она не доказывает — прочтите это",
+"ab.limitsIntro":"Инструменту доверяют за честность, поэтому вот его границы:",
+"ab.limits":"<li>Печать <strong>не доказывает, что содержимое правдиво</strong>. Она доказывает, что файл не изменяли после запечатывания. Запечатанная ложь остаётся ложью — но запечатанную правду больше нельзя тихо переписать.</li><li>Время, взятое с вашего устройства, — это <strong>ваши собственные часы</strong>, а их можно перевести. Само по себе оно никого не убедит. Оно становится настоящим доказательством в тот момент, когда вы делаете отпечаток публичным: привязываете к Bitcoin, публикуете, отправляете или даёте записать кому-то ещё.</li><li>Никакая программа не сделает файл <strong>невозможным для удаления</strong>. Данные выживают потому, что копии есть у многих. LOGOS делает доказательство настолько маленьким, что оно доедет куда угодно, и делает любую подменённую копию мгновенно заметной. Копирование — это выживание; математика — это доказательство.</li>",
+"ab.howT":"Как сделать доказательство, которое нельзя стереть",
+"ab.how":"<li>Запечатайте файл. Сохраните печать.</li><li>Привяжите к Bitcoin (один клик, бесплатно) — дата перестаёт зависеть от вас.</li><li>Отправьте текст свидетельства нескольким людям, в разные страны, по разным каналам. Опубликуйте. Каждая копия — полноценный свидетель.</li><li>Храните копии исходного файла в нескольких местах. Печать покажет, какие копии подлинные.</li>",
+"ab.howEnd":"Тогда противнику пришлось бы стереть каждую копию в каждой стране, взломать Bitcoin и взломать SHA-3. В этом и смысл.",
+"ab.deviceT":"На телефоне и на любом компьютере",
+"ab.deviceIntro":"LOGOS — одна страница, которая ведёт себя как приложение на любом устройстве: ничего покупать и нигде регистрироваться не нужно.",
+"ab.device":"<li><strong>iPhone и iPad</strong> — откройте страницу в Safari, нажмите <strong>Поделиться</strong>, затем <strong>На экран «Домой»</strong>.</li><li><strong>Android</strong> — откройте в Chrome и нажмите <strong>Установить</strong>, либо меню → <strong>Добавить на главный экран</strong>.</li><li><strong>Windows, Mac и Linux</strong> — нажмите значок установки в адресной строке Chrome или Edge, либо просто сохраните страницу (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) и открывайте двойным щелчком.</li>",
+"ab.device2":"После установки <strong>он работает вообще без интернета</strong>: в самолёте, при отключении света, в стране, где обрезали сеть, или спустя годы, даже если этого сайта больше нет. Только необязательная привязка к Bitcoin требует связи, и всего на мгновение.",
+"ab.device3":"На телефоне есть ещё <strong>Поделиться печатью</strong> — доказательство уходит прямо в WhatsApp, Signal, Telegram или почту, ведь доказательство работает тогда, когда копия есть и у других.",
+"ab.sovT":"Суверенитет",
+"ab.sov":"Эта страница — один-единственный файл. В ней нет библиотек, трекеров, аналитики и никаких сетевых запросов — кроме кнопки привязки, которую нажимаете вы сами. Отключите интернет: она работает. Скопируйте на флешку, вложите в письмо, разместите где угодно: она работает. Теперь она ваша навсегда, и отобрать её нельзя.",
+"ab.credit":"Создано и задумано д-ром Джузеппе Фальсоне для DigitalValut",
+"ab.donated":"Подарено человечеству"
+},
+
+/* ---------------------------- Bahasa Indonesia ---------------------------- */
+id: {
+"sub":"Protokol Kebenaran yang Tak Terpatahkan",
+"tagline":"Segel berkas apa pun dengan matematika. Tanpa akun. Tanpa server. Tanpa izin siapa pun.",
+"nav.seal":"SEGEL","nav.verify":"VERIFIKASI","nav.about":"CARA KERJANYA","install.btn":"Pasang",
+"drop.big":"Letakkan berkas apa pun di sini","drop.small":"dokumen · foto · audio · video · apa saja",
+"drop.tiny":"Berkas Anda tidak pernah meninggalkan perangkat ini. Semua dihitung secara lokal, tanpa internet.",
+"prog.sealing":"Menyegel","prog.reading":"membaca…","prog.verifying":"Memverifikasi",
+"seal.title":"Segel kriptografis","k.file":"Berkas","k.size":"Ukuran","k.sealedAt":"Disegel pada","k.sealId":"ID segel",
+"k.author":"Penulis","k.statement":"Pernyataan","k.anchor":"Jangkar Bitcoin",
+"opt.title":"Opsional — kaitkan identitas dan kata-kata Anda dengan berkas ini",
+"opt.author":"Penulis / yang menyegel","opt.stmt":"Pernyataan — apa berkas ini, dan mengapa penting",
+"opt.authorPh":"mis. Siti Rahayu, Jakarta","opt.stmtPh":"Rekaman ini dibuat pada… Memperlihatkan…",
+"opt.note":"Mengubah kolom ini mengubah ID segel. Isinya menjadi bagian dari catatan yang disegel.",
+"keep.title":"Simpan buktinya",
+"btn.share":"Bagikan segel","btn.seal":"Unduh segel (.logos.json)","btn.cert":"Unduh sertifikat (.html)","btn.copy":"Salin pernyataan publik",
+"keep.note":"Segel hanya beberapa ratus bita teks biasa. Kirim lewat surel, terbitkan, cetak, simpan di sepuluh flash disk. Setiap salinan adalah aslinya. Siapa pun yang memiliki berkas dan segelnya dapat memverifikasi selamanya, tanpa internet.",
+"anchor.title":"Jangkarkan ke Bitcoin — bukti tanggal yang independen",
+"anchor.note":"Jam perangkat Anda tidak membuktikan apa pun kepada orang asing: jam bisa diubah. Penjangkaran menuliskan sidik jari berkas Anda ke rantai blok Bitcoin melalui server kalender publik gratis (<strong>tanpa dompet, tanpa akun, tanpa bayaran, tanpa data pribadi</strong> — hanya sidik jari 32 bita yang dikirim). Setelah itu, tanggal berkas Anda dibuktikan oleh seluruh jaringan Bitcoin, bukan oleh Anda.",
+"btn.anchor":"Jangkarkan sekarang (perlu internet, sekali)",
+"anchor.warn":"Konfirmasi butuh beberapa jam. Simpan berkas <code>.ots</code> yang terunduh di samping berkas asli Anda. Setelah sehari, perbarui dan periksa dengan klien resmi gratis: <code>pip install opentimestamps-client</code>, lalu <code>ots upgrade file.ots</code> dan <code>ots verify file.ots</code>. LOGOS tidak pernah diperlukan lagi — buktinya berstandar terbuka.",
+"ver.step1":"1 — Letakkan segelnya","ver.step1sub":".logos.json atau sertifikat .html",
+"ver.step2":"2 — Letakkan berkas aslinya","ver.step2sub":"berkas yang dulu disegel",
+"ver.withoutTitle":"Verifikasi tanpa LOGOS",
+"ver.without1":"Anda tidak pernah harus memercayai program ini. Komputer mana pun di dunia dapat memeriksa angka yang sama dengan alat standar:",
+"ver.without2":"Jika angkanya cocok dengan segel, berkasnya sama persis bit demi bit. Jika satu bit saja berubah, mustahil cocok.",
+"ver.authentic":"ASLI","ver.authenticD":"Berkas ini sama persis, bit demi bit, dengan berkas yang disegel.",
+"ver.altered":"DIUBAH","ver.alteredD":"Ini BUKAN berkas yang disegel. Berkas ini telah diubah, atau ini berkas lain.",
+"ver.match":"COCOK","ver.different":"BERBEDA","ver.notInSeal":"tidak ada di segel",
+"ver.details":"Rincian","ver.sealIntegrity":"Keutuhan segel",
+"ver.intact":"UTUH — segelnya sendiri tidak diubah","ver.tampered":"DIRUSAK — berkas segel diubah setelah penyegelan","ver.noSealId":"tanpa ID segel",
+"ver.computed":"SHA-256 hasil hitungan","ver.sealedHash":"SHA-256 pada segel",
+"ver.passNote":"Berkas ini asli. Ingat makna tanggalnya: waktu penyegelan berasal dari perangkat yang membuat segel. Tanggal itu terbukti secara independen hanya jika segel diterbitkan atau dijangkarkan pada saat itu.",
+"anchor.sending":"Mengirim hanya sidik jari 32 bita ke beberapa server kalender independen…",
+"anchor.ok":"menerima sidik jari","anchor.fail":"tidak dapat dihubungi",
+"anchor.none1":"Tidak ada kalender yang dapat dihubungi. Periksa koneksi Anda dan coba lagi.",
+"anchor.none2":"Segel Anda tetap sah — penjangkaran hanya menambah tanggal yang independen.",
+"anchor.done":"Dijangkarkan ke kalender independen:","anchor.saved":"Berkas bukti .ots telah terunduh — simpan di samping berkas Anda:",
+"anchor.again":"Unduh ulang segel Anda sekarang: penjangkaran sudah tercatat di dalamnya.",
+"btn.anchoring":"Menjangkarkan…","btn.anchorRetry":"Coba jangkarkan lagi","btn.anchored":"Terjangkar ✓ — jangkarkan lagi",
+"install.generic":"<b>Simpan LOGOS di perangkat ini.</b> Pasang, dan ia bekerja tanpa internet sama sekali — selamanya, bahkan jika situs ini hilang.",
+"install.ios":"<b>Simpan LOGOS di iPhone atau iPad ini.</b> Ketuk <b>Bagikan</b> di bawah Safari, lalu <b>Tambahkan ke Layar Utama</b>. Setelah itu ia bekerja tanpa internet sama sekali — selamanya.",
+"toast.sealSaved":"Segel tersimpan","toast.certSaved":"Sertifikat tersimpan","toast.copied":"Pernyataan disalin",
+"toast.copyFail":"Gagal menyalin — unduh segelnya saja","toast.anchored":"Terjangkar ke Bitcoin",
+"toast.notSeal":"Berkas itu bukan segel LOGOS","toast.sealReadFail":"Segel tidak terbaca","toast.readFail":"Berkas itu tidak terbaca",
+"ab.manifestoT":"Manifesto",
+"ab.manifesto":"Dipersembahkan bagi umat manusia agar siapa pun, di mana pun, memiliki kuasa yang tak dapat dicabut untuk berbicara, bersaksi, dan membela diri dari segala penindasan. Tidak ada server untuk dimatikan, tidak ada perantara, tidak ada sensor. Hanya matematika murni dan kebebasan mutlak.",
+"ab.doesT":"Apa yang sebenarnya dilakukan LOGOS",
+"ab.does1":"Ia menghitung dua sidik jari kriptografis berkas Anda — <strong>SHA3-512</strong> dan <strong>SHA-256</strong> — sepenuhnya di perangkat Anda. Sidik jari adalah angka yang hanya mungkin berasal dari berkas itu. Ubah satu piksel, satu suku kata, satu koma, dan sidik jarinya berubah total. Tidak ada seorang pun di dunia yang bisa membuat berkas lain dengan sidik jari yang sama.",
+"ab.does2":"Lalu ia mengikat sidik jari itu pada satu saat dan pada kata-kata Anda, dan menyerahkan hasilnya sebagai berkas teks mungil — <strong>segel</strong>. Segel itulah buktinya. Berkasnya tetap milik Anda.",
+"ab.provesT":"Apa yang dibuktikan segel",
+"ab.proves":"<li><strong>Keutuhan</strong> — bahwa sebuah berkas persis sama, bit demi bit, dengan yang disegel. Ini mutlak dan permanen.</li><li><strong>Prioritas waktu</strong> — bahwa berkas sudah ada pada saat tertentu, asalkan segel diterbitkan atau dijangkarkan saat itu.</li><li><strong>Atribusi</strong> — bahwa seseorang yang disebut namanya membuat pernyataan tertentu tentang berkas itu.</li>",
+"ab.limitsT":"Apa yang tidak dibuktikannya — baca ini",
+"ab.limitsIntro":"Kejujuran membuat sebuah alat layak dipercaya, jadi inilah batasnya:",
+"ab.limits":"<li>Segel <strong>tidak membuktikan isinya benar</strong>. Ia membuktikan berkas tidak diubah sejak disegel. Kebohongan yang disegel tetap kebohongan — tetapi kebenaran yang disegel tidak bisa lagi ditulis ulang diam-diam.</li><li>Cap waktu dari perangkat Anda adalah <strong>jam Anda sendiri</strong>, dan jam bisa diubah. Sendirian ia tidak meyakinkan siapa pun. Ia menjadi bukti nyata saat Anda membuat sidik jarinya publik: dijangkarkan ke Bitcoin, diterbitkan, dikirim, atau dicatat oleh orang lain.</li><li>Tidak ada perangkat lunak yang bisa membuat berkas <strong>mustahil dihapus</strong>. Data bertahan karena salinannya ada di banyak tangan. LOGOS membuat buktinya cukup kecil untuk pergi ke mana saja, dan membuat salinan yang ditukar langsung ketahuan. Menyalin adalah cara bertahan; matematika adalah buktinya.</li>",
+"ab.howT":"Cara membuat bukti yang tak bisa dihapus",
+"ab.how":"<li>Segel berkasnya. Simpan segelnya.</li><li>Jangkarkan ke Bitcoin (satu klik, gratis) — tanggalnya tak lagi bergantung pada Anda.</li><li>Kirim teks pernyataan kepada beberapa orang, di negara berbeda, lewat saluran berbeda. Terbitkan. Setiap salinan adalah saksi yang utuh.</li><li>Simpan salinan berkas asli di beberapa tempat. Segel membuktikan salinan mana yang asli.</li>",
+"ab.howEnd":"Lawan harus menghapus setiap salinan, di setiap negara, lalu membobol Bitcoin, dan membobol SHA-3. Itulah intinya.",
+"ab.deviceT":"Di ponsel Anda, dan di setiap komputer",
+"ab.deviceIntro":"LOGOS hanyalah satu halaman yang berperilaku seperti aplikasi di semua perangkat, tanpa membeli apa pun dan tanpa mendaftar:",
+"ab.device":"<li><strong>iPhone dan iPad</strong> — buka halaman ini di Safari, ketuk <strong>Bagikan</strong>, lalu <strong>Tambahkan ke Layar Utama</strong>.</li><li><strong>Android</strong> — buka di Chrome dan ketuk <strong>Pasang</strong>, atau menu → <strong>Tambahkan ke layar utama</strong>.</li><li><strong>Windows, Mac, dan Linux</strong> — klik ikon pasang di bilah alamat Chrome atau Edge, atau cukup simpan halaman ini (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) dan buka dengan klik ganda.</li>",
+"ab.device2":"Setelah dipasang, <strong>ia bekerja tanpa internet sama sekali</strong>: di pesawat, saat listrik padam, di negara yang memutus jaringan, atau bertahun-tahun lagi meski situs ini sudah tiada. Hanya penjangkaran Bitcoin yang opsional membutuhkan koneksi, dan hanya sesaat.",
+"ab.device3":"Di ponsel ada juga <strong>Bagikan segel</strong>, yang menyerahkan bukti langsung ke WhatsApp, Signal, Telegram, atau surel — karena bukti baru berarti ketika salinannya ada pada orang lain.",
+"ab.sovT":"Kedaulatan",
+"ab.sov":"Halaman ini satu berkas saja. Tidak ada pustaka, pelacak, analitik, maupun panggilan jaringan apa pun — kecuali tombol penjangkaran yang Anda tekan sendiri. Matikan internet: ia tetap bekerja. Salin ke flash disk, lampirkan ke surel, taruh di mana saja: ia tetap bekerja. Sekarang ia milik Anda, selamanya, dan tak bisa ditarik kembali.",
+"ab.credit":"Diciptakan dan digagas oleh Dr. Giuseppe Falsone untuk DigitalValut",
+"ab.donated":"Dipersembahkan bagi umat manusia"
+},
+
+/* -------------------------------- Deutsch -------------------------------- */
+de: {
+"sub":"Das Protokoll der unangreifbaren Wahrheit",
+"tagline":"Versiegeln Sie jede Datei mit Mathematik. Kein Konto. Kein Server. Keine Erlaubnis nötig.",
+"nav.seal":"SIEGELN","nav.verify":"PRÜFEN","nav.about":"SO FUNKTIONIERT ES","install.btn":"Installieren",
+"drop.big":"Beliebige Datei hierher ziehen","drop.small":"Dokument · Foto · Audio · Video · alles",
+"drop.tiny":"Ihre Datei verlässt dieses Gerät nie. Alles wird lokal und offline berechnet.",
+"prog.sealing":"Wird versiegelt","prog.reading":"wird gelesen…","prog.verifying":"Wird geprüft",
+"seal.title":"Kryptografisches Siegel","k.file":"Datei","k.size":"Größe","k.sealedAt":"Versiegelt am","k.sealId":"Siegel-ID",
+"k.author":"Urheber","k.statement":"Erklärung","k.anchor":"Bitcoin-Verankerung",
+"opt.title":"Optional — verbinden Sie Ihren Namen und Ihre Worte mit dieser Datei",
+"opt.author":"Urheber / wer versiegelt","opt.stmt":"Erklärung — was diese Datei ist und warum sie zählt",
+"opt.authorPh":"z. B. Anna Müller, Berlin","opt.stmtPh":"Diese Aufnahme entstand am… Sie zeigt…",
+"opt.note":"Änderungen an diesen Feldern ändern die Siegel-ID. Sie werden Teil des versiegelten Eintrags.",
+"keep.title":"Bewahren Sie den Beweis",
+"btn.share":"Siegel teilen","btn.seal":"Siegel herunterladen (.logos.json)","btn.cert":"Zertifikat herunterladen (.html)","btn.copy":"Öffentliche Bezeugung kopieren",
+"keep.note":"Das Siegel sind ein paar hundert Byte reiner Text. Mailen Sie es, veröffentlichen Sie es, drucken Sie es, legen Sie es auf zehn USB-Sticks. Jede Kopie ist das Original. Wer Datei und Siegel hat, kann für immer offline prüfen.",
+"anchor.title":"In Bitcoin verankern — unabhängiger Beweis des Datums",
+"anchor.note":"Die Uhr Ihres Geräts beweist einem Fremden nichts: Sie lässt sich verstellen. Die Verankerung schreibt Ihren Fingerabdruck über kostenlose öffentliche Kalenderserver in die Bitcoin-Blockchain (<strong>keine Wallet, kein Konto, keine Zahlung, keine persönlichen Daten</strong> — es wird nur der 32-Byte-Fingerabdruck gesendet). Danach beweist das gesamte Bitcoin-Netz das Datum Ihrer Datei, nicht Sie.",
+"btn.anchor":"Jetzt verankern (einmal Internet nötig)",
+"anchor.warn":"Die Bestätigung dauert einige Stunden. Bewahren Sie die heruntergeladene <code>.ots</code>-Datei neben Ihrer Originaldatei auf. Prüfen Sie sie am nächsten Tag mit dem offiziellen kostenlosen Client: <code>pip install opentimestamps-client</code>, dann <code>ots upgrade datei.ots</code> und <code>ots verify datei.ots</code>. LOGOS wird nie wieder nötig — der Beweis ist ein offener Standard.",
+"ver.step1":"1 — Siegel hierher ziehen","ver.step1sub":".logos.json oder das Zertifikat .html",
+"ver.step2":"2 — Originaldatei hierher ziehen","ver.step2sub":"die Datei, die versiegelt wurde",
+"ver.withoutTitle":"Prüfen ohne LOGOS",
+"ver.without1":"Sie müssen diesem Programm nie vertrauen. Jeder Computer der Welt kann dieselben Zahlen mit Standardwerkzeugen prüfen:",
+"ver.without2":"Stimmen die Zahlen mit dem Siegel überein, ist die Datei Bit für Bit dieselbe. Wurde ein einziges Bit geändert, ist Übereinstimmung unmöglich.",
+"ver.authentic":"ECHT","ver.authenticD":"Diese Datei ist Bit für Bit die Datei, die versiegelt wurde.",
+"ver.altered":"VERÄNDERT","ver.alteredD":"Das ist NICHT die versiegelte Datei. Sie wurde verändert, oder es ist eine andere Datei.",
+"ver.match":"ÜBEREINSTIMMUNG","ver.different":"ABWEICHUNG","ver.notInSeal":"nicht im Siegel",
+"ver.details":"Einzelheiten","ver.sealIntegrity":"Unversehrtheit des Siegels",
+"ver.intact":"UNVERSEHRT — das Siegel selbst wurde nicht verändert","ver.tampered":"MANIPULIERT — die Siegeldatei wurde nachträglich bearbeitet","ver.noSealId":"keine Siegel-ID",
+"ver.computed":"Berechneter SHA-256","ver.sealedHash":"SHA-256 im Siegel",
+"ver.passNote":"Die Datei ist echt. Denken Sie daran, was das Datum bedeutet: Die Siegelzeit stammt vom Gerät, das das Siegel erstellt hat. Unabhängig belegt ist sie nur, wenn das Siegel damals veröffentlicht oder verankert wurde.",
+"anchor.sending":"Es wird ausschließlich der 32-Byte-Fingerabdruck an unabhängige Kalenderserver gesendet…",
+"anchor.ok":"hat den Fingerabdruck angenommen","anchor.fail":"nicht erreichbar",
+"anchor.none1":"Kein Kalenderserver erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+"anchor.none2":"Ihr Siegel bleibt gültig — die Verankerung fügt nur ein unabhängiges Datum hinzu.",
+"anchor.done":"In unabhängigen Kalendern verankert:","anchor.saved":"Die Beweisdatei .ots wurde heruntergeladen — bewahren Sie sie neben Ihrer Datei auf:",
+"anchor.again":"Laden Sie Ihr Siegel jetzt erneut herunter: Es hält die Verankerung fest.",
+"btn.anchoring":"Wird verankert…","btn.anchorRetry":"Verankerung erneut versuchen","btn.anchored":"Verankert ✓ — erneut verankern",
+"install.generic":"<b>Behalten Sie LOGOS auf diesem Gerät.</b> Installiert läuft es ganz ohne Internet — für immer, auch wenn diese Website verschwindet.",
+"install.ios":"<b>Behalten Sie LOGOS auf diesem iPhone oder iPad.</b> Tippen Sie unten in Safari auf <b>Teilen</b> und dann auf <b>Zum Home-Bildschirm</b>. Danach läuft es ganz ohne Internet — für immer.",
+"toast.sealSaved":"Siegel gespeichert","toast.certSaved":"Zertifikat gespeichert","toast.copied":"Bezeugung kopiert",
+"toast.copyFail":"Kopieren fehlgeschlagen — laden Sie das Siegel herunter","toast.anchored":"In Bitcoin verankert",
+"toast.notSeal":"Diese Datei ist kein LOGOS-Siegel","toast.sealReadFail":"Siegel konnte nicht gelesen werden","toast.readFail":"Datei konnte nicht gelesen werden",
+"ab.manifestoT":"Das Manifest",
+"ab.manifesto":"Der Menschheit geschenkt, damit jeder Mensch, überall, die unveräußerliche Macht besitzt zu sprechen, Zeugnis abzulegen und sich gegen jede Willkür zu verteidigen. Kein Server, den man abschalten kann, kein Vermittler, keine Zensur. Reine Mathematik und absolute Freiheit.",
+"ab.doesT":"Was LOGOS wirklich tut",
+"ab.does1":"Es berechnet zwei kryptografische Fingerabdrücke Ihrer Datei — <strong>SHA3-512</strong> und <strong>SHA-256</strong> — vollständig auf Ihrem Gerät. Ein Fingerabdruck ist eine Zahl, die nur aus genau dieser Datei stammen kann. Ändern Sie ein Pixel, eine Silbe, ein Komma, und der Fingerabdruck ändert sich völlig. Niemand auf der Welt kann eine andere Datei mit demselben Fingerabdruck bauen.",
+"ab.does2":"Dann bindet es diesen Fingerabdruck an einen Zeitpunkt und an Ihre Worte und gibt Ihnen das Ergebnis als winzige Textdatei — das <strong>Siegel</strong>. Das Siegel ist der Beweis. Die Datei bleibt Ihre.",
+"ab.provesT":"Was das Siegel beweist",
+"ab.proves":"<li><strong>Unversehrtheit</strong> — dass eine Datei Bit für Bit genau die versiegelte ist. Das ist absolut und dauerhaft.</li><li><strong>Priorität</strong> — dass die Datei zu einem bestimmten Zeitpunkt bereits existierte, sofern das Siegel damals veröffentlicht oder verankert wurde.</li><li><strong>Zuordnung</strong> — dass eine namentlich genannte Person eine bestimmte Erklärung zu dieser Datei abgegeben hat.</li>",
+"ab.limitsT":"Was es nicht beweist — bitte lesen",
+"ab.limitsIntro":"Ehrlichkeit macht ein Werkzeug vertrauenswürdig, also hier seine Grenzen:",
+"ab.limits":"<li>Ein Siegel <strong>beweist nicht, dass der Inhalt wahr ist</strong>. Es beweist, dass die Datei seit dem Versiegeln nicht verändert wurde. Eine versiegelte Lüge bleibt eine Lüge — aber eine versiegelte Wahrheit lässt sich nicht mehr still umschreiben.</li><li>Der Zeitstempel Ihres Geräts ist <strong>Ihre eigene Uhr</strong>, und eine Uhr lässt sich verstellen. Allein überzeugt er niemanden. Zum echten Beweis wird er, sobald Sie den Fingerabdruck öffentlich machen: durch Verankern in Bitcoin, Veröffentlichen, Versenden oder indem jemand anderes ihn festhält.</li><li>Keine Software kann eine Datei <strong>unlöschbar</strong> machen. Daten überleben, weil Kopien in vielen Händen sind. LOGOS macht den Beweis so klein, dass er überallhin reisen kann, und macht jede ausgetauschte Kopie sofort erkennbar. Kopieren ist das Überleben; Mathematik ist der Beweis.</li>",
+"ab.howT":"So entsteht ein Beweis, den niemand löschen kann",
+"ab.how":"<li>Versiegeln Sie die Datei. Bewahren Sie das Siegel auf.</li><li>Verankern Sie es in Bitcoin (ein Klick, kostenlos) — das Datum hängt nicht mehr von Ihnen ab.</li><li>Senden Sie den Bezeugungstext an mehrere Menschen, in verschiedenen Ländern, über verschiedene Kanäle. Veröffentlichen Sie ihn. Jede Kopie ist ein vollwertiger Zeuge.</li><li>Bewahren Sie Kopien der Originaldatei an mehreren Orten auf. Das Siegel zeigt, welche Kopien echt sind.</li>",
+"ab.howEnd":"Ein Gegner müsste dann jede Kopie in jedem Land löschen und Bitcoin brechen und SHA-3 brechen. Genau darum geht es.",
+"ab.deviceT":"Auf Ihrem Telefon und auf jedem Computer",
+"ab.deviceIntro":"LOGOS ist eine einzige Seite, die sich auf jedem Gerät wie eine App verhält — nichts zu kaufen, nichts anzumelden:",
+"ab.device":"<li><strong>iPhone und iPad</strong> — Seite in Safari öffnen, auf <strong>Teilen</strong> tippen, dann <strong>Zum Home-Bildschirm</strong>.</li><li><strong>Android</strong> — in Chrome öffnen und auf <strong>Installieren</strong> tippen, oder Menü → <strong>Zum Startbildschirm hinzufügen</strong>.</li><li><strong>Windows, Mac und Linux</strong> — auf das Installationssymbol in der Adressleiste von Chrome oder Edge klicken, oder die Seite einfach speichern (<strong>Strg+S</strong> / <strong>⌘S</strong>) und bei Bedarf doppelklicken.</li>",
+"ab.device2":"Einmal installiert, <strong>läuft es ganz ohne Internet</strong>: im Flugzeug, bei Stromausfall, in einem Land, das das Netz abgeschaltet hat, oder in Jahren, selbst wenn es diese Website nicht mehr gibt. Nur die optionale Bitcoin-Verankerung braucht kurz eine Verbindung.",
+"ab.device3":"Auf dem Telefon gibt es außerdem <strong>Siegel teilen</strong>: Der Beweis geht direkt an WhatsApp, Signal, Telegram oder E-Mail — denn ein Beweis zählt, sobald andere eine Kopie haben.",
+"ab.sovT":"Souveränität",
+"ab.sov":"Diese Seite ist eine einzige Datei. Sie enthält keine Bibliotheken, keine Tracker, keine Analyse und keinerlei Netzwerkaufrufe — außer der Verankerungsschaltfläche, die Sie selbst drücken. Schalten Sie das Internet ab: Sie funktioniert weiter. Kopieren Sie sie auf einen USB-Stick, hängen Sie sie an eine Mail, hosten Sie sie irgendwo: Sie funktioniert weiter. Sie gehört jetzt Ihnen, dauerhaft, und kann nicht zurückgenommen werden.",
+"ab.credit":"Erdacht und geschaffen von Dr. Giuseppe Falsone für DigitalValut",
+"ab.donated":"Der Menschheit geschenkt"
+},
+
+/* -------------------------------- Italiano -------------------------------- */
+it: {
+"sub":"Il Protocollo della Verità Inattaccabile",
+"tagline":"Sigilla qualsiasi file con la matematica. Nessun account. Nessun server. Nessun permesso.",
+"nav.seal":"SIGILLA","nav.verify":"VERIFICA","nav.about":"COME FUNZIONA","install.btn":"Installa",
+"drop.big":"Trascina qui qualsiasi file","drop.small":"documento · foto · audio · video · qualsiasi cosa",
+"drop.tiny":"Il tuo file non lascia mai questo dispositivo. Tutto è calcolato in locale, offline.",
+"prog.sealing":"Sigillatura","prog.reading":"lettura…","prog.verifying":"Verifica",
+"seal.title":"Sigillo crittografico","k.file":"File","k.size":"Dimensione","k.sealedAt":"Sigillato il","k.sealId":"ID sigillo",
+"k.author":"Autore","k.statement":"Dichiarazione","k.anchor":"Ancoraggio Bitcoin",
+"opt.title":"Facoltativo — lega la tua identità e le tue parole a questo file",
+"opt.author":"Autore / chi sta sigillando","opt.stmt":"Dichiarazione — che cos'è questo file e perché conta",
+"opt.authorPh":"es. Maria Rossi, Roma, Italia","opt.stmtPh":"Questa registrazione è stata fatta il… Mostra…",
+"opt.note":"Modificare questi campi cambia l'ID del sigillo. Diventano parte del documento sigillato.",
+"keep.title":"Conserva la prova",
+"btn.share":"Condividi il sigillo","btn.seal":"Scarica il sigillo (.logos.json)","btn.cert":"Scarica il certificato (.html)","btn.copy":"Copia l'attestazione pubblica",
+"keep.note":"Il sigillo è poche centinaia di byte di testo. Mandalo per email, pubblicalo, stampalo, mettilo su dieci chiavette USB. Ogni copia è l'originale. Chiunque abbia il file e il sigillo può verificarlo per sempre, anche offline.",
+"anchor.title":"Ancora a Bitcoin — prova indipendente della data",
+"anchor.note":"L'orologio del tuo dispositivo non prova nulla a un estraneo: si può cambiare. L'ancoraggio scrive la tua impronta nella blockchain di Bitcoin attraverso server calendario pubblici e gratuiti (<strong>niente wallet, niente conto, niente pagamento, nessun dato personale</strong> — viene inviata solo l'impronta di 32 byte del tuo file). Da quel momento la data del tuo file è provata da tutta la rete Bitcoin, non da te.",
+"btn.anchor":"Ancora adesso (serve internet, una volta)",
+"anchor.warn":"La conferma richiede qualche ora. Tieni il file <code>.ots</code> scaricato accanto al file originale. Dopo un giorno, aggiornalo e controllalo con il client ufficiale gratuito: <code>pip install opentimestamps-client</code>, poi <code>ots upgrade file.ots</code> e <code>ots verify file.ots</code>. LOGOS non serve mai più — la prova è uno standard aperto.",
+"ver.step1":"1 — Trascina il sigillo","ver.step1sub":".logos.json oppure il certificato .html",
+"ver.step2":"2 — Trascina il file originale","ver.step2sub":"il file che è stato sigillato",
+"ver.withoutTitle":"Verificare senza LOGOS",
+"ver.without1":"Non sei mai obbligato a fidarti di questo programma. Qualunque computer al mondo può controllare gli stessi numeri con strumenti standard:",
+"ver.without2":"Se i numeri corrispondono al sigillo, il file è bit per bit quello sigillato. Se è cambiato un solo bit, non possono corrispondere.",
+"ver.authentic":"AUTENTICO","ver.authenticD":"Questo file è bit per bit il file che è stato sigillato.",
+"ver.altered":"ALTERATO","ver.alteredD":"Questo NON è il file che è stato sigillato. È stato modificato, oppure è un file diverso.",
+"ver.match":"CORRISPONDE","ver.different":"DIVERSO","ver.notInSeal":"non presente nel sigillo",
+"ver.details":"Dettagli","ver.sealIntegrity":"Integrità del sigillo",
+"ver.intact":"INTATTO — il sigillo stesso non è stato modificato","ver.tampered":"MANOMESSO — il file del sigillo è stato modificato dopo la sigillatura","ver.noSealId":"nessun ID sigillo",
+"ver.computed":"SHA-256 calcolato","ver.sealedHash":"SHA-256 nel sigillo",
+"ver.passNote":"Il file è autentico. Ricorda cosa significa la data: l'ora di sigillatura viene dal dispositivo che ha creato il sigillo. È provata in modo indipendente solo se il sigillo è stato pubblicato o ancorato in quel momento.",
+"anchor.sending":"Invio della sola impronta di 32 byte a server calendario indipendenti…",
+"anchor.ok":"ha accettato l'impronta","anchor.fail":"irraggiungibile",
+"anchor.none1":"Nessun calendario raggiungibile. Controlla la connessione e riprova.",
+"anchor.none2":"Il tuo sigillo resta valido — l'ancoraggio aggiunge solo una data indipendente.",
+"anchor.done":"Ancorato a calendari indipendenti:","anchor.saved":"Il file di prova .ots è stato scaricato — tienilo accanto al tuo file:",
+"anchor.again":"Riscarica ora il sigillo: contiene la registrazione dell'ancoraggio.",
+"btn.anchoring":"Ancoraggio in corso…","btn.anchorRetry":"Riprova l'ancoraggio","btn.anchored":"Ancorato ✓ — ancora di nuovo",
+"install.generic":"<b>Tieni LOGOS su questo dispositivo.</b> Installalo e funzionerà senza alcuna connessione — per sempre, anche se questo sito sparisse.",
+"install.ios":"<b>Tieni LOGOS su questo iPhone o iPad.</b> Tocca <b>Condividi</b> in basso in Safari, poi <b>Aggiungi a Home</b>. Da quel momento funziona senza alcuna connessione — per sempre.",
+"toast.sealSaved":"Sigillo salvato","toast.certSaved":"Certificato salvato","toast.copied":"Attestazione copiata",
+"toast.copyFail":"Copia non riuscita — scarica il sigillo","toast.anchored":"Ancorato a Bitcoin",
+"toast.notSeal":"Quel file non è un sigillo LOGOS","toast.sealReadFail":"Impossibile leggere il sigillo","toast.readFail":"Impossibile leggere quel file",
+"ab.manifestoT":"Il Manifesto",
+"ab.manifesto":"Donato all'umanità per garantire a chiunque, ovunque, il potere inalienabile di parlare, di testimoniare e di difendersi da ogni sopruso. Nessun server da spegnere, nessun intermediario, nessuna censura. Solo matematica pura e libertà assoluta.",
+"ab.doesT":"Che cosa fa davvero LOGOS",
+"ab.does1":"Calcola due impronte crittografiche del tuo file — <strong>SHA3-512</strong> e <strong>SHA-256</strong> — interamente sul tuo dispositivo. Un'impronta è un numero che poteva venire solo da quel file esatto. Cambia un pixel, una sillaba, una virgola, e l'impronta cambia completamente. Nessuno al mondo può costruire un file diverso con la stessa impronta.",
+"ab.does2":"Poi lega quell'impronta a un istante e alle tue parole, e ti consegna il risultato in un minuscolo file di testo: il <strong>sigillo</strong>. Il sigillo è la prova. Il file resta tuo.",
+"ab.provesT":"Che cosa prova il sigillo",
+"ab.proves":"<li><strong>Integrità</strong> — che un file è esattamente, bit per bit, quello sigillato. Questo è assoluto e permanente.</li><li><strong>Priorità</strong> — che il file esisteva già in un certo momento, a condizione che il sigillo sia stato reso pubblico o ancorato in quel momento.</li><li><strong>Attribuzione</strong> — che una persona con nome e cognome ha fatto una dichiarazione precisa su quel file.</li>",
+"ab.limitsT":"Che cosa non prova — leggi qui",
+"ab.limitsIntro":"È l'onestà a rendere affidabile uno strumento, quindi ecco i suoi limiti:",
+"ab.limits":"<li>Un sigillo <strong>non prova che il contenuto sia vero</strong>. Prova che il file non è stato alterato dopo la sigillatura. Una bugia sigillata resta una bugia — ma una verità sigillata non può più essere riscritta in silenzio.</li><li>L'ora presa dal tuo dispositivo è <strong>il tuo orologio</strong>, e un orologio si può cambiare. Da sola non convince nessuno. Diventa prova vera nel momento in cui rendi pubblica l'impronta: ancorandola a Bitcoin, pubblicandola, spedendola, o facendola registrare a qualcun altro.</li><li>Nessun software può rendere un file <strong>impossibile da cancellare</strong>. I dati sopravvivono perché esistono copie in molte mani. LOGOS rende la prova così piccola da poter viaggiare ovunque, e rende immediatamente riconoscibile qualunque copia sostituita. Copiare è la sopravvivenza; la matematica è la prova.</li>",
+"ab.howT":"Come creare una prova che non si può cancellare",
+"ab.how":"<li>Sigilla il file. Conserva il sigillo.</li><li>Ancoralo a Bitcoin (un clic, gratis) — la data smette di dipendere da te.</li><li>Manda il testo dell'attestazione a più persone, in paesi diversi, su canali diversi. Pubblicalo. Ogni copia è un testimone completo.</li><li>Tieni copie del file originale in più posti. Il sigillo prova quali copie sono autentiche.</li>",
+"ab.howEnd":"Un avversario dovrebbe allora cancellare ogni copia, in ogni paese, e violare Bitcoin, e violare SHA-3. È esattamente questo il punto.",
+"ab.deviceT":"Sul telefono e su qualsiasi computer",
+"ab.deviceIntro":"LOGOS è una sola pagina che si comporta come un'app su ogni dispositivo, senza comprare nulla e senza registrarsi:",
+"ab.device":"<li><strong>iPhone e iPad</strong> — apri questa pagina in Safari, tocca <strong>Condividi</strong>, poi <strong>Aggiungi a Home</strong>.</li><li><strong>Android</strong> — aprila in Chrome e tocca <strong>Installa</strong> quando lo propone, oppure menu → <strong>Aggiungi a schermata Home</strong>.</li><li><strong>Windows, Mac e Linux</strong> — clicca l'icona di installazione nella barra degli indirizzi di Chrome o Edge, oppure salva la pagina (<strong>Ctrl+S</strong> / <strong>⌘S</strong>) e aprila con doppio clic quando serve.</li>",
+"ab.device2":"Una volta installato, <strong>funziona senza alcuna connessione</strong>: su un aereo, durante un blackout, in un paese che ha staccato la rete, o fra anni anche se questo sito non esistesse più. Solo l'ancoraggio a Bitcoin, che è facoltativo, richiede la connessione, e per un istante.",
+"ab.device3":"Sul telefono hai anche <strong>Condividi il sigillo</strong>, che consegna la prova direttamente a WhatsApp, Signal, Telegram o email — perché una prova conta quando altre persone ne hanno una copia.",
+"ab.sovT":"Sovranità",
+"ab.sov":"Questa pagina è un unico file. Non contiene librerie, tracciatori, statistiche né chiamate di rete di alcun tipo — tranne il pulsante di ancoraggio, che premi tu. Spegni internet: funziona lo stesso. Copiala su una chiavetta, allegala a un'email, mettila dove vuoi: funziona lo stesso. Ora è tua, per sempre, e non può esserti tolta.",
+"ab.credit":"Ideato e creato dal Dr. Giuseppe Falsone per DigitalValut",
+"ab.donated":"Donato all'umanità"
+}
+
+});
+
+
 
 /* LOGOS core hashing — pure JS, streaming, no dependencies. */
 
@@ -678,6 +1540,11 @@ const $ = id => document.getElementById(id);
 const utf8 = s => new TextEncoder().encode(s);
 const sha256hex = bytes => toHex(new SHA256().update(bytes).digest());
 
+function t(key, fallback){
+  const d = I18N[CURLANG];
+  const v = d && d[key];
+  return (v === undefined || v === null) ? fallback : v;
+}
 function toast(msg){
   const t = $('toast'); t.textContent = msg; t.classList.add('on');
   clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove('on'), 2200);
@@ -788,7 +1655,7 @@ async function doSeal(file){
     });
   }catch(err){
     $('sealProgress').classList.add('hide');
-    toast('Could not read that file');
+    toast(t('toast.readFail','Could not read that file'));
     return;
   }
 
@@ -818,7 +1685,7 @@ async function doSeal(file){
   $('rTime').textContent = CURRENT.sealed_utc + '  (UTC)';
   $('anchorStatus').classList.add('hide');
   $('btnAnchor').disabled = false;
-  $('btnAnchor').textContent = 'Anchor now (needs internet, once)';
+  $('btnAnchor').textContent = t('btn.anchor','Anchor now (needs internet, once)');
 }
 
 function refreshSeal(){
@@ -856,24 +1723,24 @@ function attestationText(s){
 $('btnSeal').addEventListener('click', () => {
   refreshSeal();
   download(safeName(CURRENT.file.name) + '.logos.json', sealJSON(), 'application/json');
-  toast('Seal saved');
+  toast(t('toast.sealSaved','Seal saved'));
 });
 $('btnCopy').addEventListener('click', async () => {
   refreshSeal();
   const txt = attestationText(CURRENT);
-  try{ await navigator.clipboard.writeText(txt); toast('Attestation copied'); }
+  try{ await navigator.clipboard.writeText(txt); toast(t('toast.copied','Attestation copied')); }
   catch(e){
     const ta = document.createElement('textarea');
     ta.value = txt; document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); toast('Attestation copied'); }
-    catch(e2){ toast('Copy failed — download the seal instead'); }
+    try{ document.execCommand('copy'); toast(t('toast.copied','Attestation copied')); }
+    catch(e2){ toast(t('toast.copyFail','Copy failed — download the seal instead')); }
     ta.remove();
   }
 });
 $('btnCert').addEventListener('click', () => {
   refreshSeal();
   download(safeName(CURRENT.file.name) + '.certificate.html', certificateHTML(CURRENT), 'text/html');
-  toast('Certificate saved');
+  toast(t('toast.certSaved','Certificate saved'));
 });
 
 /* A certificate that is also a machine-readable seal: LOGOS can read it back. */
@@ -958,10 +1825,10 @@ $('btnAnchor').addEventListener('click', async () => {
   const box = $('anchorStatus');
   box.classList.remove('hide');
   $('btnAnchor').disabled = true;
-  $('btnAnchor').textContent = 'Anchoring…';
+  $('btnAnchor').textContent = t('btn.anchoring','Anchoring…');
   const lines = [];
   const say = (s) => { lines.push(s); box.innerHTML = lines.map(esc).join('<br>'); };
-  say('Sending only the 32-byte fingerprint to independent calendar servers…');
+  say(t('anchor.sending','Sending only the 32-byte fingerprint to independent calendar servers…'));
 
   const digest = hexToBytes(CURRENT.hash['sha256']);
   const branches = [], used = [];
@@ -975,16 +1842,16 @@ $('btnAnchor').addEventListener('click', async () => {
       const bytes = new Uint8Array(await res.arrayBuffer());
       if (bytes.length < 8) throw new Error('short reply');
       branches.push(bytes); used.push(url);
-      say('✓ ' + url.replace('https://','') + ' accepted the fingerprint');
+      say('✓ ' + url.replace('https://','') + ' — ' + t('anchor.ok','accepted the fingerprint'));
     }catch(err){
-      say('✗ ' + url.replace('https://','') + ' unreachable (' + err.message + ')');
+      say('✗ ' + url.replace('https://','') + ' — ' + t('anchor.fail','unreachable') + ' (' + err.message + ')');
     }
   }
   if (!branches.length){
-    say('No calendar could be reached. Check your internet connection and try again.');
-    say('Your seal is still valid — anchoring only adds an independent date.');
+    say(t('anchor.none1','No calendar could be reached. Check your internet connection and try again.'));
+    say(t('anchor.none2','Your seal is still valid — anchoring only adds an independent date.'));
     $('btnAnchor').disabled = false;
-    $('btnAnchor').textContent = 'Try anchoring again';
+    $('btnAnchor').textContent = t('btn.anchorRetry','Try anchoring again');
     return;
   }
 
@@ -1006,12 +1873,12 @@ $('btnAnchor').addEventListener('click', async () => {
     verify: 'ots upgrade ' + CURRENT.file.name + '.ots  &&  ots verify ' + CURRENT.file.name + '.ots'
   };
   say('');
-  say('Anchored to ' + branches.length + ' independent calendar' + (branches.length>1?'s':'') + '.');
-  say('The proof file "' + CURRENT.file.name + '.ots" has been downloaded — keep it with your file.');
-  say('Re-download your seal now: it records the anchor.');
-  $('btnAnchor').textContent = 'Anchored ✓ — anchor again';
+  say(t('anchor.done','Anchored to independent calendars:') + ' ' + branches.length);
+  say(t('anchor.saved','The .ots proof file has been downloaded — keep it next to your file:') + ' ' + CURRENT.file.name + '.ots');
+  say(t('anchor.again','Download your seal again now: it records the anchor.'));
+  $('btnAnchor').textContent = t('btn.anchored','Anchored ✓ — anchor again');
   $('btnAnchor').disabled = false;
-  toast('Anchored to Bitcoin');
+  toast(t('toast.anchored','Anchored to Bitcoin'));
 });
 
 /* ============================= VERIFY ============================= */
@@ -1022,7 +1889,7 @@ wireDrop($('dropOrig'), $('fileOrig'), f => { V_FILE = f; $('origLoaded').textCo
 
 async function loadSealFile(f){
   let text;
-  try{ text = await f.text(); }catch(e){ toast('Could not read the seal'); return; }
+  try{ text = await f.text(); }catch(e){ toast(t('toast.sealReadFail','Could not read the seal')); return; }
   let obj = null;
   try{ obj = JSON.parse(text); }
   catch(e){
@@ -1030,7 +1897,7 @@ async function loadSealFile(f){
     if (m){ try{ obj = JSON.parse(m[1]); }catch(e2){} }
   }
   if (!obj || !obj.hash || !obj.hash['sha256']){
-    toast('That file is not a LOGOS seal');
+    toast(t('toast.notSeal','That file is not a LOGOS seal'));
     return;
   }
   V_SEAL = obj;
@@ -1050,7 +1917,7 @@ async function tryVerify(){
       $('verStatus').textContent = progressText(frac, bps, V_FILE.size);
     });
   }catch(e){
-    $('verProgress').classList.add('hide'); toast('Could not read that file'); return;
+    $('verProgress').classList.add('hide'); toast(t('toast.readFail','Could not read that file')); return;
   }
   $('verProgress').classList.add('hide');
 
@@ -1063,36 +1930,34 @@ async function tryVerify(){
   }
   const pass = okSha2 && (okSha3 !== false);
 
-  const mark = b => b === null ? '<span style="color:var(--faint)">not in seal</span>'
-                   : (b ? '<span style="color:var(--ok)">MATCH</span>'
-                        : '<span style="color:var(--bad)">DIFFERENT</span>');
+  const mark = b => b === null ? '<span style="color:var(--faint)">' + t('ver.notInSeal','not in seal') + '</span>'
+                   : (b ? '<span style="color:var(--ok)">' + t('ver.match','MATCH') + '</span>'
+                        : '<span style="color:var(--bad)">' + t('ver.different','DIFFERENT') + '</span>');
   let html = `
     <div class="verdict ${pass ? 'pass' : 'fail'}">
-      <div class="t">${pass ? 'AUTHENTIC' : 'ALTERED'}</div>
+      <div class="t">${pass ? t('ver.authentic','AUTHENTIC') : t('ver.altered','ALTERED')}</div>
       <div class="d">${pass
-        ? 'This file is bit for bit the file that was sealed.'
-        : 'This file is NOT the file that was sealed. It has been modified, or it is a different file.'}</div>
+        ? t('ver.authenticD','This file is bit for bit the file that was sealed.')
+        : t('ver.alteredD','This file is NOT the file that was sealed. It has been modified, or it is a different file.')}</div>
     </div>
     <div class="card">
-      <h3>Details</h3>
+      <h3>${t('ver.details','Details')}</h3>
       <div class="row"><div class="k">SHA3-512</div><div class="v">${mark(okSha3)}</div></div>
       <div class="row"><div class="k">SHA-256</div><div class="v">${mark(okSha2)}</div></div>
-      <div class="row"><div class="k">Size</div><div class="v">${mark(okSize)}</div></div>
-      <div class="row"><div class="k">Seal integrity</div><div class="v">${
-        okId === null ? '<span style="color:var(--faint)">no seal id</span>'
-        : okId ? '<span style="color:var(--ok)">INTACT — the seal itself was not edited</span>'
-               : '<span style="color:var(--bad)">TAMPERED — the seal file was edited after sealing</span>'}</div></div>
-      <div class="row"><div class="k">Computed SHA-256</div><div class="v hash">${hashes['sha256']}</div></div>
-      <div class="row"><div class="k">Sealed SHA-256</div><div class="v hash">${esc(V_SEAL.hash['sha256'])}</div></div>
-      <div class="row"><div class="k">Sealed at</div><div class="v">${esc(V_SEAL.sealed_utc || 'unknown')} UTC</div></div>
-      ${V_SEAL.author ? `<div class="row"><div class="k">Author</div><div class="v">${esc(V_SEAL.author)}</div></div>` : ''}
-      ${V_SEAL.statement ? `<div class="row"><div class="k">Statement</div><div class="v" style="font-family:var(--sans);font-size:13px">${esc(V_SEAL.statement)}</div></div>` : ''}
-      ${V_SEAL.bitcoin_anchor ? `<div class="row"><div class="k">Bitcoin anchor</div><div class="v" style="font-family:var(--sans);font-size:13px">${esc(V_SEAL.bitcoin_anchor.status||'present')} — verify the .ots file with <code>ots verify</code></div></div>` : ''}
+      <div class="row"><div class="k">${t('k.size','Size')}</div><div class="v">${mark(okSize)}</div></div>
+      <div class="row"><div class="k">${t('ver.sealIntegrity','Seal integrity')}</div><div class="v">${
+        okId === null ? '<span style="color:var(--faint)">' + t('ver.noSealId','no seal id') + '</span>'
+        : okId ? '<span style="color:var(--ok)">' + t('ver.intact','INTACT — the seal itself was not edited') + '</span>'
+               : '<span style="color:var(--bad)">' + t('ver.tampered','TAMPERED — the seal file was edited after sealing') + '</span>'}</div></div>
+      <div class="row"><div class="k">${t('ver.computed','Computed SHA-256')}</div><div class="v hash">${hashes['sha256']}</div></div>
+      <div class="row"><div class="k">${t('ver.sealedHash','Sealed SHA-256')}</div><div class="v hash">${esc(V_SEAL.hash['sha256'])}</div></div>
+      <div class="row"><div class="k">${t('k.sealedAt','Sealed at')}</div><div class="v">${esc(V_SEAL.sealed_utc || 'unknown')} UTC</div></div>
+      ${V_SEAL.author ? `<div class="row"><div class="k">${t('k.author','Author')}</div><div class="v">${esc(V_SEAL.author)}</div></div>` : ''}
+      ${V_SEAL.statement ? `<div class="row"><div class="k">${t('k.statement','Statement')}</div><div class="v" style="font-family:var(--sans);font-size:13px">${esc(V_SEAL.statement)}</div></div>` : ''}
+      ${V_SEAL.bitcoin_anchor ? `<div class="row"><div class="k">${t('k.anchor','Bitcoin anchor')}</div><div class="v" style="font-family:var(--sans);font-size:13px">${esc(V_SEAL.bitcoin_anchor.status||'present')} — verify the .ots file with <code>ots verify</code></div></div>` : ''}
     </div>`;
   if (pass){
-    html += `<div class="warnbox">The file is authentic. Remember what the date means: the sealing time
-      comes from the device that made the seal. It is independently proven only if the seal was
-      published or anchored to Bitcoin at that time.</div>`;
+    html += `<div class="warnbox">${t('ver.passNote','The file is authentic. Remember what the date means: the sealing time comes from the device that made the seal. It is independently proven only if the seal was published or anchored to Bitcoin at that time.')}</div>`;
   }
   $('verResult').innerHTML = html;
   $('verResult').classList.remove('hide');
@@ -1124,7 +1989,7 @@ async function shareSeal(){
     if (err && err.name === 'AbortError') return;
   }
   download(name, sealJSON(), 'application/json');
-  toast('Seal saved');
+  toast(t('toast.sealSaved','Seal saved'));
 }
 if (navigator.share){
   $('btnShare').classList.remove('hide');
@@ -1139,16 +2004,26 @@ const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let deferredPrompt = null;
 
-function showInstallBar(html, withButton){
-  if (isStandalone || localStorage.getItem('logos-install-dismissed') === '1') return;
-  $('installText').innerHTML = html;
-  $('installBtn').classList.toggle('hide', !withButton);
+let INSTALL_MODE = null;   // 'ios' | 'prompt' — so the bar follows the chosen language
+function showInstallBar(mode){
+  INSTALL_MODE = mode;
+  let dismissed = false;
+  try{ dismissed = localStorage.getItem('logos-install-dismissed') === '1'; }catch(e){}
+  if (isStandalone || dismissed) return;
+  refreshInstallBar();
   $('installBar').classList.remove('hide');
+}
+function refreshInstallBar(){
+  if (!INSTALL_MODE) return;
+  $('installText').innerHTML = INSTALL_MODE === 'ios'
+    ? t('install.ios','<b>Keep LOGOS on this iPhone or iPad.</b> Tap <b>Share</b> at the bottom of Safari, then <b>Add to Home Screen</b>. It then works with no internet at all — forever.')
+    : t('install.generic','<b>Keep LOGOS on this device.</b> Install it and it works with no internet at all — forever, even if this website disappears.');
+  $('installBtn').classList.toggle('hide', INSTALL_MODE !== 'prompt');
 }
 window.addEventListener('beforeinstallprompt', ev => {
   ev.preventDefault();
   deferredPrompt = ev;
-  showInstallBar('<b>Keep LOGOS on this device.</b> Install it and it works with no internet at all — forever, even if this website disappears.', true);
+  showInstallBar('prompt');
 });
 $('installBtn').addEventListener('click', async () => {
   if (!deferredPrompt) return;
@@ -1162,7 +2037,7 @@ $('installClose').addEventListener('click', () => {
   try{ localStorage.setItem('logos-install-dismissed', '1'); }catch(e){}
 });
 if (isIOS && !isStandalone && location.protocol.startsWith('http')){
-  showInstallBar('<b>Keep LOGOS on this iPhone or iPad.</b> Tap <b>Share</b> at the bottom of Safari, then <b>Add to Home Screen</b>. It then works with no internet at all — forever.', false);
+  showInstallBar('ios');
 }
 
 /* Service worker: after one visit, the app belongs to the device, not to the network. */
@@ -1172,6 +2047,55 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
   });
 }
 
+/* ============================ languages ============================ */
+const RTL = ['ar','ur','fa','he'];
+const ORIGINALS = new Map();
+
+function initLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el =>
+    ORIGINALS.set(el, { key: el.getAttribute('data-i18n'), html: el.innerHTML }));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el =>
+    ORIGINALS.set(el, { key: el.getAttribute('data-i18n-ph'), ph: el.getAttribute('placeholder') }));
+
+  const sel = $('langSel');
+  LANGS.forEach(([code, name]) => {
+    const o = document.createElement('option');
+    o.value = code; o.textContent = name;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => applyLang(sel.value));
+
+  let want = null;
+  try{ want = localStorage.getItem('logos-lang'); }catch(e){}
+  if (!want){
+    const codes = (navigator.languages && navigator.languages.length)
+      ? navigator.languages : [navigator.language || 'en'];
+    for (const c of codes){
+      const base = String(c).toLowerCase().split('-')[0];
+      if (LANGS.some(l => l[0] === base)){ want = base; break; }
+    }
+  }
+  applyLang(want && LANGS.some(l => l[0] === want) ? want : 'en');
+}
+
+function applyLang(code){
+  CURLANG = code;
+  const dict = I18N[code] || {};
+  document.documentElement.lang = code;
+  document.documentElement.dir = RTL.indexOf(code) >= 0 ? 'rtl' : 'ltr';
+  ORIGINALS.forEach((orig, el) => {
+    const v = dict[orig.key];
+    if (orig.ph !== undefined) el.setAttribute('placeholder', v !== undefined ? v : orig.ph);
+    else el.innerHTML = v !== undefined ? v : orig.html;
+  });
+  $('langSel').value = code;
+  try{ localStorage.setItem('logos-lang', code); }catch(e){}
+  refreshInstallBar();
+  if (V_SEAL && V_FILE && !$('verResult').classList.contains('hide')) tryVerify();
+  if (CURRENT && !$('sealResult').classList.contains('hide')) refreshSeal();
+}
+
+initLang();
 $('verNum').textContent = LOGOS_VERSION;
 </script>
 </body>
