@@ -137,7 +137,9 @@ Telegram or email — because a proof counts once other people hold a copy.
 ## It speaks 13 languages
 
 Arabic, Bengali, Chinese, English, French, German, Hindi, Indonesian, Italian, Portuguese, Russian,
-Spanish and Urdu — the whole interface, not just the buttons. The language is detected from your
+Spanish and Urdu — the whole interface in every language, 183 strings each, none missing: the sealing,
+the verification, the posthumous release, the spreading panel, and the letter each trusted person
+receives. The language is detected from your
 device and can be changed at any time. Arabic and Urdu are laid out right to left, while fingerprints
 and shell commands stay left to right so they remain readable.
 
