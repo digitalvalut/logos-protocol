@@ -1,0 +1,6 @@
+verità.rtf
+*.logos.json
+*.ots
+*.certificate.html
+.DS_Store
+__pycache__/

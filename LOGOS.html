@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS — The Unbreakable Truth Protocol</title>
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#12161b; --panel2:#171d24; --line:#242c35;
+    --ink:#e8edf2; --dim:#96a3b0; --faint:#5f6d7a;
+    --ok:#3ddc97; --bad:#ff5c5c; --warn:#ffb648; --accent:#7aa2ff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 80px}
+  header{text-align:center;padding:18px 0 8px}
+  h1{font-size:34px;letter-spacing:.22em;margin:0;font-weight:600}
+  .sub{color:var(--dim);font-size:14px;margin-top:6px;letter-spacing:.04em}
+  .tagline{color:var(--faint);font-size:12.5px;margin-top:10px}
+  nav{display:flex;gap:6px;justify-content:center;margin:22px 0 20px;flex-wrap:wrap}
+  nav button{background:var(--panel);color:var(--dim);border:1px solid var(--line);
+    padding:9px 20px;border-radius:999px;cursor:pointer;font-size:13.5px;letter-spacing:.1em;
+    font-family:inherit}
+  nav button:hover{color:var(--ink);border-color:#33414f}
+  nav button.on{background:var(--ink);color:#0b0d10;border-color:var(--ink);font-weight:600}
+  .panel{display:none}
+  .panel.on{display:block}
+  .drop{border:2px dashed #2c3742;border-radius:16px;padding:46px 20px;text-align:center;
+    background:var(--panel);cursor:pointer;transition:border-color .15s,background .15s}
+  .drop:hover,.drop.hot{border-color:var(--accent);background:var(--panel2)}
+  .drop .big{font-size:17px;font-weight:600}
+  .drop .small{color:var(--dim);font-size:13px;margin-top:8px}
+  .drop .tiny{color:var(--faint);font-size:11.5px;margin-top:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:18px 20px;margin-top:16px}
+  .card h3{margin:0 0 12px;font-size:12px;letter-spacing:.18em;color:var(--dim);
+    text-transform:uppercase;font-weight:600}
+  .row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid #1b2229;font-size:13.5px}
+  .row:last-child{border-bottom:none}
+  .row .k{color:var(--dim);min-width:112px;flex-shrink:0}
+  .row .v{font-family:var(--mono);word-break:break-all;font-size:12.5px;line-height:1.65}
+  .hash{color:var(--accent)}
+  .bar{height:6px;background:#1b2229;border-radius:99px;overflow:hidden;margin:14px 0 8px}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent);transition:width .12s}
+  .status{color:var(--dim);font-size:12.5px;text-align:center;font-family:var(--mono)}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  button.act{background:var(--panel2);color:var(--ink);border:1px solid var(--line);
+    padding:10px 16px;border-radius:9px;cursor:pointer;font-size:13px;font-family:inherit}
+  button.act:hover{border-color:var(--accent);color:#fff}
+  button.act.primary{background:var(--ink);color:#0b0d10;border-color:var(--ink);font-weight:600}
+  button.act:disabled{opacity:.45;cursor:not-allowed}
+  label.fld{display:block;margin-top:12px}
+  label.fld span{display:block;font-size:12px;color:var(--dim);margin-bottom:5px}
+  input[type=text],textarea{width:100%;background:#0d1116;color:var(--ink);
+    border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:13.5px}
+  textarea{min-height:74px;resize:vertical}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  .verdict{border-radius:14px;padding:20px;text-align:center;margin-top:16px;border:1px solid}
+  .verdict.pass{background:rgba(61,220,151,.08);border-color:var(--ok);color:var(--ok)}
+  .verdict.fail{background:rgba(255,92,92,.08);border-color:var(--bad);color:var(--bad)}
+  .verdict .t{font-size:22px;font-weight:700;letter-spacing:.1em}
+  .verdict .d{font-size:13px;margin-top:6px;color:var(--dim)}
+  .note{font-size:12.5px;color:var(--faint);margin-top:14px;line-height:1.65}
+  .warnbox{border-left:3px solid var(--warn);background:rgba(255,182,72,.06);
+    padding:12px 14px;border-radius:0 9px 9px 0;font-size:12.5px;color:var(--dim);margin-top:14px}
+  code{font-family:var(--mono);background:#0d1116;border:1px solid var(--line);
+    padding:2px 6px;border-radius:5px;font-size:12px;color:var(--accent)}
+  pre{font-family:var(--mono);background:#0d1116;border:1px solid var(--line);
+    padding:12px 14px;border-radius:9px;font-size:12px;overflow-x:auto;color:var(--dim)}
+  .about h2{font-size:15px;margin:26px 0 8px;letter-spacing:.06em}
+  .about p,.about li{font-size:13.5px;color:var(--dim)}
+  .about strong{color:var(--ink);font-weight:600}
+  footer{text-align:center;color:var(--faint);font-size:11.5px;margin-top:44px;line-height:1.9}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;background:var(--ink);
+    color:#0b0d10;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;
+    opacity:0;pointer-events:none;transition:opacity .2s}
+  .toast.on{opacity:1}
+  .hide{display:none!important}
+  @media(max-width:560px){h1{font-size:24px}.row{flex-direction:column;gap:2px}.row .k{min-width:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>L O G O S</h1>
+  <div class="sub">The Unbreakable Truth Protocol</div>
+  <div class="tagline">Seal any file with mathematics. No account. No server. No permission needed.</div>
+</header>
+
+<nav>
+  <button id="tab-seal" class="on">SEAL</button>
+  <button id="tab-verify">VERIFY</button>
+  <button id="tab-about">HOW IT WORKS</button>
+</nav>
+
+<!-- ============================ SEAL ============================ -->
+<section id="p-seal" class="panel on">
+  <div class="drop" id="dropSeal">
+    <div class="big">Drop any file here</div>
+    <div class="small">document · photo · audio · video · anything</div>
+    <div class="tiny">Your file never leaves this device. Everything is computed locally, offline.</div>
+  </div>
+  <input type="file" id="fileSeal" class="hide">
+
+  <div id="sealProgress" class="card hide">
+    <h3>Sealing</h3>
+    <div class="bar"><i id="sealBar"></i></div>
+    <div class="status" id="sealStatus">reading…</div>
+  </div>
+
+  <div id="sealResult" class="hide">
+    <div class="card">
+      <h3>Cryptographic Seal</h3>
+      <div class="row"><div class="k">File</div><div class="v" id="rName"></div></div>
+      <div class="row"><div class="k">Size</div><div class="v" id="rSize"></div></div>
+      <div class="row"><div class="k">SHA3-512</div><div class="v hash" id="rSha3"></div></div>
+      <div class="row"><div class="k">SHA-256</div><div class="v hash" id="rSha2"></div></div>
+      <div class="row"><div class="k">Sealed at</div><div class="v" id="rTime"></div></div>
+      <div class="row"><div class="k">Seal ID</div><div class="v" id="rId"></div></div>
+    </div>
+
+    <div class="card">
+      <h3>Optional — bind your identity and your words to this file</h3>
+      <label class="fld"><span>Author / who is sealing this</span>
+        <input type="text" id="fAuthor" placeholder="e.g. Jane Doe, Rome, Italy" autocomplete="off"></label>
+      <label class="fld"><span>Statement — what this file is, and why it matters</span>
+        <textarea id="fStatement" placeholder="This recording was made on… It shows…"></textarea></label>
+      <div class="note">Changing these fields changes the Seal ID. They become part of the sealed record.</div>
+    </div>
+
+    <div class="card">
+      <h3>Keep the proof</h3>
+      <div class="btns">
+        <button class="act primary" id="btnSeal">Download seal (.logos.json)</button>
+        <button class="act" id="btnCert">Download certificate (.html)</button>
+        <button class="act" id="btnCopy">Copy public attestation</button>
+      </div>
+      <div class="note">The seal is a few hundred bytes of plain text. Email it, post it, print it,
+        commit it to a repository, put it on ten USB sticks. Every copy is the original.
+        Anyone with the file and the seal can verify it forever, offline.</div>
+    </div>
+
+    <div class="card">
+      <h3>Anchor to Bitcoin — independent proof of the date</h3>
+      <div class="note" style="margin-top:0">Your device clock proves nothing to a stranger: it can be
+        changed. Anchoring writes your fingerprint into the Bitcoin blockchain through free public
+        calendar servers (<strong>no wallet, no account, no payment, no personal data</strong> — only the
+        32-byte fingerprint of your file is ever sent). After that, the date of your file is proven by
+        the whole Bitcoin network, not by you.</div>
+      <div class="btns">
+        <button class="act primary" id="btnAnchor">Anchor now (needs internet, once)</button>
+      </div>
+      <div class="status hide" id="anchorStatus" style="text-align:left;margin-top:12px"></div>
+      <div class="warnbox">Confirmation takes a few hours. Keep the downloaded <code>.ots</code> file next
+        to your original file. After a day, upgrade and check it with the official free client:
+        <code>pip install opentimestamps-client</code> then <code>ots upgrade file.ots</code> and
+        <code>ots verify file.ots</code>. LOGOS never becomes necessary again — the proof is standard.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== VERIFY =========================== -->
+<section id="p-verify" class="panel">
+  <div class="drop" id="dropSealFile">
+    <div class="big">1 — Drop the seal</div>
+    <div class="small" id="sealLoaded">.logos.json or the certificate .html</div>
+  </div>
+  <div class="drop" id="dropOrig" style="margin-top:12px">
+    <div class="big">2 — Drop the original file</div>
+    <div class="small" id="origLoaded">the file that was sealed</div>
+  </div>
+  <input type="file" id="fileSealIn" class="hide">
+  <input type="file" id="fileOrig" class="hide">
+
+  <div id="verProgress" class="card hide">
+    <h3>Verifying</h3>
+    <div class="bar"><i id="verBar"></i></div>
+    <div class="status" id="verStatus">reading…</div>
+  </div>
+
+  <div id="verResult" class="hide"></div>
+
+  <div class="card">
+    <h3>Verify without LOGOS</h3>
+    <div class="note" style="margin-top:0">You never have to trust this program. Any computer on earth
+      can check the same numbers with standard tools:</div>
+    <pre>sha256sum  yourfile          # Linux
+shasum -a 256 yourfile        # macOS
+certutil -hashfile yourfile SHA256   # Windows
+
+openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
+    <div class="note">If the numbers match the seal, the file is bit-for-bit the one that was sealed.
+      If a single bit was changed, they cannot match.</div>
+  </div>
+</section>
+
+<!-- =========================== ABOUT ============================ -->
+<section id="p-about" class="panel about">
+  <div class="card">
+    <h3>The Manifesto</h3>
+    <p style="margin-top:0">Given to humanity so that anyone, anywhere, holds the inalienable power to
+      speak, to bear witness, and to defend themselves against abuse. No server to shut down, no
+      intermediary, no censorship. Pure mathematics and absolute freedom.</p>
+  </div>
+
+  <h2>What LOGOS actually does</h2>
+  <p>It computes two cryptographic fingerprints of your file — <strong>SHA3-512</strong> and
+    <strong>SHA-256</strong> — entirely on your device. A fingerprint is a short number that could only
+    have come from that exact file. Change one pixel, one syllable, one comma, and the fingerprint
+    changes completely. Nobody in the world can build a different file with the same fingerprint.</p>
+  <p>It then binds that fingerprint to a moment in time and to your words, and hands you the result as a
+    tiny text file — the <strong>seal</strong>. The seal is the proof. The file stays yours.</p>
+
+  <h2>What the seal proves</h2>
+  <ul>
+    <li><strong>Integrity</strong> — that a file is exactly, bit for bit, the file that was sealed. This
+      is absolute and permanent.</li>
+    <li><strong>Priority</strong> — that the file already existed at a certain moment, provided the seal
+      was made public or anchored at that moment.</li>
+    <li><strong>Attribution</strong> — that a named person made a specific statement about that file.</li>
+  </ul>
+
+  <h2>What it does not prove — read this</h2>
+  <p>Honesty is what makes a tool trustworthy, so here are its limits:</p>
+  <ul>
+    <li>A seal <strong>does not prove the content is true</strong>. It proves the file has not been
+      altered since it was sealed. A sealed lie is still a lie — but a sealed truth can no longer be
+      quietly rewritten.</li>
+    <li>The timestamp taken from your device is <strong>your own clock</strong>, and a clock can be
+      changed. Alone it convinces nobody. It becomes real proof the moment you make the fingerprint
+      public — by anchoring it to Bitcoin, posting it, emailing it, or having anyone else record it.
+      A fingerprint published at a certain date proves the file existed by that date.</li>
+    <li>No software can make a file <strong>impossible to delete</strong>. Data survives because copies
+      exist in many hands. LOGOS makes the proof so small that it can travel anywhere, and makes any
+      substituted copy instantly detectable. Copying is the survival; mathematics is the proof.</li>
+  </ul>
+
+  <h2>How to make a proof that cannot be erased</h2>
+  <ol>
+    <li>Seal the file. Keep the seal.</li>
+    <li>Anchor it to Bitcoin (one click, free) — the date becomes independent of you.</li>
+    <li>Send the attestation text to several people, in different countries, on different channels.
+      Post it publicly. Each copy is a full witness.</li>
+    <li>Keep copies of the original file in several places. The seal proves which copies are authentic.</li>
+  </ol>
+  <p>An adversary would then have to erase every copy, in every country, and break Bitcoin, and break
+    SHA-3. That is the point.</p>
+
+  <h2>Sovereignty</h2>
+  <p>This page is one single file. It contains no libraries, no trackers, no analytics, no network calls
+    of any kind — except the anchoring button, which you press yourself. Turn off your internet: it
+    still works. Copy it to a USB stick, attach it to an email, host it anywhere: it still works. It is
+    yours now, permanently, and it cannot be taken back.</p>
+
+  <footer>
+    <strong style="color:var(--dim)">LOGOS — The Unbreakable Truth Protocol</strong><br>
+    Created and conceived by Dr. Giuseppe Falsone for DigitalValut<br>
+    © 2026 DigitalValut and the DigitalValut Team · MIT License · Open source<br>
+    <strong style="color:var(--dim)">Donated to humanity</strong><br>
+    Version <span id="verNum"></span>
+  </footer>
+</section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const LOGOS_VERSION = "1.0";
+
+/* LOGOS core hashing — pure JS, streaming, no dependencies. */
+
+/* ---------------- SHA3-512 (FIPS 202, Keccak-f[1600]) ---------------- */
+const RC_LO = [
+  0x00000001, 0x00008082, 0x0000808a, 0x80008000, 0x0000808b, 0x80000001,
+  0x80008081, 0x00008009, 0x0000008a, 0x00000088, 0x80008009, 0x8000000a,
+  0x8000808b, 0x0000008b, 0x00008089, 0x00008003, 0x00008002, 0x00000080,
+  0x0000800a, 0x8000000a, 0x80008081, 0x00008080, 0x80000001, 0x80008008
+];
+const RC_HI = [
+  0x00000000, 0x00000000, 0x80000000, 0x80000000, 0x00000000, 0x00000000,
+  0x80000000, 0x80000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+  0x00000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000,
+  0x00000000, 0x80000000, 0x80000000, 0x80000000, 0x00000000, 0x80000000
+];
+// r[x][y] rotation offsets, flattened as ROT[x + 5*y]
+const ROT = (() => {
+  const r = [
+    [0, 36, 3, 41, 18],
+    [1, 44, 10, 45, 2],
+    [62, 6, 43, 15, 61],
+    [28, 55, 25, 21, 56],
+    [27, 20, 39, 8, 14]
+  ];
+  const out = new Int32Array(25);
+  for (let x = 0; x < 5; x++) for (let y = 0; y < 5; y++) out[x + 5 * y] = r[x][y];
+  return out;
+})();
+// destination index for rho+pi: B[y + 5*((2x+3y)%5)] = rot(A[x+5y])
+const PI = (() => {
+  const out = new Int32Array(25);
+  for (let x = 0; x < 5; x++) for (let y = 0; y < 5; y++) out[x + 5 * y] = y + 5 * ((2 * x + 3 * y) % 5);
+  return out;
+})();
+
+class SHA3_512 {
+  constructor() {
+    this.lo = new Int32Array(25);
+    this.hi = new Int32Array(25);
+    this.rate = 72;               // (1600 - 2*512)/8
+    this.buf = new Uint8Array(72);
+    this.bufLen = 0;
+    this.done = false;
+  }
+
+  _permute() {
+    const lo = this.lo, hi = this.hi;
+    let l0=lo[0], h0=hi[0], l1=lo[1], h1=hi[1], l2=lo[2], h2=hi[2], l3=lo[3], h3=hi[3], l4=lo[4], h4=hi[4], l5=lo[5], h5=hi[5], l6=lo[6], h6=hi[6], l7=lo[7], h7=hi[7], l8=lo[8], h8=hi[8], l9=lo[9], h9=hi[9], l10=lo[10], h10=hi[10], l11=lo[11], h11=hi[11], l12=lo[12], h12=hi[12], l13=lo[13], h13=hi[13], l14=lo[14], h14=hi[14], l15=lo[15], h15=hi[15], l16=lo[16], h16=hi[16], l17=lo[17], h17=hi[17], l18=lo[18], h18=hi[18], l19=lo[19], h19=hi[19], l20=lo[20], h20=hi[20], l21=lo[21], h21=hi[21], l22=lo[22], h22=hi[22], l23=lo[23], h23=hi[23], l24=lo[24], h24=hi[24];
+    let bl0=0, bh0=0, bl1=0, bh1=0, bl2=0, bh2=0, bl3=0, bh3=0, bl4=0, bh4=0, bl5=0, bh5=0, bl6=0, bh6=0, bl7=0, bh7=0, bl8=0, bh8=0, bl9=0, bh9=0, bl10=0, bh10=0, bl11=0, bh11=0, bl12=0, bh12=0, bl13=0, bh13=0, bl14=0, bh14=0, bl15=0, bh15=0, bl16=0, bh16=0, bl17=0, bh17=0, bl18=0, bh18=0, bl19=0, bh19=0, bl20=0, bh20=0, bl21=0, bh21=0, bl22=0, bh22=0, bl23=0, bh23=0, bl24=0, bh24=0;
+    let c0l=0,c1l=0,c2l=0,c3l=0,c4l=0,c0h=0,c1h=0,c2h=0,c3h=0,c4h=0,dl=0,dh=0;
+    for (let rd = 0; rd < 24; rd++) {
+      c0l = l0 ^ l5 ^ l10 ^ l15 ^ l20;
+      c0h = h0 ^ h5 ^ h10 ^ h15 ^ h20;
+      c1l = l1 ^ l6 ^ l11 ^ l16 ^ l21;
+      c1h = h1 ^ h6 ^ h11 ^ h16 ^ h21;
+      c2l = l2 ^ l7 ^ l12 ^ l17 ^ l22;
+      c2h = h2 ^ h7 ^ h12 ^ h17 ^ h22;
+      c3l = l3 ^ l8 ^ l13 ^ l18 ^ l23;
+      c3h = h3 ^ h8 ^ h13 ^ h18 ^ h23;
+      c4l = l4 ^ l9 ^ l14 ^ l19 ^ l24;
+      c4h = h4 ^ h9 ^ h14 ^ h19 ^ h24;
+      dl = c4l ^ ((c1l << 1) | (c1h >>> 31));
+      dh = c4h ^ ((c1h << 1) | (c1l >>> 31));
+      l0 ^= dl; h0 ^= dh;
+      l5 ^= dl; h5 ^= dh;
+      l10 ^= dl; h10 ^= dh;
+      l15 ^= dl; h15 ^= dh;
+      l20 ^= dl; h20 ^= dh;
+      dl = c0l ^ ((c2l << 1) | (c2h >>> 31));
+      dh = c0h ^ ((c2h << 1) | (c2l >>> 31));
+      l1 ^= dl; h1 ^= dh;
+      l6 ^= dl; h6 ^= dh;
+      l11 ^= dl; h11 ^= dh;
+      l16 ^= dl; h16 ^= dh;
+      l21 ^= dl; h21 ^= dh;
+      dl = c1l ^ ((c3l << 1) | (c3h >>> 31));
+      dh = c1h ^ ((c3h << 1) | (c3l >>> 31));
+      l2 ^= dl; h2 ^= dh;
+      l7 ^= dl; h7 ^= dh;
+      l12 ^= dl; h12 ^= dh;
+      l17 ^= dl; h17 ^= dh;
+      l22 ^= dl; h22 ^= dh;
+      dl = c2l ^ ((c4l << 1) | (c4h >>> 31));
+      dh = c2h ^ ((c4h << 1) | (c4l >>> 31));
+      l3 ^= dl; h3 ^= dh;
+      l8 ^= dl; h8 ^= dh;
+      l13 ^= dl; h13 ^= dh;
+      l18 ^= dl; h18 ^= dh;
+      l23 ^= dl; h23 ^= dh;
+      dl = c3l ^ ((c0l << 1) | (c0h >>> 31));
+      dh = c3h ^ ((c0h << 1) | (c0l >>> 31));
+      l4 ^= dl; h4 ^= dh;
+      l9 ^= dl; h9 ^= dh;
+      l14 ^= dl; h14 ^= dh;
+      l19 ^= dl; h19 ^= dh;
+      l24 ^= dl; h24 ^= dh;
+      bl0 = l0; bh0 = h0;
+      bl10 = (l1 << 1) | (h1 >>> 31); bh10 = (h1 << 1) | (l1 >>> 31);
+      bl20 = (h2 << 30) | (l2 >>> 2); bh20 = (l2 << 30) | (h2 >>> 2);
+      bl5 = (l3 << 28) | (h3 >>> 4); bh5 = (h3 << 28) | (l3 >>> 4);
+      bl15 = (l4 << 27) | (h4 >>> 5); bh15 = (h4 << 27) | (l4 >>> 5);
+      bl16 = (h5 << 4) | (l5 >>> 28); bh16 = (l5 << 4) | (h5 >>> 28);
+      bl1 = (h6 << 12) | (l6 >>> 20); bh1 = (l6 << 12) | (h6 >>> 20);
+      bl11 = (l7 << 6) | (h7 >>> 26); bh11 = (h7 << 6) | (l7 >>> 26);
+      bl21 = (h8 << 23) | (l8 >>> 9); bh21 = (l8 << 23) | (h8 >>> 9);
+      bl6 = (l9 << 20) | (h9 >>> 12); bh6 = (h9 << 20) | (l9 >>> 12);
+      bl7 = (l10 << 3) | (h10 >>> 29); bh7 = (h10 << 3) | (l10 >>> 29);
+      bl17 = (l11 << 10) | (h11 >>> 22); bh17 = (h11 << 10) | (l11 >>> 22);
+      bl2 = (h12 << 11) | (l12 >>> 21); bh2 = (l12 << 11) | (h12 >>> 21);
+      bl12 = (l13 << 25) | (h13 >>> 7); bh12 = (h13 << 25) | (l13 >>> 7);
+      bl22 = (h14 << 7) | (l14 >>> 25); bh22 = (l14 << 7) | (h14 >>> 25);
+      bl23 = (h15 << 9) | (l15 >>> 23); bh23 = (l15 << 9) | (h15 >>> 23);
+      bl8 = (h16 << 13) | (l16 >>> 19); bh8 = (l16 << 13) | (h16 >>> 19);
+      bl18 = (l17 << 15) | (h17 >>> 17); bh18 = (h17 << 15) | (l17 >>> 17);
+      bl3 = (l18 << 21) | (h18 >>> 11); bh3 = (h18 << 21) | (l18 >>> 11);
+      bl13 = (l19 << 8) | (h19 >>> 24); bh13 = (h19 << 8) | (l19 >>> 24);
+      bl14 = (l20 << 18) | (h20 >>> 14); bh14 = (h20 << 18) | (l20 >>> 14);
+      bl24 = (l21 << 2) | (h21 >>> 30); bh24 = (h21 << 2) | (l21 >>> 30);
+      bl9 = (h22 << 29) | (l22 >>> 3); bh9 = (l22 << 29) | (h22 >>> 3);
+      bl19 = (h23 << 24) | (l23 >>> 8); bh19 = (l23 << 24) | (h23 >>> 8);
+      bl4 = (l24 << 14) | (h24 >>> 18); bh4 = (h24 << 14) | (l24 >>> 18);
+      l0 = bl0 ^ (~bl1 & bl2); h0 = bh0 ^ (~bh1 & bh2);
+      l1 = bl1 ^ (~bl2 & bl3); h1 = bh1 ^ (~bh2 & bh3);
+      l2 = bl2 ^ (~bl3 & bl4); h2 = bh2 ^ (~bh3 & bh4);
+      l3 = bl3 ^ (~bl4 & bl0); h3 = bh3 ^ (~bh4 & bh0);
+      l4 = bl4 ^ (~bl0 & bl1); h4 = bh4 ^ (~bh0 & bh1);
+      l5 = bl5 ^ (~bl6 & bl7); h5 = bh5 ^ (~bh6 & bh7);
+      l6 = bl6 ^ (~bl7 & bl8); h6 = bh6 ^ (~bh7 & bh8);
+      l7 = bl7 ^ (~bl8 & bl9); h7 = bh7 ^ (~bh8 & bh9);
+      l8 = bl8 ^ (~bl9 & bl5); h8 = bh8 ^ (~bh9 & bh5);
+      l9 = bl9 ^ (~bl5 & bl6); h9 = bh9 ^ (~bh5 & bh6);
+      l10 = bl10 ^ (~bl11 & bl12); h10 = bh10 ^ (~bh11 & bh12);
+      l11 = bl11 ^ (~bl12 & bl13); h11 = bh11 ^ (~bh12 & bh13);
+      l12 = bl12 ^ (~bl13 & bl14); h12 = bh12 ^ (~bh13 & bh14);
+      l13 = bl13 ^ (~bl14 & bl10); h13 = bh13 ^ (~bh14 & bh10);
+      l14 = bl14 ^ (~bl10 & bl11); h14 = bh14 ^ (~bh10 & bh11);
+      l15 = bl15 ^ (~bl16 & bl17); h15 = bh15 ^ (~bh16 & bh17);
+      l16 = bl16 ^ (~bl17 & bl18); h16 = bh16 ^ (~bh17 & bh18);
+      l17 = bl17 ^ (~bl18 & bl19); h17 = bh17 ^ (~bh18 & bh19);
+      l18 = bl18 ^ (~bl19 & bl15); h18 = bh18 ^ (~bh19 & bh15);
+      l19 = bl19 ^ (~bl15 & bl16); h19 = bh19 ^ (~bh15 & bh16);
+      l20 = bl20 ^ (~bl21 & bl22); h20 = bh20 ^ (~bh21 & bh22);
+      l21 = bl21 ^ (~bl22 & bl23); h21 = bh21 ^ (~bh22 & bh23);
+      l22 = bl22 ^ (~bl23 & bl24); h22 = bh22 ^ (~bh23 & bh24);
+      l23 = bl23 ^ (~bl24 & bl20); h23 = bh23 ^ (~bh24 & bh20);
+      l24 = bl24 ^ (~bl20 & bl21); h24 = bh24 ^ (~bh20 & bh21);
+      l0 ^= RC_LO[rd]; h0 ^= RC_HI[rd];
+    }
+    lo[0] = l0; hi[0] = h0;
+    lo[1] = l1; hi[1] = h1;
+    lo[2] = l2; hi[2] = h2;
+    lo[3] = l3; hi[3] = h3;
+    lo[4] = l4; hi[4] = h4;
+    lo[5] = l5; hi[5] = h5;
+    lo[6] = l6; hi[6] = h6;
+    lo[7] = l7; hi[7] = h7;
+    lo[8] = l8; hi[8] = h8;
+    lo[9] = l9; hi[9] = h9;
+    lo[10] = l10; hi[10] = h10;
+    lo[11] = l11; hi[11] = h11;
+    lo[12] = l12; hi[12] = h12;
+    lo[13] = l13; hi[13] = h13;
+    lo[14] = l14; hi[14] = h14;
+    lo[15] = l15; hi[15] = h15;
+    lo[16] = l16; hi[16] = h16;
+    lo[17] = l17; hi[17] = h17;
+    lo[18] = l18; hi[18] = h18;
+    lo[19] = l19; hi[19] = h19;
+    lo[20] = l20; hi[20] = h20;
+    lo[21] = l21; hi[21] = h21;
+    lo[22] = l22; hi[22] = h22;
+    lo[23] = l23; hi[23] = h23;
+    lo[24] = l24; hi[24] = h24;
+  }
+
+  _absorbBlock(bytes, off) {
+    const lo = this.lo, hi = this.hi;
+    for (let i = 0; i < 9; i++) {           // 72 bytes = 9 lanes
+      const b = off + i * 8;
+      lo[i] ^= (bytes[b] | (bytes[b + 1] << 8) | (bytes[b + 2] << 16) | (bytes[b + 3] << 24));
+      hi[i] ^= (bytes[b + 4] | (bytes[b + 5] << 8) | (bytes[b + 6] << 16) | (bytes[b + 7] << 24));
+    }
+    this._permute();
+  }
+
+  update(data) {
+    if (this.done) throw new Error('digest already finalized');
+    let i = 0;
+    const n = data.length;
+    if (this.bufLen > 0) {
+      const need = this.rate - this.bufLen;
+      const take = Math.min(need, n);
+      this.buf.set(data.subarray(0, take), this.bufLen);
+      this.bufLen += take;
+      i = take;
+      if (this.bufLen === this.rate) { this._absorbBlock(this.buf, 0); this.bufLen = 0; }
+    }
+    while (n - i >= this.rate) { this._absorbBlock(data, i); i += this.rate; }
+    if (i < n) { this.buf.set(data.subarray(i), 0); this.bufLen = n - i; }
+    return this;
+  }
+
+  digest() {
+    if (!this.done) {
+      const pad = new Uint8Array(this.rate);
+      pad.set(this.buf.subarray(0, this.bufLen), 0);
+      pad[this.bufLen] = 0x06;              // SHA-3 domain separation + pad10*1 start
+      pad[this.rate - 1] |= 0x80;
+      this._absorbBlock(pad, 0);
+      const out = new Uint8Array(64);
+      for (let i = 0; i < 8; i++) {         // 64 bytes = 8 lanes
+        const l = this.lo[i], h = this.hi[i], b = i * 8;
+        out[b] = l & 0xff; out[b + 1] = (l >>> 8) & 0xff; out[b + 2] = (l >>> 16) & 0xff; out[b + 3] = (l >>> 24) & 0xff;
+        out[b + 4] = h & 0xff; out[b + 5] = (h >>> 8) & 0xff; out[b + 6] = (h >>> 16) & 0xff; out[b + 7] = (h >>> 24) & 0xff;
+      }
+      this.out = out;
+      this.done = true;
+    }
+    return this.out;
+  }
+}
+
+/* ---------------- SHA-256 (FIPS 180-4) ---------------- */
+const K256 = new Uint32Array([
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+]);
+
+class SHA256 {
+  constructor() {
+    this.h = new Uint32Array([
+      0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+      0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+    ]);
+    this.w = new Uint32Array(64);
+    this.buf = new Uint8Array(64);
+    this.bufLen = 0;
+    this.total = 0;        // total bytes (Number is exact up to 2^53)
+    this.done = false;
+  }
+
+  _block(b, off) {
+    const w = this.w, h = this.h;
+    for (let i = 0; i < 16; i++) {
+      const j = off + i * 4;
+      w[i] = (b[j] << 24) | (b[j + 1] << 16) | (b[j + 2] << 8) | b[j + 3];
+    }
+    for (let i = 16; i < 64; i++) {
+      const x = w[i - 15], y = w[i - 2];
+      const s0 = ((x >>> 7) | (x << 25)) ^ ((x >>> 18) | (x << 14)) ^ (x >>> 3);
+      const s1 = ((y >>> 17) | (y << 15)) ^ ((y >>> 19) | (y << 13)) ^ (y >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
+    }
+    let a = h[0], b1 = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], hh = h[7];
+    for (let i = 0; i < 64; i++) {
+      const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+      const ch = (e & f) ^ (~e & g);
+      const t1 = (hh + S1 + ch + K256[i] + w[i]) | 0;
+      const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+      const maj = (a & b1) ^ (a & c) ^ (b1 & c);
+      const t2 = (S0 + maj) | 0;
+      hh = g; g = f; f = e; e = (d + t1) | 0;
+      d = c; c = b1; b1 = a; a = (t1 + t2) | 0;
+    }
+    h[0] = (h[0] + a) | 0; h[1] = (h[1] + b1) | 0; h[2] = (h[2] + c) | 0; h[3] = (h[3] + d) | 0;
+    h[4] = (h[4] + e) | 0; h[5] = (h[5] + f) | 0; h[6] = (h[6] + g) | 0; h[7] = (h[7] + hh) | 0;
+  }
+
+  update(data) {
+    if (this.done) throw new Error('digest already finalized');
+    this.total += data.length;
+    let i = 0;
+    const n = data.length;
+    if (this.bufLen > 0) {
+      const take = Math.min(64 - this.bufLen, n);
+      this.buf.set(data.subarray(0, take), this.bufLen);
+      this.bufLen += take;
+      i = take;
+      if (this.bufLen === 64) { this._block(this.buf, 0); this.bufLen = 0; }
+    }
+    while (n - i >= 64) { this._block(data, i); i += 64; }
+    if (i < n) { this.buf.set(data.subarray(i), 0); this.bufLen = n - i; }
+    return this;
+  }
+
+  digest() {
+    if (!this.done) {
+      const bits = this.total * 8;
+      const padLen = (this.bufLen < 56 ? 56 : 120) - this.bufLen;
+      const tail = new Uint8Array(padLen + 8);
+      tail[0] = 0x80;
+      const hi = Math.floor(bits / 0x100000000), lo = bits >>> 0;
+      const t = tail.length;
+      tail[t - 8] = (hi >>> 24) & 0xff; tail[t - 7] = (hi >>> 16) & 0xff;
+      tail[t - 6] = (hi >>> 8) & 0xff; tail[t - 5] = hi & 0xff;
+      tail[t - 4] = (lo >>> 24) & 0xff; tail[t - 3] = (lo >>> 16) & 0xff;
+      tail[t - 2] = (lo >>> 8) & 0xff; tail[t - 1] = lo & 0xff;
+      const savedDone = false;
+      // absorb tail without touching this.total again
+      let i = 0;
+      if (this.bufLen > 0) {
+        const take = Math.min(64 - this.bufLen, tail.length);
+        this.buf.set(tail.subarray(0, take), this.bufLen);
+        this.bufLen += take; i = take;
+        if (this.bufLen === 64) { this._block(this.buf, 0); this.bufLen = 0; }
+      }
+      while (tail.length - i >= 64) { this._block(tail, i); i += 64; }
+      const out = new Uint8Array(32);
+      for (let k = 0; k < 8; k++) {
+        const v = this.h[k];
+        out[k * 4] = (v >>> 24) & 0xff; out[k * 4 + 1] = (v >>> 16) & 0xff;
+        out[k * 4 + 2] = (v >>> 8) & 0xff; out[k * 4 + 3] = v & 0xff;
+      }
+      this.out = out;
+      this.done = true;
+    }
+    return this.out;
+  }
+}
+
+function toHex(bytes) {
+  let s = '';
+  for (let i = 0; i < bytes.length; i++) s += bytes[i].toString(16).padStart(2, '0');
+  return s;
+}
+
+/* ============================ helpers ============================ */
+const $ = id => document.getElementById(id);
+const utf8 = s => new TextEncoder().encode(s);
+const sha256hex = bytes => toHex(new SHA256().update(bytes).digest());
+
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove('on'), 2200);
+}
+function fmtSize(n){
+  if (n < 1024) return n + ' bytes';
+  const u = ['KB','MB','GB','TB']; let i = -1, v = n;
+  while (v >= 1024 && i < 3){ v /= 1024; i++; }
+  return v.toFixed(v < 10 ? 2 : 1) + ' ' + u[i] + ' (' + n.toLocaleString('en-US') + ' bytes)';
+}
+function download(name, text, mime){
+  const blob = text instanceof Uint8Array ? new Blob([text], {type: mime||'application/octet-stream'})
+                                          : new Blob([text], {type: (mime||'text/plain') + ';charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+function safeName(s){ return (s||'file').replace(/[^A-Za-z0-9._-]+/g,'_').slice(0,80); }
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* Seal ID: SHA-256 of a fixed plain-text record. Identical in every implementation. */
+function computeSealId(s){
+  const rec = [
+    'LOGOS/1',
+    'sha3-512:' + s.hash['sha3-512'],
+    'sha256:' + s.hash['sha256'],
+    'size:' + s.file.size,
+    'name:' + s.file.name,
+    'sealed:' + s.sealed_utc,
+    'author:' + (s.author || ''),
+    'statement-sha256:' + sha256hex(utf8(s.statement || ''))
+  ].join('\n');
+  return sha256hex(utf8(rec));
+}
+
+/* Streaming hash of a File, 4 MB at a time, yielding to keep the page alive. */
+const CHUNK = 4 * 1024 * 1024;
+async function hashFile(file, onProgress){
+  const h3 = new SHA3_512(), h2 = new SHA256();
+  let off = 0;
+  const t0 = performance.now();
+  while (off < file.size){
+    const end = Math.min(off + CHUNK, file.size);
+    const buf = new Uint8Array(await file.slice(off, end).arrayBuffer());
+    h3.update(buf); h2.update(buf);
+    off = end;
+    const secs = (performance.now() - t0) / 1000;
+    onProgress(off / file.size, off / Math.max(secs, .001));
+    await new Promise(r => setTimeout(r, 0));
+  }
+  onProgress(1, 0);
+  return { 'sha3-512': toHex(h3.digest()), 'sha256': toHex(h2.digest()) };
+}
+
+/* file pickers + drag and drop */
+function wireDrop(dropEl, inputEl, handler){
+  dropEl.addEventListener('click', () => inputEl.click());
+  inputEl.addEventListener('change', () => { if (inputEl.files[0]) handler(inputEl.files[0]); inputEl.value=''; });
+  ['dragenter','dragover'].forEach(e => dropEl.addEventListener(e, ev => {
+    ev.preventDefault(); ev.stopPropagation(); dropEl.classList.add('hot'); }));
+  ['dragleave','drop'].forEach(e => dropEl.addEventListener(e, ev => {
+    ev.preventDefault(); ev.stopPropagation(); dropEl.classList.remove('hot'); }));
+  dropEl.addEventListener('drop', ev => {
+    const f = ev.dataTransfer && ev.dataTransfer.files[0];
+    if (f) handler(f);
+  });
+}
+['dragover','drop'].forEach(e => window.addEventListener(e, ev => ev.preventDefault()));
+
+/* ============================== tabs ============================== */
+const TABS = [['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-about','p-about']];
+TABS.forEach(([b,p]) => $(b).addEventListener('click', () => {
+  TABS.forEach(([b2,p2]) => { $(b2).classList.toggle('on', b2===b); $(p2).classList.toggle('on', p2===p); });
+  window.scrollTo(0,0);
+}));
+
+/* ============================== SEAL ============================== */
+let CURRENT = null;   // the seal object in progress
+
+wireDrop($('dropSeal'), $('fileSeal'), doSeal);
+
+async function doSeal(file){
+  $('sealResult').classList.add('hide');
+  $('sealProgress').classList.remove('hide');
+  $('sealBar').style.width = '0%';
+  $('sealStatus').textContent = 'reading ' + file.name + ' …';
+
+  let hashes;
+  try{
+    hashes = await hashFile(file, (frac, bps) => {
+      $('sealBar').style.width = (frac*100).toFixed(1) + '%';
+      $('sealStatus').textContent = (frac*100).toFixed(1) + '%' +
+        (bps > 0 ? '   ·   ' + (bps/1048576).toFixed(1) + ' MB/s' : '');
+    });
+  }catch(err){
+    $('sealProgress').classList.add('hide');
+    toast('Could not read that file');
+    return;
+  }
+
+  const now = new Date();
+  CURRENT = {
+    logos: LOGOS_VERSION,
+    type: 'seal',
+    file: { name: file.name, size: file.size, mime: file.type || 'application/octet-stream',
+            modified_utc: file.lastModified ? new Date(file.lastModified).toISOString() : null },
+    hash: hashes,
+    sealed_utc: now.toISOString(),
+    sealed_local: now.toString(),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown',
+    author: '',
+    statement: '',
+    seal_id: '',
+    note: 'Verify with LOGOS, or with any standard tool: sha256sum / openssl dgst -sha3-512'
+  };
+  refreshSeal();
+
+  $('sealProgress').classList.add('hide');
+  $('sealResult').classList.remove('hide');
+  $('rName').textContent = file.name;
+  $('rSize').textContent = fmtSize(file.size);
+  $('rSha3').textContent = hashes['sha3-512'];
+  $('rSha2').textContent = hashes['sha256'];
+  $('rTime').textContent = CURRENT.sealed_utc + '  (UTC)';
+  $('anchorStatus').classList.add('hide');
+  $('btnAnchor').disabled = false;
+  $('btnAnchor').textContent = 'Anchor now (needs internet, once)';
+}
+
+function refreshSeal(){
+  if (!CURRENT) return;
+  CURRENT.author = $('fAuthor').value.trim();
+  CURRENT.statement = $('fStatement').value.trim();
+  CURRENT.seal_id = computeSealId(CURRENT);
+  $('rId').textContent = CURRENT.seal_id;
+}
+$('fAuthor').addEventListener('input', refreshSeal);
+$('fStatement').addEventListener('input', refreshSeal);
+
+function sealJSON(){ return JSON.stringify(CURRENT, null, 2); }
+
+function attestationText(s){
+  return [
+    'LOGOS SEAL — PROOF OF EXISTENCE AND INTEGRITY',
+    '',
+    'file:      ' + s.file.name,
+    'size:      ' + s.file.size + ' bytes',
+    'sha3-512:  ' + s.hash['sha3-512'],
+    'sha256:    ' + s.hash['sha256'],
+    'sealed:    ' + s.sealed_utc + ' (UTC)',
+    (s.author ? 'author:    ' + s.author : null),
+    (s.statement ? 'statement: ' + s.statement : null),
+    'seal id:   ' + s.seal_id,
+    '',
+    'Anyone can verify: the file whose SHA-256 equals the number above is,',
+    'bit for bit, the file that was sealed. Check with: sha256sum <file>',
+    'LOGOS — The Unbreakable Truth Protocol. Free forever, for everyone.',
+    'DigitalValut and the DigitalValut Team · MIT License · Donated to humanity.'
+  ].filter(x => x !== null).join('\n');
+}
+
+$('btnSeal').addEventListener('click', () => {
+  refreshSeal();
+  download(safeName(CURRENT.file.name) + '.logos.json', sealJSON(), 'application/json');
+  toast('Seal saved');
+});
+$('btnCopy').addEventListener('click', async () => {
+  refreshSeal();
+  const txt = attestationText(CURRENT);
+  try{ await navigator.clipboard.writeText(txt); toast('Attestation copied'); }
+  catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast('Attestation copied'); }
+    catch(e2){ toast('Copy failed — download the seal instead'); }
+    ta.remove();
+  }
+});
+$('btnCert').addEventListener('click', () => {
+  refreshSeal();
+  download(safeName(CURRENT.file.name) + '.certificate.html', certificateHTML(CURRENT), 'text/html');
+  toast('Certificate saved');
+});
+
+/* A certificate that is also a machine-readable seal: LOGOS can read it back. */
+function certificateHTML(s){
+  const J = JSON.stringify(s, null, 2).replace(/<\//g, '<\\/');
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>LOGOS Certificate — ${esc(s.file.name)}</title>
+<style>
+body{font-family:Georgia,'Times New Roman',serif;max-width:720px;margin:40px auto;padding:0 28px;color:#111;line-height:1.6}
+h1{text-align:center;letter-spacing:.28em;font-size:24px;margin:0}
+.s{text-align:center;color:#666;font-size:13px;letter-spacing:.08em;margin:6px 0 26px}
+hr{border:none;border-top:1px solid #ccc;margin:22px 0}
+table{width:100%;border-collapse:collapse}
+td{padding:8px 0;vertical-align:top;border-bottom:1px solid #eee;font-size:13px}
+td.k{width:130px;color:#666;font-family:system-ui,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+td.v{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all;font-size:11.5px}
+.st{background:#f7f7f4;border-left:3px solid #333;padding:12px 16px;margin:18px 0;font-style:italic}
+.f{color:#666;font-size:11.5px;text-align:center;margin-top:30px;line-height:1.8;font-family:system-ui,sans-serif}
+@media print{body{margin:0}}
+</style></head><body>
+<h1>L O G O S</h1>
+<div class="s">CERTIFICATE OF EXISTENCE AND INTEGRITY</div>
+<hr>
+<p>The digital file described below existed in exactly this state at the moment recorded here. Its
+cryptographic fingerprints are stated below. Any modification of the file, however small, makes these
+fingerprints impossible to reproduce.</p>
+<table>
+<tr><td class="k">File</td><td class="v">${esc(s.file.name)}</td></tr>
+<tr><td class="k">Size</td><td class="v">${s.file.size} bytes</td></tr>
+<tr><td class="k">Type</td><td class="v">${esc(s.file.mime)}</td></tr>
+<tr><td class="k">SHA3-512</td><td class="v">${s.hash['sha3-512']}</td></tr>
+<tr><td class="k">SHA-256</td><td class="v">${s.hash['sha256']}</td></tr>
+<tr><td class="k">Sealed at</td><td class="v">${esc(s.sealed_utc)} UTC</td></tr>
+<tr><td class="k">Time zone</td><td class="v">${esc(s.timezone)}</td></tr>
+${s.author ? `<tr><td class="k">Author</td><td class="v">${esc(s.author)}</td></tr>` : ''}
+<tr><td class="k">Seal ID</td><td class="v">${s.seal_id}</td></tr>
+</table>
+${s.statement ? `<div class="st">${esc(s.statement)}</div>` : ''}
+<hr>
+<p style="font-size:12.5px;color:#444">To verify, compute the SHA-256 of the file
+(<code>sha256sum file</code> on Linux, <code>shasum -a 256 file</code> on macOS,
+<code>certutil -hashfile file SHA256</code> on Windows) and compare it with the number above.
+Or drop this certificate and the file into LOGOS. The timestamp above is taken from the sealing
+device and is corroborated only if this certificate was published or anchored at that time.</p>
+<div class="f">LOGOS — The Unbreakable Truth Protocol<br>
+Created and conceived by Dr. Giuseppe Falsone for DigitalValut<br>
+© 2026 DigitalValut and the DigitalValut Team · MIT License · Donated to humanity<br>
+This certificate is also a machine-readable seal file.</div>
+<script type="application/logos+json" id="logos-seal">
+${J}
+<\/script>
+</body></html>`;
+}
+
+/* ==================== Bitcoin anchoring (OpenTimestamps) ==================== */
+const CALENDARS = [
+  'https://a.pool.opentimestamps.org',
+  'https://b.pool.opentimestamps.org',
+  'https://a.pool.eternitywall.com',
+  'https://ots.btc.catallaxy.com'
+];
+const OTS_MAGIC = new Uint8Array([
+  0x00,0x4f,0x70,0x65,0x6e,0x54,0x69,0x6d,0x65,0x73,0x74,0x61,0x6d,0x70,0x73,
+  0x00,0x00,0x50,0x72,0x6f,0x6f,0x66,0x00,0xbf,0x89,0xe2,0xe8,0x84,0xe8,0x92,0x94
+]);
+function hexToBytes(h){
+  const a = new Uint8Array(h.length/2);
+  for (let i=0;i<a.length;i++) a[i] = parseInt(h.substr(i*2,2),16);
+  return a;
+}
+function concatBytes(list){
+  let n = 0; for (const b of list) n += b.length;
+  const out = new Uint8Array(n); let o = 0;
+  for (const b of list){ out.set(b, o); o += b.length; }
+  return out;
+}
+
+$('btnAnchor').addEventListener('click', async () => {
+  if (!CURRENT) return;
+  refreshSeal();
+  const box = $('anchorStatus');
+  box.classList.remove('hide');
+  $('btnAnchor').disabled = true;
+  $('btnAnchor').textContent = 'Anchoring…';
+  const lines = [];
+  const say = (s) => { lines.push(s); box.innerHTML = lines.map(esc).join('<br>'); };
+  say('Sending only the 32-byte fingerprint to independent calendar servers…');
+
+  const digest = hexToBytes(CURRENT.hash['sha256']);
+  const branches = [], used = [];
+  for (const url of CALENDARS){
+    try{
+      const res = await fetch(url + '/digest', {
+        method: 'POST', body: digest,
+        headers: { 'Content-Type': 'text/plain', 'Accept': 'application/vnd.opentimestamps.v1' }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      if (bytes.length < 8) throw new Error('short reply');
+      branches.push(bytes); used.push(url);
+      say('✓ ' + url.replace('https://','') + ' accepted the fingerprint');
+    }catch(err){
+      say('✗ ' + url.replace('https://','') + ' unreachable (' + err.message + ')');
+    }
+  }
+  if (!branches.length){
+    say('No calendar could be reached. Check your internet connection and try again.');
+    say('Your seal is still valid — anchoring only adds an independent date.');
+    $('btnAnchor').disabled = false;
+    $('btnAnchor').textContent = 'Try anchoring again';
+    return;
+  }
+
+  /* .ots file = magic | version 1 | op sha256 (0x08) | 32-byte digest | timestamp branches */
+  const parts = [OTS_MAGIC, new Uint8Array([0x01, 0x08]), digest];
+  branches.forEach((b, i) => {
+    if (i < branches.length - 1) parts.push(new Uint8Array([0xff]));
+    parts.push(b);
+  });
+  download(CURRENT.file.name + '.ots', concatBytes(parts), 'application/octet-stream');
+
+  CURRENT.bitcoin_anchor = {
+    standard: 'OpenTimestamps',
+    anchored_utc: new Date().toISOString(),
+    binds: 'sha256',
+    calendars: used,
+    status: 'pending — confirmed in the Bitcoin blockchain within a few hours',
+    proof_file: CURRENT.file.name + '.ots',
+    verify: 'ots upgrade ' + CURRENT.file.name + '.ots  &&  ots verify ' + CURRENT.file.name + '.ots'
+  };
+  say('');
+  say('Anchored to ' + branches.length + ' independent calendar' + (branches.length>1?'s':'') + '.');
+  say('The proof file "' + CURRENT.file.name + '.ots" has been downloaded — keep it with your file.');
+  say('Re-download your seal now: it records the anchor.');
+  $('btnAnchor').textContent = 'Anchored ✓ — anchor again';
+  $('btnAnchor').disabled = false;
+  toast('Anchored to Bitcoin');
+});
+
+/* ============================= VERIFY ============================= */
+let V_SEAL = null, V_FILE = null;
+
+wireDrop($('dropSealFile'), $('fileSealIn'), loadSealFile);
+wireDrop($('dropOrig'), $('fileOrig'), f => { V_FILE = f; $('origLoaded').textContent = f.name + ' — ' + fmtSize(f.size); tryVerify(); });
+
+async function loadSealFile(f){
+  let text;
+  try{ text = await f.text(); }catch(e){ toast('Could not read the seal'); return; }
+  let obj = null;
+  try{ obj = JSON.parse(text); }
+  catch(e){
+    const m = text.match(/<script[^>]*id=["']logos-seal["'][^>]*>([\s\S]*?)<\/script>/i);
+    if (m){ try{ obj = JSON.parse(m[1]); }catch(e2){} }
+  }
+  if (!obj || !obj.hash || !obj.hash['sha256']){
+    toast('That file is not a LOGOS seal');
+    return;
+  }
+  V_SEAL = obj;
+  $('sealLoaded').textContent = 'seal loaded — ' + (obj.file && obj.file.name ? obj.file.name : 'unknown file');
+  tryVerify();
+}
+
+async function tryVerify(){
+  if (!V_SEAL || !V_FILE) return;
+  $('verResult').classList.add('hide');
+  $('verProgress').classList.remove('hide');
+  $('verBar').style.width = '0%';
+  let hashes;
+  try{
+    hashes = await hashFile(V_FILE, (frac, bps) => {
+      $('verBar').style.width = (frac*100).toFixed(1) + '%';
+      $('verStatus').textContent = (frac*100).toFixed(1) + '%' +
+        (bps > 0 ? '   ·   ' + (bps/1048576).toFixed(1) + ' MB/s' : '');
+    });
+  }catch(e){
+    $('verProgress').classList.add('hide'); toast('Could not read that file'); return;
+  }
+  $('verProgress').classList.add('hide');
+
+  const okSha3 = V_SEAL.hash['sha3-512'] ? hashes['sha3-512'] === V_SEAL.hash['sha3-512'] : null;
+  const okSha2 = hashes['sha256'] === V_SEAL.hash['sha256'];
+  const okSize = V_SEAL.file && typeof V_SEAL.file.size === 'number' ? V_FILE.size === V_SEAL.file.size : null;
+  let okId = null;
+  if (V_SEAL.seal_id){
+    try{ okId = computeSealId(V_SEAL) === V_SEAL.seal_id; }catch(e){ okId = null; }
+  }
+  const pass = okSha2 && (okSha3 !== false);
+
+  const mark = b => b === null ? '<span style="color:var(--faint)">not in seal</span>'
+                   : (b ? '<span style="color:var(--ok)">MATCH</span>'
+                        : '<span style="color:var(--bad)">DIFFERENT</span>');
+  let html = `
+    <div class="verdict ${pass ? 'pass' : 'fail'}">
+      <div class="t">${pass ? 'AUTHENTIC' : 'ALTERED'}</div>
+      <div class="d">${pass
+        ? 'This file is bit for bit the file that was sealed.'
+        : 'This file is NOT the file that was sealed. It has been modified, or it is a different file.'}</div>
+    </div>
+    <div class="card">
+      <h3>Details</h3>
+      <div class="row"><div class="k">SHA3-512</div><div class="v">${mark(okSha3)}</div></div>
+      <div class="row"><div class="k">SHA-256</div><div class="v">${mark(okSha2)}</div></div>
+      <div class="row"><div class="k">Size</div><div class="v">${mark(okSize)}</div></div>
+      <div class="row"><div class="k">Seal integrity</div><div class="v">${
+        okId === null ? '<span style="color:var(--faint)">no seal id</span>'
+        : okId ? '<span style="color:var(--ok)">INTACT — the seal itself was not edited</span>'
+               : '<span style="color:var(--bad)">TAMPERED — the seal file was edited after sealing</span>'}</div></div>
+      <div class="row"><div class="k">Computed SHA-256</div><div class="v hash">${hashes['sha256']}</div></div>
+      <div class="row"><div class="k">Sealed SHA-256</div><div class="v hash">${esc(V_SEAL.hash['sha256'])}</div></div>
+      <div class="row"><div class="k">Sealed at</div><div class="v">${esc(V_SEAL.sealed_utc || 'unknown')} UTC</div></div>
+      ${V_SEAL.author ? `<div class="row"><div class="k">Author</div><div class="v">${esc(V_SEAL.author)}</div></div>` : ''}
+      ${V_SEAL.statement ? `<div class="row"><div class="k">Statement</div><div class="v" style="font-family:var(--sans);font-size:13px">${esc(V_SEAL.statement)}</div></div>` : ''}
+      ${V_SEAL.bitcoin_anchor ? `<div class="row"><div class="k">Bitcoin anchor</div><div class="v" style="font-family:var(--sans);font-size:13px">${esc(V_SEAL.bitcoin_anchor.status||'present')} — verify the .ots file with <code>ots verify</code></div></div>` : ''}
+    </div>`;
+  if (pass){
+    html += `<div class="warnbox">The file is authentic. Remember what the date means: the sealing time
+      comes from the device that made the seal. It is independently proven only if the seal was
+      published or anchored to Bitcoin at that time.</div>`;
+  }
+  $('verResult').innerHTML = html;
+  $('verResult').classList.remove('hide');
+}
+
+$('verNum').textContent = LOGOS_VERSION;
+</script>
+</body>
+</html>
