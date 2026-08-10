@@ -150,6 +150,7 @@
 <nav>
   <button id="tab-seal" class="on" data-i18n="nav.seal">SEAL</button>
   <button id="tab-verify" data-i18n="nav.verify">VERIFY</button>
+  <button id="tab-spread" data-i18n="nav.spread">SPREAD IT</button>
   <button id="tab-vault" data-i18n="nav.vault">IF I DON'T COME BACK</button>
   <button id="tab-about" data-i18n="nav.about">HOW IT WORKS</button>
 </nav>
@@ -259,6 +260,69 @@ certutil -hashfile yourfile SHA256   # Windows
 openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
     <div class="note" data-i18n="ver.without2">If the numbers match the seal, the file is bit-for-bit the one that was sealed.
       If a single bit was changed, they cannot match.</div>
+  </div>
+</section>
+
+<!-- =========================== SPREAD ============================ -->
+<section id="p-spread" class="panel">
+  <div class="card">
+    <h3 data-i18n="spread.title">A proof matters when other people hold it</h3>
+    <div class="note" style="margin-top:0" data-i18n="spread.intro">A fingerprint kept on your own
+      device protects nothing: you could have made it this morning. The moment it is in other hands —
+      in other countries, on other channels — the date is witnessed and the truth can no longer be
+      quietly deleted. <strong>Send it to people, not only to institutions.</strong> Ten strangers who
+      keep a copy are stronger than one office that files it.</div>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="spread.textT">What you are about to send</h3>
+    <textarea id="spreadText" style="min-height:150px;font-family:var(--mono);font-size:11.5px"></textarea>
+    <div class="note" data-i18n="spread.textNote">Edit it freely before sending. It contains the
+      fingerprints of your file, not the file itself — sending it reveals nothing about the contents.
+      Everything you type here, however, goes where you send it.</div>
+    <div class="btns">
+      <button class="act" id="spFromSeal" data-i18n="spread.fromSeal">Use my last seal</button>
+      <button class="act" id="spCopy" data-i18n="spread.copy">Copy</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="spread.sendT">Send it to anyone — one tap</h3>
+    <div class="btns" id="spreadBtns">
+      <button class="act primary hide" id="spNative" data-i18n="spread.native">Share…</button>
+      <button class="act" data-send="whatsapp">WhatsApp</button>
+      <button class="act" data-send="telegram">Telegram</button>
+      <button class="act" data-send="signal" data-i18n="spread.signal">Signal (via Share)</button>
+      <button class="act" data-send="email" data-i18n="spread.email">Email</button>
+      <button class="act" data-send="sms">SMS</button>
+      <button class="act" data-send="x">X</button>
+      <button class="act" data-send="bluesky">Bluesky</button>
+    </div>
+    <div class="note" data-i18n="spread.sendNote">These open your own apps on your own device. LOGOS
+      sends nothing, stores nothing and sees nothing: there is no LOGOS server anywhere in this.</div>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="spread.orgT">Official secure channels — checked, and public</h3>
+    <div class="note" style="margin-top:0" data-i18n="spread.orgNote">These are the real submission
+      pages of investigative newsrooms and press-freedom organisations. Nobody can promise you a reply.
+      What they offer is a door that exists.</div>
+    <div id="orgList"></div>
+    <div class="warnbox" data-i18n="spread.orgWarn"><strong>Before you contact anyone, think about your
+      own safety.</strong> In some countries, the act of reaching out is itself the danger. SecureDrop
+      is designed for exactly that: it is used through the Tor Browser and hides who you are, even from
+      the newsroom. Send the fingerprint first and the file only later, once you trust the channel.</div>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="spread.embassyT">About embassies and lists of journalists</h3>
+    <div class="note" style="margin-top:0" data-i18n="spread.embassyNote">You will not find a built-in
+      list of every embassy and every reporter on earth here, and that is deliberate: such a list would
+      be out of date within weeks, and a proof sent to a dead address is a proof lost. Embassy contacts
+      change constantly and are published by each country's own foreign ministry — always take the
+      address from there, on the day you send it. The strongest thing you can do is simpler anyway:
+      give the attestation to several real people you can name, in different countries, and ask each of
+      them to keep a copy and to pass it on.</div>
   </div>
 </section>
 
@@ -440,7 +504,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.2";
+const LOGOS_VERSION = "1.3";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -1719,7 +1783,7 @@ function wireDrop(dropEl, inputEl, handler){
 ['dragover','drop'].forEach(e => window.addEventListener(e, ev => ev.preventDefault()));
 
 /* ============================== tabs ============================== */
-const TABS = [['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-vault','p-vault'],['tab-about','p-about']];
+const TABS = [['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-spread','p-spread'],['tab-vault','p-vault'],['tab-about','p-about']];
 TABS.forEach(([b,p]) => $(b).addEventListener('click', () => {
   TABS.forEach(([b2,p2]) => { $(b2).classList.toggle('on', b2===b); $(p2).classList.toggle('on', p2===p); });
   window.scrollTo(0,0);
@@ -2051,6 +2115,85 @@ async function tryVerify(){
   $('verResult').innerHTML = html;
   $('verResult').classList.remove('hide');
 }
+
+/* ============================= SPREAD IT =============================
+   Every address below was fetched and confirmed to exist before being listed.
+   Nothing here goes through LOGOS: these open the person's own apps. */
+const ORGS = [
+  ['SecureDrop directory', 'https://securedrop.org/directory/',
+   'spread.org.securedrop', 'Anonymous submission systems of hundreds of newsrooms worldwide, used through the Tor Browser. Start here if being identified would put you in danger.'],
+  ['ICIJ', 'https://www.icij.org/leak/',
+   'spread.org.icij', 'The consortium behind the Panama Papers. Built for documents that cross borders.'],
+  ['OCCRP', 'https://www.occrp.org/en/contact',
+   'spread.org.occrp', 'Organized Crime and Corruption Reporting Project — corruption, organised crime, sanctions.'],
+  ['Bellingcat', 'https://www.bellingcat.com/contact/',
+   'spread.org.bellingcat', 'Open-source investigators. Photos and videos of events they can verify independently.'],
+  ['The Guardian — SecureDrop', 'https://www.theguardian.com/securedrop',
+   'spread.org.guardian', 'A major newsroom with an anonymous channel.'],
+  ['The New York Times — Tips', 'https://www.nytimes.com/tips',
+   'spread.org.nyt', 'Several confidential ways to reach their journalists.'],
+  ['Committee to Protect Journalists', 'https://cpj.org/emergency-response/',
+   'spread.org.cpj', 'Emergency help for journalists in danger — not a place to publish, a place to be helped.'],
+  ['Reporters Without Borders', 'https://rsf.org/en',
+   'spread.org.rsf', 'Press-freedom defence and assistance, worldwide.'],
+  ['Freedom of the Press Foundation', 'https://freedom.press/',
+   'spread.org.fpf', 'The people who build SecureDrop. Practical guides on protecting sources.'],
+  ['International Criminal Court', 'https://www.icc-cpi.int/contact',
+   'spread.org.icc', 'For evidence of war crimes, crimes against humanity and genocide.']
+];
+
+function renderOrgs(){
+  $('orgList').innerHTML = ORGS.map(([name, url, key, desc]) => `
+    <div class="row" style="flex-direction:column;gap:3px;padding:11px 0">
+      <a href="${url}" target="_blank" rel="noopener noreferrer"
+         style="color:var(--accent);font-size:13.5px;text-decoration:none;font-weight:600">${esc(name)} ↗</a>
+      <div style="color:var(--faint);font-size:12.5px;line-height:1.55">${esc(t(key, desc))}</div>
+      <div style="color:#3f4a55;font-size:11px;font-family:var(--mono);word-break:break-all">${esc(url)}</div>
+    </div>`).join('');
+}
+renderOrgs();
+
+function spreadDefaultText(){
+  if (CURRENT && CURRENT.hash) return attestationText(CURRENT);
+  return t('spread.empty',
+    'Seal a file first (the SEAL tab) and its attestation will appear here, ready to send.');
+}
+$('spFromSeal').addEventListener('click', () => {
+  if (CURRENT) refreshSeal();
+  $('spreadText').value = spreadDefaultText();
+  toast(t('spread.loaded','Loaded'));
+});
+$('spCopy').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText($('spreadText').value); toast(t('toast.copied','Attestation copied')); }
+  catch(e){ toast(t('toast.copyFail','Copy failed — download the seal instead')); }
+});
+$('tab-spread').addEventListener('click', () => {
+  if (!$('spreadText').value.trim() || CURRENT) $('spreadText').value = spreadDefaultText();
+});
+if (navigator.share) $('spNative').classList.remove('hide');
+$('spNative').addEventListener('click', async () => {
+  try{ await navigator.share({ title: 'LOGOS', text: $('spreadText').value }); }catch(e){}
+});
+$('spreadBtns').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-send]');
+  if (!b) return;
+  const msg = $('spreadText').value;
+  const e = encodeURIComponent(msg);
+  const target = b.getAttribute('data-send');
+  let url = null;
+  if (target === 'whatsapp') url = 'https://wa.me/?text=' + e;
+  else if (target === 'telegram') url = 'https://t.me/share/url?url=&text=' + e;
+  else if (target === 'email') url = 'mailto:?subject=' + encodeURIComponent(t('spread.subject','LOGOS proof of existence')) + '&body=' + e;
+  else if (target === 'sms') url = 'sms:?&body=' + e;
+  else if (target === 'x') url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg.slice(0, 260));
+  else if (target === 'bluesky') url = 'https://bsky.app/intent/compose?text=' + encodeURIComponent(msg.slice(0, 290));
+  else if (target === 'signal'){
+    if (navigator.share){ navigator.share({ text: msg }).catch(()=>{}); return; }
+    toast(t('spread.signalNote','Copy the text, then paste it into Signal'));
+    return;
+  }
+  if (url) window.open(url, '_blank', 'noopener');
+});
 
 /* ============================== THE VAULT ==============================
    Lock a file with mathematics, cut the key into pieces, and hand one piece to
