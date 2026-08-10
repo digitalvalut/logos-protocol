@@ -204,6 +204,21 @@ ipfs add -r .
 Mirror it on the Internet Archive, attach it to an email, print the source, hand it out on USB
 sticks. It is under the MIT License: nobody needs to ask permission, and nobody can take it back.
 
+## Support the work — entirely optional
+
+LOGOS is free and stays free: no accounts, no subscriptions, no advertising, nothing to unlock. Every
+feature works forever without paying anyone. If it was useful to you and you want to give something
+back, DigitalValut accepts donations in **USDT on the Ethereum network (ERC-20)**:
+
+```
+0x953155bbe6686f73f009657f103334a04012a757
+```
+
+**Before sending anything:** send only USDT on the **Ethereum (ERC-20)** network to this address —
+coins sent on another network can be lost forever. Check the address character by character on your own
+screen; malware that swaps copied addresses is common. No donation buys anything: LOGOS gives everyone
+the same, for nothing.
+
 ## Author
 
 **Created and conceived by Dr. Giuseppe Falsone for DigitalValut.**

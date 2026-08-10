@@ -490,6 +490,26 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
     still works. Copy it to a USB stick, attach it to an email, host it anywhere: it still works. It is
     yours now, permanently, and it cannot be taken back.</p>
 
+  <div class="card" style="margin-top:26px">
+    <h3 data-i18n="give.title">Support the work — entirely optional</h3>
+    <div class="note" style="margin-top:0" data-i18n="give.note">LOGOS is free, and stays free. It has no
+      accounts, no subscriptions, no advertising and nothing to unlock: every feature on this page works
+      forever without paying anyone. If it was useful to you and you want to give something back,
+      DigitalValut accepts donations in <strong>USDT on the Ethereum network (ERC-20)</strong>.</div>
+    <div class="row" style="flex-direction:column;gap:6px;margin-top:12px">
+      <div class="k" data-i18n="give.addr">Donation address — USDT (ERC-20)</div>
+      <div class="v hash" id="giveAddr" style="font-size:12.5px">0x953155bbe6686f73f009657f103334a04012a757</div>
+    </div>
+    <div class="btns">
+      <button class="act" id="btnGiveCopy" data-i18n="give.copy">Copy the address</button>
+    </div>
+    <div class="warnbox" data-i18n="give.warn"><strong>Read this before sending anything.</strong> Send
+      only USDT on the <strong>Ethereum (ERC-20)</strong> network to this address — coins sent on another
+      network can be lost forever. Check the address character by character on your own screen before you
+      send: malware that swaps copied addresses is common. Nothing here is ever required, and no donation
+      buys you anything: LOGOS gives everyone the same, for nothing.</div>
+  </div>
+
   <footer>
     <strong style="color:var(--dim)">LOGOS — The Unbreakable Truth Protocol</strong><br>
     <span data-i18n="ab.credit">Created and conceived by Dr. Giuseppe Falsone for DigitalValut</span><br>
@@ -504,7 +524,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.3";
+const LOGOS_VERSION = "1.4";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -1358,6 +1378,464 @@ it: {
 
 /* LOGOS core hashing — pure JS, streaming, no dependencies. */
 
+/* Vault + Spread strings. Merged into the dictionaries built earlier. */
+Object.assign(I18N.it, {
+"nav.vault":"SE NON TORNO","nav.spread":"DIFFONDI",
+"vault.title":"Il rilascio postumo",
+"vault.intro":"Stai andando in un posto pericoloso. Hai qualcosa che il mondo dovrebbe sapere — ma solo se non torni. LOGOS chiude il tuo file con la matematica e taglia la chiave in pezzi, uno per ogni persona di cui ti fidi, in paesi diversi. <strong>Da soli non aprono nulla. Nessuno di loro può tradirti.</strong> Se abbastanza di loro decidono che il momento è arrivato, la verità si apre. Il file chiuso puoi pubblicarlo ovunque già oggi: fino a quel momento è illeggibile.",
+"vault.honest":"<strong>Sia chiaro che cos'è.</strong> Nessun programma può pubblicare qualcosa da solo dopo la tua morte: un computer che nessuno accende non fa niente. Quello che la matematica garantisce è la parte difficile: nessuno può leggerlo prima, nessuno da solo può tradirlo, e una volta sparso il file chiuso nessuno può fermarne l'apertura. Le persone che scegli sono l'innesco. Sceglile bene, e di' loro esattamente quando agire.",
+"vault.drop":"Trascina il file da proteggere","vault.dropTiny":"Viene cifrato qui, sul tuo dispositivo. Non viene caricato nulla.",
+"vault.fileT":"Il file","vault.whoT":"Chi custodisce la chiave",
+"vault.n":"Persone di cui ti fidi","vault.k":"Quante devono essere d'accordo",
+"vault.knote":"Cinque persone, tre necessarie, è un buon equilibrio: due possono perdere il pezzo, o essere messe a tacere, e la verità esce lo stesso — mentre due sole non possono aprirlo alle tue spalle.",
+"vault.wordsT":"Le tue parole, sigillate dentro",
+"vault.msg":"Messaggio da leggere quando verrà aperto","vault.msgPh":"Se state leggendo questo, non sono tornato. Quello che segue è…",
+"vault.when":"Quando devono aprirlo — dillo chiaramente","vault.whenPh":"es. se non vi scrivo entro il 20 settembre 2026",
+"vault.make":"Chiudilo e taglia la chiave",
+"vault.step1":"1 di 3 — calcolo l'impronta del file","vault.step2":"2 di 3 — lo sto chiudendo","vault.step3":"3 di 3 — taglio la chiave",
+"vault.doneT":"CHIUSO","vault.doneD":"Il file chiuso è stato scaricato. Nessuno può leggerlo — nemmeno tu — senza i pezzi qui sotto.",
+"vault.nextT":"Che cosa fare adesso — in quest'ordine",
+"vault.next1":"<strong>Diffondi il file chiuso</strong> — {file} — il più possibile, oggi. Mandalo per email, pubblicalo, dallo a degli sconosciuti. È illeggibile, quindi non ti costa nulla, e quando è ovunque nessuno può più toglierlo dal mondo.",
+"vault.next2":"<strong>Dai un pezzo della chiave a ogni persona di cui ti fidi</strong>, qui sotto. Persone diverse, paesi diversi, canali diversi. Non mandare mai due pezzi sullo stesso canale.",
+"vault.next3":"<strong>Di' loro chiaramente quando aprirlo</strong>, e che servono in {k} insieme.",
+"vault.next4":"<strong>Sigilla anche il file originale</strong> (scheda SIGILLA) e ancoralo a Bitcoin, così è provata anche la data.",
+"vault.pieceT":"Pezzo","vault.copyLetter":"Copia la lettera per questa persona","vault.sendLetter":"Invia",
+"vault.warn":"Se perdi troppi pezzi, il file è perduto per sempre — è il prezzo di una serratura che nessuno può forzare. Scrivi i pezzi anche su carta. E ricorda: il file viene aperto solo se le persone che hai scelto decidono di agire.",
+"vault.copied":"Lettera copiata",
+"vault.letterIntro":"Sei una delle persone di cui mi fido.",
+"vault.letterFrom":"Da: {who}",
+"vault.letterPiece":"Questo è il pezzo {i} di {n} di una chiave. Da solo non apre nulla e non rivela nulla. Servono {k} di questi pezzi, in mano a persone diverse, per aprire il file.",
+"vault.letterWhen":"Apritelo solo se: {when}",
+"vault.letterWhenNo":"Apritelo solo quando avrete deciso insieme che il momento è arrivato.",
+"vault.letterHow":"Come: apri LOGOS su digitalvalut.github.io/logos-protocol (funziona offline e si può installare), vai su «Se non torno», trascina dentro il file chiuso {file} e inserisci i pezzi.",
+"vault.letterKeep":"Il tuo pezzo — tienilo al sicuro, tienilo segreto:",
+"vault.openT":"Aprire un caveau",
+"vault.openNote":"Per le persone di cui ci si è fidati. Metti qui il file chiuso, poi inserisci i pezzi della chiave. Quando ce ne sono abbastanza, la verità si apre — su questo dispositivo, offline.",
+"vault.openDrop":"Trascina il file chiuso (.logos-vault)","vault.openDropSub":"nessuno può leggerlo senza i pezzi della chiave",
+"vault.shares":"I pezzi della chiave — incollali uno dopo l'altro","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"Apri la verità",
+"vault.needFile":"Aggiungi prima il file chiuso","vault.needShares":"Servono almeno due pezzi validi",
+"vault.reading":"leggo il file chiuso…","vault.checking":"controllo la chiave…","vault.opening":"apertura…",
+"vault.wrongT":"NON APERTO","vault.wrongD":"Questi pezzi non aprono questo file. O non sono abbastanza, o uno è stato scritto male, o non è il file chiuso corrispondente.",
+"vault.openedT":"APERTO","vault.openedD":"Il file è stato recuperato e scaricato. È esattamente il file che era stato chiuso.",
+"vault.theMessage":"Il messaggio lasciato per voi","vault.lockedAt":"Chiuso il","vault.openWhen":"Da aprire",
+"vault.afterOpen":"Ora verificatelo: andate su VERIFICA e confrontate il file recuperato con l'impronta qui sopra. Poi diffondetelo — è stato chiuso proprio perché questo momento non potesse essere fermato.",
+"vault.badFile":"Quel file non è un caveau LOGOS, oppure è danneggiato.","vault.failed":"Non è stato possibile chiudere il file",
+"spread.title":"Una prova conta quando ce l'hanno anche gli altri",
+"spread.intro":"Un'impronta tenuta sul tuo dispositivo non protegge nulla: potresti averla fatta stamattina. Nel momento in cui è in altre mani — in altri paesi, su altri canali — la data ha dei testimoni e la verità non può più essere cancellata in silenzio. <strong>Mandala alle persone, non solo alle istituzioni.</strong> Dieci sconosciuti che ne tengono una copia valgono più di un ufficio che la archivia.",
+"spread.textT":"Che cosa stai per mandare",
+"spread.textNote":"Modificalo pure prima di inviare. Contiene le impronte del tuo file, non il file: mandarlo non rivela nulla del contenuto. Tutto quello che scrivi qui, però, arriva dove lo mandi.",
+"spread.fromSeal":"Usa il mio ultimo sigillo","spread.copy":"Copia","spread.sendT":"Mandalo a chiunque — un tocco",
+"spread.native":"Condividi…","spread.signal":"Signal (via Condividi)","spread.email":"Email",
+"spread.sendNote":"Questi aprono le app che hai già sul tuo dispositivo. LOGOS non manda nulla, non salva nulla e non vede nulla: qui dentro non esiste nessun server LOGOS.",
+"spread.orgT":"Canali sicuri ufficiali — verificati, e pubblici",
+"spread.orgNote":"Sono le vere pagine di invio di redazioni investigative e organizzazioni per la libertà di stampa. Nessuno può prometterti una risposta. Quello che offrono è una porta che esiste davvero.",
+"spread.orgWarn":"<strong>Prima di contattare qualcuno, pensa alla tua sicurezza.</strong> In certi paesi è il contatto stesso il pericolo. SecureDrop è fatto esattamente per questo: si usa con il browser Tor e nasconde chi sei, perfino alla redazione. Manda prima l'impronta, e il file solo dopo, quando ti fidi del canale.",
+"spread.embassyT":"Su ambasciate ed elenchi di giornalisti",
+"spread.embassyNote":"Qui non troverai un elenco già pronto di tutte le ambasciate e di tutti i giornalisti del mondo, ed è una scelta voluta: un elenco simile è vecchio nel giro di settimane, e una prova mandata a un indirizzo morto è una prova persa. I contatti delle ambasciate cambiano di continuo e li pubblica il ministero degli esteri di ogni paese — prendi l'indirizzo da lì, il giorno stesso in cui mandi. La cosa più forte, comunque, è più semplice: dai l'attestazione a più persone vere che sai nominare, in paesi diversi, e chiedi a ognuna di conservarla e di passarla avanti.",
+"spread.empty":"Sigilla prima un file (scheda SIGILLA) e la sua attestazione comparirà qui, pronta da mandare.",
+"spread.loaded":"Caricato","spread.subject":"LOGOS — prova di esistenza","spread.signalNote":"Copia il testo e incollalo in Signal"
+});
+
+Object.assign(I18N.es, {
+"nav.vault":"SI NO VUELVO","nav.spread":"DIFÚNDELO",
+"vault.title":"La publicación póstuma",
+"vault.intro":"Vas a un lugar peligroso. Tienes algo que el mundo debería saber — pero solo si no vuelves. LOGOS cierra tu archivo con matemáticas y corta la llave en pedazos, uno para cada persona en la que confías, en países distintos. <strong>Por separado no abren nada. Ninguna de ellas puede traicionarte.</strong> Si suficientes coinciden en que ha llegado el momento, la verdad se abre. El archivo cerrado puedes publicarlo en todas partes hoy mismo: hasta entonces es ilegible.",
+"vault.honest":"<strong>Que quede claro qué es esto.</strong> Ningún programa puede publicar algo por sí solo cuando ya no estás: un ordenador que nadie enciende no hace nada. Lo que garantiza la matemática es la parte difícil: nadie puede leerlo antes de tiempo, ninguna persona sola puede traicionarlo, y una vez difundido el archivo cerrado nadie puede impedir su apertura. Las personas que elijas son el disparador. Elígelas bien y diles exactamente cuándo actuar.",
+"vault.drop":"Suelta el archivo que quieres proteger","vault.dropTiny":"Se cifra aquí, en tu dispositivo. No se sube nada.",
+"vault.fileT":"El archivo","vault.whoT":"Quién guarda la llave",
+"vault.n":"Personas en las que confías","vault.k":"Cuántas deben estar de acuerdo",
+"vault.knote":"Cinco personas, tres necesarias, es un buen equilibrio: dos pueden perder su pedazo, o ser silenciadas, y la verdad sale igual — mientras que dos solas no pueden abrirlo a tus espaldas.",
+"vault.wordsT":"Tus palabras, selladas dentro",
+"vault.msg":"Mensaje que se leerá al abrirlo","vault.msgPh":"Si estás leyendo esto, no volví. Lo que sigue es…",
+"vault.when":"Cuándo deben abrirlo — dilo con claridad","vault.whenPh":"p. ej. si no os escribo antes del 20 de septiembre de 2026",
+"vault.make":"Ciérralo y corta la llave",
+"vault.step1":"1 de 3 — calculando la huella del archivo","vault.step2":"2 de 3 — cerrándolo","vault.step3":"3 de 3 — cortando la llave",
+"vault.doneT":"CERRADO","vault.doneD":"El archivo cerrado se ha descargado. Nadie puede leerlo — tú tampoco — sin los pedazos de abajo.",
+"vault.nextT":"Qué hacer ahora — en este orden",
+"vault.next1":"<strong>Difunde el archivo cerrado</strong> — {file} — todo lo que puedas, hoy. Mándalo por correo, publícalo, dáselo a desconocidos. Es ilegible, así que no te cuesta nada, y cuando esté en todas partes nadie podrá sacarlo del mundo.",
+"vault.next2":"<strong>Da un pedazo de la llave a cada persona en la que confías</strong>, abajo. Personas distintas, países distintos, canales distintos. Nunca envíes dos pedazos por el mismo canal.",
+"vault.next3":"<strong>Diles con claridad cuándo abrirlo</strong>, y que hacen falta {k} de ellas juntas.",
+"vault.next4":"<strong>Sella también el archivo original</strong> (pestaña SELLAR) y ánclalo a Bitcoin, para que la fecha quede probada.",
+"vault.pieceT":"Pedazo","vault.copyLetter":"Copiar la carta para esta persona","vault.sendLetter":"Enviar",
+"vault.warn":"Si pierdes demasiados pedazos, el archivo se pierde para siempre — es el precio de una cerradura que nadie puede forzar. Escribe los pedazos también en papel. Y recuerda: el archivo solo se abre si las personas que elegiste deciden actuar.",
+"vault.copied":"Carta copiada",
+"vault.letterIntro":"Eres una de las personas en las que confío.",
+"vault.letterFrom":"De: {who}",
+"vault.letterPiece":"Este es el pedazo {i} de {n} de una llave. Por sí solo no abre nada ni revela nada. Hacen falta {k} de estos pedazos, en manos de personas distintas, para abrir el archivo.",
+"vault.letterWhen":"Ábranlo solo si: {when}",
+"vault.letterWhenNo":"Ábranlo solo cuando hayan acordado que ha llegado el momento.",
+"vault.letterHow":"Cómo: abre LOGOS en digitalvalut.github.io/logos-protocol (funciona sin conexión y se puede instalar), ve a «Si no vuelvo», suelta ahí el archivo cerrado {file} e introduce los pedazos.",
+"vault.letterKeep":"Tu pedazo — guárdalo a salvo, guárdalo en secreto:",
+"vault.openT":"Abrir una caja fuerte",
+"vault.openNote":"Para las personas en quienes se confió. Pon aquí el archivo cerrado y luego introduce los pedazos de la llave. Cuando haya suficientes, la verdad se abre — en este dispositivo, sin conexión.",
+"vault.openDrop":"Suelta el archivo cerrado (.logos-vault)","vault.openDropSub":"nadie puede leerlo sin los pedazos de la llave",
+"vault.shares":"Los pedazos de la llave — pégalos uno tras otro","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"Abrir la verdad",
+"vault.needFile":"Añade primero el archivo cerrado","vault.needShares":"Hacen falta al menos dos pedazos válidos",
+"vault.reading":"leyendo el archivo cerrado…","vault.checking":"comprobando la llave…","vault.opening":"abriendo…",
+"vault.wrongT":"NO SE ABRIÓ","vault.wrongD":"Estos pedazos no abren este archivo. O no son suficientes, o uno se escribió mal, o no es el archivo cerrado que corresponde.",
+"vault.openedT":"ABIERTO","vault.openedD":"El archivo se ha recuperado y descargado. Es exactamente el archivo que se cerró.",
+"vault.theMessage":"El mensaje que se dejó para ti","vault.lockedAt":"Cerrado el","vault.openWhen":"Para abrirse",
+"vault.afterOpen":"Ahora verifícalo: ve a VERIFICAR y compara el archivo recuperado con la huella de arriba. Después difúndelo — se cerró precisamente para que este momento no pudiera detenerse.",
+"vault.badFile":"Ese archivo no es una caja fuerte LOGOS, o está dañado.","vault.failed":"No se pudo cerrar el archivo",
+"spread.title":"Una prueba vale cuando otras personas la tienen",
+"spread.intro":"Una huella guardada en tu propio dispositivo no protege nada: podrías haberla hecho esta mañana. En cuanto está en otras manos — en otros países, en otros canales — la fecha tiene testigos y la verdad ya no puede borrarse en silencio. <strong>Mándala a personas, no solo a instituciones.</strong> Diez desconocidos que guardan una copia son más fuertes que una oficina que la archiva.",
+"spread.textT":"Lo que estás a punto de enviar",
+"spread.textNote":"Edítalo libremente antes de enviarlo. Contiene las huellas de tu archivo, no el archivo: enviarlo no revela nada del contenido. Todo lo que escribas aquí, en cambio, llega adonde lo mandes.",
+"spread.fromSeal":"Usar mi último sello","spread.copy":"Copiar","spread.sendT":"Mándalo a quien quieras — un toque",
+"spread.native":"Compartir…","spread.signal":"Signal (con Compartir)","spread.email":"Correo",
+"spread.sendNote":"Estos abren las aplicaciones que ya tienes en tu dispositivo. LOGOS no envía nada, no guarda nada y no ve nada: aquí no hay ningún servidor de LOGOS.",
+"spread.orgT":"Canales seguros oficiales — verificados y públicos",
+"spread.orgNote":"Son las páginas reales de envío de redacciones de investigación y organizaciones de libertad de prensa. Nadie puede prometerte una respuesta. Lo que ofrecen es una puerta que existe de verdad.",
+"spread.orgWarn":"<strong>Antes de contactar con nadie, piensa en tu seguridad.</strong> En algunos países el propio contacto es el peligro. SecureDrop está hecho exactamente para eso: se usa con el navegador Tor y oculta quién eres, incluso ante la redacción. Envía primero la huella y el archivo solo después, cuando confíes en el canal.",
+"spread.embassyT":"Sobre embajadas y listas de periodistas",
+"spread.embassyNote":"Aquí no encontrarás una lista incorporada de todas las embajadas y todos los periodistas del mundo, y es deliberado: una lista así queda obsoleta en semanas, y una prueba enviada a una dirección muerta es una prueba perdida. Los contactos de las embajadas cambian constantemente y los publica el ministerio de exteriores de cada país — toma la dirección de allí, el mismo día en que envíes. Lo más fuerte, de todos modos, es más sencillo: da la atestación a varias personas reales que puedas nombrar, en países distintos, y pide a cada una que guarde una copia y la pase adelante.",
+"spread.empty":"Sella primero un archivo (pestaña SELLAR) y su atestación aparecerá aquí, lista para enviar.",
+"spread.loaded":"Cargado","spread.subject":"LOGOS — prueba de existencia","spread.signalNote":"Copia el texto y pégalo en Signal"
+});
+
+Object.assign(I18N.fr, {
+"nav.vault":"SI JE NE REVIENS PAS","nav.spread":"DIFFUSER",
+"vault.title":"La publication posthume",
+"vault.intro":"Vous partez dans un endroit dangereux. Vous détenez quelque chose que le monde devrait savoir — mais seulement si vous ne revenez pas. LOGOS ferme votre fichier avec les mathématiques et découpe la clé en morceaux, un pour chaque personne de confiance, dans des pays différents. <strong>Seuls, ils n'ouvrent rien. Aucun d'eux ne peut vous trahir.</strong> Si assez d'entre eux jugent que le moment est venu, la vérité s'ouvre. Le fichier fermé, vous pouvez le publier partout dès aujourd'hui : jusque-là il est illisible.",
+"vault.honest":"<strong>Soyons clairs sur ce que c'est.</strong> Aucun programme ne peut publier quoi que ce soit tout seul après votre mort : un ordinateur que personne n'allume ne fait rien. Ce que les mathématiques garantissent, c'est le plus dur : personne ne peut le lire trop tôt, personne seul ne peut le trahir, et une fois le fichier fermé répandu, personne ne peut empêcher son ouverture. Les personnes que vous choisissez sont le déclencheur. Choisissez-les bien et dites-leur exactement quand agir.",
+"vault.drop":"Déposez le fichier à protéger","vault.dropTiny":"Il est chiffré ici, sur votre appareil. Rien n'est envoyé.",
+"vault.fileT":"Le fichier","vault.whoT":"Qui détient la clé",
+"vault.n":"Personnes de confiance","vault.k":"Combien doivent être d'accord",
+"vault.knote":"Cinq personnes, trois nécessaires, est un bon équilibre : deux peuvent perdre leur morceau, ou être réduites au silence, et la vérité sort quand même — tandis que deux seules ne peuvent pas l'ouvrir dans votre dos.",
+"vault.wordsT":"Vos mots, scellés à l'intérieur",
+"vault.msg":"Message à lire au moment de l'ouverture","vault.msgPh":"Si vous lisez ceci, je ne suis pas revenu. Ce qui suit est…",
+"vault.when":"Quand doivent-ils l'ouvrir — dites-le clairement","vault.whenPh":"ex. si je ne vous écris pas avant le 20 septembre 2026",
+"vault.make":"Fermer et découper la clé",
+"vault.step1":"1 sur 3 — empreinte du fichier","vault.step2":"2 sur 3 — fermeture","vault.step3":"3 sur 3 — découpe de la clé",
+"vault.doneT":"FERMÉ","vault.doneD":"Le fichier fermé a été téléchargé. Personne ne peut le lire — vous non plus — sans les morceaux ci-dessous.",
+"vault.nextT":"Que faire maintenant — dans cet ordre",
+"vault.next1":"<strong>Répandez le fichier fermé</strong> — {file} — aussi largement que possible, aujourd'hui. Envoyez-le, publiez-le, donnez-le à des inconnus. Il est illisible, cela ne vous coûte donc rien, et lorsqu'il est partout personne ne peut plus le retirer du monde.",
+"vault.next2":"<strong>Donnez un morceau de la clé à chaque personne de confiance</strong>, ci-dessous. Des personnes différentes, des pays différents, des canaux différents. N'envoyez jamais deux morceaux par le même canal.",
+"vault.next3":"<strong>Dites-leur clairement quand l'ouvrir</strong>, et qu'il en faut {k} ensemble.",
+"vault.next4":"<strong>Scellez aussi le fichier original</strong> (onglet SCELLER) et ancrez-le à Bitcoin, pour que la date soit prouvée elle aussi.",
+"vault.pieceT":"Morceau","vault.copyLetter":"Copier la lettre pour cette personne","vault.sendLetter":"Envoyer",
+"vault.warn":"Si vous perdez trop de morceaux, le fichier est perdu pour toujours — c'est le prix d'une serrure que personne ne peut crocheter. Écrivez aussi les morceaux sur papier. Et rappelez-vous : le fichier n'est ouvert que si les personnes choisies décident d'agir.",
+"vault.copied":"Lettre copiée",
+"vault.letterIntro":"Vous êtes l'une des personnes en qui j'ai confiance.",
+"vault.letterFrom":"De : {who}",
+"vault.letterPiece":"Ceci est le morceau {i} sur {n} d'une clé. Seul, il n'ouvre rien et ne révèle rien. Il faut {k} de ces morceaux, détenus par des personnes différentes, pour ouvrir le fichier.",
+"vault.letterWhen":"Ne l'ouvrez que si : {when}",
+"vault.letterWhenNo":"Ne l'ouvrez que lorsque vous aurez convenu que le moment est venu.",
+"vault.letterHow":"Comment : ouvrez LOGOS sur digitalvalut.github.io/logos-protocol (fonctionne hors ligne et peut s'installer), allez dans « Si je ne reviens pas », déposez-y le fichier fermé {file} et saisissez les morceaux.",
+"vault.letterKeep":"Votre morceau — gardez-le en sûreté, gardez-le secret :",
+"vault.openT":"Ouvrir un coffre",
+"vault.openNote":"Pour les personnes à qui l'on a fait confiance. Mettez ici le fichier fermé, puis saisissez les morceaux de la clé. Quand il y en a assez, la vérité s'ouvre — sur cet appareil, hors ligne.",
+"vault.openDrop":"Déposez le fichier fermé (.logos-vault)","vault.openDropSub":"personne ne peut le lire sans les morceaux de la clé",
+"vault.shares":"Les morceaux de la clé — collez-les l'un après l'autre","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"Ouvrir la vérité",
+"vault.needFile":"Ajoutez d'abord le fichier fermé","vault.needShares":"Il faut au moins deux morceaux valides",
+"vault.reading":"lecture du fichier fermé…","vault.checking":"vérification de la clé…","vault.opening":"ouverture…",
+"vault.wrongT":"NON OUVERT","vault.wrongD":"Ces morceaux n'ouvrent pas ce fichier. Soit ils ne sont pas assez nombreux, soit l'un a été mal saisi, soit ce n'est pas le fichier fermé correspondant.",
+"vault.openedT":"OUVERT","vault.openedD":"Le fichier a été récupéré et téléchargé. C'est exactement le fichier qui avait été fermé.",
+"vault.theMessage":"Le message laissé pour vous","vault.lockedAt":"Fermé le","vault.openWhen":"À ouvrir",
+"vault.afterOpen":"Vérifiez-le maintenant : allez dans VÉRIFIER et comparez le fichier récupéré à l'empreinte ci-dessus. Puis diffusez-le — il avait été fermé précisément pour que ce moment ne puisse pas être empêché.",
+"vault.badFile":"Ce fichier n'est pas un coffre LOGOS, ou il est endommagé.","vault.failed":"Impossible de fermer le fichier",
+"spread.title":"Une preuve compte quand d'autres la détiennent",
+"spread.intro":"Une empreinte gardée sur votre appareil ne protège rien : vous auriez pu la faire ce matin. Dès qu'elle est entre d'autres mains — dans d'autres pays, sur d'autres canaux — la date a des témoins et la vérité ne peut plus être effacée en silence. <strong>Envoyez-la à des personnes, pas seulement à des institutions.</strong> Dix inconnus qui en gardent une copie valent mieux qu'un bureau qui la classe.",
+"spread.textT":"Ce que vous allez envoyer",
+"spread.textNote":"Modifiez-le librement avant l'envoi. Il contient les empreintes de votre fichier, pas le fichier : l'envoyer ne révèle rien du contenu. En revanche, tout ce que vous écrivez ici part là où vous l'envoyez.",
+"spread.fromSeal":"Utiliser mon dernier sceau","spread.copy":"Copier","spread.sendT":"Envoyez-le à qui vous voulez — en un geste",
+"spread.native":"Partager…","spread.signal":"Signal (via Partager)","spread.email":"E-mail",
+"spread.sendNote":"Ceux-ci ouvrent les applications déjà présentes sur votre appareil. LOGOS n'envoie rien, ne conserve rien et ne voit rien : il n'y a aucun serveur LOGOS là-dedans.",
+"spread.orgT":"Canaux sécurisés officiels — vérifiés et publics",
+"spread.orgNote":"Ce sont les véritables pages de dépôt de rédactions d'investigation et d'organisations de défense de la presse. Personne ne peut vous promettre une réponse. Ce qu'elles offrent, c'est une porte qui existe.",
+"spread.orgWarn":"<strong>Avant de contacter qui que ce soit, pensez à votre sécurité.</strong> Dans certains pays, le contact lui-même est le danger. SecureDrop est fait exactement pour cela : il s'utilise avec le navigateur Tor et cache qui vous êtes, même à la rédaction. Envoyez d'abord l'empreinte, et le fichier seulement ensuite, quand vous aurez confiance dans le canal.",
+"spread.embassyT":"À propos des ambassades et des listes de journalistes",
+"spread.embassyNote":"Vous ne trouverez pas ici une liste intégrée de toutes les ambassades et de tous les journalistes du monde, et c'est délibéré : une telle liste est périmée en quelques semaines, et une preuve envoyée à une adresse morte est une preuve perdue. Les contacts des ambassades changent sans cesse et sont publiés par le ministère des affaires étrangères de chaque pays — prenez l'adresse là-bas, le jour même de l'envoi. Le plus fort reste de toute façon plus simple : confiez l'attestation à plusieurs personnes réelles que vous pouvez nommer, dans des pays différents, et demandez à chacune d'en garder une copie et de la transmettre.",
+"spread.empty":"Scellez d'abord un fichier (onglet SCELLER) et son attestation apparaîtra ici, prête à partir.",
+"spread.loaded":"Chargé","spread.subject":"LOGOS — preuve d'existence","spread.signalNote":"Copiez le texte, puis collez-le dans Signal"
+});
+
+Object.assign(I18N.ar, {
+"nav.vault":"إن لم أعد","nav.spread":"انشره",
+"vault.title":"النشر بعد الرحيل",
+"vault.intro":"أنت ذاهب إلى مكان خطر، وتحمل شيئًا ينبغي أن يعرفه العالم — لكن فقط إن لم تعد. يقفل LOGOS ملفك بالرياضيات ويقسّم المفتاح إلى قطع، قطعة لكل شخص تثق به، في بلدان مختلفة. <strong>لا تفتح أي قطعة وحدها شيئًا، ولا يستطيع أحدهم منفردًا أن يخونك.</strong> وإذا اتفق عدد كافٍ منهم على أن اللحظة قد حانت، تُفتح الحقيقة. أما الملف المقفل فيمكنك نشره في كل مكان اليوم: يبقى غير قابل للقراءة حتى تلك اللحظة.",
+"vault.honest":"<strong>لنكن واضحين في ما هذا.</strong> لا يستطيع أي برنامج أن ينشر شيئًا بنفسه بعد رحيلك: حاسوب لا يشغّله أحد لا يفعل شيئًا. ما تضمنه الرياضيات هو الجزء الصعب: لا أحد يستطيع قراءته قبل الأوان، ولا أحد بمفرده يستطيع خيانته، وحين ينتشر الملف المقفل لا يستطيع أحد منع فتحه. الأشخاص الذين تختارهم هم الزناد. اخترهم جيدًا، وقل لهم بالضبط متى يتصرفون.",
+"vault.drop":"أفلت الملف الذي تريد حمايته","vault.dropTiny":"يُشفَّر هنا، على جهازك. لا يُرفع شيء.",
+"vault.fileT":"الملف","vault.whoT":"من يحمل المفتاح",
+"vault.n":"عدد من تثق بهم","vault.k":"كم منهم يجب أن يتفقوا",
+"vault.knote":"خمسة أشخاص، وثلاثة مطلوبون: توازن جيد. يمكن أن يفقد اثنان قطعتهما أو يُسكتا، وتخرج الحقيقة رغم ذلك — بينما لا يستطيع اثنان فقط فتحه من دون علمك.",
+"vault.wordsT":"كلماتك، مختومة في الداخل",
+"vault.msg":"رسالة تُقرأ عند الفتح","vault.msgPh":"إن كنت تقرأ هذا فأنا لم أعد. ما يلي هو…",
+"vault.when":"متى يفتحونه — قلها بوضوح","vault.whenPh":"مثال: إن لم أكتب لكم قبل 20 سبتمبر 2026",
+"vault.make":"أقفله واقسم المفتاح",
+"vault.step1":"١ من ٣ — حساب بصمة الملف","vault.step2":"٢ من ٣ — جارٍ الإقفال","vault.step3":"٣ من ٣ — تقسيم المفتاح",
+"vault.doneT":"مُقفَل","vault.doneD":"نُزِّل الملف المقفل. لا أحد يستطيع قراءته — ولا أنت — بدون القطع أدناه.",
+"vault.nextT":"ماذا تفعل الآن — بهذا الترتيب",
+"vault.next1":"<strong>انشر الملف المقفل</strong> — {file} — على أوسع نطاق تستطيعه، اليوم. أرسله بالبريد، انشره، أعطه لغرباء. إنه غير قابل للقراءة فلا يكلفك شيئًا، ومتى صار في كل مكان لم يعد بإمكان أحد إخراجه من العالم.",
+"vault.next2":"<strong>أعطِ قطعة من المفتاح لكل شخص تثق به</strong> من القائمة أدناه. أشخاص مختلفون، بلدان مختلفة، قنوات مختلفة. لا ترسل أبدًا قطعتين عبر القناة نفسها.",
+"vault.next3":"<strong>قل لهم بوضوح متى يفتحونه</strong>، وأن الأمر يحتاج إلى {k} منهم معًا.",
+"vault.next4":"<strong>اختم الملف الأصلي أيضًا</strong> (تبويب الختم) وثبّته في بيتكوين، ليصير التاريخ مُثبتًا كذلك.",
+"vault.pieceT":"قطعة","vault.copyLetter":"انسخ الرسالة الخاصة بهذا الشخص","vault.sendLetter":"أرسلها",
+"vault.warn":"إن فقدت عددًا كبيرًا من القطع ضاع الملف إلى الأبد — هذا ثمن قفل لا يستطيع أحد كسره. اكتب القطع على ورق أيضًا. وتذكّر: لا يُفتح الملف إلا إذا قرر الأشخاص الذين اخترتهم أن يتصرفوا.",
+"vault.copied":"نُسخت الرسالة",
+"vault.letterIntro":"أنت أحد الأشخاص الذين أثق بهم.",
+"vault.letterFrom":"من: {who}",
+"vault.letterPiece":"هذه هي القطعة {i} من {n} من مفتاح. وحدها لا تفتح شيئًا ولا تكشف شيئًا. يلزم {k} من هذه القطع، بحوزة أشخاص مختلفين، لفتح الملف.",
+"vault.letterWhen":"لا تفتحوه إلا إذا: {when}",
+"vault.letterWhenNo":"لا تفتحوه إلا بعد أن تتفقوا على أن اللحظة قد حانت.",
+"vault.letterHow":"الطريقة: افتح LOGOS على digitalvalut.github.io/logos-protocol (يعمل بلا إنترنت ويمكن تثبيته)، اذهب إلى «إن لم أعد»، أفلت فيه الملف المقفل {file}، ثم أدخل القطع.",
+"vault.letterKeep":"قطعتك — احفظها في أمان، واحفظها سرًا:",
+"vault.openT":"فتح خزنة",
+"vault.openNote":"لمن وُضعت فيهم الثقة. ضع هنا الملف المقفل، ثم أدخل قطع المفتاح. وحين يكتمل العدد الكافي تُفتح الحقيقة — على هذا الجهاز، وبلا إنترنت.",
+"vault.openDrop":"أفلت الملف المقفل (.logos-vault)","vault.openDropSub":"لا أحد يستطيع قراءته بدون قطع المفتاح",
+"vault.shares":"قطع المفتاح — الصقها واحدة تلو الأخرى","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"افتح الحقيقة",
+"vault.needFile":"أضف الملف المقفل أولًا","vault.needShares":"يلزم قطعتان صحيحتان على الأقل",
+"vault.reading":"قراءة الملف المقفل…","vault.checking":"التحقق من المفتاح…","vault.opening":"جارٍ الفتح…",
+"vault.wrongT":"لم يُفتح","vault.wrongD":"هذه القطع لا تفتح هذا الملف. إما أنها غير كافية، أو أن إحداها كُتبت خطأً، أو أن هذا ليس الملف المقفل المطابق.",
+"vault.openedT":"فُتح","vault.openedD":"استُعيد الملف ونُزِّل. وهو تمامًا الملف الذي جرى إقفاله.",
+"vault.theMessage":"الرسالة التي تُركت لكم","vault.lockedAt":"أُقفل في","vault.openWhen":"يُفتح عند",
+"vault.afterOpen":"تحقّقوا منه الآن: اذهبوا إلى «التحقق» وقارنوا الملف المستعاد بالبصمة أعلاه. ثم انشروه — فقد أُقفل تحديدًا كي لا يمكن إيقاف هذه اللحظة.",
+"vault.badFile":"هذا الملف ليس خزنة LOGOS، أو أنه تالف.","vault.failed":"تعذّر إقفال الملف",
+"spread.title":"الدليل يصير ذا قيمة حين يحمله آخرون",
+"spread.intro":"بصمة محفوظة على جهازك وحدك لا تحمي شيئًا: قد تكون صنعتها هذا الصباح. وما إن تصير في أيدٍ أخرى — في بلدان أخرى وعلى قنوات أخرى — حتى يصبح للتاريخ شهود، ولا يعود ممكنًا محو الحقيقة في صمت. <strong>أرسلها إلى أشخاص، لا إلى المؤسسات وحدها.</strong> عشرة غرباء يحتفظون بنسخة أقوى من مكتب واحد يحفظها في أرشيف.",
+"spread.textT":"ما أنت على وشك إرساله",
+"spread.textNote":"عدّله كما تشاء قبل الإرسال. يحتوي على بصمات ملفك لا على الملف نفسه: إرساله لا يكشف شيئًا عن المحتوى. أما كل ما تكتبه هنا فيصل إلى حيث ترسله.",
+"spread.fromSeal":"استخدم ختمي الأخير","spread.copy":"نسخ","spread.sendT":"أرسله إلى أي أحد — بلمسة واحدة",
+"spread.native":"مشاركة…","spread.signal":"Signal (عبر المشاركة)","spread.email":"بريد إلكتروني",
+"spread.sendNote":"هذه تفتح التطبيقات الموجودة أصلًا على جهازك. LOGOS لا يرسل شيئًا ولا يخزّن شيئًا ولا يرى شيئًا: لا وجود لأي خادم لـ LOGOS في هذا كله.",
+"spread.orgT":"قنوات آمنة رسمية — تم التحقق منها، وهي علنية",
+"spread.orgNote":"هذه صفحات الإرسال الحقيقية لغرف أخبار استقصائية ومنظمات لحرية الصحافة. لا أحد يستطيع أن يعدك بردّ. ما تقدّمه هو باب موجود فعلًا.",
+"spread.orgWarn":"<strong>قبل أن تتواصل مع أي جهة، فكّر في سلامتك.</strong> في بعض البلدان يكون التواصل نفسه هو الخطر. وSecureDrop مصمم لهذا تحديدًا: يُستخدم عبر متصفح Tor ويخفي هويتك حتى عن غرفة الأخبار. أرسل البصمة أولًا، والملف لاحقًا فقط، حين تثق بالقناة.",
+"spread.embassyT":"عن السفارات وقوائم الصحفيين",
+"spread.embassyNote":"لن تجد هنا قائمة جاهزة بكل سفارات وصحفيي العالم، وهذا مقصود: قائمة كهذه تصبح قديمة خلال أسابيع، ودليل يُرسل إلى عنوان ميت هو دليل ضائع. بيانات السفارات تتغير باستمرار وتنشرها وزارة خارجية كل بلد — خذ العنوان من هناك، في اليوم نفسه الذي ترسل فيه. والأقوى على أي حال أبسط: سلّم الإفادة إلى عدة أشخاص حقيقيين تعرف أسماءهم، في بلدان مختلفة، واطلب من كل منهم أن يحتفظ بنسخة وأن يمررها.",
+"spread.empty":"اختم ملفًا أولًا (تبويب الختم) وستظهر إفادته هنا جاهزة للإرسال.",
+"spread.loaded":"تم التحميل","spread.subject":"LOGOS — إثبات وجود","spread.signalNote":"انسخ النص ثم الصقه في Signal"
+});
+
+Object.assign(I18N.zh, {
+"nav.vault":"如果我没能回来","nav.spread":"传播出去",
+"vault.title":"身后的公开",
+"vault.intro":"你要去一个危险的地方。你手里有世界应当知道的东西 —— 但只在你回不来的时候。LOGOS 用数学把你的文件锁上，并把钥匙切成若干片，你信任的每个人一片，分布在不同国家。<strong>单独一片打不开任何东西，任何一个人都无法出卖你。</strong>当足够多的人认为时刻已到，真相就会打开。而锁住的文件今天就可以发布到任何地方：在那一刻之前，它不可读。",
+"vault.honest":"<strong>请弄清楚这是什么。</strong>你不在之后，没有任何程序能自己发布东西 —— 没人开机的电脑什么也做不了。数学保证的是最难的那部分：没有人能提前读到，没有任何一个人能单独背叛它，而锁住的文件一旦散布出去，没有人能阻止它被打开。你选择的人就是扳机。慎重选择，并明确告诉他们何时行动。",
+"vault.drop":"把要保护的文件拖到这里","vault.dropTiny":"就在你的设备上加密，不会上传任何内容。",
+"vault.fileT":"文件","vault.whoT":"谁保管钥匙",
+"vault.n":"你信任的人数","vault.k":"需要多少人同意",
+"vault.knote":"五个人、需要三人，是个好的平衡：两个人可以丢失自己的那片，或者被迫沉默，真相依然出得来 —— 而任何两个人也无法背着你打开它。",
+"vault.wordsT":"你的话，封在里面",
+"vault.msg":"打开时要被读到的留言","vault.msgPh":"如果你读到这段话，我没有回来。以下是……",
+"vault.when":"他们应当在什么情况下打开 —— 说清楚","vault.whenPh":"例如：如果我在2026年9月20日前没有联系你们",
+"vault.make":"锁上并切分钥匙",
+"vault.step1":"第1步，共3步 —— 计算文件指纹","vault.step2":"第2步，共3步 —— 正在上锁","vault.step3":"第3步，共3步 —— 切分钥匙",
+"vault.doneT":"已锁定","vault.doneD":"锁住的文件已下载。没有下面的钥匙碎片，任何人都读不了它 —— 包括你自己。",
+"vault.nextT":"现在要做什么 —— 按这个顺序",
+"vault.next1":"<strong>散布锁住的文件</strong> —— {file} —— 今天就尽可能广地散出去。发邮件、公开发布、交给陌生人。它不可读，所以你毫无损失；而当它无处不在时，没有人能再把它从世界上抹去。",
+"vault.next2":"<strong>把一片钥匙交给每一位你信任的人</strong>（见下）。不同的人、不同的国家、不同的渠道。绝不要用同一个渠道发送两片。",
+"vault.next3":"<strong>明确告诉他们何时打开</strong>，以及需要其中 {k} 人一起。",
+"vault.next4":"<strong>也给原始文件加封</strong>（加封标签页）并锚定到比特币，这样日期同样得到证明。",
+"vault.pieceT":"碎片","vault.copyLetter":"复制给这个人的信","vault.sendLetter":"发送",
+"vault.warn":"如果丢失的碎片太多，文件将永远失去 —— 这是一把谁也撬不开的锁的代价。也请把碎片抄写在纸上。并且记住：只有当你选择的人决定行动时，文件才会被打开。",
+"vault.copied":"信已复制",
+"vault.letterIntro":"你是我信任的人之一。",
+"vault.letterFrom":"来自：{who}",
+"vault.letterPiece":"这是一把钥匙的第 {i} 片，共 {n} 片。它单独打不开任何东西，也不泄露任何东西。需要由不同的人持有的 {k} 片，才能打开那个文件。",
+"vault.letterWhen":"只有在以下情况才打开：{when}",
+"vault.letterWhenNo":"只有当你们一致认为时刻已到时才打开。",
+"vault.letterHow":"方法：打开 digitalvalut.github.io/logos-protocol 上的 LOGOS（可离线使用，也可安装），进入「如果我没能回来」，把锁住的文件 {file} 拖进去，然后输入各片钥匙。",
+"vault.letterKeep":"你的这一片 —— 请妥善保管，务必保密：",
+"vault.openT":"打开一个保险库",
+"vault.openNote":"给那些被托付的人。把锁住的文件放到这里，再输入钥匙碎片。当碎片足够时，真相就会打开 —— 就在这台设备上，离线完成。",
+"vault.openDrop":"拖入锁住的文件（.logos-vault）","vault.openDropSub":"没有钥匙碎片，谁也读不了它",
+"vault.shares":"钥匙碎片 —— 一段接一段粘贴进来","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"打开真相",
+"vault.needFile":"请先加入锁住的文件","vault.needShares":"至少需要两片有效的碎片",
+"vault.reading":"正在读取锁住的文件…","vault.checking":"正在核对钥匙…","vault.opening":"正在打开…",
+"vault.wrongT":"未能打开","vault.wrongD":"这些碎片打不开这个文件。可能数量不够，或者其中一片输入有误，或者这不是对应的那个锁定文件。",
+"vault.openedT":"已打开","vault.openedD":"文件已恢复并下载。它正是当初被锁住的那个文件。",
+"vault.theMessage":"留给你们的话","vault.lockedAt":"锁定时间","vault.openWhen":"开启条件",
+"vault.afterOpen":"现在去验证：进入「验证」，把恢复出的文件与上面的指纹比对。然后把它传播出去 —— 当初上锁，正是为了让这一刻无法被阻止。",
+"vault.badFile":"该文件不是 LOGOS 保险库，或者已损坏。","vault.failed":"无法锁定该文件",
+"spread.title":"证据要在别人手里才有分量",
+"spread.intro":"只留在你自己设备上的指纹保护不了任何东西：它可能是你今早才做的。一旦它到了别人手里 —— 在别的国家、别的渠道 —— 日期就有了见证，真相也无法再被悄悄删除。<strong>发给人，而不只是发给机构。</strong>十个陌生人各存一份，胜过一个把它归档的办公室。",
+"spread.textT":"你将要发送的内容",
+"spread.textNote":"发送前可以自由修改。它包含的是文件的指纹，不是文件本身：发送它不会泄露内容。但你在这里写的一切，都会到达你发送的地方。",
+"spread.fromSeal":"使用我最近的封印","spread.copy":"复制","spread.sendT":"一键发给任何人",
+"spread.native":"分享…","spread.signal":"Signal（通过分享）","spread.email":"电子邮件",
+"spread.sendNote":"这些只是打开你设备上已有的应用。LOGOS 不发送任何东西、不保存任何东西、也看不到任何东西：这里根本不存在 LOGOS 的服务器。",
+"spread.orgT":"官方安全投稿渠道 —— 已逐个核实，且公开",
+"spread.orgNote":"这些是调查报道机构和新闻自由组织真实的投稿页面。没有人能向你保证会有回复。它们提供的，是一扇确实存在的门。",
+"spread.orgWarn":"<strong>联系任何人之前，先想想你自己的安全。</strong>在某些国家，联系这件事本身就是危险。SecureDrop 正是为此而生：通过 Tor 浏览器使用，即便对编辑部也隐藏你的身份。先发指纹，等你信任这个渠道之后再发文件。",
+"spread.embassyT":"关于大使馆和记者名单",
+"spread.embassyNote":"这里不会内置一份世界上所有大使馆和所有记者的名单，这是有意为之：这样的名单几周内就会过时，而寄往一个失效地址的证据就是丢失的证据。使馆联系方式不断变化，由各国外交部自行公布 —— 请在发送的当天从那里获取地址。无论如何，最有力的做法反而更简单：把这份声明交给几个你叫得出名字的真实的人，分布在不同国家，并请每个人保存一份并继续传下去。",
+"spread.empty":"先给一个文件加封（加封标签页），它的声明就会出现在这里，随时可发。",
+"spread.loaded":"已载入","spread.subject":"LOGOS — 存在性证明","spread.signalNote":"复制文本，然后粘贴到 Signal"
+});
+
+Object.assign(I18N.hi, {
+"nav.vault":"अगर मैं न लौटूँ","nav.spread":"फैलाइए",
+"vault.title":"मरणोपरांत प्रकाशन",
+"vault.intro":"आप किसी ख़तरनाक जगह जा रहे हैं। आपके पास कुछ ऐसा है जो दुनिया को जानना चाहिए — पर तभी, जब आप न लौटें। LOGOS आपकी फ़ाइल को गणित से बंद कर देता है और चाबी को टुकड़ों में काट देता है, एक टुकड़ा हर उस व्यक्ति के लिए जिस पर आप भरोसा करते हैं, अलग-अलग देशों में। <strong>अकेला कोई टुकड़ा कुछ नहीं खोलता। उनमें से कोई अकेला आपको धोखा नहीं दे सकता।</strong> जब उनमें से पर्याप्त लोग मान लें कि घड़ी आ गई है, सच खुल जाता है। बंद की गई फ़ाइल आप आज ही हर जगह प्रकाशित कर सकते हैं: उस क्षण तक वह पढ़ी नहीं जा सकती।",
+"vault.honest":"<strong>यह क्या है, यह साफ़ रहे।</strong> आपके बाद कोई प्रोग्राम अपने आप कुछ प्रकाशित नहीं कर सकता — जिस कंप्यूटर को कोई चालू न करे, वह कुछ नहीं करता। गणित जिसकी गारंटी देता है, वही सबसे कठिन हिस्सा है: कोई इसे समय से पहले नहीं पढ़ सकता, कोई अकेला इसके साथ विश्वासघात नहीं कर सकता, और बंद फ़ाइल एक बार फैल जाने के बाद कोई उसका खुलना नहीं रोक सकता। आपके चुने हुए लोग ही ट्रिगर हैं। उन्हें सोच-समझकर चुनिए और ठीक-ठीक बताइए कि कब कार्रवाई करनी है।",
+"vault.drop":"जिस फ़ाइल की रक्षा करनी है, उसे यहाँ छोड़ें","vault.dropTiny":"यह यहीं, आपके उपकरण पर एन्क्रिप्ट होती है। कुछ भी अपलोड नहीं होता।",
+"vault.fileT":"फ़ाइल","vault.whoT":"चाबी किसके पास रहेगी",
+"vault.n":"जिन पर आप भरोसा करते हैं","vault.k":"कितनों की सहमति ज़रूरी",
+"vault.knote":"पाँच लोग और तीन की ज़रूरत — यह अच्छा संतुलन है: दो अपना टुकड़ा खो सकते हैं या चुप कराए जा सकते हैं, फिर भी सच बाहर आता है — और कोई दो मिलकर आपकी पीठ पीछे इसे नहीं खोल सकते।",
+"vault.wordsT":"आपके शब्द, भीतर मुहरबंद",
+"vault.msg":"खोले जाने पर पढ़ा जाने वाला संदेश","vault.msgPh":"अगर आप यह पढ़ रहे हैं, तो मैं नहीं लौटा। आगे जो है, वह…",
+"vault.when":"वे इसे कब खोलें — साफ़-साफ़ लिखें","vault.whenPh":"जैसे: अगर मैं 20 सितंबर 2026 तक न लिखूँ",
+"vault.make":"बंद करें और चाबी काटें",
+"vault.step1":"3 में से 1 — फ़ाइल की छाप","vault.step2":"3 में से 2 — बंद किया जा रहा है","vault.step3":"3 में से 3 — चाबी काटी जा रही है",
+"vault.doneT":"बंद हो गया","vault.doneD":"बंद फ़ाइल डाउनलोड हो गई। नीचे दिए टुकड़ों के बिना इसे कोई नहीं पढ़ सकता — आप भी नहीं।",
+"vault.nextT":"अब क्या करें — इसी क्रम में",
+"vault.next1":"<strong>बंद फ़ाइल फैलाइए</strong> — {file} — आज ही, जितना दूर तक हो सके। ईमेल कीजिए, प्रकाशित कीजिए, अजनबियों को दीजिए। वह पढ़ी नहीं जा सकती, इसलिए आपका कुछ नहीं जाता; और जब वह हर जगह होगी, कोई उसे दुनिया से नहीं हटा सकेगा।",
+"vault.next2":"<strong>हर भरोसेमंद व्यक्ति को चाबी का एक टुकड़ा दीजिए</strong> (नीचे)। अलग लोग, अलग देश, अलग माध्यम। दो टुकड़े कभी एक ही माध्यम से न भेजें।",
+"vault.next3":"<strong>उन्हें साफ़ बताइए कि कब खोलना है</strong>, और यह कि उनमें से {k} को साथ मिलकर करना होगा।",
+"vault.next4":"<strong>मूल फ़ाइल पर भी मुहर लगाइए</strong> (मुहर टैब) और उसे बिटकॉइन से जोड़िए, ताकि तारीख़ भी प्रमाणित हो जाए।",
+"vault.pieceT":"टुकड़ा","vault.copyLetter":"इस व्यक्ति के लिए पत्र कॉपी करें","vault.sendLetter":"भेजें",
+"vault.warn":"अगर बहुत सारे टुकड़े खो गए तो फ़ाइल हमेशा के लिए चली जाएगी — यही उस ताले की क़ीमत है जिसे कोई खोल नहीं सकता। टुकड़ों को काग़ज़ पर भी लिख लीजिए। और याद रखिए: फ़ाइल तभी खुलती है जब आपके चुने हुए लोग कार्रवाई करने का निर्णय लें।",
+"vault.copied":"पत्र कॉपी हुआ",
+"vault.letterIntro":"आप उन लोगों में से हैं जिन पर मैं भरोसा करता हूँ।",
+"vault.letterFrom":"की ओर से: {who}",
+"vault.letterPiece":"यह एक चाबी का {n} में से {i} टुकड़ा है। अकेला यह न कुछ खोलता है, न कुछ बताता है। फ़ाइल खोलने के लिए अलग-अलग लोगों के पास मौजूद ऐसे {k} टुकड़े चाहिए।",
+"vault.letterWhen":"इसे केवल तभी खोलें जब: {when}",
+"vault.letterWhenNo":"इसे केवल तभी खोलें जब आप सब सहमत हों कि घड़ी आ गई है।",
+"vault.letterHow":"कैसे: digitalvalut.github.io/logos-protocol पर LOGOS खोलिए (बिना इंटरनेट चलता है, इंस्टॉल भी हो जाता है), «अगर मैं न लौटूँ» में जाइए, बंद फ़ाइल {file} वहाँ छोड़िए और टुकड़े दर्ज कीजिए।",
+"vault.letterKeep":"आपका टुकड़ा — सुरक्षित रखिए, गुप्त रखिए:",
+"vault.openT":"तिजोरी खोलना",
+"vault.openNote":"उन लोगों के लिए जिन पर भरोसा किया गया था। बंद फ़ाइल यहाँ रखिए, फिर चाबी के टुकड़े दर्ज कीजिए। जब पर्याप्त टुकड़े हों, सच खुल जाता है — इसी उपकरण पर, बिना इंटरनेट के।",
+"vault.openDrop":"बंद फ़ाइल यहाँ छोड़ें (.logos-vault)","vault.openDropSub":"चाबी के टुकड़ों के बिना इसे कोई नहीं पढ़ सकता",
+"vault.shares":"चाबी के टुकड़े — एक के बाद एक चिपकाइए","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"सच खोलिए",
+"vault.needFile":"पहले बंद फ़ाइल जोड़िए","vault.needShares":"कम से कम दो सही टुकड़े चाहिए",
+"vault.reading":"बंद फ़ाइल पढ़ी जा रही है…","vault.checking":"चाबी जाँची जा रही है…","vault.opening":"खोला जा रहा है…",
+"vault.wrongT":"नहीं खुला","vault.wrongD":"ये टुकड़े इस फ़ाइल को नहीं खोलते। या तो ये पर्याप्त नहीं हैं, या कोई ग़लत लिखा गया है, या यह उससे मेल खाती बंद फ़ाइल नहीं है।",
+"vault.openedT":"खुल गया","vault.openedD":"फ़ाइल वापस मिल गई और डाउनलोड हो गई। यह ठीक वही फ़ाइल है जिसे बंद किया गया था।",
+"vault.theMessage":"आपके लिए छोड़ा गया संदेश","vault.lockedAt":"बंद किया गया","vault.openWhen":"कब खोलना है",
+"vault.afterOpen":"अब इसे जाँचिए: «जाँच» में जाकर मिली हुई फ़ाइल को ऊपर दी छाप से मिलाइए। फिर इसे फैलाइए — इसे बंद ही इसलिए किया गया था कि यह क्षण रोका न जा सके।",
+"vault.badFile":"वह फ़ाइल LOGOS तिजोरी नहीं है, या ख़राब है।","vault.failed":"फ़ाइल बंद नहीं की जा सकी",
+"spread.title":"प्रमाण तब मायने रखता है जब वह दूसरों के पास भी हो",
+"spread.intro":"सिर्फ़ अपने उपकरण में रखी छाप कुछ नहीं बचाती: हो सकता है आपने वह आज सुबह ही बनाई हो। जिस क्षण वह दूसरों के हाथों में जाती है — दूसरे देशों में, दूसरे माध्यमों पर — तारीख़ के गवाह बन जाते हैं और सच चुपचाप मिटाया नहीं जा सकता। <strong>इसे लोगों को भेजिए, सिर्फ़ संस्थाओं को नहीं।</strong> एक प्रति सँभालने वाले दस अजनबी, उसे फ़ाइल में रख देने वाले एक दफ़्तर से ज़्यादा मज़बूत हैं।",
+"spread.textT":"आप जो भेजने जा रहे हैं",
+"spread.textNote":"भेजने से पहले इसे जैसे चाहें बदलिए। इसमें आपकी फ़ाइल की छापें हैं, फ़ाइल नहीं: इसे भेजने से सामग्री के बारे में कुछ नहीं खुलता। पर जो कुछ आप यहाँ लिखेंगे, वह वहीं पहुँचेगा जहाँ आप भेजेंगे।",
+"spread.fromSeal":"मेरी पिछली मुहर लीजिए","spread.copy":"कॉपी","spread.sendT":"किसी को भी भेजिए — एक टैप में",
+"spread.native":"साझा करें…","spread.signal":"Signal (साझा करें से)","spread.email":"ईमेल",
+"spread.sendNote":"ये आपके अपने उपकरण के ऐप ही खोलते हैं। LOGOS कुछ भेजता नहीं, कुछ रखता नहीं और कुछ देखता नहीं: इसमें कहीं कोई LOGOS सर्वर है ही नहीं।",
+"spread.orgT":"आधिकारिक सुरक्षित माध्यम — जाँचे हुए और सार्वजनिक",
+"spread.orgNote":"ये खोजी पत्रकारिता के संस्थानों और प्रेस-स्वतंत्रता संगठनों के असली सबमिशन पन्ने हैं। जवाब का वादा कोई नहीं कर सकता। ये जो देते हैं, वह एक ऐसा दरवाज़ा है जो सचमुच मौजूद है।",
+"spread.orgWarn":"<strong>किसी से संपर्क करने से पहले अपनी सुरक्षा सोचिए।</strong> कुछ देशों में संपर्क करना ही ख़तरा है। SecureDrop इसी के लिए बना है: यह Tor ब्राउज़र से चलता है और आपकी पहचान संपादकीय टीम से भी छिपाता है। पहले सिर्फ़ छाप भेजिए, फ़ाइल बाद में — जब माध्यम पर भरोसा हो जाए।",
+"spread.embassyT":"दूतावासों और पत्रकारों की सूचियों के बारे में",
+"spread.embassyNote":"यहाँ दुनिया के सारे दूतावासों और सारे पत्रकारों की बनी-बनाई सूची नहीं मिलेगी, और यह जानबूझकर है: ऐसी सूची कुछ ही हफ़्तों में पुरानी हो जाती है, और मरे हुए पते पर भेजा गया प्रमाण खोया हुआ प्रमाण है। दूतावासों के संपर्क लगातार बदलते हैं और हर देश का विदेश मंत्रालय उन्हें ख़ुद प्रकाशित करता है — पता वहीं से लीजिए, उसी दिन जिस दिन भेजना हो। वैसे भी सबसे मज़बूत रास्ता आसान है: प्रमाणन कई असली लोगों को दीजिए जिनके नाम आप जानते हैं, अलग-अलग देशों में, और हरेक से कहिए कि एक प्रति रखे और आगे बढ़ाए।",
+"spread.empty":"पहले किसी फ़ाइल पर मुहर लगाइए (मुहर टैब), उसका प्रमाणन यहाँ भेजने के लिए तैयार दिखेगा।",
+"spread.loaded":"लोड हुआ","spread.subject":"LOGOS — अस्तित्व का प्रमाण","spread.signalNote":"पाठ कॉपी करके Signal में चिपकाइए"
+});
+
+Object.assign(I18N.ru, {
+"nav.vault":"ЕСЛИ Я НЕ ВЕРНУСЬ","nav.spread":"РАСПРОСТРАНИТЬ",
+"vault.title":"Посмертная публикация",
+"vault.intro":"Вы едете туда, где опасно. У вас есть то, что мир должен узнать, — но только если вы не вернётесь. LOGOS запирает ваш файл математикой и разрезает ключ на части, по одной каждому, кому вы доверяете, в разных странах. <strong>По отдельности они не открывают ничего. Никто из них не может вас предать.</strong> Если достаточное число из них решит, что момент настал, правда откроется. А запертый файл можно публиковать где угодно уже сегодня: до того момента он нечитаем.",
+"vault.honest":"<strong>Поймите ясно, что это такое.</strong> Ни одна программа не опубликует ничего сама после вашей смерти: компьютер, который никто не включает, не делает ничего. Математика гарантирует самое трудное: никто не прочтёт раньше срока, никто в одиночку не предаст, и, когда запертый файл разошёлся, никто не остановит его открытие. Спусковой крючок — выбранные вами люди. Выбирайте их хорошо и скажите им точно, когда действовать.",
+"vault.drop":"Перетащите файл, который нужно защитить","vault.dropTiny":"Он шифруется здесь, на вашем устройстве. Ничего не отправляется.",
+"vault.fileT":"Файл","vault.whoT":"У кого будет ключ",
+"vault.n":"Людей, которым вы доверяете","vault.k":"Сколько должны согласиться",
+"vault.knote":"Пятеро, из них нужны трое, — хороший баланс: двое могут потерять свою часть или замолчать, и правда всё равно выйдет, а вдвоём они не откроют файл за вашей спиной.",
+"vault.wordsT":"Ваши слова, запечатанные внутри",
+"vault.msg":"Сообщение, которое прочтут при открытии","vault.msgPh":"Если вы это читаете, я не вернулся. Дальше — …",
+"vault.when":"Когда им открывать — скажите прямо","vault.whenPh":"напр.: если я не напишу вам до 20 сентября 2026 года",
+"vault.make":"Запереть и разрезать ключ",
+"vault.step1":"1 из 3 — отпечаток файла","vault.step2":"2 из 3 — запираю","vault.step3":"3 из 3 — режу ключ",
+"vault.doneT":"ЗАПЕРТО","vault.doneD":"Запертый файл скачан. Без частей ключа его не прочтёт никто — включая вас.",
+"vault.nextT":"Что делать сейчас — именно в этом порядке",
+"vault.next1":"<strong>Распространите запертый файл</strong> — {file} — как можно шире, сегодня. Разошлите почтой, опубликуйте, отдайте незнакомым. Он нечитаем, значит вам это ничего не стоит, а когда он повсюду, его уже не убрать из мира.",
+"vault.next2":"<strong>Отдайте по одной части ключа каждому, кому доверяете</strong> (ниже). Разные люди, разные страны, разные каналы. Никогда не отправляйте две части одним каналом.",
+"vault.next3":"<strong>Скажите им прямо, когда открывать</strong>, и что нужно {k} из них вместе.",
+"vault.next4":"<strong>Запечатайте и сам исходный файл</strong> (вкладка «Печать») и привяжите его к Bitcoin, чтобы дата тоже была доказана.",
+"vault.pieceT":"Часть","vault.copyLetter":"Скопировать письмо для этого человека","vault.sendLetter":"Отправить",
+"vault.warn":"Если потеряется слишком много частей, файл исчезнет навсегда — это цена замка, который никто не вскроет. Перепишите части ещё и на бумагу. И помните: файл откроется, только если выбранные вами люди решат действовать.",
+"vault.copied":"Письмо скопировано",
+"vault.letterIntro":"Ты — один из людей, которым я доверяю.",
+"vault.letterFrom":"От: {who}",
+"vault.letterPiece":"Это часть {i} из {n} одного ключа. Сама по себе она ничего не открывает и ничего не раскрывает. Чтобы открыть файл, нужно {k} таких частей, находящихся у разных людей.",
+"vault.letterWhen":"Открывайте только если: {when}",
+"vault.letterWhenNo":"Открывайте только тогда, когда сами согласитесь, что момент настал.",
+"vault.letterHow":"Как: откройте LOGOS на digitalvalut.github.io/logos-protocol (работает без интернета, можно установить), зайдите в «Если я не вернусь», перетащите туда запертый файл {file} и введите части.",
+"vault.letterKeep":"Твоя часть — храни её надёжно и в тайне:",
+"vault.openT":"Открыть хранилище",
+"vault.openNote":"Для тех, кому доверили. Положите сюда запертый файл, затем введите части ключа. Когда их наберётся достаточно, правда откроется — на этом устройстве, без интернета.",
+"vault.openDrop":"Перетащите запертый файл (.logos-vault)","vault.openDropSub":"без частей ключа его никто не прочтёт",
+"vault.shares":"Части ключа — вставляйте одну за другой","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"Открыть правду",
+"vault.needFile":"Сначала добавьте запертый файл","vault.needShares":"Нужны хотя бы две действительные части",
+"vault.reading":"читаю запертый файл…","vault.checking":"проверяю ключ…","vault.opening":"открываю…",
+"vault.wrongT":"НЕ ОТКРЫТО","vault.wrongD":"Эти части не открывают этот файл. Либо их недостаточно, либо одна введена с ошибкой, либо это не тот запертый файл.",
+"vault.openedT":"ОТКРЫТО","vault.openedD":"Файл восстановлен и скачан. Это ровно тот файл, который был заперт.",
+"vault.theMessage":"Сообщение, оставленное вам","vault.lockedAt":"Заперто","vault.openWhen":"Открыть при условии",
+"vault.afterOpen":"Теперь проверьте его: откройте «Проверку» и сравните восстановленный файл с отпечатком выше. Затем распространите — файл запирали именно затем, чтобы этот момент нельзя было остановить.",
+"vault.badFile":"Это не хранилище LOGOS либо файл повреждён.","vault.failed":"Не удалось запереть файл",
+"spread.title":"Доказательство весомо, когда оно есть и у других",
+"spread.intro":"Отпечаток, лежащий только на вашем устройстве, не защищает ничего: вы могли сделать его сегодня утром. Как только он оказывается в других руках — в других странах, на других каналах — у даты появляются свидетели, и правду уже не удалить втихую. <strong>Отправляйте людям, а не только учреждениям.</strong> Десять незнакомцев с копией сильнее одной канцелярии, которая подшила её в дело.",
+"spread.textT":"Что именно вы отправляете",
+"spread.textNote":"Правьте текст как хотите перед отправкой. В нём отпечатки вашего файла, а не сам файл: отправка не раскрывает содержимое. Но всё, что вы здесь напишете, уйдёт туда, куда вы отправите.",
+"spread.fromSeal":"Взять мою последнюю печать","spread.copy":"Копировать","spread.sendT":"Отправьте кому угодно — одним касанием",
+"spread.native":"Поделиться…","spread.signal":"Signal (через «Поделиться»)","spread.email":"Почта",
+"spread.sendNote":"Это открывает приложения, которые уже стоят у вас на устройстве. LOGOS ничего не отправляет, ничего не хранит и ничего не видит: никакого сервера LOGOS здесь нет.",
+"spread.orgT":"Официальные защищённые каналы — проверенные и открытые",
+"spread.orgNote":"Это настоящие страницы приёма материалов у расследовательских редакций и организаций защиты прессы. Ответ вам никто обещать не может. Они дают дверь, которая действительно существует.",
+"spread.orgWarn":"<strong>Прежде чем к кому-то обращаться, подумайте о своей безопасности.</strong> В некоторых странах опасно само обращение. SecureDrop сделан именно для этого: он работает через браузер Tor и скрывает, кто вы, даже от редакции. Сначала отправьте отпечаток, а файл — только потом, когда доверитесь каналу.",
+"spread.embassyT":"О посольствах и списках журналистов",
+"spread.embassyNote":"Здесь нет встроенного списка всех посольств и всех журналистов мира, и это сделано намеренно: такой список устаревает за недели, а доказательство, отправленное на мёртвый адрес, — потерянное доказательство. Контакты посольств меняются постоянно, и их публикует МИД каждой страны — берите адрес оттуда, в тот же день, когда отправляете. Самое сильное всё равно проще: отдайте свидетельство нескольким реальным людям, которых вы можете назвать по имени, в разных странах, и попросите каждого хранить копию и передать дальше.",
+"spread.empty":"Сначала запечатайте файл (вкладка «Печать») — и его свидетельство появится здесь, готовое к отправке.",
+"spread.loaded":"Загружено","spread.subject":"LOGOS — доказательство существования","spread.signalNote":"Скопируйте текст и вставьте его в Signal"
+});
+
+Object.assign(I18N.pt, {
+"nav.vault":"SE EU NÃO VOLTAR","nav.spread":"ESPALHE",
+"vault.title":"A publicação póstuma",
+"vault.intro":"Você vai a um lugar perigoso. Tem algo que o mundo deveria saber — mas só se você não voltar. O LOGOS tranca o seu arquivo com matemática e corta a chave em pedaços, um para cada pessoa em quem confia, em países diferentes. <strong>Sozinhos, eles não abrem nada. Nenhum deles pode traí-lo.</strong> Se um número suficiente concordar que a hora chegou, a verdade se abre. O arquivo trancado você pode publicar em toda parte hoje mesmo: até lá é ilegível.",
+"vault.honest":"<strong>Que fique claro o que isto é.</strong> Nenhum programa publica algo sozinho depois que você se vai: um computador que ninguém liga não faz nada. O que a matemática garante é a parte difícil: ninguém consegue ler antes da hora, ninguém sozinho pode trair, e uma vez espalhado o arquivo trancado ninguém pode impedir sua abertura. As pessoas que você escolher são o gatilho. Escolha bem e diga a elas exatamente quando agir.",
+"vault.drop":"Solte o arquivo a proteger","vault.dropTiny":"Ele é criptografado aqui, no seu dispositivo. Nada é enviado.",
+"vault.fileT":"O arquivo","vault.whoT":"Quem guarda a chave",
+"vault.n":"Pessoas em quem você confia","vault.k":"Quantas precisam concordar",
+"vault.knote":"Cinco pessoas, três necessárias, é um bom equilíbrio: duas podem perder o pedaço, ou ser silenciadas, e a verdade sai do mesmo jeito — enquanto duas sozinhas não conseguem abrir pelas suas costas.",
+"vault.wordsT":"Suas palavras, seladas dentro",
+"vault.msg":"Mensagem a ser lida quando for aberto","vault.msgPh":"Se você está lendo isto, eu não voltei. O que vem a seguir é…",
+"vault.when":"Quando devem abrir — diga com clareza","vault.whenPh":"ex.: se eu não escrever até 20 de setembro de 2026",
+"vault.make":"Trancar e cortar a chave",
+"vault.step1":"1 de 3 — impressão digital do arquivo","vault.step2":"2 de 3 — trancando","vault.step3":"3 de 3 — cortando a chave",
+"vault.doneT":"TRANCADO","vault.doneD":"O arquivo trancado foi baixado. Ninguém consegue lê-lo — nem você — sem os pedaços abaixo.",
+"vault.nextT":"O que fazer agora — nesta ordem",
+"vault.next1":"<strong>Espalhe o arquivo trancado</strong> — {file} — o mais amplamente que puder, hoje. Mande por e-mail, publique, dê a desconhecidos. Ele é ilegível, então não lhe custa nada, e quando estiver em toda parte ninguém poderá tirá-lo do mundo.",
+"vault.next2":"<strong>Dê um pedaço da chave a cada pessoa de sua confiança</strong> (abaixo). Pessoas diferentes, países diferentes, canais diferentes. Nunca envie dois pedaços pelo mesmo canal.",
+"vault.next3":"<strong>Diga a elas com clareza quando abrir</strong>, e que são necessárias {k} delas juntas.",
+"vault.next4":"<strong>Sele também o arquivo original</strong> (aba SELAR) e ancore-o no Bitcoin, para que a data fique provada também.",
+"vault.pieceT":"Pedaço","vault.copyLetter":"Copiar a carta para esta pessoa","vault.sendLetter":"Enviar",
+"vault.warn":"Se perder pedaços demais, o arquivo se perde para sempre — é o preço de uma fechadura que ninguém arromba. Escreva os pedaços também em papel. E lembre-se: o arquivo só é aberto se as pessoas que você escolheu decidirem agir.",
+"vault.copied":"Carta copiada",
+"vault.letterIntro":"Você é uma das pessoas em quem eu confio.",
+"vault.letterFrom":"De: {who}",
+"vault.letterPiece":"Este é o pedaço {i} de {n} de uma chave. Sozinho ele não abre nada nem revela nada. São precisos {k} destes pedaços, em mãos de pessoas diferentes, para abrir o arquivo.",
+"vault.letterWhen":"Abra somente se: {when}",
+"vault.letterWhenNo":"Abram somente quando tiverem concordado que a hora chegou.",
+"vault.letterHow":"Como: abra o LOGOS em digitalvalut.github.io/logos-protocol (funciona sem internet e pode ser instalado), vá em «Se eu não voltar», solte lá o arquivo trancado {file} e digite os pedaços.",
+"vault.letterKeep":"Seu pedaço — guarde em segurança, guarde em segredo:",
+"vault.openT":"Abrir um cofre",
+"vault.openNote":"Para as pessoas em quem se confiou. Ponha aqui o arquivo trancado e depois digite os pedaços da chave. Quando houver o bastante, a verdade se abre — neste aparelho, sem internet.",
+"vault.openDrop":"Solte o arquivo trancado (.logos-vault)","vault.openDropSub":"ninguém consegue lê-lo sem os pedaços da chave",
+"vault.shares":"Os pedaços da chave — cole um após o outro","vault.sharesPh":"LOGOS-SHARE-1 …","vault.open":"Abrir a verdade",
+"vault.needFile":"Adicione primeiro o arquivo trancado","vault.needShares":"São precisos pelo menos dois pedaços válidos",
+"vault.reading":"lendo o arquivo trancado…","vault.checking":"conferindo a chave…","vault.opening":"abrindo…",
+"vault.wrongT":"NÃO ABRIU","vault.wrongD":"Estes pedaços não abrem este arquivo. Ou não são suficientes, ou um foi digitado errado, ou este não é o arquivo trancado correspondente.",
+"vault.openedT":"ABERTO","vault.openedD":"O arquivo foi recuperado e baixado. É exatamente o arquivo que foi trancado.",
+"vault.theMessage":"A mensagem deixada para você","vault.lockedAt":"Trancado em","vault.openWhen":"Para ser aberto",
+"vault.afterOpen":"Agora verifique: vá em VERIFICAR e compare o arquivo recuperado com a impressão acima. Depois espalhe — ele foi trancado justamente para que este momento não pudesse ser impedido.",
+"vault.badFile":"Esse arquivo não é um cofre LOGOS, ou está danificado.","vault.failed":"Não foi possível trancar o arquivo",
+"spread.title":"Uma prova vale quando outras pessoas a têm",
+"spread.intro":"Uma impressão guardada só no seu aparelho não protege nada: você poderia tê-la feito hoje de manhã. No momento em que ela está em outras mãos — em outros países, em outros canais — a data ganha testemunhas e a verdade não pode mais ser apagada em silêncio. <strong>Mande para pessoas, não só para instituições.</strong> Dez desconhecidos que guardam uma cópia são mais fortes do que um escritório que a arquiva.",
+"spread.textT":"O que você está prestes a enviar",
+"spread.textNote":"Edite à vontade antes de enviar. Contém as impressões do seu arquivo, não o arquivo: enviar não revela nada do conteúdo. Mas tudo o que você escrever aqui chega aonde você mandar.",
+"spread.fromSeal":"Usar meu último selo","spread.copy":"Copiar","spread.sendT":"Mande para quem quiser — num toque",
+"spread.native":"Compartilhar…","spread.signal":"Signal (via Compartilhar)","spread.email":"E-mail",
+"spread.sendNote":"Isto abre os aplicativos que já estão no seu aparelho. O LOGOS não envia nada, não guarda nada e não vê nada: não existe servidor do LOGOS nisto.",
+"spread.orgT":"Canais seguros oficiais — verificados e públicos",
+"spread.orgNote":"São as páginas reais de envio de redações investigativas e organizações de liberdade de imprensa. Ninguém pode lhe prometer resposta. O que elas oferecem é uma porta que existe de verdade.",
+"spread.orgWarn":"<strong>Antes de procurar alguém, pense na sua segurança.</strong> Em alguns países o próprio contato é o perigo. O SecureDrop foi feito exatamente para isso: usa-se pelo navegador Tor e esconde quem você é, até da redação. Envie primeiro a impressão e o arquivo só depois, quando confiar no canal.",
+"spread.embassyT":"Sobre embaixadas e listas de jornalistas",
+"spread.embassyNote":"Aqui você não vai encontrar uma lista pronta de todas as embaixadas e de todos os jornalistas do mundo, e isso é proposital: uma lista dessas fica velha em semanas, e uma prova enviada a um endereço morto é uma prova perdida. Os contatos de embaixadas mudam o tempo todo e são publicados pelo ministério das relações exteriores de cada país — pegue o endereço lá, no mesmo dia em que enviar. O mais forte, de qualquer modo, é mais simples: entregue a atestação a várias pessoas reais que você saiba nomear, em países diferentes, e peça a cada uma que guarde uma cópia e passe adiante.",
+"spread.empty":"Sele primeiro um arquivo (aba SELAR) e a atestação dele aparecerá aqui, pronta para enviar.",
+"spread.loaded":"Carregado","spread.subject":"LOGOS — prova de existência","spread.signalNote":"Copie o texto e cole no Signal"
+});
+
+
 /* ---------------- SHA3-512 (FIPS 202, Keccak-f[1600]) ---------------- */
 const RC_LO = [
   0x00000001, 0x00008082, 0x0000808a, 0x80008000, 0x0000808b, 0x80000001,
@@ -1697,6 +2175,9 @@ function t(key, fallback){
   const d = I18N[CURLANG];
   const v = d && d[key];
   return (v === undefined || v === null) ? fallback : v;
+}
+function fill(str, vars){
+  return String(str).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
 }
 function toast(msg){
   const t = $('toast'); t.textContent = msg; t.classList.add('on');
@@ -2675,21 +3156,23 @@ $('btnVault').addEventListener('click', async () => {
 function guardianLetter(i, n, k, code, vaultName){
   const when = $('vWhen').value.trim();
   const who = $('vAuthor').value.trim();
+  const v = { i: i, n: n, k: k, file: vaultName, who: who, when: when };
   return [
-    t('vault.letter1','You are one of the people I trust.'),
+    t('vault.letterIntro', 'You are one of the people I trust.'),
     '',
-    (who ? t('vault.letter2','From:') + ' ' + who : null),
-    t('vault.letter3','This is piece') + ' ' + i + '/' + n + ' ' +
-      t('vault.letter4','of a key. On its own it opens nothing and reveals nothing.'),
-    t('vault.letter5','It takes') + ' ' + k + ' ' +
-      t('vault.letter6','of these pieces, held by different people, to open the file.'),
+    (who ? fill(t('vault.letterFrom', 'From: {who}'), v) : null),
+    fill(t('vault.letterPiece',
+      'This is piece {i} of {n} of a key. On its own it opens nothing and reveals nothing. ' +
+      'It takes {k} of these pieces, held by different people, to open the file.'), v),
     '',
-    (when ? t('vault.letter7','Open it only:') + ' ' + when : t('vault.letter7b','Open it only when you have agreed that the moment has come.')),
+    (when ? fill(t('vault.letterWhen', 'Open it only if: {when}'), v)
+          : t('vault.letterWhenNo', 'Open it only when you have agreed that the moment has come.')),
     '',
-    t('vault.letter8','How: open LOGOS (logos-protocol on GitHub, works offline), go to “If I don’t come back”, drop in the locked file') + ' ' + vaultName + ', ' +
-      t('vault.letter9','and type in the pieces.'),
+    fill(t('vault.letterHow',
+      'How: open LOGOS at digitalvalut.github.io/logos-protocol (it works offline, and can be ' +
+      'installed), go to "If I don\'t come back", drop in the locked file {file}, and type in the pieces.'), v),
     '',
-    t('vault.letter10','Your piece — keep it safe, keep it secret:'),
+    t('vault.letterKeep', 'Your piece — keep it safe, keep it secret:'),
     code
   ].filter(x => x !== null).join('\n');
 }
@@ -2704,9 +3187,9 @@ function renderVaultResult(vaultName, shares, k, n, hashes){
     <div class="card">
       <h3>${esc(t('vault.nextT','What to do now — in this order'))}</h3>
       <ol style="font-size:13.5px;color:var(--dim);padding-left:20px;line-height:1.7">
-        <li>${t('vault.next1','<strong>Spread the locked file</strong> — ' + vaultName + ' — as widely as you can, today. Email it, publish it, give it to strangers. It is unreadable, so it costs you nothing, and once it is everywhere nobody can take it out of the world.')}</li>
+        <li>${fill(t('vault.next1','<strong>Spread the locked file</strong> — {file} — as widely as you can, today. Email it, publish it, give it to strangers. It is unreadable, so it costs you nothing, and once it is everywhere nobody can take it out of the world.'), {file: vaultName, k: k})}</li>
         <li>${t('vault.next2','<strong>Give one piece of the key to each person you trust</strong>, below. Different people, different countries, different channels. Never send two pieces down the same channel.')}</li>
-        <li>${t('vault.next3','<strong>Tell them plainly when to open it</strong>, and that it takes ' + k + ' of them together.')}</li>
+        <li>${fill(t('vault.next3','<strong>Tell them plainly when to open it</strong>, and that it takes {k} of them together.'), {k: k})}</li>
         <li>${t('vault.next4','<strong>Seal the original file too</strong> (the SEAL tab) and anchor it to Bitcoin, so the date is proven as well.')}</li>
       </ol>
     </div>`;
@@ -2990,6 +3473,11 @@ function applyLang(code){
 }
 
 initLang();
+$('btnGiveCopy').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText($('giveAddr').textContent.trim()); toast(t('give.copied','Address copied')); }
+  catch(e){ toast(t('give.copyFail','Copy failed — select the address and copy it by hand')); }
+});
+
 $('verNum').textContent = LOGOS_VERSION;
 </script>
 </body>
