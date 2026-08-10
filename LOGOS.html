@@ -150,6 +150,7 @@
 <nav>
   <button id="tab-seal" class="on" data-i18n="nav.seal">SEAL</button>
   <button id="tab-verify" data-i18n="nav.verify">VERIFY</button>
+  <button id="tab-vault" data-i18n="nav.vault">IF I DON'T COME BACK</button>
   <button id="tab-about" data-i18n="nav.about">HOW IT WORKS</button>
 </nav>
 
@@ -261,6 +262,94 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
   </div>
 </section>
 
+<!-- ============================ VAULT ============================ -->
+<section id="p-vault" class="panel">
+  <div class="card">
+    <h3 data-i18n="vault.title">The posthumous release</h3>
+    <div class="note" style="margin-top:0" data-i18n="vault.intro">You are going somewhere dangerous.
+      You hold something the world should know — but only if you do not come back. LOGOS locks your
+      file with mathematics and cuts the key into pieces, one for each person you trust, in different
+      countries. <strong>Alone, none of them can open it. No one of them can betray you.</strong> If
+      enough of them agree that the moment has come, the truth opens. The locked file itself can be
+      published everywhere today: it is unreadable until that moment.</div>
+    <div class="warnbox" data-i18n="vault.honest"><strong>Be clear about what this is.</strong> No
+      program can publish something by itself after you are gone — a computer that nobody switches on
+      does nothing. What mathematics guarantees is the hard part: nobody can read it early, no single
+      person can betray it, and once the locked file is spread nobody can stop its release. The people
+      you choose are the trigger. Choose them well, and tell them exactly when to act.</div>
+  </div>
+
+  <div class="drop" id="dropVault">
+    <div class="big" data-i18n="vault.drop">Drop the file to protect</div>
+    <div class="small" data-i18n="drop.small">document · photo · audio · video · anything</div>
+    <div class="tiny" data-i18n="vault.dropTiny">It is encrypted here, on your device. Nothing is uploaded.</div>
+  </div>
+  <input type="file" id="fileVault" class="hide">
+
+  <div id="vaultForm" class="hide">
+    <div class="card">
+      <h3 data-i18n="vault.fileT">The file</h3>
+      <div class="row"><div class="k" data-i18n="k.file">File</div><div class="v" id="vName"></div></div>
+      <div class="row"><div class="k" data-i18n="k.size">Size</div><div class="v" id="vSize"></div></div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="vault.whoT">Who holds the key</h3>
+      <div class="btns" style="margin-top:0">
+        <label class="fld" style="flex:1 1 150px;margin-top:0"><span data-i18n="vault.n">People you trust</span>
+          <input type="text" id="vN" value="5" inputmode="numeric" autocomplete="off"></label>
+        <label class="fld" style="flex:1 1 150px;margin-top:0"><span data-i18n="vault.k">How many must agree</span>
+          <input type="text" id="vK" value="3" inputmode="numeric" autocomplete="off"></label>
+      </div>
+      <div class="note" data-i18n="vault.knote">Five people, three needed, is a good balance: two can lose
+        their piece, or be silenced, and the truth still comes out — while no two people can open it
+        behind your back.</div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="vault.wordsT">Your words, sealed inside</h3>
+      <label class="fld"><span data-i18n="opt.author">Author / who is sealing this</span>
+        <input type="text" id="vAuthor" data-i18n-ph="opt.authorPh" placeholder="e.g. Jane Doe, Rome, Italy" autocomplete="off"></label>
+      <label class="fld"><span data-i18n="vault.msg">Message to be read when this is opened</span>
+        <textarea id="vMsg" data-i18n-ph="vault.msgPh" placeholder="If you are reading this, I did not come back. What follows is…"></textarea></label>
+      <label class="fld"><span data-i18n="vault.when">When should they open it — say it plainly</span>
+        <input type="text" id="vWhen" data-i18n-ph="vault.whenPh" placeholder="e.g. if I have not written to you by 20 September 2026" autocomplete="off"></label>
+    </div>
+
+    <div class="btns">
+      <button class="act primary" id="btnVault" data-i18n="vault.make">Lock it and cut the key</button>
+    </div>
+    <div id="vaultProgress" class="card hide">
+      <div class="bar"><i id="vaultBar"></i></div>
+      <div class="status" id="vaultStatus"></div>
+    </div>
+  </div>
+
+  <div id="vaultResult" class="hide"></div>
+
+  <div class="card" style="margin-top:26px">
+    <h3 data-i18n="vault.openT">Open a vault</h3>
+    <div class="note" style="margin-top:0" data-i18n="vault.openNote">For the people who were trusted.
+      Put the locked file here, then type in the pieces of the key. When enough of them are present,
+      the truth opens — on this device, offline.</div>
+    <div class="drop" id="dropOpen" style="margin-top:14px">
+      <div class="big" data-i18n="vault.openDrop">Drop the locked file (.logos-vault)</div>
+      <div class="small" id="openLoaded" data-i18n="vault.openDropSub">nobody can read it without the key pieces</div>
+    </div>
+    <input type="file" id="fileOpen" class="hide">
+    <label class="fld"><span data-i18n="vault.shares">The pieces of the key — paste them one after another</span>
+      <textarea id="vShares" style="min-height:120px;font-family:var(--mono);font-size:12px" data-i18n-ph="vault.sharesPh" placeholder="LOGOS-SHARE-1 ..."></textarea></label>
+    <div class="btns">
+      <button class="act primary" id="btnOpen" data-i18n="vault.open">Open the truth</button>
+    </div>
+    <div id="openProgress" class="card hide">
+      <div class="bar"><i id="openBar"></i></div>
+      <div class="status" id="openStatus"></div>
+    </div>
+    <div id="openResult" class="hide"></div>
+  </div>
+</section>
+
 <!-- =========================== ABOUT ============================ -->
 <section id="p-about" class="panel about">
   <div class="card">
@@ -351,7 +440,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.1";
+const LOGOS_VERSION = "1.2";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -1630,7 +1719,7 @@ function wireDrop(dropEl, inputEl, handler){
 ['dragover','drop'].forEach(e => window.addEventListener(e, ev => ev.preventDefault()));
 
 /* ============================== tabs ============================== */
-const TABS = [['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-about','p-about']];
+const TABS = [['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-vault','p-vault'],['tab-about','p-about']];
 TABS.forEach(([b,p]) => $(b).addEventListener('click', () => {
   TABS.forEach(([b2,p2]) => { $(b2).classList.toggle('on', b2===b); $(p2).classList.toggle('on', p2===p); });
   window.scrollTo(0,0);
@@ -1962,6 +2051,668 @@ async function tryVerify(){
   $('verResult').innerHTML = html;
   $('verResult').classList.remove('hide');
 }
+
+/* ============================== THE VAULT ==============================
+   Lock a file with mathematics, cut the key into pieces, and hand one piece to
+   each person you trust. Alone they hold nothing. Together they hold the truth. */
+
+/* LOGOS vault — encryption and key-splitting for the posthumous release.
+   ChaCha20-Poly1305 (RFC 8439) and Shamir's Secret Sharing over GF(256).
+   Pure JS: works offline, on file://, on any browser, with no Web Crypto. */
+
+/* ------------------------------- ChaCha20 ------------------------------- */
+function rotl32(v, c){ return ((v << c) | (v >>> (32 - c))) >>> 0; }
+
+function chachaBlock(key32, nonce12, counter, out16){
+  // state: constants | key | counter | nonce
+  const s = new Uint32Array(16);
+  s[0]=0x61707865; s[1]=0x3320646e; s[2]=0x79622d32; s[3]=0x6b206574;
+  for (let i=0;i<8;i++){
+    const b=i*4;
+    s[4+i]=(key32[b] | (key32[b+1]<<8) | (key32[b+2]<<16) | (key32[b+3]<<24))>>>0;
+  }
+  s[12]=counter>>>0;
+  for (let i=0;i<3;i++){
+    const b=i*4;
+    s[13+i]=(nonce12[b] | (nonce12[b+1]<<8) | (nonce12[b+2]<<16) | (nonce12[b+3]<<24))>>>0;
+  }
+  const x = out16;
+  x.set(s);
+  for (let r=0;r<10;r++){
+    // column rounds
+    QR(x,0,4,8,12); QR(x,1,5,9,13); QR(x,2,6,10,14); QR(x,3,7,11,15);
+    // diagonal rounds
+    QR(x,0,5,10,15); QR(x,1,6,11,12); QR(x,2,7,8,13); QR(x,3,4,9,14);
+  }
+  for (let i=0;i<16;i++) x[i] = (x[i] + s[i]) >>> 0;
+  return x;
+}
+function QR(x,a,b,c,d){
+  x[a]=(x[a]+x[b])>>>0; x[d]=rotl32(x[d]^x[a],16);
+  x[c]=(x[c]+x[d])>>>0; x[b]=rotl32(x[b]^x[c],12);
+  x[a]=(x[a]+x[b])>>>0; x[d]=rotl32(x[d]^x[a],8);
+  x[c]=(x[c]+x[d])>>>0; x[b]=rotl32(x[b]^x[c],7);
+}
+
+/* Streaming ChaCha20 keystream: XORs data in place, keeps position across calls. */
+class ChaCha20 {
+  constructor(key, nonce, counter){
+    this.key = key; this.nonce = nonce;
+    this.counter = counter >>> 0;
+    this.block = new Uint32Array(16);
+    this.buf = new Uint8Array(64);
+    this.pos = 64;                  // force a fresh block on first use
+  }
+  _refill(){
+    chachaBlock(this.key, this.nonce, this.counter, this.block);
+    this.counter = (this.counter + 1) >>> 0;
+    for (let i=0;i<16;i++){
+      const v = this.block[i], b = i*4;
+      this.buf[b]=v&0xff; this.buf[b+1]=(v>>>8)&0xff; this.buf[b+2]=(v>>>16)&0xff; this.buf[b+3]=(v>>>24)&0xff;
+    }
+    this.pos = 0;
+  }
+  xor(data){                        // in place
+    for (let i=0;i<data.length;i++){
+      if (this.pos === 64) this._refill();
+      data[i] ^= this.buf[this.pos++];
+    }
+    return data;
+  }
+}
+
+/* ------------------------------- Poly1305 ------------------------------- */
+/* 130-bit arithmetic in ten 13-bit limbs. Every partial product stays below
+   2^33, far inside the range where JavaScript numbers are exact integers —
+   the 26-bit formulations used in C overflow silently here. */
+const P_LIMBS = 10, P_BITS = 13, P_MASK = (1 << P_BITS) - 1;
+
+function bytesToLimbs(b, off, len, hibit, out){
+  out.fill(0);
+  let acc = 0, accBits = 0, li = 0;
+  for (let i = 0; i < len; i++){
+    acc |= b[off + i] << accBits;
+    accBits += 8;
+    while (accBits >= P_BITS && li < P_LIMBS){
+      out[li++] = acc & P_MASK;
+      acc >>>= P_BITS;
+      accBits -= P_BITS;
+    }
+  }
+  if (li < P_LIMBS) out[li++] = acc & P_MASK;
+  if (hibit){                      // set bit (len*8) — the message's 2^128 marker
+    const bit = len * 8;
+    out[(bit / P_BITS) | 0] |= 1 << (bit % P_BITS);
+  }
+}
+
+class Poly1305 {
+  constructor(key32){
+    this.h = new Int32Array(P_LIMBS);
+    this.r = new Int32Array(P_LIMBS);
+    this.n = new Int32Array(P_LIMBS);
+    this.prod = new Float64Array(P_LIMBS * 2);
+    this.buf = new Uint8Array(16);
+    this.leftover = 0;
+    this.s = key32.slice(16, 32);
+
+    const r = new Uint8Array(key32.subarray(0, 16));
+    r[3] &= 15; r[7] &= 15; r[11] &= 15; r[15] &= 15;
+    r[4] &= 252; r[8] &= 252; r[12] &= 252;
+    bytesToLimbs(r, 0, 16, false, this.r);
+  }
+
+  _block(bytes, off, len, hibit){
+    const h = this.h, r = this.r, n = this.n, c = this.prod;
+    bytesToLimbs(bytes, off, len, hibit, n);
+    for (let i = 0; i < P_LIMBS; i++) n[i] += h[i];      // h + m, still < 2^14
+
+    c.fill(0);
+    for (let i = 0; i < P_LIMBS; i++){
+      const ni = n[i];
+      if (ni === 0) continue;
+      for (let j = 0; j < P_LIMBS; j++) c[i + j] += ni * r[j];
+    }
+    /* 2^130 = 5 (mod 2^130 - 5): fold everything above limb 9 back down. */
+    for (let i = P_LIMBS; i < P_LIMBS * 2; i++){
+      c[i - P_LIMBS] += 5 * c[i];
+      c[i] = 0;
+    }
+    let carry = 0;
+    for (let i = 0; i < P_LIMBS; i++){
+      const v = c[i] + carry;
+      h[i] = v & P_MASK;
+      carry = Math.floor(v / (P_MASK + 1));
+    }
+    while (carry){                                       // wrap the top back in
+      let cc = 5 * carry;
+      carry = 0;
+      for (let i = 0; i < P_LIMBS && cc; i++){
+        const v = h[i] + cc;
+        h[i] = v & P_MASK;
+        cc = v >>> P_BITS;
+      }
+      carry = cc;
+    }
+  }
+
+  update(m){
+    let off = 0;
+    if (this.leftover){
+      const want = Math.min(16 - this.leftover, m.length);
+      this.buf.set(m.subarray(0, want), this.leftover);
+      this.leftover += want; off += want;
+      if (this.leftover === 16){ this._block(this.buf, 0, 16, true); this.leftover = 0; }
+    }
+    while (m.length - off >= 16){ this._block(m, off, 16, true); off += 16; }
+    if (off < m.length){
+      this.buf.set(m.subarray(off), this.leftover);
+      this.leftover += m.length - off;
+    }
+    return this;
+  }
+
+  digest(){
+    if (this.leftover){
+      this._block(this.buf, 0, this.leftover, true);
+      this.leftover = 0;
+    }
+    const h = this.h;
+    /* final freeze: if h >= 2^130 - 5, subtract it (same as adding 5, mod 2^130) */
+    const g = new Int32Array(P_LIMBS);
+    let carry = 5;
+    for (let i = 0; i < P_LIMBS; i++){
+      const v = h[i] + carry;
+      g[i] = v & P_MASK;
+      carry = v >>> P_BITS;
+    }
+    const mask = -carry;                                  // all ones when h + 5 overflowed
+    for (let i = 0; i < P_LIMBS; i++) h[i] = (h[i] & ~mask) | (g[i] & mask);
+
+    /* h + s, little-endian, low 128 bits */
+    const out = new Uint8Array(16);
+    let acc = 0, accBits = 0, oi = 0;
+    for (let i = 0; i < P_LIMBS && oi < 16; i++){
+      acc |= h[i] * Math.pow(2, accBits);
+      accBits += P_BITS;
+      while (accBits >= 8 && oi < 16){
+        out[oi++] = acc & 0xff;
+        acc = Math.floor(acc / 256);
+        accBits -= 8;
+      }
+    }
+    let add = 0;
+    for (let i = 0; i < 16; i++){
+      const v = out[i] + this.s[i] + add;
+      out[i] = v & 0xff;
+      add = v >>> 8;
+    }
+    return out;
+  }
+}
+
+/* ----------------------- ChaCha20-Poly1305 (AEAD) ----------------------- */
+function poly1305KeyGen(key, nonce){
+  const block = new Uint32Array(16);
+  chachaBlock(key, nonce, 0, block);
+  const out = new Uint8Array(32);
+  for (let i=0;i<8;i++){
+    const v = block[i], b = i*4;
+    out[b]=v&0xff; out[b+1]=(v>>>8)&0xff; out[b+2]=(v>>>16)&0xff; out[b+3]=(v>>>24)&0xff;
+  }
+  return out;
+}
+const ZERO16 = new Uint8Array(16);
+function padTo16(mac, len){
+  const rem = len % 16;
+  if (rem) mac.update(ZERO16.subarray(0, 16 - rem));
+}
+function lenBytes(a, b){                 // two little-endian uint64
+  const out = new Uint8Array(16);
+  let x = a, y = b;
+  for (let i=0;i<8;i++){ out[i] = x & 0xff; x = Math.floor(x / 256); }
+  for (let i=0;i<8;i++){ out[8+i] = y & 0xff; y = Math.floor(y / 256); }
+  return out;
+}
+
+/* One-shot, for small data. Returns ciphertext||tag. */
+function aeadSeal(key, nonce, plaintext, aad){
+  const otk = poly1305KeyGen(key, nonce);
+  const ct = new Uint8Array(plaintext);
+  new ChaCha20(key, nonce, 1).xor(ct);
+  const mac = new Poly1305(otk);
+  if (aad && aad.length){ mac.update(aad); padTo16(mac, aad.length); }
+  mac.update(ct); padTo16(mac, ct.length);
+  mac.update(lenBytes(aad ? aad.length : 0, ct.length));
+  const tag = mac.digest();
+  const out = new Uint8Array(ct.length + 16);
+  out.set(ct, 0); out.set(tag, ct.length);
+  return out;
+}
+function aeadOpen(key, nonce, data, aad){
+  if (data.length < 16) return null;
+  const ct = data.subarray(0, data.length - 16);
+  const tag = data.subarray(data.length - 16);
+  const otk = poly1305KeyGen(key, nonce);
+  const mac = new Poly1305(otk);
+  if (aad && aad.length){ mac.update(aad); padTo16(mac, aad.length); }
+  mac.update(ct); padTo16(mac, ct.length);
+  mac.update(lenBytes(aad ? aad.length : 0, ct.length));
+  const want = mac.digest();
+  let diff = 0;
+  for (let i=0;i<16;i++) diff |= want[i] ^ tag[i];
+  if (diff !== 0) return null;                   // authentication failed
+  const pt = new Uint8Array(ct);
+  new ChaCha20(key, nonce, 1).xor(pt);
+  return pt;
+}
+
+/* -------------------- Shamir Secret Sharing over GF(256) -------------------- */
+const GF_EXP = new Uint8Array(512), GF_LOG = new Uint8Array(256);
+(function(){
+  let x = 1;
+  for (let i=0;i<255;i++){
+    GF_EXP[i] = x;
+    GF_LOG[x] = i;
+    x ^= (x << 1) ^ ((x & 0x80) ? 0x11b : 0);
+    x &= 0xff;
+  }
+  for (let i=255;i<512;i++) GF_EXP[i] = GF_EXP[i-255];
+})();
+function gmul(a, b){
+  if (a === 0 || b === 0) return 0;
+  return GF_EXP[GF_LOG[a] + GF_LOG[b]];
+}
+function gdiv(a, b){
+  if (b === 0) throw new Error('division by zero');
+  if (a === 0) return 0;
+  return GF_EXP[GF_LOG[a] - GF_LOG[b] + 255];
+}
+
+/* Split `secret` (bytes) into n shares; any k of them rebuild it, k-1 reveal nothing. */
+function shamirSplit(secret, k, n, randomBytes){
+  if (k < 2 || k > n || n > 255) throw new Error('bad k/n');
+  const shares = [];
+  for (let i=1;i<=n;i++) shares.push({ x: i, y: new Uint8Array(secret.length) });
+  const coeff = new Uint8Array(k - 1);
+  for (let pos = 0; pos < secret.length; pos++){
+    randomBytes(coeff);
+    for (const sh of shares){
+      let acc = 0;                                  // Horner, highest degree first
+      for (let d = k - 2; d >= 0; d--) acc = gmul(acc, sh.x) ^ coeff[d];
+      acc = gmul(acc, sh.x) ^ secret[pos];
+      sh.y[pos] = acc;
+    }
+  }
+  return shares;
+}
+
+/* Rebuild the secret from k shares (Lagrange interpolation at x = 0). */
+function shamirCombine(shares){
+  const len = shares[0].y.length;
+  const out = new Uint8Array(len);
+  for (const s of shares){
+    if (s.y.length !== len) throw new Error('shares have different lengths');
+  }
+  for (let pos = 0; pos < len; pos++){
+    let acc = 0;
+    for (let i=0;i<shares.length;i++){
+      let num = 1, den = 1;
+      for (let j=0;j<shares.length;j++){
+        if (i === j) continue;
+        if (shares[i].x === shares[j].x) throw new Error('duplicate share');
+        num = gmul(num, shares[j].x);
+        den = gmul(den, shares[i].x ^ shares[j].x);
+      }
+      acc ^= gmul(shares[i].y[pos], gdiv(num, den));
+    }
+    out[pos] = acc;
+  }
+  return out;
+}
+
+const VAULT_MAGIC = new Uint8Array([0x4c,0x4f,0x47,0x4f,0x53,0x56,0x4c,0x54]); // "LOGOSVLT"
+const B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';        // Crockford: no I, L, O, U
+
+function randomBytes(n){
+  const out = n instanceof Uint8Array ? n : new Uint8Array(n);
+  crypto.getRandomValues(out);
+  return out;
+}
+function b32encode(bytes){
+  let out = '', acc = 0, bits = 0;
+  for (let i=0;i<bytes.length;i++){
+    acc = (acc << 8) | bytes[i]; bits += 8;
+    while (bits >= 5){ out += B32[(acc >>> (bits - 5)) & 31]; bits -= 5; }
+  }
+  if (bits) out += B32[(acc << (5 - bits)) & 31];
+  return out;
+}
+function b32decode(str){
+  const clean = str.toUpperCase().replace(/[^0-9A-Z]/g, '')
+    .replace(/O/g,'0').replace(/[IL]/g,'1').replace(/U/g,'V');
+  const out = [];
+  let acc = 0, bits = 0;
+  for (const ch of clean){
+    const v = B32.indexOf(ch);
+    if (v < 0) return null;
+    acc = (acc << 5) | v; bits += 5;
+    if (bits >= 8){ out.push((acc >>> (bits - 8)) & 0xff); bits -= 8; }
+  }
+  return new Uint8Array(out);
+}
+/* A share is: x | 32 key bytes | 2 checksum bytes, written in groups of four. */
+function encodeShare(x, y){
+  const raw = new Uint8Array(1 + y.length);
+  raw[0] = x; raw.set(y, 1);
+  const sum = new SHA256().update(raw).digest();
+  const full = new Uint8Array(raw.length + 2);
+  full.set(raw, 0); full[raw.length] = sum[0]; full[raw.length+1] = sum[1];
+  return b32encode(full).replace(/(.{4})/g, '$1-').replace(/-$/, '');
+}
+function decodeShare(text){
+  const full = b32decode(text);
+  if (!full || full.length < 4) return null;
+  const raw = full.subarray(0, full.length - 2);
+  const sum = new SHA256().update(raw).digest();
+  if (sum[0] !== full[full.length-2] || sum[1] !== full[full.length-1]) return null;
+  return { x: raw[0], y: new Uint8Array(raw.subarray(1)) };
+}
+
+let VAULT_FILE = null;
+
+wireDrop($('dropVault'), $('fileVault'), f => {
+  VAULT_FILE = f;
+  $('vName').textContent = f.name;
+  $('vSize').textContent = fmtSize(f.size);
+  $('vaultForm').classList.remove('hide');
+  $('vaultResult').classList.add('hide');
+});
+wireDrop($('dropOpen'), $('fileOpen'), f => {
+  OPEN_FILE = f;
+  $('openLoaded').textContent = f.name + ' — ' + fmtSize(f.size);
+});
+
+$('btnVault').addEventListener('click', async () => {
+  if (!VAULT_FILE) return;
+  const n = Math.max(2, Math.min(20, parseInt($('vN').value, 10) || 5));
+  const k = Math.max(2, Math.min(n, parseInt($('vK').value, 10) || 3));
+  $('vN').value = n; $('vK').value = k;
+
+  $('btnVault').disabled = true;
+  $('vaultProgress').classList.remove('hide');
+  $('vaultResult').classList.add('hide');
+
+  try{
+    /* 1. fingerprint the original, so the truth can also be proven, not only read */
+    $('vaultStatus').textContent = t('vault.step1','1 of 3 — fingerprinting the file');
+    const hashes = await hashFile(VAULT_FILE, (frac, bps) => {
+      $('vaultBar').style.width = (frac*33).toFixed(1) + '%';
+      $('vaultStatus').textContent = t('vault.step1','1 of 3 — fingerprinting the file') + '   ' + progressText(frac, bps, VAULT_FILE.size);
+    });
+
+    /* 2. the header travels inside the encryption: even the file name is hidden */
+    const header = utf8(JSON.stringify({
+      logos: LOGOS_VERSION, type: 'vault',
+      file: { name: VAULT_FILE.name, size: VAULT_FILE.size,
+              mime: VAULT_FILE.type || 'application/octet-stream' },
+      hash: hashes,
+      locked_utc: new Date().toISOString(),
+      author: $('vAuthor').value.trim(),
+      message: $('vMsg').value.trim(),
+      open_when: $('vWhen').value.trim(),
+      threshold: k, shares: n
+    }));
+
+    const key = randomBytes(32);
+    const nonce = randomBytes(12);
+    const aad = concatBytes([VAULT_MAGIC, new Uint8Array([1]), nonce]);
+
+    $('vaultStatus').textContent = t('vault.step2','2 of 3 — locking it');
+    const otk = poly1305KeyGen(key, nonce);
+    const mac = new Poly1305(otk);
+    mac.update(aad); padTo16(mac, aad.length);
+    const stream = new ChaCha20(key, nonce, 1);
+    const parts = [];
+    let ctLen = 0;
+
+    const lenPrefix = new Uint8Array(4);
+    const hl = header.length;
+    lenPrefix[0]=(hl>>>24)&0xff; lenPrefix[1]=(hl>>>16)&0xff; lenPrefix[2]=(hl>>>8)&0xff; lenPrefix[3]=hl&0xff;
+    for (const chunk of [lenPrefix, header]){
+      const c = new Uint8Array(chunk);
+      stream.xor(c); mac.update(c); parts.push(c); ctLen += c.length;
+    }
+
+    let off = 0;
+    const t0 = performance.now();
+    while (off < VAULT_FILE.size){
+      const end = Math.min(off + CHUNK, VAULT_FILE.size);
+      const buf = new Uint8Array(await VAULT_FILE.slice(off, end).arrayBuffer());
+      stream.xor(buf); mac.update(buf);
+      parts.push(buf); ctLen += buf.length;
+      off = end;
+      const frac = off / VAULT_FILE.size;
+      const secs = (performance.now() - t0) / 1000;
+      $('vaultBar').style.width = (33 + frac*60).toFixed(1) + '%';
+      $('vaultStatus').textContent = t('vault.step2','2 of 3 — locking it') + '   ' +
+        progressText(frac, off / Math.max(secs, .001), VAULT_FILE.size);
+      await new Promise(r => setTimeout(r, 0));
+    }
+    padTo16(mac, ctLen);
+    mac.update(lenBytes(aad.length, ctLen));
+    const tag = mac.digest();
+
+    /* 3. cut the key */
+    $('vaultStatus').textContent = t('vault.step3','3 of 3 — cutting the key');
+    $('vaultBar').style.width = '97%';
+    const shares = shamirSplit(key, k, n, randomBytes);
+    key.fill(0);                       // the whole key stops existing here
+
+    const vaultName = safeName(VAULT_FILE.name) + '.logos-vault';
+    const blob = new Blob([VAULT_MAGIC, new Uint8Array([1]), nonce, tag, ...parts],
+                          {type:'application/octet-stream'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = vaultName;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+
+    $('vaultBar').style.width = '100%';
+    $('vaultProgress').classList.add('hide');
+    $('btnVault').disabled = false;
+    renderVaultResult(vaultName, shares, k, n, hashes);
+  }catch(err){
+    $('vaultProgress').classList.add('hide');
+    $('btnVault').disabled = false;
+    toast(t('vault.failed','Could not lock the file'));
+  }
+});
+
+function guardianLetter(i, n, k, code, vaultName){
+  const when = $('vWhen').value.trim();
+  const who = $('vAuthor').value.trim();
+  return [
+    t('vault.letter1','You are one of the people I trust.'),
+    '',
+    (who ? t('vault.letter2','From:') + ' ' + who : null),
+    t('vault.letter3','This is piece') + ' ' + i + '/' + n + ' ' +
+      t('vault.letter4','of a key. On its own it opens nothing and reveals nothing.'),
+    t('vault.letter5','It takes') + ' ' + k + ' ' +
+      t('vault.letter6','of these pieces, held by different people, to open the file.'),
+    '',
+    (when ? t('vault.letter7','Open it only:') + ' ' + when : t('vault.letter7b','Open it only when you have agreed that the moment has come.')),
+    '',
+    t('vault.letter8','How: open LOGOS (logos-protocol on GitHub, works offline), go to “If I don’t come back”, drop in the locked file') + ' ' + vaultName + ', ' +
+      t('vault.letter9','and type in the pieces.'),
+    '',
+    t('vault.letter10','Your piece — keep it safe, keep it secret:'),
+    code
+  ].filter(x => x !== null).join('\n');
+}
+
+function renderVaultResult(vaultName, shares, k, n, hashes){
+  const codes = shares.map(s => encodeShare(s.x, s.y));
+  let html = `
+    <div class="verdict pass" style="border-color:var(--accent);background:rgba(122,162,255,.07);color:var(--accent)">
+      <div class="t">${esc(t('vault.doneT','LOCKED'))}</div>
+      <div class="d">${esc(t('vault.doneD','The locked file has been downloaded. It is unreadable by anyone — including you — without the pieces below.'))}</div>
+    </div>
+    <div class="card">
+      <h3>${esc(t('vault.nextT','What to do now — in this order'))}</h3>
+      <ol style="font-size:13.5px;color:var(--dim);padding-left:20px;line-height:1.7">
+        <li>${t('vault.next1','<strong>Spread the locked file</strong> — ' + vaultName + ' — as widely as you can, today. Email it, publish it, give it to strangers. It is unreadable, so it costs you nothing, and once it is everywhere nobody can take it out of the world.')}</li>
+        <li>${t('vault.next2','<strong>Give one piece of the key to each person you trust</strong>, below. Different people, different countries, different channels. Never send two pieces down the same channel.')}</li>
+        <li>${t('vault.next3','<strong>Tell them plainly when to open it</strong>, and that it takes ' + k + ' of them together.')}</li>
+        <li>${t('vault.next4','<strong>Seal the original file too</strong> (the SEAL tab) and anchor it to Bitcoin, so the date is proven as well.')}</li>
+      </ol>
+    </div>`;
+
+  codes.forEach((code, i) => {
+    const letter = guardianLetter(i+1, n, k, code, vaultName);
+    html += `
+      <div class="card">
+        <h3>${esc(t('vault.pieceT','Piece'))} ${i+1} / ${n}</h3>
+        <div class="v hash" style="font-family:var(--mono);font-size:12px;word-break:break-all;line-height:1.8">${esc(code)}</div>
+        <div class="btns">
+          <button class="act" data-share-copy="${i}">${esc(t('vault.copyLetter','Copy the letter for this person'))}</button>
+          <button class="act" data-share-send="${i}">${esc(t('vault.sendLetter','Send it'))}</button>
+        </div>
+      </div>`;
+    VAULT_LETTERS[i] = letter;
+  });
+
+  html += `<div class="warnbox">${t('vault.warn','If you lose too many pieces, the file is gone forever — that is the price of a lock nobody can pick. Write the pieces on paper as well. And remember: the file is only released if the people you chose decide to act.')}</div>`;
+  $('vaultResult').innerHTML = html;
+  $('vaultResult').classList.remove('hide');
+  $('vaultResult').querySelectorAll('[data-share-copy]').forEach(b =>
+    b.addEventListener('click', async () => {
+      const txt = VAULT_LETTERS[+b.getAttribute('data-share-copy')];
+      try{ await navigator.clipboard.writeText(txt); toast(t('vault.copied','Letter copied')); }
+      catch(e){ toast(t('toast.copyFail','Copy failed — download the seal instead')); }
+    }));
+  $('vaultResult').querySelectorAll('[data-share-send]').forEach(b =>
+    b.addEventListener('click', async () => {
+      const txt = VAULT_LETTERS[+b.getAttribute('data-share-send')];
+      if (navigator.share){
+        try{ await navigator.share({ title: 'LOGOS', text: txt }); return; }catch(e){ if (e.name==='AbortError') return; }
+      }
+      location.href = 'mailto:?subject=' + encodeURIComponent('LOGOS') + '&body=' + encodeURIComponent(txt);
+    }));
+}
+const VAULT_LETTERS = {};
+
+/* ------------------------------- opening -------------------------------- */
+let OPEN_FILE = null;
+
+$('btnOpen').addEventListener('click', async () => {
+  if (!OPEN_FILE){ toast(t('vault.needFile','Add the locked file first')); return; }
+  const raw = $('vShares').value;
+  const chunks = raw.split(/\n\s*\n|\r\n\s*\r\n/).map(s => s.trim()).filter(Boolean);
+  const candidates = chunks.length > 1 ? chunks : raw.split(/\n/).map(s => s.trim()).filter(Boolean);
+  const shares = [];
+  const seen = {};
+  for (const c of candidates){
+    const s = decodeShare(c);
+    if (s && !seen[s.x]){ seen[s.x] = 1; shares.push(s); }
+  }
+  if (shares.length < 2){ toast(t('vault.needShares','At least two valid pieces are needed')); return; }
+
+  $('openProgress').classList.remove('hide');
+  $('openResult').classList.add('hide');
+  $('openStatus').textContent = t('vault.reading','reading the locked file…');
+
+  try{
+    const head = new Uint8Array(await OPEN_FILE.slice(0, 8 + 1 + 12 + 16).arrayBuffer());
+    for (let i=0;i<8;i++){
+      if (head[i] !== VAULT_MAGIC[i]) throw new Error('not a vault');
+    }
+    const nonce = head.subarray(9, 21);
+    const tag = head.subarray(21, 37);
+    const aad = concatBytes([VAULT_MAGIC, new Uint8Array([1]), nonce]);
+    const key = shamirCombine(shares);
+
+    /* First pass: is the key right and the file untouched? Only then decrypt. */
+    const otk = poly1305KeyGen(key, nonce);
+    const mac = new Poly1305(otk);
+    mac.update(aad); padTo16(mac, aad.length);
+    const bodyStart = 37, total = OPEN_FILE.size - bodyStart;
+    let off = 0;
+    while (off < total){
+      const end = Math.min(off + CHUNK, total);
+      const buf = new Uint8Array(await OPEN_FILE.slice(bodyStart + off, bodyStart + end).arrayBuffer());
+      mac.update(buf);
+      off = end;
+      $('openBar').style.width = (off/total*50).toFixed(1) + '%';
+      $('openStatus').textContent = t('vault.checking','checking the key…') + ' ' + (off/total*100).toFixed(0) + '%';
+      await new Promise(r => setTimeout(r, 0));
+    }
+    padTo16(mac, total);
+    mac.update(lenBytes(aad.length, total));
+    const want = mac.digest();
+    let diff = 0;
+    for (let i=0;i<16;i++) diff |= want[i] ^ tag[i];
+    if (diff !== 0){
+      $('openProgress').classList.add('hide');
+      $('openResult').innerHTML = `<div class="verdict fail"><div class="t">${esc(t('vault.wrongT','NOT OPENED'))}</div>
+        <div class="d">${esc(t('vault.wrongD','These pieces do not open this file. Either there are not enough of them, or one was typed wrongly, or this is not the matching locked file.'))}</div></div>`;
+      $('openResult').classList.remove('hide');
+      return;
+    }
+
+    /* Second pass: decrypt for real. */
+    const stream = new ChaCha20(key, nonce, 1);
+    const parts = [];
+    off = 0;
+    let headerJSON = null, headerLeft = -1, headerBuf = [], sizeBytes = [];
+    while (off < total){
+      const end = Math.min(off + CHUNK, total);
+      const buf = new Uint8Array(await OPEN_FILE.slice(bodyStart + off, bodyStart + end).arrayBuffer());
+      stream.xor(buf);
+      parts.push(buf);
+      off = end;
+      $('openBar').style.width = (50 + off/total*50).toFixed(1) + '%';
+      $('openStatus').textContent = t('vault.opening','opening…') + ' ' + (off/total*100).toFixed(0) + '%';
+      await new Promise(r => setTimeout(r, 0));
+    }
+    key.fill(0);
+
+    const all = concatBytes(parts);
+    const hl = (all[0]<<24) | (all[1]<<16) | (all[2]<<8) | all[3];
+    const meta = JSON.parse(new TextDecoder().decode(all.subarray(4, 4 + hl)));
+    const fileBytes = all.subarray(4 + hl);
+
+    const outName = meta.file && meta.file.name ? meta.file.name : 'recovered.bin';
+    const blob = new Blob([fileBytes], {type: (meta.file && meta.file.mime) || 'application/octet-stream'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = outName;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+
+    $('openProgress').classList.add('hide');
+    $('openResult').innerHTML = `
+      <div class="verdict pass"><div class="t">${esc(t('vault.openedT','OPENED'))}</div>
+        <div class="d">${esc(t('vault.openedD','The file has been recovered and downloaded. It is exactly the file that was locked.'))}</div></div>
+      ${meta.message ? `<div class="card"><h3>${esc(t('vault.theMessage','The message left for you'))}</h3>
+        <div style="font-size:14.5px;line-height:1.7;white-space:pre-wrap">${esc(meta.message)}</div></div>` : ''}
+      <div class="card">
+        <h3>${esc(t('ver.details','Details'))}</h3>
+        <div class="row"><div class="k">${esc(t('k.file','File'))}</div><div class="v">${esc(outName)}</div></div>
+        ${meta.author ? `<div class="row"><div class="k">${esc(t('k.author','Author'))}</div><div class="v">${esc(meta.author)}</div></div>` : ''}
+        <div class="row"><div class="k">${esc(t('vault.lockedAt','Locked at'))}</div><div class="v">${esc(meta.locked_utc||'')}</div></div>
+        ${meta.open_when ? `<div class="row"><div class="k">${esc(t('vault.openWhen','To be opened'))}</div><div class="v" style="font-family:var(--sans)">${esc(meta.open_when)}</div></div>` : ''}
+        ${meta.hash ? `<div class="row"><div class="k">SHA-256</div><div class="v hash">${esc(meta.hash['sha256']||'')}</div></div>` : ''}
+      </div>
+      <div class="warnbox">${esc(t('vault.afterOpen','Now verify it: go to VERIFY and check the recovered file against the fingerprint above. Then spread it — the reason it was locked was so that this moment could not be stopped.'))}</div>`;
+    $('openResult').classList.remove('hide');
+  }catch(err){
+    $('openProgress').classList.add('hide');
+    $('openResult').innerHTML = `<div class="verdict fail"><div class="t">${esc(t('vault.wrongT','NOT OPENED'))}</div>
+      <div class="d">${esc(t('vault.badFile','That file is not a LOGOS vault, or it is damaged.'))}</div></div>`;
+    $('openResult').classList.remove('hide');
+  }
+});
 
 /* ===================== phones: share, install, offline ===================== */
 
