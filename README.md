@@ -145,14 +145,23 @@ and shell commands stay left to right so they remain readable.
 
 ## Spread it — a proof matters when other people hold it
 
-The **SPREAD** tab sends your attestation in one tap to WhatsApp, Telegram, Signal, email, SMS, X,
-Bluesky or the system share sheet, and lists the official secure submission channels of investigative
-newsrooms and press-freedom organisations — SecureDrop's directory, ICIJ, OCCRP, Bellingcat, the
-Guardian, the New York Times, CPJ, RSF, Freedom of the Press Foundation and the ICC. Every one of those
-addresses was fetched and confirmed before being listed.
+The **SPREAD** tab sends your attestation in one tap to WhatsApp, Telegram, Signal, Briar, Session,
+email, SMS, X, Bluesky or the system share sheet, and lists the official secure submission channels of
+investigative newsrooms and press-freedom organisations — SecureDrop's directory, ICIJ, OCCRP,
+Bellingcat, the Guardian, the New York Times, CPJ, RSF, Freedom of the Press Foundation and the ICC.
+Every one of those addresses was fetched and confirmed before being listed.
 
 Nothing passes through a LOGOS server, because there is none: these open the apps already on your
 device.
+
+**LOGOS does not build its own chat.** A real-time messenger safe enough to trust with your safety is
+years of audited cryptographic engineering — Signal's protocol alone took academic cryptographers years
+to design and is still reviewed today. Rebuilding that under time pressure would be exactly the kind of
+home-made, unaudited crypto that gets people hurt. Instead, LOGOS hands your proof straight to tools that
+have already earned that trust: **Signal**, **[Briar](https://briarproject.org)** (mesh over
+Bluetooth/Wi-Fi or Tor, no phone number, a panic button built in) and **[Session](https://getsession.org)**
+(no phone number, no account tied to your identity). If you don't have them yet, the SPREAD tab links to
+all three.
 
 ## If I don't come back — the posthumous release
 

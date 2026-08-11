@@ -155,6 +155,14 @@
   <button id="tab-about" data-i18n="nav.about">HOW IT WORKS</button>
 </nav>
 
+<div class="install hide" id="onboardBar">
+  <div style="flex:1 1 220px">
+    <div data-i18n="onboard.title" style="font-weight:600;margin-bottom:2px">How this works, in 3 steps</div>
+    <div data-i18n="onboard.body">1 — Drop a file. 2 — LOGOS creates a mathematical proof nobody can fake. 3 — Share it with anyone. The file never leaves this device.</div>
+  </div>
+  <button id="onboardBtn" data-i18n="onboard.btn">Got it, let's start</button>
+</div>
+
 <div class="install hide" id="installBar">
   <div style="flex:1 1 200px" id="installText"></div>
   <button id="installBtn" class="hide" data-i18n="install.btn">Install</button>
@@ -293,6 +301,8 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
       <button class="act" data-send="whatsapp">WhatsApp</button>
       <button class="act" data-send="telegram">Telegram</button>
       <button class="act" data-send="signal" data-i18n="spread.signal">Signal (via Share)</button>
+      <button class="act" data-send="briar" data-i18n="spread.briar">Briar (via Share)</button>
+      <button class="act" data-send="session" data-i18n="spread.session">Session (via Share)</button>
       <button class="act" data-send="email" data-i18n="spread.email">Email</button>
       <button class="act" data-send="sms">SMS</button>
       <button class="act" data-send="x">X</button>
@@ -300,6 +310,16 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
     </div>
     <div class="note" data-i18n="spread.sendNote">These open your own apps on your own device. LOGOS
       sends nothing, stores nothing and sees nothing: there is no LOGOS server anywhere in this.</div>
+    <div class="note" style="margin-top:10px">
+      <span data-i18n="spread.companionsIntro">Don't have Briar or Session yet? They are free, audited
+        chat apps built for exactly this situation — no phone number needed, no account tied to your
+        identity:</span>
+      <a href="https://signal.org" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Signal</a> ·
+      <a href="https://briarproject.org" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Briar</a> ·
+      <a href="https://getsession.org" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Session</a>.
+      <span data-i18n="spread.companionsOutro">LOGOS does not build its own chat — sending your proof
+        through tools already trusted and verified by security researchers is safer than anything
+        reinvented in a hurry.</span></div>
   </div>
 
   <div class="card">
@@ -582,7 +602,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.7";
+const LOGOS_VERSION = "1.8";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -2488,6 +2508,104 @@ Object.assign(I18N.ur, {
 });
 
 
+Object.assign(I18N.it, {
+"onboard.title":"Come funziona, in 3 passi",
+"onboard.body":"1 — Trascina un file. 2 — LOGOS crea una prova matematica che nessuno può falsificare. 3 — Condividila con chi vuoi. Il file non lascia mai questo dispositivo.",
+"onboard.btn":"Ho capito, iniziamo",
+"spread.briar":"Briar (via Condividi)","spread.session":"Session (via Condividi)",
+"spread.briarNote":"Copia il testo, poi incollalo in Briar","spread.sessionNote":"Copia il testo, poi incollalo in Session",
+"spread.companionsIntro":"Non hai ancora Briar o Session? Sono app di chat gratuite e verificate, pensate proprio per questa situazione — nessun numero di telefono richiesto, nessun account legato alla tua identità:","spread.companionsOutro":"LOGOS non costruisce una sua chat: mandare la prova attraverso strumenti già affidabili e verificati da ricercatori di sicurezza è più sicuro di qualunque cosa reinventata in fretta."
+});
+Object.assign(I18N.es, {
+"onboard.title":"Cómo funciona, en 3 pasos",
+"onboard.body":"1 — Suelta un archivo. 2 — LOGOS crea una prueba matemática que nadie puede falsificar. 3 — Compártela con quien quieras. El archivo nunca sale de este dispositivo.",
+"onboard.btn":"Entendido, empecemos",
+"spread.briar":"Briar (con Compartir)","spread.session":"Session (con Compartir)",
+"spread.briarNote":"Copia el texto y pégalo en Briar","spread.sessionNote":"Copia el texto y pégalo en Session",
+"spread.companionsIntro":"¿Todavía no tienes Briar o Session? Son apps de chat gratuitas y verificadas, pensadas justo para esta situación — sin número de teléfono, sin cuenta ligada a tu identidad:","spread.companionsOutro":"LOGOS no construye su propio chat: enviar la prueba a través de herramientas ya fiables y verificadas por investigadores de seguridad es más seguro que cualquier cosa reinventada con prisa."
+});
+Object.assign(I18N.fr, {
+"onboard.title":"Comment ça marche, en 3 étapes",
+"onboard.body":"1 — Déposez un fichier. 2 — LOGOS crée une preuve mathématique que personne ne peut falsifier. 3 — Partagez-la avec qui vous voulez. Le fichier ne quitte jamais cet appareil.",
+"onboard.btn":"Compris, on y va",
+"spread.briar":"Briar (via Partager)","spread.session":"Session (via Partager)",
+"spread.briarNote":"Copiez le texte, puis collez-le dans Briar","spread.sessionNote":"Copiez le texte, puis collez-le dans Session",
+"spread.companionsIntro":"Vous n'avez pas encore Briar ou Session ? Ce sont des applications de chat gratuites et vérifiées, faites justement pour cette situation — aucun numéro de téléphone requis, aucun compte lié à votre identité :","spread.companionsOutro":"LOGOS ne construit pas son propre système de chat : envoyer votre preuve via des outils déjà fiables et vérifiés par des chercheurs en sécurité est plus sûr que tout ce qui serait réinventé dans l'urgence."
+});
+Object.assign(I18N.pt, {
+"onboard.title":"Como funciona, em 3 passos",
+"onboard.body":"1 — Solte um arquivo. 2 — O LOGOS cria uma prova matemática que ninguém pode falsificar. 3 — Compartilhe com quem quiser. O arquivo nunca sai deste aparelho.",
+"onboard.btn":"Entendi, vamos começar",
+"spread.briar":"Briar (via Compartilhar)","spread.session":"Session (via Compartilhar)",
+"spread.briarNote":"Copie o texto e cole no Briar","spread.sessionNote":"Copie o texto e cole no Session",
+"spread.companionsIntro":"Ainda não tem Briar ou Session? São apps de chat gratuitos e verificados, feitos exatamente para esta situação — sem número de telefone, sem conta ligada à sua identidade:","spread.companionsOutro":"O LOGOS não constrói seu próprio chat: enviar a prova por ferramentas já confiáveis e verificadas por pesquisadores de segurança é mais seguro do que qualquer coisa reinventada às pressas."
+});
+Object.assign(I18N.de, {
+"onboard.title":"So funktioniert es, in 3 Schritten",
+"onboard.body":"1 — Datei hineinziehen. 2 — LOGOS erstellt einen mathematischen Beweis, den niemand fälschen kann. 3 — Mit wem Sie wollen teilen. Die Datei verlässt dieses Gerät nie.",
+"onboard.btn":"Verstanden, los geht's",
+"spread.briar":"Briar (über Teilen)","spread.session":"Session (über Teilen)",
+"spread.briarNote":"Text kopieren und in Briar einfügen","spread.sessionNote":"Text kopieren und in Session einfügen",
+"spread.companionsIntro":"Noch kein Briar oder Session? Das sind kostenlose, geprüfte Chat-Apps, genau für diese Situation gemacht — keine Telefonnummer nötig, kein an Ihre Identität gebundenes Konto:","spread.companionsOutro":"LOGOS baut keinen eigenen Chat: den Beweis über bereits vertrauenswürdige, von Sicherheitsforschern geprüfte Werkzeuge zu senden, ist sicherer als alles in Eile Neuerfundene."
+});
+Object.assign(I18N.ru, {
+"onboard.title":"Как это работает — 3 шага",
+"onboard.body":"1 — Перетащите файл. 2 — LOGOS создаёт математическое доказательство, которое никто не подделает. 3 — Поделитесь им, с кем захотите. Файл никогда не покидает это устройство.",
+"onboard.btn":"Понятно, начнём",
+"spread.briar":"Briar (через «Поделиться»)","spread.session":"Session (через «Поделиться»)",
+"spread.briarNote":"Скопируйте текст и вставьте его в Briar","spread.sessionNote":"Скопируйте текст и вставьте его в Session",
+"spread.companionsIntro":"Ещё нет Briar или Session? Это бесплатные, проверенные приложения для чата, созданные именно для такой ситуации — не нужен номер телефона, нет аккаунта, привязанного к вашей личности:","spread.companionsOutro":"LOGOS не создаёт свой собственный чат: отправка доказательства через уже надёжные, проверенные специалистами по безопасности инструменты безопаснее, чем что-либо, наспех изобретённое заново."
+});
+Object.assign(I18N.zh, {
+"onboard.title":"使用方法，三步搞定",
+"onboard.body":"1 — 拖入一个文件。2 — LOGOS 生成一个任何人都无法伪造的数学证明。3 — 分享给任何你想分享的人。文件永远不会离开这台设备。",
+"onboard.btn":"知道了，开始吧",
+"spread.briar":"Briar（通过分享）","spread.session":"Session（通过分享）",
+"spread.briarNote":"复制文本，然后粘贴到 Briar 里","spread.sessionNote":"复制文本，然后粘贴到 Session 里",
+"spread.companionsIntro":"还没有 Briar 或 Session？它们是免费、经过审查的聊天应用，正是为这种处境而设计——不需要电话号码，账号也不与你的身份绑定：","spread.companionsOutro":"LOGOS 不会自建聊天功能：通过已经可信、经过安全研究人员审查的工具发送你的证明，比任何仓促自造的东西都更安全。"
+});
+Object.assign(I18N.hi, {
+"onboard.title":"यह कैसे काम करता है — 3 चरणों में",
+"onboard.body":"1 — एक फ़ाइल छोड़ें। 2 — LOGOS एक गणितीय प्रमाण बनाता है जिसे कोई जाली नहीं बना सकता। 3 — इसे जिसे चाहें साझा करें। फ़ाइल इस उपकरण को कभी नहीं छोड़ती।",
+"onboard.btn":"समझ गया, शुरू करते हैं",
+"spread.briar":"Briar (साझा करें से)","spread.session":"Session (साझा करें से)",
+"spread.briarNote":"पाठ कॉपी करके Briar में चिपकाइए","spread.sessionNote":"पाठ कॉपी करके Session में चिपकाइए",
+"spread.companionsIntro":"अभी तक Briar या Session नहीं है? ये मुफ़्त, जाँचे हुए चैट ऐप हैं, ठीक इसी स्थिति के लिए बनाए गए — न फ़ोन नंबर चाहिए, न आपकी पहचान से जुड़ा कोई खाता:","spread.companionsOutro":"LOGOS अपनी कोई चैट नहीं बनाता: सुरक्षा शोधकर्ताओं द्वारा पहले से जाँचे-परखे भरोसेमंद औज़ारों से प्रमाण भेजना, जल्दबाज़ी में बनाई किसी भी चीज़ से ज़्यादा सुरक्षित है।"
+});
+Object.assign(I18N.id, {
+"onboard.title":"Cara kerjanya, dalam 3 langkah",
+"onboard.body":"1 — Letakkan sebuah berkas. 2 — LOGOS membuat bukti matematis yang tak bisa dipalsukan siapa pun. 3 — Bagikan kepada siapa saja. Berkas itu tak pernah meninggalkan perangkat ini.",
+"onboard.btn":"Mengerti, ayo mulai",
+"spread.briar":"Briar (lewat Bagikan)","spread.session":"Session (lewat Bagikan)",
+"spread.briarNote":"Salin teksnya, lalu tempel ke Briar","spread.sessionNote":"Salin teksnya, lalu tempel ke Session",
+"spread.companionsIntro":"Belum punya Briar atau Session? Keduanya aplikasi obrolan gratis dan sudah diperiksa, dibuat justru untuk situasi seperti ini — tidak perlu nomor telepon, tidak ada akun yang terkait identitas Anda:","spread.companionsOutro":"LOGOS tidak membangun obrolannya sendiri: mengirim bukti lewat alat yang sudah tepercaya dan diperiksa peneliti keamanan lebih aman daripada apa pun yang dibuat buru-buru."
+});
+Object.assign(I18N.bn, {
+"onboard.title":"এটি কীভাবে কাজ করে — ৩ ধাপে",
+"onboard.body":"১ — একটি ফাইল ছাড়ুন। ২ — LOGOS এমন একটি গাণিতিক প্রমাণ তৈরি করে যা কেউ জাল করতে পারে না। ৩ — যাকে ইচ্ছা তার সঙ্গে শেয়ার করুন। ফাইলটি এই যন্ত্র কখনও ছাড়ে না।",
+"onboard.btn":"বুঝেছি, শুরু করি",
+"spread.briar":"Briar (শেয়ারের মাধ্যমে)","spread.session":"Session (শেয়ারের মাধ্যমে)",
+"spread.briarNote":"লেখাটি কপি করে Briar-এ পেস্ট করুন","spread.sessionNote":"লেখাটি কপি করে Session-এ পেস্ট করুন",
+"spread.companionsIntro":"এখনও Briar বা Session নেই? এগুলো বিনামূল্যের, যাচাই করা চ্যাট অ্যাপ, ঠিক এই পরিস্থিতির জন্যই তৈরি — কোনো ফোন নম্বর লাগে না, আপনার পরিচয়ের সঙ্গে যুক্ত কোনো অ্যাকাউন্ট নেই:","spread.companionsOutro":"LOGOS নিজের কোনো চ্যাট বানায় না: নিরাপত্তা গবেষকদের দ্বারা যাচাই করা, আগে থেকে নির্ভরযোগ্য টুল দিয়ে প্রমাণ পাঠানো তাড়াহুড়ো করে বানানো যেকোনো কিছুর চেয়ে বেশি নিরাপদ।"
+});
+Object.assign(I18N.ar, {
+"onboard.title":"كيف يعمل هذا، في 3 خطوات",
+"onboard.body":"١ — أفلت ملفًا. ٢ — يُنشئ LOGOS دليلًا رياضيًا لا يستطيع أحد تزويره. ٣ — شاركه مع من تشاء. الملف لا يغادر هذا الجهاز أبدًا.",
+"onboard.btn":"فهمت، لنبدأ",
+"spread.briar":"Briar (عبر المشاركة)","spread.session":"Session (عبر المشاركة)",
+"spread.briarNote":"انسخ النص ثم الصقه في Briar","spread.sessionNote":"انسخ النص ثم الصقه في Session",
+"spread.companionsIntro":"ليس لديك بعد Briar أو Session؟ هما تطبيقا دردشة مجانيان تم التحقق منهما، صُمما تحديدًا لهذا الموقف — لا حاجة إلى رقم هاتف، ولا حساب مرتبط بهويتك:","spread.companionsOutro":"لا يبني LOGOS دردشته الخاصة: إرسال الدليل عبر أدوات موثوقة بالفعل ومتحقق منها من قِبل باحثي الأمن أكثر أمانًا من أي شيء يُبتكر على عجل."
+});
+Object.assign(I18N.ur, {
+"onboard.title":"یہ کیسے کام کرتا ہے — 3 مراحل میں",
+"onboard.body":"1 — ایک فائل چھوڑیں۔ 2 — LOGOS ایک ریاضیاتی ثبوت بناتا ہے جسے کوئی جعلی نہیں بنا سکتا۔ 3 — جس کے ساتھ چاہیں شیئر کریں۔ فائل اس آلے کو کبھی نہیں چھوڑتی۔",
+"onboard.btn":"سمجھ گیا، شروع کرتے ہیں",
+"spread.briar":"Briar (شیئر کے ذریعے)","spread.session":"Session (شیئر کے ذریعے)",
+"spread.briarNote":"متن کاپی کر کے Briar میں چسپاں کریں","spread.sessionNote":"متن کاپی کر کے Session میں چسپاں کریں",
+"spread.companionsIntro":"ابھی تک Briar یا Session نہیں ہے؟ یہ مفت، تصدیق شدہ چیٹ ایپس ہیں، بالکل اسی صورتحال کے لیے بنائی گئیں — نہ فون نمبر درکار، نہ آپ کی شناخت سے جڑا کوئی اکاؤنٹ:","spread.companionsOutro":"LOGOS اپنی کوئی چیٹ نہیں بناتا: سیکیورٹی محققین کی جانچی ہوئی، پہلے سے قابلِ اعتماد چیزوں کے ذریعے ثبوت بھیجنا، جلدی میں بنائی گئی کسی بھی چیز سے زیادہ محفوظ ہے۔"
+});
+
+
 /* ---------------- SHA3-512 (FIPS 202, Keccak-f[1600]) ---------------- */
 const RC_LO = [
   0x00000001, 0x00008082, 0x0000808a, 0x80008000, 0x0000808b, 0x80000001,
@@ -3320,9 +3438,12 @@ $('spreadBtns').addEventListener('click', ev => {
   else if (target === 'sms') url = 'sms:?&body=' + e;
   else if (target === 'x') url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg.slice(0, 260));
   else if (target === 'bluesky') url = 'https://bsky.app/intent/compose?text=' + encodeURIComponent(msg.slice(0, 290));
-  else if (target === 'signal'){
+  else if (target === 'signal' || target === 'briar' || target === 'session'){
     if (navigator.share){ navigator.share({ text: msg }).catch(()=>{}); return; }
-    toast(t('spread.signalNote','Copy the text, then paste it into Signal'));
+    const notes = { signal: t('spread.signalNote','Copy the text, then paste it into Signal'),
+                     briar: t('spread.briarNote','Copy the text, then paste it into Briar'),
+                     session: t('spread.sessionNote','Copy the text, then paste it into Session') };
+    toast(notes[target]);
     return;
   }
   if (url) window.open(url, '_blank', 'noopener');
@@ -4236,6 +4357,17 @@ if (navigator.share){
 }
 
 /* Install as a real app, so it survives without the internet and without this site. */
+/* A first look at LOGOS should not require reading the manual. Shown once. */
+try{
+  if (!localStorage.getItem('logos-onboarded')){
+    $('onboardBar').classList.remove('hide');
+  }
+}catch(e){}
+$('onboardBtn').addEventListener('click', () => {
+  $('onboardBar').classList.add('hide');
+  try{ localStorage.setItem('logos-onboarded', '1'); }catch(e){}
+});
+
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
                      window.navigator.standalone === true;
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
