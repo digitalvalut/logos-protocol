@@ -148,7 +148,8 @@
 </header>
 
 <nav>
-  <button id="tab-seal" class="on" data-i18n="nav.seal">SEAL</button>
+  <button id="tab-now" class="on" data-i18n="nav.now">SEND NOW</button>
+  <button id="tab-seal" data-i18n="nav.seal">SEAL</button>
   <button id="tab-verify" data-i18n="nav.verify">VERIFY</button>
   <button id="tab-spread" data-i18n="nav.spread">SPREAD IT</button>
   <button id="tab-vault" data-i18n="nav.vault">IF I DON'T COME BACK</button>
@@ -169,8 +170,63 @@
   <button class="x" id="installClose" aria-label="close">×</button>
 </div>
 
+<!-- ============================ SEND NOW ============================ -->
+<section id="p-now" class="panel on">
+  <div class="card">
+    <h3 data-i18n="now.title">Need to send something right now?</h3>
+    <div class="note" style="margin-top:0" data-i18n="now.intro">One file, no questions asked. LOGOS
+      seals it, then hands you straight to a real way to send it. The advanced options — Bitcoin,
+      hiding it in a photo, releasing it only if you don't come back — are in the other tabs, for when
+      you have time.</div>
+  </div>
+
+  <div class="drop" id="dropNow">
+    <div class="big" data-i18n="drop.big">Drop any file here</div>
+    <div class="small" data-i18n="drop.small">document · photo · audio · video · anything</div>
+    <div class="tiny" data-i18n="drop.tiny">Your file never leaves this device. Everything is computed locally, offline.</div>
+  </div>
+  <input type="file" id="fileNow" class="hide">
+
+  <div id="nowProgress" class="card hide">
+    <h3 data-i18n="prog.sealing">Sealing</h3>
+    <div class="bar"><i id="nowBar"></i></div>
+    <div class="status" id="nowStatus" data-i18n="prog.reading">reading…</div>
+  </div>
+
+  <div id="nowResult" class="hide">
+    <div class="card">
+      <h3 data-i18n="now.doneT">Sealed</h3>
+      <div class="row"><div class="k" data-i18n="k.file">File</div><div class="v" id="nowName"></div></div>
+      <div class="row"><div class="k">SHA-256</div><div class="v hash" id="nowHash"></div></div>
+      <div class="btns">
+        <button class="act" id="nowDownload" data-i18n="btn.seal">Download seal (.logos.json)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="now.sendT">Send it — pick one</h3>
+      <div class="btns" style="flex-direction:column">
+        <button class="act primary" id="nowSecureDrop" style="text-align:left;padding:14px 16px">
+          <span data-i18n="now.securedropT">Send to a secure newsroom, anonymously</span><br>
+          <span style="font-weight:400;font-size:12px;color:var(--dim)" data-i18n="now.securedropD">Opens SecureDrop's directory — hundreds of investigative newsrooms, used through the Tor Browser</span>
+        </button>
+        <button class="act" id="nowShare" style="text-align:left;padding:14px 16px">
+          <span data-i18n="now.shareT">Send it to someone you trust</span><br>
+          <span style="font-weight:400;font-size:12px;color:var(--dim)" data-i18n="now.shareD">Opens WhatsApp, Signal, Briar, Session, email — whatever you already have</span>
+        </button>
+        <button class="act" id="nowArchive" style="text-align:left;padding:14px 16px">
+          <span data-i18n="now.archiveT">Publish it, publicly, so it stays online</span><br>
+          <span style="font-weight:400;font-size:12px;color:var(--dim)" data-i18n="now.archiveD">Opens the Internet Archive's uploader — needs a free account, takes a minute</span>
+        </button>
+      </div>
+      <div class="note" data-i18n="now.note">None of these pass through LOGOS. Each one opens the real
+        thing directly — LOGOS never sees where you send it.</div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ SEAL ============================ -->
-<section id="p-seal" class="panel on">
+<section id="p-seal" class="panel">
   <div class="drop" id="dropSeal">
     <div class="big" data-i18n="drop.big">Drop any file here</div>
     <div class="small" data-i18n="drop.small">document · photo · audio · video · anything</div>
@@ -602,7 +658,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.8";
+const LOGOS_VERSION = "1.9";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -2606,6 +2662,176 @@ Object.assign(I18N.ur, {
 });
 
 
+Object.assign(I18N.it, {
+"nav.now":"INVIA ORA",
+"now.title":"Devi mandare qualcosa proprio adesso?",
+"now.intro":"Un file, nessuna domanda. LOGOS lo sigilla, poi ti porta subito a un modo vero per inviarlo. Le opzioni avanzate — Bitcoin, nasconderlo in una foto, rilasciarlo solo se non torni — sono nelle altre schede, per quando avrai tempo.",
+"now.doneT":"Sigillato",
+"now.sendT":"Mandalo — scegline uno",
+"now.securedropT":"Manda a una redazione sicura, in anonimo",
+"now.securedropD":"Apre l'elenco di SecureDrop — centinaia di redazioni investigative, usato tramite il browser Tor",
+"now.shareT":"Mandalo a qualcuno di cui ti fidi",
+"now.shareD":"Apre WhatsApp, Signal, Briar, Session, email — qualunque cosa tu abbia già",
+"now.archiveT":"Pubblicalo, pubblicamente, così resta online",
+"now.archiveD":"Apre il caricatore di Internet Archive — serve un account gratuito, richiede un minuto",
+"now.note":"Nessuna di queste passa da LOGOS. Ognuna apre direttamente lo strumento vero — LOGOS non vede mai dove lo mandi."
+});
+Object.assign(I18N.es, {
+"nav.now":"ENVIAR AHORA",
+"now.title":"¿Necesitas enviar algo ahora mismo?",
+"now.intro":"Un archivo, sin preguntas. LOGOS lo sella y te lleva directo a una forma real de enviarlo. Las opciones avanzadas — Bitcoin, esconderlo en una foto, liberarlo solo si no vuelves — están en las otras pestañas, para cuando tengas tiempo.",
+"now.doneT":"Sellado",
+"now.sendT":"Envíalo — elige uno",
+"now.securedropT":"Enviar a una redacción segura, de forma anónima",
+"now.securedropD":"Abre el directorio de SecureDrop — cientos de redacciones de investigación, usado a través del navegador Tor",
+"now.shareT":"Envíaselo a alguien en quien confíes",
+"now.shareD":"Abre WhatsApp, Signal, Briar, Session, correo — lo que ya tengas",
+"now.archiveT":"Publícalo, públicamente, para que quede en línea",
+"now.archiveD":"Abre el cargador de Internet Archive — necesita una cuenta gratuita, toma un minuto",
+"now.note":"Ninguna de estas pasa por LOGOS. Cada una abre la herramienta real directamente — LOGOS nunca ve adónde lo envías."
+});
+Object.assign(I18N.fr, {
+"nav.now":"ENVOYER MAINTENANT",
+"now.title":"Besoin d'envoyer quelque chose tout de suite ?",
+"now.intro":"Un fichier, aucune question. LOGOS le scelle, puis vous emmène directement vers un vrai moyen de l'envoyer. Les options avancées — Bitcoin, le cacher dans une photo, ne le libérer que si vous ne revenez pas — sont dans les autres onglets, pour quand vous aurez le temps.",
+"now.doneT":"Scellé",
+"now.sendT":"Envoyez-le — choisissez-en un",
+"now.securedropT":"Envoyer à une rédaction sécurisée, anonymement",
+"now.securedropD":"Ouvre l'annuaire SecureDrop — des centaines de rédactions d'investigation, utilisé via le navigateur Tor",
+"now.shareT":"Envoyez-le à quelqu'un en qui vous avez confiance",
+"now.shareD":"Ouvre WhatsApp, Signal, Briar, Session, e-mail — ce que vous avez déjà",
+"now.archiveT":"Publiez-le, publiquement, pour qu'il reste en ligne",
+"now.archiveD":"Ouvre l'outil de dépôt de l'Internet Archive — nécessite un compte gratuit, prend une minute",
+"now.note":"Aucune de ces options ne passe par LOGOS. Chacune ouvre directement le vrai outil — LOGOS ne voit jamais où vous l'envoyez."
+});
+Object.assign(I18N.pt, {
+"nav.now":"ENVIAR AGORA",
+"now.title":"Precisa enviar algo agora mesmo?",
+"now.intro":"Um arquivo, sem perguntas. O LOGOS o sela e leva você direto a uma forma real de enviá-lo. As opções avançadas — Bitcoin, escondê-lo numa foto, liberá-lo só se você não voltar — estão nas outras abas, para quando tiver tempo.",
+"now.doneT":"Selado",
+"now.sendT":"Envie — escolha um",
+"now.securedropT":"Enviar a uma redação segura, anonimamente",
+"now.securedropD":"Abre o diretório do SecureDrop — centenas de redações investigativas, usado pelo navegador Tor",
+"now.shareT":"Envie a alguém em quem você confia",
+"now.shareD":"Abre WhatsApp, Signal, Briar, Session, e-mail — o que você já tiver",
+"now.archiveT":"Publique-o, publicamente, para que fique online",
+"now.archiveD":"Abre o uploader do Internet Archive — precisa de conta gratuita, leva um minuto",
+"now.note":"Nenhuma delas passa pelo LOGOS. Cada uma abre a ferramenta real diretamente — o LOGOS nunca vê para onde você envia."
+});
+Object.assign(I18N.de, {
+"nav.now":"JETZT SENDEN",
+"now.title":"Müssen Sie gerade jetzt etwas senden?",
+"now.intro":"Eine Datei, keine Fragen. LOGOS versiegelt sie und führt Sie direkt zu einem echten Weg, sie zu versenden. Die erweiterten Optionen — Bitcoin, in einem Foto verstecken, nur freigeben, wenn Sie nicht zurückkommen — finden Sie in den anderen Tabs, wenn Sie Zeit haben.",
+"now.doneT":"Versiegelt",
+"now.sendT":"Senden — eines wählen",
+"now.securedropT":"An eine sichere Redaktion senden, anonym",
+"now.securedropD":"Öffnet das SecureDrop-Verzeichnis — Hunderte Recherchredaktionen, genutzt über den Tor-Browser",
+"now.shareT":"An jemanden senden, dem Sie vertrauen",
+"now.shareD":"Öffnet WhatsApp, Signal, Briar, Session, E-Mail — was Sie bereits haben",
+"now.archiveT":"Öffentlich veröffentlichen, damit es online bleibt",
+"now.archiveD":"Öffnet den Uploader des Internet Archive — braucht ein kostenloses Konto, dauert eine Minute",
+"now.note":"Keine davon läuft über LOGOS. Jede öffnet direkt das echte Werkzeug — LOGOS sieht nie, wohin Sie es senden."
+});
+Object.assign(I18N.ru, {
+"nav.now":"ОТПРАВИТЬ СЕЙЧАС",
+"now.title":"Нужно отправить что-то прямо сейчас?",
+"now.intro":"Один файл, никаких вопросов. LOGOS запечатывает его и сразу ведёт к настоящему способу отправки. Расширенные возможности — Bitcoin, скрытие в фотографии, выпуск только если вы не вернётесь — в других вкладках, на потом, когда будет время.",
+"now.doneT":"Запечатано",
+"now.sendT":"Отправить — выберите один способ",
+"now.securedropT":"Отправить в защищённую редакцию, анонимно",
+"now.securedropD":"Открывает каталог SecureDrop — сотни расследовательских редакций, используется через браузер Tor",
+"now.shareT":"Отправить тому, кому вы доверяете",
+"now.shareD":"Открывает WhatsApp, Signal, Briar, Session, почту — что у вас уже есть",
+"now.archiveT":"Опубликовать открыто, чтобы осталось в сети",
+"now.archiveD":"Открывает загрузчик Internet Archive — нужен бесплатный аккаунт, займёт минуту",
+"now.note":"Ничего из этого не проходит через LOGOS. Каждый вариант открывает настоящий инструмент напрямую — LOGOS никогда не видит, куда вы это отправляете."
+});
+Object.assign(I18N.zh, {
+"nav.now":"立即发送",
+"now.title":"现在就需要发送什么吗？",
+"now.intro":"一个文件，不问任何问题。LOGOS 先给它加封，然后直接带你去一个真正能发送的方式。高级选项——比特币锚定、藏进照片里、只在你没能回来时才释放——都在其他标签页里，留给你有空的时候。",
+"now.doneT":"已加封",
+"now.sendT":"发送——选一个方式",
+"now.securedropT":"匿名发送给安全的新闻编辑部",
+"now.securedropD":"打开 SecureDrop 目录——数百家调查类新闻编辑部，通过 Tor 浏览器使用",
+"now.shareT":"发送给你信任的人",
+"now.shareD":"打开 WhatsApp、Signal、Briar、Session、邮件——你手机上已有的任何一个",
+"now.archiveT":"公开发布，让它留在网上",
+"now.archiveD":"打开 Internet Archive 的上传页面——需要一个免费账号，花一分钟",
+"now.note":"这些都不经过 LOGOS。每一个都会直接打开真正的工具——LOGOS 永远不知道你发到了哪里。"
+});
+Object.assign(I18N.hi, {
+"nav.now":"अभी भेजें",
+"now.title":"क्या आपको अभी कुछ भेजना है?",
+"now.intro":"एक फ़ाइल, कोई सवाल नहीं। LOGOS इसे सील करता है, फिर सीधे भेजने के एक असली तरीके तक ले जाता है। उन्नत विकल्प — बिटकॉइन, इसे किसी फ़ोटो में छिपाना, आप न लौटें तभी जारी करना — बाक़ी टैब्स में हैं, जब आपके पास समय हो।",
+"now.doneT":"सील हो गया",
+"now.sendT":"भेजिए — एक चुनिए",
+"now.securedropT":"किसी सुरक्षित न्यूज़रूम को गुमनाम रूप से भेजिए",
+"now.securedropD":"SecureDrop की सूची खोलता है — सैकड़ों खोजी न्यूज़रूम, Tor ब्राउज़र के ज़रिए इस्तेमाल होता है",
+"now.shareT":"जिस पर भरोसा है उसे भेजिए",
+"now.shareD":"WhatsApp, Signal, Briar, Session, ईमेल खोलता है — जो भी आपके पास पहले से हो",
+"now.archiveT":"इसे सार्वजनिक रूप से प्रकाशित करें, ताकि यह ऑनलाइन बना रहे",
+"now.archiveD":"Internet Archive का अपलोडर खोलता है — मुफ़्त खाता चाहिए, एक मिनट लगता है",
+"now.note":"इनमें से कोई भी LOGOS से होकर नहीं गुज़रता। हर एक सीधे असली टूल खोलता है — LOGOS को कभी पता नहीं चलता कि आपने कहाँ भेजा।"
+});
+Object.assign(I18N.id, {
+"nav.now":"KIRIM SEKARANG",
+"now.title":"Perlu mengirim sesuatu sekarang juga?",
+"now.intro":"Satu berkas, tanpa pertanyaan. LOGOS menyegelnya, lalu langsung membawa Anda ke cara nyata untuk mengirimkannya. Opsi lanjutan — Bitcoin, menyembunyikannya di foto, merilisnya hanya jika Anda tidak kembali — ada di tab lain, untuk saat Anda punya waktu.",
+"now.doneT":"Disegel",
+"now.sendT":"Kirim — pilih satu",
+"now.securedropT":"Kirim ke ruang redaksi aman, secara anonim",
+"now.securedropD":"Membuka direktori SecureDrop — ratusan ruang redaksi investigatif, digunakan lewat peramban Tor",
+"now.shareT":"Kirim ke seseorang yang Anda percayai",
+"now.shareD":"Membuka WhatsApp, Signal, Briar, Session, email — apa pun yang sudah Anda miliki",
+"now.archiveT":"Terbitkan secara publik, agar tetap online",
+"now.archiveD":"Membuka pengunggah Internet Archive — perlu akun gratis, makan waktu semenit",
+"now.note":"Tak satu pun dari ini melewati LOGOS. Masing-masing langsung membuka alat aslinya — LOGOS tidak pernah tahu ke mana Anda mengirimnya."
+});
+Object.assign(I18N.bn, {
+"nav.now":"এখনই পাঠান",
+"now.title":"এখনই কিছু পাঠাতে হবে?",
+"now.intro":"একটি ফাইল, কোনো প্রশ্ন নেই। LOGOS এটি সিল করে, তারপর সরাসরি পাঠানোর একটি আসল উপায়ে নিয়ে যায়। উন্নত বিকল্পগুলো — বিটকয়েন, ছবির ভেতরে লুকানো, আপনি না ফিরলে তবেই প্রকাশ করা — বাকি ট্যাবে আছে, যখন আপনার সময় হবে।",
+"now.doneT":"সিল হয়েছে",
+"now.sendT":"পাঠান — একটি বেছে নিন",
+"now.securedropT":"নিরাপদ নিউজরুমে, বেনামে পাঠান",
+"now.securedropD":"SecureDrop-এর তালিকা খোলে — শত শত অনুসন্ধানী নিউজরুম, Tor ব্রাউজারের মাধ্যমে ব্যবহৃত হয়",
+"now.shareT":"যাকে বিশ্বাস করেন তাকে পাঠান",
+"now.shareD":"WhatsApp, Signal, Briar, Session, ইমেইল খোলে — আপনার কাছে যা আগে থেকেই আছে",
+"now.archiveT":"এটি প্রকাশ্যে প্রকাশ করুন, যাতে অনলাইনে থেকে যায়",
+"now.archiveD":"Internet Archive-এর আপলোডার খোলে — একটি বিনামূল্যের অ্যাকাউন্ট লাগবে, এক মিনিট সময় নেয়",
+"now.note":"এর কোনোটিই LOGOS দিয়ে যায় না। প্রতিটি সরাসরি আসল টুল খোলে — আপনি কোথায় পাঠাচ্ছেন তা LOGOS কখনও দেখে না।"
+});
+Object.assign(I18N.ar, {
+"nav.now":"أرسل الآن",
+"now.title":"هل تحتاج إلى إرسال شيء الآن؟",
+"now.intro":"ملف واحد، بلا أسئلة. يختم LOGOS الملف، ثم يأخذك مباشرة إلى طريقة حقيقية لإرساله. الخيارات المتقدمة — بيتكوين، إخفاؤه داخل صورة، إطلاقه فقط إن لم تعد — موجودة في الألسنة الأخرى، لوقت لاحق حين يتوفر لك الوقت.",
+"now.doneT":"مختوم",
+"now.sendT":"أرسله — اختر واحدة",
+"now.securedropT":"أرسل إلى غرفة أخبار آمنة، دون كشف هويتك",
+"now.securedropD":"يفتح دليل SecureDrop — مئات غرف الأخبار الاستقصائية، يُستخدم عبر متصفح Tor",
+"now.shareT":"أرسله إلى شخص تثق به",
+"now.shareD":"يفتح واتساب أو Signal أو Briar أو Session أو البريد الإلكتروني — أيًا مما لديك بالفعل",
+"now.archiveT":"انشره علنًا، ليبقى متاحًا على الإنترنت",
+"now.archiveD":"يفتح رافع الملفات في Internet Archive — يحتاج حسابًا مجانيًا، يستغرق دقيقة",
+"now.note":"لا يمر أي من هذه عبر LOGOS. كل واحد يفتح الأداة الحقيقية مباشرة — لا يرى LOGOS أبدًا إلى أين ترسله."
+});
+Object.assign(I18N.ur, {
+"nav.now":"ابھی بھیجیں",
+"now.title":"کیا ابھی کچھ بھیجنا ہے؟",
+"now.intro":"ایک فائل، کوئی سوال نہیں۔ LOGOS اسے سیل کرتا ہے، پھر سیدھا آپ کو بھیجنے کے ایک اصل طریقے تک لے جاتا ہے۔ اعلیٰ درجے کے اختیارات — بٹ کوائن، اسے تصویر میں چھپانا، آپ کے واپس نہ آنے پر ہی جاری کرنا — باقی ٹیبز میں ہیں، جب آپ کے پاس وقت ہو۔",
+"now.doneT":"سیل ہو گیا",
+"now.sendT":"بھیجیں — ایک چنیں",
+"now.securedropT":"محفوظ نیوز روم کو، بے نامی طور پر بھیجیں",
+"now.securedropD":"SecureDrop کی ڈائریکٹری کھولتا ہے — سیکڑوں تحقیقاتی نیوز رومز، Tor براؤزر کے ذریعے استعمال ہوتا ہے",
+"now.shareT":"جس پر بھروسا ہے اسے بھیجیں",
+"now.shareD":"WhatsApp، Signal، Briar، Session، ای میل کھولتا ہے — جو بھی آپ کے پاس پہلے سے موجود ہو",
+"now.archiveT":"اسے عوامی طور پر شائع کریں، تاکہ آن لائن رہے",
+"now.archiveD":"Internet Archive کا اپ لوڈر کھولتا ہے — مفت اکاؤنٹ درکار ہے، ایک منٹ لگتا ہے",
+"now.note":"ان میں سے کوئی بھی LOGOS سے نہیں گزرتا۔ ہر ایک براہ راست اصل ٹول کھولتا ہے — LOGOS کو کبھی پتا نہیں چلتا کہ آپ کہاں بھیج رہے ہیں۔"
+});
+
+
 /* ---------------- SHA3-512 (FIPS 202, Keccak-f[1600]) ---------------- */
 const RC_LO = [
   0x00000001, 0x00008082, 0x0000808a, 0x80008000, 0x0000808b, 0x80000001,
@@ -3034,7 +3260,7 @@ function wireDrop(dropEl, inputEl, handler){
 ['dragover','drop'].forEach(e => window.addEventListener(e, ev => ev.preventDefault()));
 
 /* ============================== tabs ============================== */
-const TABS = [['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-spread','p-spread'],['tab-vault','p-vault'],['tab-about','p-about']];
+const TABS = [['tab-now','p-now'],['tab-seal','p-seal'],['tab-verify','p-verify'],['tab-spread','p-spread'],['tab-vault','p-vault'],['tab-about','p-about']];
 TABS.forEach(([b,p]) => $(b).addEventListener('click', () => {
   TABS.forEach(([b2,p2]) => { $(b2).classList.toggle('on', b2===b); $(p2).classList.toggle('on', p2===p); });
   window.scrollTo(0,0);
@@ -3044,6 +3270,7 @@ TABS.forEach(([b,p]) => $(b).addEventListener('click', () => {
 let CURRENT = null;   // the seal object in progress
 
 wireDrop($('dropSeal'), $('fileSeal'), doSeal);
+wireDrop($('dropNow'), $('fileNow'), handleNow);
 
 async function doSeal(file){
   $('sealResult').classList.add('hide');
@@ -3091,6 +3318,42 @@ async function doSeal(file){
   $('btnAnchor').disabled = false;
   $('btnAnchor').textContent = t('btn.anchor','Anchor now (needs internet, once)');
 }
+
+async function handleNow(file){
+  $('nowResult').classList.add('hide');
+  $('nowProgress').classList.remove('hide');
+  $('nowBar').style.width = '0%';
+  await doSeal(file);
+  $('nowProgress').classList.add('hide');
+  if (!CURRENT) return;
+  $('nowName').textContent = CURRENT.file.name;
+  $('nowHash').textContent = CURRENT.hash['sha256'];
+  $('nowResult').classList.remove('hide');
+}
+$('nowDownload').addEventListener('click', () => {
+  if (!CURRENT) return;
+  download(safeName(CURRENT.file.name) + '.logos.json', sealJSON(), 'application/json');
+  toast(t('toast.sealSaved','Seal saved'));
+});
+$('nowSecureDrop').addEventListener('click', () => {
+  window.open('https://securedrop.org/directory/', '_blank', 'noopener');
+});
+$('nowArchive').addEventListener('click', () => {
+  window.open('https://archive.org/upload', '_blank', 'noopener');
+});
+$('nowShare').addEventListener('click', async () => {
+  if (!CURRENT) return;
+  const text = attestationText(CURRENT);
+  try{
+    const file = new File([sealJSON()], safeName(CURRENT.file.name) + '.logos.json', { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: 'LOGOS', text }); return;
+    }
+    if (navigator.share){ await navigator.share({ title: 'LOGOS', text }); return; }
+  }catch(err){ if (err && err.name === 'AbortError') return; }
+  try{ await navigator.clipboard.writeText(text); toast(t('toast.copied','Attestation copied')); }
+  catch(e){ toast(t('toast.copyFail','Copy failed — download the seal instead')); }
+});
 
 function refreshSeal(){
   if (!CURRENT) return;

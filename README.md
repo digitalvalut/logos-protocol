@@ -20,7 +20,16 @@ every computer.
 ## Start in 30 seconds — no installation
 
 **Double-click `LOGOS.html`.** It opens in any browser, on any operating system, on a phone or a
-laptop, in 2026 or in 2046. Drop your file in. That is all.
+laptop, in 2026 or in 2046. It opens on the **SEND NOW** tab: drop a file, get a proof, and send it —
+straight to a secure newsroom via SecureDrop, to someone you trust, or published publicly on the
+Internet Archive. No other questions asked. Everything else — Bitcoin anchoring, hiding the proof in a
+photo, releasing something only if you don't come back — lives in the other tabs, for when you have
+time to think it through.
+
+**Be clear about what LOGOS is and is not.** It never publishes anything itself — it has no server, by
+design, and a tool with no server has nothing to publish through. What it does is seal a file, correctly
+and verifiably, *before* you hand it to something that actually can publish: a newsroom, the Internet
+Archive, a person you trust. That handoff is the whole second half of this document.
 
 - Works with the internet **turned off**.
 - Your file **never leaves your device**. Nothing is uploaded, ever.
