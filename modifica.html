@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DigitalValut Logos — chat sperimentale</title>
-<meta name="description" content="Chat sperimentale diretta tra due browser, di proprietà di DigitalValut. Non anonima, non per situazioni di pericolo.">
+<meta name="description" content="Software libero e open source di DigitalValut APS ETS: chat, chiamate e videochiamate dirette tra due browser, gratis per sempre, senza account.">
 <meta name="theme-color" content="#0b0d10">
 <meta name="color-scheme" content="dark">
 <link rel="manifest" href="modifica-manifest.webmanifest">
@@ -216,7 +216,9 @@
   </div>
 
   <div class="banner accent hide" id="onboardBanner">
-    <div style="flex:1" data-i18n="onboard.text">Sigilla nulla, non è LOGOS: è una chat sperimentale a parte, di proprietà di DigitalValut.</div>
+    <div style="flex:1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza MIT),
+      di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
+      Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
     <button class="x" id="onboardClose" aria-label="close">×</button>
   </div>
 
@@ -262,11 +264,11 @@
     </div>
 
     <details class="legal">
-      <summary data-i18n="home.legalSummary">Cosa devi sapere prima di usarla</summary>
-      <div class="body" data-i18n="home.legalBody">Chat sperimentale di proprietà di DigitalValut. Tre cose vere: rivela il
-        tuo indirizzo di rete (IP) a chi parli con te; serve che siate online insieme, altrimenti non arriva nulla, e su
-        reti molto filtrate le chiamate possono non collegarsi; nessun sito web può impedire uno screenshot, a nessuno.
-        Per la sicurezza quando conta davvero, usa Signal, Session o Briar invece di questa.</div>
+      <summary data-i18n="home.legalSummary">Come funziona, in tre righe tecniche</summary>
+      <div class="body" data-i18n="home.legalBody">Rivela il tuo indirizzo di rete (IP) a chi parli con te; serve che siate
+        online insieme, altrimenti non arriva nulla, e su reti molto filtrate le chiamate possono non collegarsi; nessun
+        sito web può impedire uno screenshot, a nessuno. Per la sicurezza quando conta davvero, usa Signal, Session o
+        Briar invece di questa.</div>
     </details>
   </section>
 
@@ -379,8 +381,10 @@
   </section>
 
   <footer>
-    DigitalValut Logos — <span data-i18n="footer.text">strumento sperimentale separato, non parte del protocollo LOGOS principale.</span><br>
-    <span data-i18n="footer.noserver">Nessun server: la connessione è diretta tra i due browser via WebRTC.</span>
+    DigitalValut Logos — <span data-i18n="footer.text">software libero e open source (licenza MIT), un progetto di DigitalValut APS ETS.</span><br>
+    <span data-i18n="footer.noserver">Nessun server: la connessione è diretta tra i due browser via WebRTC.</span><br>
+    <a href="LICENSE" data-i18n="footer.license" style="color:var(--faint)">Leggi la licenza open source</a> ·
+    <a href="https://github.com/digitalvalut/logos-protocol" style="color:var(--faint)" data-i18n="footer.source">Codice sorgente su GitHub</a>
   </footer>
 </div>
 
@@ -395,7 +399,7 @@ const I18N = { it: {}, en: {} };
 
 Object.assign(I18N.en, {
 "topbar.sub":"Experimental chat",
-"onboard.text":"This seals nothing, it isn't LOGOS: a separate experimental chat, owned by DigitalValut.",
+"onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (MIT license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
 "install.btn":"Install",
 "home.title":"Talk to anyone, wherever they are",
 "home.sub":"Text, photos, video, voice, calls. Direct between two devices, no account, free forever.",
@@ -403,8 +407,8 @@ Object.assign(I18N.en, {
 "home.namePh":"Your name",
 "home.startT":"Start a chat","home.startD":"Create an invite to send someone",
 "home.joinT":"I got an invite","home.joinD":"Paste or open the link someone sent you",
-"home.legalSummary":"What you should know before using it",
-"home.legalBody":"Experimental chat owned by DigitalValut. Three true things: it reveals your network address (IP) to whoever you talk to; it needs both of you online at once, otherwise nothing arrives, and on heavily filtered networks calls may not connect; no website can prevent a screenshot, ever. For safety when it truly matters, use Signal, Session or Briar instead of this.",
+"home.legalSummary":"How it works, in three technical lines",
+"home.legalBody":"It reveals your network address (IP) to whoever you talk to; it needs both of you online at once, otherwise nothing arrives, and on heavily filtered networks calls may not connect; no website can prevent a screenshot, ever. For safety when it truly matters, use Signal, Session or Briar instead of this.",
 "nav.back":"Back",
 "start.title":"Create the invite","start.lead":"Generate a code, then send it to whoever you want to bring in — email, WhatsApp, in person.",
 "start.create":"Create my invite",
@@ -419,8 +423,9 @@ Object.assign(I18N.en, {
 "menu.title":"Tools","menu.arm":"Self-destruct","menu.disarm":"Cancel",
 "menu.clearHistory":"Clear history","menu.endChat":"End chat",
 "menu.historyNote":"History stays only on this device, tied to the name of the person you're talking to. No server keeps it.",
-"footer.text":"experimental tool kept separate, not part of the main LOGOS protocol.",
+"footer.text":"free and open-source software (MIT license), a project of DigitalValut APS ETS.",
 "footer.noserver":"No server: the connection is direct between the two browsers via WebRTC.",
+"footer.license":"Read the open-source license","footer.source":"Source code on GitHub",
 "contacts.title":"Recent contacts",
 "contacts.note":"One tap to prepare a new invite for them — the history of what you said is already waiting. A new code is still needed every time: no server keeps anyone \"always connected\".",
 "toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand",
@@ -453,8 +458,9 @@ Object.assign(I18N.it, {
 "menu.title":"Strumenti","menu.arm":"Autodistruzione","menu.disarm":"Annulla",
 "menu.clearHistory":"Svuota cronologia","menu.endChat":"Termina chat",
 "menu.historyNote":"La cronologia resta solo su questo dispositivo, legata al nome della persona con cui parli. Nessun server la conserva.",
-"footer.text":"strumento sperimentale separato, non parte del protocollo LOGOS principale.",
+"footer.text":"software libero e open source (licenza MIT), un progetto di DigitalValut APS ETS.",
 "footer.noserver":"Nessun server: la connessione è diretta tra i due browser via WebRTC.",
+"footer.license":"Leggi la licenza open source","footer.source":"Codice sorgente su GitHub",
 "toast.sealCopied":"Codice copiato","toast.copyFail":"Copia non riuscita — seleziona e copia a mano",
 "call.busy":"non ha risposto — occupato in un'altra chiamata.","call.declinedBy":"ha rifiutato la chiamata.",
 "call.joined":"si è unito alla chat.","call.videoInvite":"ti sta facendo una videochiamata","call.audioInvite":"ti sta chiamando",

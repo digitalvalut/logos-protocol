@@ -1,7 +1,7 @@
 {
   "name": "DigitalValut Logos — chat sperimentale",
   "short_name": "DV Logos",
-  "description": "Chat sperimentale diretta tra due browser, di proprietà di DigitalValut. Non anonima, non per situazioni di pericolo.",
+  "description": "Software libero e open source di DigitalValut APS ETS: chat, chiamate e videochiamate dirette tra due browser, gratis per sempre, senza account.",
   "id": "/logos-protocol/modifica",
   "start_url": "./modifica.html",
   "scope": "./modifica.html",
