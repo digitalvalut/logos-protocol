@@ -1,0 +1,17 @@
+{
+  "name": "DigitalValut Logos — chat sperimentale",
+  "short_name": "DV Logos",
+  "description": "Chat sperimentale diretta tra due browser, di proprietà di DigitalValut. Non anonima, non per situazioni di pericolo.",
+  "id": "/logos-protocol/modifica",
+  "start_url": "./modifica.html",
+  "scope": "./modifica.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "categories": ["social", "utilities"],
+  "icons": [
+    { "src": "modifica-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "modifica-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

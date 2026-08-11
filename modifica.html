@@ -2,14 +2,23 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LOGOS Modifica — chat sperimentale diretta</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DigitalValut Logos — chat sperimentale</title>
+<meta name="description" content="Chat sperimentale diretta tra due browser, di proprietà di DigitalValut. Non anonima, non per situazioni di pericolo.">
+<meta name="theme-color" content="#0b0d10">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="modifica-manifest.webmanifest">
+<link rel="icon" href="modifica-icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="modifica-apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DV Logos">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
   :root{
     --bg:#0b0d10; --panel:#12161b; --panel2:#171d24; --line:#242c35;
     --ink:#e8edf2; --dim:#96a3b0; --faint:#5f6d7a;
-    --ok:#3ddc97; --bad:#ff5c5c; --warn:#ffb648; --accent:#7aa2ff;
+    --ok:#3ddc97; --bad:#ff5c5c; --warn:#ffb648; --accent:#ff914d;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   }
@@ -39,6 +48,13 @@
   .status{font-size:12.5px;color:var(--dim);margin-top:8px}
   .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
   .hide{display:none!important}
+  .install{display:flex;align-items:center;gap:12px;background:var(--panel2);
+    border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:11px;
+    padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:var(--dim);line-height:1.55}
+  .install b{color:var(--ink);font-weight:600}
+  .install button{flex-shrink:0;background:var(--ink);color:#0b0d10;border:none;padding:9px 15px;
+    border-radius:8px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .install .x{background:none;color:var(--faint);padding:4px 8px;font-size:17px;font-weight:400}
   #chatArea{display:flex;flex-direction:column;height:60vh;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   #msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--panel)}
   .msg{max-width:78%;padding:8px 11px;border-radius:10px;font-size:13.5px;word-break:break-word}
@@ -54,27 +70,32 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>LOGOS MODIFICA</h1>
-  <div class="sub">Chat sperimentale diretta tra due browser — build separata, non collegata a LOGOS</div>
+  <h1>DIGITALVALUT LOGOS</h1>
+  <div class="sub">Chat sperimentale diretta tra due browser</div>
+
+  <div class="install hide" id="installBar">
+    <div style="flex:1 1 220px" id="installText"></div>
+    <button id="installBtn" class="hide">Installa</button>
+    <button class="x" id="installClose" aria-label="chiudi">×</button>
+  </div>
 
   <div class="warn">
-    <b>Cos'è e cos'a non è, per chiarezza — leggilo prima di usarla per qualcosa che conta.</b>
-    Chat sperimentale, browser-a-browser (WebRTC): testo, foto, video, audio, PDF e qualsiasi file.
-    <b>Non è pensata per situazioni di pericolo.</b> Tre limiti veri, che nessuna pagina web può togliere:
-    <b>(1)</b> rivela il tuo indirizzo di rete (IP) alla persona con cui parli — nasconderlo del tutto
-    richiederebbe un server-relay che qualcuno deve gestire e pagare per sempre, e qui non c'è;
-    <b>(2)</b> serve una connessione diretta tra due dispositivi online nello stesso momento — se uno
-    chiude la pagina, la conversazione finisce, non resta in attesa da nessuna parte; <b>(3)</b> nessun
-    sito web al mondo può impedire uno screenshot — è una barriera che solo un sistema operativo può
-    mettere. Per comunicazioni dove la tua sicurezza dipende dall'anonimato, usa
-    <a href="https://signal.org" style="color:var(--accent)">Signal</a>,
-    <a href="https://getsession.org" style="color:var(--accent)">Session</a> o
-    <a href="https://briarproject.org" style="color:var(--accent)">Briar</a> — non questo strumento.
+    Chat sperimentale di proprietà di <b>DigitalValut</b> — testo, foto, video, audio, PDF, qualsiasi
+    file. Tre cose vere, in breve: rivela il tuo IP a chi parli con te; serve che siate online insieme,
+    altrimenti non arriva nulla; nessun sito web può impedire uno screenshot, a nessuno. Per la sicurezza
+    quando conta davvero: <a href="https://signal.org" style="color:var(--accent)">Signal</a>,
+    <a href="https://getsession.org" style="color:var(--accent)">Session</a>,
+    <a href="https://briarproject.org" style="color:var(--accent)">Briar</a>.
+  </div>
+
+  <div class="card" id="nickCard">
+    <h3>Il tuo nome</h3>
+    <input type="text" id="nickInput" placeholder="Come vuoi farti chiamare in chat" maxlength="30">
   </div>
 
   <div id="setupArea">
-    <div class="card">
-      <h3>Chi inizia la chat</h3>
+    <div class="card" id="panelStart">
+      <h3>Inizia una chat</h3>
       <div class="step"><div class="n">1</div><div>Premi «Crea codice d'invito» e mandalo a chi vuoi far entrare (email, WhatsApp, di persona — come preferisci).</div></div>
       <div class="step"><div class="n">2</div><div>Quando l'altra persona ti manda indietro il suo codice di risposta, incollalo qui sotto e premi «Connetti».</div></div>
       <div class="btns">
@@ -92,10 +113,13 @@
         <div class="btns"><button class="act primary" id="btnConnectAsA">Connetti</button></div>
       </div>
       <div class="status" id="statusA"></div>
+      <div class="btns" style="margin-top:14px">
+        <button class="act" id="btnSwitchToJoin" style="background:none;border:none;color:var(--dim);text-decoration:underline">Hai invece ricevuto un invito da qualcuno?</button>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>Chi riceve l'invito</h3>
+    <div class="card hide" id="panelJoin">
+      <h3>Hai ricevuto un invito</h3>
       <div class="step"><div class="n">1</div><div>Se hai aperto un link d'invito, il codice qui sotto è già compilato — altrimenti incollalo tu.</div></div>
       <div class="step"><div class="n">2</div><div>Premi «Genera risposta», poi manda il codice che compare a chi ti ha invitato — lui deve incollarlo per completare la connessione.</div></div>
       <textarea id="offerIn" placeholder="Incolla qui il codice d'invito ricevuto…"></textarea>
@@ -106,6 +130,9 @@
         <button class="act" id="btnCopyAnswer">Copia solo il codice</button>
       </div>
       <div class="status" id="statusB"></div>
+      <div class="btns" style="margin-top:14px">
+        <button class="act" id="btnSwitchToStart" style="background:none;border:none;color:var(--dim);text-decoration:underline">Vuoi invece iniziare tu una chat?</button>
+      </div>
     </div>
   </div>
 
@@ -148,7 +175,7 @@
   </div>
 
   <footer>
-    LOGOS Modifica — strumento sperimentale separato, non parte del protocollo LOGOS principale.<br>
+    DigitalValut Logos — strumento sperimentale separato, non parte del protocollo LOGOS principale.<br>
     Nessun server: la connessione è diretta tra i due browser via WebRTC.
   </footer>
 </div>
@@ -181,10 +208,11 @@ function setStatus(el, text, kind){
   el.className = 'status' + (kind ? ' ' + kind : '');
 }
 
+let peerNick = '';
 function wireDataChannel(channel){
   dc = channel;
   dc.binaryType = 'arraybuffer';
-  dc.onopen = () => showChat();
+  dc.onopen = () => { showChat(); dc.send(JSON.stringify({ type: 'hello', nick: myNick() })); };
   dc.onclose = () => setStatus($('statusA'), 'Connessione chiusa. Crea una nuova sessione per riconnetterti.', 'bad');
   dc.onmessage = onDcMessage;
 }
@@ -220,10 +248,10 @@ function inviteLink(code){
 }
 $('btnShareOffer').addEventListener('click', async () => {
   const link = inviteLink($('offerOut').value);
-  const text = 'Ti va di chattare con me su LOGOS Modifica? Apri questo link: se non hai la pagina ' +
+  const text = 'Ti va di chattare con me su DigitalValut Logos? Apri questo link: se non hai la pagina ' +
                'già pronta si apre da sola, con il mio invito già inserito.\n\n' + link;
   try{
-    if (navigator.share){ await navigator.share({ title: 'LOGOS Modifica — invito a chattare', text }); return; }
+    if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos — invito a chattare', text }); return; }
   }catch(e){ if (e && e.name === 'AbortError') return; }
   try{ await navigator.clipboard.writeText(text); setStatus($('statusA'), 'Link copiato — incollalo dove vuoi mandarlo.', 'ok'); }
   catch(e){ $('offerOut').value = link; $('offerOut').select(); }
@@ -270,9 +298,9 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   setStatus($('statusB'), 'Manda la risposta a chi ti ha invitato. La chat si aprirà appena la riceve.', 'ok');
 });
 $('btnShareAnswer').addEventListener('click', async () => {
-  const text = 'Ecco la mia risposta per LOGOS Modifica, incollala per completare la connessione:\n\n' + $('answerOut').value;
+  const text = 'Ecco la mia risposta per DigitalValut Logos, incollala per completare la connessione:\n\n' + $('answerOut').value;
   try{
-    if (navigator.share){ await navigator.share({ title: 'LOGOS Modifica — risposta', text }); return; }
+    if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos — risposta', text }); return; }
   }catch(e){ if (e && e.name === 'AbortError') return; }
   try{ await navigator.clipboard.writeText($('answerOut').value); setStatus($('statusB'), 'Codice copiato.', 'ok'); }
   catch(e){ $('answerOut').select(); }
@@ -282,17 +310,32 @@ $('btnCopyAnswer').addEventListener('click', async () => {
   catch(e){ $('answerOut').select(); }
 });
 
+/* one path at a time, not two panels fighting for attention */
+function showPanel(which){
+  $('panelStart').classList.toggle('hide', which !== 'start');
+  $('panelJoin').classList.toggle('hide', which !== 'join');
+}
+$('btnSwitchToJoin').addEventListener('click', () => showPanel('join'));
+$('btnSwitchToStart').addEventListener('click', () => showPanel('start'));
+
+/* your name, remembered on this device */
+try{ $('nickInput').value = localStorage.getItem('logos-modifica-nick') || ''; }catch(e){}
+$('nickInput').addEventListener('input', () => {
+  try{ localStorage.setItem('logos-modifica-nick', $('nickInput').value.trim()); }catch(e){}
+});
+function myNick(){ return $('nickInput').value.trim() || 'Qualcuno'; }
+
 /* opening a shared invite link pre-fills the code so the second person barely has to think */
 (function autoFillFromHash(){
   const m = location.hash.match(/[#&]i=([^&]+)/);
-  if (!m) return;
+  if (!m){ showPanel('start'); return; }
   try{
     const code = decodeURIComponent(m[1]);
     JSON.parse(b64decode(code));   // just validating it decodes before trusting it
     $('offerIn').value = code;
-    $('offerIn').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setStatus($('statusB'), 'Codice d\'invito già inserito — premi «Genera risposta».', 'ok');
-  }catch(e){ /* not a valid invite link, leave the field empty */ }
+    showPanel('join');
+    setStatus($('statusB'), 'Codice d\'invito già inserito — scrivi il tuo nome sopra, poi premi «Genera risposta».', 'ok');
+  }catch(e){ showPanel('start'); }
 })();
 
 /* -------------------- chat: text + chunked file transfer -------------------- */
@@ -388,8 +431,15 @@ const incoming = {};   // id -> { chunks: [], meta }
 function onDcMessage(ev){
   if (typeof ev.data === 'string'){
     let msg; try{ msg = JSON.parse(ev.data); }catch(e){ return; }
-    if (msg.type === 'text'){
-      addMsg(esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
+    if (msg.type === 'hello'){
+      peerNick = (msg.nick || '').trim();
+      if (peerNick){
+        $('connState').textContent = 'connessa con ' + peerNick;
+        addMsg(esc(peerNick) + ' si è unito alla chat.', false);
+      }
+    } else if (msg.type === 'text'){
+      const label = peerNick ? '<b style="opacity:.7">' + esc(peerNick) + '</b><br>' : '';
+      addMsg(label + esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
     } else if (msg.type === 'file-start'){
       incoming[msg.id] = { chunks: [], meta: msg };
     } else if (msg.type === 'file-end'){
@@ -473,6 +523,45 @@ $('btnNewSession').addEventListener('click', () => {
   $('chatCard').classList.add('hide');
   $('setupArea').classList.remove('hide');
 });
+
+/* ===================== install as an app, and work offline for the shell ===================== */
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                     window.navigator.standalone === true;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+let deferredPrompt = null;
+
+function showInstallBar(html, withButton){
+  if (isStandalone || localStorage.getItem('dvlogos-install-dismissed') === '1') return;
+  $('installText').innerHTML = html;
+  $('installBtn').classList.toggle('hide', !withButton);
+  $('installBar').classList.remove('hide');
+}
+window.addEventListener('beforeinstallprompt', ev => {
+  ev.preventDefault();
+  deferredPrompt = ev;
+  showInstallBar('<b>Installa DigitalValut Logos</b> per averla come app, con la sua icona, senza passare dal browser.', true);
+});
+$('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  try{ await deferredPrompt.userChoice; }catch(e){}
+  deferredPrompt = null;
+  $('installBar').classList.add('hide');
+});
+$('installClose').addEventListener('click', () => {
+  $('installBar').classList.add('hide');
+  try{ localStorage.setItem('dvlogos-install-dismissed', '1'); }catch(e){}
+});
+if (isIOS && !isStandalone && location.protocol.startsWith('http')){
+  showInstallBar('<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.', false);
+}
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('modifica-sw.js', { scope: './modifica.html' }).catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
