@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS Modifica — chat sperimentale diretta</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#12161b; --panel2:#171d24; --line:#242c35;
+    --ink:#e8edf2; --dim:#96a3b0; --faint:#5f6d7a;
+    --ok:#3ddc97; --bad:#ff5c5c; --warn:#ffb648; --accent:#7aa2ff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
+  .wrap{max-width:720px;margin:0 auto;padding:24px 18px 60px}
+  h1{font-size:22px;letter-spacing:.04em;margin:0 0 4px}
+  .sub{color:var(--dim);font-size:13.5px;margin-bottom:18px}
+  .warn{border-left:3px solid var(--warn);background:rgba(255,182,72,.07);border-radius:0 10px 10px 0;
+    padding:14px 16px;font-size:13px;color:var(--dim);line-height:1.6;margin-bottom:20px}
+  .warn b{color:var(--ink)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .card h3{margin:0 0 10px;font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+  .step{display:flex;gap:10px;align-items:flex-start;margin-bottom:6px}
+  .step .n{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--panel2);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--dim)}
+  textarea,input[type=text]{width:100%;background:#0d1116;color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;padding:10px;font-family:var(--mono);font-size:11.5px;resize:vertical}
+  textarea{min-height:80px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button.act{background:var(--panel2);color:var(--ink);border:1px solid var(--line);padding:9px 14px;
+    border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit}
+  button.act:hover{border-color:var(--accent)}
+  button.act.primary{background:var(--ink);color:#0b0d10;border-color:var(--ink);font-weight:600}
+  button.act:disabled{opacity:.4;cursor:not-allowed}
+  .status{font-size:12.5px;color:var(--dim);margin-top:8px}
+  .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
+  .hide{display:none!important}
+  #chatArea{display:flex;flex-direction:column;height:60vh;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  #msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--panel)}
+  .msg{max-width:78%;padding:8px 11px;border-radius:10px;font-size:13.5px;word-break:break-word}
+  .msg.me{align-self:flex-end;background:var(--accent);color:#0b0d10}
+  .msg.them{align-self:flex-start;background:var(--panel2);border:1px solid var(--line)}
+  .msg img,.msg video{max-width:100%;border-radius:6px;display:block;margin-top:4px}
+  .msg .meta{font-size:10px;opacity:.6;margin-top:2px}
+  #composer{display:flex;gap:8px;padding:10px;background:var(--panel2);border-top:1px solid var(--line)}
+  #msgInput{flex:1;border-radius:20px;padding:10px 14px;font-family:var(--sans);font-size:14px}
+  #composer button{border-radius:20px;padding:10px 16px}
+  footer{text-align:center;color:var(--faint);font-size:11px;margin-top:30px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>LOGOS MODIFICA</h1>
+  <div class="sub">Chat sperimentale diretta tra due browser — build separata, non collegata a LOGOS</div>
+
+  <div class="warn">
+    <b>Cos'è e cos'a non è, per chiarezza.</b> Questa è una chat sperimentale, browser-a-browser (WebRTC),
+    per uso informale — lezioni, amici. <b>Non è pensata per situazioni di pericolo</b>: rivela il tuo
+    indirizzo di rete (IP) alla persona con cui parli e ai server pubblici usati per stabilire la
+    connessione. Serve una connessione diretta tra due dispositivi online nello stesso momento — se uno
+    chiude la pagina, la conversazione finisce e va ricreata. Per comunicazioni dove la tua sicurezza
+    dipende dall'anonimato, usa <a href="https://signal.org" style="color:var(--accent)">Signal</a>,
+    <a href="https://getsession.org" style="color:var(--accent)">Session</a> o
+    <a href="https://briarproject.org" style="color:var(--accent)">Briar</a> — non questo strumento.
+  </div>
+
+  <div id="setupArea">
+    <div class="card">
+      <h3>Chi inizia la chat</h3>
+      <div class="step"><div class="n">1</div><div>Premi «Crea codice d'invito» e mandalo a chi vuoi far entrare (email, WhatsApp, di persona — come preferisci).</div></div>
+      <div class="step"><div class="n">2</div><div>Quando l'altra persona ti manda indietro il suo codice di risposta, incollalo qui sotto e premi «Connetti».</div></div>
+      <div class="btns">
+        <button class="act primary" id="btnCreate">Crea codice d'invito</button>
+      </div>
+      <textarea id="offerOut" class="hide" readonly placeholder="Il tuo codice d'invito comparirà qui…"></textarea>
+      <div class="btns hide" id="offerBtns">
+        <button class="act" id="btnCopyOffer">Copia il codice</button>
+      </div>
+      <div style="margin-top:14px">
+        <label style="font-size:12px;color:var(--dim)">Codice di risposta ricevuto — incollalo qui</label>
+        <textarea id="answerIn" placeholder="Incolla qui il codice che ti ha mandato l'altra persona…"></textarea>
+        <div class="btns"><button class="act primary" id="btnConnectAsA">Connetti</button></div>
+      </div>
+      <div class="status" id="statusA"></div>
+    </div>
+
+    <div class="card">
+      <h3>Chi riceve l'invito</h3>
+      <div class="step"><div class="n">1</div><div>Incolla qui sotto il codice d'invito che hai ricevuto.</div></div>
+      <div class="step"><div class="n">2</div><div>Premi «Genera risposta», poi manda il codice che compare a chi ti ha invitato.</div></div>
+      <textarea id="offerIn" placeholder="Incolla qui il codice d'invito ricevuto…"></textarea>
+      <div class="btns"><button class="act primary" id="btnCreateAnswer">Genera risposta</button></div>
+      <textarea id="answerOut" class="hide" readonly placeholder="Il codice di risposta comparirà qui…"></textarea>
+      <div class="btns hide" id="answerBtns">
+        <button class="act" id="btnCopyAnswer">Copia il codice di risposta</button>
+      </div>
+      <div class="status" id="statusB"></div>
+    </div>
+  </div>
+
+  <div id="chatCard" class="card hide">
+    <h3>Chat <span id="connState" style="text-transform:none;color:var(--ok)">connessa</span></h3>
+    <div id="chatArea">
+      <div id="msgs"></div>
+      <div id="composer">
+        <button class="act" id="btnAttach" title="Allega foto o video">📎</button>
+        <input type="file" id="fileInput" class="hide" accept="image/*,video/*">
+        <input type="text" id="msgInput" placeholder="Scrivi un messaggio…">
+        <button class="act primary" id="btnSend">Invia</button>
+      </div>
+    </div>
+    <div class="btns" style="margin-top:10px">
+      <button class="act" id="btnNewSession">Nuova sessione</button>
+    </div>
+  </div>
+
+  <footer>
+    LOGOS Modifica — strumento sperimentale separato, non parte del protocollo LOGOS principale.<br>
+    Nessun server: la connessione è diretta tra i due browser via WebRTC.
+  </footer>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const ICE = { iceServers: [
+  { urls: 'stun:stun.l.google.com:19302' },
+  { urls: 'stun:stun1.l.google.com:19302' }
+]};
+
+let pc = null, dc = null;
+const CHUNK = 16 * 1024;
+
+function b64encode(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64decode(str){ return decodeURIComponent(escape(atob(str))); }
+
+async function waitIceComplete(peer){
+  if (peer.iceGatheringState === 'complete') return;
+  await new Promise(resolve => {
+    const check = () => { if (peer.iceGatheringState === 'complete'){ peer.removeEventListener('icegatheringstatechange', check); resolve(); } };
+    peer.addEventListener('icegatheringstatechange', check);
+    setTimeout(resolve, 4000);   // don't wait forever on networks with slow ICE gathering
+  });
+}
+
+function setStatus(el, text, kind){
+  el.textContent = text;
+  el.className = 'status' + (kind ? ' ' + kind : '');
+}
+
+function wireDataChannel(channel){
+  dc = channel;
+  dc.binaryType = 'arraybuffer';
+  dc.onopen = () => showChat();
+  dc.onclose = () => setStatus($('statusA'), 'Connessione chiusa. Crea una nuova sessione per riconnetterti.', 'bad');
+  dc.onmessage = onDcMessage;
+}
+
+function showChat(){
+  $('setupArea').classList.add('hide');
+  $('chatCard').classList.remove('hide');
+  $('msgInput').focus();
+}
+
+/* -------------------- side A: create the invite -------------------- */
+$('btnCreate').addEventListener('click', async () => {
+  $('btnCreate').disabled = true;
+  setStatus($('statusA'), 'Genero il codice…');
+  pc = new RTCPeerConnection(ICE);
+  wireDataChannel(pc.createDataChannel('logos-modifica'));
+  pc.onconnectionstatechange = () => {
+    if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected'){
+      setStatus($('statusA'), 'Connessione persa o non riuscita. Riprova con una nuova sessione.', 'bad');
+    }
+  };
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  await waitIceComplete(pc);
+  const code = b64encode(JSON.stringify({ type: 'offer', sdp: pc.localDescription.sdp }));
+  $('offerOut').value = code;
+  $('offerOut').classList.remove('hide');
+  $('offerBtns').classList.remove('hide');
+  setStatus($('statusA'), 'Manda questo codice a chi vuoi invitare, poi aspetta il suo codice di risposta.');
+});
+$('btnCopyOffer').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText($('offerOut').value); setStatus($('statusA'), 'Codice copiato.', 'ok'); }
+  catch(e){ $('offerOut').select(); }
+});
+$('btnConnectAsA').addEventListener('click', async () => {
+  if (!pc){ setStatus($('statusA'), 'Prima crea un codice d\'invito.', 'bad'); return; }
+  try{
+    const parsed = JSON.parse(b64decode($('answerIn').value.trim()));
+    if (parsed.type !== 'answer') throw new Error('not an answer code');
+    await pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
+    setStatus($('statusA'), 'Connessione in corso…');
+  }catch(e){
+    setStatus($('statusA'), 'Quel codice non è valido. Controlla di averlo copiato per intero.', 'bad');
+  }
+});
+
+/* -------------------- side B: accept the invite -------------------- */
+$('btnCreateAnswer').addEventListener('click', async () => {
+  let parsed;
+  try{ parsed = JSON.parse(b64decode($('offerIn').value.trim())); if (parsed.type !== 'offer') throw 0; }
+  catch(e){ setStatus($('statusB'), 'Quel codice non è valido. Controlla di averlo copiato per intero.', 'bad'); return; }
+
+  $('btnCreateAnswer').disabled = true;
+  setStatus($('statusB'), 'Genero la risposta…');
+  pc = new RTCPeerConnection(ICE);
+  pc.ondatachannel = ev => wireDataChannel(ev.channel);
+  pc.onconnectionstatechange = () => {
+    if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected'){
+      setStatus($('statusB'), 'Connessione persa o non riuscita. Riprova con una nuova sessione.', 'bad');
+    }
+  };
+  await pc.setRemoteDescription({ type: 'offer', sdp: parsed.sdp });
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  await waitIceComplete(pc);
+  const code = b64encode(JSON.stringify({ type: 'answer', sdp: pc.localDescription.sdp }));
+  $('answerOut').value = code;
+  $('answerOut').classList.remove('hide');
+  $('answerBtns').classList.remove('hide');
+  setStatus($('statusB'), 'Manda questo codice a chi ti ha invitato. La chat si aprirà appena lo riceve.', 'ok');
+});
+$('btnCopyAnswer').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText($('answerOut').value); setStatus($('statusB'), 'Codice copiato.', 'ok'); }
+  catch(e){ $('answerOut').select(); }
+});
+
+/* -------------------- chat: text + chunked file transfer -------------------- */
+function addMsg(html, mine){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (mine ? 'me' : 'them');
+  div.innerHTML = html;
+  $('msgs').appendChild(div);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function timeNow(){ return new Date().toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'}); }
+
+async function sendWithBackpressure(channel, buf){
+  const HIGH = 1 << 20;
+  if (channel.bufferedAmount > HIGH){
+    await new Promise(resolve => {
+      const check = () => { if (channel.bufferedAmount <= HIGH) resolve(); else setTimeout(check, 30); };
+      check();
+    });
+  }
+  channel.send(buf);
+}
+
+$('btnSend').addEventListener('click', sendText);
+$('msgInput').addEventListener('keydown', ev => { if (ev.key === 'Enter') sendText(); });
+function sendText(){
+  const text = $('msgInput').value.trim();
+  if (!text || !dc || dc.readyState !== 'open') return;
+  dc.send(JSON.stringify({ type: 'text', text }));
+  addMsg(esc(text) + '<div class="meta">' + timeNow() + '</div>', true);
+  $('msgInput').value = '';
+}
+
+$('btnAttach').addEventListener('click', () => $('fileInput').click());
+$('fileInput').addEventListener('change', async () => {
+  const file = $('fileInput').files[0];
+  $('fileInput').value = '';
+  if (!file || !dc || dc.readyState !== 'open') return;
+  const id = Math.random().toString(36).slice(2);
+  dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
+  let off = 0;
+  while (off < file.size){
+    const end = Math.min(off + CHUNK, file.size);
+    const buf = await file.slice(off, end).arrayBuffer();
+    const framed = new Uint8Array(buf.byteLength + 16);
+    framed.set(new TextEncoder().encode(id.padEnd(16, ' ').slice(0,16)), 0);
+    framed.set(new Uint8Array(buf), 16);
+    await sendWithBackpressure(dc, framed);
+    off = end;
+  }
+  dc.send(JSON.stringify({ type: 'file-end', id }));
+
+  const url = URL.createObjectURL(file);
+  const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/');
+  const preview = isImg ? '<img src="' + url + '">' : isVid ? '<video src="' + url + '" controls></video>' : esc(file.name);
+  addMsg(preview + '<div class="meta">' + timeNow() + '</div>', true);
+});
+
+const incoming = {};   // id -> { chunks: [], meta }
+function onDcMessage(ev){
+  if (typeof ev.data === 'string'){
+    let msg; try{ msg = JSON.parse(ev.data); }catch(e){ return; }
+    if (msg.type === 'text'){
+      addMsg(esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
+    } else if (msg.type === 'file-start'){
+      incoming[msg.id] = { chunks: [], meta: msg };
+    } else if (msg.type === 'file-end'){
+      const rec = incoming[msg.id];
+      if (!rec) return;
+      const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      const isImg = (rec.meta.mime||'').startsWith('image/'), isVid = (rec.meta.mime||'').startsWith('video/');
+      let html = isImg ? '<img src="' + url + '">' : isVid ? '<video src="' + url + '" controls></video>'
+                : '<a href="' + url + '" download="' + esc(rec.meta.name) + '" style="color:inherit">' + esc(rec.meta.name) + ' ↓</a>';
+      addMsg(html + '<div class="meta">' + timeNow() + '</div>', false);
+      delete incoming[msg.id];
+    }
+  } else {
+    const bytes = new Uint8Array(ev.data);
+    const id = new TextDecoder().decode(bytes.subarray(0, 16)).trim();
+    const rec = incoming[id];
+    if (rec) rec.chunks.push(bytes.subarray(16));
+  }
+}
+
+$('btnNewSession').addEventListener('click', () => {
+  if (dc) try{ dc.close(); }catch(e){}
+  if (pc) try{ pc.close(); }catch(e){}
+  pc = null; dc = null;
+  $('msgs').innerHTML = '';
+  $('offerOut').value = ''; $('offerOut').classList.add('hide'); $('offerBtns').classList.add('hide');
+  $('answerOut').value = ''; $('answerOut').classList.add('hide'); $('answerBtns').classList.add('hide');
+  $('offerIn').value = ''; $('answerIn').value = '';
+  $('btnCreate').disabled = false; $('btnCreateAnswer').disabled = false;
+  setStatus($('statusA'), ''); setStatus($('statusB'), '');
+  $('chatCard').classList.add('hide');
+  $('setupArea').classList.remove('hide');
+});
+</script>
+</body>
+</html>
