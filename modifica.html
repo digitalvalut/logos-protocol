@@ -106,6 +106,23 @@
   .choicecard .t{font-weight:700;font-size:14.5px}
   .choicecard .d{color:var(--dim);font-size:12px;margin-top:2px}
 
+  .contactrow{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--line);
+    cursor:pointer;transition:background .12s;border-radius:10px}
+  .contactrow:hover{background:var(--panel2)}
+  .contactrow:last-child{border-bottom:none}
+  .contactrow .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff5f6d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#1a0e05;flex-shrink:0}
+  .contactrow .info{flex:1;min-width:0}
+  .contactrow .info b{font-size:14px;display:block}
+  .contactrow .info span{font-size:11.5px;color:var(--faint)}
+  .contactrow .rm{background:none;border:none;color:var(--faint);font-size:16px;padding:6px;cursor:pointer;flex-shrink:0}
+  .contactrow .rm:hover{color:var(--bad)}
+
+  /* visually hidden but still "present" — display:none on a file input breaks
+     the native picker in some installed-app (standalone PWA) contexts on iOS */
+  .filehide{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
   .status{font-size:12.5px;color:var(--dim);margin-top:10px;line-height:1.6}
   .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
   .hide{display:none!important}
@@ -215,6 +232,8 @@
       <img src="modifica-icon-512.png" alt="DigitalValut Logos">
       <h1 data-i18n="home.title">Parla con chi vuoi, ovunque sia</h1>
       <p data-i18n="home.sub">Testo, foto, video, audio, chiamate. Diretta tra due dispositivi, senza account, gratis per sempre.</p>
+      <button class="btn ghost" id="btnShareApp" style="margin-top:8px">
+        <span class="ic">📣</span><span data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span></button>
     </div>
 
     <div class="card">
@@ -233,6 +252,13 @@
         <div><div class="t" data-i18n="home.joinT">Ho ricevuto un invito</div>
           <div class="d" data-i18n="home.joinD">Incolla o apri il link che ti hanno mandato</div></div>
       </button>
+    </div>
+
+    <div class="card hide" id="contactsCard">
+      <h3 data-i18n="contacts.title">Contatti recenti</h3>
+      <div class="lead" data-i18n="contacts.note">Un tocco per preparare un nuovo invito per loro — la cronologia di ciò
+        che vi siete detti li aspetta già. Serve comunque un codice nuovo ogni volta: nessun server tiene nessuno "sempre connesso".</div>
+      <div id="contactsList"></div>
     </div>
 
     <details class="legal">
@@ -323,7 +349,7 @@
         <button class="iconbtn" id="btnEmoji" title="Emoji">😊</button>
         <div id="emojiPop" class="hide"></div>
         <button class="iconbtn" id="btnAttach" title="Allega">📎</button>
-        <input type="file" id="fileInput" class="hide">
+        <input type="file" id="fileInput" class="filehide" tabindex="-1" aria-hidden="true">
         <button class="iconbtn" id="btnMic" title="Vocale">🎤</button>
         <input type="text" id="msgInput" spellcheck="true" autocapitalize="sentences" autocomplete="off" data-i18n-ph="chat.typePh" placeholder="Scrivi un messaggio…">
         <button id="btnSend" title="Invia">➤</button>
@@ -395,6 +421,8 @@ Object.assign(I18N.en, {
 "menu.historyNote":"History stays only on this device, tied to the name of the person you're talking to. No server keeps it.",
 "footer.text":"experimental tool kept separate, not part of the main LOGOS protocol.",
 "footer.noserver":"No server: the connection is direct between the two browsers via WebRTC.",
+"contacts.title":"Recent contacts",
+"contacts.note":"One tap to prepare a new invite for them — the history of what you said is already waiting. A new code is still needed every time: no server keeps anyone \"always connected\".",
 "toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand",
 "call.busy":"didn't answer — busy on another call.","call.declinedBy":"declined the call.",
 "call.joined":"joined the chat.","call.videoInvite":"is video calling you","call.audioInvite":"is calling you",
@@ -407,12 +435,16 @@ Object.assign(I18N.en, {
 "invite.answerText":"Here's my reply for DigitalValut Logos, paste it to finish connecting:\n\n",
 "mic.recording":"Recording — tap to stop","file.tooBig":"","history.cleared":"History cleared on this device.",
 "install.genericText":"<b>Install DigitalValut Logos</b> to have it as an app, with its own icon, no browser needed.",
-"install.iosText":"<b>Install DigitalValut Logos on iPhone or iPad.</b> Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>."
+"install.iosText":"<b>Install DigitalValut Logos on iPhone or iPad.</b> Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.",
+"home.shareApp":"Tell someone about the app",
+"home.shareAppText":"Free, no account, works on any phone or computer — DigitalValut Logos:\n\n"
 });
 Object.assign(I18N.it, {
 "topbar.sub":"Chat sperimentale",
 "home.startT":"Inizia una chat","home.startD":"Crea un invito da mandare a qualcuno",
 "home.joinT":"Ho ricevuto un invito","home.joinD":"Incolla o apri il link che ti hanno mandato",
+"home.shareApp":"Fai conoscere l'app a qualcuno",
+"home.shareAppText":"Gratis, senza account, funziona su qualunque telefono o computer — DigitalValut Logos:\n\n",
 "nav.back":"Indietro",
 "start.share":"Manda l'invito","btn.copyCode":"Copia il codice",
 "join.sendAnswer":"Manda la risposta",
@@ -596,6 +628,14 @@ $('btnCreate').addEventListener('click', async () => {
   $('pasteAnswerCard').style.display = 'block';
 });
 function inviteLink(code){ return location.origin + location.pathname + '#i=' + encodeURIComponent(code); }
+/* Sharing the app itself — not an invite to a chat, just "here's where to get it" */
+$('btnShareApp').addEventListener('click', async () => {
+  const link = location.origin + location.pathname;
+  const text = t('home.shareAppText') + link;
+  try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
+  try{ await navigator.clipboard.writeText(text); toast(t('toast.sealCopied')); }
+  catch(e){ toast(t('toast.copyFail')); }
+});
 $('btnShareOffer').addEventListener('click', async () => {
   const link = inviteLink($('offerOut').textContent);
   const text = t('invite.shareText') + link;
@@ -682,6 +722,61 @@ $('btnClearHistory').addEventListener('click', () => {
   if (peerNick) try{ localStorage.removeItem(historyKey(peerNick)); }catch(e){}
   $('msgs').innerHTML = '';
   toast(t('history.cleared'));
+});
+
+/* ============================== recent contacts (local only) ==============================
+   Remembered automatically the moment someone's 'hello' arrives — no manual "add contact"
+   step. This does not create any persistent connection or account: it is a shortcut back to
+   the invite screen plus that person's saved history. A fresh code exchange is still needed
+   every time, because nothing here runs a server that could keep anyone "always connected". */
+function loadContacts(){
+  try{ return JSON.parse(localStorage.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
+}
+function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
+function touchContact(nick){
+  if (!nick) return;
+  let list = loadContacts();
+  list = list.filter(c => c.nick.toLowerCase() !== nick.toLowerCase());
+  list.unshift({ nick, lastSeen: Date.now() });
+  if (list.length > 40) list = list.slice(0, 40);
+  saveContacts(list);
+  renderContacts();
+}
+function relTime(ts){
+  const mins = Math.round((Date.now() - ts) / 60000);
+  if (CURLANG === 'it'){
+    if (mins < 1) return 'adesso';
+    if (mins < 60) return mins + ' min fa';
+    if (mins < 24*60) return Math.round(mins/60) + ' h fa';
+    return Math.round(mins/1440) + ' g fa';
+  }
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + ' min ago';
+  if (mins < 24*60) return Math.round(mins/60) + ' h ago';
+  return Math.round(mins/1440) + ' d ago';
+}
+function renderContacts(){
+  const list = loadContacts();
+  $('contactsCard').classList.toggle('hide', list.length === 0);
+  $('contactsList').innerHTML = list.map(c => `
+    <div class="contactrow" data-nick="${esc(c.nick)}">
+      <div class="av">${esc(initials(c.nick))}</div>
+      <div class="info"><b>${esc(c.nick)}</b><span>${esc(relTime(c.lastSeen))}</span></div>
+      <button class="rm" data-rm="${esc(c.nick)}" title="Rimuovi" aria-label="Rimuovi">×</button>
+    </div>`).join('');
+}
+$('contactsList').addEventListener('click', ev => {
+  const rm = ev.target.closest('[data-rm]');
+  if (rm){
+    saveContacts(loadContacts().filter(c => c.nick !== rm.getAttribute('data-rm')));
+    renderContacts();
+    return;
+  }
+  const row = ev.target.closest('.contactrow');
+  if (!row) return;
+  const nick = row.getAttribute('data-nick');
+  showScreen('screenStart');
+  setStatus($('statusA'), (CURLANG==='it' ? 'Stai preparando un invito per ' : 'Preparing an invite for ') + nick + '…');
 });
 
 /* ============================== chat: text + files ============================== */
@@ -792,6 +887,7 @@ function onDcMessage(ev){
         $('peerNameLbl').textContent = peerNick;
         $('peerAvatar').textContent = initials(peerNick);
         loadHistoryFor(peerNick);
+        touchContact(peerNick);
         sysLine(peerNick + ' ' + t('call.joined'));
       }
     } else if (msg.type === 'text'){
@@ -828,6 +924,56 @@ let micOn = true, camOn = true;
 function sig(msg){ if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
 function setCallStatus(text){ $('callStatus').textContent = text; }
 
+/* ringtone: two-tone loop synthesised with Web Audio — no external audio file
+   needed. Also vibrates on devices that support it (Android; iOS Safari has
+   no Vibration API, a real platform limit, not something a page can add). */
+let ringAudioCtx = null, ringTimer = null, vibrateTimer = null, callTimeoutTimer = null;
+function playRingTone(loud){
+  try{
+    if (!ringAudioCtx) ringAudioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const ctx = ringAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume().catch(()=>{});
+    const now = ctx.currentTime;
+    [ [480,0], [620,0.02] ].forEach(([freq, delay]) => {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      osc.connect(gain); gain.connect(ctx.destination);
+      const g = loud ? 0.11 : 0.05;
+      gain.gain.setValueAtTime(0, now + delay);
+      gain.gain.linearRampToValueAtTime(g, now + delay + 0.05);
+      gain.gain.setValueAtTime(g, now + delay + 0.9);
+      gain.gain.linearRampToValueAtTime(0, now + delay + 1.0);
+      osc.start(now + delay); osc.stop(now + delay + 1.05);
+    });
+  }catch(e){}
+}
+function startRing(loud){
+  stopRing();
+  playRingTone(loud);
+  ringTimer = setInterval(() => playRingTone(loud), 2200);
+  if (loud && navigator.vibrate){
+    navigator.vibrate([500,300,500,1200]);
+    vibrateTimer = setInterval(() => navigator.vibrate([500,300,500,1200]), 2500);
+  }
+}
+function stopRing(){
+  clearInterval(ringTimer); ringTimer = null;
+  clearInterval(vibrateTimer); vibrateTimer = null;
+  if (navigator.vibrate) navigator.vibrate(0);
+}
+function armCallTimeout(){
+  clearTimeout(callTimeoutTimer);
+  callTimeoutTimer = setTimeout(() => {
+    if (callState === 'ringing-out' || callState === 'ringing-in'){
+      const wasIncoming = callState === 'ringing-in';
+      sig({ type: 'call-end' });
+      endCall(false);
+      sysLine(wasIncoming ? (peerNick||t('chat.someone')) + ' — ' + t('call.busy') : t('call.busy'));
+    }
+  }, 35000);
+}
+function disarmCallTimeout(){ clearTimeout(callTimeoutTimer); callTimeoutTimer = null; }
+
 async function startCall(kind){
   if (callState !== 'idle' || !dc || dc.readyState !== 'open') return;
   callKind = kind; callState = 'ringing-out';
@@ -837,6 +983,8 @@ async function startCall(kind){
   $('localVideo').classList.toggle('hide', kind !== 'video');
   $('localVideo').srcObject = localStream;
   setCallStatus(kind === 'video' ? t('call.ringingVideo') : t('call.ringingAudio'));
+  startRing(false);
+  armCallTimeout();
   sig({ type: 'call-invite', kind });
 }
 function handleCallSignal(msg){
@@ -845,14 +993,17 @@ function handleCallSignal(msg){
     callKind = msg.kind; callState = 'ringing-in';
     $('incomingCallText').textContent = (peerNick || t('chat.someone')) + ' ' + (msg.kind === 'video' ? t('call.videoInvite') : t('call.audioInvite'));
     $('incomingCall').classList.remove('hide');
-  } else if (msg.type === 'call-busy'){ endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.busy'));
-  } else if (msg.type === 'call-decline'){ endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.declinedBy'));
-  } else if (msg.type === 'call-accept'){ onCallAccepted();
+    startRing(true);
+    armCallTimeout();
+  } else if (msg.type === 'call-busy'){ stopRing(); disarmCallTimeout(); endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.busy'));
+  } else if (msg.type === 'call-decline'){ stopRing(); disarmCallTimeout(); endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.declinedBy'));
+  } else if (msg.type === 'call-accept'){ stopRing(); disarmCallTimeout(); onCallAccepted();
   } else if (msg.type === 'call-offer-sdp'){ onCallOfferSdp(msg.sdp);
   } else if (msg.type === 'call-answer-sdp'){ pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(()=>{});
-  } else if (msg.type === 'call-end'){ endCall(false); }
+  } else if (msg.type === 'call-end'){ stopRing(); disarmCallTimeout(); endCall(false); }
 }
 $('btnAcceptCall').addEventListener('click', async () => {
+  stopRing(); disarmCallTimeout();
   $('incomingCall').classList.add('hide');
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: callKind === 'video' }); }
   catch(e){ sysLine(t('call.micFail')); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null; return; }
@@ -865,6 +1016,7 @@ $('btnAcceptCall').addEventListener('click', async () => {
   sig({ type: 'call-accept' });
 });
 $('btnDeclineCall').addEventListener('click', () => {
+  stopRing(); disarmCallTimeout();
   $('incomingCall').classList.add('hide'); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null;
 });
 async function onCallAccepted(){
@@ -880,6 +1032,7 @@ async function onCallOfferSdp(sdp){
   sig({ type: 'call-answer-sdp', sdp: pc.localDescription.sdp });
 }
 function endCall(tellPeer){
+  stopRing(); disarmCallTimeout();
   if (tellPeer) sig({ type: 'call-end' });
   if (localStream){ localStream.getTracks().forEach(tr => tr.stop()); localStream = null; }
   $('callBox').classList.add('hide'); $('incomingCall').classList.add('hide');
@@ -952,6 +1105,7 @@ $('btnNewSession').addEventListener('click', () => {
 });
 
 initLang();
+renderContacts();
 </script>
 </body>
 </html>
