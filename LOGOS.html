@@ -430,6 +430,24 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
   <div id="vaultResult" class="hide"></div>
 
+  <div class="card hide" id="stegoCard">
+    <h3 data-i18n="stego.title">Hide it inside an ordinary photo</h3>
+    <div class="note" style="margin-top:0" data-i18n="stego.note">A phone search, or a border check,
+      may treat any locked or encrypted file it finds as suspicious by itself — even one nobody can
+      open. Hidden inside an everyday photo, the locked file looks like nothing at all: just a picture.
+      A photo you already have — a real one, not one made for this — works best.</div>
+    <div class="drop" id="dropStego">
+      <div class="big" data-i18n="stego.drop">Drop a cover photo here</div>
+      <div class="small" id="stegoStatus" data-i18n="stego.dropSmall">JPEG or PNG · it will look completely ordinary to anyone else</div>
+    </div>
+    <input type="file" id="fileStego" class="hide" accept="image/*">
+    <div class="warnbox" data-i18n="stego.warn">Keep the result as a PNG and send it as a <strong>file /
+      document</strong>, not as a "photo" — messaging apps often recompress photos, which would destroy
+      what is hidden inside. Be honest with yourself about what this does: it defeats a casual look or an
+      ordinary phone search. It is <strong>not</strong> proven against a specialised forensic examination
+      that is specifically looking for hidden data.</div>
+  </div>
+
   <div class="card" style="margin-top:26px">
     <h3 data-i18n="vault.openT">Open a vault</h3>
     <div class="note" style="margin-top:0" data-i18n="vault.openNote">For the people who were trusted.
@@ -438,6 +456,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
     <div class="drop" id="dropOpen" style="margin-top:14px">
       <div class="big" data-i18n="vault.openDrop">Drop the locked file (.logos-vault)</div>
       <div class="small" id="openLoaded" data-i18n="vault.openDropSub">nobody can read it without the key pieces</div>
+      <div class="tiny" data-i18n="stego.openHint">A photo made with "Hide it inside a photo" works here too</div>
     </div>
     <input type="file" id="fileOpen" class="hide">
     <label class="fld"><span data-i18n="vault.shares">The pieces of the key — paste them one after another</span>
@@ -563,7 +582,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.6";
+const LOGOS_VERSION = "1.7";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -2323,6 +2342,152 @@ Object.assign(I18N.ur, {
 });
 
 
+Object.assign(I18N.it, {
+"stego.title":"Nascondilo dentro una foto qualunque",
+"stego.note":"Una perquisizione del telefono, o un controllo di frontiera, può trattare come sospetto qualunque file bloccato o cifrato trovi — anche uno che nessuno riesce ad aprire. Nascosto dentro una foto di tutti i giorni, il file chiuso non sembra nulla: solo un'immagine. Una foto che hai già — vera, non fatta apposta per questo — funziona meglio.",
+"stego.drop":"Trascina qui una foto di copertura","stego.dropSmall":"JPEG o PNG · sembrerà del tutto normale a chiunque altro",
+"stego.warn":"Tieni il risultato in formato PNG e mandalo come <strong>file / documento</strong>, non come «foto» — le app di messaggistica spesso ricomprimono le foto, il che distruggerebbe ciò che è nascosto dentro. Sii onesto con te stesso su cosa fa questo: inganna uno sguardo casuale o una perquisizione ordinaria del telefono. <strong>Non</strong> è provato contro un'analisi forense specializzata che sta specificamente cercando dati nascosti.",
+"stego.openHint":"Qui funziona anche una foto creata con «Nascondilo dentro una foto»",
+"stego.working":"Sto nascondendolo dentro la foto…",
+"stego.tooSmall":"Questa foto è troppo piccola. Il caveau richiede una foto di circa {side}×{side} pixel o più grande.",
+"stego.tooSmall2":"Foto troppo piccola — leggi la nota qui sopra",
+"stego.done":"Nascosto. Scaricato come {name} — una foto dall'aspetto del tutto normale.",
+"stego.done2":"Nascosto dentro la foto","stego.badImage":"Non riesco a leggere quell'immagine. Prova con un semplice JPEG o PNG."
+});
+Object.assign(I18N.es, {
+"stego.title":"Ocúltalo dentro de una foto cualquiera",
+"stego.note":"Un registro del teléfono, o un control fronterizo, puede tratar como sospechoso cualquier archivo bloqueado o cifrado que encuentre — incluso uno que nadie puede abrir. Escondido dentro de una foto cotidiana, el archivo cerrado no parece nada: solo una imagen. Una foto que ya tengas — real, no hecha para esto — funciona mejor.",
+"stego.drop":"Suelta aquí una foto de portada","stego.dropSmall":"JPEG o PNG · parecerá completamente normal para cualquier otra persona",
+"stego.warn":"Conserva el resultado como PNG y envíalo como <strong>archivo / documento</strong>, no como «foto» — las apps de mensajería suelen recomprimir las fotos, lo que destruiría lo escondido dentro. Sé honesto contigo mismo sobre lo que hace esto: engaña a una mirada casual o a un registro ordinario del teléfono. <strong>No</strong> está probado contra un examen forense especializado que busque específicamente datos ocultos.",
+"stego.openHint":"Aquí también funciona una foto creada con «Ocúltalo dentro de una foto»",
+"stego.working":"Ocultándolo dentro de la foto…",
+"stego.tooSmall":"Esa foto es demasiado pequeña. Esta caja fuerte necesita una foto de unos {side}×{side} píxeles o más grande.",
+"stego.tooSmall2":"Foto demasiado pequeña — lee la nota de arriba",
+"stego.done":"Oculto. Descargado como {name} — una foto de aspecto completamente normal.",
+"stego.done2":"Oculto dentro de la foto","stego.badImage":"No se pudo leer esa imagen. Prueba con un JPEG o PNG simple."
+});
+Object.assign(I18N.fr, {
+"stego.title":"Cachez-le dans une photo ordinaire",
+"stego.note":"Une fouille du téléphone, ou un contrôle à la frontière, peut traiter comme suspect tout fichier verrouillé ou chiffré qu'elle trouve — même un que personne ne peut ouvrir. Caché dans une photo du quotidien, le fichier fermé ne ressemble à rien : juste une image. Une photo que vous avez déjà — réelle, pas prise pour l'occasion — fonctionne le mieux.",
+"stego.drop":"Déposez ici une photo de couverture","stego.dropSmall":"JPEG ou PNG · elle paraîtra tout à fait ordinaire à n'importe qui d'autre",
+"stego.warn":"Gardez le résultat en PNG et envoyez-le comme <strong>fichier / document</strong>, pas comme « photo » — les applications de messagerie recompressent souvent les photos, ce qui détruirait ce qui est caché à l'intérieur. Soyez honnête avec vous-même sur ce que cela fait : cela déjoue un regard distrait ou une fouille ordinaire du téléphone. Ce n'est <strong>pas</strong> prouvé face à un examen scientifique spécialisé qui cherche spécifiquement des données cachées.",
+"stego.openHint":"Une photo créée avec « Cachez-le dans une photo » fonctionne ici aussi",
+"stego.working":"Dissimulation dans la photo…",
+"stego.tooSmall":"Cette photo est trop petite. Ce coffre a besoin d'une photo d'environ {side}×{side} pixels ou plus.",
+"stego.tooSmall2":"Photo trop petite — voir la note ci-dessus",
+"stego.done":"Caché. Téléchargé sous {name} — une photo à l'apparence tout à fait ordinaire.",
+"stego.done2":"Caché dans la photo","stego.badImage":"Impossible de lire cette image. Essayez un simple JPEG ou PNG."
+});
+Object.assign(I18N.pt, {
+"stego.title":"Esconda-o dentro de uma foto qualquer",
+"stego.note":"Uma revista do telefone, ou um controle de fronteira, pode tratar como suspeito qualquer arquivo trancado ou criptografado que encontrar — mesmo um que ninguém consiga abrir. Escondido dentro de uma foto do dia a dia, o arquivo trancado não parece nada: só uma imagem. Uma foto que você já tenha — de verdade, não feita para isso — funciona melhor.",
+"stego.drop":"Solte aqui uma foto de capa","stego.dropSmall":"JPEG ou PNG · vai parecer completamente normal para qualquer outra pessoa",
+"stego.warn":"Mantenha o resultado em PNG e envie-o como <strong>arquivo / documento</strong>, não como «foto» — apps de mensagens costumam recomprimir fotos, o que destruiria o que está escondido dentro. Seja honesto consigo mesmo sobre o que isto faz: engana um olhar casual ou uma revista comum do telefone. <strong>Não</strong> está comprovado contra um exame forense especializado que procure especificamente dados ocultos.",
+"stego.openHint":"Uma foto criada com «Esconda-o dentro de uma foto» também funciona aqui",
+"stego.working":"Escondendo dentro da foto…",
+"stego.tooSmall":"Essa foto é pequena demais. Este cofre precisa de uma foto de cerca de {side}×{side} pixels ou maior.",
+"stego.tooSmall2":"Foto pequena demais — leia a nota acima",
+"stego.done":"Escondido. Baixado como {name} — uma foto de aparência completamente normal.",
+"stego.done2":"Escondido dentro da foto","stego.badImage":"Não foi possível ler essa imagem. Tente um JPEG ou PNG simples."
+});
+Object.assign(I18N.de, {
+"stego.title":"In einem gewöhnlichen Foto verstecken",
+"stego.note":"Eine Handydurchsuchung oder eine Grenzkontrolle kann jede gesperrte oder verschlüsselte Datei, die sie findet, als verdächtig behandeln — selbst eine, die niemand öffnen kann. Versteckt in einem Alltagsfoto sieht die verschlossene Datei nach nichts aus: nur ein Bild. Ein Foto, das Sie bereits besitzen — echt, nicht eigens dafür gemacht — funktioniert am besten.",
+"stego.drop":"Ziehen Sie hier ein Deckfoto hin","stego.dropSmall":"JPEG oder PNG · sieht für jeden anderen völlig gewöhnlich aus",
+"stego.warn":"Behalten Sie das Ergebnis als PNG und versenden Sie es als <strong>Datei/Dokument</strong>, nicht als „Foto“ — Messenger-Apps komprimieren Fotos oft neu, was das Versteckte darin zerstören würde. Seien Sie ehrlich zu sich selbst, was das leistet: Es täuscht einen flüchtigen Blick oder eine gewöhnliche Handydurchsuchung. Es ist <strong>nicht</strong> erwiesenermaßen sicher gegen eine spezialisierte forensische Untersuchung, die gezielt nach versteckten Daten sucht.",
+"stego.openHint":"Ein mit „In einem Foto verstecken“ erstelltes Foto funktioniert auch hier",
+"stego.working":"Wird im Foto versteckt…",
+"stego.tooSmall":"Dieses Foto ist zu klein. Dieser Tresor braucht ein Foto von etwa {side}×{side} Pixeln oder größer.",
+"stego.tooSmall2":"Foto zu klein — siehe Hinweis oben",
+"stego.done":"Versteckt. Heruntergeladen als {name} — ein völlig gewöhnlich aussehendes Foto.",
+"stego.done2":"Im Foto versteckt","stego.badImage":"Dieses Bild kann nicht gelesen werden. Versuchen Sie ein einfaches JPEG oder PNG."
+});
+Object.assign(I18N.ru, {
+"stego.title":"Спрятать в обычной фотографии",
+"stego.note":"Досмотр телефона или пограничный контроль может счесть подозрительным любой запертый или зашифрованный файл — даже тот, который никто не может открыть. Спрятанный внутри обычного снимка, запертый файл ничем не выделяется: просто картинка. Лучше всего подходит фото, которое у вас уже есть — настоящее, а не сделанное специально для этого.",
+"stego.drop":"Перетащите сюда фото-обложку","stego.dropSmall":"JPEG или PNG · будет выглядеть совершенно обычно для кого угодно",
+"stego.warn":"Сохраняйте результат в формате PNG и отправляйте как <strong>файл/документ</strong>, а не как «фото» — мессенджеры часто пережимают фотографии, что уничтожит спрятанное внутри. Будьте честны с собой насчёт того, что это даёт: это обманывает беглый взгляд или обычный досмотр телефона. Это <strong>не</strong> доказанная защита от специализированной криминалистической экспертизы, целенаправленно ищущей скрытые данные.",
+"stego.openHint":"Фото, созданное через «Спрятать в фотографии», тоже подходит здесь",
+"stego.working":"Прячу внутри фотографии…",
+"stego.tooSmall":"Это фото слишком маленькое. Этому хранилищу нужно фото размером примерно {side}×{side} пикселей или больше.",
+"stego.tooSmall2":"Фото слишком маленькое — см. примечание выше",
+"stego.done":"Спрятано. Скачано как {name} — фото совершенно обычного вида.",
+"stego.done2":"Спрятано в фотографии","stego.badImage":"Не удалось прочитать это изображение. Попробуйте обычный JPEG или PNG."
+});
+Object.assign(I18N.zh, {
+"stego.title":"把它藏进一张普通照片里",
+"stego.note":"手机搜查或边境检查，可能会把任何被找到的锁定或加密文件都当作可疑对象 —— 哪怕谁也打不开它。把锁住的文件藏进一张日常照片后，它看起来什么都不是：只是一张图片。用你已经拥有的照片 —— 真实的、不是特意为此拍的 —— 效果最好。",
+"stego.drop":"把封面照片拖到这里","stego.dropSmall":"JPEG 或 PNG · 在别人眼里会显得完全普通",
+"stego.warn":"请把结果保存为 PNG，并以<strong>文件/文档</strong>的方式发送，而不是当作「照片」发送 —— 即时通讯应用常常会重新压缩照片，这会破坏藏在里面的内容。请对自己诚实地看待这项功能：它能骗过随意一瞥或普通的手机搜查，但<strong>没有</strong>被证明能抵御专门寻找隐藏数据的取证分析。",
+"stego.openHint":"用「把它藏进照片里」生成的照片，在这里同样可以使用",
+"stego.working":"正在藏入照片……",
+"stego.tooSmall":"这张照片太小了。这个保险库需要一张大约 {side}×{side} 像素或更大的照片。",
+"stego.tooSmall2":"照片太小 —— 见上方说明",
+"stego.done":"已隐藏。已下载为 {name} —— 一张看起来完全普通的照片。",
+"stego.done2":"已藏入照片","stego.badImage":"无法读取该图片。请换用普通的 JPEG 或 PNG。"
+});
+Object.assign(I18N.hi, {
+"stego.title":"इसे किसी सामान्य फ़ोटो में छिपाएँ",
+"stego.note":"फ़ोन की तलाशी, या सीमा जाँच, उसे मिलने वाली किसी भी बंद या एन्क्रिप्टेड फ़ाइल को संदिग्ध मान सकती है — भले ही उसे कोई खोल न सके। किसी रोज़मर्रा की फ़ोटो में छिपाई गई बंद फ़ाइल कुछ नहीं लगती: बस एक तस्वीर। जो फ़ोटो आपके पास पहले से है — असली, इसके लिए बनाई नहीं गई — वह सबसे अच्छा काम करती है।",
+"stego.drop":"यहाँ एक कवर फ़ोटो छोड़ें","stego.dropSmall":"JPEG या PNG · यह किसी और को बिलकुल सामान्य दिखेगी",
+"stego.warn":"नतीजे को PNG में रखें और इसे «फ़ोटो» के बजाय <strong>फ़ाइल/दस्तावेज़</strong> की तरह भेजें — मैसेजिंग ऐप्स अक्सर फ़ोटो को फिर से कंप्रेस कर देते हैं, जिससे अंदर छिपा हुआ नष्ट हो जाएगा। ख़ुद से ईमानदार रहिए कि यह क्या करता है: यह एक सरसरी नज़र या सामान्य फ़ोन तलाशी को चकमा देता है। यह किसी विशेष फ़ॉरेंसिक जाँच के सामने <strong>सिद्ध</strong> नहीं है जो ख़ासतौर पर छिपे डेटा को ढूँढ रही हो।",
+"stego.openHint":"«इसे फ़ोटो में छिपाएँ» से बनाई गई फ़ोटो यहाँ भी काम करती है",
+"stego.working":"फ़ोटो में छिपाया जा रहा है…",
+"stego.tooSmall":"यह फ़ोटो बहुत छोटी है। इस तिजोरी के लिए लगभग {side}×{side} पिक्सेल या उससे बड़ी फ़ोटो चाहिए।",
+"stego.tooSmall2":"फ़ोटो बहुत छोटी है — ऊपर दिया नोट पढ़ें",
+"stego.done":"छिपा दिया गया। {name} के रूप में डाउनलोड हुआ — बिलकुल सामान्य दिखने वाली फ़ोटो।",
+"stego.done2":"फ़ोटो में छिपाया गया","stego.badImage":"वह छवि पढ़ी नहीं जा सकी। सामान्य JPEG या PNG आज़माएँ।"
+});
+Object.assign(I18N.id, {
+"stego.title":"Sembunyikan di dalam foto biasa",
+"stego.note":"Penggeledahan ponsel, atau pemeriksaan perbatasan, bisa menganggap curiga berkas terkunci atau terenkripsi apa pun yang ditemukannya — bahkan yang tak bisa dibuka siapa pun. Disembunyikan di dalam foto sehari-hari, berkas terkunci itu tidak tampak seperti apa-apa: hanya sebuah gambar. Foto yang sudah Anda miliki — asli, bukan dibuat khusus untuk ini — bekerja paling baik.",
+"stego.drop":"Letakkan foto sampul di sini","stego.dropSmall":"JPEG atau PNG · akan terlihat sepenuhnya biasa bagi siapa pun",
+"stego.warn":"Simpan hasilnya sebagai PNG dan kirim sebagai <strong>berkas/dokumen</strong>, bukan sebagai «foto» — aplikasi perpesanan sering memampatkan ulang foto, yang akan merusak apa yang tersembunyi di dalamnya. Jujurlah pada diri sendiri soal apa yang dilakukan ini: ia mengelabui pandangan sekilas atau penggeledahan ponsel biasa. Ini <strong>tidak</strong> terbukti tahan terhadap pemeriksaan forensik khusus yang secara spesifik mencari data tersembunyi.",
+"stego.openHint":"Foto yang dibuat dengan «Sembunyikan di dalam foto» juga berfungsi di sini",
+"stego.working":"Menyembunyikan di dalam foto…",
+"stego.tooSmall":"Foto itu terlalu kecil. Brankas ini butuh foto sekitar {side}×{side} piksel atau lebih besar.",
+"stego.tooSmall2":"Foto terlalu kecil — lihat catatan di atas",
+"stego.done":"Tersembunyi. Diunduh sebagai {name} — foto yang terlihat sepenuhnya biasa.",
+"stego.done2":"Tersembunyi di dalam foto","stego.badImage":"Tidak dapat membaca gambar itu. Coba JPEG atau PNG biasa."
+});
+Object.assign(I18N.bn, {
+"stego.title":"একটি সাধারণ ছবির ভেতরে লুকিয়ে দিন",
+"stego.note":"ফোন তল্লাশি বা সীমান্ত পরীক্ষা, তার হাতে পাওয়া যেকোনো বন্ধ বা এনক্রিপ্ট করা ফাইলকেই সন্দেহজনক মনে করতে পারে — এমনকি যা কেউ খুলতেই পারে না তাকেও। একটি সাধারণ দৈনন্দিন ছবির মধ্যে লুকানো থাকলে বন্ধ ফাইলটিকে কিছুই মনে হয় না: শুধু একটি ছবি। আপনার কাছে আগে থেকেই থাকা কোনো ছবি — আসল, এর জন্য বানানো নয় — সবচেয়ে ভালো কাজ করে।",
+"stego.drop":"এখানে একটি প্রচ্ছদ ছবি ছাড়ুন","stego.dropSmall":"JPEG বা PNG · অন্য যে কারো কাছে এটি একদম স্বাভাবিক দেখাবে",
+"stego.warn":"ফলাফলটি PNG আকারে রাখুন এবং «ছবি» হিসেবে নয়, <strong>ফাইল/নথি</strong> হিসেবে পাঠান — মেসেজিং অ্যাপগুলো প্রায়ই ছবি পুনরায় সংকুচিত করে, যা এর ভেতরে লুকানো জিনিস নষ্ট করে দেবে। এটি আসলে কী করে সে ব্যাপারে নিজের সঙ্গে সৎ থাকুন: এটি একটি অলস দৃষ্টি বা সাধারণ ফোন তল্লাশিকে ফাঁকি দেয়। যে ফরেনসিক পরীক্ষা বিশেষভাবে লুকানো তথ্য খুঁজছে, তার বিরুদ্ধে এটি <strong>প্রমাণিত</strong> নয়।",
+"stego.openHint":"«ছবির ভেতরে লুকান» দিয়ে বানানো ছবিও এখানে কাজ করে",
+"stego.working":"ছবির ভেতরে লুকানো হচ্ছে…",
+"stego.tooSmall":"এই ছবিটি খুব ছোট। এই তিজোরির জন্য প্রায় {side}×{side} পিক্সেল বা তার চেয়ে বড় ছবি দরকার।",
+"stego.tooSmall2":"ছবি খুব ছোট — ওপরের নোট পড়ুন",
+"stego.done":"লুকানো হয়েছে। {name} নামে ডাউনলোড হয়েছে — একদম স্বাভাবিক দেখতে একটি ছবি।",
+"stego.done2":"ছবির ভেতরে লুকানো হয়েছে","stego.badImage":"সেই ছবিটি পড়া যায়নি। সাধারণ JPEG বা PNG ব্যবহার করে দেখুন।"
+});
+Object.assign(I18N.ar, {
+"stego.title":"أخفه داخل صورة عادية",
+"stego.note":"قد يعامل تفتيش الهاتف، أو التفتيش الحدودي، أي ملف مقفل أو مشفَّر يعثر عليه بوصفه مشبوهًا — حتى لو تعذّر على أحد فتحه. عند إخفائه داخل صورة يومية عادية، لا يبدو الملف المقفل شيئًا: مجرد صورة. الصورة التي تملكها بالفعل — حقيقية، لم تُلتقط لهذا الغرض — هي الأنسب.",
+"stego.drop":"أفلت هنا صورة غلاف","stego.dropSmall":"JPEG أو PNG · ستبدو عادية تمامًا لأي شخص آخر",
+"stego.warn":"احتفظ بالنتيجة بصيغة PNG وأرسلها بوصفها <strong>ملفًا / مستندًا</strong>، لا بوصفها «صورة» — فتطبيقات المراسلة كثيرًا ما تعيد ضغط الصور، مما يتلف ما هو مخفي بداخلها. كن صادقًا مع نفسك بشأن ما يفعله هذا: إنه يخدع نظرة عابرة أو تفتيشًا عاديًا للهاتف. إنه <strong>غير</strong> مثبت أمام فحص جنائي متخصص يبحث تحديدًا عن بيانات مخفية.",
+"stego.openHint":"تعمل هنا أيضًا صورة أُنشئت بواسطة «أخفه داخل صورة»",
+"stego.working":"جارٍ الإخفاء داخل الصورة…",
+"stego.tooSmall":"هذه الصورة صغيرة جدًا. تحتاج هذه الخزنة إلى صورة بحجم نحو {side}×{side} بكسل أو أكبر.",
+"stego.tooSmall2":"الصورة صغيرة جدًا — راجع الملاحظة أعلاه",
+"stego.done":"أُخفي. نُزِّل باسم {name} — صورة تبدو عادية تمامًا.",
+"stego.done2":"أُخفي داخل الصورة","stego.badImage":"تعذّرت قراءة تلك الصورة. جرّب صورة JPEG أو PNG بسيطة."
+});
+Object.assign(I18N.ur, {
+"stego.title":"اسے کسی عام تصویر میں چھپا دیں",
+"stego.note":"فون کی تلاشی، یا سرحدی چیکنگ، اپنے ہاتھ لگنے والی کسی بھی بند یا خفیہ کردہ فائل کو مشکوک سمجھ سکتی ہے — چاہے اسے کوئی کھول ہی نہ سکے۔ کسی روزمرہ تصویر میں چھپائی گئی بند فائل کچھ نہیں لگتی: بس ایک تصویر۔ وہ تصویر جو آپ کے پاس پہلے سے موجود ہو — اصلی، اس کے لیے نہ بنائی گئی — سب سے بہتر کام کرتی ہے۔",
+"stego.drop":"یہاں ایک کور تصویر چھوڑیں","stego.dropSmall":"JPEG یا PNG · یہ کسی اور کو بالکل عام نظر آئے گی",
+"stego.warn":"نتیجے کو PNG میں رکھیں اور اسے «تصویر» کے بجائے <strong>فائل/دستاویز</strong> کے طور پر بھیجیں — میسجنگ ایپس اکثر تصاویر کو دوبارہ کمپریس کر دیتی ہیں، جس سے اندر چھپی چیز تباہ ہو جائے گی۔ خود سے ایماندار رہیں کہ یہ کیا کرتا ہے: یہ ایک سرسری نظر یا عام فون تلاشی کو دھوکہ دیتا ہے۔ یہ کسی خصوصی فرانزک جانچ کے مقابلے میں <strong>ثابت شدہ</strong> نہیں ہے جو خاص طور پر چھپے ڈیٹا کو ڈھونڈ رہی ہو۔",
+"stego.openHint":"«اسے تصویر میں چھپائیں» سے بنائی گئی تصویر بھی یہاں کام کرتی ہے",
+"stego.working":"تصویر میں چھپایا جا رہا ہے…",
+"stego.tooSmall":"یہ تصویر بہت چھوٹی ہے۔ اس تجوری کے لیے تقریباً {side}×{side} پکسل یا اس سے بڑی تصویر درکار ہے۔",
+"stego.tooSmall2":"تصویر بہت چھوٹی ہے — اوپر دیا نوٹ پڑھیں",
+"stego.done":"چھپا دیا گیا۔ {name} کے نام سے ڈاؤن لوڈ ہوئی — بالکل عام نظر آنے والی تصویر۔",
+"stego.done2":"تصویر میں چھپا دیا گیا","stego.badImage":"وہ تصویر پڑھی نہ جا سکی۔ سادہ JPEG یا PNG آزمائیں۔"
+});
+
+
 /* ---------------- SHA3-512 (FIPS 202, Keccak-f[1600]) ---------------- */
 const RC_LO = [
   0x00000001, 0x00008082, 0x0000808a, 0x80008000, 0x0000808b, 0x80000001,
@@ -3532,6 +3697,8 @@ function decodeShare(text){
 
 let VAULT_FILE = null;
 let TEXT_ONLY = false;
+let LAST_VAULT_BYTES = null;
+let LAST_VAULT_NAME = '';
 
 wireDrop($('dropVault'), $('fileVault'), f => {
   VAULT_FILE = f;
@@ -3704,8 +3871,10 @@ $('btnVault').addEventListener('click', async () => {
     key.fill(0);                       // the whole key stops existing here
 
     const vaultName = safeName(VAULT_FILE.name) + '.logos-vault';
-    const blob = new Blob([VAULT_MAGIC, new Uint8Array([1]), nonce, tag, ...parts],
-                          {type:'application/octet-stream'});
+    const vaultBytes = concatBytes([VAULT_MAGIC, new Uint8Array([1]), nonce, tag, ...parts]);
+    LAST_VAULT_BYTES = vaultBytes;
+    LAST_VAULT_NAME = vaultName;
+    const blob = new Blob([vaultBytes], {type:'application/octet-stream'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = vaultName;
@@ -3723,10 +3892,112 @@ $('btnVault').addEventListener('click', async () => {
     $('vaultProgress').classList.add('hide');
     $('btnVault').disabled = false;
     renderVaultResult(vaultName, shares, k, n, hashes);
+    $('stegoCard').classList.remove('hide');
+    $('stegoStatus').textContent = t('stego.dropSmall','JPEG or PNG · it will look completely ordinary to anyone else');
   }catch(err){
     $('vaultProgress').classList.add('hide');
     $('btnVault').disabled = false;
     toast(t('vault.failed','Could not lock the file'));
+  }
+});
+
+/* ---- Steganography: hide bytes inside an ordinary photo, 1 bit per colour
+   channel (R,G,B; alpha untouched). This defeats a casual look or a phone
+   search that glances at the gallery. It is NOT proven against a targeted
+   forensic steganalysis by a well-resourced adversary who suspects hiding —
+   say so plainly wherever this is used; false confidence here can get someone
+   killed. The hidden bytes are the vault exactly as already encrypted with
+   ChaCha20-Poly1305 and split with Shamir — steganography adds no crypto of
+   its own, it only disguises what is already properly protected. */
+function stegoCapacityBytes(w, h){ return Math.floor((w * h * 3) / 8) - 4; }
+
+function stegoEncode(bitmap, payload){
+  const w = bitmap.width, h = bitmap.height;
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(bitmap, 0, 0);
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const px = imgData.data;
+
+  const len = payload.length;
+  const full = new Uint8Array(4 + len);
+  full[0] = (len>>>24)&0xff; full[1] = (len>>>16)&0xff; full[2] = (len>>>8)&0xff; full[3] = len&0xff;
+  full.set(payload, 4);
+
+  const totalBits = full.length * 8;
+  let p = 0, c = 0;
+  for (let bitIdx = 0; bitIdx < totalBits; bitIdx++){
+    const byteIdx = bitIdx >> 3, bitInByte = 7 - (bitIdx & 7);
+    const bit = (full[byteIdx] >> bitInByte) & 1;
+    px[p + c] = (px[p + c] & 0xfe) | bit;
+    c++;
+    if (c === 3){ c = 0; p += 4; }
+  }
+  ctx.putImageData(imgData, 0, 0);
+  return canvas;
+}
+
+function stegoDecode(bitmap){
+  const w = bitmap.width, h = bitmap.height;
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(bitmap, 0, 0);
+  const px = ctx.getImageData(0, 0, w, h).data;
+
+  const cap = stegoCapacityBytes(w, h);
+  if (cap < 1) return null;
+
+  let p = 0, c = 0;
+  function readBytes(n){
+    const out = new Uint8Array(n);
+    for (let i = 0; i < n; i++){
+      let byte = 0;
+      for (let b = 0; b < 8; b++){
+        byte = (byte << 1) | (px[p + c] & 1);
+        c++;
+        if (c === 3){ c = 0; p += 4; }
+      }
+      out[i] = byte;
+    }
+    return out;
+  }
+
+  const lb = readBytes(4);
+  const len = (lb[0]<<24) | (lb[1]<<16) | (lb[2]<<8) | lb[3];
+  if (len <= 0 || len > cap) return null;
+  return readBytes(len);
+}
+
+wireDrop($('dropStego'), $('fileStego'), async f => {
+  if (!LAST_VAULT_BYTES){ toast(t('vault.needFile','Add the locked file first')); return; }
+  $('stegoStatus').textContent = t('stego.working','Hiding it inside the photo…');
+  try{
+    const bitmap = await createImageBitmap(f);
+    const cap = stegoCapacityBytes(bitmap.width, bitmap.height);
+    if (LAST_VAULT_BYTES.length > cap){
+      const needPixels = Math.ceil((LAST_VAULT_BYTES.length + 4) * 8 / 3);
+      const side = Math.ceil(Math.sqrt(needPixels));
+      $('stegoStatus').textContent = fill(t('stego.tooSmall',
+        'That photo is too small. This vault needs a photo of about {side}×{side} pixels or larger.'),
+        { side: side });
+      toast(t('stego.tooSmall2','Photo too small — see the note above'));
+      return;
+    }
+    const canvas = stegoEncode(bitmap, LAST_VAULT_BYTES);
+    const outName = safeName((f.name || 'photo').replace(/\.[^.]+$/, '')) + '.png';
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = outName;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 60000);
+      $('stegoStatus').textContent = fill(t('stego.done','Hidden. Downloaded as {name} — an ordinary-looking photo.'), { name: outName });
+      toast(t('stego.done2','Hidden inside the photo'));
+    }, 'image/png');
+  }catch(err){
+    $('stegoStatus').textContent = t('stego.badImage','Could not read that image. Try a plain JPEG or PNG.');
   }
 });
 
@@ -3808,6 +4079,17 @@ const VAULT_LETTERS = {};
 /* ------------------------------- opening -------------------------------- */
 let OPEN_FILE = null;
 
+async function bytesFromOpenInput(file){
+  if (file.type && file.type.startsWith('image/')){
+    try{
+      const bitmap = await createImageBitmap(file);
+      const extracted = stegoDecode(bitmap);
+      if (extracted) return extracted;
+    }catch(e){ /* not a readable image with hidden data — fall through */ }
+  }
+  return new Uint8Array(await file.arrayBuffer());
+}
+
 $('btnOpen').addEventListener('click', async () => {
   if (!OPEN_FILE){ toast(t('vault.needFile','Add the locked file first')); return; }
   const raw = $('vShares').value;
@@ -3826,7 +4108,8 @@ $('btnOpen').addEventListener('click', async () => {
   $('openStatus').textContent = t('vault.reading','reading the locked file…');
 
   try{
-    const head = new Uint8Array(await OPEN_FILE.slice(0, 8 + 1 + 12 + 16).arrayBuffer());
+    const bytes = await bytesFromOpenInput(OPEN_FILE);
+    const head = bytes.subarray(0, 8 + 1 + 12 + 16);
     for (let i=0;i<8;i++){
       if (head[i] !== VAULT_MAGIC[i]) throw new Error('not a vault');
     }
@@ -3839,11 +4122,11 @@ $('btnOpen').addEventListener('click', async () => {
     const otk = poly1305KeyGen(key, nonce);
     const mac = new Poly1305(otk);
     mac.update(aad); padTo16(mac, aad.length);
-    const bodyStart = 37, total = OPEN_FILE.size - bodyStart;
+    const bodyStart = 37, total = bytes.length - bodyStart;
     let off = 0;
     while (off < total){
       const end = Math.min(off + CHUNK, total);
-      const buf = new Uint8Array(await OPEN_FILE.slice(bodyStart + off, bodyStart + end).arrayBuffer());
+      const buf = bytes.subarray(bodyStart + off, bodyStart + end);
       mac.update(buf);
       off = end;
       $('openBar').style.width = (off/total*50).toFixed(1) + '%';
@@ -3870,7 +4153,7 @@ $('btnOpen').addEventListener('click', async () => {
     let headerJSON = null, headerLeft = -1, headerBuf = [], sizeBytes = [];
     while (off < total){
       const end = Math.min(off + CHUNK, total);
-      const buf = new Uint8Array(await OPEN_FILE.slice(bodyStart + off, bodyStart + end).arrayBuffer());
+      const buf = bytes.subarray(bodyStart + off, bodyStart + end).slice();
       stream.xor(buf);
       parts.push(buf);
       off = end;

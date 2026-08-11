@@ -181,6 +181,24 @@ computer nobody switches on does nothing. What the mathematics guarantees is the
 read it early, no single person can betray it, and once the locked file is spread nobody can stop its
 release. The people you choose are the trigger. Choose them well.
 
+### Hide it inside an ordinary photo
+
+A phone search, or a border check, can treat *any* locked or encrypted file it finds as suspicious —
+even one nobody can open. So the vault can be hidden inside an everyday photo: after locking a file,
+drop a cover photo onto **"Hide it inside an ordinary photo"** and LOGOS embeds the locked vault into
+the photo's least significant pixel bits. The output is a PNG that looks completely ordinary — a phone
+search or a casual look finds a picture, not a file to be suspicious of. Drop that same photo into
+**"Open a vault"** later and LOGOS extracts and decrypts it exactly as if it were the original
+`.logos-vault` file — nothing else about the process changes.
+
+Say plainly what this is and is not. It hides *disguise*, not cryptography — the hidden bytes are the
+same ChaCha20-Poly1305/Shamir vault, unchanged. It **defeats a casual look or an ordinary phone
+search.** It is **not proven against a specialised forensic examination** that is specifically looking
+for hidden data — steganalysis exists, and a well-resourced adversary who already suspects
+steganography can sometimes detect it. A real photo you already have, not one made for the occasion,
+gives the best cover. Keep the result as a PNG and send it as a file/document, not as a "photo" —
+messaging apps often recompress photos, which would destroy what is hidden inside.
+
 ## Files in this folder
 
 | File | What it is |
