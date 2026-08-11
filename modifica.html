@@ -58,12 +58,16 @@
   <div class="sub">Chat sperimentale diretta tra due browser — build separata, non collegata a LOGOS</div>
 
   <div class="warn">
-    <b>Cos'è e cos'a non è, per chiarezza.</b> Questa è una chat sperimentale, browser-a-browser (WebRTC),
-    per uso informale — lezioni, amici. <b>Non è pensata per situazioni di pericolo</b>: rivela il tuo
-    indirizzo di rete (IP) alla persona con cui parli e ai server pubblici usati per stabilire la
-    connessione. Serve una connessione diretta tra due dispositivi online nello stesso momento — se uno
-    chiude la pagina, la conversazione finisce e va ricreata. Per comunicazioni dove la tua sicurezza
-    dipende dall'anonimato, usa <a href="https://signal.org" style="color:var(--accent)">Signal</a>,
+    <b>Cos'è e cos'a non è, per chiarezza — leggilo prima di usarla per qualcosa che conta.</b>
+    Chat sperimentale, browser-a-browser (WebRTC): testo, foto, video, audio, PDF e qualsiasi file.
+    <b>Non è pensata per situazioni di pericolo.</b> Tre limiti veri, che nessuna pagina web può togliere:
+    <b>(1)</b> rivela il tuo indirizzo di rete (IP) alla persona con cui parli — nasconderlo del tutto
+    richiederebbe un server-relay che qualcuno deve gestire e pagare per sempre, e qui non c'è;
+    <b>(2)</b> serve una connessione diretta tra due dispositivi online nello stesso momento — se uno
+    chiude la pagina, la conversazione finisce, non resta in attesa da nessuna parte; <b>(3)</b> nessun
+    sito web al mondo può impedire uno screenshot — è una barriera che solo un sistema operativo può
+    mettere. Per comunicazioni dove la tua sicurezza dipende dall'anonimato, usa
+    <a href="https://signal.org" style="color:var(--accent)">Signal</a>,
     <a href="https://getsession.org" style="color:var(--accent)">Session</a> o
     <a href="https://briarproject.org" style="color:var(--accent)">Briar</a> — non questo strumento.
   </div>
@@ -78,8 +82,10 @@
       </div>
       <textarea id="offerOut" class="hide" readonly placeholder="Il tuo codice d'invito comparirà qui…"></textarea>
       <div class="btns hide" id="offerBtns">
-        <button class="act" id="btnCopyOffer">Copia il codice</button>
+        <button class="act primary" id="btnShareOffer">Condividi invito (WhatsApp, Signal, email…)</button>
+        <button class="act" id="btnCopyOffer">Copia solo il codice</button>
       </div>
+      <div class="status" id="shareHint"></div>
       <div style="margin-top:14px">
         <label style="font-size:12px;color:var(--dim)">Codice di risposta ricevuto — incollalo qui</label>
         <textarea id="answerIn" placeholder="Incolla qui il codice che ti ha mandato l'altra persona…"></textarea>
@@ -90,13 +96,14 @@
 
     <div class="card">
       <h3>Chi riceve l'invito</h3>
-      <div class="step"><div class="n">1</div><div>Incolla qui sotto il codice d'invito che hai ricevuto.</div></div>
-      <div class="step"><div class="n">2</div><div>Premi «Genera risposta», poi manda il codice che compare a chi ti ha invitato.</div></div>
+      <div class="step"><div class="n">1</div><div>Se hai aperto un link d'invito, il codice qui sotto è già compilato — altrimenti incollalo tu.</div></div>
+      <div class="step"><div class="n">2</div><div>Premi «Genera risposta», poi manda il codice che compare a chi ti ha invitato — lui deve incollarlo per completare la connessione.</div></div>
       <textarea id="offerIn" placeholder="Incolla qui il codice d'invito ricevuto…"></textarea>
       <div class="btns"><button class="act primary" id="btnCreateAnswer">Genera risposta</button></div>
       <textarea id="answerOut" class="hide" readonly placeholder="Il codice di risposta comparirà qui…"></textarea>
       <div class="btns hide" id="answerBtns">
-        <button class="act" id="btnCopyAnswer">Copia il codice di risposta</button>
+        <button class="act primary" id="btnShareAnswer">Manda la risposta (WhatsApp, Signal, email…)</button>
+        <button class="act" id="btnCopyAnswer">Copia solo il codice</button>
       </div>
       <div class="status" id="statusB"></div>
     </div>
@@ -107,10 +114,32 @@
     <div id="chatArea">
       <div id="msgs"></div>
       <div id="composer">
-        <button class="act" id="btnAttach" title="Allega foto o video">📎</button>
-        <input type="file" id="fileInput" class="hide" accept="image/*,video/*">
+        <button class="act" id="btnAttach" title="Allega foto, video, PDF, qualsiasi file">📎</button>
+        <input type="file" id="fileInput" class="hide">
+        <button class="act" id="btnMic" title="Registra un messaggio vocale">🎤</button>
         <input type="text" id="msgInput" placeholder="Scrivi un messaggio…">
         <button class="act primary" id="btnSend">Invia</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px;background:var(--panel2)">
+      <h3 style="color:var(--warn)">🔥 Autodistruzione</h3>
+      <div class="note" style="color:var(--dim);font-size:12.5px;margin-bottom:8px">
+        Allo scadere del timer: la conversazione viene cancellata da questo schermo, viene chiesto di
+        fare lo stesso all'altra persona, e la connessione si chiude. Non può toccare copie già salvate
+        altrove (screenshot, file scaricati) — quelle restano dove sono state salvate.
+      </div>
+      <div class="btns" id="destructSetup">
+        <select id="destructMinutes" style="background:#0d1116;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px">
+          <option value="1">1 minuto</option>
+          <option value="5" selected>5 minuti</option>
+          <option value="15">15 minuti</option>
+          <option value="60">1 ora</option>
+        </select>
+        <button class="act" id="btnArmDestruct">Attiva autodistruzione</button>
+      </div>
+      <div class="btns hide" id="destructArmed">
+        <span class="status ok" id="destructCountdown" style="margin:0"></span>
+        <button class="act" id="btnDisarmDestruct">Disattiva</button>
       </div>
     </div>
     <div class="btns" style="margin-top:10px">
@@ -184,7 +213,20 @@ $('btnCreate').addEventListener('click', async () => {
   $('offerOut').value = code;
   $('offerOut').classList.remove('hide');
   $('offerBtns').classList.remove('hide');
-  setStatus($('statusA'), 'Manda questo codice a chi vuoi invitare, poi aspetta il suo codice di risposta.');
+  setStatus($('statusA'), 'Manda l\'invito a chi vuoi far entrare, poi aspetta il suo codice di risposta.');
+});
+function inviteLink(code){
+  return location.origin + location.pathname + '#i=' + encodeURIComponent(code);
+}
+$('btnShareOffer').addEventListener('click', async () => {
+  const link = inviteLink($('offerOut').value);
+  const text = 'Ti va di chattare con me su LOGOS Modifica? Apri questo link: se non hai la pagina ' +
+               'già pronta si apre da sola, con il mio invito già inserito.\n\n' + link;
+  try{
+    if (navigator.share){ await navigator.share({ title: 'LOGOS Modifica — invito a chattare', text }); return; }
+  }catch(e){ if (e && e.name === 'AbortError') return; }
+  try{ await navigator.clipboard.writeText(text); setStatus($('statusA'), 'Link copiato — incollalo dove vuoi mandarlo.', 'ok'); }
+  catch(e){ $('offerOut').value = link; $('offerOut').select(); }
 });
 $('btnCopyOffer').addEventListener('click', async () => {
   try{ await navigator.clipboard.writeText($('offerOut').value); setStatus($('statusA'), 'Codice copiato.', 'ok'); }
@@ -225,12 +267,33 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   $('answerOut').value = code;
   $('answerOut').classList.remove('hide');
   $('answerBtns').classList.remove('hide');
-  setStatus($('statusB'), 'Manda questo codice a chi ti ha invitato. La chat si aprirà appena lo riceve.', 'ok');
+  setStatus($('statusB'), 'Manda la risposta a chi ti ha invitato. La chat si aprirà appena la riceve.', 'ok');
+});
+$('btnShareAnswer').addEventListener('click', async () => {
+  const text = 'Ecco la mia risposta per LOGOS Modifica, incollala per completare la connessione:\n\n' + $('answerOut').value;
+  try{
+    if (navigator.share){ await navigator.share({ title: 'LOGOS Modifica — risposta', text }); return; }
+  }catch(e){ if (e && e.name === 'AbortError') return; }
+  try{ await navigator.clipboard.writeText($('answerOut').value); setStatus($('statusB'), 'Codice copiato.', 'ok'); }
+  catch(e){ $('answerOut').select(); }
 });
 $('btnCopyAnswer').addEventListener('click', async () => {
   try{ await navigator.clipboard.writeText($('answerOut').value); setStatus($('statusB'), 'Codice copiato.', 'ok'); }
   catch(e){ $('answerOut').select(); }
 });
+
+/* opening a shared invite link pre-fills the code so the second person barely has to think */
+(function autoFillFromHash(){
+  const m = location.hash.match(/[#&]i=([^&]+)/);
+  if (!m) return;
+  try{
+    const code = decodeURIComponent(m[1]);
+    JSON.parse(b64decode(code));   // just validating it decodes before trusting it
+    $('offerIn').value = code;
+    $('offerIn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setStatus($('statusB'), 'Codice d\'invito già inserito — premi «Genera risposta».', 'ok');
+  }catch(e){ /* not a valid invite link, leave the field empty */ }
+})();
 
 /* -------------------- chat: text + chunked file transfer -------------------- */
 function addMsg(html, mine){
@@ -264,10 +327,7 @@ function sendText(){
   $('msgInput').value = '';
 }
 
-$('btnAttach').addEventListener('click', () => $('fileInput').click());
-$('fileInput').addEventListener('change', async () => {
-  const file = $('fileInput').files[0];
-  $('fileInput').value = '';
+async function sendFile(file){
   if (!file || !dc || dc.readyState !== 'open') return;
   const id = Math.random().toString(36).slice(2);
   dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
@@ -284,9 +344,44 @@ $('fileInput').addEventListener('change', async () => {
   dc.send(JSON.stringify({ type: 'file-end', id }));
 
   const url = URL.createObjectURL(file);
-  const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/');
-  const preview = isImg ? '<img src="' + url + '">' : isVid ? '<video src="' + url + '" controls></video>' : esc(file.name);
+  const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
+  const preview = isImg ? '<img src="' + url + '">'
+                 : isVid ? '<video src="' + url + '" controls></video>'
+                 : isAud ? '<audio src="' + url + '" controls></audio>'
+                 : '<a href="' + url + '" download="' + esc(file.name) + '" style="color:inherit">📄 ' + esc(file.name) + ' ↓</a>';
   addMsg(preview + '<div class="meta">' + timeNow() + '</div>', true);
+}
+
+$('btnAttach').addEventListener('click', () => $('fileInput').click());
+$('fileInput').addEventListener('change', () => {
+  const file = $('fileInput').files[0];
+  $('fileInput').value = '';
+  if (file) sendFile(file);
+});
+
+/* voice messages: record, then send exactly like any other attached file */
+let mediaRecorder = null, recordedChunks = [];
+$('btnMic').addEventListener('click', async () => {
+  if (mediaRecorder && mediaRecorder.state === 'recording'){
+    mediaRecorder.stop();
+    return;
+  }
+  let stream;
+  try{ stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+  catch(e){ setStatus($('statusA'), 'Microfono non disponibile o permesso negato.', 'bad'); return; }
+  recordedChunks = [];
+  const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+  mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+  mediaRecorder.ondataavailable = ev => { if (ev.data.size > 0) recordedChunks.push(ev.data); };
+  mediaRecorder.onstop = () => {
+    stream.getTracks().forEach(tr => tr.stop());
+    $('btnMic').textContent = '🎤';
+    const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+    const file = new File([blob], 'vocale.webm', { type: blob.type });
+    sendFile(file);
+  };
+  mediaRecorder.start();
+  $('btnMic').textContent = '⏹';
 });
 
 const incoming = {};   // id -> { chunks: [], meta }
@@ -302,11 +397,16 @@ function onDcMessage(ev){
       if (!rec) return;
       const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
       const url = URL.createObjectURL(blob);
-      const isImg = (rec.meta.mime||'').startsWith('image/'), isVid = (rec.meta.mime||'').startsWith('video/');
-      let html = isImg ? '<img src="' + url + '">' : isVid ? '<video src="' + url + '" controls></video>'
-                : '<a href="' + url + '" download="' + esc(rec.meta.name) + '" style="color:inherit">' + esc(rec.meta.name) + ' ↓</a>';
+      const mime = rec.meta.mime || '';
+      const isImg = mime.startsWith('image/'), isVid = mime.startsWith('video/'), isAud = mime.startsWith('audio/');
+      let html = isImg ? '<img src="' + url + '">'
+               : isVid ? '<video src="' + url + '" controls></video>'
+               : isAud ? '<audio src="' + url + '" controls></audio>'
+               : '<a href="' + url + '" download="' + esc(rec.meta.name) + '" style="color:inherit">📄 ' + esc(rec.meta.name) + ' ↓</a>';
       addMsg(html + '<div class="meta">' + timeNow() + '</div>', false);
       delete incoming[msg.id];
+    } else if (msg.type === 'wipe'){
+      destroyNow(false);
     }
   } else {
     const bytes = new Uint8Array(ev.data);
@@ -316,7 +416,51 @@ function onDcMessage(ev){
   }
 }
 
+/* self-destruct: clears this screen, asks the peer to do the same, then ends the session.
+   It cannot reach anything already saved outside this tab — a screenshot or a downloaded
+   file is gone from our control the instant it left the page. No website can prevent either. */
+let destructTimer = null, destructDeadline = 0;
+
+function destroyNow(tellPeer){
+  clearInterval(destructTimer); destructTimer = null;
+  if (tellPeer && dc && dc.readyState === 'open'){
+    try{ dc.send(JSON.stringify({ type: 'wipe' })); }catch(e){}
+  }
+  $('msgs').innerHTML = '';
+  addMsg('Conversazione autodistrutta.', false);
+  if (dc) try{ dc.close(); }catch(e){}
+  if (pc) try{ pc.close(); }catch(e){}
+  dc = null; pc = null;
+  $('destructArmed').classList.add('hide');
+  $('destructSetup').classList.remove('hide');
+  $('connState').textContent = 'chiusa';
+  $('connState').style.color = 'var(--faint)';
+}
+
+$('btnArmDestruct').addEventListener('click', () => {
+  const minutes = parseInt($('destructMinutes').value, 10);
+  destructDeadline = Date.now() + minutes * 60000;
+  $('destructSetup').classList.add('hide');
+  $('destructArmed').classList.remove('hide');
+  const tick = () => {
+    const left = Math.max(0, destructDeadline - Date.now());
+    if (left <= 0){ destroyNow(true); return; }
+    const m = Math.floor(left / 60000), s = Math.floor((left % 60000) / 1000);
+    $('destructCountdown').textContent = 'si autodistrugge tra ' + m + ':' + String(s).padStart(2,'0');
+  };
+  tick();
+  destructTimer = setInterval(tick, 1000);
+});
+$('btnDisarmDestruct').addEventListener('click', () => {
+  clearInterval(destructTimer); destructTimer = null;
+  $('destructArmed').classList.add('hide');
+  $('destructSetup').classList.remove('hide');
+});
+
 $('btnNewSession').addEventListener('click', () => {
+  clearInterval(destructTimer); destructTimer = null;
+  $('destructArmed').classList.add('hide');
+  $('destructSetup').classList.remove('hide');
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
   pc = null; dc = null;
