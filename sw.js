@@ -2,7 +2,7 @@
    Once you have opened LOGOS once, it lives on your device. Turn off the network,
    fly, lose signal, be cut off: it still seals and verifies. */
 
-const CACHE = 'logos-1.9';
+const CACHE = 'logos-2.0';
 const ASSETS = [
   './',
   './index.html',
