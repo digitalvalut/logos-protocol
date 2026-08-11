@@ -164,6 +164,13 @@ LOGOS encrypts the file on your device with **ChaCha20-Poly1305** and cuts the k
 With 3 of 5, two people can lose their piece — or be silenced — and the truth still comes out, while
 no two of them can open it behind your back.
 
+You can also lock **written words alone** — a testimony, instructions, what you saw — with no file at
+all. And you can set a **deadline**: choose how many days of silence should pass before your people act.
+LOGOS turns that into an exact date, writes it into every letter they hold, and keeps a countdown on
+your device with an "I am alive" button that restarts it. Be clear about what that countdown is: it
+reminds *you*. The deadline has force because it is written in the letters other people are holding, not
+because a program is watching the clock.
+
 1. Lock the file. The locked `.logos-vault` file is unreadable: **publish it everywhere today**, and
    it can never be taken out of the world.
 2. Give one piece of the key to each person you trust, in different countries, on different channels.

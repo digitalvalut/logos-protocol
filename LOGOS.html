@@ -349,6 +349,21 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
     <div class="tiny" data-i18n="vault.dropTiny">It is encrypted here, on your device. Nothing is uploaded.</div>
   </div>
   <input type="file" id="fileVault" class="hide">
+  <div class="btns">
+    <button class="act" id="btnTextMode" data-i18n="vault.textMode">No file? Lock written words instead</button>
+  </div>
+
+  <div id="checkinCard" class="card hide">
+    <h3 data-i18n="vault.checkinT">Your check-in</h3>
+    <div id="checkinBody" style="font-size:14px;line-height:1.6"></div>
+    <div class="btns">
+      <button class="act primary" id="btnCheckin" data-i18n="vault.checkinBtn">I am alive — restart the countdown</button>
+      <button class="act" id="btnCheckinStop" data-i18n="vault.checkinStop">Remove this countdown</button>
+    </div>
+    <div class="note" data-i18n="vault.checkinNote">This countdown lives on this device and reminds you.
+      It cannot publish anything by itself — the deadline matters because it is written into the letters
+      your trusted people are holding.</div>
+  </div>
 
   <div id="vaultForm" class="hide">
     <div class="card">
@@ -368,6 +383,30 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
       <div class="note" data-i18n="vault.knote">Five people, three needed, is a good balance: two can lose
         their piece, or be silenced, and the truth still comes out — while no two people can open it
         behind your back.</div>
+    </div>
+
+    <div class="card hide" id="secretCard">
+      <h3 data-i18n="vault.secretT">The words to be locked away</h3>
+      <label class="fld"><span data-i18n="vault.secret">Everything written here is encrypted. Nobody can read it until enough pieces of the key come together.</span>
+        <textarea id="vSecret" style="min-height:150px" data-i18n-ph="vault.secretPh" placeholder="What I saw, who was there, where the rest is kept…"></textarea></label>
+      <div class="warnbox" data-i18n="vault.secretWarn">If you put passwords or access to a computer or a
+        server in here, understand what that means: whoever opens it can do anything on that machine,
+        including destroying what is on it — and once released, access cannot be taken back. When the goal
+        is to preserve the truth, lock <strong>copies of the evidence itself</strong>, not the keys to the
+        place where it is kept.</div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="vault.deadlineT">The deadline — your silence is the signal</h3>
+      <div class="note" style="margin-top:0" data-i18n="vault.deadlineNote">Choose how long you should stay
+        silent before your people act. LOGOS turns it into an exact date, writes it into every letter they
+        receive, and keeps a countdown for you on this device.</div>
+      <div class="btns" style="margin-top:12px">
+        <label class="fld" style="flex:1 1 140px;margin-top:0"><span data-i18n="vault.days">Days of silence</span>
+          <input type="text" id="vDays" value="30" inputmode="numeric" autocomplete="off"></label>
+        <label class="fld" style="flex:2 1 220px;margin-top:0"><span data-i18n="vault.deadlineDate">They should act on</span>
+          <input type="text" id="vDate" readonly></label>
+      </div>
     </div>
 
     <div class="card">
@@ -524,7 +563,7 @@ openssl dgst -sha3-512 yourfile      # the SHA3-512 line</pre>
 
 <script>
 "use strict";
-const LOGOS_VERSION = "1.5";
+const LOGOS_VERSION = "1.6";
 
 /* ===== Languages. English lives in the page itself; these override it. ===== */
 const LANGS = [
@@ -2065,6 +2104,225 @@ Object.assign(I18N.ur, {
 });
 
 
+/* Deadline + text-only vault, in every language. */
+Object.assign(I18N.it, {
+"vault.textMode":"Nessun file? Chiudi solo parole scritte","vault.textName":"parole scritte",
+"vault.secretT":"Le parole da mettere sotto chiave",
+"vault.secret":"Tutto ciò che scrivi qui viene cifrato. Nessuno può leggerlo finché non si uniscono abbastanza pezzi della chiave.",
+"vault.secretPh":"Quello che ho visto, chi c'era, dove è custodito il resto…",
+"vault.secretWarn":"Se qui dentro metti password o l'accesso a un computer o a un server, sappi cosa significa: chi lo apre potrà fare qualunque cosa su quella macchina, compreso distruggere ciò che contiene — e un accesso, una volta rilasciato, non si può più ritirare. Se lo scopo è custodire la verità, chiudi qui <strong>copie delle prove</strong>, non le chiavi del posto dove sono tenute.",
+"vault.deadlineT":"La scadenza — il tuo silenzio è il segnale",
+"vault.deadlineNote":"Scegli per quanto tempo devi restare in silenzio prima che le tue persone agiscano. LOGOS lo trasforma in una data esatta, la scrive in ogni lettera che ricevono, e tiene un conto alla rovescia per te su questo dispositivo.",
+"vault.days":"Giorni di silenzio","vault.deadlineDate":"Devono agire il",
+"vault.deadlineSentence":"se non vi scrivo entro il {date}",
+"vault.checkinT":"Il tuo segnale di vita","vault.checkinBtn":"Sono vivo — riparti da capo","vault.checkinStop":"Togli questo conto alla rovescia",
+"vault.checkinNote":"Questo conto alla rovescia vive su questo dispositivo e serve a ricordartelo. Da solo non può pubblicare nulla: la scadenza conta perché è scritta nelle lettere che hanno in mano le tue persone.",
+"vault.checkinBody":"Alle tue persone è stato chiesto di agire il {date} — per il file {file}. Fatti vivo prima di allora, altrimenti è il silenzio stesso a diventare il segnale.",
+"vault.daysLeft":"{days} giorni rimasti","vault.overdue":"LA SCADENZA È PASSATA",
+"vault.overdueNote":"Avevi detto a chi custodisce la tua chiave di agire il {date}. Se stai leggendo e sei al sicuro, fatti vivo adesso — altrimenti stanno già agendo.",
+"vault.checkedIn":"Conto alla rovescia riavviato","vault.needWords":"Scrivi prima le parole da mettere sotto chiave",
+"vault.actAfter":"Data data ai custodi"
+});
+Object.assign(I18N.es, {
+"vault.textMode":"¿Sin archivo? Cierra solo palabras escritas","vault.textName":"palabras escritas",
+"vault.secretT":"Las palabras que quedarán bajo llave",
+"vault.secret":"Todo lo que escribas aquí se cifra. Nadie puede leerlo hasta que se junten suficientes pedazos de la llave.",
+"vault.secretPh":"Lo que vi, quién estaba, dónde se guarda el resto…",
+"vault.secretWarn":"Si pones aquí contraseñas o el acceso a un ordenador o a un servidor, entiende lo que significa: quien lo abra podrá hacer cualquier cosa en esa máquina, incluso destruir lo que contiene — y un acceso, una vez entregado, ya no se puede retirar. Si el objetivo es preservar la verdad, guarda aquí <strong>copias de las pruebas</strong>, no las llaves del lugar donde se guardan.",
+"vault.deadlineT":"El plazo — tu silencio es la señal",
+"vault.deadlineNote":"Elige cuánto tiempo debes permanecer en silencio antes de que tu gente actúe. LOGOS lo convierte en una fecha exacta, la escribe en cada carta que reciben y mantiene una cuenta atrás para ti en este dispositivo.",
+"vault.days":"Días de silencio","vault.deadlineDate":"Deben actuar el",
+"vault.deadlineSentence":"si no os escribo antes del {date}",
+"vault.checkinT":"Tu señal de vida","vault.checkinBtn":"Estoy vivo — reiniciar la cuenta atrás","vault.checkinStop":"Quitar esta cuenta atrás",
+"vault.checkinNote":"Esta cuenta atrás vive en este dispositivo y sirve para recordártelo. Por sí sola no puede publicar nada: el plazo cuenta porque está escrito en las cartas que tiene tu gente.",
+"vault.checkinBody":"A tu gente se le pidió actuar el {date} — por el archivo {file}. Da señales antes de esa fecha, o el propio silencio se convierte en la señal.",
+"vault.daysLeft":"{days} días restantes","vault.overdue":"EL PLAZO HA VENCIDO",
+"vault.overdueNote":"Dijiste a quienes guardan tu llave que actuaran el {date}. Si estás leyendo esto y estás a salvo, da señales ahora — si no, ya están actuando.",
+"vault.checkedIn":"Cuenta atrás reiniciada","vault.needWords":"Escribe primero las palabras que quedarán bajo llave",
+"vault.actAfter":"Fecha dada a quienes guardan la llave"
+});
+Object.assign(I18N.fr, {
+"vault.textMode":"Pas de fichier ? Enfermez des mots écrits","vault.textName":"mots écrits",
+"vault.secretT":"Les mots à mettre sous clé",
+"vault.secret":"Tout ce que vous écrivez ici est chiffré. Personne ne peut le lire tant que assez de morceaux de la clé ne sont pas réunis.",
+"vault.secretPh":"Ce que j'ai vu, qui était là, où le reste est conservé…",
+"vault.secretWarn":"Si vous mettez ici des mots de passe ou l'accès à un ordinateur ou à un serveur, mesurez ce que cela veut dire : celui qui l'ouvrira pourra tout faire sur cette machine, y compris détruire ce qu'elle contient — et un accès, une fois livré, ne se reprend plus. Si le but est de préserver la vérité, enfermez ici <strong>des copies des preuves</strong>, pas les clés de l'endroit où elles sont gardées.",
+"vault.deadlineT":"L'échéance — votre silence est le signal",
+"vault.deadlineNote":"Choisissez combien de temps vous devez rester silencieux avant que vos proches agissent. LOGOS en fait une date exacte, l'inscrit dans chaque lettre qu'ils reçoivent et tient un compte à rebours pour vous sur cet appareil.",
+"vault.days":"Jours de silence","vault.deadlineDate":"Ils doivent agir le",
+"vault.deadlineSentence":"si je ne vous écris pas avant le {date}",
+"vault.checkinT":"Votre signe de vie","vault.checkinBtn":"Je suis vivant — relancer le compte à rebours","vault.checkinStop":"Supprimer ce compte à rebours",
+"vault.checkinNote":"Ce compte à rebours vit sur cet appareil et sert à vous le rappeler. Seul, il ne peut rien publier : l'échéance compte parce qu'elle est écrite dans les lettres que détiennent vos proches.",
+"vault.checkinBody":"On a demandé à vos proches d'agir le {date} — pour le fichier {file}. Donnez signe de vie avant, sinon le silence lui-même devient le signal.",
+"vault.daysLeft":"{days} jours restants","vault.overdue":"L'ÉCHÉANCE EST PASSÉE",
+"vault.overdueNote":"Vous aviez dit à ceux qui gardent votre clé d'agir le {date}. Si vous lisez ceci et que vous êtes en sécurité, donnez signe de vie maintenant — sinon ils agissent déjà.",
+"vault.checkedIn":"Compte à rebours relancé","vault.needWords":"Écrivez d'abord les mots à mettre sous clé",
+"vault.actAfter":"Date donnée aux détenteurs"
+});
+Object.assign(I18N.pt, {
+"vault.textMode":"Sem arquivo? Tranque apenas palavras escritas","vault.textName":"palavras escritas",
+"vault.secretT":"As palavras a serem trancadas",
+"vault.secret":"Tudo o que você escrever aqui é criptografado. Ninguém consegue ler até que se juntem pedaços suficientes da chave.",
+"vault.secretPh":"O que eu vi, quem estava lá, onde está guardado o resto…",
+"vault.secretWarn":"Se puser aqui senhas ou o acesso a um computador ou servidor, entenda o que isso significa: quem abrir poderá fazer qualquer coisa naquela máquina, inclusive destruir o que há nela — e um acesso, uma vez entregue, não se recupera. Se o objetivo é preservar a verdade, tranque aqui <strong>cópias das provas</strong>, não as chaves do lugar onde elas ficam.",
+"vault.deadlineT":"O prazo — o seu silêncio é o sinal",
+"vault.deadlineNote":"Escolha quanto tempo você deve ficar em silêncio antes que as suas pessoas ajam. O LOGOS transforma isso numa data exata, escreve-a em cada carta que elas recebem e mantém uma contagem regressiva para você neste aparelho.",
+"vault.days":"Dias de silêncio","vault.deadlineDate":"Devem agir em",
+"vault.deadlineSentence":"se eu não escrever a vocês até {date}",
+"vault.checkinT":"O seu sinal de vida","vault.checkinBtn":"Estou vivo — reiniciar a contagem","vault.checkinStop":"Remover esta contagem",
+"vault.checkinNote":"Esta contagem vive neste aparelho e serve para lembrar você. Sozinha não publica nada: o prazo conta porque está escrito nas cartas que as suas pessoas têm em mãos.",
+"vault.checkinBody":"Pediram às suas pessoas que agissem em {date} — pelo arquivo {file}. Dê sinal antes disso, ou o próprio silêncio vira o sinal.",
+"vault.daysLeft":"faltam {days} dias","vault.overdue":"O PRAZO VENCEU",
+"vault.overdueNote":"Você disse a quem guarda a sua chave para agir em {date}. Se está lendo isto e está a salvo, dê sinal agora — caso contrário, já estão agindo.",
+"vault.checkedIn":"Contagem reiniciada","vault.needWords":"Escreva primeiro as palavras a serem trancadas",
+"vault.actAfter":"Data dada a quem guarda"
+});
+Object.assign(I18N.de, {
+"vault.textMode":"Keine Datei? Dann Geschriebenes einschließen","vault.textName":"geschriebene Worte",
+"vault.secretT":"Die Worte, die weggeschlossen werden",
+"vault.secret":"Alles, was Sie hier schreiben, wird verschlüsselt. Niemand kann es lesen, bis genug Schlüsselstücke zusammenkommen.",
+"vault.secretPh":"Was ich gesehen habe, wer dabei war, wo der Rest liegt…",
+"vault.secretWarn":"Wenn Sie hier Passwörter oder den Zugang zu einem Rechner oder Server hineinlegen, seien Sie sich im Klaren: Wer es öffnet, kann auf dieser Maschine alles tun, auch zerstören, was darauf liegt — und ein einmal herausgegebener Zugang lässt sich nicht zurückholen. Wenn es darum geht, die Wahrheit zu bewahren, schließen Sie hier <strong>Kopien der Beweise</strong> ein, nicht die Schlüssel zu dem Ort, an dem sie liegen.",
+"vault.deadlineT":"Die Frist — Ihr Schweigen ist das Signal",
+"vault.deadlineNote":"Wählen Sie, wie lange Sie schweigen dürfen, bevor Ihre Leute handeln. LOGOS macht daraus ein genaues Datum, schreibt es in jeden Brief, den sie erhalten, und führt für Sie auf diesem Gerät einen Countdown.",
+"vault.days":"Tage des Schweigens","vault.deadlineDate":"Sie sollen handeln am",
+"vault.deadlineSentence":"wenn ich mich bis zum {date} nicht bei euch melde",
+"vault.checkinT":"Ihr Lebenszeichen","vault.checkinBtn":"Ich lebe — Countdown neu starten","vault.checkinStop":"Diesen Countdown entfernen",
+"vault.checkinNote":"Dieser Countdown liegt auf diesem Gerät und erinnert Sie. Von selbst veröffentlicht er nichts: Die Frist zählt, weil sie in den Briefen steht, die Ihre Leute in Händen halten.",
+"vault.checkinBody":"Ihre Leute wurden gebeten, am {date} zu handeln — wegen der Datei {file}. Melden Sie sich vorher, sonst wird das Schweigen selbst zum Signal.",
+"vault.daysLeft":"noch {days} Tage","vault.overdue":"DIE FRIST IST ABGELAUFEN",
+"vault.overdueNote":"Sie hatten denen, die Ihren Schlüssel halten, gesagt, am {date} zu handeln. Wenn Sie das lesen und in Sicherheit sind, melden Sie sich jetzt — sonst handeln sie bereits.",
+"vault.checkedIn":"Countdown neu gestartet","vault.needWords":"Schreiben Sie zuerst die Worte, die weggeschlossen werden sollen",
+"vault.actAfter":"Den Haltern genanntes Datum"
+});
+Object.assign(I18N.ru, {
+"vault.textMode":"Нет файла? Заприте написанные слова","vault.textName":"написанные слова",
+"vault.secretT":"Слова, которые будут заперты",
+"vault.secret":"Всё, что вы здесь напишете, шифруется. Никто не прочтёт это, пока не соберётся достаточно частей ключа.",
+"vault.secretPh":"Что я видел, кто там был, где хранится остальное…",
+"vault.secretWarn":"Если вы кладёте сюда пароли или доступ к компьютеру либо серверу, понимайте, что это значит: тот, кто откроет, сможет делать на той машине всё, в том числе уничтожить то, что на ней, — а выданный доступ уже не отозвать. Если цель — сохранить правду, запирайте здесь <strong>копии самих доказательств</strong>, а не ключи от места, где они лежат.",
+"vault.deadlineT":"Срок — ваше молчание и есть сигнал",
+"vault.deadlineNote":"Выберите, сколько вы можете молчать, прежде чем ваши люди начнут действовать. LOGOS превратит это в точную дату, впишет её в каждое письмо и будет вести для вас обратный отсчёт на этом устройстве.",
+"vault.days":"Дней молчания","vault.deadlineDate":"Им действовать",
+"vault.deadlineSentence":"если я не напишу вам до {date}",
+"vault.checkinT":"Ваш знак жизни","vault.checkinBtn":"Я жив — начать отсчёт заново","vault.checkinStop":"Убрать этот отсчёт",
+"vault.checkinNote":"Этот отсчёт живёт на этом устройстве и напоминает вам. Сам по себе он ничего не публикует: срок важен потому, что он записан в письмах, которые держат ваши люди.",
+"vault.checkinBody":"Ваших людей попросили действовать {date} — по файлу {file}. Дайте о себе знать раньше, иначе сигналом станет само молчание.",
+"vault.daysLeft":"осталось дней: {days}","vault.overdue":"СРОК ИСТЁК",
+"vault.overdueNote":"Вы сказали хранителям ключа действовать {date}. Если вы читаете это и вы в безопасности — дайте знать сейчас, иначе они уже действуют.",
+"vault.checkedIn":"Отсчёт начат заново","vault.needWords":"Сначала напишите слова, которые нужно запереть",
+"vault.actAfter":"Дата, названная хранителям"
+});
+Object.assign(I18N.zh, {
+"vault.textMode":"没有文件？那就锁住写下的话","vault.textName":"写下的话",
+"vault.secretT":"要锁起来的文字",
+"vault.secret":"你在这里写的一切都会被加密。在足够多的钥匙碎片汇合之前，没有人能读到。",
+"vault.secretPh":"我看到了什么、有谁在场、其余的东西存放在哪里……",
+"vault.secretWarn":"如果你把密码，或者一台电脑、一台服务器的访问权放进来，请明白这意味着什么：打开它的人可以在那台机器上做任何事，包括销毁上面的内容 —— 而访问权一旦交出去就再也收不回来。如果目的是保存真相，请锁进<strong>证据本身的副本</strong>，而不是存放证据那个地方的钥匙。",
+"vault.deadlineT":"期限 —— 你的沉默就是信号",
+"vault.deadlineNote":"选择你在多久之内保持沉默后，你的人就该行动。LOGOS 会把它变成一个确切日期，写进他们收到的每一封信，并在这台设备上为你保留倒计时。",
+"vault.days":"沉默的天数","vault.deadlineDate":"他们应在此日行动",
+"vault.deadlineSentence":"如果我在 {date} 之前没有联系你们",
+"vault.checkinT":"你的生存信号","vault.checkinBtn":"我还活着 —— 重新开始倒计时","vault.checkinStop":"移除这个倒计时",
+"vault.checkinNote":"这个倒计时只存在于这台设备，用来提醒你。它自己不会发布任何东西：期限之所以有意义，是因为它写在你的人手中的信里。",
+"vault.checkinBody":"你的人被告知在 {date} 采取行动 —— 为了文件 {file}。请在那之前报个信，否则沉默本身就成了信号。",
+"vault.daysLeft":"还剩 {days} 天","vault.overdue":"期限已过",
+"vault.overdueNote":"你告诉过保管钥匙的人，在 {date} 采取行动。如果你正在读这句话并且平安，请立刻报信 —— 否则他们已经在行动了。",
+"vault.checkedIn":"倒计时已重新开始","vault.needWords":"请先写下要锁起来的文字",
+"vault.actAfter":"告知保管人的日期"
+});
+Object.assign(I18N.hi, {
+"vault.textMode":"फ़ाइल नहीं है? लिखे हुए शब्द ही बंद कीजिए","vault.textName":"लिखे हुए शब्द",
+"vault.secretT":"जो शब्द ताले में रखे जाएँगे",
+"vault.secret":"यहाँ आप जो कुछ लिखेंगे वह एन्क्रिप्ट हो जाता है। जब तक चाबी के पर्याप्त टुकड़े एक साथ न आएँ, कोई इसे नहीं पढ़ सकता।",
+"vault.secretPh":"मैंने क्या देखा, वहाँ कौन था, बाक़ी चीज़ें कहाँ रखी हैं…",
+"vault.secretWarn":"अगर आप यहाँ पासवर्ड या किसी कंप्यूटर या सर्वर का प्रवेश रख रहे हैं, तो समझ लीजिए इसका अर्थ क्या है: जो इसे खोलेगा वह उस मशीन पर कुछ भी कर सकेगा, उस पर रखी चीज़ें मिटाना भी — और एक बार दिया गया प्रवेश वापस नहीं लिया जा सकता। अगर उद्देश्य सच को बचाना है, तो यहाँ <strong>सबूतों की प्रतियाँ</strong> बंद कीजिए, उस जगह की चाबियाँ नहीं जहाँ वे रखे हैं।",
+"vault.deadlineT":"समय-सीमा — आपकी ख़ामोशी ही संकेत है",
+"vault.deadlineNote":"तय कीजिए कि आपके लोग कार्रवाई करने से पहले आपको कितने समय तक चुप रहना है। LOGOS इसे एक निश्चित तारीख़ में बदल देता है, उसे हर पत्र में लिख देता है, और इस उपकरण पर आपके लिए उलटी गिनती रखता है।",
+"vault.days":"ख़ामोशी के दिन","vault.deadlineDate":"उन्हें इस दिन कार्रवाई करनी है",
+"vault.deadlineSentence":"अगर मैं {date} तक आपको न लिखूँ",
+"vault.checkinT":"आपका जीवित होने का संकेत","vault.checkinBtn":"मैं ज़िंदा हूँ — गिनती फिर शुरू करें","vault.checkinStop":"यह उलटी गिनती हटाइए",
+"vault.checkinNote":"यह उलटी गिनती इसी उपकरण पर रहती है और आपको याद दिलाती है। अपने आप यह कुछ प्रकाशित नहीं कर सकती: समय-सीमा इसलिए मायने रखती है क्योंकि वह आपके लोगों के पास मौजूद पत्रों में लिखी है।",
+"vault.checkinBody":"आपके लोगों से {date} को कार्रवाई करने को कहा गया है — फ़ाइल {file} के लिए। उससे पहले संपर्क कीजिए, वरना ख़ामोशी ही संकेत बन जाती है।",
+"vault.daysLeft":"{days} दिन बाक़ी","vault.overdue":"समय-सीमा बीत चुकी है",
+"vault.overdueNote":"आपने चाबी सँभालने वालों से {date} को कार्रवाई करने को कहा था। अगर आप यह पढ़ रहे हैं और सुरक्षित हैं, अभी संपर्क कीजिए — वरना वे कार्रवाई कर ही रहे हैं।",
+"vault.checkedIn":"उलटी गिनती फिर शुरू","vault.needWords":"पहले वे शब्द लिखिए जिन्हें ताले में रखना है",
+"vault.actAfter":"रखवालों को दी गई तारीख़"
+});
+Object.assign(I18N.id, {
+"vault.textMode":"Tidak ada berkas? Kunci saja kata-kata tertulis","vault.textName":"kata-kata tertulis",
+"vault.secretT":"Kata-kata yang akan dikunci",
+"vault.secret":"Semua yang Anda tulis di sini dienkripsi. Tidak ada yang bisa membacanya sampai cukup kepingan kunci berkumpul.",
+"vault.secretPh":"Apa yang saya lihat, siapa yang ada di sana, di mana sisanya disimpan…",
+"vault.secretWarn":"Jika Anda menaruh kata sandi atau akses ke sebuah komputer atau server di sini, pahami artinya: siapa pun yang membukanya bisa melakukan apa saja pada mesin itu, termasuk menghancurkan isinya — dan akses yang sudah diberikan tidak bisa ditarik kembali. Jika tujuannya menjaga kebenaran, kuncilah <strong>salinan buktinya</strong> di sini, bukan kunci tempat bukti itu disimpan.",
+"vault.deadlineT":"Tenggat — diam Anda adalah isyaratnya",
+"vault.deadlineNote":"Pilih berapa lama Anda harus diam sebelum orang-orang Anda bertindak. LOGOS mengubahnya menjadi tanggal pasti, menuliskannya di setiap surat yang mereka terima, dan menyimpan hitung mundur untuk Anda di perangkat ini.",
+"vault.days":"Hari diam","vault.deadlineDate":"Mereka harus bertindak pada",
+"vault.deadlineSentence":"jika saya tidak menulis kepada kalian sampai {date}",
+"vault.checkinT":"Tanda hidup Anda","vault.checkinBtn":"Saya masih hidup — mulai lagi hitung mundurnya","vault.checkinStop":"Hapus hitung mundur ini",
+"vault.checkinNote":"Hitung mundur ini ada di perangkat ini dan hanya mengingatkan Anda. Sendirian ia tidak bisa menerbitkan apa pun: tenggatnya berarti karena tertulis di surat-surat yang dipegang orang-orang Anda.",
+"vault.checkinBody":"Orang-orang Anda diminta bertindak pada {date} — untuk berkas {file}. Beri kabar sebelum itu, atau diam itu sendiri yang menjadi isyarat.",
+"vault.daysLeft":"sisa {days} hari","vault.overdue":"TENGGATNYA SUDAH LEWAT",
+"vault.overdueNote":"Anda memberi tahu pemegang kunci untuk bertindak pada {date}. Jika Anda membaca ini dan selamat, beri kabar sekarang — kalau tidak, mereka sudah bertindak.",
+"vault.checkedIn":"Hitung mundur dimulai lagi","vault.needWords":"Tulis dulu kata-kata yang akan dikunci",
+"vault.actAfter":"Tanggal yang diberikan kepada pemegang"
+});
+Object.assign(I18N.bn, {
+"vault.textMode":"ফাইল নেই? লেখা কথাগুলোই বন্ধ করুন","vault.textName":"লেখা কথা",
+"vault.secretT":"যে কথাগুলো তালাবদ্ধ হবে",
+"vault.secret":"এখানে যা লিখবেন সবই এনক্রিপ্ট হয়। যথেষ্ট চাবির টুকরো একসঙ্গে না হওয়া পর্যন্ত কেউ এটি পড়তে পারবে না।",
+"vault.secretPh":"আমি যা দেখেছি, কারা ছিল, বাকিটা কোথায় রাখা আছে…",
+"vault.secretWarn":"এখানে যদি পাসওয়ার্ড বা কোনো কম্পিউটার বা সার্ভারে ঢোকার অধিকার রাখেন, তবে বুঝে রাখুন এর মানে কী: যিনি এটি খুলবেন তিনি ওই যন্ত্রে যা খুশি করতে পারবেন, এমনকি ভেতরের সব নষ্টও করতে পারবেন — আর একবার দেওয়া প্রবেশাধিকার আর ফিরিয়ে নেওয়া যায় না। উদ্দেশ্য যদি সত্য রক্ষা করা হয়, তবে এখানে <strong>প্রমাণের কপি</strong> বন্ধ করুন, যেখানে প্রমাণ রাখা আছে সেই জায়গার চাবি নয়।",
+"vault.deadlineT":"সময়সীমা — আপনার নীরবতাই সংকেত",
+"vault.deadlineNote":"ঠিক করুন, আপনার লোকেরা পদক্ষেপ নেওয়ার আগে আপনাকে কত দিন নীরব থাকতে হবে। LOGOS তা একটি নির্দিষ্ট তারিখে বদলে দেয়, প্রতিটি চিঠিতে লিখে দেয়, আর এই যন্ত্রে আপনার জন্য একটি কাউন্টডাউন রাখে।",
+"vault.days":"নীরবতার দিন","vault.deadlineDate":"তাঁদের পদক্ষেপ নেওয়ার দিন",
+"vault.deadlineSentence":"যদি আমি {date}-এর মধ্যে আপনাদের না লিখি",
+"vault.checkinT":"আপনার বেঁচে থাকার সংকেত","vault.checkinBtn":"আমি বেঁচে আছি — আবার শুরু করুন","vault.checkinStop":"এই কাউন্টডাউন সরান",
+"vault.checkinNote":"এই কাউন্টডাউন এই যন্ত্রেই থাকে এবং আপনাকে মনে করিয়ে দেয়। একা এটি কিছু প্রকাশ করতে পারে না: সময়সীমার গুরুত্ব এই কারণে যে তা আপনার লোকদের হাতে থাকা চিঠিতে লেখা আছে।",
+"vault.checkinBody":"আপনার লোকদের {date} তারিখে পদক্ষেপ নিতে বলা হয়েছে — {file} ফাইলটির জন্য। তার আগে খবর দিন, নইলে নীরবতাই সংকেত হয়ে যায়।",
+"vault.daysLeft":"{days} দিন বাকি","vault.overdue":"সময়সীমা পেরিয়ে গেছে",
+"vault.overdueNote":"আপনি চাবির রক্ষকদের {date} তারিখে পদক্ষেপ নিতে বলেছিলেন। আপনি যদি এটি পড়ছেন এবং নিরাপদ থাকেন, এখনই খবর দিন — নইলে তাঁরা ইতিমধ্যেই কাজ শুরু করেছেন।",
+"vault.checkedIn":"কাউন্টডাউন আবার শুরু","vault.needWords":"আগে তালাবদ্ধ করার কথাগুলো লিখুন",
+"vault.actAfter":"রক্ষকদের দেওয়া তারিখ"
+});
+Object.assign(I18N.ar, {
+"vault.textMode":"لا يوجد ملف؟ أقفل كلمات مكتوبة بدلًا منه","vault.textName":"كلمات مكتوبة",
+"vault.secretT":"الكلمات التي ستوضع تحت القفل",
+"vault.secret":"كل ما تكتبه هنا يُشفَّر. لا يستطيع أحد قراءته حتى تجتمع قطع كافية من المفتاح.",
+"vault.secretPh":"ما رأيته، ومن كان حاضرًا، وأين حُفظ الباقي…",
+"vault.secretWarn":"إن وضعت هنا كلمات مرور أو صلاحية دخول إلى حاسوب أو خادم، فافهم ما يعنيه ذلك: من يفتحه سيتمكن من فعل أي شيء على تلك الآلة، بما في ذلك إتلاف ما فيها — والصلاحية متى مُنحت لا تُسترد. إذا كان الهدف حفظ الحقيقة، فأقفل هنا <strong>نسخًا من الأدلة نفسها</strong>، لا مفاتيح المكان الذي تُحفظ فيه.",
+"vault.deadlineT":"المهلة — صمتك هو الإشارة",
+"vault.deadlineNote":"اختر كم من الوقت ينبغي أن تبقى صامتًا قبل أن يتحرك من تثق بهم. يحوّل LOGOS ذلك إلى تاريخ محدد، ويكتبه في كل رسالة يتسلمونها، ويحتفظ لك بعدّ تنازلي على هذا الجهاز.",
+"vault.days":"أيام الصمت","vault.deadlineDate":"عليهم التحرك في",
+"vault.deadlineSentence":"إن لم أكتب لكم قبل {date}",
+"vault.checkinT":"إشارة حياتك","vault.checkinBtn":"أنا حي — أعد بدء العدّ","vault.checkinStop":"احذف هذا العدّ التنازلي",
+"vault.checkinNote":"هذا العدّ التنازلي موجود على هذا الجهاز ويذكّرك فقط. وحده لا ينشر شيئًا: المهلة مهمة لأنها مكتوبة في الرسائل التي بحوزة من تثق بهم.",
+"vault.checkinBody":"طُلب ممن تثق بهم أن يتحركوا في {date} — بخصوص الملف {file}. أعطِ خبرًا قبل ذلك، وإلا صار الصمت نفسه هو الإشارة.",
+"vault.daysLeft":"بقي {days} يومًا","vault.overdue":"انتهت المهلة",
+"vault.overdueNote":"قلت لمن يحملون مفتاحك أن يتحركوا في {date}. إن كنت تقرأ هذا وأنت بأمان فأعطِ خبرًا الآن — وإلا فهم يتحركون بالفعل.",
+"vault.checkedIn":"أُعيد بدء العدّ","vault.needWords":"اكتب أولًا الكلمات التي ستوضع تحت القفل",
+"vault.actAfter":"التاريخ المعطى للحاملين"
+});
+Object.assign(I18N.ur, {
+"vault.textMode":"فائل نہیں؟ لکھے ہوئے الفاظ ہی بند کریں","vault.textName":"لکھے ہوئے الفاظ",
+"vault.secretT":"وہ الفاظ جو تالے میں رکھے جائیں گے",
+"vault.secret":"یہاں آپ جو کچھ لکھیں گے وہ خفیہ ہو جاتا ہے۔ جب تک چابی کے کافی ٹکڑے جمع نہ ہوں، اسے کوئی نہیں پڑھ سکتا۔",
+"vault.secretPh":"میں نے کیا دیکھا، وہاں کون تھا، باقی چیزیں کہاں رکھی ہیں…",
+"vault.secretWarn":"اگر آپ یہاں پاس ورڈ یا کسی کمپیوٹر یا سرور تک رسائی رکھ رہے ہیں تو سمجھ لیں اس کا مطلب کیا ہے: جو اسے کھولے گا وہ اُس مشین پر کچھ بھی کر سکے گا، بشمول اُس پر موجود چیزیں تباہ کرنے کے — اور ایک بار دی گئی رسائی واپس نہیں لی جا سکتی۔ اگر مقصد سچ کو محفوظ رکھنا ہے تو یہاں <strong>ثبوتوں کی نقول</strong> بند کریں، اُس جگہ کی چابیاں نہیں جہاں وہ رکھے ہیں۔",
+"vault.deadlineT":"مہلت — آپ کی خاموشی ہی اشارہ ہے",
+"vault.deadlineNote":"طے کریں کہ آپ کے لوگوں کے عمل کرنے سے پہلے آپ کو کتنا عرصہ خاموش رہنا ہے۔ LOGOS اسے ایک متعین تاریخ میں بدل دیتا ہے، ہر خط میں لکھ دیتا ہے، اور اس آلے پر آپ کے لیے الٹی گنتی رکھتا ہے۔",
+"vault.days":"خاموشی کے دن","vault.deadlineDate":"انہیں عمل کرنا ہے",
+"vault.deadlineSentence":"اگر میں {date} تک آپ کو نہ لکھوں",
+"vault.checkinT":"آپ کے زندہ ہونے کا اشارہ","vault.checkinBtn":"میں زندہ ہوں — گنتی دوبارہ شروع کریں","vault.checkinStop":"یہ الٹی گنتی ہٹا دیں",
+"vault.checkinNote":"یہ الٹی گنتی اسی آلے پر رہتی ہے اور صرف آپ کو یاد دلاتی ہے۔ خود سے یہ کچھ شائع نہیں کر سکتی: مہلت اس لیے اہم ہے کہ وہ اُن خطوط میں لکھی ہے جو آپ کے لوگوں کے پاس ہیں۔",
+"vault.checkinBody":"آپ کے لوگوں سے کہا گیا ہے کہ {date} کو عمل کریں — فائل {file} کے لیے۔ اُس سے پہلے اطلاع دیں، ورنہ خاموشی خود اشارہ بن جاتی ہے۔",
+"vault.daysLeft":"{days} دن باقی","vault.overdue":"مہلت گزر چکی ہے",
+"vault.overdueNote":"آپ نے چابی رکھنے والوں سے کہا تھا کہ {date} کو عمل کریں۔ اگر آپ یہ پڑھ رہے ہیں اور محفوظ ہیں تو ابھی اطلاع دیں — ورنہ وہ پہلے ہی عمل کر رہے ہیں۔",
+"vault.checkedIn":"الٹی گنتی دوبارہ شروع","vault.needWords":"پہلے وہ الفاظ لکھیں جو تالے میں رکھنے ہیں",
+"vault.actAfter":"محافظوں کو دی گئی تاریخ"
+});
+
+
 /* ---------------- SHA3-512 (FIPS 202, Keccak-f[1600]) ---------------- */
 const RC_LO = [
   0x00000001, 0x00008082, 0x0000808a, 0x80008000, 0x0000808b, 0x80000001,
@@ -3273,20 +3531,102 @@ function decodeShare(text){
 }
 
 let VAULT_FILE = null;
+let TEXT_ONLY = false;
 
 wireDrop($('dropVault'), $('fileVault'), f => {
   VAULT_FILE = f;
+  TEXT_ONLY = false;
+  $('secretCard').classList.add('hide');
   $('vName').textContent = f.name;
   $('vSize').textContent = fmtSize(f.size);
   $('vaultForm').classList.remove('hide');
   $('vaultResult').classList.add('hide');
+  refreshDeadline();
 });
+
+/* Not everyone has a file. A testimony typed here is protected exactly the same. */
+$('btnTextMode').addEventListener('click', () => {
+  VAULT_FILE = null;
+  TEXT_ONLY = true;
+  $('secretCard').classList.remove('hide');
+  $('vName').textContent = t('vault.textName','written words');
+  $('vSize').textContent = '—';
+  $('vaultForm').classList.remove('hide');
+  $('vaultResult').classList.add('hide');
+  refreshDeadline();
+  $('vSecret').focus();
+});
+
+/* ------------------------------ the deadline ------------------------------ */
+function formatDate(d){
+  try{
+    return new Intl.DateTimeFormat(CURLANG === 'en' ? undefined : CURLANG,
+      { year:'numeric', month:'long', day:'numeric' }).format(d);
+  }catch(e){ return d.toISOString().slice(0,10); }
+}
+function deadlineFrom(days){
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d;
+}
+function refreshDeadline(){
+  const days = Math.max(1, Math.min(3650, parseInt($('vDays').value, 10) || 30));
+  const when = deadlineFrom(days);
+  $('vDate').value = formatDate(when);
+  const sentence = fill(t('vault.deadlineSentence',
+    'if I have not written to you by {date}'), { date: formatDate(when) });
+  const cur = $('vWhen').value.trim();
+  if (!cur || cur === $('vWhen').dataset.auto) {
+    $('vWhen').value = sentence;
+    $('vWhen').dataset.auto = sentence;
+  }
+  return when;
+}
+$('vDays').addEventListener('input', refreshDeadline);
+
+/* The countdown belongs to this device. It reminds you; it never acts for you. */
+function loadCheckin(){
+  let raw = null;
+  try{ raw = localStorage.getItem('logos-checkin'); }catch(e){}
+  if (!raw){ $('checkinCard').classList.add('hide'); return null; }
+  let c = null;
+  try{ c = JSON.parse(raw); }catch(e){ return null; }
+  const left = Math.ceil((c.deadline - Date.now()) / 86400000);
+  const overdue = left <= 0;
+  $('checkinBody').innerHTML = overdue
+    ? '<span style="color:var(--bad);font-weight:700">' + esc(t('vault.overdue','THE DEADLINE HAS PASSED')) + '</span><br>' +
+      esc(fill(t('vault.overdueNote','You told the people holding your key to act on {date}. If you are reading this and you are safe, check in now — otherwise they are already acting.'), { date: formatDate(new Date(c.deadline)) }))
+    : '<span style="color:var(--accent);font-weight:700">' + esc(fill(t('vault.daysLeft','{days} days left'), { days: left })) + '</span><br>' +
+      esc(fill(t('vault.checkinBody','Your people were asked to act on {date} — for the file {file}. Check in before then, or the silence itself becomes the signal.'), { date: formatDate(new Date(c.deadline)), file: c.file || '' }));
+  $('checkinCard').classList.remove('hide');
+  return c;
+}
+$('btnCheckin').addEventListener('click', () => {
+  let c = null;
+  try{ c = JSON.parse(localStorage.getItem('logos-checkin') || 'null'); }catch(e){}
+  if (!c) return;
+  c.deadline = deadlineFrom(c.days || 30).getTime();
+  try{ localStorage.setItem('logos-checkin', JSON.stringify(c)); }catch(e){}
+  loadCheckin();
+  toast(t('vault.checkedIn','Countdown restarted'));
+});
+$('btnCheckinStop').addEventListener('click', () => {
+  try{ localStorage.removeItem('logos-checkin'); }catch(e){}
+  $('checkinCard').classList.add('hide');
+});
+loadCheckin();
 wireDrop($('dropOpen'), $('fileOpen'), f => {
   OPEN_FILE = f;
   $('openLoaded').textContent = f.name + ' — ' + fmtSize(f.size);
 });
 
 $('btnVault').addEventListener('click', async () => {
+  if (TEXT_ONLY){
+    const words = $('vSecret').value;
+    if (!words.trim()){ toast(t('vault.needWords','Write the words to be locked away first')); return; }
+    VAULT_FILE = new File([words], 'logos-testimony.txt', { type: 'text/plain' });
+    $('vSize').textContent = fmtSize(VAULT_FILE.size);
+  }
   if (!VAULT_FILE) return;
   const n = Math.max(2, Math.min(20, parseInt($('vN').value, 10) || 5));
   const k = Math.max(2, Math.min(n, parseInt($('vK').value, 10) || 3));
@@ -3314,6 +3654,7 @@ $('btnVault').addEventListener('click', async () => {
       author: $('vAuthor').value.trim(),
       message: $('vMsg').value.trim(),
       open_when: $('vWhen').value.trim(),
+      act_after_utc: deadlineFrom(Math.max(1, Math.min(3650, parseInt($('vDays').value, 10) || 30))).toISOString(),
       threshold: k, shares: n
     }));
 
@@ -3370,6 +3711,13 @@ $('btnVault').addEventListener('click', async () => {
     a.href = url; a.download = vaultName;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(url), 60000);
+
+    const days = Math.max(1, Math.min(3650, parseInt($('vDays').value, 10) || 30));
+    try{
+      localStorage.setItem('logos-checkin', JSON.stringify({
+        days: days, deadline: deadlineFrom(days).getTime(), file: VAULT_FILE.name }));
+    }catch(e){}
+    loadCheckin();
 
     $('vaultBar').style.width = '100%';
     $('vaultProgress').classList.add('hide');
@@ -3557,6 +3905,7 @@ $('btnOpen').addEventListener('click', async () => {
         ${meta.author ? `<div class="row"><div class="k">${esc(t('k.author','Author'))}</div><div class="v">${esc(meta.author)}</div></div>` : ''}
         <div class="row"><div class="k">${esc(t('vault.lockedAt','Locked at'))}</div><div class="v">${esc(meta.locked_utc||'')}</div></div>
         ${meta.open_when ? `<div class="row"><div class="k">${esc(t('vault.openWhen','To be opened'))}</div><div class="v" style="font-family:var(--sans)">${esc(meta.open_when)}</div></div>` : ''}
+        ${meta.act_after_utc ? `<div class="row"><div class="k">${esc(t('vault.actAfter','Date given to the holders'))}</div><div class="v">${esc(String(meta.act_after_utc).slice(0,10))}</div></div>` : ''}
         ${meta.hash ? `<div class="row"><div class="k">SHA-256</div><div class="v hash">${esc(meta.hash['sha256']||'')}</div></div>` : ''}
       </div>
       <div class="warnbox">${esc(t('vault.afterOpen','Now verify it: go to VERIFY and check the recovered file against the fingerprint above. Then spread it — the reason it was locked was so that this moment could not be stopped.'))}</div>`;
