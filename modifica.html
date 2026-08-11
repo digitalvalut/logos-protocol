@@ -81,8 +81,9 @@
 
   <div class="warn">
     Chat sperimentale di proprietà di <b>DigitalValut</b> — testo, foto, video, audio, PDF, qualsiasi
-    file. Tre cose vere, in breve: rivela il tuo IP a chi parli con te; serve che siate online insieme,
-    altrimenti non arriva nulla; nessun sito web può impedire uno screenshot, a nessuno. Per la sicurezza
+    file, più chiamate e videochiamate. Tre cose vere, in breve: rivela il tuo IP a chi parli con te;
+    serve che siate online insieme, altrimenti non arriva nulla, e su reti molto filtrate le chiamate
+    possono non collegarsi; nessun sito web può impedire uno screenshot, a nessuno. Per la sicurezza
     quando conta davvero: <a href="https://signal.org" style="color:var(--accent)">Signal</a>,
     <a href="https://getsession.org" style="color:var(--accent)">Session</a>,
     <a href="https://briarproject.org" style="color:var(--accent)">Briar</a>.
@@ -137,7 +138,29 @@
   </div>
 
   <div id="chatCard" class="card hide">
-    <h3>Chat <span id="connState" style="text-transform:none;color:var(--ok)">connessa</span></h3>
+    <h3>Chat <span id="connState" style="text-transform:none;color:var(--ok)">connessa</span>
+      <span style="float:right">
+        <button class="act" id="btnCallAudio" title="Chiamata audio" style="padding:5px 10px">📞</button>
+        <button class="act" id="btnCallVideo" title="Videochiamata" style="padding:5px 10px">🎥</button>
+      </span>
+    </h3>
+    <div id="callBox" class="hide" style="background:#000;border-radius:10px;overflow:hidden;position:relative;margin-bottom:10px">
+      <video id="remoteVideo" autoplay playsinline style="width:100%;max-height:340px;display:block;background:#000"></video>
+      <video id="localVideo" autoplay playsinline muted style="width:26%;max-width:140px;position:absolute;bottom:10px;right:10px;border-radius:8px;border:1px solid #333"></video>
+      <div id="callStatus" style="position:absolute;top:10px;left:10px;color:#fff;font-size:12.5px;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:99px"></div>
+      <div style="position:absolute;bottom:10px;left:10px;display:flex;gap:8px">
+        <button class="act" id="btnMuteCall" title="Muto" style="padding:8px 10px">🎤</button>
+        <button class="act" id="btnCamCall" title="Camera" style="padding:8px 10px">🎥</button>
+        <button class="act" id="btnHangup" style="padding:8px 14px;background:var(--bad);border-color:var(--bad);color:#fff">Chiudi</button>
+      </div>
+    </div>
+    <div id="incomingCall" class="warn hide" style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+      <span id="incomingCallText"></span>
+      <span style="display:flex;gap:8px">
+        <button class="act primary" id="btnAcceptCall">Rispondi</button>
+        <button class="act" id="btnDeclineCall">Rifiuta</button>
+      </span>
+    </div>
     <div id="chatArea">
       <div id="msgs"></div>
       <div id="composer">
@@ -212,6 +235,11 @@ let peerNick = '';
 function wireDataChannel(channel){
   dc = channel;
   dc.binaryType = 'arraybuffer';
+  pc.ontrack = ev => {
+    // audio and video tracks from the same call share one stream — one element
+    // plays both together, so a second element never doubles the audio up.
+    if ($('remoteVideo').srcObject !== ev.streams[0]) $('remoteVideo').srcObject = ev.streams[0];
+  };
   dc.onopen = () => { showChat(); dc.send(JSON.stringify({ type: 'hello', nick: myNick() })); };
   dc.onclose = () => setStatus($('statusA'), 'Connessione chiusa. Crea una nuova sessione per riconnetterti.', 'bad');
   dc.onmessage = onDcMessage;
@@ -457,6 +485,8 @@ function onDcMessage(ev){
       delete incoming[msg.id];
     } else if (msg.type === 'wipe'){
       destroyNow(false);
+    } else if (msg.type.indexOf('call-') === 0){
+      handleCallSignal(msg);
     }
   } else {
     const bytes = new Uint8Array(ev.data);
@@ -465,6 +495,129 @@ function onDcMessage(ev){
     if (rec) rec.chunks.push(bytes.subarray(16));
   }
 }
+
+/* ============================ calls (audio/video) ============================
+   Rides on the SAME peer connection already open for chat: adding media tracks
+   triggers WebRTC renegotiation, and the new offer/answer for that renegotiation
+   travels over the already-open data channel — no new manual code exchange.
+   Same honest limits as the rest of this page: no relay server here, so a call
+   can fail to connect on a very restrictive network even when text/files work,
+   because live audio/video needs a steadier path than an occasional message. */
+let localStream = null, callKind = null, callState = 'idle';  // idle | ringing-out | ringing-in | active
+let micOn = true, camOn = true;
+
+function sig(msg){ if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
+
+function setCallStatus(text){ $('callStatus').textContent = text; }
+
+async function startCall(kind){
+  if (callState !== 'idle' || !dc || dc.readyState !== 'open') return;
+  callKind = kind;
+  callState = 'ringing-out';
+  try{
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: kind === 'video' });
+  }catch(e){
+    addMsg('Microfono o fotocamera non disponibili, o permesso negato.', false);
+    callState = 'idle'; callKind = null;
+    return;
+  }
+  $('callBox').classList.remove('hide');
+  $('localVideo').classList.toggle('hide', kind !== 'video');
+  $('localVideo').srcObject = localStream;
+  setCallStatus(kind === 'video' ? 'Chiamata video in corso, in attesa di risposta…' : 'Chiamata in corso, in attesa di risposta…');
+  sig({ type: 'call-invite', kind });
+}
+
+function handleCallSignal(msg){
+  if (msg.type === 'call-invite'){
+    if (callState !== 'idle') { sig({ type: 'call-busy' }); return; }
+    callKind = msg.kind;
+    callState = 'ringing-in';
+    $('incomingCallText').textContent = (peerNick || 'Qualcuno') +
+      (msg.kind === 'video' ? ' ti sta facendo una videochiamata' : ' ti sta chiamando');
+    $('incomingCall').classList.remove('hide');
+  } else if (msg.type === 'call-busy'){
+    endCall(false);
+    addMsg('Non ha risposto — occupato in un\'altra chiamata.', false);
+  } else if (msg.type === 'call-decline'){
+    endCall(false);
+    addMsg((peerNick || 'La persona') + ' ha rifiutato la chiamata.', false);
+  } else if (msg.type === 'call-accept'){
+    onCallAccepted();
+  } else if (msg.type === 'call-offer-sdp'){
+    onCallOfferSdp(msg.sdp);
+  } else if (msg.type === 'call-answer-sdp'){
+    pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(()=>{});
+  } else if (msg.type === 'call-end'){
+    endCall(false);
+  }
+}
+
+$('btnAcceptCall').addEventListener('click', async () => {
+  $('incomingCall').classList.add('hide');
+  try{
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: callKind === 'video' });
+  }catch(e){
+    addMsg('Microfono o fotocamera non disponibili, o permesso negato.', false);
+    sig({ type: 'call-decline' });
+    callState = 'idle'; callKind = null;
+    return;
+  }
+  localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+  $('callBox').classList.remove('hide');
+  $('localVideo').classList.toggle('hide', callKind !== 'video');
+  $('localVideo').srcObject = localStream;
+  setCallStatus(callKind === 'video' ? 'Videochiamata in corso…' : 'Chiamata in corso…');
+  callState = 'active';
+  sig({ type: 'call-accept' });
+});
+$('btnDeclineCall').addEventListener('click', () => {
+  $('incomingCall').classList.add('hide');
+  sig({ type: 'call-decline' });
+  callState = 'idle'; callKind = null;
+});
+
+async function onCallAccepted(){
+  localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
+  setCallStatus(callKind === 'video' ? 'Videochiamata in corso…' : 'Chiamata in corso…');
+  callState = 'active';
+}
+async function onCallOfferSdp(sdp){
+  await pc.setRemoteDescription({ type: 'offer', sdp });
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  sig({ type: 'call-answer-sdp', sdp: pc.localDescription.sdp });
+}
+
+function endCall(tellPeer){
+  if (tellPeer) sig({ type: 'call-end' });
+  if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+  $('callBox').classList.add('hide');
+  $('incomingCall').classList.add('hide');
+  $('remoteVideo').srcObject = null; $('localVideo').srcObject = null;
+  callState = 'idle'; callKind = null;
+  micOn = true; camOn = true;
+  $('btnMuteCall').textContent = '🎤'; $('btnCamCall').textContent = '🎥';
+}
+
+$('btnCallAudio').addEventListener('click', () => startCall('audio'));
+$('btnCallVideo').addEventListener('click', () => startCall('video'));
+$('btnHangup').addEventListener('click', () => endCall(true));
+$('btnMuteCall').addEventListener('click', () => {
+  if (!localStream) return;
+  micOn = !micOn;
+  localStream.getAudioTracks().forEach(t => t.enabled = micOn);
+  $('btnMuteCall').textContent = micOn ? '🎤' : '🔇';
+});
+$('btnCamCall').addEventListener('click', () => {
+  if (!localStream) return;
+  camOn = !camOn;
+  localStream.getVideoTracks().forEach(t => t.enabled = camOn);
+  $('btnCamCall').textContent = camOn ? '🎥' : '🚫';
+});
 
 /* self-destruct: clears this screen, asks the peer to do the same, then ends the session.
    It cannot reach anything already saved outside this tab — a screenshot or a downloaded
@@ -476,6 +629,7 @@ function destroyNow(tellPeer){
   if (tellPeer && dc && dc.readyState === 'open'){
     try{ dc.send(JSON.stringify({ type: 'wipe' })); }catch(e){}
   }
+  endCall(false);
   $('msgs').innerHTML = '';
   addMsg('Conversazione autodistrutta.', false);
   if (dc) try{ dc.close(); }catch(e){}
@@ -511,6 +665,7 @@ $('btnNewSession').addEventListener('click', () => {
   clearInterval(destructTimer); destructTimer = null;
   $('destructArmed').classList.add('hide');
   $('destructSetup').classList.remove('hide');
+  endCall(false);
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
   pc = null; dc = null;
