@@ -14,6 +14,19 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="DV Logos">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' blob: data:;
+  media-src 'self' blob:;
+  connect-src 'self' stun: turn: https://stun.l.google.com https://stun1.l.google.com;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  manifest-src 'self';
+">
 <style>
   :root{
     --bg:#0a0b0d; --bg2:#0e1013; --panel:#14171c; --panel2:#1a1e24; --line:#262b32;
@@ -138,6 +151,12 @@
   .chatheader .who{flex:1;min-width:0}
   .chatheader .who b{font-size:15px;display:block}
   .chatheader .who span{font-size:11.5px;color:var(--ok)}
+  .linkbtn{background:none;border:none;color:var(--dim);font-size:11.5px;padding:0;cursor:pointer;
+    text-decoration:underline;font-family:inherit}
+  .linkbtn:hover{color:var(--accent)}
+  .safetycode{font-family:var(--mono);font-size:17px;letter-spacing:.04em;color:var(--ink);
+    background:#0d0f12;border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;
+    text-align:center;line-height:1.7;margin:12px 0}
   .chatheader .iconbtn{background:var(--panel2);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0}
   .chatheader .iconbtn:hover{border-color:var(--accent)}
@@ -320,7 +339,8 @@
   <section id="screenChat" class="hide">
     <div class="chatheader">
       <div class="avatar" id="peerAvatar">?</div>
-      <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span id="connState" data-i18n="chat.connected">connessa</span></div>
+      <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span id="connState" data-i18n="chat.connected">connessa</span>
+        · <button id="btnVerify" class="linkbtn" data-i18n="verify.badge">🔒 verifica</button></div>
       <button class="iconbtn" id="btnCallAudio" title="Chiamata">📞</button>
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata">🎥</button>
       <button class="iconbtn" id="btnMenu" title="Altro">⋯</button>
@@ -334,6 +354,17 @@
         <button id="btnMuteCall" title="Muto">🎤</button>
         <button id="btnCamCall" title="Camera">🎥</button>
         <button class="hangup" id="btnHangup" data-i18n="call.hangup">Chiudi</button>
+      </div>
+    </div>
+
+    <div class="card hide" id="verifyPanel">
+      <h3 data-i18n="verify.title">Codice di sicurezza</h3>
+      <div class="lead" data-i18n="verify.lead">Confrontalo con l'altra persona — a voce, per telefono, o su un altro
+        canale che non sia quello con cui vi siete scambiati il codice d'invito. Se i due codici non combaciano
+        esattamente, qualcuno potrebbe essersi inserito nella connessione: non fidarti di quella chat.</div>
+      <div class="safetycode" id="safetyCodeText">…</div>
+      <div class="btns">
+        <button class="btn" id="btnCloseVerify" data-i18n="verify.close">Chiudi</button>
       </div>
     </div>
 
@@ -426,6 +457,9 @@ Object.assign(I18N.en, {
 "footer.text":"free and open-source software (MIT license), a project of DigitalValut APS ETS.",
 "footer.noserver":"No server: the connection is direct between the two browsers via WebRTC.",
 "footer.license":"Read the open-source license","footer.source":"Source code on GitHub",
+"verify.badge":"🔒 verify","verify.title":"Security code",
+"verify.lead":"Compare it with the other person — out loud, by phone, or on a channel different from the one you used to exchange the invite code. If the two codes don't match exactly, someone may have inserted themselves into the connection: don't trust that chat.",
+"verify.close":"Close","verify.unavailable":"Not ready yet — try again in a moment.",
 "contacts.title":"Recent contacts",
 "contacts.note":"One tap to prepare a new invite for them — the history of what you said is already waiting. A new code is still needed every time: no server keeps anyone \"always connected\".",
 "toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand",
@@ -461,6 +495,8 @@ Object.assign(I18N.it, {
 "footer.text":"software libero e open source (licenza MIT), un progetto di DigitalValut APS ETS.",
 "footer.noserver":"Nessun server: la connessione è diretta tra i due browser via WebRTC.",
 "footer.license":"Leggi la licenza open source","footer.source":"Codice sorgente su GitHub",
+"verify.badge":"🔒 verifica","verify.close":"Chiudi",
+"verify.unavailable":"Non ancora disponibile — riprova tra un istante.",
 "toast.sealCopied":"Codice copiato","toast.copyFail":"Copia non riuscita — seleziona e copia a mano",
 "call.busy":"non ha risposto — occupato in un'altra chiamata.","call.declinedBy":"ha rifiutato la chiamata.",
 "call.joined":"si è unito alla chat.","call.videoInvite":"ti sta facendo una videochiamata","call.audioInvite":"ti sta chiamando",
@@ -603,6 +639,41 @@ function wireDataChannel(channel){
   dc.onclose = () => { setStatus($('statusA'), t('session.newHint'), 'bad'); };
   dc.onmessage = onDcMessage;
 }
+
+/* ============================== safety number ==============================
+   Every WebRTC connection is already encrypted with DTLS using a certificate
+   each browser generates for that session — this doesn't add new cryptography,
+   it only surfaces a fingerprint the browser already computed (via the
+   standard, audited Web Crypto API) so two humans can compare it out of band.
+   The offer/answer codes travel through an untrusted channel (WhatsApp, email,
+   whatever); if someone intercepted and replaced them in transit, each side's
+   local and remote certificates would not be the pair the two of you actually
+   generated, and the codes below would not match. That mismatch is the only
+   sign of that kind of tampering — nothing else in this page can detect it. */
+function extractFingerprint(sdp){
+  const m = sdp && sdp.match(/a=fingerprint:sha-256 ([0-9A-Fa-f:]+)/);
+  return m ? m[1].toUpperCase() : null;
+}
+async function computeSafetyCode(){
+  if (!pc || !pc.localDescription || !pc.remoteDescription) return null;
+  const fpA = extractFingerprint(pc.localDescription.sdp);
+  const fpB = extractFingerprint(pc.remoteDescription.sdp);
+  if (!fpA || !fpB) return null;
+  const combined = [fpA, fpB].sort().join('|');
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(combined));
+  const bytes = new Uint8Array(digest);
+  const groups = [];
+  for (let i = 0; i < 12; i += 2) groups.push(String((bytes[i] << 8) | bytes[i+1]).padStart(5,'0'));
+  return groups.join('  ');
+}
+$('btnVerify').addEventListener('click', async () => {
+  $('menuPanel').classList.add('hide');
+  $('safetyCodeText').textContent = '…';
+  $('verifyPanel').classList.remove('hide');
+  const code = await computeSafetyCode();
+  $('safetyCodeText').textContent = code || t('verify.unavailable','Non ancora disponibile — riprova tra un istante.');
+});
+$('btnCloseVerify').addEventListener('click', () => $('verifyPanel').classList.add('hide'));
 
 function initials(name){
   const parts = (name||'').trim().split(/\s+/).filter(Boolean);
