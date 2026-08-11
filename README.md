@@ -189,6 +189,7 @@ release. The people you choose are the trigger. Choose them well.
 | `logos.py` | The same protocol on the command line. Standard library only. |
 | `index.html`, `manifest.webmanifest`, `sw.js`, `icon-*.png` | What makes it installable and able to run with no internet. |
 | `README.md` | This document. |
+| `PRESENTATION.md` | A one-page presentation for journalists, lawyers and NGOs, in English and Italian, with a ready-to-send email. |
 | `LICENSE` | MIT, © 2026 DigitalValut and the DigitalValut Team — free forever, for everyone, including commercially. |
 
 Seals you create are written next to your file as `yourfile.logos.json`. The certificate
