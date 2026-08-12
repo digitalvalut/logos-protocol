@@ -444,23 +444,37 @@ async function diagLine(pc){
 function watchHandshakeProgress(peer, statusEl, diagEl){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
   let settled = false;
-  const tick = async () => { if (diagEl) diagEl.textContent = await diagLine(peer.pc); };
-  const diagTimer = diagEl ? setInterval(tick, 1500) : null;
+  /* A connection that just failed gets closed a moment later, and querying
+     getStats() after that returns nothing useful — which is exactly what
+     showed up as a blank "closed · closed · tu:- loro:-" instead of the real
+     failure. Waiting for the 'settled' flag from the change event was not
+     enough: a periodic tick can still slip in right after close() and before
+     that event is actually observed, so this checks the connection's own
+     current state directly, every time, and simply skips writing once it is
+     no longer live — leaving the last real reading on screen instead of
+     overwriting it with nothing. */
+  const tick = async () => {
+    if (!diagEl || settled) return;
+    const st = peer.pc.connectionState;
+    if (st === 'closed' || st === 'failed') return;
+    diagEl.textContent = await diagLine(peer.pc);
+  };
+  const diagTimer = diagEl ? setInterval(tick, 1200) : null;
   if (diagEl){ diagEl.classList.remove('hide'); tick(); }
   const stop = () => { if (diagTimer) clearInterval(diagTimer); };
   const onChange = () => {
+    if (settled) return;
     const st = peer.pc.connectionState;
     if (st === 'connected'){ settled = true; stop(); setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide'); }
     else if (st === 'failed' || st === 'closed'){
       settled = true; stop();
       setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
-      tick();
     }
   };
   peer.pc.addEventListener('connectionstatechange', onChange);
   setTimeout(() => {
     if (settled || peer.pc.connectionState === 'connected') return;
-    settled = true;
+    settled = true; stop();
     setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'), 'bad');
   }, 25000);
 }
