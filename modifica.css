@@ -175,7 +175,23 @@
   .chatheader .iconbtn:hover{border-color:var(--accent)}
 
   #callBox{background:#000;border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px;box-shadow:var(--shadow)}
-  #remoteVideo{width:100%;max-height:360px;display:block;background:#000}
+  /* one tile per person on the call; two or more and it becomes a grid */
+  #remoteVideos{display:grid;grid-template-columns:1fr;gap:2px;background:#000}
+  #remoteVideos.many{grid-template-columns:1fr 1fr}
+  #remoteVideos .vcell{position:relative;background:#000;min-height:120px}
+  #remoteVideos video{width:100%;max-height:360px;display:block;background:#000;object-fit:cover}
+  #remoteVideos.many video{max-height:200px}
+  /* names sit at the top: the call controls live along the bottom edge and were
+     covering the first tile's label */
+  #remoteVideos .vcell.voiceonly{display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#1c2028,#0d0f13);min-height:150px}
+  #remoteVideos .vface{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-weight:800;font-size:1.5rem;color:#1a0e05;
+    background:linear-gradient(135deg,var(--accent),#ff5f6d)}
+  #remoteVideos .vname{position:absolute;left:8px;top:8px;color:#fff;font-size:0.75rem;
+    background:rgba(0,0,0,.55);padding:3px 10px;border-radius:99px;backdrop-filter:blur(6px);
+    max-width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .roomline{font-size:0.8125rem;color:var(--faint);padding:0 4px 12px;margin-top:-8px}
   #localVideo{width:26%;max-width:150px;position:absolute;bottom:12px;right:12px;border-radius:10px;
     border:2px solid rgba(255,255,255,.25);box-shadow:0 4px 16px rgba(0,0,0,.5)}
   #callStatus{position:absolute;top:12px;left:12px;color:#fff;font-size:0.75rem;background:rgba(0,0,0,.55);
