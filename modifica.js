@@ -45,6 +45,9 @@ Object.assign(I18N.en, {
 "call.joined":"joined the chat.","call.videoInvite":"is video calling you","call.audioInvite":"is calling you",
 "call.inVideo":"Video call in progress…","call.inAudio":"Call in progress…","call.ringingVideo":"Video calling, waiting for answer…","call.ringingAudio":"Calling, waiting for answer…",
 "call.micFail":"Microphone or camera unavailable, or permission denied.",
+"call.micFailNotFound":"No microphone or camera found on this device.",
+"call.micFailBusy":"Your microphone or camera is already being used by another app (Zoom, Teams, another tab…). Close it and try again.",
+"call.micFailDenied":"The browser has blocked the microphone and camera for this site. Check the lock icon next to the address bar and allow access, then reload the page.",
 "destruct.note":"When the timer runs out: the conversation is cleared from this screen, the other person is asked to do the same, and the connection closes. It cannot reach copies already saved elsewhere (screenshots, downloaded files) — those stay where they were saved.",
 "destruct.countdown":"self-destructs in ","destruct.done":"Conversation self-destructed.",
 "session.closed":"closed","session.newHint":"Create a new session to reconnect.",
@@ -158,6 +161,9 @@ Object.assign(I18N.it, {
 "call.joined":"si è unito alla chat.","call.videoInvite":"ti sta facendo una videochiamata","call.audioInvite":"ti sta chiamando",
 "call.inVideo":"Videochiamata in corso…","call.inAudio":"Chiamata in corso…","call.ringingVideo":"Chiamata video in corso, in attesa di risposta…","call.ringingAudio":"Chiamata in corso, in attesa di risposta…",
 "call.micFail":"Microfono o fotocamera non disponibili, o permesso negato.",
+"call.micFailNotFound":"Non trovo un microfono o una fotocamera su questo dispositivo.",
+"call.micFailBusy":"Il microfono o la fotocamera sono già in uso da un'altra app (Zoom, Teams, un'altra scheda…). Chiudila e riprova.",
+"call.micFailDenied":"Il browser ha bloccato microfono e fotocamera per questo sito. Controlla l'icona del lucchetto vicino all'indirizzo e consenti l'accesso, poi ricarica la pagina.",
 "destruct.note":"Allo scadere del timer: la conversazione viene cancellata da questo schermo, viene chiesto di fare lo stesso all'altra persona, e la connessione si chiude. Non può toccare copie già salvate altrove (screenshot, file scaricati) — quelle restano dove sono state salvate.",
 "destruct.countdown":"si autodistrugge tra ","destruct.done":"Conversazione autodistrutta.",
 "session.closed":"chiusa","session.newHint":"Crea una nuova sessione per riconnetterti.",
@@ -902,7 +908,7 @@ $('btnMic').addEventListener('click', async () => {
   if (mediaRecorder && mediaRecorder.state === 'recording'){ mediaRecorder.stop(); return; }
   let stream;
   try{ stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
-  catch(e){ sysLine(t('call.micFail')); return; }
+  catch(e){ sysLine(micFailMessage(e)); return; }
   recordedChunks = [];
   const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
   mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
@@ -988,6 +994,21 @@ let micOn = true, camOn = true;
 function sig(msg){ if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
 function setCallStatus(text){ $('callStatus').textContent = text; }
 
+/* "Permission denied" was covering three different problems with one message:
+   no camera/mic ever found, one that's busy in another app right now, and one
+   actually blocked by the browser. Each needs a different action from the
+   person reading it, so each gets named. */
+function micFailMessage(e){
+  const name = e && e.name;
+  if (name === 'NotFoundError' || name === 'DevicesNotFoundError')
+    return t('call.micFailNotFound','Non trovo un microfono o una fotocamera su questo dispositivo.');
+  if (name === 'NotReadableError' || name === 'TrackStartError')
+    return t('call.micFailBusy','Il microfono o la fotocamera sono già in uso da un\'altra app (Zoom, Teams, un\'altra scheda…). Chiudila e riprova.');
+  if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError')
+    return t('call.micFailDenied','Il browser ha bloccato microfono e fotocamera per questo sito. Controlla l\'icona del lucchetto vicino all\'indirizzo e consenti l\'accesso, poi ricarica la pagina.');
+  return t('call.micFail','Microfono o fotocamera non disponibili, o permesso negato.');
+}
+
 /* ringtone: two-tone loop synthesised with Web Audio — no external audio file
    needed. Also vibrates on devices that support it (Android; iOS Safari has
    no Vibration API, a real platform limit, not something a page can add). */
@@ -1042,7 +1063,7 @@ async function startCall(kind){
   if (callState !== 'idle' || !dc || dc.readyState !== 'open') return;
   callKind = kind; callState = 'ringing-out';
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: kind === 'video' }); }
-  catch(e){ sysLine(t('call.micFail')); callState = 'idle'; callKind = null; return; }
+  catch(e){ sysLine(micFailMessage(e)); callState = 'idle'; callKind = null; return; }
   $('callBox').classList.remove('hide');
   $('localVideo').classList.toggle('hide', kind !== 'video');
   $('localVideo').srcObject = localStream;
@@ -1070,7 +1091,7 @@ $('btnAcceptCall').addEventListener('click', async () => {
   stopRing(); disarmCallTimeout();
   $('incomingCall').classList.add('hide');
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: callKind === 'video' }); }
-  catch(e){ sysLine(t('call.micFail')); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null; return; }
+  catch(e){ sysLine(micFailMessage(e)); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null; return; }
   localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
   $('callBox').classList.remove('hide');
   $('localVideo').classList.toggle('hide', callKind !== 'video');
