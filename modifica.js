@@ -11,7 +11,7 @@ Object.assign(I18N.en, {
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (MIT license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
 "install.btn":"Install",
 "home.title":"Talk to anyone, wherever they are",
-"home.sub":"Text, photos, video, voice, calls. Direct between two devices, no account, free forever.",
+"home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
 "home.nameLabel":"Your name",
 "home.namePh":"Your name",
 "home.startT":"Start a chat","home.startD":"Create an invite to send someone",
@@ -39,7 +39,7 @@ Object.assign(I18N.en, {
 "verify.lead":"Compare it with the other person — out loud, by phone, or on a channel different from the one you used to exchange the invite code. If the two codes don't match exactly, someone may have inserted themselves into the connection: don't trust that chat.",
 "verify.close":"Close","verify.unavailable":"Not ready yet — try again in a moment.",
 "contacts.title":"Recent contacts",
-"contacts.note":"One tap to prepare a new invite for them — the history of what you said is already waiting. A new code is still needed every time: no server keeps anyone \"always connected\".",
+"contacts.note":"One tap to see them again: what you said to each other stayed here. Each time needs a fresh invite, because no server keeps anyone connected for you.",
 "toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand","toast.copySelected":"Copy failed — code selected for you, just press Ctrl/Cmd+C",
 "call.busy":"didn't answer — busy on another call.","call.declinedBy":"declined the call.",
 "call.joined":"joined the chat.","call.videoInvite":"is video calling you","call.audioInvite":"is calling you",
@@ -54,6 +54,23 @@ Object.assign(I18N.en, {
 "install.genericText":"<b>Install DigitalValut Logos</b> to have it as an app, with its own icon, no browser needed.",
 "install.iosText":"<b>Install DigitalValut Logos on iPhone or iPad.</b> Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.",
 "home.shareApp":"Tell someone about the app",
+"start.s1":"Send the invite",
+"start.s1help":"Press the orange button. The app prepares the invite and lets you choose how to send it: WhatsApp, a message, email \u2014 whatever you normally use.",
+"start.s2":"Paste their reply",
+"start.s2help":"They will send a message back. Copy it, come back here and press <b>Paste</b>. Then you go into the chat together.",
+"start.create":"Prepare the invite",
+"start.pastePh":"Paste the reply here\u2026",
+"join.s1":"Open the invite",
+"join.s1help":"If you opened the link they sent you, everything is ready: press the orange button. Otherwise press <b>Paste</b>.",
+"join.s2":"Send the reply",
+"join.s2help":"Last step: send this back to the person who invited you, and you are connected.",
+"join.generate":"Open the invite",
+"join.pastePh":"Paste the invite here\u2026",
+"btn.connect":"Go into the chat",
+"btn.paste":"Paste",
+"btn.showCode":"Show the code",
+"toast.clipboardEmpty":"There is nothing to paste.",
+"toast.pasteManually":"Hold your finger on the box and choose Paste.",
 "home.shareAppText":"Free, no account, works on any phone or computer — DigitalValut Logos:\n\n",
 "lock.title":"🔐 Extra protection",
 "lock.sub":"Locks the invite with a passphrase you say out loud. Worth turning on if the code travels over WhatsApp, email or SMS.",
@@ -80,6 +97,23 @@ Object.assign(I18N.it, {
 "home.startT":"Inizia una chat","home.startD":"Crea un invito da mandare a qualcuno",
 "home.joinT":"Ho ricevuto un invito","home.joinD":"Incolla o apri il link che ti hanno mandato",
 "home.shareApp":"Fai conoscere l'app a qualcuno",
+"start.s1":"Manda l'invito",
+"start.s1help":"Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere come mandarlo: WhatsApp, messaggio, email \u2014 quello che usi di solito.",
+"start.s2":"Incolla la sua risposta",
+"start.s2help":"L'altra persona ti rimander\u00e0 un messaggio. Copialo, torna qui e premi <b>Incolla</b>. Poi entrate insieme nella chat.",
+"start.create":"Prepara l'invito",
+"start.pastePh":"Incolla qui la risposta\u2026",
+"join.s1":"Apri l'invito",
+"join.s1help":"Se hai aperto il link che ti hanno mandato, \u00e8 gi\u00e0 tutto pronto: premi il pulsante arancione. Altrimenti premi <b>Incolla</b>.",
+"join.s2":"Manda la risposta",
+"join.s2help":"Ultimo passo: rimanda questo alla persona che ti ha invitato, e siete connessi.",
+"join.generate":"Apri l'invito",
+"join.pastePh":"Incolla qui l'invito\u2026",
+"btn.connect":"Entra nella chat",
+"btn.paste":"Incolla",
+"btn.showCode":"Mostra il codice",
+"toast.clipboardEmpty":"Non c'\u00e8 niente da incollare.",
+"toast.pasteManually":"Tieni premuto sul riquadro e scegli Incolla.",
 "home.shareAppText":"Gratis, senza account, funziona su qualunque telefono o computer — DigitalValut Logos:\n\n",
 "nav.back":"Indietro",
 "start.share":"Manda l'invito","btn.copyCode":"Copia il codice",
@@ -295,7 +329,19 @@ async function openPayload(env, pass){
   const pt  = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b642ab(env.i) }, key, b642ab(env.c));
   return JSON.parse(new TextDecoder().decode(pt));
 }
-function readEnvelope(raw){ return JSON.parse(b64decode((raw||'').trim())); }
+/* People paste what they have: sometimes the bare code, more often the whole
+   message their friend sent, link and greeting and all. Asking someone to pick
+   out "just the code" is exactly the kind of instruction that loses a person, so
+   the app digs the code out itself instead. */
+function extractCode(raw){
+  const s = (raw || '').trim();
+  const link = s.match(/[#&]i=([^&\s]+)/);
+  if (link){ try{ return decodeURIComponent(link[1]); }catch(e){ return link[1]; } }
+  const runs = s.match(/[A-Za-z0-9+/=]{40,}/g);
+  if (runs) return runs.reduce((a, b) => b.length > a.length ? b : a);
+  return s;
+}
+function readEnvelope(raw){ return JSON.parse(b64decode(extractCode(raw))); }
 function isLocked(env){ return !!(env && env.e === 1); }
 
 let lockOn = false;      /* the switch on the create screen */
@@ -541,6 +587,10 @@ async function robustCopy(text){
 }
 function selectCodeBox(el){
   try{
+    /* the code now lives inside a collapsed "show the code" section; selecting
+       text nobody can see would be a worse dead end than the failure itself */
+    const box = el.closest('details');
+    if (box) box.open = true;
     const range = document.createRange();
     range.selectNodeContents(el);
     const sel = window.getSelection();
@@ -1096,6 +1146,43 @@ async function sha256Hex(buf){
     $('sealLine').classList.remove('hide');
   }catch(e){ /* offline, or a browser that will not fetch its own files: stay quiet */ }
 })();
+
+/* ---------------- one tap instead of a long press ----------------
+   Holding a finger on a box until a menu appears, then finding "Paste", is one
+   of the places people give up. This is the same thing as a button. */
+async function pasteInto(el){
+  try{
+    const text = await navigator.clipboard.readText();
+    if (text && text.trim()){
+      el.value = text.trim();
+      el.dispatchEvent(new Event('input'));
+      return;
+    }
+    toast(t('toast.clipboardEmpty','Non c\'è niente da incollare.'));
+  }catch(e){
+    /* permission refused, or a browser that will not read the clipboard */
+    el.focus();
+    toast(t('toast.pasteManually','Tieni premuto sul riquadro e scegli Incolla.'));
+  }
+}
+$('btnPasteOffer').addEventListener('click', () => pasteInto($('offerIn')));
+$('btnPasteAnswer').addEventListener('click', () => pasteInto($('answerIn')));
+
+/* ---------------- bigger text, remembered ----------------
+   The single most useful thing for eyes that are not twenty any more, and it
+   costs nothing to anyone who never touches it. */
+function applyTextSize(cls){
+  document.documentElement.classList.remove('ts-l','ts-xl');
+  if (cls) document.documentElement.classList.add(cls);
+  for (const b of document.querySelectorAll('.textsize button')){
+    b.classList.toggle('on', (b.dataset.ts || '') === (cls || ''));
+  }
+  try{ localStorage.setItem('dvlogos-textsize', cls || ''); }catch(e){}
+}
+for (const b of document.querySelectorAll('.textsize button')){
+  b.addEventListener('click', () => applyTextSize(b.dataset.ts || ''));
+}
+applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || ''; }catch(e){ return ''; } })());
 
 initLang();
 renderContacts();
