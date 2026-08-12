@@ -121,6 +121,10 @@
 
   .status{font-size:0.9062rem;color:var(--dim);margin-top:12px;line-height:1.6}
   .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
+  /* technical detail during a stuck handshake — small on purpose, but visible
+     and copyable, so a failure can be photographed or read out loud instead of
+     staying an unexplained blank screen */
+  .diagline{font-family:var(--mono);font-size:0.75rem;color:var(--faint);margin-top:8px;line-height:1.6}
   .hide{display:none!important}
   .codebox{font-family:var(--mono);font-size:0.6875rem;background:#0d0f12;border:1px solid var(--line);
     border-radius:var(--r-sm);padding:10px 12px;color:var(--dim);word-break:break-all;max-height:80px;

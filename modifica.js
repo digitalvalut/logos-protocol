@@ -424,15 +424,37 @@ function setStatus(el, text, kind){ el.textContent = text; el.className = 'statu
    someone staring at a blank status has no way to tell "still working" from
    "broken", and no idea what to try next. This watches the handshake and says
    so, either way. */
-function watchHandshakeProgress(peer, statusEl){
+/* What kind of network path was actually found, in plain terms. "host" means a
+   direct local address; "srflx" means STUN found a path through the router;
+   "relay" never appears, since this app has no relay server to offer one. */
+async function diagLine(pc){
+  let host = false, srflx = false, remoteHost = false, remoteSrflx = false;
+  try{
+    const stats = await pc.getStats();
+    stats.forEach(s => {
+      if (s.type === 'local-candidate'){ if (s.candidateType === 'host') host = true; if (s.candidateType === 'srflx') srflx = true; }
+      if (s.type === 'remote-candidate'){ if (s.candidateType === 'host') remoteHost = true; if (s.candidateType === 'srflx') remoteSrflx = true; }
+    });
+  }catch(e){}
+  const mine = [host && 'host', srflx && 'srflx'].filter(Boolean).join('+') || '—';
+  const theirs = [remoteHost && 'host', remoteSrflx && 'srflx'].filter(Boolean).join('+') || '—';
+  return 'ICE ' + pc.iceConnectionState + ' · ' + pc.connectionState + ' · tu:' + mine + ' loro:' + theirs;
+}
+
+function watchHandshakeProgress(peer, statusEl, diagEl){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
   let settled = false;
+  const tick = async () => { if (diagEl) diagEl.textContent = await diagLine(peer.pc); };
+  const diagTimer = diagEl ? setInterval(tick, 1500) : null;
+  if (diagEl){ diagEl.classList.remove('hide'); tick(); }
+  const stop = () => { if (diagTimer) clearInterval(diagTimer); };
   const onChange = () => {
     const st = peer.pc.connectionState;
-    if (st === 'connected'){ settled = true; setStatus(statusEl, ''); }
+    if (st === 'connected'){ settled = true; stop(); setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide'); }
     else if (st === 'failed' || st === 'closed'){
-      settled = true;
+      settled = true; stop();
       setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+      tick();
     }
   };
   peer.pc.addEventListener('connectionstatechange', onChange);
@@ -815,7 +837,7 @@ $('btnConnectAsA').addEventListener('click', async () => {
     if (parsed.type !== 'answer') throw new Error('bad');
     if (!pending) throw new Error('no pending invite');
     await pending.pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
-    watchHandshakeProgress(pending, $('statusA'));
+    watchHandshakeProgress(pending, $('statusA'), $('diagA'));
   }catch(e){ setStatus($('statusA'), t('lock.badAnswer','—'), 'bad'); }
 });
 
@@ -863,7 +885,7 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   $('answerOut').textContent = code;
   $('answerBlock').classList.remove('hide');
   if (await robustCopy(code)) toast(t('toast.sealCopied'));
-  watchHandshakeProgress(pending, $('statusB'));
+  watchHandshakeProgress(pending, $('statusB'), $('diagB'));
 });
 $('btnShareAnswer').addEventListener('click', async () => {
   const text = t('invite.answerText') + $('answerOut').textContent;
@@ -1438,6 +1460,7 @@ $('btnAddPerson').addEventListener('click', () => {
   $('pasteAnswerCard').classList.add('hide'); $('answerIn').value = '';
   $('passBox').classList.add('hide'); $('passWord').textContent = '';
   setStatus($('statusA'), '');
+  $('diagA').classList.add('hide');
   $('backFromStart').classList.add('hide');
   $('backToChat').classList.remove('hide');
   showScreen('screenStart');
@@ -1460,6 +1483,7 @@ $('btnNewSession').addEventListener('click', () => {
   paintVerifyBadge('unknown'); $('verifyNote').textContent = ''; $('btnAcceptSafety').classList.add('hide');
   $('btnCreate').disabled = false; $('btnCreateAnswer').disabled = false;
   setStatus($('statusA'), ''); setStatus($('statusB'), '');
+  $('diagA').classList.add('hide'); $('diagB').classList.add('hide');
   $('menuPanel').classList.add('hide');
   showScreen('screenHome');
 });
