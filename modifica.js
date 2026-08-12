@@ -69,12 +69,6 @@ Object.assign(I18N.en, {
 "btn.connect":"Go into the chat",
 "btn.paste":"Paste",
 "btn.showCode":"Show the code",
-"nav.backToChat":"Back to the chat",
-"menu.addPerson":"Add someone",
-"room.left":"left the chat.",
-"room.full":"The room is full (4 people).",
-"room.canAdd":"You can be {n} in here. Send another invite to add someone.",
-"call.hungUp":"hung up.",
 "toast.clipboardEmpty":"There is nothing to paste.",
 "toast.pasteManually":"Hold your finger on the box and choose Paste.",
 "home.shareAppText":"Free, no account, works on any phone or computer — DigitalValut Logos:\n\n",
@@ -121,12 +115,6 @@ Object.assign(I18N.it, {
 "btn.connect":"Entra nella chat",
 "btn.paste":"Incolla",
 "btn.showCode":"Mostra il codice",
-"nav.backToChat":"Torna alla chat",
-"menu.addPerson":"Aggiungi qualcuno",
-"room.left":"ha lasciato la chat.",
-"room.full":"La stanza \u00e8 al completo (4 persone).",
-"room.canAdd":"Potete essere in {n}. Manda un altro invito per aggiungere qualcuno.",
-"call.hungUp":"ha chiuso la chiamata.",
 "toast.clipboardEmpty":"Non c'\u00e8 niente da incollare.",
 "toast.pasteManually":"Tieni premuto sul riquadro e scegli Incolla.",
 "home.shareAppText":"Gratis, senza account, funziona su qualunque telefono o computer — DigitalValut Logos:\n\n",
@@ -222,11 +210,7 @@ function showScreen(id){
   ['screenHome','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
   window.scrollTo(0,0);
 }
-$('goStart').addEventListener('click', () => {
-  $('backFromStart').classList.remove('hide');
-  $('backToChat').classList.add('hide');
-  showScreen('screenStart');
-});
+$('goStart').addEventListener('click', () => showScreen('screenStart'));
 $('goJoin').addEventListener('click', () => showScreen('screenJoin'));
 $('backFromStart').addEventListener('click', () => showScreen('screenHome'));
 $('backFromJoin').addEventListener('click', () => showScreen('screenHome'));
@@ -278,42 +262,7 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
 
 /* ============================== WebRTC core ============================== */
 const ICE = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
-/* ============================== the room ==============================
-   Up to four people, and no server, means every pair holds its own direct
-   encrypted connection: four people is six connections. That is the honest
-   ceiling — each person uploads their own video once per other person, so a
-   fifth would ask more of a home connection than most have to give.
-   Only the first link is done by hand. Once you are joined to someone, your
-   browsers introduce their other contacts to each other over the connections
-   that already exist, so a newcomer still does exactly one exchange of codes
-   with whoever invited them. */
-const MAX_OTHERS = 3;
-const myId = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
-const peers = new Map();          /* id (or a temporary key) -> peer record */
-const seenSignals = new Set();    /* relayed signals are dropped if they loop back */
-
-function makePeer(pcObj){ return { id:null, pc:pcObj, dc:null, nick:'', stream:null, safety:null }; }
-function peerList(){ return [...peers.values()]; }
-function livePeers(){ return peerList().filter(p => p.dc && p.dc.readyState === 'open'); }
-function namedPeers(){ return livePeers().filter(p => p.id && p.nick); }
-function roomFull(){ return peerList().length >= MAX_OTHERS; }
-function sendTo(peer, obj){
-  try{ if (peer && peer.dc && peer.dc.readyState === 'open') peer.dc.send(JSON.stringify(obj)); }catch(e){}
-}
-function broadcast(obj){ for (const p of livePeers()) sendTo(p, obj); }
-
-/* A signal for someone we are not directly joined to yet travels over the links
-   we do have. With at most four people the fan-out is trivial; the seen-set is
-   what stops it echoing around the room. */
-function routeSignal(msg){
-  if (!msg.sid) msg.sid = Math.random().toString(36).slice(2, 12);
-  if (seenSignals.has(msg.sid)) return;
-  seenSignals.add(msg.sid);
-  if (seenSignals.size > 200) seenSignals.clear();
-  const direct = msg.to && peers.get(msg.to);
-  if (direct && direct.dc && direct.dc.readyState === 'open'){ sendTo(direct, msg); return; }
-  for (const p of livePeers()) if (p.id !== msg.from) sendTo(p, msg);
-}
+let pc = null, dc = null;
 const CHUNK = 16 * 1024;
 
 function b64encode(str){ return btoa(unescape(encodeURIComponent(str))); }
@@ -402,7 +351,6 @@ function readEnvelope(raw){ return JSON.parse(b64decode(extractCode(raw))); }
 function isLocked(env){ return !!(env && env.e === 1); }
 
 let lockOn = false;      /* the switch on the create screen */
-let pending = null;      /* the peer being set up by the hand-carried code exchange */
 let sessionPass = '';    /* the passphrase in play, so the reply is sealed the same way */
 
 /* The invite is only as good as the addresses inside it. Four seconds was
@@ -419,21 +367,13 @@ async function waitIceComplete(peer){
 }
 function setStatus(el, text, kind){ el.textContent = text; el.className = 'status' + (kind ? ' ' + kind : ''); }
 
-/* Until now, a stalled connection left the screen silent — nothing told anyone
-   it was still trying, or that it had given up. That silence is itself a bug:
-   someone staring at a blank status has no way to tell "still working" from
-   "broken", and no idea what to try next. This watches the handshake and says
-   so, either way. */
-/* What kind of network path was actually found, in plain terms. "host" means a
-   direct local address; "srflx" means STUN found a path through the router;
-   "relay" never appears, since this app has no relay server to offer one. */
-/* getStats() turned out to be the wrong source for this: on some browsers a
-   candidate stat is only reported once it belongs to a candidate pair that was
-   actually tried, so "no pair ever formed" and "nothing was gathered" both
-   read as the same empty result — indistinguishable, and useless for telling
-   them apart. The SDPs themselves don't have that ambiguity: every gathered
-   candidate is written into them as plain text, and — unlike live stats —
-   they stay exactly as they were even after the connection closes. */
+/* getStats() turned out to be the wrong source for a connection diagnostic:
+   on some browsers a candidate stat is only reported once it belongs to a
+   pair that was actually tried, so "nothing gathered" and "gathered fine but
+   no pair ever formed" read as the same empty result. The SDPs themselves
+   don't have that ambiguity — every candidate a side gathers is written into
+   its own description as plain text, and both stay exactly as they were even
+   after the connection closes. */
 function candidateTypesIn(sdp){
   if (!sdp) return [];
   const types = new Set();
@@ -442,44 +382,36 @@ function candidateTypesIn(sdp){
   while ((m = re.exec(sdp))) types.add(m[1]);
   return [...types];
 }
-function diagLine(pc){
-  const mine = candidateTypesIn(pc.localDescription && pc.localDescription.sdp);
-  const theirs = candidateTypesIn(pc.remoteDescription && pc.remoteDescription.sdp);
-  return 'ICE ' + pc.iceConnectionState + ' · ' + pc.connectionState +
+function diagLine(pcObj){
+  const mine = candidateTypesIn(pcObj.localDescription && pcObj.localDescription.sdp);
+  const theirs = candidateTypesIn(pcObj.remoteDescription && pcObj.remoteDescription.sdp);
+  return 'ICE ' + pcObj.iceConnectionState + ' · ' + pcObj.connectionState +
     ' · tu:' + (mine.join('+') || '—') + ' loro:' + (theirs.join('+') || '—');
 }
 
-function watchHandshakeProgress(peer, statusEl, diagEl){
+/* Until now, a stalled connection left the screen silent — nothing told
+   anyone it was still trying, or that it had given up. This watches the
+   handshake and says so, either way, plus the technical line above: what
+   kind of address each side actually found. */
+function watchHandshakeProgress(pcObj, statusEl, diagEl){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
   let settled = false;
-  /* A connection that just failed gets closed a moment later, and querying
-     getStats() after that returns nothing useful — which is exactly what
-     showed up as a blank "closed · closed · tu:- loro:-" instead of the real
-     failure. Waiting for the 'settled' flag from the change event was not
-     enough: a periodic tick can still slip in right after close() and before
-     that event is actually observed, so this checks the connection's own
-     current state directly, every time, and simply skips writing once it is
-     no longer live — leaving the last real reading on screen instead of
-     overwriting it with nothing. */
-  const tick = () => {
-    if (!diagEl || settled) return;
-    diagEl.textContent = diagLine(peer.pc);
-  };
+  const tick = () => { if (diagEl && !settled) diagEl.textContent = diagLine(pcObj); };
   const diagTimer = diagEl ? setInterval(tick, 1200) : null;
   if (diagEl){ diagEl.classList.remove('hide'); tick(); }
   const stop = () => { if (diagTimer) clearInterval(diagTimer); };
   const onChange = () => {
     if (settled) return;
-    const st = peer.pc.connectionState;
+    const st = pcObj.connectionState;
     if (st === 'connected'){ settled = true; stop(); setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide'); }
     else if (st === 'failed' || st === 'closed'){
       settled = true; stop();
       setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
     }
   };
-  peer.pc.addEventListener('connectionstatechange', onChange);
+  pcObj.addEventListener('connectionstatechange', onChange);
   setTimeout(() => {
-    if (settled || peer.pc.connectionState === 'connected') return;
+    if (settled || pcObj.connectionState === 'connected') return;
     settled = true; stop();
     setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'), 'bad');
   }, 25000);
@@ -493,104 +425,14 @@ function toast(msg){
   setTimeout(()=>el.remove(), 2200);
 }
 
-let peerNick = '';   /* the other person when there is exactly one — the common case */
-
-function wirePeer(peer){
-  peer.pc.ontrack = ev => { peer.stream = ev.streams[0]; renderCallGrid(); };
-  const ch = peer.dc;
-  ch.binaryType = 'arraybuffer';
-  ch.onopen = () => {
-    enterChat();
-    sendTo(peer, { type:'hello', nick: myNick(), id: myId });
-    attachLocalTracks(peer);
-  };
-  ch.onclose = () => onPeerGone(peer);
-  ch.onmessage = ev => onDcMessage(ev, peer);
-}
-
-/* Someone new arrived on a link of mine: tell them who else is here, and tell
-   everyone else about them, so the browsers can pair up without the people
-   having to copy any more codes. */
-function introduceAround(newPeer){
-  const others = namedPeers().filter(p => p !== newPeer);
-  if (!others.length) return;
-  sendTo(newPeer, { type:'mesh-peers', peers: others.map(p => ({ id:p.id, nick:p.nick })) });
-  for (const o of others) sendTo(o, { type:'mesh-peers', peers: [{ id:newPeer.id, nick:newPeer.nick }] });
-}
-
-/* For any pair, the smaller id makes the offer. A fixed rule beats politeness:
-   without it both sides offer at once and the negotiation collides. */
-function iOffer(otherId){ return myId < otherId; }
-
-async function meshConnectTo(id, nick){
-  if (!id || id === myId || peers.has(id) || roomFull()) return;
-  const pcObj = await newPeerConnection();
-  const peer = makePeer(pcObj);
-  peer.id = id; peer.nick = nick || ''; peer.mesh = true;
-  peers.set(id, peer);
-  watchPeerConnection(peer);
-  peer.dc = pcObj.createDataChannel('logos-modifica');
-  wirePeer(peer);
-  attachLocalTracks(peer);
-  const offer = await pcObj.createOffer();
-  await pcObj.setLocalDescription(offer);
-  await waitIceComplete(pcObj);
-  routeSignal({ type:'mesh-signal', kind:'offer', from: myId, to: id, nick: myNick(), sdp: pcObj.localDescription.sdp });
-}
-
-async function onMeshSignal(msg){
-  if (msg.kind === 'offer'){
-    if (peers.has(msg.from) || roomFull()) return;
-    const pcObj = await newPeerConnection();
-    const peer = makePeer(pcObj);
-    peer.id = msg.from; peer.nick = msg.nick || ''; peer.mesh = true;
-    peers.set(msg.from, peer);
-    watchPeerConnection(peer);
-    pcObj.ondatachannel = ev => { peer.dc = ev.channel; wirePeer(peer); };
-    await pcObj.setRemoteDescription({ type:'offer', sdp: msg.sdp });
-    const answer = await pcObj.createAnswer();
-    await pcObj.setLocalDescription(answer);
-    await waitIceComplete(pcObj);
-    routeSignal({ type:'mesh-signal', kind:'answer', from: myId, to: msg.from, nick: myNick(), sdp: pcObj.localDescription.sdp });
-  } else if (msg.kind === 'answer'){
-    const peer = peers.get(msg.from);
-    if (peer && peer.pc.signalingState === 'have-local-offer'){
-      try{ await peer.pc.setRemoteDescription({ type:'answer', sdp: msg.sdp }); }catch(e){}
-    }
-  }
-}
-
-function watchPeerConnection(peer){
-  peer.pc.onconnectionstatechange = () => {
-    if (peer.pc.connectionState === 'failed' || peer.pc.connectionState === 'closed') onPeerGone(peer);
-    renderRoster();
-  };
-}
-
-const meshTries = new Map();
-function onPeerGone(peer){
-  if (!peers.has(peer.id) && !peers.has(peer.tempKey)) return;
-  peers.delete(peer.id); if (peer.tempKey) peers.delete(peer.tempKey);
-  try{ peer.pc.close(); }catch(e){}
-  /* A link made through the room can be rebuilt without asking anyone to copy
-     anything, so a first failure is worth one more attempt rather than a
-     shrug. The hand-carried first link has no such path back. */
-  if (peer.id && peer.mesh && livePeers().length){
-    const tries = (meshTries.get(peer.id) || 0) + 1;
-    meshTries.set(peer.id, tries);
-    if (tries <= 2 && iOffer(peer.id)){
-      const id = peer.id, nick = peer.nick;
-      setTimeout(() => { if (!peers.has(id) && livePeers().length) meshConnectTo(id, nick); }, 1500 * tries);
-    }
-  }
-  if (peer.nick) sysLine(peer.nick + ' ' + t('room.left','ha lasciato la chat.'));
-  peer.stream = null;
-  renderCallGrid();
-  renderRoster();
-  if (!livePeers().length){
-    $('connState').textContent = t('session.closed');
-    if (callState !== 'idle') endCall(false);
-  }
+let peerNick = '';
+function wireDataChannel(channel){
+  dc = channel;
+  dc.binaryType = 'arraybuffer';
+  pc.ontrack = ev => { if ($('remoteVideo').srcObject !== ev.streams[0]) $('remoteVideo').srcObject = ev.streams[0]; };
+  dc.onopen = () => { enterChat(); dc.send(JSON.stringify({ type: 'hello', nick: myNick() })); };
+  dc.onclose = () => { setStatus($('statusA'), t('session.newHint'), 'bad'); };
+  dc.onmessage = onDcMessage;
 }
 
 /* ============================== safety number ==============================
@@ -607,9 +449,7 @@ function extractFingerprint(sdp){
   const m = sdp && sdp.match(/a=fingerprint:sha-256 ([0-9A-Fa-f:]+)/);
   return m ? m[1].toUpperCase() : null;
 }
-async function computeSafetyCode(peer){
-  peer = peer || livePeers()[0];
-  const pc = peer && peer.pc;
+async function computeSafetyCode(){
   if (!pc || !pc.localDescription || !pc.remoteDescription) return null;
   const fpA = extractFingerprint(pc.localDescription.sdp);
   const fpB = extractFingerprint(pc.remoteDescription.sdp);
@@ -684,10 +524,9 @@ function paintVerifyBadge(state){
   else if (state === 'changed'){ b.classList.add('vbad'); b.textContent = '⚠️ ' + t('verify.changedShort','codice cambiato'); }
   else { b.textContent = t('verify.badge','🔒 verifica'); }
 }
-async function checkSafetyFor(nick, peer){
-  const code = await computeSafetyCode(peer);
+async function checkSafetyFor(nick){
+  const code = await computeSafetyCode();
   if (!code || !nick) return;
-  if (peer) peer.safety = code;
   let rec = null;
   try{ rec = JSON.parse(localStorage.getItem(safetyKey(nick)) || 'null'); }catch(e){}
   if (!rec || !rec.code){
@@ -734,12 +573,8 @@ function initials(name){
   if (!parts.length) return '?';
   return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
-let chatStarted = false;
 function enterChat(){
   showScreen('screenChat');
-  /* a third person arriving must not wipe what the first two have been saying */
-  if (chatStarted) return;
-  chatStarted = true;
   $('peerNameLbl').textContent = t('chat.someone');
   $('peerAvatar').textContent = '?';
   loadHistoryPlaceholder();
@@ -760,17 +595,12 @@ $('lockRow').addEventListener('keydown', e => {
 $('btnCreate').addEventListener('click', async () => {
   $('btnCreate').disabled = true;
   setStatus($('statusA'), lockOn ? t('lock.working','…') : '');
-  const pcObj = await newPeerConnection();
-  pending = makePeer(pcObj);
-  pending.tempKey = 'pending-' + Math.random().toString(36).slice(2);
-  peers.set(pending.tempKey, pending);
-  watchPeerConnection(pending);
-  pending.dc = pcObj.createDataChannel('logos-modifica');
-  wirePeer(pending);
-  const offer = await pcObj.createOffer();
-  await pcObj.setLocalDescription(offer);
-  await waitIceComplete(pcObj);
-  const payload = { type: 'offer', sdp: pcObj.localDescription.sdp };
+  pc = await newPeerConnection();
+  wireDataChannel(pc.createDataChannel('logos-modifica'));
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  await waitIceComplete(pc);
+  const payload = { type: 'offer', sdp: pc.localDescription.sdp };
   let code;
   if (lockOn){
     sessionPass = makePassphrase();
@@ -849,15 +679,14 @@ $('btnCopyOffer').addEventListener('click', async () => {
   await copyOrSelect($('offerOut').textContent, $('offerOut'));
 });
 $('btnConnectAsA').addEventListener('click', async () => {
-  if (!pending) return;
+  if (!pc) return;
   try{
     const env = readEnvelope($('answerIn').value);
     /* the reply comes back sealed under the same passphrase we handed out */
     const parsed = isLocked(env) ? await openPayload(env, sessionPass) : env;
     if (parsed.type !== 'answer') throw new Error('bad');
-    if (!pending) throw new Error('no pending invite');
-    await pending.pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
-    watchHandshakeProgress(pending, $('statusA'), $('diagA'));
+    await pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
+    watchHandshakeProgress(pc, $('statusA'), $('diagA'));
   }catch(e){ setStatus($('statusA'), t('lock.badAnswer','—'), 'bad'); }
 });
 
@@ -890,22 +719,18 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   if (!parsed || parsed.type !== 'offer'){ setStatus($('statusB'), t('join.badCode','—'), 'bad'); return; }
   setStatus($('statusB'), '');
   $('btnCreateAnswer').disabled = true;
-  const pcObj = await newPeerConnection();
-  pending = makePeer(pcObj);
-  pending.tempKey = 'pending-' + Math.random().toString(36).slice(2);
-  peers.set(pending.tempKey, pending);
-  watchPeerConnection(pending);
-  pcObj.ondatachannel = ev => { pending.dc = ev.channel; wirePeer(pending); };
-  await pcObj.setRemoteDescription({ type: 'offer', sdp: parsed.sdp });
-  const answer = await pcObj.createAnswer();
-  await pcObj.setLocalDescription(answer);
-  await waitIceComplete(pcObj);
-  const reply = { type: 'answer', sdp: pcObj.localDescription.sdp };
+  pc = await newPeerConnection();
+  pc.ondatachannel = ev => wireDataChannel(ev.channel);
+  await pc.setRemoteDescription({ type: 'offer', sdp: parsed.sdp });
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  await waitIceComplete(pc);
+  const reply = { type: 'answer', sdp: pc.localDescription.sdp };
   const code = sessionPass ? await sealPayload(reply, sessionPass) : b64encode(JSON.stringify(reply));
   $('answerOut').textContent = code;
   $('answerBlock').classList.remove('hide');
   if (await robustCopy(code)) toast(t('toast.sealCopied'));
-  watchHandshakeProgress(pending, $('statusB'), $('diagB'));
+  watchHandshakeProgress(pc, $('statusB'), $('diagB'));
 });
 $('btnShareAnswer').addEventListener('click', async () => {
   const text = t('invite.answerText') + $('answerOut').textContent;
@@ -930,8 +755,6 @@ $('btnCopyAnswer').addEventListener('click', async () => {
 })();
 
 /* ============================== history (local, per contact name) ============================== */
-/* For two people this is the same key as before, so old conversations are still
-   found; for a group it is the set of names, so each group keeps its own. */
 function historyKey(nick){ return 'dvlogos-history-' + (nick||'').trim().toLowerCase(); }
 function loadHistoryPlaceholder(){ $('msgs').innerHTML = ''; }
 function loadHistoryFor(nick){
@@ -1024,7 +847,7 @@ function renderMsg(bodyHtml, mine, persist){
   row.appendChild(bub);
   $('msgs').appendChild(row);
   $('msgs').scrollTop = $('msgs').scrollHeight;
-  if (persist !== false) saveToHistory(roomName() || peerNick, bodyHtml, mine);
+  if (persist !== false) saveToHistory(peerNick, bodyHtml, mine);
 }
 function sysLine(text){
   const d = document.createElement('div'); d.className = 'sysline'; d.textContent = text;
@@ -1043,18 +866,16 @@ $('btnSend').addEventListener('click', sendText);
 $('msgInput').addEventListener('keydown', ev => { if (ev.key === 'Enter') sendText(); });
 function sendText(){
   const text = $('msgInput').value.trim();
-  if (!text || !livePeers().length) return;
-  broadcast({ type: 'text', text, from: myId, nick: myNick() });
+  if (!text || !dc || dc.readyState !== 'open') return;
+  dc.send(JSON.stringify({ type: 'text', text }));
   renderMsg(esc(text) + '<div class="meta">' + timeNow() + '</div>', true);
   $('msgInput').value = '';
 }
 
 async function sendFile(file){
-  const targets = livePeers();
-  if (!file || !targets.length) return;
+  if (!file || !dc || dc.readyState !== 'open') return;
   const id = Math.random().toString(36).slice(2);
-  const head = { type: 'file-start', id, name: file.name, mime: file.type, size: file.size, nick: myNick() };
-  for (const p of targets) sendTo(p, head);
+  dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
   let off = 0;
   while (off < file.size){
     const end = Math.min(off + CHUNK, file.size);
@@ -1062,13 +883,10 @@ async function sendFile(file){
     const framed = new Uint8Array(buf.byteLength + 16);
     framed.set(new TextEncoder().encode(id.padEnd(16,' ').slice(0,16)), 0);
     framed.set(new Uint8Array(buf), 16);
-    /* one copy per person: with no server there is nothing else to send it through */
-    for (const p of targets){
-      if (p.dc && p.dc.readyState === 'open') await sendWithBackpressure(p.dc, framed.slice());
-    }
+    await sendWithBackpressure(dc, framed);
     off = end;
   }
-  for (const p of targets) sendTo(p, { type: 'file-end', id });
+  dc.send(JSON.stringify({ type: 'file-end', id }));
   const url = URL.createObjectURL(file);
   const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
   const preview = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
@@ -1118,54 +936,26 @@ document.addEventListener('click', ev => {
 $('btnMenu').addEventListener('click', () => $('menuPanel').classList.toggle('hide'));
 
 const incoming = {};
-function onDcMessage(ev, peer){
+function onDcMessage(ev){
   if (typeof ev.data === 'string'){
     let msg; try{ msg = JSON.parse(ev.data); }catch(e){ return; }
     /* everything past this point is data from the other side, so treat it as
        untrusted: anything without a proper type is dropped rather than trusted
        to have the shape the branches below expect */
     if (!msg || typeof msg.type !== 'string') return;
-
-    /* signals addressed to someone else simply travel on */
-    if (msg.type === 'mesh-signal' && msg.to && msg.to !== myId){ routeSignal(msg); return; }
-
     if (msg.type === 'hello'){
-      const nick = (msg.nick || '').trim();
-      if (!nick) return;
-      peer.nick = nick;
-      if (msg.id && typeof msg.id === 'string'){
-        if (peer.tempKey){ peers.delete(peer.tempKey); peer.tempKey = null; }
-        peer.id = msg.id;
-        peers.set(peer.id, peer);
+      peerNick = (msg.nick || '').trim();
+      if (peerNick){
+        $('connState').textContent = t('chat.connected');
+        $('peerNameLbl').textContent = peerNick;
+        $('peerAvatar').textContent = initials(peerNick);
+        loadHistoryFor(peerNick);
+        touchContact(peerNick);
+        sysLine(peerNick + ' ' + t('call.joined'));
+        checkSafetyFor(peerNick);
       }
-      peerNick = nick;
-      $('connState').textContent = t('chat.connected');
-      /* only the first arrival restores a past conversation; later ones join the
-         one already on screen instead of replacing it */
-      if (namedPeers().length === 1) loadHistoryFor(nick);
-      touchContact(nick);
-      sysLine(nick + ' ' + t('call.joined'));
-      checkSafetyFor(nick, peer);
-      renderRoster();
-      introduceAround(peer);
-      /* someone joining mid-call should see and hear the call, not an empty room */
-      if (callState === 'active' && localStream){
-        attachLocalTracks(peer);
-        sendTo(peer, { type:'call-invite', kind: callKind, nick: myNick() });
-      }
-    } else if (msg.type === 'mesh-peers'){
-      if (Array.isArray(msg.peers)){
-        for (const info of msg.peers){
-          if (info && typeof info.id === 'string' && !peers.has(info.id) && info.id !== myId && iOffer(info.id)){
-            meshConnectTo(info.id, info.nick);
-          }
-        }
-      }
-    } else if (msg.type === 'mesh-signal'){
-      onMeshSignal(msg);
     } else if (msg.type === 'text'){
-      const who = (msg.nick || peer.nick || '').trim();
-      const label = who ? '<span class="who">'+esc(who)+'</span>' : '';
+      const label = peerNick ? '<span class="who">'+esc(peerNick)+'</span>' : '';
       renderMsg(label + esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
     } else if (msg.type === 'file-start'){
       incoming[msg.id] = { chunks: [], meta: msg };
@@ -1177,14 +967,12 @@ function onDcMessage(ev, peer){
       const isImg = mime.startsWith('image/'), isVid = mime.startsWith('video/'), isAud = mime.startsWith('audio/');
       let html = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
                : isAud ? '<audio src="'+url+'" controls></audio>' : '<a href="'+url+'" download="'+esc(rec.meta.name)+'" class="filelink">📄 '+esc(rec.meta.name)+' ↓</a>';
-      const sender = (rec.meta.nick || peer.nick || '').trim();
-      const tag = sender ? '<span class="who">'+esc(sender)+'</span>' : '';
-      renderMsg(tag + html + '<div class="meta">' + timeNow() + '</div>', false);
+      renderMsg(html + '<div class="meta">' + timeNow() + '</div>', false);
       delete incoming[msg.id];
     } else if (msg.type === 'wipe'){
       destroyNow(false);
     } else if (msg.type.indexOf('call-') === 0){
-      handleCallSignal(msg, peer);
+      handleCallSignal(msg);
     }
   } else {
     const bytes = new Uint8Array(ev.data);
@@ -1197,80 +985,8 @@ function onDcMessage(ev, peer){
 /* ============================== calls ============================== */
 let localStream = null, callKind = null, callState = 'idle';
 let micOn = true, camOn = true;
-function sig(msg){ broadcast(msg); }
+function sig(msg){ if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
 function setCallStatus(text){ $('callStatus').textContent = text; }
-
-/* ---- who is in the room, shown where people can see it ---- */
-function roomName(){
-  const names = namedPeers().map(p => p.nick).sort();
-  return names.join(' + ');
-}
-function renderRoster(){
-  const names = namedPeers().map(p => p.nick);
-  const label = names.length ? names.join(', ') : t('chat.someone');
-  $('peerNameLbl').textContent = names.length > 1
-    ? label + ' (' + (names.length + 1) + ')'
-    : label;
-  $('peerAvatar').textContent = names.length > 1 ? String(names.length + 1) : initials(names[0] || '');
-  const room = $('roomCount');
-  if (room){
-    room.textContent = names.length >= MAX_OTHERS
-      ? t('room.full','La stanza \u00e8 al completo (4 persone).')
-      : fill(t('room.canAdd','Potete essere in {n}. Manda un altro invito per aggiungere qualcuno.'), { n: MAX_OTHERS + 1 });
-  }
-}
-
-/* ---- video: one tile per person, however many are on the call ---- */
-function attachLocalTracks(peer){
-  if (!localStream || !peer || !peer.pc) return;
-  const already = peer.pc.getSenders().map(sn => sn.track).filter(Boolean);
-  for (const tr of localStream.getTracks()){
-    if (!already.includes(tr)){ try{ peer.pc.addTrack(tr, localStream); }catch(e){} }
-  }
-}
-function renderCallGrid(){
-  const grid = $('remoteVideos');
-  if (!grid) return;
-  const withVideo = peerList().filter(p => p.stream);
-  grid.innerHTML = '';
-  grid.classList.toggle('many', withVideo.length > 1);
-  for (const p of withVideo){
-    const cell = document.createElement('div');
-    cell.className = 'vcell';
-    const hasVideo = p.stream.getVideoTracks().some(tr => tr.readyState === 'live');
-    /* The stream must be attached to a media element either way, or there is
-       no sound; on a voice call we just show a face instead of a black box. */
-    const media = document.createElement(hasVideo ? 'video' : 'audio');
-    media.autoplay = true;
-    if (hasVideo) media.playsInline = true;
-    media.srcObject = p.stream;
-    cell.appendChild(media);
-    if (!hasVideo){
-      cell.classList.add('voiceonly');
-      const face = document.createElement('div');
-      face.className = 'vface';
-      face.textContent = initials(p.nick || '?');
-      cell.appendChild(face);
-    }
-    const tag = document.createElement('span');
-    tag.className = 'vname';
-    tag.textContent = p.nick || t('chat.someone');
-    cell.appendChild(tag);
-    grid.appendChild(cell);
-  }
-}
-
-/* Renegotiating a live connection from both ends at once collides, so for each
-   pair only the smaller id offers; the other asks for one. */
-async function renegotiateWith(peer){
-  if (!peer || !peer.pc || !peer.id) return;
-  if (!iOffer(peer.id)){ sendTo(peer, { type:'call-need-offer' }); return; }
-  try{
-    const offer = await peer.pc.createOffer();
-    await peer.pc.setLocalDescription(offer);
-    sendTo(peer, { type:'call-offer-sdp', sdp: peer.pc.localDescription.sdp });
-  }catch(e){}
-}
 
 /* ringtone: two-tone loop synthesised with Web Audio — no external audio file
    needed. Also vibrates on devices that support it (Android; iOS Safari has
@@ -1323,7 +1039,7 @@ function armCallTimeout(){
 function disarmCallTimeout(){ clearTimeout(callTimeoutTimer); callTimeoutTimer = null; }
 
 async function startCall(kind){
-  if (callState !== 'idle' || !livePeers().length) return;
+  if (callState !== 'idle' || !dc || dc.readyState !== 'open') return;
   callKind = kind; callState = 'ringing-out';
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: kind === 'video' }); }
   catch(e){ sysLine(t('call.micFail')); callState = 'idle'; callKind = null; return; }
@@ -1335,81 +1051,56 @@ async function startCall(kind){
   armCallTimeout();
   sig({ type: 'call-invite', kind });
 }
-function handleCallSignal(msg, peer){
-  const who = (peer && peer.nick) || peerNick || t('chat.someone');
+function handleCallSignal(msg){
   if (msg.type === 'call-invite'){
-    /* already on the call: just take this person's stream, do not ring again */
-    if (callState === 'active'){ attachLocalTracks(peer); renegotiateWith(peer); return; }
-    if (callState !== 'idle'){ sendTo(peer, { type: 'call-busy' }); return; }
+    if (callState !== 'idle'){ sig({ type: 'call-busy' }); return; }
     callKind = msg.kind; callState = 'ringing-in';
-    $('incomingCallText').textContent = who + ' ' + (msg.kind === 'video' ? t('call.videoInvite') : t('call.audioInvite'));
+    $('incomingCallText').textContent = (peerNick || t('chat.someone')) + ' ' + (msg.kind === 'video' ? t('call.videoInvite') : t('call.audioInvite'));
     $('incomingCall').classList.remove('hide');
     startRing(true);
     armCallTimeout();
-  } else if (msg.type === 'call-busy'){
-    sysLine(who + ' ' + t('call.busy'));
-    if (!anyoneOnCall()) { stopRing(); disarmCallTimeout(); endCall(false); }
-  } else if (msg.type === 'call-decline'){
-    sysLine(who + ' ' + t('call.declinedBy'));
-    if (!anyoneOnCall()) { stopRing(); disarmCallTimeout(); endCall(false); }
-  } else if (msg.type === 'call-accept'){
-    stopRing(); disarmCallTimeout(); onCallAccepted(peer);
-  } else if (msg.type === 'call-need-offer'){
-    renegotiateWith(peer);
-  } else if (msg.type === 'call-offer-sdp'){
-    onCallOfferSdp(msg.sdp, peer);
-  } else if (msg.type === 'call-answer-sdp'){
-    if (peer && peer.pc) peer.pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(()=>{});
-  } else if (msg.type === 'call-end'){
-    if (peer){ peer.stream = null; renderCallGrid(); }
-    sysLine(who + ' ' + t('call.hungUp','ha chiuso la chiamata.'));
-    if (!anyoneOnCall()){ stopRing(); disarmCallTimeout(); endCall(false); }
-  }
+  } else if (msg.type === 'call-busy'){ stopRing(); disarmCallTimeout(); endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.busy'));
+  } else if (msg.type === 'call-decline'){ stopRing(); disarmCallTimeout(); endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.declinedBy'));
+  } else if (msg.type === 'call-accept'){ stopRing(); disarmCallTimeout(); onCallAccepted();
+  } else if (msg.type === 'call-offer-sdp'){ onCallOfferSdp(msg.sdp);
+  } else if (msg.type === 'call-answer-sdp'){ pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(()=>{});
+  } else if (msg.type === 'call-end'){ stopRing(); disarmCallTimeout(); endCall(false); }
 }
-/* with more than two people, one person hanging up does not end the call */
-function anyoneOnCall(){ return peerList().some(p => p.stream); }
 $('btnAcceptCall').addEventListener('click', async () => {
   stopRing(); disarmCallTimeout();
   $('incomingCall').classList.add('hide');
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: callKind === 'video' }); }
-  catch(e){ sysLine(t('call.micFail')); broadcast({ type: 'call-decline' }); callState = 'idle'; callKind = null; return; }
-  for (const p of livePeers()) attachLocalTracks(p);
+  catch(e){ sysLine(t('call.micFail')); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null; return; }
+  localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
   $('callBox').classList.remove('hide');
   $('localVideo').classList.toggle('hide', callKind !== 'video');
   $('localVideo').srcObject = localStream;
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
-  broadcast({ type: 'call-accept' });
+  sig({ type: 'call-accept' });
 });
 $('btnDeclineCall').addEventListener('click', () => {
   stopRing(); disarmCallTimeout();
-  $('incomingCall').classList.add('hide'); broadcast({ type: 'call-decline' }); callState = 'idle'; callKind = null;
+  $('incomingCall').classList.add('hide'); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null;
 });
-async function onCallAccepted(peer){
-  if (!localStream) return;
-  attachLocalTracks(peer);
-  await renegotiateWith(peer);
+async function onCallAccepted(){
+  localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
+  const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
+  sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
 }
-async function onCallOfferSdp(sdp, peer){
-  if (!peer || !peer.pc) return;
-  try{
-    await peer.pc.setRemoteDescription({ type: 'offer', sdp });
-    attachLocalTracks(peer);
-    const answer = await peer.pc.createAnswer();
-    await peer.pc.setLocalDescription(answer);
-    sendTo(peer, { type: 'call-answer-sdp', sdp: peer.pc.localDescription.sdp });
-  }catch(e){}
+async function onCallOfferSdp(sdp){
+  await pc.setRemoteDescription({ type: 'offer', sdp });
+  const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
+  sig({ type: 'call-answer-sdp', sdp: pc.localDescription.sdp });
 }
 function endCall(tellPeer){
   stopRing(); disarmCallTimeout();
-  if (tellPeer) broadcast({ type: 'call-end' });
+  if (tellPeer) sig({ type: 'call-end' });
   if (localStream){ localStream.getTracks().forEach(tr => tr.stop()); localStream = null; }
-  for (const p of peerList()) p.stream = null;
-  renderCallGrid();
   $('callBox').classList.add('hide'); $('incomingCall').classList.add('hide');
-  $('localVideo').srcObject = null;
+  $('remoteVideo').srcObject = null; $('localVideo').srcObject = null;
   callState = 'idle'; callKind = null; micOn = true; camOn = true;
   $('btnMuteCall').textContent = '🎤'; $('btnCamCall').textContent = '🎥';
 }
@@ -1428,28 +1119,16 @@ $('btnCamCall').addEventListener('click', () => {
 });
 
 /* ============================== self-destruct ============================== */
-function closeAllPeers(){
-  for (const p of peerList()){
-    try{ if (p.dc) p.dc.close(); }catch(e){}
-    try{ p.pc.close(); }catch(e){}
-  }
-  peers.clear();
-  meshTries.clear();
-  pending = null;
-  chatStarted = false;
-  seenSignals.clear();
-  renderCallGrid();
-  $('connState').textContent = t('session.closed');
-}
-
 let destructTimer = null, destructDeadline = 0;
 function destroyNow(tellPeer){
   clearInterval(destructTimer); destructTimer = null;
-  if (tellPeer) broadcast({ type:'wipe' });
+  if (tellPeer && dc && dc.readyState === 'open'){ try{ dc.send(JSON.stringify({ type:'wipe' })); }catch(e){} }
   endCall(false);
   $('msgs').innerHTML = '';
   sysLine(t('destruct.done'));
-  closeAllPeers();
+  if (dc) try{ dc.close(); }catch(e){}
+  if (pc) try{ pc.close(); }catch(e){}
+  dc = null; pc = null;
   $('destructCountdown').classList.add('hide');
   $('btnDisarmDestruct').classList.add('hide');
   $('connState').textContent = t('session.closed');
@@ -1471,28 +1150,13 @@ $('btnDisarmDestruct').addEventListener('click', () => {
   clearInterval(destructTimer); destructTimer = null;
   $('destructCountdown').classList.add('hide'); $('btnDisarmDestruct').classList.add('hide');
 });
-$('btnAddPerson').addEventListener('click', () => {
-  $('menuPanel').classList.add('hide');
-  if (roomFull()){ toast(t('room.full','La stanza \u00e8 al completo (4 persone).')); return; }
-  pending = null;
-  $('btnCreate').disabled = false;
-  $('offerBlock').classList.add('hide'); $('offerOut').textContent = '';
-  $('pasteAnswerCard').classList.add('hide'); $('answerIn').value = '';
-  $('passBox').classList.add('hide'); $('passWord').textContent = '';
-  setStatus($('statusA'), '');
-  $('diagA').classList.add('hide');
-  $('backFromStart').classList.add('hide');
-  $('backToChat').classList.remove('hide');
-  showScreen('screenStart');
-});
-$('backToChat').addEventListener('click', () => showScreen('screenChat'));
-
 $('btnNewSession').addEventListener('click', () => {
   clearInterval(destructTimer); destructTimer = null;
   $('destructCountdown').classList.add('hide'); $('btnDisarmDestruct').classList.add('hide');
   endCall(false);
-  closeAllPeers();
-  peerNick = '';
+  if (dc) try{ dc.close(); }catch(e){}
+  if (pc) try{ pc.close(); }catch(e){}
+  pc = null; dc = null; peerNick = '';
   $('msgs').innerHTML = '';
   $('offerBlock').classList.add('hide'); $('offerOut').textContent = '';
   $('answerBlock').classList.add('hide'); $('answerOut').textContent = '';

@@ -104,7 +104,6 @@
   <!-- ============================ START ============================ -->
   <section id="screenStart" class="hide">
     <button class="btn ghost" id="backFromStart">‹ <span data-i18n="nav.back">Indietro</span></button>
-    <button class="btn ghost hide" id="backToChat">‹ <span data-i18n="nav.backToChat">Torna alla chat</span></button>
     <div class="card">
       <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="start.s1">Manda l'invito</div></div>
       <div class="helptext" data-i18n="start.s1help">Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere
@@ -193,10 +192,9 @@
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata">🎥</button>
       <button class="iconbtn" id="btnMenu" title="Altro">⋯</button>
     </div>
-    <div class="roomline" id="roomCount"></div>
 
     <div id="callBox" class="hide">
-      <div id="remoteVideos"></div>
+      <video id="remoteVideo" autoplay playsinline></video>
       <video id="localVideo" autoplay playsinline muted></video>
       <div id="callStatus"></div>
       <div class="callctrl">
@@ -252,9 +250,6 @@
         <button class="btn" id="btnArmDestruct"><span class="ic">🔥</span><span data-i18n="menu.arm">Autodistruzione</span></button>
         <span class="status ok hide m0" id="destructCountdown"></span>
         <button class="btn hide" id="btnDisarmDestruct" data-i18n="menu.disarm">Annulla</button>
-      </div>
-      <div class="toolsrow">
-        <button class="btn" id="btnAddPerson"><span class="ic">➕</span><span data-i18n="menu.addPerson">Aggiungi qualcuno</span></button>
       </div>
       <div class="toolsrow">
         <button class="btn" id="btnClearHistory"><span class="ic">🧹</span><span data-i18n="menu.clearHistory">Svuota cronologia</span></button>
