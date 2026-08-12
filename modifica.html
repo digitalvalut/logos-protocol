@@ -462,7 +462,7 @@ Object.assign(I18N.en, {
 "verify.close":"Close","verify.unavailable":"Not ready yet — try again in a moment.",
 "contacts.title":"Recent contacts",
 "contacts.note":"One tap to prepare a new invite for them — the history of what you said is already waiting. A new code is still needed every time: no server keeps anyone \"always connected\".",
-"toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand",
+"toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand","toast.copySelected":"Copy failed — code selected for you, just press Ctrl/Cmd+C",
 "call.busy":"didn't answer — busy on another call.","call.declinedBy":"declined the call.",
 "call.joined":"joined the chat.","call.videoInvite":"is video calling you","call.audioInvite":"is calling you",
 "call.inVideo":"Video call in progress…","call.inAudio":"Call in progress…","call.ringingVideo":"Video calling, waiting for answer…","call.ringingAudio":"Calling, waiting for answer…",
@@ -497,7 +497,7 @@ Object.assign(I18N.it, {
 "footer.license":"Leggi la licenza open source","footer.source":"Codice sorgente su GitHub",
 "verify.badge":"🔒 verifica","verify.close":"Chiudi",
 "verify.unavailable":"Non ancora disponibile — riprova tra un istante.",
-"toast.sealCopied":"Codice copiato","toast.copyFail":"Copia non riuscita — seleziona e copia a mano",
+"toast.sealCopied":"Codice copiato","toast.copyFail":"Copia non riuscita — seleziona e copia a mano","toast.copySelected":"Copia non riuscita — l'ho selezionato per te, premi Ctrl/Cmd+C",
 "call.busy":"non ha risposto — occupato in un'altra chiamata.","call.declinedBy":"ha rifiutato la chiamata.",
 "call.joined":"si è unito alla chat.","call.videoInvite":"ti sta facendo una videochiamata","call.audioInvite":"ti sta chiamando",
 "call.inVideo":"Videochiamata in corso…","call.inAudio":"Chiamata in corso…","call.ringingVideo":"Chiamata video in corso, in attesa di risposta…","call.ringingAudio":"Chiamata in corso, in attesa di risposta…",
@@ -703,25 +703,63 @@ $('btnCreate').addEventListener('click', async () => {
   $('offerOut').textContent = code;
   $('offerBlock').classList.remove('hide');
   $('pasteAnswerCard').style.display = 'block';
+  if (await robustCopy(code)) toast(t('toast.sealCopied'));
 });
 function inviteLink(code){ return location.origin + location.pathname + '#i=' + encodeURIComponent(code); }
+
+/* Copy that actually works: try the modern API, then a legacy textarea+execCommand
+   fallback (not gated by the same permission/activation rules), and only if both
+   fail, select the code on screen so a manual Ctrl/Cmd+C takes one keystroke. */
+async function robustCopy(text){
+  try{ await navigator.clipboard.writeText(text); return true; }catch(e){}
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (ok) return true;
+  }catch(e){}
+  return false;
+}
+function selectCodeBox(el){
+  try{
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+  }catch(e){}
+}
+async function copyOrSelect(text, boxEl){
+  if (await robustCopy(text)){ toast(t('toast.sealCopied')); return; }
+  if (boxEl){ selectCodeBox(boxEl); toast(t('toast.copySelected', t('toast.copyFail'))); }
+  else toast(t('toast.copyFail'));
+}
+
 /* Sharing the app itself — not an invite to a chat, just "here's where to get it" */
 $('btnShareApp').addEventListener('click', async () => {
   const link = location.origin + location.pathname;
   const text = t('home.shareAppText') + link;
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
-  try{ await navigator.clipboard.writeText(text); toast(t('toast.sealCopied')); }
-  catch(e){ toast(t('toast.copyFail')); }
+  await copyOrSelect(text, null);
 });
 $('btnShareOffer').addEventListener('click', async () => {
   const link = inviteLink($('offerOut').textContent);
   const text = t('invite.shareText') + link;
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
-  try{ await navigator.clipboard.writeText(text); toast(t('toast.sealCopied')); }
-  catch(e){ toast(t('toast.copyFail')); }
+  await copyOrSelect(text, $('offerOut'));
 });
 $('btnCopyOffer').addEventListener('click', async () => {
-  try{ await navigator.clipboard.writeText($('offerOut').textContent); toast(t('toast.sealCopied')); }catch(e){ toast(t('toast.copyFail')); }
+  await copyOrSelect($('offerOut').textContent, $('offerOut'));
 });
 $('btnConnectAsA').addEventListener('click', async () => {
   if (!pc) return;
@@ -750,14 +788,15 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   const code = b64encode(JSON.stringify({ type: 'answer', sdp: pc.localDescription.sdp }));
   $('answerOut').textContent = code;
   $('answerBlock').classList.remove('hide');
+  if (await robustCopy(code)) toast(t('toast.sealCopied'));
 });
 $('btnShareAnswer').addEventListener('click', async () => {
   const text = t('invite.answerText') + $('answerOut').textContent;
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
-  try{ await navigator.clipboard.writeText(text); toast(t('toast.sealCopied')); }catch(e){ toast(t('toast.copyFail')); }
+  await copyOrSelect(text, $('answerOut'));
 });
 $('btnCopyAnswer').addEventListener('click', async () => {
-  try{ await navigator.clipboard.writeText($('answerOut').textContent); toast(t('toast.sealCopied')); }catch(e){ toast(t('toast.copyFail')); }
+  await copyOrSelect($('answerOut').textContent, $('answerOut'));
 });
 
 /* opening a shared invite link pre-fills the code so the second person barely has to think */
