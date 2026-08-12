@@ -266,7 +266,19 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load', () => { navigator.serviceWorker.register('modifica-sw.js', { scope: './modifica.html' }).catch(()=>{}); });
 }
 
-/* ============================== WebRTC core ============================== */
+/* ============================== WebRTC core ==============================
+   STUN alone finds a direct path only when both sides sit behind NAT that
+   maps addresses predictably. Mobile carriers overwhelmingly use symmetric
+   carrier-grade NAT, which STUN cannot see through by design — this is why
+   two phones on different carriers can fail to connect while two devices on
+   the same network succeed. The only real fix is a relay both sides can
+   reach (TURN) — checked here (2026-08-12) and not added, because the one
+   well-known free community relay (openrelay.metered.ca) is confirmed dead,
+   not just untested: it refuses connections outright. A relay that actually
+   stays up costs real, ongoing bandwidth, which means someone has to run and
+   pay for it — that is a decision for DigitalValut to make deliberately, not
+   something to bolt on with a random free URL that could vanish the same way
+   this one did. */
 const ICE = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
 let pc = null, dc = null;
 const CHUNK = 16 * 1024;
