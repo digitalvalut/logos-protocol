@@ -427,18 +427,26 @@ function setStatus(el, text, kind){ el.textContent = text; el.className = 'statu
 /* What kind of network path was actually found, in plain terms. "host" means a
    direct local address; "srflx" means STUN found a path through the router;
    "relay" never appears, since this app has no relay server to offer one. */
-async function diagLine(pc){
-  let host = false, srflx = false, remoteHost = false, remoteSrflx = false;
-  try{
-    const stats = await pc.getStats();
-    stats.forEach(s => {
-      if (s.type === 'local-candidate'){ if (s.candidateType === 'host') host = true; if (s.candidateType === 'srflx') srflx = true; }
-      if (s.type === 'remote-candidate'){ if (s.candidateType === 'host') remoteHost = true; if (s.candidateType === 'srflx') remoteSrflx = true; }
-    });
-  }catch(e){}
-  const mine = [host && 'host', srflx && 'srflx'].filter(Boolean).join('+') || '—';
-  const theirs = [remoteHost && 'host', remoteSrflx && 'srflx'].filter(Boolean).join('+') || '—';
-  return 'ICE ' + pc.iceConnectionState + ' · ' + pc.connectionState + ' · tu:' + mine + ' loro:' + theirs;
+/* getStats() turned out to be the wrong source for this: on some browsers a
+   candidate stat is only reported once it belongs to a candidate pair that was
+   actually tried, so "no pair ever formed" and "nothing was gathered" both
+   read as the same empty result — indistinguishable, and useless for telling
+   them apart. The SDPs themselves don't have that ambiguity: every gathered
+   candidate is written into them as plain text, and — unlike live stats —
+   they stay exactly as they were even after the connection closes. */
+function candidateTypesIn(sdp){
+  if (!sdp) return [];
+  const types = new Set();
+  const re = /^a=candidate:\S+ \d+ \S+ \d+ \S+ \d+ typ (\w+)/gm;
+  let m;
+  while ((m = re.exec(sdp))) types.add(m[1]);
+  return [...types];
+}
+function diagLine(pc){
+  const mine = candidateTypesIn(pc.localDescription && pc.localDescription.sdp);
+  const theirs = candidateTypesIn(pc.remoteDescription && pc.remoteDescription.sdp);
+  return 'ICE ' + pc.iceConnectionState + ' · ' + pc.connectionState +
+    ' · tu:' + (mine.join('+') || '—') + ' loro:' + (theirs.join('+') || '—');
 }
 
 function watchHandshakeProgress(peer, statusEl, diagEl){
@@ -453,11 +461,9 @@ function watchHandshakeProgress(peer, statusEl, diagEl){
      current state directly, every time, and simply skips writing once it is
      no longer live — leaving the last real reading on screen instead of
      overwriting it with nothing. */
-  const tick = async () => {
+  const tick = () => {
     if (!diagEl || settled) return;
-    const st = peer.pc.connectionState;
-    if (st === 'closed' || st === 'failed') return;
-    diagEl.textContent = await diagLine(peer.pc);
+    diagEl.textContent = diagLine(peer.pc);
   };
   const diagTimer = diagEl ? setInterval(tick, 1200) : null;
   if (diagEl){ diagEl.classList.remove('hide'); tick(); }
