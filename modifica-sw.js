@@ -4,7 +4,7 @@
    Caches the app shell so it installs and opens without a connection; the
    WebRTC handshake itself still needs the internet to find the other peer. */
 
-const CACHE = 'logos-modifica-1.2';
+const CACHE = 'logos-modifica-1.3';
 const ASSETS = [
   './modifica.html',
   './modifica-manifest.webmanifest',
@@ -30,20 +30,38 @@ self.addEventListener('activate', event => {
   );
 });
 
+function keep(req, res){
+  if (res && res.ok && res.type === 'basic'){
+    const copy = res.clone();
+    caches.open(CACHE).then(cache => cache.put(req, copy));
+  }
+  return res;
+}
+
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
   if (new URL(req.url).origin !== self.location.origin) return;
 
+  /* The page itself goes to the network first. Cache-first meant an update only
+     showed up on the *second* open — the first one still served the old page,
+     which reads to anyone using it as "the fix did not work". Offline still
+     works: the moment the network fails we fall straight back to the cache. */
+  if (req.mode === 'navigate' || req.destination === 'document'){
+    event.respondWith(
+      fetch(req)
+        .then(res => keep(req, res))
+        .catch(() => caches.match(req, { ignoreSearch: true })
+          .then(hit => hit || Response.error()))
+    );
+    return;
+  }
+
+  /* Icons and the manifest change rarely: serve them instantly from the cache
+     and refresh in the background. */
   event.respondWith(
     caches.match(req, { ignoreSearch: true }).then(hit => {
-      const live = fetch(req).then(res => {
-        if (res && res.ok && res.type === 'basic') {
-          const copy = res.clone();
-          caches.open(CACHE).then(cache => cache.put(req, copy));
-        }
-        return res;
-      }).catch(() => hit);
+      const live = fetch(req).then(res => keep(req, res)).catch(() => hit);
       return hit || live;
     })
   );
