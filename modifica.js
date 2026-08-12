@@ -89,6 +89,9 @@ Object.assign(I18N.en, {
 "lock.wrongPass":"Wrong passphrase. Check it and try again.",
 "lock.badAnswer":"Invalid reply — or it was sealed with a different passphrase.",
 "join.badCode":"This code is not valid. Check that you copied all of it.",
+"connect.waiting":"Waiting for the connection…",
+"connect.failed":"Could not connect. Make sure you are both online, then create a fresh invite — old codes cannot be reused.",
+"connect.slow":"This is taking longer than usual — that happens on very restricted networks (workplaces, some mobile networks) or if you are not online at the same moment. Wait a bit more, or create a fresh invite.",
 "footer.seal":"Fingerprints of this app (SHA-256):",
 "verify.known":"verified",
 "verify.changedShort":"code changed",
@@ -149,6 +152,9 @@ Object.assign(I18N.it, {
 "lock.wrongPass":"Parola d'ordine sbagliata. Controlla e riprova.",
 "lock.badAnswer":"Risposta non valida — oppure è stata chiusa con una parola d'ordine diversa.",
 "join.badCode":"Questo codice non è valido. Controlla di averlo copiato tutto.",
+"connect.waiting":"In attesa della connessione…",
+"connect.failed":"Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.",
+"connect.slow":"Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.",
 "footer.seal":"Impronte di questa app (SHA-256):",
 "verify.known":"verificato",
 "verify.changedShort":"codice cambiato",
@@ -412,6 +418,30 @@ async function waitIceComplete(peer){
   });
 }
 function setStatus(el, text, kind){ el.textContent = text; el.className = 'status' + (kind ? ' ' + kind : ''); }
+
+/* Until now, a stalled connection left the screen silent — nothing told anyone
+   it was still trying, or that it had given up. That silence is itself a bug:
+   someone staring at a blank status has no way to tell "still working" from
+   "broken", and no idea what to try next. This watches the handshake and says
+   so, either way. */
+function watchHandshakeProgress(peer, statusEl){
+  setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
+  let settled = false;
+  const onChange = () => {
+    const st = peer.pc.connectionState;
+    if (st === 'connected'){ settled = true; setStatus(statusEl, ''); }
+    else if (st === 'failed' || st === 'closed'){
+      settled = true;
+      setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+    }
+  };
+  peer.pc.addEventListener('connectionstatechange', onChange);
+  setTimeout(() => {
+    if (settled || peer.pc.connectionState === 'connected') return;
+    settled = true;
+    setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'), 'bad');
+  }, 25000);
+}
 function toast(msg){
   const el = document.createElement('div');
   el.textContent = msg;
@@ -785,6 +815,7 @@ $('btnConnectAsA').addEventListener('click', async () => {
     if (parsed.type !== 'answer') throw new Error('bad');
     if (!pending) throw new Error('no pending invite');
     await pending.pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
+    watchHandshakeProgress(pending, $('statusA'));
   }catch(e){ setStatus($('statusA'), t('lock.badAnswer','—'), 'bad'); }
 });
 
@@ -832,6 +863,7 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   $('answerOut').textContent = code;
   $('answerBlock').classList.remove('hide');
   if (await robustCopy(code)) toast(t('toast.sealCopied'));
+  watchHandshakeProgress(pending, $('statusB'));
 });
 $('btnShareAnswer').addEventListener('click', async () => {
   const text = t('invite.answerText') + $('answerOut').textContent;
