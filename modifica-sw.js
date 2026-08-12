@@ -4,9 +4,11 @@
    Caches the app shell so it installs and opens without a connection; the
    WebRTC handshake itself still needs the internet to find the other peer. */
 
-const CACHE = 'logos-modifica-1.3';
+const CACHE = 'logos-modifica-1.4';
 const ASSETS = [
   './modifica.html',
+  './modifica.css',
+  './modifica.js',
   './modifica-manifest.webmanifest',
   './modifica-icon-192.png',
   './modifica-icon-512.png',
@@ -43,11 +45,15 @@ self.addEventListener('fetch', event => {
   if (req.method !== 'GET') return;
   if (new URL(req.url).origin !== self.location.origin) return;
 
-  /* The page itself goes to the network first. Cache-first meant an update only
-     showed up on the *second* open — the first one still served the old page,
-     which reads to anyone using it as "the fix did not work". Offline still
-     works: the moment the network fails we fall straight back to the cache. */
-  if (req.mode === 'navigate' || req.destination === 'document'){
+  /* The app's own code — the page, its stylesheet and its script — goes to the
+     network first. Cache-first meant an update only showed up on the *second*
+     open, and to anyone using the app that reads as "the fix did not work".
+     Offline still works: the moment the network fails we fall straight back to
+     the cache. The script matters as much as the page here, since that is where
+     all the logic now lives. */
+  const isAppCode = req.mode === 'navigate' || req.destination === 'document' ||
+                    req.destination === 'script' || req.destination === 'style';
+  if (isAppCode){
     event.respondWith(
       fetch(req)
         .then(res => keep(req, res))
