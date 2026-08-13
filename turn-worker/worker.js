@@ -19,7 +19,7 @@
 const ALLOWED_ORIGIN = 'https://digitalvalut.github.io';
 const TURN_TTL_SECONDS = 86400; // 24h — long enough for the longest realistic call
 const MAILBOX_TTL_SECONDS = 120; // long enough to open the app and be found, no longer
-const MAX_BODY_BYTES = 4096; // an SDP offer/answer is a few hundred bytes; this is generous headroom
+const MAX_BODY_BYTES = 8192; // an encrypted offer/answer is ~1.5KB once sealed and base64'd; this is generous headroom
 const KEY_RE = /^[0-9a-f]{64}$/; // a hex SHA-256, nothing else is a valid mailbox key
 
 function corsHeaders(origin){
@@ -52,9 +52,46 @@ async function handleTurn(env, cors){
   }
 }
 
+/* ---------------- attempt limiting ----------------
+   A six-digit connection code is a million possibilities. The client already
+   makes each guess expensive to prepare (600k rounds of PBKDF2 before a slot
+   address can even be computed) and encrypts everything it stores, so a
+   guessed address on its own reveals nothing. This closes the remaining door:
+   sweeping the code space needs an enormous number of lookups, and lookups are
+   something this Worker can simply refuse.
+
+   The budget is deliberately generous, because a legitimate connection polls
+   quite a lot while two phones are finding each other — roughly a hundred and
+   fifty lookups in the busiest minute. Anything far above that is not a person
+   trying to talk to a friend.
+
+   KV is eventually consistent, so this count is approximate and a determined
+   attacker can overshoot it somewhat. That is understood and accepted: the aim
+   is to make a sweep cost orders of magnitude more than it otherwise would,
+   not to be an exact meter. */
+const RL_WINDOW_SECONDS = 60;
+const RL_MAX_LOOKUPS = 240;
+
+async function overRateLimit(request, env){
+  const ip = request.headers.get('CF-Connecting-IP');
+  if (!ip) return false; /* no address to attribute it to: do not punish the request */
+  const bucket = Math.floor(Date.now() / 1000 / RL_WINDOW_SECONDS);
+  const key = 'rl:' + ip + ':' + bucket;
+  const current = parseInt((await env.MAILBOX.get(key)) || '0', 10) || 0;
+  if (current >= RL_MAX_LOOKUPS) return true;
+  await env.MAILBOX.put(key, String(current + 1), { expirationTtl: RL_WINDOW_SECONDS * 2 });
+  return false;
+}
+
 async function handleMailbox(request, env, cors, key){
   if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
   if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
+
+  /* only reads are metered: a read is what a code-guesser needs, and a write
+     only ever puts something into a slot nobody else can find or decrypt */
+  if (request.method === 'GET' && await overRateLimit(request, env)){
+    return json({ error: 'too many attempts' }, 429, cors);
+  }
 
   if (request.method === 'PUT'){
     const body = await request.text();

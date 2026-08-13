@@ -108,7 +108,14 @@ Object.assign(I18N.en, {
 "quick.codePh":"000000","quick.connect":"Connect",
 "quick.waiting":"Waiting for the other person to type the code\u2026","quick.expired":"The code expired with no answer. Generate a new one.",
 "quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.",
-"quick.shareText":"Here's the code for DigitalValut Logos, type it in the app within 2 minutes: "
+"quick.shareText":"Here's the code for DigitalValut Logos, type it in the app within 2 minutes: ",
+"sas.title":"Security check",
+"sas.lead":"Say these three words to each other out loud. If you both see the same ones, nobody has come in between.",
+"sas.leadChanged":"Careful: this person no longer looks like the same one as last time. Usually that means a new phone or a reinstalled app — but it is also what being intercepted looks like. Say the three words out loud before going on.",
+"sas.yes":"✓ Yes, they match","sas.no":"✕ No, they're different",
+"sas.note":"Only needed the first time with this person: after that, the app remembers.",
+"sas.confirmed":"Contact verified.",
+"sas.refused":"The words did not match: this conversation is not considered safe. Close it and start again with a fresh code."
 });
 Object.assign(I18N.it, {
 "topbar.sub":"Chat sperimentale",
@@ -195,7 +202,14 @@ Object.assign(I18N.it, {
 "quick.codePh":"000000","quick.connect":"Connetti",
 "quick.waiting":"In attesa che l'altra persona digiti il codice…","quick.expired":"Il codice è scaduto senza risposta. Generane uno nuovo.",
 "quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.",
-"quick.shareText":"Ecco il codice per DigitalValut Logos, scrivilo nell'app entro 2 minuti: "
+"quick.shareText":"Ecco il codice per DigitalValut Logos, scrivilo nell'app entro 2 minuti: ",
+"sas.title":"Controllo di sicurezza",
+"sas.lead":"Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.",
+"sas.leadChanged":"Attenzione: questa persona non risulta più la stessa dell'ultima volta. Di solito è un telefono nuovo o l'app reinstallata — ma è anche il segno di qualcuno che si è messo in mezzo. Ditevi le tre parole a voce prima di continuare.",
+"sas.yes":"✓ Sì, sono uguali","sas.no":"✕ No, sono diverse",
+"sas.note":"Serve solo la prima volta con questa persona: dopo, l'app se lo ricorda.",
+"sas.confirmed":"Contatto verificato.",
+"sas.refused":"Le parole non coincidevano: questa conversazione non è considerata sicura. Chiudila e ricominciate con un codice nuovo."
 });
 
 function t(key, fallback){
@@ -567,17 +581,42 @@ function extractFingerprint(sdp){
   const m = sdp && sdp.match(/a=fingerprint:sha-256 ([0-9A-Fa-f:]+)/);
   return m ? m[1].toUpperCase() : null;
 }
-async function computeSafetyCode(){
+async function safetyDigest(){
   if (!pc || !pc.localDescription || !pc.remoteDescription) return null;
   const fpA = extractFingerprint(pc.localDescription.sdp);
   const fpB = extractFingerprint(pc.remoteDescription.sdp);
   if (!fpA || !fpB) return null;
   const combined = [fpA, fpB].sort().join('|');
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(combined));
-  const bytes = new Uint8Array(digest);
+  return new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(combined)));
+}
+async function computeSafetyCode(){
+  const bytes = await safetyDigest();
+  if (!bytes) return null;
   const groups = [];
   for (let i = 0; i < 12; i += 2) groups.push(String((bytes[i] << 8) | bytes[i+1]).padStart(5,'0'));
   return groups.join('  ');
+}
+/* Thirty digits are unreadable over the phone, and something nobody reads is
+   something nobody checks. Three words out of the same digest carry roughly
+   twenty-five bits — far past what an attacker gets to try, since they only
+   ever get one attempt and a person is listening — and two people can actually
+   say them to each other. This is the short authentication string of ZRTP
+   (RFC 6189), the model secure telephony has used for two decades: the words
+   are not a secret and are not sent anywhere, they are simply the same on both
+   ends if, and only if, nobody is sitting in the middle. */
+async function computeSafetyWords(){
+  const bytes = await safetyDigest();
+  if (!bytes) return null;
+  const words = [];
+  for (let i = 0; i < 3; i++) words.push(LOCK_WORDS[((bytes[i*2] << 8) | bytes[i*2+1]) % LOCK_WORDS.length]);
+  return words;
+}
+/* The other side's certificate fingerprint, straight out of the description the
+   DTLS handshake itself authenticated. Unlike a nickname — which anyone can
+   claim — this cannot be borrowed, so it is what trust gets pinned to. */
+function remoteFpHex(){
+  const fp = extractFingerprint(pc && pc.remoteDescription && pc.remoteDescription.sdp);
+  return fp ? fp.replace(/:/g, '').toLowerCase() : null;
 }
 /* ---------- a lasting identity, so verification can outlive one session ----------
    By default a browser mints a throwaway certificate for every connection, so the
@@ -632,8 +671,15 @@ async function newPeerConnection(){
   return new RTCPeerConnection(config);
 }
 
-/* ---------- trust on first use: remember the code, speak up when it changes ---------- */
+/* ---------- trust on first use, pinned to the device rather than the name ----------
+   This used to be filed under whatever name the other side announced itself by. But
+   a name is just a claim — anyone can say they are Marco — so the record it unlocked
+   belonged to whoever asked for it. It is now filed under the other side's
+   certificate fingerprint, which the encrypted handshake itself proves and which
+   nobody else can present. Records written by older versions are carried over the
+   first time their owner reconnects and the code still matches. */
 function safetyKey(nick){ return 'dvlogos-safety-' + (nick||'').trim().toLowerCase(); }
+function safetyKeyFp(fpHex){ return 'dvlogos-safety-fp-' + fpHex; }
 let safetyState = 'unknown';
 function paintVerifyBadge(state){
   safetyState = state;
@@ -644,29 +690,63 @@ function paintVerifyBadge(state){
   else if (state === 'changed'){ b.classList.add('vbad'); b.textContent = '⚠️ ' + t('verify.changedShort','codice cambiato'); }
   else { b.textContent = t('verify.badge','🔒 verifica'); }
 }
+function readSafetyRec(key){ try{ return JSON.parse(localStorage.getItem(key) || 'null'); }catch(e){ return null; } }
+function writeSafetyRec(key, code){ try{ localStorage.setItem(key, JSON.stringify({ code, since: Date.now() })); }catch(e){} }
+
 async function checkSafetyFor(nick){
   const code = await computeSafetyCode();
-  if (!code || !nick) return;
-  let rec = null;
-  try{ rec = JSON.parse(localStorage.getItem(safetyKey(nick)) || 'null'); }catch(e){}
-  if (!rec || !rec.code){
-    try{ localStorage.setItem(safetyKey(nick), JSON.stringify({ code, since: Date.now() })); }catch(e){}
-    paintVerifyBadge('new');
-  } else if (rec.code === code){
-    paintVerifyBadge('ok');
-  } else {
-    paintVerifyBadge('changed');
-    sysLine(t('verify.changedWarn','⚠️ Il codice di sicurezza di questa persona è cambiato rispetto all\'ultima volta.'));
+  const fpHex = remoteFpHex();
+  if (!code || !fpHex) return;
+  const key = safetyKeyFp(fpHex);
+  let rec = readSafetyRec(key);
+  /* one-time carry-over from the old name-keyed records */
+  if (!rec && nick){
+    const old = readSafetyRec(safetyKey(nick));
+    if (old && old.code === code){ writeSafetyRec(key, code); rec = { code }; }
   }
+  if (rec && rec.code === code){
+    paintVerifyBadge('ok');
+    return;
+  }
+  /* Nothing is trusted here yet. Previously this stored the code on sight and
+     called it verified, which meant an impostor was recorded just as readily as
+     the real person. Now the two people are asked, once, and nothing is written
+     until they say the words match. */
+  paintVerifyBadge(rec ? 'changed' : 'new');
+  await showSasPanel(rec ? 'changed' : 'new');
 }
-function acceptNewSafety(nick){
+function acceptNewSafety(){
   computeSafetyCode().then(code => {
-    if (!code) return;
-    try{ localStorage.setItem(safetyKey(nick), JSON.stringify({ code, since: Date.now() })); }catch(e){}
+    const fpHex = remoteFpHex();
+    if (!code || !fpHex) return;
+    writeSafetyRec(safetyKeyFp(fpHex), code);
     paintVerifyBadge('ok');
     $('verifyPanel').classList.add('hide');
+    $('sasPanel').classList.add('hide');
   });
 }
+
+/* ---------- the one question worth asking, asked once ----------
+   Shown by itself the first time two people ever connect, and again only if the
+   other side's identity changes. Someone who has already confirmed a contact
+   never sees it again — which is the whole point: a check that appeared every
+   time would be dismissed every time. */
+async function showSasPanel(kind){
+  const words = await computeSafetyWords();
+  if (!words) return;
+  $('sasWords').textContent = words.join('   ');
+  $('sasLead').textContent = kind === 'changed'
+    ? t('sas.leadChanged','Attenzione: questa persona non risulta più la stessa dell\'ultima volta. Di solito è un telefono nuovo o l\'app reinstallata — ma è anche il segno di qualcuno che si è messo in mezzo. Ditevi le tre parole a voce prima di continuare.')
+    : t('sas.lead','Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.');
+  $('sasPanel').classList.toggle('warn', kind === 'changed');
+  $('sasPanel').classList.remove('hide');
+}
+$('btnSasYes').addEventListener('click', () => { acceptNewSafety(); toast(t('sas.confirmed','Contatto verificato.')); });
+$('btnSasNo').addEventListener('click', () => {
+  $('sasPanel').classList.add('hide');
+  paintVerifyBadge('changed');
+  sysLine(t('sas.refused','Le parole non coincidevano: questa conversazione non è considerata sicura. Chiudila e ricominciate con un codice nuovo.'));
+});
 
 $('btnVerify').addEventListener('click', async () => {
   $('menuPanel').classList.add('hide');
@@ -685,7 +765,7 @@ $('btnVerify').addEventListener('click', async () => {
   $('verifyNote').textContent = note;
   $('btnAcceptSafety').classList.toggle('hide', !showAccept);
 });
-$('btnAcceptSafety').addEventListener('click', () => acceptNewSafety(peerNick));
+$('btnAcceptSafety').addEventListener('click', () => acceptNewSafety());
 $('btnCloseVerify').addEventListener('click', () => $('verifyPanel').classList.add('hide'));
 
 function initials(name){
@@ -1004,6 +1084,74 @@ async function mailboxGet(key){
   }catch(e){ return null; }
 }
 
+/* ============ nothing readable ever reaches the mailbox ============
+   Everything that passes through the mailbox — the offer, the answer, every
+   network address — is encrypted first, with a key both sides derive from
+   something only they know. Two things follow from that, and both matter:
+
+   1. Someone who guesses or sweeps a mailbox address still gets nothing. The
+      short code stops being the whole defence.
+   2. Neither Cloudflare nor DigitalValut can read what goes through. The offer
+      contains IP addresses; previously they crossed the mailbox in the clear,
+      which meant the relay could in principle see who was talking to whom.
+      Now it cannot. That was a real privacy gap, closed here.
+
+   Every primitive is the browser's own audited Web Crypto: PBKDF2-SHA256,
+   HKDF-SHA256, AES-256-GCM. No cryptography is hand-written anywhere in this
+   file, deliberately — see the note on SPAKE2 in the quick-connect section. */
+const QUICK_ITER = 600000; /* ~0.3-1s once per connection: unnoticed by a person, brutal for a machine trying a million codes */
+const SIGNAL_SALT = new TextEncoder().encode('DigitalValut Logos signalling v3');
+
+function hex(bytes){ return [...new Uint8Array(bytes)].map(b => b.toString(16).padStart(2,'0')).join(''); }
+async function sha256Hex2(str){ return hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))); }
+
+/* A six-digit code is a million possibilities, which is nothing to a machine —
+   so it is stretched deliberately before it becomes either an address or a key.
+   The cost is paid once, by each of the two people, on a phone: invisible.
+   The same cost paid a million times over is what makes sweeping the code space
+   impractical, and the Worker's own attempt limit closes the rest of that door. */
+async function quickSecrets(code){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode('logos-quick-v3:' + code), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name:'PBKDF2', salt: SIGNAL_SALT, iterations: QUICK_ITER, hash:'SHA-256' }, base, 512);
+  const raw = new Uint8Array(bits);
+  const key = await crypto.subtle.importKey('raw', raw.slice(0, 32), { name:'AES-GCM' }, false, ['encrypt','decrypt']);
+  return { key, seed: hex(raw.slice(32, 64)) };
+}
+/* The fingerprints two people already hold for each other are 256-bit values,
+   not a short code — there is nothing to guess, so no stretching is needed and
+   HKDF is exactly the right tool. */
+async function pairSecrets(secretStr){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(secretStr), 'HKDF', false, ['deriveKey','deriveBits']);
+  const params = { name:'HKDF', hash:'SHA-256', salt: SIGNAL_SALT, info: new TextEncoder().encode('logos-pair-v3') };
+  const key = await crypto.subtle.deriveKey(params, base, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
+  const seed = hex(await crypto.subtle.deriveBits({ ...params, info: new TextEncoder().encode('logos-pair-slot-v3') }, base, 256));
+  return { key, seed };
+}
+async function slotId(seed, label){ return sha256Hex2(seed + '/' + label); }
+
+async function sealFor(key, obj){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(obj)));
+  return { i: ab2b64(iv), c: ab2b64(ct) };
+}
+/* Returns null rather than throwing on anything that does not decrypt — a wrong
+   code, a tampered payload and a stray leftover all look the same from here, and
+   all mean the same thing: not for us. */
+async function openFrom(key, env){
+  try{
+    if (!env || typeof env.i !== 'string' || typeof env.c !== 'string') return null;
+    const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b642ab(env.i) }, key, b642ab(env.c));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }catch(e){ return null; }
+}
+async function mailboxPutSealed(key, sec, obj){ return mailboxPut(key, await sealFor(sec.key, obj)); }
+async function mailboxGetSealed(key, sec){
+  const env = await mailboxGet(key);
+  if (!env) return null;
+  return openFrom(sec.key, env);
+}
+
 /* Same envelope the manual "create invite" button already produces, so the auto-reconnect
    fallback below can reveal it as a completely ordinary invite if nobody answers. */
 async function sealOrEncodeOffer(pcObj){
@@ -1037,15 +1185,21 @@ async function tryAutoReconnect(contact){
   wireDataChannel(pc.createDataChannel('logos-modifica'));
   /* same trickle exchange as the short code above, and for the same reason:
      waiting for gathering to finish before speaking made one side declare
-     failure while the other was already connected */
-  const pump = candidatePump(pc, myFp + ':' + contact.fp, 'a', 'b');
+     failure while the other was already connected. The key comes from the two
+     fingerprints, which both sides already hold and nobody else knows, so this
+     path is encrypted too — the relay never sees these addresses either. */
+  const sec = await pairSecrets(myFp + ':' + contact.fp);
+  const pump = candidatePump(pc, sec, 'a', 'b');
   quickPump = pump;
   const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
 
+  /* the announcement slot stays derived from the plain fingerprints: the other
+     side has to be able to find it while only knowing who might call, before it
+     has any key material for this particular attempt */
   const outKey = await pairKey(myFp, contact.fp);
   const inKey = await pairKey(contact.fp, myFp);
-  const sent = await mailboxPut(outKey, { nick: myNick(), sdp: pc.localDescription.sdp });
+  const sent = await mailboxPutSealed(outKey, sec, { nick: myNick(), sdp: pc.localDescription.sdp });
 
   if (sent){
     /* The other side has to be sitting on the home screen for its own poll to
@@ -1055,7 +1209,7 @@ async function tryAutoReconnect(contact){
     const deadline = Date.now() + 45000;
     while (Date.now() < deadline){
       if (!pc || pc.signalingState === 'closed'){ pump.stop(); return; } // user navigated away or started something else
-      const msg = await mailboxGet(inKey);
+      const msg = await mailboxGetSealed(inKey, sec);
       if (msg && msg.sdp){
         await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
         await pump.remoteReady();
@@ -1090,8 +1244,9 @@ async function checkInboxOnce(){
   const contacts = loadContacts().filter(c => c.fp);
   for (const c of contacts){
     const key = await pairKey(c.fp, myFp);
-    const msg = await mailboxGet(key);
-    if (msg && msg.sdp){ await acceptIncomingAutoOffer(c, msg); return; }
+    const sec = await pairSecrets(c.fp + ':' + myFp);
+    const msg = await mailboxGetSealed(key, sec);
+    if (msg && msg.sdp){ await acceptIncomingAutoOffer(c, msg, sec); return; }
   }
 }
 function startInboxPolling(){
@@ -1103,15 +1258,15 @@ function stopInboxPolling(){
   clearInterval(inboxTimer);
   inboxTimer = null;
 }
-async function acceptIncomingAutoOffer(contact, msg){
+async function acceptIncomingAutoOffer(contact, msg, sec){
   stopInboxPolling();
   stopQuickPump();
   const myFp = await myFingerprintHex();
   pc = await newPeerConnection();
   pc.ondatachannel = ev => wireDataChannel(ev.channel);
-  /* the namespace both sides derive independently: the caller's fingerprint,
-     then the callee's — here `contact.fp` is the caller and `myFp` is us */
-  const pump = candidatePump(pc, contact.fp + ':' + myFp, 'b', 'a');
+  /* the key both sides derive independently from the caller's fingerprint then
+     the callee's — here `contact.fp` is the caller and `myFp` is us */
+  const pump = candidatePump(pc, sec, 'b', 'a');
   quickPump = pump;
   await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
   await pump.remoteReady();
@@ -1119,7 +1274,7 @@ async function acceptIncomingAutoOffer(contact, msg){
   await pc.setLocalDescription(answer);
   const outKey = await pairKey(myFp, contact.fp);
   /* answered at once, so the other side stops knocking at a door we have not opened */
-  await mailboxPut(outKey, { sdp: pc.localDescription.sdp });
+  await mailboxPutSealed(outKey, sec, { sdp: pc.localDescription.sdp });
   watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
   /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
 }
@@ -1185,7 +1340,7 @@ $('toggleLongInviteB').addEventListener('click', showLongLayoutB);
    Each batch of addresses goes to its own numbered mailbox slot, because a slot can
    only be read once — nothing else about the mailbox, its two-minute life, or the
    privacy of what it holds changes. */
-function candidatePump(pcObj, ns, mine, theirs){
+function candidatePump(pcObj, sec, mine, theirs){
   let outN = 0, inN = 0, batch = [], flushTimer = null, stopped = false, remoteSet = false;
   const held = [];
   pcObj.__trickleTypes = new Set();
@@ -1193,8 +1348,8 @@ function candidatePump(pcObj, ns, mine, theirs){
   const flush = async () => {
     if (stopped || !batch.length) return;
     const send = batch; batch = [];
-    const key = await pairKey('logos-trickle-' + mine + '-v2', ns + ':' + (outN++));
-    await mailboxPut(key, { c: send });
+    const key = await slotId(sec.seed, 'trickle-' + mine + '-' + (outN++));
+    await mailboxPutSealed(key, sec, { c: send });
   };
   pcObj.addEventListener('icecandidate', ev => {
     if (!ev.candidate) return; /* end of gathering: nothing left to send */
@@ -1212,8 +1367,8 @@ function candidatePump(pcObj, ns, mine, theirs){
   };
   (async () => {
     while (!stopped){
-      const key = await pairKey('logos-trickle-' + theirs + '-v2', ns + ':' + inN);
-      const msg = await mailboxGet(key);
+      const key = await slotId(sec.seed, 'trickle-' + theirs + '-' + inN);
+      const msg = await mailboxGetSealed(key, sec);
       if (msg && Array.isArray(msg.c)){
         inN++;
         for (const c of msg.c){ if (remoteSet) await add(c); else held.push(c); }
@@ -1244,22 +1399,24 @@ async function startQuickShare(){
   pc = await newPeerConnection();
   const myPc = pc;
   wireDataChannel(pc.createDataChannel('logos-modifica'));
-  const pump = candidatePump(pc, code, 'a', 'b');
+  const sec = await quickSecrets(code);
+  if (pc !== myPc) return;
+  const pump = candidatePump(pc, sec, 'a', 'b');
   quickPump = pump;
 
   const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
   if (pc !== myPc){ pump.stop(); return; }
 
-  const offerKey = await pairKey('logos-quick-offer-v2', code);
-  const answerKey = await pairKey('logos-quick-answer-v2', code);
+  const offerKey = await slotId(sec.seed, 'offer');
+  const answerKey = await slotId(sec.seed, 'answer');
   /* published straight away, candidates or not — they follow on their own */
-  await mailboxPut(offerKey, { sdp: pc.localDescription.sdp, nick: myNick() });
+  await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
 
   const deadline = Date.now() + 115000; /* just under the mailbox's own 2-minute TTL */
   while (Date.now() < deadline){
     if (pc !== myPc){ pump.stop(); return; }
-    const msg = await mailboxGet(answerKey);
+    const msg = await mailboxGetSealed(answerKey, sec);
     if (msg && msg.sdp){
       await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
       await pump.remoteReady();
@@ -1292,9 +1449,25 @@ async function tryQuickConnect(){
   $('btnQuickConnect').disabled = true;
   setStatus($('quickStatusB'), t('lock.working','…'));
   try{
-    const offerKey = await pairKey('logos-quick-offer-v2', code);
-    const answerKey = await pairKey('logos-quick-answer-v2', code);
-    const msg = await mailboxGet(offerKey);
+    const sec = await quickSecrets(code);
+    const offerKey = await slotId(sec.seed, 'offer');
+    const answerKey = await slotId(sec.seed, 'answer');
+
+    /* Stretching the code costs the phone showing it a couple of seconds before
+       it can publish anything, and someone reading that code off the screen in
+       person can easily type it faster than that. Giving up on the first empty
+       look would turn "you were quick" into "wrong code", so this keeps looking
+       for a few seconds before saying so. */
+    let msg = null;
+    const lookUntil = Date.now() + 15000;
+    for (;;){
+      msg = await mailboxGetSealed(offerKey, sec);
+      if (msg && msg.sdp) break;
+      if (Date.now() >= lookUntil) break;
+      await new Promise(r => setTimeout(r, 1000));
+    }
+    /* a wrong code and an expired one are indistinguishable here by design:
+       without the right key nothing decrypts, so there is nothing to tell apart */
     if (!msg || !msg.sdp){
       setStatus($('quickStatusB'), t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
       return;
@@ -1302,7 +1475,7 @@ async function tryQuickConnect(){
     stopQuickPump();
     pc = await newPeerConnection();
     pc.ondatachannel = ev => wireDataChannel(ev.channel);
-    const pump = candidatePump(pc, code, 'b', 'a');
+    const pump = candidatePump(pc, sec, 'b', 'a');
     quickPump = pump;
     await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
@@ -1310,7 +1483,7 @@ async function tryQuickConnect(){
     await pc.setLocalDescription(answer);
     /* sent immediately: the other side needs this before it will recognise us,
        and everything still being gathered follows behind it */
-    await mailboxPut(answerKey, { sdp: pc.localDescription.sdp, nick: myNick() });
+    await mailboxPutSealed(answerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
     watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump);
   } finally {
     quickConnecting = false;
@@ -1712,6 +1885,7 @@ $('btnNewSession').addEventListener('click', () => {
   $('passBox').classList.add('hide'); $('passWord').textContent = '';
   $('passAsk').classList.add('hide'); $('passIn').value = ''; sessionPass = '';
   paintVerifyBadge('unknown'); $('verifyNote').textContent = ''; $('btnAcceptSafety').classList.add('hide');
+  $('sasPanel').classList.add('hide'); $('sasPanel').classList.remove('warn');
   $('btnCreate').disabled = false; $('btnCreateAnswer').disabled = false;
   setStatus($('statusA'), ''); setStatus($('statusB'), '');
   $('diagA').classList.add('hide'); $('diagB').classList.add('hide');

@@ -131,6 +131,14 @@
     overflow-y:auto}
   .backlink{margin-top:16px;text-align:center}
 
+  /* ---- the safety check: the one thing worth reading on this screen ---- */
+  #sasPanel{border-color:var(--accent)}
+  #sasPanel.warn{border-color:var(--bad)}
+  .saswords{font-family:var(--mono);font-size:1.75rem;font-weight:700;letter-spacing:.04em;
+    text-align:center;color:var(--ink);background:#0d0f12;border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:20px 12px;margin:14px 0;word-spacing:.5em;line-height:1.5}
+  #sasPanel.warn .saswords{border-color:var(--bad)}
+
   /* ---- quick connect: a short number instead of a long code to paste ---- */
   .quickcode{font-family:var(--mono);font-size:2.375rem;font-weight:700;letter-spacing:.12em;
     text-align:center;color:var(--ink);background:#0d0f12;border:1.5px solid var(--line);
