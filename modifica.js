@@ -405,16 +405,32 @@ function isLocked(env){ return !!(env && env.e === 1); }
 let lockOn = false;      /* the switch on the create screen */
 let sessionPass = '';    /* the passphrase in play, so the reply is sealed the same way */
 
-/* The invite is only as good as the addresses inside it. Four seconds was
-   enough on a quick network and not enough on a slow one, and a code sent
-   before gathering finished is a code that simply never connects. */
+/* The invite is only as good as the addresses inside it. A fixed 9s cutoff was
+   enough on a fast, low-loss network — a laptop on wifi, a phone on the same
+   hotspot as the other person — but two phones on two different mobile
+   carriers each need their own round trip to the TURN server to allocate a
+   relay address, and that handshake is exactly the one most exposed to
+   cellular latency and packet loss. Cutting off before it finishes produces a
+   code with only host/srflx candidates in it — which is precisely the case
+   symmetric carrier-grade NAT cannot use, so the two phones would never
+   connect while a phone and a laptop, or two devices on the same network,
+   still could. So: give up at 9s only if a relay candidate already made it
+   in; otherwise it's the one address that matters most here, so wait longer
+   for it specifically before giving up for good. */
+function hasRelayCandidate(peer){
+  const sdp = peer.localDescription && peer.localDescription.sdp;
+  return !!(sdp && /a=candidate:\S+ \d+ \S+ \d+ \S+ \d+ typ relay/.test(sdp));
+}
 async function waitIceComplete(peer){
   if (peer.iceGatheringState === 'complete') return;
   await new Promise(resolve => {
     const done = () => { peer.removeEventListener('icegatheringstatechange', check); resolve(); };
     const check = () => { if (peer.iceGatheringState === 'complete') done(); };
     peer.addEventListener('icegatheringstatechange', check);
-    setTimeout(done, 9000);
+    setTimeout(() => {
+      if (peer.iceGatheringState === 'complete' || hasRelayCandidate(peer)){ done(); return; }
+      setTimeout(done, 12000);
+    }, 9000);
   });
 }
 function setStatus(el, text, kind){ el.textContent = text; el.className = 'status' + (kind ? ' ' + kind : ''); }
@@ -652,7 +668,7 @@ $('lockRow').addEventListener('keydown', e => {
 
 $('btnCreate').addEventListener('click', async () => {
   $('btnCreate').disabled = true;
-  setStatus($('statusA'), lockOn ? t('lock.working','…') : '');
+  setStatus($('statusA'), t('lock.working','…'));
   pc = await newPeerConnection();
   wireDataChannel(pc.createDataChannel('logos-modifica'));
   const offer = await pc.createOffer();
@@ -775,7 +791,7 @@ $('btnCreateAnswer').addEventListener('click', async () => {
     sessionPass = '';
   }
   if (!parsed || parsed.type !== 'offer'){ setStatus($('statusB'), t('join.badCode','—'), 'bad'); return; }
-  setStatus($('statusB'), '');
+  setStatus($('statusB'), t('lock.working','…'));
   $('btnCreateAnswer').disabled = true;
   pc = await newPeerConnection();
   pc.ondatachannel = ev => wireDataChannel(ev.channel);
