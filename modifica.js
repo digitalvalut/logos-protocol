@@ -49,6 +49,8 @@ Object.assign(I18N.en, {
 "call.micFailNotFound":"No microphone or camera found on this device.",
 "call.micFailBusy":"Your microphone or camera is already being used by another app (Zoom, Teams, another tab…). Close it and try again.",
 "call.micFailDenied":"The browser has blocked the microphone and camera for this site. Check the lock icon next to the address bar and allow access, then reload the page.",
+"reconnect.trying":"Trying to reconnect to {n}…",
+"reconnect.offline":"{n} doesn't seem to be online right now. Here's the code to send by hand.",
 "destruct.note":"When the timer runs out: the conversation is cleared from this screen, the other person is asked to do the same, and the connection closes. It cannot reach copies already saved elsewhere (screenshots, downloaded files) — those stay where they were saved.",
 "destruct.countdown":"self-destructs in ","destruct.done":"Conversation self-destructed.",
 "session.closed":"closed","session.newHint":"Create a new session to reconnect.",
@@ -166,6 +168,8 @@ Object.assign(I18N.it, {
 "call.micFailNotFound":"Non trovo un microfono o una fotocamera su questo dispositivo.",
 "call.micFailBusy":"Il microfono o la fotocamera sono già in uso da un'altra app (Zoom, Teams, un'altra scheda…). Chiudila e riprova.",
 "call.micFailDenied":"Il browser ha bloccato microfono e fotocamera per questo sito. Controlla l'icona del lucchetto vicino all'indirizzo e consenti l'accesso, poi ricarica la pagina.",
+"reconnect.trying":"Provo a ricollegarmi a {n}…",
+"reconnect.offline":"{n} non sembra online in questo momento. Ecco il codice da mandare a mano.",
 "destruct.note":"Allo scadere del timer: la conversazione viene cancellata da questo schermo, viene chiesto di fare lo stesso all'altra persona, e la connessione si chiude. Non può toccare copie già salvate altrove (screenshot, file scaricati) — quelle restano dove sono state salvate.",
 "destruct.countdown":"si autodistrugge tra ","destruct.done":"Conversazione autodistrutta.",
 "session.closed":"chiusa","session.newHint":"Crea una nuova sessione per riconnetterti.",
@@ -217,6 +221,7 @@ function applyLang(code){
 function showScreen(id){
   ['screenHome','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
   window.scrollTo(0,0);
+  if (id === 'screenHome') startInboxPolling(); else stopInboxPolling();
 }
 $('goStart').addEventListener('click', () => showScreen('screenStart'));
 $('goJoin').addEventListener('click', () => showScreen('screenJoin'));
@@ -473,7 +478,11 @@ function wireDataChannel(channel){
   dc = channel;
   dc.binaryType = 'arraybuffer';
   pc.ontrack = ev => { if ($('remoteVideo').srcObject !== ev.streams[0]) $('remoteVideo').srcObject = ev.streams[0]; };
-  dc.onopen = () => { enterChat(); dc.send(JSON.stringify({ type: 'hello', nick: myNick() })); };
+  dc.onopen = async () => {
+    enterChat();
+    const fp = await myFingerprintHex();
+    dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp }));
+  };
   dc.onclose = () => { setStatus($('statusA'), t('session.newHint'), 'bad'); };
   dc.onmessage = onDcMessage;
 }
@@ -830,18 +839,20 @@ $('btnClearHistory').addEventListener('click', () => {
 
 /* ============================== recent contacts (local only) ==============================
    Remembered automatically the moment someone's 'hello' arrives — no manual "add contact"
-   step. This does not create any persistent connection or account: it is a shortcut back to
-   the invite screen plus that person's saved history. A fresh code exchange is still needed
-   every time, because nothing here runs a server that could keep anyone "always connected". */
+   step. Once a contact's persistent fingerprint is on file (see the auto-reconnect section
+   below), reopening them can skip a fresh code exchange entirely; contacts saved before that
+   fingerprint existed just fall back to the manual invite screen, same as always. */
 function loadContacts(){
   try{ return JSON.parse(localStorage.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
 }
 function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
-function touchContact(nick){
+function touchContact(nick, fp){
   if (!nick) return;
   let list = loadContacts();
+  const prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
+  const keepFp = fp || (prev && prev.fp) || null;
   list = list.filter(c => c.nick.toLowerCase() !== nick.toLowerCase());
-  list.unshift({ nick, lastSeen: Date.now() });
+  list.unshift({ nick, lastSeen: Date.now(), fp: keepFp });
   if (list.length > 40) list = list.slice(0, 40);
   saveContacts(list);
   renderContacts();
@@ -879,9 +890,148 @@ $('contactsList').addEventListener('click', ev => {
   const row = ev.target.closest('.contactrow');
   if (!row) return;
   const nick = row.getAttribute('data-nick');
+  const contact = loadContacts().find(c => c.nick === nick);
   showScreen('screenStart');
-  setStatus($('statusA'), (CURLANG==='it' ? 'Stai preparando un invito per ' : 'Preparing an invite for ') + nick + '…');
+  if (contact && contact.fp){
+    tryAutoReconnect(contact);
+  } else {
+    setStatus($('statusA'), (CURLANG==='it' ? 'Stai preparando un invito per ' : 'Preparing an invite for ') + nick + '…');
+  }
 });
+
+/* ============================== auto-reconnect (mailbox) ==============================
+   Two people who have already met once can find each other again without pasting a code —
+   but ONLY if both have the app open at the same moment. There is no way around that without
+   push notifications (a separate, much bigger piece of infrastructure this does not have).
+   Addressing uses each side's own persistent identity (the same certificate the safety number
+   is already built from — see myIdentity() above), hashed, so the mailbox never sees a name or
+   a message: only "someone who knows this hash is trying to reach that hash right now". A
+   message is picked up at most once and expires within two minutes either way. */
+const MAILBOX_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/mailbox/';
+
+async function myFingerprintHex(){
+  const cert = await myIdentity();
+  if (!cert) return null;
+  const fps = cert.getFingerprints ? cert.getFingerprints() : [];
+  if (!fps.length) return null;
+  return fps[0].value.replace(/:/g, '').toLowerCase();
+}
+async function pairKey(fromFp, toFp){
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(fromFp + '>' + toFp));
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function mailboxPut(key, obj){
+  try{ const res = await fetch(MAILBOX_BASE + key, { method:'PUT', body: JSON.stringify(obj) }); return res.ok; }
+  catch(e){ return false; }
+}
+async function mailboxGet(key){
+  try{
+    const res = await fetch(MAILBOX_BASE + key, { method:'GET' });
+    if (res.status !== 200) return null;
+    return await res.json();
+  }catch(e){ return null; }
+}
+
+/* Same envelope the manual "create invite" button already produces, so the auto-reconnect
+   fallback below can reveal it as a completely ordinary invite if nobody answers. */
+async function sealOrEncodeOffer(pcObj){
+  const payload = { type: 'offer', sdp: pcObj.localDescription.sdp };
+  if (lockOn){
+    sessionPass = makePassphrase();
+    const code = await sealPayload(payload, sessionPass);
+    $('passWord').textContent = sessionPass;
+    $('passBox').classList.remove('hide');
+    return code;
+  }
+  sessionPass = '';
+  $('passBox').classList.add('hide');
+  return b64encode(JSON.stringify(payload));
+}
+function revealInviteCode(code){
+  $('offerOut').textContent = code;
+  $('offerBlock').classList.remove('hide');
+  $('pasteAnswerCard').classList.remove('hide');
+}
+
+async function tryAutoReconnect(contact){
+  const myFp = await myFingerprintHex();
+  if (!myFp || !contact.fp) return;
+
+  $('btnCreate').disabled = true;
+  setStatus($('statusA'), fill(t('reconnect.trying','Provo a ricollegarmi a {n}…'), { n: contact.nick }));
+
+  pc = await newPeerConnection();
+  wireDataChannel(pc.createDataChannel('logos-modifica'));
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  await waitIceComplete(pc);
+
+  const outKey = await pairKey(myFp, contact.fp);
+  const inKey = await pairKey(contact.fp, myFp);
+  const sent = await mailboxPut(outKey, { nick: myNick(), sdp: pc.localDescription.sdp });
+
+  if (sent){
+    const deadline = Date.now() + 20000;
+    while (Date.now() < deadline){
+      if (!pc || pc.signalingState === 'closed') return; // user navigated away or started something else
+      const msg = await mailboxGet(inKey);
+      if (msg && msg.sdp){
+        await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
+        watchHandshakeProgress(pc, $('statusA'), $('diagA'));
+        $('btnCreate').disabled = false;
+        return;
+      }
+      await new Promise(r => setTimeout(r, 1500));
+    }
+  }
+
+  /* not reachable right now — fall back to an ordinary invite, built from the exact same
+     offer already sitting in `pc`, so nothing is wasted */
+  if (!pc || pc.signalingState === 'closed') return;
+  setStatus($('statusA'), fill(t('reconnect.offline','{n} non sembra online in questo momento. Ecco il codice da mandare a mano.'), { n: contact.nick }), 'bad');
+  const code = await sealOrEncodeOffer(pc);
+  revealInviteCode(code);
+  if (await robustCopy(code)) toast(t('toast.sealCopied'));
+  $('btnCreate').disabled = false;
+}
+
+/* While sitting on the home screen with known contacts, check whether any of them is trying
+   to reach this device right now. Stops the instant the screen changes — a call in progress,
+   an open chat or a manual invite in flight should never be interrupted by this. */
+let inboxTimer = null;
+async function checkInboxOnce(){
+  if (pc) return; // already connecting or connected to someone
+  const myFp = await myFingerprintHex();
+  if (!myFp) return;
+  const contacts = loadContacts().filter(c => c.fp);
+  for (const c of contacts){
+    const key = await pairKey(c.fp, myFp);
+    const msg = await mailboxGet(key);
+    if (msg && msg.sdp){ await acceptIncomingAutoOffer(c, msg); return; }
+  }
+}
+function startInboxPolling(){
+  if (inboxTimer) return;
+  inboxTimer = setInterval(checkInboxOnce, 4000);
+  checkInboxOnce();
+}
+function stopInboxPolling(){
+  clearInterval(inboxTimer);
+  inboxTimer = null;
+}
+async function acceptIncomingAutoOffer(contact, msg){
+  stopInboxPolling();
+  pc = await newPeerConnection();
+  pc.ondatachannel = ev => wireDataChannel(ev.channel);
+  await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+  const answer = await pc.createAnswer();
+  await pc.setLocalDescription(answer);
+  await waitIceComplete(pc);
+  const myFp = await myFingerprintHex();
+  const outKey = await pairKey(myFp, contact.fp);
+  await mailboxPut(outKey, { sdp: pc.localDescription.sdp });
+  /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
+}
 
 /* ============================== chat: text + files ============================== */
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -995,7 +1145,7 @@ function onDcMessage(ev){
         $('peerNameLbl').textContent = peerNick;
         $('peerAvatar').textContent = initials(peerNick);
         loadHistoryFor(peerNick);
-        touchContact(peerNick);
+        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null);
         sysLine(peerNick + ' ' + t('call.joined'));
         checkSafetyFor(peerNick);
       }
@@ -1303,3 +1453,4 @@ applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || '
 
 initLang();
 renderContacts();
+if (!$('screenHome').classList.contains('hide')) startInboxPolling();
