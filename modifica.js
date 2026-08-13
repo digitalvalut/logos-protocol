@@ -270,16 +270,39 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
    STUN alone finds a direct path only when both sides sit behind NAT that
    maps addresses predictably. Mobile carriers overwhelmingly use symmetric
    carrier-grade NAT, which STUN cannot see through by design — this is why
-   two phones on different carriers can fail to connect while two devices on
-   the same network succeed. The only real fix is a relay both sides can
-   reach (TURN) — checked here (2026-08-12) and not added, because the one
-   well-known free community relay (openrelay.metered.ca) is confirmed dead,
-   not just untested: it refuses connections outright. A relay that actually
-   stays up costs real, ongoing bandwidth, which means someone has to run and
-   pay for it — that is a decision for DigitalValut to make deliberately, not
-   something to bolt on with a random free URL that could vanish the same way
-   this one did. */
-const ICE = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
+   two phones on different carriers could fail to connect while two devices
+   on the same network succeeded. The two free relays tried first
+   (openrelay.metered.ca, numb.viagenie.ca) were both confirmed dead outright,
+   not just untested — that is why this uses a paid one instead of another
+   guess: DigitalValut's own Cloudflare Realtime TURN, kept behind a small
+   Worker so the account's secret key never has to sit in a public page. */
+const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
+const TURN_BROKER_URL = 'https://digitalvalut-turn.burbeng78.workers.dev/';
+
+let cachedIceServers = null;
+/* Fetched once per page load and reused — the credentials are valid 24h, far
+   longer than any single visit, so there is nothing to gain from asking
+   again mid-session. If the Worker is ever unreachable, this quietly falls
+   back to STUN-only rather than blocking the connection on it: a call that
+   only needed a direct path still works, and the honest cost is exactly the
+   gap that existed before today for the calls that needed the relay. */
+async function fetchIceServers(){
+  if (cachedIceServers) return cachedIceServers;
+  try{
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 5000);
+    const res = await fetch(TURN_BROKER_URL, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error('broker responded ' + res.status);
+    const data = await res.json();
+    if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
+    cachedIceServers = data.iceServers;
+  }catch(e){
+    cachedIceServers = ICE_STUN_ONLY.iceServers;
+  }
+  return cachedIceServers;
+}
+
 let pc = null, dc = null;
 const CHUNK = 16 * 1024;
 
@@ -526,8 +549,10 @@ async function myIdentity(){
   return myCert;
 }
 async function newPeerConnection(){
-  const cert = await myIdentity();
-  return new RTCPeerConnection(cert ? Object.assign({}, ICE, { certificates: [cert] }) : ICE);
+  const [cert, iceServers] = await Promise.all([myIdentity(), fetchIceServers()]);
+  const config = { iceServers };
+  if (cert) config.certificates = [cert];
+  return new RTCPeerConnection(config);
 }
 
 /* ---------- trust on first use: remember the code, speak up when it changes ---------- */
