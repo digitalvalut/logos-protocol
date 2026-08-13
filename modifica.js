@@ -971,7 +971,14 @@ async function tryAutoReconnect(contact){
   const sent = await mailboxPut(outKey, { nick: myNick(), sdp: pc.localDescription.sdp });
 
   if (sent){
-    const deadline = Date.now() + 20000;
+    /* Both sides gather their own network addresses before they can even write
+       to the mailbox (waitIceComplete above, up to 9s each) — on a real network,
+       not a test machine, that plus the contact's own poll interval can add up
+       to more than 20s. Found this the hard way testing against the real relay:
+       Anna's own attempt had already given up by the time Bruno's answer was
+       ready. The mailbox itself holds a message for two minutes, so there is
+       plenty of room to wait longer here without the message expiring first. */
+    const deadline = Date.now() + 45000;
     while (Date.now() < deadline){
       if (!pc || pc.signalingState === 'closed') return; // user navigated away or started something else
       const msg = await mailboxGet(inKey);
