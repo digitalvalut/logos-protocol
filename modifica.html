@@ -104,81 +104,109 @@
   <!-- ============================ START ============================ -->
   <section id="screenStart" class="hide">
     <button class="btn ghost" id="backFromStart">‹ <span data-i18n="nav.back">Indietro</span></button>
-    <div class="card">
-      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="start.s1">Manda l'invito</div></div>
-      <div class="helptext" data-i18n="start.s1help">Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere
-        come mandarlo: WhatsApp, messaggio, email — quello che usi di solito.</div>
-      <div class="switchrow" id="lockRow" role="button" tabindex="0" aria-pressed="false">
-        <div class="txt">
-          <b data-i18n="lock.title">🔐 Protezione extra</b>
-          <span data-i18n="lock.sub">Chiude l'invito con una parola d'ordine che dirai a voce. Serve se il codice passa da WhatsApp o email.</span>
-        </div>
-        <div class="sw" aria-hidden="true"></div>
-      </div>
-      <button class="btn primary big" id="btnCreate"><span class="ic">✉️</span><span data-i18n="start.create">Prepara l'invito</span></button>
-      <div id="offerBlock" class="hide mt16">
-        <div class="passbox hide" id="passBox">
-          <div class="cap" data-i18n="lock.passCap">Parola d'ordine</div>
-          <div class="word" id="passWord"></div>
-          <div class="hint" data-i18n="lock.passHint">Dilla a voce, o su un canale diverso da quello dove mandi il codice. Senza di questa il codice non si apre.</div>
-        </div>
-        <button class="btn primary big" id="btnShareOffer"><span class="ic">📤</span><span data-i18n="start.share">Manda l'invito</span></button>
-        <div class="btnrow">
-          <button class="btn" id="btnCopyOffer"><span class="ic">📋</span><span data-i18n="btn.copyCode">Copia il codice</span></button>
-        </div>
-        <details class="showcode" id="offerDetails">
-          <summary data-i18n="btn.showCode">Mostra il codice</summary>
-          <div class="codebox" id="offerOut"></div>
-        </details>
-        <div class="status" id="shareHint"></div>
-      </div>
+
+    <div class="card" id="quickStartCard">
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo codice</div></div>
+      <div class="helptext" data-i18n="quick.helpA">Dillo a voce alla persona che vuoi far entrare, oppure mandaglielo. Scade tra 2 minuti, poi ne serve uno nuovo.</div>
+      <div class="quickcode" id="quickCodeOut">······</div>
+      <button class="btn primary big" id="btnShareQuick"><span class="ic">📤</span><span data-i18n="quick.share">Manda il codice</span></button>
+      <div class="status" id="quickStatusA"></div>
+      <div class="diagline hide" id="diagQuickA"></div>
+      <button class="btn hide mt10" id="btnRetryQuickA"><span class="ic">🔄</span><span data-i18n="quick.newCode">Genera un nuovo codice</span></button>
     </div>
-    <div class="card hide" id="pasteAnswerCard">
-      <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="start.s2">Incolla la sua risposta</div></div>
-      <div class="helptext" data-i18n="start.s2help">L'altra persona ti rimanderà un messaggio. Copialo, torna qui e premi
-        <b>Incolla</b>. Poi entrate insieme nella chat.</div>
-      <textarea id="answerIn" data-i18n-ph="start.pastePh" placeholder="Incolla qui la risposta…"></textarea>
-      <div class="pasteline">
-        <button class="btn" id="btnPasteAnswer"><span class="ic">📋</span><span data-i18n="btn.paste">Incolla</span></button>
+    <button class="btn ghost linkbtn mt10" id="toggleLongInviteA" data-i18n="quick.useLong">Preferisci il codice lungo?</button>
+
+    <div class="hide" id="longInviteWrapA">
+      <div class="card mt10">
+        <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="start.s1">Manda l'invito</div></div>
+        <div class="helptext" data-i18n="start.s1help">Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere
+          come mandarlo: WhatsApp, messaggio, email — quello che usi di solito.</div>
+        <div class="switchrow" id="lockRow" role="button" tabindex="0" aria-pressed="false">
+          <div class="txt">
+            <b data-i18n="lock.title">🔐 Protezione extra</b>
+            <span data-i18n="lock.sub">Chiude l'invito con una parola d'ordine che dirai a voce. Serve se il codice passa da WhatsApp o email.</span>
+          </div>
+          <div class="sw" aria-hidden="true"></div>
+        </div>
+        <button class="btn primary big" id="btnCreate"><span class="ic">✉️</span><span data-i18n="start.create">Prepara l'invito</span></button>
+        <div id="offerBlock" class="hide mt16">
+          <div class="passbox hide" id="passBox">
+            <div class="cap" data-i18n="lock.passCap">Parola d'ordine</div>
+            <div class="word" id="passWord"></div>
+            <div class="hint" data-i18n="lock.passHint">Dilla a voce, o su un canale diverso da quello dove mandi il codice. Senza di questa il codice non si apre.</div>
+          </div>
+          <button class="btn primary big" id="btnShareOffer"><span class="ic">📤</span><span data-i18n="start.share">Manda l'invito</span></button>
+          <div class="btnrow">
+            <button class="btn" id="btnCopyOffer"><span class="ic">📋</span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+          </div>
+          <details class="showcode" id="offerDetails">
+            <summary data-i18n="btn.showCode">Mostra il codice</summary>
+            <div class="codebox" id="offerOut"></div>
+          </details>
+          <div class="status" id="shareHint"></div>
+        </div>
       </div>
-      <button class="btn primary big mt10" id="btnConnectAsA" data-i18n="btn.connect">Entra nella chat</button>
-      <div class="status" id="statusA"></div>
-      <div class="diagline hide" id="diagA"></div>
+      <div class="card hide" id="pasteAnswerCard">
+        <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="start.s2">Incolla la sua risposta</div></div>
+        <div class="helptext" data-i18n="start.s2help">L'altra persona ti rimanderà un messaggio. Copialo, torna qui e premi
+          <b>Incolla</b>. Poi entrate insieme nella chat.</div>
+        <textarea id="answerIn" data-i18n-ph="start.pastePh" placeholder="Incolla qui la risposta…"></textarea>
+        <div class="pasteline">
+          <button class="btn" id="btnPasteAnswer"><span class="ic">📋</span><span data-i18n="btn.paste">Incolla</span></button>
+        </div>
+        <button class="btn primary big mt10" id="btnConnectAsA" data-i18n="btn.connect">Entra nella chat</button>
+        <div class="status" id="statusA"></div>
+        <div class="diagline hide" id="diagA"></div>
+      </div>
     </div>
   </section>
 
   <!-- ============================ JOIN ============================ -->
   <section id="screenJoin" class="hide">
     <button class="btn ghost" id="backFromJoin">‹ <span data-i18n="nav.back">Indietro</span></button>
-    <div class="card">
-      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="join.s1">Apri l'invito</div></div>
-      <div class="helptext" id="joinLead" data-i18n="join.s1help">Se hai aperto il link che ti hanno mandato, è già tutto pronto:
-        premi il pulsante arancione. Altrimenti premi <b>Incolla</b>.</div>
-      <textarea id="offerIn" data-i18n-ph="join.pastePh" placeholder="Incolla qui l'invito…"></textarea>
-      <div class="pasteline">
-        <button class="btn" id="btnPasteOffer"><span class="ic">📋</span><span data-i18n="btn.paste">Incolla</span></button>
-      </div>
-      <div id="passAsk" class="hide mt12">
-        <div class="helptext mb8" data-i18n="lock.ask">🔐 Questo invito è chiuso a chiave. Scrivi la parola d'ordine che ti hanno detto a voce.</div>
-        <input type="text" class="sans-input" id="passIn" autocomplete="off" autocapitalize="off" spellcheck="false"
-               data-i18n-ph="lock.askPh" placeholder="parola d'ordine">
-      </div>
-      <button class="btn primary big mt10" id="btnCreateAnswer" data-i18n="join.generate">Apri l'invito</button>
-      <div id="answerBlock" class="hide mt16">
-        <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="join.s2">Manda la risposta</div></div>
-        <div class="helptext" data-i18n="join.s2help">Ultimo passo: rimanda questo alla persona che ti ha invitato,
-          e siete connessi.</div>
-        <button class="btn primary big" id="btnShareAnswer"><span class="ic">📤</span><span data-i18n="join.sendAnswer">Manda la risposta</span></button>
-        <div class="btnrow">
-          <button class="btn" id="btnCopyAnswer"><span class="ic">📋</span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+
+    <div class="card" id="quickJoinCard">
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleB">Digita il codice</div></div>
+      <div class="helptext" data-i18n="quick.helpB">Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.</div>
+      <input type="text" class="quickinput" id="quickCodeIn" inputmode="numeric" autocomplete="off"
+             data-i18n-ph="quick.codePh" placeholder="000000" maxlength="6">
+      <button class="btn primary big mt10" id="btnQuickConnect" data-i18n="quick.connect">Connetti</button>
+      <div class="status" id="quickStatusB"></div>
+      <div class="diagline hide" id="diagQuickB"></div>
+    </div>
+    <button class="btn ghost linkbtn mt10" id="toggleLongInviteB" data-i18n="quick.useLong">Preferisci il codice lungo?</button>
+
+    <div class="hide" id="longInviteWrapB">
+      <div class="card mt10">
+        <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="join.s1">Apri l'invito</div></div>
+        <div class="helptext" id="joinLead" data-i18n="join.s1help">Se hai aperto il link che ti hanno mandato, è già tutto pronto:
+          premi il pulsante arancione. Altrimenti premi <b>Incolla</b>.</div>
+        <textarea id="offerIn" data-i18n-ph="join.pastePh" placeholder="Incolla qui l'invito…"></textarea>
+        <div class="pasteline">
+          <button class="btn" id="btnPasteOffer"><span class="ic">📋</span><span data-i18n="btn.paste">Incolla</span></button>
         </div>
-        <details class="showcode" id="answerDetails">
-          <summary data-i18n="btn.showCode">Mostra il codice</summary>
-          <div class="codebox" id="answerOut"></div>
-        </details>
+        <div id="passAsk" class="hide mt12">
+          <div class="helptext mb8" data-i18n="lock.ask">🔐 Questo invito è chiuso a chiave. Scrivi la parola d'ordine che ti hanno detto a voce.</div>
+          <input type="text" class="sans-input" id="passIn" autocomplete="off" autocapitalize="off" spellcheck="false"
+                 data-i18n-ph="lock.askPh" placeholder="parola d'ordine">
+        </div>
+        <button class="btn primary big mt10" id="btnCreateAnswer" data-i18n="join.generate">Apri l'invito</button>
+        <div id="answerBlock" class="hide mt16">
+          <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="join.s2">Manda la risposta</div></div>
+          <div class="helptext" data-i18n="join.s2help">Ultimo passo: rimanda questo alla persona che ti ha invitato,
+            e siete connessi.</div>
+          <button class="btn primary big" id="btnShareAnswer"><span class="ic">📤</span><span data-i18n="join.sendAnswer">Manda la risposta</span></button>
+          <div class="btnrow">
+            <button class="btn" id="btnCopyAnswer"><span class="ic">📋</span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+          </div>
+          <details class="showcode" id="answerDetails">
+            <summary data-i18n="btn.showCode">Mostra il codice</summary>
+            <div class="codebox" id="answerOut"></div>
+          </details>
+        </div>
+        <div class="status" id="statusB"></div>
+        <div class="diagline hide" id="diagB"></div>
       </div>
-      <div class="status" id="statusB"></div>
-      <div class="diagline hide" id="diagB"></div>
     </div>
   </section>
 

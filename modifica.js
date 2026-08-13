@@ -101,7 +101,14 @@ Object.assign(I18N.en, {
 "verify.noteKnown":"Same code as last time: nobody has come in between since.",
 "verify.noteNew":"First time with this person: compare the code out loud, then the app remembers it.",
 "verify.noteChanged":"The code has changed. Usually that means a new phone or a reinstalled app — but it is also what being intercepted looks like. Compare it out loud before accepting it.",
-"verify.changedWarn":"\u26a0\ufe0f This person's safety code has changed since last time. Compare it out loud before trusting this chat."
+"verify.changedWarn":"\u26a0\ufe0f This person's safety code has changed since last time. Compare it out loud before trusting this chat.",
+"quick.titleA":"Your code","quick.helpA":"Say it out loud to whoever you want to bring in, or send it. Expires in 2 minutes, then you'll need a new one.",
+"quick.share":"Send the code","quick.newCode":"Generate a new code","quick.useLong":"Prefer the long code?",
+"quick.titleB":"Type the code","quick.helpB":"Ask whoever invited you for the code \u2014 6 digits, said out loud or written \u2014 and type it here.",
+"quick.codePh":"000000","quick.connect":"Connect",
+"quick.waiting":"Waiting for the other person to type the code\u2026","quick.expired":"The code expired with no answer. Generate a new one.",
+"quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.",
+"quick.shareText":"Here's the code for DigitalValut Logos, type it in the app within 2 minutes: "
 });
 Object.assign(I18N.it, {
 "topbar.sub":"Chat sperimentale",
@@ -181,7 +188,14 @@ Object.assign(I18N.it, {
 "invite.answerText":"Ecco la mia risposta per DigitalValut Logos, incollala per completare la connessione:\n\n",
 "mic.recording":"Registrazione — tocca per fermare","history.cleared":"Cronologia svuotata su questo dispositivo.",
 "install.genericText":"<b>Installa DigitalValut Logos</b> per averla come app, con la sua icona, senza passare dal browser.",
-"install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>."
+"install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.",
+"quick.titleA":"Il tuo codice","quick.helpA":"Dillo a voce alla persona che vuoi far entrare, oppure mandaglielo. Scade tra 2 minuti, poi ne serve uno nuovo.",
+"quick.share":"Manda il codice","quick.newCode":"Genera un nuovo codice","quick.useLong":"Preferisci il codice lungo?",
+"quick.titleB":"Digita il codice","quick.helpB":"Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.",
+"quick.codePh":"000000","quick.connect":"Connetti",
+"quick.waiting":"In attesa che l'altra persona digiti il codice…","quick.expired":"Il codice è scaduto senza risposta. Generane uno nuovo.",
+"quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.",
+"quick.shareText":"Ecco il codice per DigitalValut Logos, scrivilo nell'app entro 2 minuti: "
 });
 
 function t(key, fallback){
@@ -227,8 +241,8 @@ function showScreen(id){
   window.scrollTo(0,0);
   if (id === 'screenHome') startInboxPolling(); else stopInboxPolling();
 }
-$('goStart').addEventListener('click', () => showScreen('screenStart'));
-$('goJoin').addEventListener('click', () => showScreen('screenJoin'));
+$('goStart').addEventListener('click', () => { showScreen('screenStart'); showQuickLayoutA(); startQuickShare(); });
+$('goJoin').addEventListener('click', () => { showScreen('screenJoin'); showQuickLayoutB(); $('quickCodeIn').value = ''; $('quickCodeIn').focus(); });
 $('backFromStart').addEventListener('click', () => showScreen('screenHome'));
 $('backFromJoin').addEventListener('click', () => showScreen('screenHome'));
 
@@ -825,6 +839,7 @@ $('btnCopyAnswer').addEventListener('click', async () => {
     $('offerIn').value = code;
     refreshJoinLock();
     showScreen('screenJoin');
+    showLongLayoutB();
   }catch(e){}
 })();
 
@@ -913,9 +928,14 @@ $('contactsList').addEventListener('click', ev => {
   const contact = loadContacts().find(c => c.nick === nick);
   showScreen('screenStart');
   if (contact && contact.fp){
+    /* a targeted reconnect to someone specific isn't the "get a shareable code" flow —
+       it reuses the long-invite screen's status/diagnostic line, which already does the
+       right thing regardless of which layout is showing */
+    showLongLayoutA();
     tryAutoReconnect(contact);
   } else {
-    setStatus($('statusA'), (CURLANG==='it' ? 'Stai preparando un invito per ' : 'Preparing an invite for ') + nick + '…');
+    showQuickLayoutA();
+    startQuickShare();
   }
 });
 
@@ -1059,6 +1079,126 @@ async function acceptIncomingAutoOffer(contact, msg){
   await mailboxPut(outKey, { sdp: pc.localDescription.sdp });
   /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
 }
+
+/* ============================== quick connect (short code) ==============================
+   The long invite code works, but asking someone to copy a two-thousand-character blob,
+   send it, wait for one back, and paste that too, is a lot to ask of a person who does not
+   want to think about any of this — an 80-year-old, a child, anyone. This reuses the exact
+   same mailbox as auto-reconnect above, except the address is derived from a short number
+   both people happen to know for the next two minutes, instead of a fingerprint they only
+   learn after meeting once. Nothing about the security model changes: the code is random,
+   it is never stored anywhere, it is deleted the moment it is read, and it stops working
+   after two minutes either way. The one honest trade-off, spelled out where the code is
+   shown: six digits are easy to say out loud, but also short enough that someone could in
+   principle guess one in that two-minute window — which is exactly what the safety-number
+   check right after connecting is for, same as it always was. */
+function makeQuickCode(){
+  const arr = new Uint32Array(1);
+  const lim = Math.floor(4294967296 / 1000000) * 1000000; /* rejection sampling: no digit run is more likely than another */
+  let n;
+  do { crypto.getRandomValues(arr); } while (arr[0] >= lim);
+  n = arr[0] % 1000000;
+  return String(n).padStart(6, '0');
+}
+function formatQuickCode(code){ return code.slice(0,3) + ' ' + code.slice(3); }
+function showQuickLayoutA(){
+  $('quickStartCard').classList.remove('hide');
+  $('toggleLongInviteA').classList.remove('hide');
+  $('longInviteWrapA').classList.add('hide');
+}
+function showLongLayoutA(){
+  $('quickStartCard').classList.add('hide');
+  $('toggleLongInviteA').classList.add('hide');
+  $('longInviteWrapA').classList.remove('hide');
+}
+function showQuickLayoutB(){
+  $('quickJoinCard').classList.remove('hide');
+  $('toggleLongInviteB').classList.remove('hide');
+  $('longInviteWrapB').classList.add('hide');
+}
+function showLongLayoutB(){
+  $('quickJoinCard').classList.add('hide');
+  $('toggleLongInviteB').classList.add('hide');
+  $('longInviteWrapB').classList.remove('hide');
+}
+$('toggleLongInviteA').addEventListener('click', showLongLayoutA);
+$('toggleLongInviteB').addEventListener('click', showLongLayoutB);
+
+async function startQuickShare(){
+  const code = makeQuickCode();
+  $('quickCodeOut').textContent = formatQuickCode(code);
+  $('btnRetryQuickA').classList.add('hide');
+  setStatus($('quickStatusA'), t('quick.waiting','In attesa che l\'altra persona digiti il codice…'));
+
+  pc = await newPeerConnection();
+  const myPc = pc;
+  wireDataChannel(pc.createDataChannel('logos-modifica'));
+  const offer = await pc.createOffer();
+  await pc.setLocalDescription(offer);
+  await waitIceComplete(pc);
+  if (pc !== myPc) return; /* superseded by something else while we were gathering */
+
+  const offerKey = await pairKey('logos-quick-offer-v1', code);
+  const answerKey = await pairKey('logos-quick-answer-v1', code);
+  await mailboxPut(offerKey, { sdp: pc.localDescription.sdp, nick: myNick() });
+
+  const deadline = Date.now() + 115000; /* just under the mailbox's own 2-minute TTL */
+  while (Date.now() < deadline){
+    if (pc !== myPc) return;
+    const msg = await mailboxGet(answerKey);
+    if (msg && msg.sdp){
+      await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
+      watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'));
+      return;
+    }
+    await new Promise(r => setTimeout(r, 1500));
+  }
+  if (pc !== myPc) return;
+  setStatus($('quickStatusA'), t('quick.expired','Il codice è scaduto senza risposta. Generane uno nuovo.'), 'bad');
+  $('btnRetryQuickA').classList.remove('hide');
+}
+$('btnShareQuick').addEventListener('click', async () => {
+  const code = $('quickCodeOut').textContent.replace(/\s/g,'');
+  const text = t('quick.shareText','Ecco il codice per DigitalValut Logos, scrivilo nell\'app entro 2 minuti: ') + code;
+  try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
+  await copyOrSelect(text, $('quickCodeOut'));
+});
+$('btnRetryQuickA').addEventListener('click', startQuickShare);
+
+let quickConnecting = false;
+async function tryQuickConnect(){
+  const code = $('quickCodeIn').value.replace(/\D/g,'').slice(0,6);
+  if (code.length !== 6 || quickConnecting) return;
+  quickConnecting = true;
+  $('btnQuickConnect').disabled = true;
+  setStatus($('quickStatusB'), t('lock.working','…'));
+  try{
+    const offerKey = await pairKey('logos-quick-offer-v1', code);
+    const answerKey = await pairKey('logos-quick-answer-v1', code);
+    const msg = await mailboxGet(offerKey);
+    if (!msg || !msg.sdp){
+      setStatus($('quickStatusB'), t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
+      return;
+    }
+    pc = await newPeerConnection();
+    pc.ondatachannel = ev => wireDataChannel(ev.channel);
+    await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    await waitIceComplete(pc);
+    await mailboxPut(answerKey, { sdp: pc.localDescription.sdp, nick: myNick() });
+    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'));
+  } finally {
+    quickConnecting = false;
+    $('btnQuickConnect').disabled = false;
+  }
+}
+$('btnQuickConnect').addEventListener('click', tryQuickConnect);
+$('quickCodeIn').addEventListener('input', () => {
+  const v = $('quickCodeIn').value.replace(/\D/g,'').slice(0,6);
+  $('quickCodeIn').value = v;
+  if (v.length === 6) tryQuickConnect();
+});
 
 /* ============================== chat: text + files ============================== */
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -1451,6 +1591,11 @@ $('btnNewSession').addEventListener('click', () => {
   setStatus($('statusA'), ''); setStatus($('statusB'), '');
   $('diagA').classList.add('hide'); $('diagB').classList.add('hide');
   $('menuPanel').classList.add('hide');
+  $('quickCodeOut').textContent = '······'; setStatus($('quickStatusA'), ''); $('diagQuickA').classList.add('hide');
+  $('btnRetryQuickA').classList.add('hide');
+  $('quickCodeIn').value = ''; setStatus($('quickStatusB'), ''); $('diagQuickB').classList.add('hide');
+  $('btnQuickConnect').disabled = false;
+  showQuickLayoutA(); showQuickLayoutB();
   showScreen('screenHome');
 });
 

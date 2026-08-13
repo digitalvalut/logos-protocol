@@ -131,6 +131,15 @@
     overflow-y:auto}
   .backlink{margin-top:16px;text-align:center}
 
+  /* ---- quick connect: a short number instead of a long code to paste ---- */
+  .quickcode{font-family:var(--mono);font-size:2.375rem;font-weight:700;letter-spacing:.12em;
+    text-align:center;color:var(--ink);background:#0d0f12;border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:18px 10px;margin:14px 0}
+  .quickinput{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:16px 14px;font-family:var(--mono);font-size:1.75rem;
+    font-weight:700;letter-spacing:.3em;text-align:center}
+  .quickinput:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,145,77,.15)}
+
   /* ---- optional extra protection: off by default, one tap to turn on ---- */
   .switchrow{display:flex;align-items:center;gap:14px;background:#0b0d11;border:1.5px solid var(--line);
     border-radius:var(--r-sm);padding:16px;margin-bottom:16px;cursor:pointer;user-select:none;
