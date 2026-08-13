@@ -143,6 +143,11 @@
   .quickcode{font-family:var(--mono);font-size:2.375rem;font-weight:700;letter-spacing:.12em;
     text-align:center;color:var(--ink);background:#0d0f12;border:1.5px solid var(--line);
     border-radius:var(--r-sm);padding:18px 10px;margin:14px 0}
+  /* white regardless of the theme: scanners need the contrast, and a QR
+     inverted to suit a dark page is one most cameras will not read */
+  .qrbox{background:#fff;border-radius:var(--r-sm);padding:14px 14px 10px;margin:0 0 14px;text-align:center}
+  .qrbox canvas{width:100%;max-width:260px;height:auto;image-rendering:pixelated;display:block;margin:0 auto}
+  .qrhint{color:#4a4a4a;font-size:0.8125rem;margin-top:10px;line-height:1.5}
   .quickinput{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);
     border-radius:var(--r-sm);padding:16px 14px;font-family:var(--mono);font-size:1.75rem;
     font-weight:700;letter-spacing:.3em;text-align:center}
