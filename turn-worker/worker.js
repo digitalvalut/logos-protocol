@@ -54,33 +54,43 @@ async function handleTurn(env, cors){
 
 /* ---------------- attempt limiting ----------------
    A six-digit connection code is a million possibilities. The client already
-   makes each guess expensive to prepare (600k rounds of PBKDF2 before a slot
-   address can even be computed) and encrypts everything it stores, so a
-   guessed address on its own reveals nothing. This closes the remaining door:
-   sweeping the code space needs an enormous number of lookups, and lookups are
-   something this Worker can simply refuse.
+   makes each guess expensive to prepare and encrypts everything it stores, so
+   a guessed slot address on its own reveals nothing. This closes the remaining
+   door: sweeping the code space needs an enormous number of lookups, and
+   lookups are something this Worker can refuse.
 
-   The budget is deliberately generous, because a legitimate connection polls
-   quite a lot while two phones are finding each other — roughly a hundred and
-   fifty lookups in the busiest minute. Anything far above that is not a person
-   trying to talk to a friend.
+   Counted in the isolate's own memory, deliberately. The first version of this
+   kept the counter in KV, which was a straightforward mistake: the free plan
+   allows a thousand KV writes a day and one honest connection polls about a
+   hundred and fifty times, so the quota would have been gone after roughly
+   seven conversations and the app would have stopped working for everyone
+   else. A defence that takes the service down is not a defence.
 
-   KV is eventually consistent, so this count is approximate and a determined
-   attacker can overshoot it somewhat. That is understood and accepted: the aim
-   is to make a sweep cost orders of magnitude more than it otherwise would,
-   not to be an exact meter. */
-const RL_WINDOW_SECONDS = 60;
-const RL_MAX_LOOKUPS = 240;
+   Memory costs nothing and has no quota. The honest limit is that Cloudflare
+   runs many isolates, so no single counter sees every request — this does not
+   meter traffic exactly. It does not need to. Sweeping a million codes inside
+   a two-minute window means firing an enormous burst, and a burst is precisely
+   what any one isolate does see and cut off. Combined with the encrypted
+   mailbox and the spoken word check, that is enough; a precise global meter
+   would cost real money for very little more safety.
 
-async function overRateLimit(request, env){
+   The budget is generous on purpose, because a legitimate connection polls a
+   lot while two phones are finding each other. Anything far above it is not
+   someone trying to reach a friend. */
+const RL_WINDOW_MS = 60000;
+const RL_MAX_LOOKUPS = 300;
+const rlHits = new Map();
+
+function overRateLimit(request){
   const ip = request.headers.get('CF-Connecting-IP');
-  if (!ip) return false; /* no address to attribute it to: do not punish the request */
-  const bucket = Math.floor(Date.now() / 1000 / RL_WINDOW_SECONDS);
-  const key = 'rl:' + ip + ':' + bucket;
-  const current = parseInt((await env.MAILBOX.get(key)) || '0', 10) || 0;
-  if (current >= RL_MAX_LOOKUPS) return true;
-  await env.MAILBOX.put(key, String(current + 1), { expirationTtl: RL_WINDOW_SECONDS * 2 });
-  return false;
+  if (!ip) return false; /* nothing to attribute it to: do not punish the request */
+  const now = Date.now();
+  let rec = rlHits.get(ip);
+  if (!rec || now >= rec.resetAt){ rec = { n: 0, resetAt: now + RL_WINDOW_MS }; rlHits.set(ip, rec); }
+  rec.n++;
+  /* keep the map from growing without bound on a long-lived isolate */
+  if (rlHits.size > 4000) for (const [k, v] of rlHits) if (now >= v.resetAt) rlHits.delete(k);
+  return rec.n > RL_MAX_LOOKUPS;
 }
 
 async function handleMailbox(request, env, cors, key){
@@ -89,7 +99,7 @@ async function handleMailbox(request, env, cors, key){
 
   /* only reads are metered: a read is what a code-guesser needs, and a write
      only ever puts something into a slot nobody else can find or decrypt */
-  if (request.method === 'GET' && await overRateLimit(request, env)){
+  if (request.method === 'GET' && overRateLimit(request)){
     return json({ error: 'too many attempts' }, 429, cors);
   }
 
