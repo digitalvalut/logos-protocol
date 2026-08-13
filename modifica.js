@@ -243,8 +243,11 @@ function showScreen(id){
 }
 $('goStart').addEventListener('click', () => { showScreen('screenStart'); showQuickLayoutA(); startQuickShare(); });
 $('goJoin').addEventListener('click', () => { showScreen('screenJoin'); showQuickLayoutB(); $('quickCodeIn').value = ''; $('quickCodeIn').focus(); });
-$('backFromStart').addEventListener('click', () => showScreen('screenHome'));
-$('backFromJoin').addEventListener('click', () => showScreen('screenHome'));
+/* leaving the screen abandons whatever handshake it had started — otherwise its
+   candidate polling would keep running in the background for a code nobody is
+   going to type any more */
+$('backFromStart').addEventListener('click', () => { stopQuickPump(); showScreen('screenHome'); });
+$('backFromJoin').addEventListener('click', () => { stopQuickPump(); showScreen('screenHome'); });
 
 /* your name, remembered on this device */
 try{ $('nickInput').value = localStorage.getItem('logos-modifica-nick') || ''; }catch(e){}
@@ -467,6 +470,10 @@ function candidateTypesIn(sdp){
 function diagLine(pcObj){
   const mine = candidateTypesIn(pcObj.localDescription && pcObj.localDescription.sdp);
   const theirs = candidateTypesIn(pcObj.remoteDescription && pcObj.remoteDescription.sdp);
+  /* candidates that arrived one by one (trickle) are never written into the
+     remote description, so without this the other side would always read as
+     "found nothing" on exactly the path that works best */
+  if (pcObj.__trickleTypes) for (const ty of pcObj.__trickleTypes) if (theirs.indexOf(ty) === -1) theirs.push(ty);
   return 'ICE ' + pcObj.iceConnectionState + ' · ' + pcObj.connectionState +
     ' · tu:' + (mine.join('+') || '—') + ' loro:' + (theirs.join('+') || '—');
 }
@@ -475,27 +482,52 @@ function diagLine(pcObj){
    anyone it was still trying, or that it had given up. This watches the
    handshake and says so, either way, plus the technical line above: what
    kind of address each side actually found. */
-function watchHandshakeProgress(pcObj, statusEl, diagEl){
+function watchHandshakeProgress(pcObj, statusEl, diagEl, pump){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
-  let settled = false;
+  let settled = false, failTimer = null;
   const tick = () => { if (diagEl && !settled) diagEl.textContent = diagLine(pcObj); };
   const diagTimer = diagEl ? setInterval(tick, 1200) : null;
   if (diagEl){ diagEl.classList.remove('hide'); tick(); }
-  const stop = () => { if (diagTimer) clearInterval(diagTimer); };
+  const stop = () => { if (diagTimer) clearInterval(diagTimer); clearTimeout(failTimer); if (pump) pump.stop(); };
   const onChange = () => {
     if (settled) return;
     const st = pcObj.connectionState;
-    if (st === 'connected'){ settled = true; stop(); setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide'); }
-    else if (st === 'failed' || st === 'closed'){
+    if (st === 'connected'){
+      settled = true; stop();
+      setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide');
+      return;
+    }
+    /* 'failed' is not the end of the story. While candidates are still
+       trickling in, an ICE agent can burn through everything it knows about,
+       report failure, and then succeed a moment later on an address that had
+       not arrived yet. Announcing defeat on the first 'failed' is what put
+       "could not connect" on one phone while the other was already in the
+       chat. So: wait, and only speak up if it is still broken and the channel
+       really never opened. */
+    if (st === 'failed'){
+      clearTimeout(failTimer);
+      failTimer = setTimeout(() => {
+        if (settled) return;
+        if (pcObj.connectionState === 'connected') return;
+        if (dc && dc.readyState === 'open') return;
+        settled = true; stop();
+        setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+      }, 12000);
+      return;
+    }
+    if (st === 'closed'){
       settled = true; stop();
       setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
     }
   };
   pcObj.addEventListener('connectionstatechange', onChange);
+  /* A note that it is taking a while — not a verdict. It deliberately does not
+     settle anything: the candidates must keep flowing and the diagnostic must
+     keep updating, because the connection very often still lands after this. */
   setTimeout(() => {
     if (settled || pcObj.connectionState === 'connected') return;
-    settled = true; stop();
-    setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'), 'bad');
+    if (dc && dc.readyState === 'open') return;
+    setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'));
   }, 25000);
 }
 function toast(msg){
@@ -1000,40 +1032,45 @@ async function tryAutoReconnect(contact){
   $('btnCreate').disabled = true;
   setStatus($('statusA'), fill(t('reconnect.trying','Provo a ricollegarmi a {n}…'), { n: contact.nick }));
 
+  stopQuickPump();
   pc = await newPeerConnection();
   wireDataChannel(pc.createDataChannel('logos-modifica'));
+  /* same trickle exchange as the short code above, and for the same reason:
+     waiting for gathering to finish before speaking made one side declare
+     failure while the other was already connected */
+  const pump = candidatePump(pc, myFp + ':' + contact.fp, 'a', 'b');
+  quickPump = pump;
   const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
-  await waitIceComplete(pc);
 
   const outKey = await pairKey(myFp, contact.fp);
   const inKey = await pairKey(contact.fp, myFp);
   const sent = await mailboxPut(outKey, { nick: myNick(), sdp: pc.localDescription.sdp });
 
   if (sent){
-    /* Both sides gather their own network addresses before they can even write
-       to the mailbox (waitIceComplete above, up to 9s each) — on a real network,
-       not a test machine, that plus the contact's own poll interval can add up
-       to more than 20s. Found this the hard way testing against the real relay:
-       Anna's own attempt had already given up by the time Bruno's answer was
-       ready. The mailbox itself holds a message for two minutes, so there is
-       plenty of room to wait longer here without the message expiring first. */
+    /* The other side has to be sitting on the home screen for its own poll to
+       notice this, answer it, and get that answer back here — so this waits
+       well past the handshake itself before deciding nobody is there. The
+       mailbox holds a message for two minutes, comfortably longer. */
     const deadline = Date.now() + 45000;
     while (Date.now() < deadline){
-      if (!pc || pc.signalingState === 'closed') return; // user navigated away or started something else
+      if (!pc || pc.signalingState === 'closed'){ pump.stop(); return; } // user navigated away or started something else
       const msg = await mailboxGet(inKey);
       if (msg && msg.sdp){
         await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
-        watchHandshakeProgress(pc, $('statusA'), $('diagA'));
+        await pump.remoteReady();
+        watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
         $('btnCreate').disabled = false;
         return;
       }
-      await new Promise(r => setTimeout(r, 1500));
+      await new Promise(r => setTimeout(r, 1200));
     }
   }
 
   /* not reachable right now — fall back to an ordinary invite, built from the exact same
-     offer already sitting in `pc`, so nothing is wasted */
+     offer already sitting in `pc`, so nothing is wasted. By now gathering has long
+     finished, so the description carries every address it ever found. */
+  pump.stop();
   if (!pc || pc.signalingState === 'closed') return;
   setStatus($('statusA'), fill(t('reconnect.offline','{n} non sembra online in questo momento. Ecco il codice da mandare a mano.'), { n: contact.nick }), 'bad');
   const code = await sealOrEncodeOffer(pc);
@@ -1068,15 +1105,22 @@ function stopInboxPolling(){
 }
 async function acceptIncomingAutoOffer(contact, msg){
   stopInboxPolling();
+  stopQuickPump();
+  const myFp = await myFingerprintHex();
   pc = await newPeerConnection();
   pc.ondatachannel = ev => wireDataChannel(ev.channel);
+  /* the namespace both sides derive independently: the caller's fingerprint,
+     then the callee's — here `contact.fp` is the caller and `myFp` is us */
+  const pump = candidatePump(pc, contact.fp + ':' + myFp, 'b', 'a');
+  quickPump = pump;
   await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+  await pump.remoteReady();
   const answer = await pc.createAnswer();
   await pc.setLocalDescription(answer);
-  await waitIceComplete(pc);
-  const myFp = await myFingerprintHex();
   const outKey = await pairKey(myFp, contact.fp);
+  /* answered at once, so the other side stops knocking at a door we have not opened */
   await mailboxPut(outKey, { sdp: pc.localDescription.sdp });
+  watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
   /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
 }
 
@@ -1124,7 +1168,74 @@ function showLongLayoutB(){
 $('toggleLongInviteA').addEventListener('click', showLongLayoutA);
 $('toggleLongInviteB').addEventListener('click', showLongLayoutB);
 
+/* ---------------- addresses that flow as they are found (trickle ICE) ----------------
+   The first version of this waited for a side to finish collecting every network
+   address it could reach, and only then sent its half of the handshake. That is what
+   broke two phones talking to each other: the side that typed the code had already
+   started knocking on the other phone's door, but the other phone had not yet been
+   handed the answer, so it did not recognise the knocking and ignored it. After
+   enough ignored knocks that side gave up and said "could not connect" — while the
+   first phone, finally receiving the answer, connected and showed the chat. One
+   screen connected, the other reporting failure, from the same handshake.
+   Making the earlier gathering wait longer (to help phones on different carriers)
+   widened that gap and made this worse, not better.
+   The fix is to stop waiting at all: send the offer or answer the instant it exists,
+   then send each address separately as it turns up. Both sides are then talking about
+   the same connection from the very first second, which is also simply faster.
+   Each batch of addresses goes to its own numbered mailbox slot, because a slot can
+   only be read once — nothing else about the mailbox, its two-minute life, or the
+   privacy of what it holds changes. */
+function candidatePump(pcObj, ns, mine, theirs){
+  let outN = 0, inN = 0, batch = [], flushTimer = null, stopped = false, remoteSet = false;
+  const held = [];
+  pcObj.__trickleTypes = new Set();
+
+  const flush = async () => {
+    if (stopped || !batch.length) return;
+    const send = batch; batch = [];
+    const key = await pairKey('logos-trickle-' + mine + '-v2', ns + ':' + (outN++));
+    await mailboxPut(key, { c: send });
+  };
+  pcObj.addEventListener('icecandidate', ev => {
+    if (!ev.candidate) return; /* end of gathering: nothing left to send */
+    batch.push({ candidate: ev.candidate.candidate, sdpMid: ev.candidate.sdpMid, sdpMLineIndex: ev.candidate.sdpMLineIndex });
+    clearTimeout(flushTimer);
+    flushTimer = setTimeout(flush, 350); /* group the burst that always arrives together */
+  });
+
+  const add = async c => {
+    try{
+      const ty = /\btyp (\w+)/.exec(c.candidate || '');
+      if (ty) pcObj.__trickleTypes.add(ty[1]);
+      await pcObj.addIceCandidate(c);
+    }catch(e){}
+  };
+  (async () => {
+    while (!stopped){
+      const key = await pairKey('logos-trickle-' + theirs + '-v2', ns + ':' + inN);
+      const msg = await mailboxGet(key);
+      if (msg && Array.isArray(msg.c)){
+        inN++;
+        for (const c of msg.c){ if (remoteSet) await add(c); else held.push(c); }
+        continue; /* a batch was waiting, the next one may be too */
+      }
+      await new Promise(r => setTimeout(r, 700));
+    }
+  })();
+
+  return {
+    /* candidates cannot be handed over before the other side's description is in
+       place, so anything that arrives early waits here rather than being dropped */
+    remoteReady: async () => { remoteSet = true; for (const c of held.splice(0)) await add(c); },
+    stop: () => { stopped = true; clearTimeout(flushTimer); },
+  };
+}
+
+let quickPump = null;
+function stopQuickPump(){ if (quickPump){ quickPump.stop(); quickPump = null; } }
+
 async function startQuickShare(){
+  stopQuickPump();
   const code = makeQuickCode();
   $('quickCodeOut').textContent = formatQuickCode(code);
   $('btnRetryQuickA').classList.add('hide');
@@ -1133,26 +1244,31 @@ async function startQuickShare(){
   pc = await newPeerConnection();
   const myPc = pc;
   wireDataChannel(pc.createDataChannel('logos-modifica'));
+  const pump = candidatePump(pc, code, 'a', 'b');
+  quickPump = pump;
+
   const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
-  await waitIceComplete(pc);
-  if (pc !== myPc) return; /* superseded by something else while we were gathering */
+  if (pc !== myPc){ pump.stop(); return; }
 
-  const offerKey = await pairKey('logos-quick-offer-v1', code);
-  const answerKey = await pairKey('logos-quick-answer-v1', code);
+  const offerKey = await pairKey('logos-quick-offer-v2', code);
+  const answerKey = await pairKey('logos-quick-answer-v2', code);
+  /* published straight away, candidates or not — they follow on their own */
   await mailboxPut(offerKey, { sdp: pc.localDescription.sdp, nick: myNick() });
 
   const deadline = Date.now() + 115000; /* just under the mailbox's own 2-minute TTL */
   while (Date.now() < deadline){
-    if (pc !== myPc) return;
+    if (pc !== myPc){ pump.stop(); return; }
     const msg = await mailboxGet(answerKey);
     if (msg && msg.sdp){
       await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
-      watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'));
+      await pump.remoteReady();
+      watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump);
       return;
     }
-    await new Promise(r => setTimeout(r, 1500));
+    await new Promise(r => setTimeout(r, 1200));
   }
+  pump.stop();
   if (pc !== myPc) return;
   setStatus($('quickStatusA'), t('quick.expired','Il codice è scaduto senza risposta. Generane uno nuovo.'), 'bad');
   $('btnRetryQuickA').classList.remove('hide');
@@ -1169,25 +1285,33 @@ let quickConnecting = false;
 async function tryQuickConnect(){
   const code = $('quickCodeIn').value.replace(/\D/g,'').slice(0,6);
   if (code.length !== 6 || quickConnecting) return;
+  /* a code is good for exactly one use — re-submitting the same one would only
+     find an empty mailbox and tear down a connection that is already working */
+  if (!$('screenChat').classList.contains('hide')) return;
   quickConnecting = true;
   $('btnQuickConnect').disabled = true;
   setStatus($('quickStatusB'), t('lock.working','…'));
   try{
-    const offerKey = await pairKey('logos-quick-offer-v1', code);
-    const answerKey = await pairKey('logos-quick-answer-v1', code);
+    const offerKey = await pairKey('logos-quick-offer-v2', code);
+    const answerKey = await pairKey('logos-quick-answer-v2', code);
     const msg = await mailboxGet(offerKey);
     if (!msg || !msg.sdp){
       setStatus($('quickStatusB'), t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
       return;
     }
+    stopQuickPump();
     pc = await newPeerConnection();
     pc.ondatachannel = ev => wireDataChannel(ev.channel);
+    const pump = candidatePump(pc, code, 'b', 'a');
+    quickPump = pump;
     await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+    await pump.remoteReady();
     const answer = await pc.createAnswer();
     await pc.setLocalDescription(answer);
-    await waitIceComplete(pc);
+    /* sent immediately: the other side needs this before it will recognise us,
+       and everything still being gathered follows behind it */
     await mailboxPut(answerKey, { sdp: pc.localDescription.sdp, nick: myNick() });
-    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'));
+    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump);
   } finally {
     quickConnecting = false;
     $('btnQuickConnect').disabled = false;
@@ -1575,6 +1699,7 @@ $('btnDisarmDestruct').addEventListener('click', () => {
 $('btnNewSession').addEventListener('click', () => {
   clearInterval(destructTimer); destructTimer = null;
   $('destructCountdown').classList.add('hide'); $('btnDisarmDestruct').classList.add('hide');
+  stopQuickPump();
   endCall(false);
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
