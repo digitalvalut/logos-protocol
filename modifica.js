@@ -51,6 +51,8 @@ Object.assign(I18N.en, {
 "call.micFailDenied":"The browser has blocked the microphone and camera for this site. Check the lock icon next to the address bar and allow access, then reload the page.",
 "reconnect.trying":"Trying to reconnect to {n}…",
 "reconnect.offline":"{n} doesn't seem to be online right now. Here's the code to send by hand.",
+"call.noSpeakerFound":"Can't find a separate speaker on this phone.",
+"call.speakerFail":"Can't switch the speaker on this phone.",
 "destruct.note":"When the timer runs out: the conversation is cleared from this screen, the other person is asked to do the same, and the connection closes. It cannot reach copies already saved elsewhere (screenshots, downloaded files) — those stay where they were saved.",
 "destruct.countdown":"self-destructs in ","destruct.done":"Conversation self-destructed.",
 "session.closed":"closed","session.newHint":"Create a new session to reconnect.",
@@ -170,6 +172,8 @@ Object.assign(I18N.it, {
 "call.micFailDenied":"Il browser ha bloccato microfono e fotocamera per questo sito. Controlla l'icona del lucchetto vicino all'indirizzo e consenti l'accesso, poi ricarica la pagina.",
 "reconnect.trying":"Provo a ricollegarmi a {n}…",
 "reconnect.offline":"{n} non sembra online in questo momento. Ecco il codice da mandare a mano.",
+"call.noSpeakerFound":"Non trovo un altoparlante separato su questo telefono.",
+"call.speakerFail":"Non riesco a cambiare l'altoparlante su questo telefono.",
 "destruct.note":"Allo scadere del timer: la conversazione viene cancellata da questo schermo, viene chiesto di fare lo stesso all'altra persona, e la connessione si chiude. Non può toccare copie già salvate altrove (screenshot, file scaricati) — quelle restano dove sono state salvate.",
 "destruct.countdown":"si autodistrugge tra ","destruct.done":"Conversazione autodistrutta.",
 "session.closed":"chiusa","session.newHint":"Crea una nuova sessione per riconnetterti.",
@@ -1294,6 +1298,7 @@ $('btnAcceptCall').addEventListener('click', async () => {
   $('localVideo').srcObject = localStream;
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
+  initSpeakerToggle();
   sig({ type: 'call-accept' });
 });
 $('btnDeclineCall').addEventListener('click', () => {
@@ -1306,6 +1311,7 @@ async function onCallAccepted(){
   sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
+  initSpeakerToggle();
 }
 async function onCallOfferSdp(sdp){
   await pc.setRemoteDescription({ type: 'offer', sdp });
@@ -1320,6 +1326,7 @@ function endCall(tellPeer){
   $('remoteVideo').srcObject = null; $('localVideo').srcObject = null;
   callState = 'idle'; callKind = null; micOn = true; camOn = true;
   $('btnMuteCall').textContent = '🎤'; $('btnCamCall').textContent = '🎥';
+  speakerOn = false; $('btnSpeakerCall').classList.add('hide'); $('btnSpeakerCall').classList.remove('on');
 }
 $('btnCallAudio').addEventListener('click', () => startCall('audio'));
 $('btnCallVideo').addEventListener('click', () => startCall('video'));
@@ -1333,6 +1340,48 @@ $('btnCamCall').addEventListener('click', () => {
   if (!localStream) return;
   camOn = !camOn; localStream.getVideoTracks().forEach(tr => tr.enabled = camOn);
   $('btnCamCall').textContent = camOn ? '🎥' : '🚫';
+});
+
+/* ---------------- loudspeaker toggle, where the phone actually allows it ----------------
+   Confirmed against current documentation, not assumed: iOS Safari does not implement
+   HTMLMediaElement.setSinkId() at all — Apple keeps output-device selection at the OS
+   level and does not expose it to web pages, still true as of 2026. On browsers that do
+   support it (Chrome on Android), this looks for whatever the phone itself labels as a
+   speaker and toggles between that and the normal output. The button only ever appears
+   where it can actually do something — no dead control shown on a phone that can't use it. */
+let speakerOn = false;
+async function findSpeakerDeviceId(){
+  try{
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const speaker = devices.find(d => d.kind === 'audiooutput' && /speaker/i.test(d.label));
+    return speaker ? speaker.deviceId : null;
+  }catch(e){ return null; }
+}
+async function initSpeakerToggle(){
+  const supported = typeof $('remoteVideo').setSinkId === 'function';
+  $('btnSpeakerCall').classList.toggle('hide', !supported);
+  if (!supported) return;
+  speakerOn = false;
+  $('btnSpeakerCall').classList.remove('on');
+  try{ await $('remoteVideo').setSinkId(''); }catch(e){}
+}
+$('btnSpeakerCall').addEventListener('click', async () => {
+  const el = $('remoteVideo');
+  if (typeof el.setSinkId !== 'function') return;
+  try{
+    if (!speakerOn){
+      const id = await findSpeakerDeviceId();
+      if (!id){ toast(t('call.noSpeakerFound','Non trovo un altoparlante separato su questo telefono.')); return; }
+      await el.setSinkId(id);
+      speakerOn = true;
+    } else {
+      await el.setSinkId('');
+      speakerOn = false;
+    }
+    $('btnSpeakerCall').classList.toggle('on', speakerOn);
+  }catch(e){
+    toast(t('call.speakerFail','Non riesco a cambiare l\'altoparlante su questo telefono.'));
+  }
 });
 
 /* ============================== self-destruct ============================== */

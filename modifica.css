@@ -188,6 +188,9 @@
   .callctrl button{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.14);
     color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px)}
   .callctrl button.hangup{width:auto;border-radius:99px;padding:0 18px;background:var(--bad);font-weight:700;font-size:0.8125rem}
+  /* on = loudspeaker active; off = whatever the phone's other output is (earpiece,
+     if the browser exposes one — not guaranteed on every device, see the JS) */
+  .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink)}
 
   #chatArea{display:flex;flex-direction:column;height:min(62vh,560px);border:1px solid var(--line);
     border-radius:var(--r);overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
