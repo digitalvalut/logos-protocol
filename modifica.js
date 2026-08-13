@@ -102,13 +102,15 @@ Object.assign(I18N.en, {
 "verify.noteNew":"First time with this person: compare the code out loud, then the app remembers it.",
 "verify.noteChanged":"The code has changed. Usually that means a new phone or a reinstalled app — but it is also what being intercepted looks like. Compare it out loud before accepting it.",
 "verify.changedWarn":"\u26a0\ufe0f This person's safety code has changed since last time. Compare it out loud before trusting this chat.",
-"quick.titleA":"Your code","quick.helpA":"Say it out loud to whoever you want to bring in, or send it. Expires in 2 minutes, then you'll need a new one.",
-"quick.share":"Send the code","quick.newCode":"Generate a new code","quick.useLong":"Prefer the long code?",
+"quick.titleA":"Your code","quick.helpA":"Send it with the button below — one tap and they're in. Or say the six digits out loud. It keeps working as long as you stay on this screen.",
+"quick.orType":"Or open the app and type this code:",
+"quick.newCode":"Generate a new code","quick.useLong":"Prefer the long code?",
 "quick.titleB":"Type the code","quick.helpB":"Ask whoever invited you for the code \u2014 6 digits, said out loud or written \u2014 and type it here.",
 "quick.codePh":"000000","quick.connect":"Connect",
 "quick.waiting":"Waiting for the other person to type the code\u2026","quick.expired":"The code expired with no answer. Generate a new one.",
 "quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.",
-"quick.shareText":"Here's the code for DigitalValut Logos, type it in the app within 2 minutes: ",
+"quick.shareText":"Here's the link to talk to me on DigitalValut Logos. Tap it and we're connected:",
+"quick.share":"Send the invitation",
 "sas.title":"Security check",
 "sas.lead":"Say these three words to each other out loud. If you both see the same ones, nobody has come in between.",
 "sas.leadChanged":"Careful: this person no longer looks like the same one as last time. Usually that means a new phone or a reinstalled app — but it is also what being intercepted looks like. Say the three words out loud before going on.",
@@ -196,13 +198,15 @@ Object.assign(I18N.it, {
 "mic.recording":"Registrazione — tocca per fermare","history.cleared":"Cronologia svuotata su questo dispositivo.",
 "install.genericText":"<b>Installa DigitalValut Logos</b> per averla come app, con la sua icona, senza passare dal browser.",
 "install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.",
-"quick.titleA":"Il tuo codice","quick.helpA":"Dillo a voce alla persona che vuoi far entrare, oppure mandaglielo. Scade tra 2 minuti, poi ne serve uno nuovo.",
-"quick.share":"Manda il codice","quick.newCode":"Genera un nuovo codice","quick.useLong":"Preferisci il codice lungo?",
+"quick.titleA":"Il tuo codice","quick.helpA":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.",
+"quick.orType":"Oppure apri l'app e scrivi questo codice:",
+"quick.newCode":"Genera un nuovo codice","quick.useLong":"Preferisci il codice lungo?",
 "quick.titleB":"Digita il codice","quick.helpB":"Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.",
 "quick.codePh":"000000","quick.connect":"Connetti",
 "quick.waiting":"In attesa che l'altra persona digiti il codice…","quick.expired":"Il codice è scaduto senza risposta. Generane uno nuovo.",
 "quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.",
-"quick.shareText":"Ecco il codice per DigitalValut Logos, scrivilo nell'app entro 2 minuti: ",
+"quick.shareText":"Ecco il link per parlare con me su DigitalValut Logos. Toccalo e siamo connessi:",
+"quick.share":"Manda l'invito",
 "sas.title":"Controllo di sicurezza",
 "sas.lead":"Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.",
 "sas.leadChanged":"Attenzione: questa persona non risulta più la stessa dell'ultima volta. Di solito è un telefono nuovo o l'app reinstallata — ma è anche il segno di qualcuno che si è messo in mezzo. Ditevi le tre parole a voce prima di continuare.",
@@ -941,8 +945,26 @@ $('btnCopyAnswer').addEventListener('click', async () => {
   await copyOrSelect($('answerOut').textContent, $('answerOut'));
 });
 
-/* opening a shared invite link pre-fills the code so the second person barely has to think */
+/* ---------------- opening an invite link ----------------
+   Two shapes arrive here. `#q=` is the short code turned into something you can
+   simply tap: the app opens, fills the code in and connects on its own, with
+   nothing to read, type or paste. `#i=` is the older long invite, which still
+   has to be answered by hand, so it only pre-fills the box.
+   The address bar is cleaned either way, so reloading the page does not try to
+   spend a code that has already been used. */
 (function autoFillFromHash(){
+  const quick = location.hash.match(/[#&]q=(\d{6})\b/);
+  if (quick){
+    const code = quick[1];
+    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+    showScreen('screenJoin');
+    showQuickLayoutB();
+    $('quickCodeIn').value = code;
+    setStatus($('quickStatusB'), t('lock.working','…'));
+    /* deferred so the rest of the script finishes wiring itself up first */
+    setTimeout(() => tryQuickConnect(), 0);
+    return;
+  }
   const m = location.hash.match(/[#&]i=([^&]+)/);
   if (!m) return;
   try{
@@ -1426,7 +1448,15 @@ async function startQuickShare(){
   /* published straight away, candidates or not — they follow on their own */
   await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
 
-  const deadline = Date.now() + 115000; /* just under the mailbox's own 2-minute TTL */
+  /* An invite sent over WhatsApp is not read in the next ninety seconds. It is
+     read when the other person next picks up their phone. The mailbox only
+     holds anything for two minutes, so the invite is simply written again
+     before it lapses: as long as this screen is open, the link someone was
+     sent still works. Nothing is kept anywhere longer than those two minutes —
+     what changes is that the person offering stays willing, not that the
+     mailbox remembers. */
+  const deadline = Date.now() + 15 * 60 * 1000;
+  let nextRefresh = Date.now() + 80000;
   while (Date.now() < deadline){
     if (pc !== myPc){ pump.stop(); return; }
     const msg = await mailboxGetSealed(answerKey, sec);
@@ -1436,6 +1466,10 @@ async function startQuickShare(){
       watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump);
       return;
     }
+    if (Date.now() >= nextRefresh){
+      await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
+      nextRefresh = Date.now() + 80000;
+    }
     await new Promise(r => setTimeout(r, 1200));
   }
   pump.stop();
@@ -1443,9 +1477,15 @@ async function startQuickShare(){
   setStatus($('quickStatusA'), t('quick.expired','Il codice è scaduto senza risposta. Generane uno nuovo.'), 'bad');
   $('btnRetryQuickA').classList.remove('hide');
 }
+function quickLink(code){ return location.origin + location.pathname + '#q=' + code; }
 $('btnShareQuick').addEventListener('click', async () => {
   const code = $('quickCodeOut').textContent.replace(/\s/g,'');
-  const text = t('quick.shareText','Ecco il codice per DigitalValut Logos, scrivilo nell\'app entro 2 minuti: ') + code;
+  /* Both, deliberately: the link is one tap and needs no explaining, and the
+     digits underneath still let someone read the code down the phone to a
+     person who would rather type it than tap a link they do not trust. */
+  const text = t('quick.shareText','Ecco il link per parlare con me su DigitalValut Logos. Toccalo e siamo connessi:') +
+               '\n\n' + quickLink(code) +
+               '\n\n' + t('quick.orType','Oppure apri l\'app e scrivi questo codice:') + ' ' + code;
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
   await copyOrSelect(text, $('quickCodeOut'));
 });
