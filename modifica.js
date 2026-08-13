@@ -1099,7 +1099,20 @@ async function mailboxGet(key){
    Every primitive is the browser's own audited Web Crypto: PBKDF2-SHA256,
    HKDF-SHA256, AES-256-GCM. No cryptography is hand-written anywhere in this
    file, deliberately — see the note on SPAKE2 in the quick-connect section. */
-const QUICK_ITER = 600000; /* ~0.3-1s once per connection: unnoticed by a person, brutal for a machine trying a million codes */
+/* Measured, not guessed. 600k rounds — the figure usually quoted for password
+   storage — took 8.5 seconds in a browser here, against 1.1 in server-side
+   JavaScript: browser Web Crypto is far slower than the numbers those
+   recommendations come from, and eight seconds of nothing happening is exactly
+   how you lose the person this app was simplified for. At 100k the same browser
+   takes 1.3s, and a current phone well under half of that.
+   That is an honest trade and worth stating plainly: the stretching is not what
+   stops someone sweeping the code space. Three other things do — everything in
+   the mailbox is encrypted, so a guessed slot yields nothing readable; the
+   Worker meters lookups, which is the real ceiling on guessing; and any
+   impostor who somehow gets through still has to produce the same three words
+   on the other person's screen. The stretching multiplies the cost of each
+   attempt on top of all that. */
+const QUICK_ITER = 100000;
 const SIGNAL_SALT = new TextEncoder().encode('DigitalValut Logos signalling v3');
 
 function hex(bytes){ return [...new Uint8Array(bytes)].map(b => b.toString(16).padStart(2,'0')).join(''); }
