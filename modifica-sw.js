@@ -50,12 +50,18 @@ self.addEventListener('fetch', event => {
      open, and to anyone using the app that reads as "the fix did not work".
      Offline still works: the moment the network fails we fall straight back to
      the cache. The script matters as much as the page here, since that is where
-     all the logic now lives. */
+     all the logic now lives.
+     `cache: 'no-store'` matters here specifically: GitHub Pages serves these
+     files with a 10-minute max-age, and a plain fetch() honours that HTTP
+     cache before it ever reaches the network — so without this, "network
+     first" would silently degrade back into serving up to 10 minutes of
+     stale code after every single deploy, the exact failure this was
+     written to avoid. */
   const isAppCode = req.mode === 'navigate' || req.destination === 'document' ||
                     req.destination === 'script' || req.destination === 'style';
   if (isAppCode){
     event.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'no-store' })
         .then(res => keep(req, res))
         .catch(() => caches.match(req, { ignoreSearch: true })
           .then(hit => hit || Response.error()))
