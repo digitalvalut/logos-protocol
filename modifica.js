@@ -253,7 +253,14 @@ function applyLang(code){
   try{ localStorage.setItem('dvlogos-lang', code); }catch(e){}
 }
 
-/* ============================== screens ============================== */
+/* ============================== screens ==============================
+   `inboxTimer` belongs to the mailbox polling far below, but it is declared up
+   here on purpose: showScreen() touches it, and showScreen() runs the moment
+   someone opens an invite link — long before the script reaches that section.
+   Declared down there with `let`, that first call threw before initialisation
+   and took the entire rest of the file with it, leaving the app a shell that
+   loaded and did nothing. */
+let inboxTimer = null;
 function showScreen(id){
   ['screenHome','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
   window.scrollTo(0,0);
@@ -945,37 +952,8 @@ $('btnCopyAnswer').addEventListener('click', async () => {
   await copyOrSelect($('answerOut').textContent, $('answerOut'));
 });
 
-/* ---------------- opening an invite link ----------------
-   Two shapes arrive here. `#q=` is the short code turned into something you can
-   simply tap: the app opens, fills the code in and connects on its own, with
-   nothing to read, type or paste. `#i=` is the older long invite, which still
-   has to be answered by hand, so it only pre-fills the box.
-   The address bar is cleaned either way, so reloading the page does not try to
-   spend a code that has already been used. */
-(function autoFillFromHash(){
-  const quick = location.hash.match(/[#&]q=(\d{6})\b/);
-  if (quick){
-    const code = quick[1];
-    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
-    showScreen('screenJoin');
-    showQuickLayoutB();
-    $('quickCodeIn').value = code;
-    setStatus($('quickStatusB'), t('lock.working','…'));
-    /* deferred so the rest of the script finishes wiring itself up first */
-    setTimeout(() => tryQuickConnect(), 0);
-    return;
-  }
-  const m = location.hash.match(/[#&]i=([^&]+)/);
-  if (!m) return;
-  try{
-    const code = decodeURIComponent(m[1]);
-    JSON.parse(b64decode(code));
-    $('offerIn').value = code;
-    refreshJoinLock();
-    showScreen('screenJoin');
-    showLongLayoutB();
-  }catch(e){}
-})();
+/* Opening an invite link is handled at the very bottom of this file, once
+   everything it touches actually exists — see autoFillFromHash(). */
 
 /* ============================== history (local, per contact name) ============================== */
 function historyKey(nick){ return 'dvlogos-history-' + (nick||'').trim().toLowerCase(); }
@@ -1271,7 +1249,6 @@ async function tryAutoReconnect(contact){
 /* While sitting on the home screen with known contacts, check whether any of them is trying
    to reach this device right now. Stops the instant the screen changes — a call in progress,
    an open chat or a manual invite in flight should never be interrupted by this. */
-let inboxTimer = null;
 async function checkInboxOnce(){
   if (pc) return; // already connecting or connected to someone
   const myFp = await myFingerprintHex();
@@ -2023,3 +2000,39 @@ applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || '
 initLang();
 renderContacts();
 if (!$('screenHome').classList.contains('hide')) startInboxPolling();
+
+/* ---------------- opening an invite link ----------------
+   Two shapes arrive here. `#q=` is the short code turned into something you can
+   simply tap: the app opens, fills the code in and connects on its own, with
+   nothing to read, type or paste. `#i=` is the older long invite, which still
+   has to be answered by hand, so it only pre-fills the box.
+   The address bar is cleaned either way, so reloading cannot try to spend a
+   code that has already been used.
+   This runs last, deliberately. It used to sit halfway up the file, where it
+   reached for things the script had not defined yet — and the failure was not
+   a broken link but a blank app, because the exception stopped everything
+   below it from ever running. Anything that acts on the address bar belongs
+   after the app is fully assembled. */
+(function autoFillFromHash(){
+  const quick = location.hash.match(/[#&]q=(\d{6})\b/);
+  if (quick){
+    const code = quick[1];
+    try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+    showScreen('screenJoin');
+    showQuickLayoutB();
+    $('quickCodeIn').value = code;
+    setStatus($('quickStatusB'), t('lock.working','…'));
+    tryQuickConnect();
+    return;
+  }
+  const m = location.hash.match(/[#&]i=([^&]+)/);
+  if (!m) return;
+  try{
+    const code = decodeURIComponent(m[1]);
+    JSON.parse(b64decode(code));
+    $('offerIn').value = code;
+    refreshJoinLock();
+    showScreen('screenJoin');
+    showLongLayoutB();
+  }catch(e){}
+})();
