@@ -43,6 +43,15 @@ anyone — because there is no server handling your conversation at all.
 - Audio and video calls, direct between the two browsers.
 - Connect by short 6-digit code, by a tappable invite link, or by scanning a QR code in
   person — whichever is easiest for the two of you.
+- **An invite that waits.** Send one and close the app. Whoever opens it — an hour later,
+  a day later — makes your phone ring; you open the app and you're connected. Neither of
+  you has to be sitting there waiting.
+- **A QR scanned in person verifies itself.** Holding out a code on your own screen is a
+  channel nobody can get into the middle of, so the app confirms it outright instead of
+  asking the two of you to read words to each other. If what answers isn't the phone the
+  QR named, it says so in no uncertain terms.
+- **A simple mode**: two very large buttons and nothing else on screen, with the
+  instructions read out loud in your own language. Both off unless you switch them on.
 - A self-destruct timer for messages, when you want a conversation to leave no trace at all.
 - **Automatic cleanup**, entirely opt-in and off by default: turn it on and the app quietly
   deletes conversations older than the number of days you choose (7, 30, 90 or 365), so
@@ -65,6 +74,20 @@ anyone — because there is no server handling your conversation at all.
   or just keep it open as a normal browser tab — no installation is required to use it.
 
 No app store, no account, nothing to buy.
+
+## It is also one single file
+
+```bash
+python3 build-single-file.py
+```
+
+That produces `digitalvalut-logos.html` — the whole application, stylesheet and logic
+folded into one self-contained file. Put it on any web host and the app is running again;
+keep it on a USB stick and you are carrying it. It is the real thing, not a reduced copy.
+
+The page refuses to run any code that is not its own, so the build names its two inlined
+blocks by their SHA-256: change a single character anywhere in that file and the browser
+itself will refuse to run it.
 
 ## About
 
@@ -100,6 +123,13 @@ opzionale (spenta di base) per non far crescere lo spazio occupato, un "colpetto
 discreto per farsi sentire senza tenere l'app aperta, codice QR o link per collegarsi, e
 tutta l'interfaccia in **13 lingue**. Si installa su iPhone, Android, Windows, Mac e Linux
 senza alcun account né pagamento.
+
+**L'invito aspetta:** mandalo e chiudi pure l'app — chi lo apre, anche il giorno dopo, ti
+fa squillare il telefono, e appena riapri siete connessi. **Il QR si verifica da solo:**
+inquadrare il codice sullo schermo di chi hai davanti è un canale che nessuno può
+intercettare, e l'app lo riconosce senza chiedervi altro. C'è una **modalità semplice** con
+due soli pulsanti giganti e le istruzioni lette ad alta voce, per chi non vede bene o non
+legge. E tutta l'app sta in **un unico file** che chiunque può caricare ovunque.
 
 Ideato dal **Dott. Giuseppe Falsone** per **DigitalValut**, realizzato con il Team
 DigitalValut.
