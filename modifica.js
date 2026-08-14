@@ -3982,13 +3982,13 @@ if (!$('screenHome').classList.contains('hide')) startInboxPolling();
   try{ startQuickShare(pending.code, true); }catch(e){}
 })();
 
-(function autoFillFromHash(){
+function autoFillFromHash(){
   const quick = location.hash.match(/[#&]q=(\d{6})\b/);
   if (quick){
     const code = quick[1];
     /* only a QR carries this, and only a QR was ever held out in person */
     const vouch = location.hash.match(/[#&]v=([0-9a-f]{8,64})\b/);
-    if (vouch) scannedFp = vouch[1];
+    scannedFp = vouch ? vouch[1] : null;
     try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
     showScreen('screenJoin');
     showQuickLayoutB();
@@ -4007,4 +4007,16 @@ if (!$('screenHome').classList.contains('hide')) startInboxPolling();
     showScreen('screenJoin');
     showLongLayoutB();
   }catch(e){}
-})();
+}
+autoFillFromHash();
+
+/* An invite tapped while the app is already open changes only the part of the
+   address after the '#', and a browser treats that as staying on the same page:
+   nothing reloads, so none of the above would run again and the tap would
+   appear to do nothing at all. That case is now the common one rather than the
+   exotic one — the whole point of the wake slot is that people leave this app
+   installed and come back to it — so the same handling runs again on its own. */
+window.addEventListener('hashchange', () => {
+  if (!/[#&][qi]=/.test(location.hash)) return;
+  autoFillFromHash();
+});
