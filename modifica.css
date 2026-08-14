@@ -62,14 +62,16 @@
   /* Compact on purpose. The old hero was tall enough that on an ordinary phone
      the second of the two buttons fell below the fold, which defeats the whole
      point of having exactly two. */
-  .hero{text-align:center;padding:18px 10px 4px}
-  .hero img{width:72px;height:72px;border-radius:22px;box-shadow:0 12px 34px rgba(255,145,77,.28)}
-  .hero h1{font-size:1.375rem;letter-spacing:-.01em;margin:14px 0 6px;font-weight:800;line-height:1.25}
-  .hero p{color:var(--dim);font-size:0.9375rem;margin:0 auto;max-width:23em;line-height:1.5}
+  .hero{text-align:center;padding:16px 10px 2px}
+  .hero img{width:64px;height:64px;border-radius:20px;box-shadow:0 8px 26px rgba(255,145,77,.20)}
+  .hero h1{font-size:1.3125rem;letter-spacing:-.015em;margin:13px 0 5px;font-weight:800;line-height:1.25}
+  /* deliberately quiet: it explains, it does not compete with the two buttons */
+  .hero p{color:var(--faint);font-size:0.875rem;margin:0 auto;max-width:25em;line-height:1.5}
   @media(min-height:760px){
-    .hero{padding:28px 10px 6px}
-    .hero img{width:88px;height:88px;border-radius:26px}
-    .hero h1{font-size:1.625rem}
+    .hero{padding:26px 10px 4px}
+    .hero img{width:80px;height:80px;border-radius:24px}
+    .hero h1{font-size:1.5rem}
+    .hero p{font-size:0.9062rem}
   }
 
   .card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
@@ -183,20 +185,36 @@
      at all. These are meant to be the first thing seen and the only thing
      that needs deciding — big enough to hit without aiming, and readable
      across a room. */
-  .bigchoices{display:grid;gap:14px;margin:26px 0 8px}
+  .bigchoices{display:grid;gap:12px;margin:22px 0 6px}
   .bigchoice{display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:4px;width:100%;min-height:132px;padding:26px 20px;cursor:pointer;color:var(--ink);
-    background:var(--panel2);border:2px solid var(--line);border-radius:var(--r);
-    transition:border-color .15s,transform .12s,box-shadow .15s;text-align:center}
-  .bigchoice:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
-  .bigchoice:active{transform:translateY(0)}
-  .bigchoice .ic{font-size:2.25rem;line-height:1;margin-bottom:6px}
-  .bigchoice .t{font-weight:800;font-size:1.375rem;letter-spacing:-.01em}
-  .bigchoice .d{color:var(--dim);font-size:0.9375rem;line-height:1.45}
-  /* the first one is the one most people want */
-  .bigchoice:first-child{border-color:rgba(255,145,77,.55);
-    background:linear-gradient(180deg,rgba(255,145,77,.10),var(--panel2))}
-  @media(min-width:560px){ .bigchoices{grid-template-columns:1fr 1fr} }
+    gap:2px;width:100%;padding:24px 20px 22px;cursor:pointer;color:var(--ink);
+    background:var(--panel2);border:1px solid var(--line);border-radius:var(--r-lg);
+    transition:transform .12s ease,box-shadow .18s ease,border-color .18s ease;text-align:center}
+  .bigchoice:hover{transform:translateY(-2px)}
+  .bigchoice:active{transform:translateY(0) scale(.995)}
+  .bigchoice .ic{display:block;width:38px;height:38px;margin-bottom:12px;color:var(--dim)}
+  .bigchoice .ic svg{width:100%;height:100%;display:block}
+  .bigchoice .t{font-weight:800;font-size:1.5rem;letter-spacing:-.02em;line-height:1.15}
+  .bigchoice .d{color:var(--dim);font-size:0.9375rem;line-height:1.45;margin-top:5px}
+
+  /* The one most people want, and it should not need reading to know that.
+     Filled rather than merely tinted: a hesitant primary is the same as no
+     primary at all. */
+  .bigchoice.primary{background:linear-gradient(160deg,var(--accent2),var(--accent));
+    border-color:transparent;color:var(--accent-ink);
+    box-shadow:0 10px 30px rgba(255,145,77,.28)}
+  .bigchoice.primary:hover{box-shadow:0 16px 40px rgba(255,145,77,.36)}
+  .bigchoice.primary .ic{color:var(--accent-ink);opacity:.9}
+  .bigchoice.primary .d{color:rgba(26,14,5,.72)}
+  .bigchoice:not(.primary):hover{border-color:var(--dim)}
+
+  /* Stacked at every width, on purpose. Side by side would put the two on the
+     same footing and ask which one first; one above the other answers that
+     before anyone has to wonder, and gives the finger a bigger thing to hit. */
+  @media(min-width:560px){
+    .bigchoices{gap:14px}
+    .bigchoice{padding:30px 22px 26px}
+  }
 
   /* the state of the line, without a word of jargon */
   .cdot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;
@@ -209,8 +227,9 @@
   /* secondary, and placed where secondary things go */
   .sharerow{text-align:center;margin-top:18px}
   .gear{background:none;border:1px solid var(--line);border-radius:50%;color:var(--dim);
-    width:38px;height:38px;font-size:1.125rem;line-height:1;cursor:pointer;flex:none;
-    display:flex;align-items:center;justify-content:center}
+    width:38px;height:38px;padding:0;cursor:pointer;flex:none;
+    display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
+  .gear svg{width:18px;height:18px;display:block}
   .gear:hover{color:var(--ink);border-color:var(--dim)}
 
   /* ---------------- simple mode ----------------
