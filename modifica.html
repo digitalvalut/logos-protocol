@@ -130,6 +130,23 @@
          default. It is derived from this device's own certificate and is
          never registered anywhere: there is no directory of addresses, here
          or anywhere else, so there is nothing to leak, subpoena or sell. -->
+    <!-- Arriving by address used to drop someone straight into a call before
+         they had said who they were, so the other end got "Qualcuno" and no
+         reason. One screen, three things, one big button. -->
+    <div class="card knock hide" id="knockCard">
+      <div class="knocktitle" data-i18n="knock.title">Stai contattando</div>
+      <div class="knockwho" id="knockWho">DV-····-····-····</div>
+      <label class="fieldlabel mt16" for="knockName" data-i18n="knock.nameLabel">Come ti chiami?</label>
+      <input type="text" id="knockName" class="sans-input" maxlength="30" autocapitalize="words"
+             data-i18n-ph="knock.namePh" placeholder="Il tuo nome">
+      <label class="fieldlabel mt12" for="knockMsg" data-i18n="knock.msgLabel">Cosa ti serve? (se vuoi)</label>
+      <input type="text" id="knockMsg" class="sans-input" maxlength="140"
+             data-i18n-ph="knock.msgPh" placeholder="es. Avete le scarpe numero 42?">
+      <button class="btn primary big mt16" id="btnKnockGo">
+        <span class="ic">📞</span><span data-i18n="knock.go">Chiama</span></button>
+      <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
+    </div>
+
     <div class="card" id="addrCard">
       <div class="switchrow" id="addrRow" role="button" tabindex="0" aria-pressed="false">
         <div class="txt">
@@ -181,7 +198,9 @@
     <div class="card hide" id="addrIncoming">
       <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
       <span class="whichaddr hide" id="addrIncomingWhich"></span>
-      <span class="lead" data-i18n="addr.incomingSub">Sta usando il tuo indirizzo permanente. Non sai ancora chi è: lo saprai solo se accetti.</span>
+      <div class="whoknocks" id="addrIncomingWho"></div>
+      <div class="whyknocks hide" id="addrIncomingMsg"></div>
+      <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
       <div class="toolsrow">
         <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
         <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
