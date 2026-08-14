@@ -517,7 +517,16 @@ function diagLine(pcObj){
    anyone it was still trying, or that it had given up. This watches the
    handshake and says so, either way, plus the technical line above: what
    kind of address each side actually found. */
-function watchHandshakeProgress(pcObj, statusEl, diagEl, pump){
+/* `onSettle`, when given, fires exactly once — with `true` if the connection
+   actually came up, `false` if it didn't — and not a moment before either is
+   really known. Callers that disable a button while connecting should re-enable
+   it from here, not the instant this function is called: the handshake itself
+   still runs for several seconds after that, and a button re-enabled early is
+   a button a second, impatient tap can fire into a mailbox slot the first
+   attempt already emptied — a frightening "wrong code" while the real
+   connection quietly succeeds underneath it. Found exactly that happening on
+   a real device. */
+function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
   let settled = false, failTimer = null;
   const tick = () => { if (diagEl && !settled) diagEl.textContent = diagLine(pcObj); };
@@ -530,6 +539,7 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump){
     if (st === 'connected'){
       settled = true; stop();
       setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide');
+      if (onSettle) onSettle(true);
       return;
     }
     /* 'failed' is not the end of the story. While candidates are still
@@ -547,12 +557,14 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump){
         if (dc && dc.readyState === 'open') return;
         settled = true; stop();
         setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+        if (onSettle) onSettle(false);
       }, 12000);
       return;
     }
     if (st === 'closed'){
       settled = true; stop();
       setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+      if (onSettle) onSettle(false);
     }
   };
   pcObj.addEventListener('connectionstatechange', onChange);
@@ -564,6 +576,17 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump){
     if (dc && dc.readyState === 'open') return;
     setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'));
   }, 25000);
+  /* A safety net, not a verdict either: connectionState can in principle sit in
+     'checking' without ever formally reaching 'failed', which — before this —
+     could leave a disabled button disabled forever with no way out but a
+     reload. This only ever fires if nothing else already has. */
+  setTimeout(() => {
+    if (settled) return;
+    if (pcObj.connectionState === 'connected' || (dc && dc.readyState === 'open')) return;
+    settled = true; stop();
+    setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+    if (onSettle) onSettle(false);
+  }, 60000);
 }
 function toast(msg){
   const el = document.createElement('div');
@@ -1354,8 +1377,11 @@ async function tryAutoReconnect(contact){
       if (msg && msg.sdp){
         await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
         await pump.remoteReady();
-        watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
-        $('btnCreate').disabled = false;
+        /* re-enabled only once the handshake actually settles — see the note
+           on watchHandshakeProgress; enabling it the instant an answer was
+           found, while the connection itself was still several seconds from
+           done, was the same bug as the quick-connect button */
+        watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump, () => { $('btnCreate').disabled = false; });
         return;
       }
       await new Promise(r => setTimeout(r, 1200));
@@ -1909,6 +1935,8 @@ async function tryQuickConnect(){
        without the right key nothing decrypts, so there is nothing to tell apart */
     if (!msg || !msg.sdp){
       setStatus($('quickStatusB'), t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
+      quickConnecting = false;
+      $('btnQuickConnect').disabled = false;
       return;
     }
     stopQuickPump();
@@ -1923,8 +1951,14 @@ async function tryQuickConnect(){
     /* sent immediately: the other side needs this before it will recognise us,
        and everything still being gathered follows behind it */
     await mailboxPutSealed(answerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
-    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump);
-  } finally {
+    /* the button stays disabled for the whole handshake now, not just until
+       the offer was found — see the note on watchHandshakeProgress for why
+       re-enabling it any earlier was a real bug, not a style choice */
+    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump, () => {
+      quickConnecting = false;
+      $('btnQuickConnect').disabled = false;
+    });
+  }catch(e){
     quickConnecting = false;
     $('btnQuickConnect').disabled = false;
   }
