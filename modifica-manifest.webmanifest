@@ -1,5 +1,5 @@
 {
-  "name": "DigitalValut Logos — chat sperimentale",
+  "name": "DigitalValut Logos",
   "short_name": "DV Logos",
   "description": "Software libero e open source di DigitalValut APS ETS: chat, chiamate e videochiamate dirette tra due browser, gratis per sempre, senza account.",
   "id": "/logos-protocol/modifica",
@@ -12,6 +12,7 @@
   "categories": ["social", "utilities"],
   "icons": [
     { "src": "modifica-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "modifica-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    { "src": "modifica-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "modifica-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
