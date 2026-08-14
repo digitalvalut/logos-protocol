@@ -500,6 +500,14 @@
 
     <div id="callBox" class="hide">
       <video id="remoteVideo" autoplay playsinline></video>
+      <!-- A voice call is not a video playing. Attaching the far end's audio to
+           a <video> element told the phone this was media, and media comes out
+           of the loudspeaker — so a private conversation was played to the
+           whole room by default. Voice-only calls get their own audio element.
+           Whether a given phone then uses the earpiece is the phone's decision,
+           not something a web page can command, but this at least stops asking
+           it for the wrong thing. -->
+      <audio id="remoteAudio" autoplay playsinline></audio>
       <video id="localVideo" autoplay playsinline muted></video>
       <div id="callStatus"></div>
       <div class="callctrl">

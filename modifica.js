@@ -2005,7 +2005,7 @@ let peerNick = '';
 function wireDataChannel(channel){
   dc = channel;
   dc.binaryType = 'arraybuffer';
-  pc.ontrack = ev => { if ($('remoteVideo').srcObject !== ev.streams[0]) $('remoteVideo').srcObject = ev.streams[0]; };
+  pc.ontrack = ev => attachRemoteStream(ev.streams[0]);
   dc.onopen = async () => {
     enterChat();
     const fp = await myFingerprintHex();
@@ -4882,6 +4882,7 @@ function endCall(tellPeer){
   if (localStream){ localStream.getTracks().forEach(tr => tr.stop()); localStream = null; }
   $('callBox').classList.add('hide'); $('incomingCall').classList.add('hide');
   $('remoteVideo').srcObject = null; $('localVideo').srcObject = null;
+  $('remoteAudio').srcObject = null; $('remoteVideo').classList.remove('hide');
   callState = 'idle'; callKind = null; micOn = true; camOn = true;
   $('btnMuteCall').textContent = '🎤'; $('btnCamCall').textContent = '🎥';
   speakerOn = false; $('btnSpeakerCall').classList.add('hide'); $('btnSpeakerCall').classList.remove('on');
@@ -4900,43 +4901,83 @@ $('btnCamCall').addEventListener('click', () => {
   $('btnCamCall').textContent = camOn ? '🎥' : '🚫';
 });
 
-/* ---------------- loudspeaker toggle, where the phone actually allows it ----------------
+/* ---------------- which thing the far end's voice comes out of ----------------
+   A voice call was being played through the <video> element, which is how the
+   app told the phone "this is media" — and media plays out of the loudspeaker.
+   The result was a private conversation broadcast to whoever was in the room,
+   every time, without anyone choosing it. For an app whose whole point is that
+   nobody else hears you, that was the worst possible default.
+   Voice-only calls now get their own <audio> element. A page still cannot
+   command a phone to use the earpiece — no web API exists for that — but it can
+   stop claiming to be a video, which is what was causing the wrong answer. */
+function remoteMediaEl(){ return callKind === 'video' ? $('remoteVideo') : $('remoteAudio'); }
+
+function attachRemoteStream(stream){
+  const el = remoteMediaEl(), other = el === $('remoteVideo') ? $('remoteAudio') : $('remoteVideo');
+  /* only ever one of the two holds it, or the voice arrives twice */
+  if (other.srcObject) other.srcObject = null;
+  if (el.srcObject !== stream) el.srcObject = stream;
+  /* a voice call had been showing an empty black rectangle where the picture
+     would be, which reads as something broken rather than as "no video" */
+  $('remoteVideo').classList.toggle('hide', callKind !== 'video');
+  applySpeakerChoice();
+}
+
+/* ---------------- loudspeaker, where the phone actually allows it ----------------
    Confirmed against current documentation, not assumed: iOS Safari does not implement
    HTMLMediaElement.setSinkId() at all — Apple keeps output-device selection at the OS
-   level and does not expose it to web pages, still true as of 2026. On browsers that do
-   support it (Chrome on Android), this looks for whatever the phone itself labels as a
-   speaker and toggles between that and the normal output. The button only ever appears
-   where it can actually do something — no dead control shown on a phone that can't use it. */
+   level and does not expose it to web pages, still true as of 2026. Where it does exist
+   (Chrome on Android), this asks the phone for the earpiece by default and the
+   loudspeaker only when someone chooses it. The button only ever appears where it can
+   actually do something — no dead control on a phone that cannot use it. */
 let speakerOn = false;
-async function findSpeakerDeviceId(){
+function speakerPref(){ try{ return localStorage.getItem('dvlogos-speaker') === '1'; }catch(e){ return false; } }
+function setSpeakerPref(on){ try{ localStorage.setItem('dvlogos-speaker', on ? '1' : '0'); }catch(e){} }
+
+/* Phones label these differently and most do not expose them at all, so both
+   lookups are allowed to come back empty and the caller falls back to whatever
+   the system considers default. */
+async function findOutputId(which){
   try{
     const devices = await navigator.mediaDevices.enumerateDevices();
-    const speaker = devices.find(d => d.kind === 'audiooutput' && /speaker/i.test(d.label));
-    return speaker ? speaker.deviceId : null;
+    const re = which === 'speaker' ? /speaker|speakerphone|loud/i : /earpiece|receiver|handset/i;
+    const d = devices.find(x => x.kind === 'audiooutput' && re.test(x.label));
+    return d ? d.deviceId : null;
   }catch(e){ return null; }
 }
-async function initSpeakerToggle(){
-  const supported = typeof $('remoteVideo').setSinkId === 'function';
-  $('btnSpeakerCall').classList.toggle('hide', !supported);
-  if (!supported) return;
-  speakerOn = false;
-  $('btnSpeakerCall').classList.remove('on');
-  try{ await $('remoteVideo').setSinkId(''); }catch(e){}
-}
-$('btnSpeakerCall').addEventListener('click', async () => {
-  const el = $('remoteVideo');
+
+async function applySpeakerChoice(){
+  const el = remoteMediaEl();
   if (typeof el.setSinkId !== 'function') return;
   try{
-    if (!speakerOn){
-      const id = await findSpeakerDeviceId();
-      if (!id){ toast(t('call.noSpeakerFound','Non trovo un altoparlante separato su questo telefono.')); return; }
-      await el.setSinkId(id);
-      speakerOn = true;
-    } else {
-      await el.setSinkId('');
-      speakerOn = false;
-    }
+    const id = await findOutputId(speakerOn ? 'speaker' : 'earpiece');
+    await el.setSinkId(id || '');
+  }catch(e){}
+}
+
+async function initSpeakerToggle(){
+  const supported = typeof remoteMediaEl().setSinkId === 'function';
+  $('btnSpeakerCall').classList.toggle('hide', !supported);
+  if (!supported) return;
+  /* whatever was chosen last time, because someone who put it on speaker for a
+     reason usually still has that reason on the next call */
+  speakerOn = speakerPref();
+  $('btnSpeakerCall').classList.toggle('on', speakerOn);
+  $('btnSpeakerCall').textContent = speakerOn ? '🔊' : '🔈';
+  await applySpeakerChoice();
+}
+$('btnSpeakerCall').addEventListener('click', async () => {
+  const el = remoteMediaEl();
+  if (typeof el.setSinkId !== 'function') return;
+  const want = !speakerOn;
+  try{
+    const id = await findOutputId(want ? 'speaker' : 'earpiece');
+    if (want && !id){ toast(t('call.noSpeakerFound','Non trovo un altoparlante separato su questo telefono.')); return; }
+    await el.setSinkId(id || '');
+    speakerOn = want;
+    setSpeakerPref(speakerOn);   /* remembered for the next call */
     $('btnSpeakerCall').classList.toggle('on', speakerOn);
+    $('btnSpeakerCall').textContent = speakerOn ? '🔊' : '🔈';
   }catch(e){
     toast(t('call.speakerFail','Non riesco a cambiare l\'altoparlante su questo telefono.'));
   }
