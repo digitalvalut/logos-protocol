@@ -1690,14 +1690,12 @@ $('nickInput').addEventListener('input', () => {
 });
 function myNick(){ return $('nickInput').value.trim() || t('chat.someone','Qualcuno'); }
 
-/* ============================== onboarding / install banners ============================== */
-try{
-  if (!localStorage.getItem('dvlogos-onboarded')) $('onboardBanner').classList.remove('hide');
-}catch(e){}
-$('onboardClose').addEventListener('click', () => {
-  $('onboardBanner').classList.add('hide');
-  try{ localStorage.setItem('dvlogos-onboarded','1'); }catch(e){}
-});
+/* ============================== install banner ==============================
+   The licence notice used to live here too, shown once on the home screen with
+   a dismiss button. It now sits in the settings, always on, with nothing to
+   dismiss — the footer already carries the same statement on every screen, so
+   on the home it was six lines of duplicate standing between a new person and
+   the only two things they could do. */
 
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

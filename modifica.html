@@ -126,16 +126,7 @@
       </button>
     </div>
 
-    <!-- Still said, still dismissible, but under the two buttons rather than
-         on top of them: six lines of legal text was the first thing a new
-         person met, and it pushed the only two things they could do off the
-         bottom of an ordinary phone screen. -->
-    <div class="banner accent hide" id="onboardBanner">
-      <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza MIT),
-        di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
-        Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
-      <button class="x" id="onboardClose" aria-label="close">×</button>
-    </div>
+
 
     <div class="banner accent hide" id="installBar">
       <div class="f1" id="installText"></div>
@@ -219,6 +210,17 @@
        where it buried the two things that are. -->
   <section id="screenSettings" class="hide">
     <button class="btn ghost" id="backFromSettings">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <!-- The licence and who owns this. It was the first thing a new person met
+         on the home screen, six lines of it, above the only two things they
+         could do — and the footer already says the same on every screen, so it
+         was six lines of duplicate standing in the way. Nothing is lost by it
+         living here. -->
+    <div class="banner accent" id="onboardBanner">
+      <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza MIT),
+        di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
+        Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
+    </div>
 
     <div class="card">
       <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
