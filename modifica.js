@@ -129,7 +129,8 @@ Object.assign(I18N.en, {
 "easy.title":"👋 Simple mode","easy.sub":"Just two big buttons and nothing else around them. For anyone who would rather not think about any of it — or for whoever is setting the phone up for them.","easy.voiceTitle":"🔊 Say it out loud","easy.voiceSub":"The app tells you what to do in your own language. For anyone who finds the screen hard to read.","easy.voiceOn":"All right. From now on I'll tell you what to do out loud.","easy.sayHome":"Tap the first button to start a chat. Tap the second one if someone sent you an invite.","easy.sayStart":"This is your code. Press the orange button to send it to whoever you like.","easy.sayJoin":"Type the six digits you were given.","easy.sayChat":"You're connected. You can talk now.",
 "broker.down":"The service that helps you find each other isn't responding. The long code below still works: it goes through no server at all.",
 "flash.title":"Connected","flash.titleWith":"Connected with {name}","flash.direct":"A direct link between your two phones","flash.relay":"Linked through an encrypted bridge — your network wouldn't allow a direct one","flash.noserver":"No server can read what you say to each other","flash.time":"In {s} seconds, without signing up to anything",
-"viral.title":"That worked.","viral.sub":"If it was useful, pass it on: it's free, it asks for no account, and it keeps nothing about anyone.","viral.btn":"Tell someone about it"
+"viral.title":"That worked.","viral.sub":"If it was useful, pass it on: it's free, it asks for no account, and it keeps nothing about anyone.","viral.btn":"Tell someone about it",
+"media.title":"Microphone and camera","media.warnDenied":"This browser is blocking the microphone: you won't be able to make or take calls.","media.warnFix":"How to fix it","media.retry":"Try again","media.close":"Close","media.nowOk":"Microphone is on. You can call now.","media.peerNoMic":"{name} answered, but their browser won't let them turn the microphone on. They did not refuse you.","media.peerNoCam":"{name} answered, but their browser won't let them turn the camera and microphone on. Try an audio-only call, or ask them to unblock them.","media.stepsIos":"Open <b>Settings</b> on your iPhone|Scroll down and tap <b>Safari</b>|Tap <b>Microphone</b>, then <b>Camera</b>: set them to <b>Ask</b> or <b>Allow</b>|Come back here and reload the page","media.stepsAndroid":"Tap the <b>padlock</b> next to the address at the top|Tap <b>Permissions</b>|Turn on <b>Microphone</b> and <b>Camera</b>|Reload the page","media.stepsChrome":"Click the <b>padlock</b> to the left of the address|Turn on <b>Microphone</b> and <b>Camera</b>|Reload the page","media.stepsSafariMac":"In the menu bar open <b>Safari</b> › <b>Settings for This Website</b>|Set <b>Microphone</b> and <b>Camera</b> to <b>Allow</b>|Reload the page","media.stepsFirefox":"Click the <b>padlock</b> to the left of the address|Clear the block next to <b>Use the Microphone</b> and <b>Use the Camera</b>|Reload the page","media.stepsOther":"Open your browser's settings for this site|Allow <b>Microphone</b> and <b>Camera</b>|Reload the page"
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -247,7 +248,8 @@ Object.assign(I18N.it, {
 "easy.title":"👋 Modalità semplice","easy.sub":"Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.","easy.voiceTitle":"🔊 Dillo ad alta voce","easy.voiceSub":"L'app dice a voce cosa fare, nella tua lingua. Serve a chi fa fatica a leggere lo schermo.","easy.voiceOn":"Va bene. Da adesso ti dico a voce cosa fare.","easy.sayHome":"Tocca il primo pulsante per iniziare una chat. Tocca il secondo se ti hanno mandato un invito.","easy.sayStart":"Questo è il tuo codice. Premi il pulsante arancione per mandarlo a chi vuoi.","easy.sayJoin":"Scrivi le sei cifre che ti hanno dato.","easy.sayChat":"Siete connessi. Ora potete parlare.",
 "broker.down":"Il servizio che vi fa incontrare non risponde. Il codice lungo qui sotto funziona lo stesso: non passa da nessun server.",
 "flash.title":"Connessi","flash.titleWith":"Connessi con {name}","flash.direct":"Collegamento diretto tra i vostri due telefoni","flash.relay":"Collegamento tramite ponte cifrato — la vostra rete non permetteva quello diretto","flash.noserver":"Nessun server può leggere quello che vi dite","flash.time":"In {s} secondi, senza registrarsi a niente",
-"viral.title":"Ha funzionato.","viral.sub":"Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.","viral.btn":"Fallo sapere a qualcuno"
+"viral.title":"Ha funzionato.","viral.sub":"Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.","viral.btn":"Fallo sapere a qualcuno",
+"media.title":"Microfono e fotocamera","media.warnDenied":"Microfono bloccato da questo browser: non potrai fare né ricevere chiamate.","media.warnFix":"Come si sistema","media.retry":"Riprova","media.close":"Chiudi","media.nowOk":"Microfono attivo. Ora puoi chiamare.","media.peerNoMic":"{name} ha risposto, ma il suo browser blocca il microfono: non è un rifiuto.","media.peerNoCam":"{name} ha risposto, ma il suo browser blocca fotocamera e microfono: non è un rifiuto. Provate con una chiamata solo audio.","media.stepsIos":"Apri <b>Impostazioni</b> sull'iPhone|Scendi e tocca <b>Safari</b>|Tocca <b>Microfono</b> e poi <b>Fotocamera</b>: metti <b>Chiedi</b> o <b>Consenti</b>|Torna qui e ricarica la pagina","media.stepsAndroid":"Tocca il <b>lucchetto</b> vicino all'indirizzo, in alto|Tocca <b>Autorizzazioni</b>|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina","media.stepsChrome":"Clicca il <b>lucchetto</b> a sinistra dell'indirizzo|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina","media.stepsSafariMac":"Nella barra in alto apri <b>Safari</b> › <b>Impostazioni per questo sito web</b>|Metti <b>Microfono</b> e <b>Fotocamera</b> su <b>Consenti</b>|Ricarica la pagina","media.stepsFirefox":"Clicca il <b>lucchetto</b> a sinistra dell'indirizzo|Togli il blocco accanto a <b>Usa il microfono</b> e <b>Usa la fotocamera</b>|Ricarica la pagina","media.stepsOther":"Apri le impostazioni del browser per questo sito|Consenti <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina"
 });
 
 Object.assign(I18N.fr, {
@@ -358,7 +360,8 @@ Object.assign(I18N.fr, {
 "easy.title":"👋 Mode simple","easy.sub":"Deux grands boutons et rien d'autre autour. Pour qui préfère ne penser à rien — ou pour qui prépare le téléphone de quelqu'un d'autre.","easy.voiceTitle":"🔊 Dis-le à voix haute","easy.voiceSub":"L'application dit à voix haute quoi faire, dans votre langue. Pour qui a du mal à lire l'écran.","easy.voiceOn":"D'accord. À partir de maintenant je vous dis quoi faire à voix haute.","easy.sayHome":"Touchez le premier bouton pour commencer une discussion. Touchez le second si on vous a envoyé une invitation.","easy.sayStart":"Voici votre code. Appuyez sur le bouton orange pour l'envoyer à qui vous voulez.","easy.sayJoin":"Tapez les six chiffres qu'on vous a donnés.","easy.sayChat":"Vous êtes connectés. Vous pouvez parler.",
 "broker.down":"Le service qui vous aide à vous trouver ne répond pas. Le code long ci-dessous fonctionne quand même : il ne passe par aucun serveur.",
 "flash.title":"Connectés","flash.titleWith":"Connectés avec {name}","flash.direct":"Une liaison directe entre vos deux téléphones","flash.relay":"Liaison via un pont chiffré — votre réseau n'autorisait pas la liaison directe","flash.noserver":"Aucun serveur ne peut lire ce que vous vous dites","flash.time":"En {s} secondes, sans inscription",
-"viral.title":"Ça a marché.","viral.sub":"Si ça vous a servi, faites passer : c'est gratuit, sans compte, et ça ne conserve rien sur personne.","viral.btn":"En parler à quelqu'un"
+"viral.title":"Ça a marché.","viral.sub":"Si ça vous a servi, faites passer : c'est gratuit, sans compte, et ça ne conserve rien sur personne.","viral.btn":"En parler à quelqu'un",
+"media.title":"Microphone et caméra","media.warnDenied":"Ce navigateur bloque le microphone : vous ne pourrez ni passer ni recevoir d'appels.","media.warnFix":"Comment corriger","media.retry":"Réessayer","media.close":"Fermer","media.nowOk":"Microphone activé. Vous pouvez appeler.","media.peerNoMic":"{name} a répondu, mais son navigateur bloque le microphone : ce n'est pas un refus.","media.peerNoCam":"{name} a répondu, mais son navigateur bloque la caméra et le microphone : ce n'est pas un refus. Essayez un appel audio.","media.stepsIos":"Ouvrez <b>Réglages</b> sur l'iPhone|Descendez et touchez <b>Safari</b>|Touchez <b>Microphone</b> puis <b>Appareil photo</b> : mettez <b>Demander</b> ou <b>Autoriser</b>|Revenez ici et rechargez la page","media.stepsAndroid":"Touchez le <b>cadenas</b> près de l'adresse, en haut|Touchez <b>Autorisations</b>|Activez <b>Microphone</b> et <b>Caméra</b>|Rechargez la page","media.stepsChrome":"Cliquez sur le <b>cadenas</b> à gauche de l'adresse|Activez <b>Microphone</b> et <b>Caméra</b>|Rechargez la page","media.stepsSafariMac":"Dans la barre de menus ouvrez <b>Safari</b> › <b>Réglages pour ce site web</b>|Mettez <b>Microphone</b> et <b>Caméra</b> sur <b>Autoriser</b>|Rechargez la page","media.stepsFirefox":"Cliquez sur le <b>cadenas</b> à gauche de l'adresse|Retirez le blocage à côté de <b>Utiliser le microphone</b> et <b>Utiliser la caméra</b>|Rechargez la page","media.stepsOther":"Ouvrez les réglages du navigateur pour ce site|Autorisez <b>Microphone</b> et <b>Caméra</b>|Rechargez la page"
 });
 
 Object.assign(I18N.de, {
@@ -469,7 +472,8 @@ Object.assign(I18N.de, {
 "easy.title":"👋 Einfacher Modus","easy.sub":"Nur zwei große Schaltflächen und sonst nichts. Für alle, die über nichts nachdenken möchten — oder für die Person, die das Telefon für sie einrichtet.","easy.voiceTitle":"🔊 Laut vorlesen","easy.voiceSub":"Die App sagt dir in deiner Sprache, was zu tun ist. Für alle, denen das Lesen am Bildschirm schwerfällt.","easy.voiceOn":"In Ordnung. Ab jetzt sage ich dir laut, was zu tun ist.","easy.sayHome":"Tippe auf die erste Schaltfläche, um einen Chat zu beginnen. Auf die zweite, wenn dir jemand eine Einladung geschickt hat.","easy.sayStart":"Das ist dein Code. Drück die orange Schaltfläche, um ihn zu verschicken.","easy.sayJoin":"Tippe die sechs Ziffern ein, die man dir gegeben hat.","easy.sayChat":"Ihr seid verbunden. Jetzt könnt ihr reden.",
 "broker.down":"Der Dienst, über den ihr euch findet, antwortet nicht. Der lange Code unten funktioniert trotzdem: Er läuft über gar keinen Server.",
 "flash.title":"Verbunden","flash.titleWith":"Verbunden mit {name}","flash.direct":"Eine direkte Verbindung zwischen euren beiden Telefonen","flash.relay":"Verbunden über eine verschlüsselte Brücke — euer Netz ließ keine direkte zu","flash.noserver":"Kein Server kann mitlesen, was ihr euch schreibt","flash.time":"In {s} Sekunden, ganz ohne Anmeldung",
-"viral.title":"Es hat funktioniert.","viral.sub":"Wenn es nützlich war, gib es weiter: kostenlos, ohne Konto, und es behält nichts über niemanden.","viral.btn":"Jemandem davon erzählen"
+"viral.title":"Es hat funktioniert.","viral.sub":"Wenn es nützlich war, gib es weiter: kostenlos, ohne Konto, und es behält nichts über niemanden.","viral.btn":"Jemandem davon erzählen",
+"media.title":"Mikrofon und Kamera","media.warnDenied":"Dieser Browser blockiert das Mikrofon: Du kannst weder anrufen noch Anrufe annehmen.","media.warnFix":"So geht's","media.retry":"Erneut versuchen","media.close":"Schließen","media.nowOk":"Mikrofon ist an. Du kannst jetzt anrufen.","media.peerNoMic":"{name} hat abgenommen, aber der Browser lässt das Mikrofon nicht zu. Die Person hat dich nicht abgewiesen.","media.peerNoCam":"{name} hat abgenommen, aber der Browser lässt Kamera und Mikrofon nicht zu. Versucht es mit einem reinen Audioanruf, oder bittet sie, die Sperre aufzuheben.","media.stepsIos":"Öffne <b>Einstellungen</b> auf dem iPhone|Scrolle nach unten und tippe auf <b>Safari</b>|Tippe auf <b>Mikrofon</b> und dann <b>Kamera</b>: stelle auf <b>Fragen</b> oder <b>Erlauben</b>|Komm hierher zurück und lade die Seite neu","media.stepsAndroid":"Tippe oben auf das <b>Schloss</b> neben der Adresse|Tippe auf <b>Berechtigungen</b>|Schalte <b>Mikrofon</b> und <b>Kamera</b> ein|Lade die Seite neu","media.stepsChrome":"Klicke auf das <b>Schloss</b> links neben der Adresse|Schalte <b>Mikrofon</b> und <b>Kamera</b> ein|Lade die Seite neu","media.stepsSafariMac":"Öffne in der Menüleiste <b>Safari</b> › <b>Einstellungen für diese Website</b>|Stelle <b>Mikrofon</b> und <b>Kamera</b> auf <b>Erlauben</b>|Lade die Seite neu","media.stepsFirefox":"Klicke auf das <b>Schloss</b> links neben der Adresse|Entferne die Sperre neben <b>Mikrofon verwenden</b> und <b>Kamera verwenden</b>|Lade die Seite neu","media.stepsOther":"Öffne die Browsereinstellungen für diese Seite|Erlaube <b>Mikrofon</b> und <b>Kamera</b>|Lade die Seite neu"
 });
 
 Object.assign(I18N.es, {
@@ -580,7 +584,8 @@ Object.assign(I18N.es, {
 "easy.title":"👋 Modo sencillo","easy.sub":"Solo dos botones grandes y nada más alrededor. Para quien prefiere no pensar en nada — o para quien le prepara el teléfono a otra persona.","easy.voiceTitle":"🔊 Dilo en voz alta","easy.voiceSub":"La aplicación te dice en voz alta qué hacer, en tu idioma. Para quien le cuesta leer la pantalla.","easy.voiceOn":"De acuerdo. A partir de ahora te digo en voz alta qué hacer.","easy.sayHome":"Toca el primer botón para empezar una conversación. Toca el segundo si te han mandado una invitación.","easy.sayStart":"Este es tu código. Pulsa el botón naranja para mandárselo a quien quieras.","easy.sayJoin":"Escribe las seis cifras que te han dado.","easy.sayChat":"Estáis conectados. Ya podéis hablar.",
 "broker.down":"El servicio que os ayuda a encontraros no responde. El código largo de abajo funciona igualmente: no pasa por ningún servidor.",
 "flash.title":"Conectados","flash.titleWith":"Conectados con {name}","flash.direct":"Un enlace directo entre vuestros dos teléfonos","flash.relay":"Enlazados por un puente cifrado — vuestra red no permitía el directo","flash.noserver":"Ningún servidor puede leer lo que os decís","flash.time":"En {s} segundos, sin registrarse en nada",
-"viral.title":"Ha funcionado.","viral.sub":"Si te ha servido, pásalo: es gratis, no pide cuenta y no guarda nada de nadie.","viral.btn":"Contárselo a alguien"
+"viral.title":"Ha funcionado.","viral.sub":"Si te ha servido, pásalo: es gratis, no pide cuenta y no guarda nada de nadie.","viral.btn":"Contárselo a alguien",
+"media.title":"Micrófono y cámara","media.warnDenied":"Este navegador está bloqueando el micrófono: no podrás hacer ni recibir llamadas.","media.warnFix":"Cómo arreglarlo","media.retry":"Reintentar","media.close":"Cerrar","media.nowOk":"Micrófono activado. Ya puedes llamar.","media.peerNoMic":"{name} ha contestado, pero su navegador no le deja activar el micrófono. No es que te haya rechazado.","media.peerNoCam":"{name} ha contestado, pero su navegador no le deja activar la cámara y el micrófono. Probad con una llamada solo de audio, o pedidle que los desbloquee.","media.stepsIos":"Abre <b>Ajustes</b> en el iPhone|Baja y toca <b>Safari</b>|Toca <b>Micrófono</b> y luego <b>Cámara</b>: ponlos en <b>Preguntar</b> o <b>Permitir</b>|Vuelve aquí y recarga la página","media.stepsAndroid":"Toca el <b>candado</b> junto a la dirección, arriba|Toca <b>Permisos</b>|Activa <b>Micrófono</b> y <b>Cámara</b>|Recarga la página","media.stepsChrome":"Haz clic en el <b>candado</b> a la izquierda de la dirección|Activa <b>Micrófono</b> y <b>Cámara</b>|Recarga la página","media.stepsSafariMac":"En la barra de menús abre <b>Safari</b> › <b>Ajustes para esta web</b>|Pon <b>Micrófono</b> y <b>Cámara</b> en <b>Permitir</b>|Recarga la página","media.stepsFirefox":"Haz clic en el <b>candado</b> a la izquierda de la dirección|Quita el bloqueo junto a <b>Usar el micrófono</b> y <b>Usar la cámara</b>|Recarga la página","media.stepsOther":"Abre los ajustes del navegador para este sitio|Permite <b>Micrófono</b> y <b>Cámara</b>|Recarga la página"
 });
 
 Object.assign(I18N.pt, {
@@ -691,7 +696,8 @@ Object.assign(I18N.pt, {
 "easy.title":"👋 Modo simples","easy.sub":"Apenas dois botões grandes e mais nada à volta. Para quem prefere não pensar em nada — ou para quem prepara o telemóvel a outra pessoa.","easy.voiceTitle":"🔊 Diz em voz alta","easy.voiceSub":"A aplicação diz em voz alta o que fazer, na sua língua. Para quem tem dificuldade em ler o ecrã.","easy.voiceOn":"Muito bem. A partir de agora digo-lhe em voz alta o que fazer.","easy.sayHome":"Toque no primeiro botão para começar uma conversa. Toque no segundo se lhe enviaram um convite.","easy.sayStart":"Este é o seu código. Carregue no botão laranja para o enviar a quem quiser.","easy.sayJoin":"Escreva os seis algarismos que lhe deram.","easy.sayChat":"Estão ligados. Já podem falar.",
 "broker.down":"O serviço que vos ajuda a encontrarem-se não responde. O código longo abaixo funciona na mesma: não passa por servidor nenhum.",
 "flash.title":"Ligados","flash.titleWith":"Ligados com {name}","flash.direct":"Uma ligação direta entre os vossos dois telemóveis","flash.relay":"Ligados através de uma ponte cifrada — a vossa rede não permitia a ligação direta","flash.noserver":"Nenhum servidor consegue ler o que dizem um ao outro","flash.time":"Em {s} segundos, sem se registar em nada",
-"viral.title":"Funcionou.","viral.sub":"Se foi útil, passe adiante: é grátis, não pede conta e não guarda nada de ninguém.","viral.btn":"Contar a alguém"
+"viral.title":"Funcionou.","viral.sub":"Se foi útil, passe adiante: é grátis, não pede conta e não guarda nada de ninguém.","viral.btn":"Contar a alguém",
+"media.title":"Microfone e câmara","media.warnDenied":"Este navegador está a bloquear o microfone: não vai conseguir fazer nem receber chamadas.","media.warnFix":"Como resolver","media.retry":"Tentar de novo","media.close":"Fechar","media.nowOk":"Microfone ativo. Já pode ligar.","media.peerNoMic":"{name} atendeu, mas o navegador está a bloquear o microfone: não é uma recusa.","media.peerNoCam":"{name} atendeu, mas o navegador está a bloquear a câmara e o microfone: não é uma recusa. Tentem uma chamada só de áudio.","media.stepsIos":"Abra <b>Definições</b> no iPhone|Desça e toque em <b>Safari</b>|Toque em <b>Microfone</b> e depois <b>Câmara</b>: ponha <b>Perguntar</b> ou <b>Permitir</b>|Volte aqui e recarregue a página","media.stepsAndroid":"Toque no <b>cadeado</b> ao lado do endereço, em cima|Toque em <b>Permissões</b>|Ative <b>Microfone</b> e <b>Câmara</b>|Recarregue a página","media.stepsChrome":"Clique no <b>cadeado</b> à esquerda do endereço|Ative <b>Microfone</b> e <b>Câmara</b>|Recarregue a página","media.stepsSafariMac":"Na barra de menus abra <b>Safari</b> › <b>Definições para este site</b>|Ponha <b>Microfone</b> e <b>Câmara</b> em <b>Permitir</b>|Recarregue a página","media.stepsFirefox":"Clique no <b>cadeado</b> à esquerda do endereço|Retire o bloqueio ao lado de <b>Usar o microfone</b> e <b>Usar a câmara</b>|Recarregue a página","media.stepsOther":"Abra as definições do navegador para este site|Permita <b>Microfone</b> e <b>Câmara</b>|Recarregue a página"
 });
 
 Object.assign(I18N.ru, {
@@ -802,7 +808,8 @@ Object.assign(I18N.ru, {
 "easy.title":"👋 Простой режим","easy.sub":"Только две большие кнопки и больше ничего. Для тех, кто не хочет ни о чём думать — или для того, кто настраивает телефон другому.","easy.voiceTitle":"🔊 Говорить вслух","easy.voiceSub":"Приложение вслух подсказывает, что делать, на вашем языке. Для тех, кому трудно читать с экрана.","easy.voiceOn":"Хорошо. Теперь я буду говорить вслух, что делать.","easy.sayHome":"Нажмите первую кнопку, чтобы начать разговор. Вторую — если вам прислали приглашение.","easy.sayStart":"Это ваш код. Нажмите оранжевую кнопку, чтобы отправить его кому хотите.","easy.sayJoin":"Введите шесть цифр, которые вам дали.","easy.sayChat":"Вы соединены. Теперь можно говорить.",
 "broker.down":"Служба, которая помогает вам найти друг друга, не отвечает. Длинный код ниже работает всё равно: он не проходит ни через какой сервер.",
 "flash.title":"Соединены","flash.titleWith":"Соединены с {name}","flash.direct":"Прямая связь между вашими телефонами","flash.relay":"Связь через зашифрованный мост — ваша сеть не допустила прямую","flash.noserver":"Ни один сервер не может прочитать то, что вы пишете","flash.time":"За {s} секунды, без всякой регистрации",
-"viral.title":"Получилось.","viral.sub":"Если пригодилось — передайте дальше: это бесплатно, без регистрации и ничего ни о ком не хранит.","viral.btn":"Рассказать кому-нибудь"
+"viral.title":"Получилось.","viral.sub":"Если пригодилось — передайте дальше: это бесплатно, без регистрации и ничего ни о ком не хранит.","viral.btn":"Рассказать кому-нибудь",
+"media.title":"Микрофон и камера","media.warnDenied":"Этот браузер блокирует микрофон: вы не сможете ни звонить, ни принимать звонки.","media.warnFix":"Как исправить","media.retry":"Ещё раз","media.close":"Закрыть","media.nowOk":"Микрофон включён. Теперь можно звонить.","media.peerNoMic":"{name}: звонок принят, но браузер не даёт включить микрофон. Это не отказ.","media.peerNoCam":"{name}: звонок принят, но браузер не даёт включить камеру и микрофон. Это не отказ — попробуйте только голосовой звонок.","media.stepsIos":"Откройте <b>Настройки</b> на iPhone|Прокрутите вниз и нажмите <b>Safari</b>|Нажмите <b>Микрофон</b>, затем <b>Камера</b>: поставьте <b>Спрашивать</b> или <b>Разрешить</b>|Вернитесь сюда и перезагрузите страницу","media.stepsAndroid":"Нажмите на <b>замок</b> рядом с адресом вверху|Нажмите <b>Разрешения</b>|Включите <b>Микрофон</b> и <b>Камеру</b>|Перезагрузите страницу","media.stepsChrome":"Нажмите на <b>замок</b> слева от адреса|Включите <b>Микрофон</b> и <b>Камеру</b>|Перезагрузите страницу","media.stepsSafariMac":"В строке меню откройте <b>Safari</b> › <b>Настройки для этого сайта</b>|Поставьте <b>Микрофон</b> и <b>Камеру</b> на <b>Разрешить</b>|Перезагрузите страницу","media.stepsFirefox":"Нажмите на <b>замок</b> слева от адреса|Снимите блокировку рядом с <b>Использовать микрофон</b> и <b>Использовать камеру</b>|Перезагрузите страницу","media.stepsOther":"Откройте настройки браузера для этого сайта|Разрешите <b>Микрофон</b> и <b>Камеру</b>|Перезагрузите страницу"
 });
 
 Object.assign(I18N.zh, {
@@ -913,7 +920,8 @@ Object.assign(I18N.zh, {
 "easy.title":"👋 简单模式","easy.sub":"只有两个大按钮，周围什么都没有。给不想操心的人——也给替别人设置手机的人。","easy.voiceTitle":"🔊 读出来","easy.voiceSub":"应用会用你的语言把该做的事读出来。适合看屏幕吃力的人。","easy.voiceOn":"好的。从现在起我会把该做的事读给你听。","easy.sayHome":"点第一个按钮开始聊天。如果别人给你发了邀请，就点第二个。","easy.sayStart":"这是你的号码。按橙色按钮把它发给你想发的人。","easy.sayJoin":"输入别人给你的六位数字。","easy.sayChat":"已经连上了。现在可以说话了。",
 "broker.down":"帮你们互相找到对方的服务没有响应。下面的长号码照样能用：它完全不经过任何服务器。",
 "flash.title":"已连接","flash.titleWith":"已与 {name} 连接","flash.direct":"你们两台手机之间的直接连接","flash.relay":"通过加密中转连接——你们的网络不允许直接连接","flash.noserver":"没有任何服务器能读取你们的对话","flash.time":"用时 {s} 秒，无需注册任何账号",
-"viral.title":"成功了。","viral.sub":"如果觉得有用，就传给别人吧：免费、无需账号，也不保存任何人的任何信息。","viral.btn":"告诉别人"
+"viral.title":"成功了。","viral.sub":"如果觉得有用，就传给别人吧：免费、无需账号，也不保存任何人的任何信息。","viral.btn":"告诉别人",
+"media.title":"麦克风和摄像头","media.warnDenied":"此浏览器阻止了麦克风：你将无法拨打或接听通话。","media.warnFix":"如何解决","media.retry":"重试","media.close":"关闭","media.nowOk":"麦克风已开启，现在可以通话了。","media.peerNoMic":"{name} 已经接听了，但对方的浏览器不允许开启麦克风。不是对方拒绝了你。","media.peerNoCam":"{name} 已经接听了，但对方的浏览器不允许开启摄像头和麦克风。可以改用语音通话，或者请对方解除限制。","media.stepsIos":"在 iPhone 上打开<b>设置</b>|向下滑动并点按 <b>Safari 浏览器</b>|点按<b>麦克风</b>，再点按<b>相机</b>：设为<b>询问</b>或<b>允许</b>|回到这里并重新加载页面","media.stepsAndroid":"点按地址栏旁边顶部的<b>锁形图标</b>|点按<b>权限</b>|开启<b>麦克风</b>和<b>相机</b>|重新加载页面","media.stepsChrome":"点击地址左侧的<b>锁形图标</b>|开启<b>麦克风</b>和<b>摄像头</b>|重新加载页面","media.stepsSafariMac":"在菜单栏打开 <b>Safari 浏览器</b> › <b>此网站的设置</b>|将<b>麦克风</b>和<b>摄像头</b>设为<b>允许</b>|重新加载页面","media.stepsFirefox":"点击地址左侧的<b>锁形图标</b>|清除<b>使用麦克风</b>和<b>使用摄像头</b>旁边的阻止|重新加载页面","media.stepsOther":"打开浏览器中此网站的设置|允许<b>麦克风</b>和<b>摄像头</b>|重新加载页面"
 });
 
 Object.assign(I18N.ar, {
@@ -1024,7 +1032,8 @@ Object.assign(I18N.ar, {
 "easy.title":"👋 الوضع البسيط","easy.sub":"زرّان كبيران فقط ولا شيء آخر حولهما. لمن لا يريد التفكير في شيء — أو لمن يُعدّ الهاتف لشخص آخر.","easy.voiceTitle":"🔊 قُلها بصوت عالٍ","easy.voiceSub":"يقول لك التطبيق بصوت عالٍ ما عليك فعله، بلغتك. لمن يجد صعوبة في قراءة الشاشة.","easy.voiceOn":"حسنًا. من الآن سأقول لك بصوت عالٍ ما عليك فعله.","easy.sayHome":"المس الزر الأول لبدء محادثة. والمس الثاني إذا أرسل لك أحدهم دعوة.","easy.sayStart":"هذا هو رمزك. اضغط الزر البرتقالي لإرساله لمن تشاء.","easy.sayJoin":"اكتب الأرقام الستة التي أُعطيت لك.","easy.sayChat":"تم الاتصال. يمكنكما التحدث الآن.",
 "broker.down":"الخدمة التي تساعدكما على إيجاد بعضكما لا تستجيب. الرمز الطويل بالأسفل يعمل رغم ذلك: فهو لا يمر عبر أي خادم إطلاقًا.",
 "flash.title":"تم الاتصال","flash.titleWith":"تم الاتصال بـ {name}","flash.direct":"اتصال مباشر بين هاتفيكما","flash.relay":"اتصال عبر جسر مشفَّر — شبكتكما لم تسمح بالاتصال المباشر","flash.noserver":"لا يستطيع أي خادم قراءة ما تتبادلانه","flash.time":"خلال {s} ثانية، دون التسجيل في أي شيء",
-"viral.title":"نجح الأمر.","viral.sub":"إن كان مفيدًا، مرّره لغيرك: مجاني، لا يطلب حسابًا، ولا يحتفظ بشيء عن أحد.","viral.btn":"أخبر شخصًا عنه"
+"viral.title":"نجح الأمر.","viral.sub":"إن كان مفيدًا، مرّره لغيرك: مجاني، لا يطلب حسابًا، ولا يحتفظ بشيء عن أحد.","viral.btn":"أخبر شخصًا عنه",
+"media.title":"الميكروفون والكاميرا","media.warnDenied":"هذا المتصفح يحجب الميكروفون: لن تتمكن من إجراء المكالمات أو استقبالها.","media.warnFix":"كيف تُصلحها","media.retry":"أعد المحاولة","media.close":"إغلاق","media.nowOk":"الميكروفون يعمل. يمكنك الاتصال الآن.","media.peerNoMic":"{name}: تم الرد، لكن المتصفح يمنع تشغيل الميكروفون. ليس رفضًا.","media.peerNoCam":"{name}: تم الرد، لكن المتصفح يمنع تشغيل الكاميرا والميكروفون. ليس رفضًا — جرّبا مكالمة صوتية فقط.","media.stepsIos":"افتح <b>الإعدادات</b> على الآيفون|انزل واضغط <b>Safari</b>|اضغط <b>الميكروفون</b> ثم <b>الكاميرا</b>: اجعلهما <b>اسأل</b> أو <b>اسمح</b>|عُد إلى هنا وأعد تحميل الصفحة","media.stepsAndroid":"اضغط على <b>القفل</b> بجوار العنوان في الأعلى|اضغط <b>الأذونات</b>|فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد تحميل الصفحة","media.stepsChrome":"اضغط على <b>القفل</b> يسار العنوان|فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد تحميل الصفحة","media.stepsSafariMac":"من شريط القوائم افتح <b>Safari</b> › <b>إعدادات هذا الموقع</b>|اجعل <b>الميكروفون</b> و<b>الكاميرا</b> على <b>السماح</b>|أعد تحميل الصفحة","media.stepsFirefox":"اضغط على <b>القفل</b> يسار العنوان|أزل الحجب بجوار <b>استخدام الميكروفون</b> و<b>استخدام الكاميرا</b>|أعد تحميل الصفحة","media.stepsOther":"افتح إعدادات المتصفح لهذا الموقع|اسمح بـ<b>الميكروفون</b> و<b>الكاميرا</b>|أعد تحميل الصفحة"
 });
 
 Object.assign(I18N.ur, {
@@ -1135,7 +1144,8 @@ Object.assign(I18N.ur, {
 "easy.title":"👋 آسان موڈ","easy.sub":"صرف دو بڑے بٹن اور ان کے ارد گرد کچھ نہیں۔ اُن کے لیے جو کچھ سوچنا نہیں چاہتے — یا اُس کے لیے جو کسی اور کا فون تیار کر رہا ہے۔","easy.voiceTitle":"🔊 بول کر بتاؤ","easy.voiceSub":"ایپ آپ کی زبان میں بول کر بتاتی ہے کہ کیا کرنا ہے۔ اُن کے لیے جنہیں اسکرین پڑھنا مشکل لگتا ہے۔","easy.voiceOn":"ٹھیک ہے۔ اب سے میں بول کر بتاؤں گا کہ کیا کرنا ہے۔","easy.sayHome":"بات چیت شروع کرنے کے لیے پہلا بٹن دبائیں۔ اگر کسی نے آپ کو دعوت بھیجی ہے تو دوسرا دبائیں۔","easy.sayStart":"یہ آپ کا کوڈ ہے۔ جسے چاہیں بھیجنے کے لیے نارنجی بٹن دبائیں۔","easy.sayJoin":"جو چھ ہندسے آپ کو دیے گئے ہیں وہ لکھیں۔","easy.sayChat":"رابطہ ہو گیا۔ اب آپ بات کر سکتے ہیں۔",
 "broker.down":"وہ سروس جو آپ کو ایک دوسرے تک پہنچاتی ہے جواب نہیں دے رہی۔ نیچے دیا گیا لمبا کوڈ پھر بھی کام کرتا ہے: یہ کسی سرور سے نہیں گزرتا۔",
 "flash.title":"منسلک ہو گئے","flash.titleWith":"{name} سے منسلک ہو گئے","flash.direct":"آپ کے دونوں فونز کے درمیان براہِ راست رابطہ","flash.relay":"خفیہ پل کے ذریعے رابطہ — آپ کے نیٹ ورک نے براہِ راست رابطے کی اجازت نہیں دی","flash.noserver":"کوئی سرور آپ کی باتیں نہیں پڑھ سکتا","flash.time":"{s} سیکنڈ میں، کہیں رجسٹر ہوئے بغیر",
-"viral.title":"یہ کام کر گیا۔","viral.sub":"اگر مفید رہا تو آگے پہنچائیں: یہ مفت ہے، اکاؤنٹ نہیں مانگتا، اور کسی کا کچھ محفوظ نہیں رکھتا۔","viral.btn":"کسی کو بتائیں"
+"viral.title":"یہ کام کر گیا۔","viral.sub":"اگر مفید رہا تو آگے پہنچائیں: یہ مفت ہے، اکاؤنٹ نہیں مانگتا، اور کسی کا کچھ محفوظ نہیں رکھتا۔","viral.btn":"کسی کو بتائیں",
+"media.title":"مائیکروفون اور کیمرہ","media.warnDenied":"یہ براؤزر مائیکروفون کو روک رہا ہے: آپ نہ کال کر سکیں گے نہ وصول۔","media.warnFix":"کیسے ٹھیک کریں","media.retry":"دوبارہ کوشش کریں","media.close":"بند کریں","media.nowOk":"مائیکروفون چل رہا ہے۔ اب آپ کال کر سکتے ہیں۔","media.peerNoMic":"{name} نے جواب دیا، لیکن ان کا براؤزر مائیکروفون آن نہیں کرنے دیتا۔ انہوں نے آپ کو انکار نہیں کیا۔","media.peerNoCam":"{name} نے جواب دیا، لیکن ان کا براؤزر کیمرہ اور مائیکروفون آن نہیں کرنے دیتا۔ صرف آواز والی کال آزمائیں، یا ان سے کہیں کہ پابندی ہٹا دیں۔","media.stepsIos":"آئی فون پر <b>ترتیبات</b> کھولیں|نیچے جا کر <b>Safari</b> پر ٹیپ کریں|<b>مائیکروفون</b> پھر <b>کیمرہ</b> پر ٹیپ کریں: <b>پوچھیں</b> یا <b>اجازت دیں</b> پر رکھیں|یہاں واپس آ کر صفحہ دوبارہ لوڈ کریں","media.stepsAndroid":"اوپر پتے کے پاس <b>تالے</b> پر ٹیپ کریں|<b>اجازتیں</b> پر ٹیپ کریں|<b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|صفحہ دوبارہ لوڈ کریں","media.stepsChrome":"پتے کے بائیں طرف <b>تالے</b> پر کلک کریں|<b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|صفحہ دوبارہ لوڈ کریں","media.stepsSafariMac":"مینو بار میں <b>Safari</b> › <b>اس ویب سائٹ کی ترتیبات</b> کھولیں|<b>مائیکروفون</b> اور <b>کیمرہ</b> کو <b>اجازت دیں</b> پر رکھیں|صفحہ دوبارہ لوڈ کریں","media.stepsFirefox":"پتے کے بائیں طرف <b>تالے</b> پر کلک کریں|<b>مائیکروفون استعمال کریں</b> اور <b>کیمرہ استعمال کریں</b> کے ساتھ پابندی ہٹائیں|صفحہ دوبارہ لوڈ کریں","media.stepsOther":"اس سائٹ کے لیے براؤزر کی ترتیبات کھولیں|<b>مائیکروفون</b> اور <b>کیمرہ</b> کی اجازت دیں|صفحہ دوبارہ لوڈ کریں"
 });
 
 Object.assign(I18N.hi, {
@@ -1246,7 +1256,8 @@ Object.assign(I18N.hi, {
 "easy.title":"👋 आसान मोड","easy.sub":"बस दो बड़े बटन और आसपास कुछ नहीं। उनके लिए जो कुछ सोचना नहीं चाहते — या जो किसी और का फ़ोन तैयार कर रहे हैं।","easy.voiceTitle":"🔊 बोलकर बताओ","easy.voiceSub":"ऐप आपकी भाषा में बोलकर बताता है कि क्या करना है। उनके लिए जिन्हें स्क्रीन पढ़ना मुश्किल लगता है।","easy.voiceOn":"ठीक है। अब से मैं बोलकर बताऊंगा कि क्या करना है।","easy.sayHome":"बातचीत शुरू करने के लिए पहला बटन दबाएं। अगर किसी ने आपको निमंत्रण भेजा है तो दूसरा दबाएं।","easy.sayStart":"यह आपका कोड है। जिसे चाहें भेजने के लिए नारंगी बटन दबाएं।","easy.sayJoin":"आपको दिए गए छह अंक लिखें।","easy.sayChat":"जुड़ गए। अब आप बात कर सकते हैं।",
 "broker.down":"जो सेवा आपको एक-दूसरे तक पहुँचाती है वह जवाब नहीं दे रही। नीचे दिया लंबा कोड फिर भी काम करता है: यह किसी सर्वर से नहीं गुज़रता।",
 "flash.title":"जुड़ गए","flash.titleWith":"{name} से जुड़ गए","flash.direct":"आपके दोनों फ़ोन के बीच सीधा संपर्क","flash.relay":"एन्क्रिप्टेड पुल के ज़रिए जुड़े — आपके नेटवर्क ने सीधा संपर्क नहीं होने दिया","flash.noserver":"कोई सर्वर आपकी बातें नहीं पढ़ सकता","flash.time":"{s} सेकंड में, कहीं रजिस्टर हुए बिना",
-"viral.title":"यह काम कर गया।","viral.sub":"अगर काम आया हो तो आगे बढ़ाएं: यह मुफ़्त है, कोई खाता नहीं मांगता, और किसी का कुछ नहीं रखता।","viral.btn":"किसी को बताएं"
+"viral.title":"यह काम कर गया।","viral.sub":"अगर काम आया हो तो आगे बढ़ाएं: यह मुफ़्त है, कोई खाता नहीं मांगता, और किसी का कुछ नहीं रखता।","viral.btn":"किसी को बताएं",
+"media.title":"माइक्रोफ़ोन और कैमरा","media.warnDenied":"यह ब्राउज़र माइक्रोफ़ोन रोक रहा है: आप न कॉल कर पाएंगे, न कॉल ले पाएंगे।","media.warnFix":"इसे कैसे ठीक करें","media.retry":"फिर कोशिश करें","media.close":"बंद करें","media.nowOk":"माइक्रोफ़ोन चालू है। अब आप कॉल कर सकते हैं।","media.peerNoMic":"{name} ने उठाया, लेकिन उनका ब्राउज़र माइक्रोफ़ोन चालू नहीं करने देता। उन्होंने मना नहीं किया है।","media.peerNoCam":"{name} ने उठाया, लेकिन उनका ब्राउज़र कैमरा और माइक्रोफ़ोन चालू नहीं करने देता। सिर्फ़ आवाज़ वाली कॉल आज़माएं, या उनसे रोक हटाने को कहें।","media.stepsIos":"iPhone पर <b>सेटिंग्स</b> खोलें|नीचे जाकर <b>Safari</b> पर टैप करें|<b>माइक्रोफ़ोन</b> फिर <b>कैमरा</b> पर टैप करें: <b>पूछें</b> या <b>अनुमति दें</b> पर रखें|यहाँ लौटकर पेज फिर से लोड करें","media.stepsAndroid":"ऊपर पते के पास <b>ताले</b> पर टैप करें|<b>अनुमतियाँ</b> पर टैप करें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|पेज फिर से लोड करें","media.stepsChrome":"पते के बाईं ओर <b>ताले</b> पर क्लिक करें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|पेज फिर से लोड करें","media.stepsSafariMac":"मेनू बार में <b>Safari</b> › <b>इस वेबसाइट के लिए सेटिंग्स</b> खोलें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> को <b>अनुमति दें</b> पर रखें|पेज फिर से लोड करें","media.stepsFirefox":"पते के बाईं ओर <b>ताले</b> पर क्लिक करें|<b>माइक्रोफ़ोन इस्तेमाल करें</b> और <b>कैमरा इस्तेमाल करें</b> के आगे की रोक हटाएं|पेज फिर से लोड करें","media.stepsOther":"इस साइट के लिए ब्राउज़र सेटिंग्स खोलें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> की अनुमति दें|पेज फिर से लोड करें"
 });
 
 Object.assign(I18N.bn, {
@@ -1357,7 +1368,8 @@ Object.assign(I18N.bn, {
 "easy.title":"👋 সহজ মোড","easy.sub":"শুধু দুটি বড় বোতাম, আশেপাশে আর কিছু নেই। যাঁরা কিছু ভাবতে চান না তাঁদের জন্য — বা যিনি অন্য কারও ফোন গুছিয়ে দিচ্ছেন তাঁর জন্য।","easy.voiceTitle":"🔊 জোরে বলে দাও","easy.voiceSub":"অ্যাপটি আপনার ভাষায় বলে দেয় কী করতে হবে। যাঁদের পর্দা পড়তে কষ্ট হয় তাঁদের জন্য।","easy.voiceOn":"ঠিক আছে। এখন থেকে আমি বলে দেব কী করতে হবে।","easy.sayHome":"কথা শুরু করতে প্রথম বোতামে চাপ দিন। কেউ আমন্ত্রণ পাঠিয়ে থাকলে দ্বিতীয়টিতে চাপ দিন।","easy.sayStart":"এটি আপনার কোড। যাকে চান পাঠাতে কমলা বোতামে চাপ দিন।","easy.sayJoin":"আপনাকে দেওয়া ছয়টি সংখ্যা লিখুন।","easy.sayChat":"যুক্ত হয়ে গেছে। এখন কথা বলতে পারেন।",
 "broker.down":"যে পরিষেবা আপনাদের একে অপরকে খুঁজে পেতে সাহায্য করে সেটি সাড়া দিচ্ছে না। নিচের লম্বা কোডটি তবুও কাজ করে: এটি কোনো সার্ভারের মধ্য দিয়ে যায় না।",
 "flash.title":"সংযুক্ত","flash.titleWith":"{name}-এর সঙ্গে সংযুক্ত","flash.direct":"আপনাদের দুই ফোনের মধ্যে সরাসরি সংযোগ","flash.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে সংযুক্ত — আপনাদের নেটওয়ার্ক সরাসরি সংযোগ দেয়নি","flash.noserver":"কোনও সার্ভার আপনাদের কথা পড়তে পারে না","flash.time":"{s} সেকেন্ডে, কোথাও নিবন্ধন না করেই",
-"viral.title":"এটা কাজ করেছে।","viral.sub":"কাজে লেগে থাকলে অন্যকেও জানান: এটি বিনামূল্যে, কোনও অ্যাকাউন্ট চায় না, কারও কিছুই রাখে না।","viral.btn":"কাউকে জানান"
+"viral.title":"এটা কাজ করেছে।","viral.sub":"কাজে লেগে থাকলে অন্যকেও জানান: এটি বিনামূল্যে, কোনও অ্যাকাউন্ট চায় না, কারও কিছুই রাখে না।","viral.btn":"কাউকে জানান",
+"media.title":"মাইক্রোফোন ও ক্যামেরা","media.warnDenied":"এই ব্রাউজার মাইক্রোফোন আটকে রেখেছে: আপনি কল করতে বা ধরতে পারবেন না।","media.warnFix":"কীভাবে ঠিক করবেন","media.retry":"আবার চেষ্টা করুন","media.close":"বন্ধ করুন","media.nowOk":"মাইক্রোফোন চালু। এখন কল করতে পারেন।","media.peerNoMic":"{name} ধরেছেন, কিন্তু তাঁর ব্রাউজার মাইক্রোফোন চালু করতে দিচ্ছে না। তিনি আপনাকে ফিরিয়ে দেননি।","media.peerNoCam":"{name} ধরেছেন, কিন্তু তাঁর ব্রাউজার ক্যামেরা ও মাইক্রোফোন চালু করতে দিচ্ছে না। শুধু অডিও কল চেষ্টা করুন, বা তাঁকে বাধা সরাতে বলুন।","media.stepsIos":"আইফোনে <b>সেটিংস</b> খুলুন|নিচে নেমে <b>Safari</b> ট্যাপ করুন|<b>মাইক্রোফোন</b> তারপর <b>ক্যামেরা</b> ট্যাপ করুন: <b>জিজ্ঞাসা করুন</b> বা <b>অনুমতি দিন</b> রাখুন|এখানে ফিরে এসে পাতাটি আবার লোড করুন","media.stepsAndroid":"উপরে ঠিকানার পাশে <b>তালা</b> ট্যাপ করুন|<b>অনুমতি</b> ট্যাপ করুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|পাতাটি আবার লোড করুন","media.stepsChrome":"ঠিকানার বাঁ পাশে <b>তালায়</b> ক্লিক করুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|পাতাটি আবার লোড করুন","media.stepsSafariMac":"মেনু বারে <b>Safari</b> › <b>এই ওয়েবসাইটের সেটিংস</b> খুলুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> <b>অনুমতি দিন</b>-এ রাখুন|পাতাটি আবার লোড করুন","media.stepsFirefox":"ঠিকানার বাঁ পাশে <b>তালায়</b> ক্লিক করুন|<b>মাইক্রোফোন ব্যবহার</b> ও <b>ক্যামেরা ব্যবহার</b>-এর পাশের বাধা সরান|পাতাটি আবার লোড করুন","media.stepsOther":"এই সাইটের জন্য ব্রাউজারের সেটিংস খুলুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> অনুমতি দিন|পাতাটি আবার লোড করুন"
 });
 
 Object.assign(I18N.id, {
@@ -1468,7 +1480,8 @@ Object.assign(I18N.id, {
 "easy.title":"👋 Mode sederhana","easy.sub":"Hanya dua tombol besar dan tidak ada apa-apa lagi di sekelilingnya. Untuk siapa pun yang tidak ingin memikirkan apa pun — atau untuk yang menyiapkan ponsel bagi orang lain.","easy.voiceTitle":"🔊 Bacakan dengan suara","easy.voiceSub":"Aplikasi memberi tahu apa yang harus dilakukan dengan suara, dalam bahasa Anda. Untuk yang kesulitan membaca layar.","easy.voiceOn":"Baik. Mulai sekarang saya akan memberi tahu dengan suara apa yang harus dilakukan.","easy.sayHome":"Sentuh tombol pertama untuk memulai obrolan. Sentuh yang kedua jika ada yang mengirimi Anda undangan.","easy.sayStart":"Ini kode Anda. Tekan tombol oranye untuk mengirimkannya kepada siapa pun.","easy.sayJoin":"Ketik enam angka yang diberikan kepada Anda.","easy.sayChat":"Sudah terhubung. Sekarang Anda bisa bicara.",
 "broker.down":"Layanan yang membantu kalian saling menemukan tidak merespons. Kode panjang di bawah tetap berfungsi: ia tidak melewati server mana pun.",
 "flash.title":"Terhubung","flash.titleWith":"Terhubung dengan {name}","flash.direct":"Sambungan langsung antara kedua ponsel Anda","flash.relay":"Tersambung lewat jembatan terenkripsi — jaringan Anda tidak mengizinkan sambungan langsung","flash.noserver":"Tidak ada server yang bisa membaca percakapan Anda","flash.time":"Dalam {s} detik, tanpa mendaftar apa pun",
-"viral.title":"Berhasil.","viral.sub":"Kalau bermanfaat, teruskan ke orang lain: gratis, tanpa akun, dan tidak menyimpan apa pun tentang siapa pun.","viral.btn":"Beri tahu seseorang"
+"viral.title":"Berhasil.","viral.sub":"Kalau bermanfaat, teruskan ke orang lain: gratis, tanpa akun, dan tidak menyimpan apa pun tentang siapa pun.","viral.btn":"Beri tahu seseorang",
+"media.title":"Mikrofon dan kamera","media.warnDenied":"Peramban ini memblokir mikrofon: Anda tidak bisa menelepon maupun menerima panggilan.","media.warnFix":"Cara memperbaikinya","media.retry":"Coba lagi","media.close":"Tutup","media.nowOk":"Mikrofon aktif. Sekarang Anda bisa menelepon.","media.peerNoMic":"{name} sudah menjawab, tetapi perambannya tidak mengizinkan mikrofon menyala. Bukan dia yang menolak.","media.peerNoCam":"{name} sudah menjawab, tetapi perambannya tidak mengizinkan kamera dan mikrofon menyala. Coba panggilan suara saja, atau minta dia membuka blokirnya.","media.stepsIos":"Buka <b>Pengaturan</b> di iPhone|Gulir ke bawah dan ketuk <b>Safari</b>|Ketuk <b>Mikrofon</b> lalu <b>Kamera</b>: setel ke <b>Tanya</b> atau <b>Izinkan</b>|Kembali ke sini dan muat ulang halaman","media.stepsAndroid":"Ketuk <b>gembok</b> di sebelah alamat, di atas|Ketuk <b>Izin</b>|Aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Muat ulang halaman","media.stepsChrome":"Klik <b>gembok</b> di kiri alamat|Aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Muat ulang halaman","media.stepsSafariMac":"Di bilah menu buka <b>Safari</b> › <b>Pengaturan untuk Situs Web Ini</b>|Setel <b>Mikrofon</b> dan <b>Kamera</b> ke <b>Izinkan</b>|Muat ulang halaman","media.stepsFirefox":"Klik <b>gembok</b> di kiri alamat|Hapus blokir di sebelah <b>Gunakan Mikrofon</b> dan <b>Gunakan Kamera</b>|Muat ulang halaman","media.stepsOther":"Buka pengaturan peramban untuk situs ini|Izinkan <b>Mikrofon</b> dan <b>Kamera</b>|Muat ulang halaman"
 });
 
 function t(key, fallback){
@@ -2252,6 +2265,9 @@ function enterChat(){
      a dead code back on the air at every app open for the next day */
   clearPendingInvite();
   showScreen('screenChat');
+  $('mediaHelp').classList.add('hide');
+  /* found now, while there is time to fix it, rather than while a phone rings */
+  checkMicPermissionEarly();
   $('peerNameLbl').textContent = t('chat.someone');
   $('peerAvatar').textContent = '?';
   loadHistoryPlaceholder();
@@ -3801,7 +3817,7 @@ $('btnMic').addEventListener('click', async () => {
   if (mediaRecorder && mediaRecorder.state === 'recording'){ mediaRecorder.stop(); return; }
   let stream;
   try{ stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
-  catch(e){ sysLine(micFailMessage(e)); return; }
+  catch(e){ showMediaHelp(e); return; }
   recordedChunks = [];
   const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
   mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
@@ -3906,6 +3922,89 @@ function micFailMessage(e){
   return t('call.micFail','Microfono o fotocamera non disponibili, o permesso negato.');
 }
 
+/* ---------------- when the microphone will not open ----------------
+   Three separate failures were being handled as one small line in the chat:
+   a device that does not exist, one another app is holding, and one the
+   browser has been told to refuse. Only the last is common, and it is the
+   only one a person can actually fix — but not from generic advice, because
+   the fix lives somewhere completely different on each browser. On iPhone it
+   is in the Settings app, two levels down, and no amount of looking at the
+   web page will ever reveal it.
+   So: name the problem, then give the steps for the browser actually in
+   front of them, in a panel that cannot be scrolled past. */
+function browserFamily(){
+  const ua = navigator.userAgent;
+  if (isIOS) return 'ios';
+  if (/Android/.test(ua)) return 'android';
+  /* Chrome and Edge both put it behind the padlock, and both say they are
+     Safari in the user agent, so Safari has to be what is left over */
+  if (/Edg\//.test(ua) || /Chrome\//.test(ua) || /Chromium/.test(ua)) return 'chrome';
+  if (/Firefox\//.test(ua)) return 'firefox';
+  if (/Safari\//.test(ua)) return 'safari';
+  return 'other';
+}
+
+function mediaHelpSteps(){
+  switch (browserFamily()){
+    case 'ios': return t('media.stepsIos',
+      'Apri <b>Impostazioni</b> sull\'iPhone|Scendi e tocca <b>Safari</b>|Tocca <b>Microfono</b> e poi <b>Fotocamera</b>: metti <b>Chiedi</b> o <b>Consenti</b>|Torna qui e ricarica la pagina');
+    case 'android': return t('media.stepsAndroid',
+      'Tocca il <b>lucchetto</b> vicino all\'indirizzo, in alto|Tocca <b>Autorizzazioni</b>|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina');
+    case 'chrome': return t('media.stepsChrome',
+      'Clicca il <b>lucchetto</b> a sinistra dell\'indirizzo|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina');
+    case 'safari': return t('media.stepsSafariMac',
+      'Nella barra in alto apri <b>Safari</b> › <b>Impostazioni per questo sito web</b>|Metti <b>Microfono</b> e <b>Fotocamera</b> su <b>Consenti</b>|Ricarica la pagina');
+    case 'firefox': return t('media.stepsFirefox',
+      'Clicca il <b>lucchetto</b> a sinistra dell\'indirizzo|Togli il blocco accanto a <b>Usa il microfono</b> e <b>Usa la fotocamera</b>|Ricarica la pagina');
+    default: return t('media.stepsOther',
+      'Apri le impostazioni del browser per questo sito|Consenti <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina');
+  }
+}
+
+/* The steps arrive as one translated string split on "|" so that thirteen
+   languages need one entry each rather than four. */
+function showMediaHelp(err){
+  $('mediaWhat').textContent = micFailMessage(err);
+  const list = $('mediaSteps');
+  list.innerHTML = '';
+  const blocked = !err || ['NotAllowedError','PermissionDeniedError','SecurityError'].indexOf(err.name) >= 0;
+  if (blocked){
+    for (const step of mediaHelpSteps().split('|')){
+      const li = document.createElement('li');
+      li.innerHTML = step; /* the bolding is ours, from the translation table */
+      list.appendChild(li);
+    }
+  }
+  $('mediaHelp').classList.remove('hide');
+  /* the small warning was only ever a pointer to this panel — with the panel
+     open it would be the same sentence twice */
+  $('mediaWarn').classList.add('hide');
+  $('mediaHelp').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+$('btnMediaClose').addEventListener('click', () => $('mediaHelp').classList.add('hide'));
+$('btnMediaRetry').addEventListener('click', async () => {
+  try{
+    const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+    s.getTracks().forEach(tr => tr.stop());
+    $('mediaHelp').classList.add('hide');
+    $('mediaWarn').classList.add('hide');
+    toast(t('media.nowOk','Microfono attivo. Ora puoi chiamare.'));
+  }catch(e){ showMediaHelp(e); }
+});
+$('btnMediaWarnFix').addEventListener('click', () => showMediaHelp(null));
+
+/* Asked on arrival rather than mid-call. Safari does not implement this query
+   at all, so a browser that cannot answer is simply left alone — better a
+   missing warning than a wrong one. */
+async function checkMicPermissionEarly(){
+  try{
+    if (!navigator.permissions || !navigator.permissions.query) return;
+    const st = await navigator.permissions.query({ name: 'microphone' });
+    $('mediaWarn').classList.toggle('hide', st.state !== 'denied');
+    st.onchange = () => $('mediaWarn').classList.toggle('hide', st.state !== 'denied');
+  }catch(e){ /* unsupported: say nothing */ }
+}
+
 /* ringtone: two-tone loop synthesised with Web Audio — no external audio file
    needed. Also vibrates on devices that support it (Android; iOS Safari has
    no Vibration API, a real platform limit, not something a page can add). */
@@ -3960,7 +4059,7 @@ async function startCall(kind){
   if (callState !== 'idle' || !dc || dc.readyState !== 'open') return;
   callKind = kind; callState = 'ringing-out';
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: kind === 'video' }); }
-  catch(e){ sysLine(micFailMessage(e)); callState = 'idle'; callKind = null; return; }
+  catch(e){ showMediaHelp(e); callState = 'idle'; callKind = null; return; }
   $('callBox').classList.remove('hide');
   $('localVideo').classList.toggle('hide', kind !== 'video');
   $('localVideo').srcObject = localStream;
@@ -3979,6 +4078,12 @@ function handleCallSignal(msg){
     armCallTimeout();
   } else if (msg.type === 'call-busy'){ stopRing(); disarmCallTimeout(); endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.busy'));
   } else if (msg.type === 'call-decline'){ stopRing(); disarmCallTimeout(); endCall(false); sysLine((peerNick||t('chat.someone')) + ' ' + t('call.declinedBy'));
+  } else if (msg.type === 'call-nomedia'){
+    stopRing(); disarmCallTimeout(); endCall(false);
+    sysLine(fill(msg.kind === 'video'
+      ? t('media.peerNoCam','{name} ha risposto, ma il suo browser blocca fotocamera e microfono: non è un rifiuto. Provate con una chiamata solo audio.')
+      : t('media.peerNoMic','{name} ha risposto, ma il suo browser blocca il microfono: non è un rifiuto.'),
+      { name: peerNick || t('chat.someone') }));
   } else if (msg.type === 'call-accept'){ stopRing(); disarmCallTimeout(); onCallAccepted();
   } else if (msg.type === 'call-offer-sdp'){ onCallOfferSdp(msg.sdp);
   } else if (msg.type === 'call-answer-sdp'){ pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(()=>{});
@@ -3988,7 +4093,15 @@ $('btnAcceptCall').addEventListener('click', async () => {
   stopRing(); disarmCallTimeout();
   $('incomingCall').classList.add('hide');
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: callKind === 'video' }); }
-  catch(e){ sysLine(micFailMessage(e)); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null; return; }
+  catch(e){
+    showMediaHelp(e);
+    /* NOT 'call-decline'. Sending that told the caller "they refused you",
+       which is a lie: they pressed answer, and their browser refused. Being
+       left to conclude the other person is ignoring you — or that the app is
+       broken — was the worst part of this bug. */
+    sig({ type: 'call-nomedia', kind: callKind });
+    callState = 'idle'; callKind = null; return;
+  }
   localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
   $('callBox').classList.remove('hide');
   $('localVideo').classList.toggle('hide', callKind !== 'video');
@@ -4130,6 +4243,7 @@ $('btnNewSession').addEventListener('click', () => {
   $('passAsk').classList.add('hide'); $('passIn').value = ''; sessionPass = '';
   paintVerifyBadge('unknown'); $('verifyNote').textContent = ''; $('btnAcceptSafety').classList.add('hide');
   $('sasPanel').classList.add('hide'); $('sasPanel').classList.remove('warn');
+  $('mediaHelp').classList.add('hide'); $('mediaWarn').classList.add('hide');
   $('btnCreate').disabled = false; $('btnCreateAnswer').disabled = false;
   setStatus($('statusA'), ''); setStatus($('statusB'), '');
   $('diagA').classList.add('hide'); $('diagB').classList.add('hide');

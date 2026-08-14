@@ -73,6 +73,12 @@
      away — it earns its place by arriving after the proof, not before it */
   .card.viral{position:relative;border-color:rgba(61,220,151,0.3);
     background:linear-gradient(180deg,rgba(61,220,151,0.07),var(--bg2))}
+  /* what is wrong, then what to do about it, in that order and in that weight */
+  .mediawhat{color:var(--ink);font-size:0.9688rem;line-height:1.6;margin:2px 0 14px}
+  .mediasteps{margin:0 0 16px;padding-inline-start:22px;color:var(--dim);font-size:0.9062rem;line-height:1.7}
+  .mediasteps li{margin-bottom:7px}
+  .mediasteps b{color:var(--ink);font-weight:650}
+
   .card.viral > b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
   /* direct children only: an unrestricted `span` here also caught the labels
      inside the button, turning them grey on orange */

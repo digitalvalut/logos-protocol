@@ -362,6 +362,30 @@
       </div>
     </div>
 
+    <!-- When the microphone or camera will not open. Previously this was one
+         small line in the chat, which is exactly where a person in the middle
+         of a failing call does not look. The steps below are per-browser
+         because "allow it in the settings" helps nobody: on iOS the switch is
+         in the Settings app, on desktop it is behind the padlock in the
+         address bar, and they are nothing like each other. -->
+    <div class="card hide" id="mediaHelp">
+      <h3 data-i18n="media.title">Microfono e fotocamera</h3>
+      <div class="mediawhat" id="mediaWhat"></div>
+      <ol class="mediasteps" id="mediaSteps"></ol>
+      <div class="btns">
+        <button class="btn primary" id="btnMediaRetry" data-i18n="media.retry">Riprova</button>
+        <button class="btn" id="btnMediaClose" data-i18n="media.close">Chiudi</button>
+      </div>
+    </div>
+
+    <!-- Shown on arriving in a chat when the browser has already been told no,
+         so it is found while there is time to fix it rather than while someone
+         is ringing. -->
+    <div class="banner accent hide jsb" id="mediaWarn">
+      <span class="f1" data-i18n="media.warnDenied">Microfono bloccato da questo browser: non potrai fare né ricevere chiamate.</span>
+      <button class="btn mini" id="btnMediaWarnFix" data-i18n="media.warnFix">Come si sistema</button>
+    </div>
+
     <div class="banner hide jsb" id="incomingCall">
       <span id="incomingCallText"></span>
       <span class="inlinebtns">
