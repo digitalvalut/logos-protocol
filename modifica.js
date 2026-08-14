@@ -20,8 +20,8 @@ Object.assign(I18N.en, {
 "home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
 "home.nameLabel":"Your name",
 "home.namePh":"Your name",
-"home.startT":"Start a chat","home.startD":"Create an invite to send someone",
-"home.joinT":"I got an invite","home.joinD":"Paste or open the link someone sent you",
+
+
 "home.legalSummary":"How it works, in three technical lines",
 "home.legalBody":"It reveals your network address (IP) to whoever you talk to; it needs both of you online at once, otherwise nothing arrives, and on heavily filtered networks calls may not connect; no website can prevent a screenshot, ever. For safety when it truly matters, use Signal, Session or Briar instead of this.",
 "nav.back":"Back",
@@ -134,7 +134,8 @@ Object.assign(I18N.en, {
 "addr.title":"🪪 Your permanent address","addr.sub":"Give this out instead of a phone number. Anyone holding it can reach you whenever they like, without knowing your name or your number. Off by default.","addr.qrHint":"Scanning it calls you directly","addr.share":"Send your address","addr.showQr":"Show the QR","addr.reachNote":"So people can reach you with the app closed too, turn on notifications below.","addr.dialLabel":"Got someone's address?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Call it","addr.badFormat":"That address isn't written right. It's 12 characters, like DV-K7M2-9QRT-X4WP.","addr.itsYou":"That's your own address.","addr.callingTitle":"Calling…","addr.callingHint":"If their app is closed I'll ring their phone. It can take a moment.","addr.noAnswer":"No answer. They've been alerted — try again later.","addr.dialFailed":"I couldn't call that address.","addr.incomingTitle":"Someone is looking for you","addr.incomingSub":"The name and the reason were written by whoever is calling: until you accept, nobody can prove they really are that person.","addr.incomingToast":"Someone is calling your address.","addr.accept":"Accept","addr.ignore":"Ignore","addr.verified":"Verified: whoever answered really does own the address {a}. Nobody can have got in between.","addr.blockedIn":"A call from someone you turned away: ignored.","addr.shareText":"You can reach me here, without my phone number. My DigitalValut Logos address is {a}\n\nTap to call me:",
 "addr.incomingAt":"through “{name}”","burn.title":"Throwaway addresses","burn.help":"One per listing, one per stranger. Delete it when you're done and that person can't reach you any more — they never had your real one.","burn.namePh":"What for? e.g. Second-hand sofa","burn.add":"Create","burn.send":"Send this address","burn.delete":"Delete","burn.deleted":"“{name}” deleted. That address no longer answers.","burn.made":"“{name}” created. You can hand it out now.","burn.needName":"Give it a name, so you know who you gave it to.","burn.full":"You can have {n} at a time. Delete one to make another.","burn.untitled":"Unnamed",
 "knock.title":"You are contacting","knock.nameLabel":"What's your name?","knock.namePh":"Your name","knock.msgLabel":"What do you need? (optional)","knock.msgPh":"e.g. Do you have size 42 shoes?","knock.go":"Call","knock.note":"Your name and this line are seen only by the person you're calling. No server can read them.",
-"letter.title":"Messages left for you","letter.noneTitle":"Nobody is answering right now.","letter.noneSub":"You can leave a message: they'll find it as soon as they open the app.","letter.ph":"Write your message here","letter.leave":"Leave the message","letter.cancel":"Never mind","letter.needText":"Write a line or two, so they know what you wanted.","letter.left":"Message left. They'll find it when they open the app.","letter.failed":"I couldn't leave the message. Try again.","letter.callBack":"Call back","letter.dismiss":"Done"
+"letter.title":"Messages left for you","letter.noneTitle":"Nobody is answering right now.","letter.noneSub":"You can leave a message: they'll find it as soon as they open the app.","letter.ph":"Write your message here","letter.leave":"Leave the message","letter.cancel":"Never mind","letter.needText":"Write a line or two, so they know what you wanted.","letter.left":"Message left. They'll find it when they open the app.","letter.failed":"I couldn't leave the message. Try again.","letter.callBack":"Call back","letter.dismiss":"Done",
+"home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting"
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -148,8 +149,8 @@ Object.assign(I18N.it, {
 "contacts.note":"Un tocco per rivederli: quello che vi siete detti è rimasto qui. Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.",
 "verify.title":"Codice di sicurezza",
 "verify.lead":"Confrontalo con l'altra persona — a voce, per telefono, o su un altro canale che non sia quello con cui vi siete scambiati il codice d'invito. Se i due codici non combaciano esattamente, qualcuno potrebbe essersi inserito nella connessione: non fidarti di quella chat.",
-"home.startT":"Inizia una chat","home.startD":"Crea un invito da mandare a qualcuno",
-"home.joinT":"Ho ricevuto un invito","home.joinD":"Incolla o apri il link che ti hanno mandato",
+
+
 "home.shareApp":"Fai conoscere l'app a qualcuno",
 "start.s1":"Manda l'invito",
 "start.s1help":"Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere come mandarlo: WhatsApp, messaggio, email \u2014 quello che usi di solito.",
@@ -257,7 +258,8 @@ Object.assign(I18N.it, {
 "addr.title":"🪪 Il tuo indirizzo permanente","addr.sub":"Da dare al posto del numero di telefono. Chi ce l'ha può cercarti quando vuole, senza sapere il tuo nome né il tuo numero. Spento di base.","addr.qrHint":"Chi lo inquadra ti chiama direttamente","addr.share":"Manda il tuo indirizzo","addr.showQr":"Mostra il QR","addr.reachNote":"Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.","addr.dialLabel":"Hai l'indirizzo di qualcuno?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Chiamalo","addr.badFormat":"Questo indirizzo non è scritto bene. Sono 12 caratteri, tipo DV-K7M2-9QRT-X4WP.","addr.itsYou":"Questo è il tuo indirizzo.","addr.callingTitle":"Sto chiamando…","addr.callingHint":"Se la persona ha l'app chiusa le faccio squillare il telefono. Può volerci qualche istante.","addr.noAnswer":"Non ha risposto. L'ho avvisata: riprova più tardi.","addr.dialFailed":"Non sono riuscito a chiamare questo indirizzo.","addr.incomingTitle":"Qualcuno ti sta cercando","addr.incomingSub":"Il nome e il motivo li ha scritti chi ti cerca: finché non accetti, nessuno può dimostrare di essere davvero quella persona.","addr.incomingToast":"Qualcuno ti sta cercando al tuo indirizzo.","addr.accept":"Accetta","addr.ignore":"Ignora","addr.verified":"Verificato: chi ha risposto possiede davvero l'indirizzo {a}. Nessuno può essersi messo in mezzo.","addr.blockedIn":"Chiamata da un contatto che avevi rifiutato: ignorata.","addr.shareText":"Puoi cercarmi qui, senza il mio numero di telefono. Il mio indirizzo su DigitalValut Logos è {a}\n\nTocca per chiamarmi:",
 "addr.incomingAt":"tramite «{name}»","burn.title":"Indirizzi usa e getta","burn.help":"Uno per ogni annuncio o sconosciuto. Quando hai finito lo cancelli e quella persona non ti trova più — il tuo indirizzo vero non l'ha mai avuto.","burn.namePh":"Per cosa? es. Divano usato","burn.add":"Crea","burn.send":"Manda questo indirizzo","burn.delete":"Cancella","burn.deleted":"«{name}» cancellato. Quell'indirizzo non risponde più.","burn.made":"«{name}» creato. Ora puoi darlo a chi vuoi.","burn.needName":"Dagli un nome, così sai a chi l'hai dato.","burn.full":"Puoi averne al massimo {n} insieme. Cancellane uno per farne un altro.","burn.untitled":"Senza nome",
 "knock.title":"Stai contattando","knock.nameLabel":"Come ti chiami?","knock.namePh":"Il tuo nome","knock.msgLabel":"Cosa ti serve? (se vuoi)","knock.msgPh":"es. Avete le scarpe numero 42?","knock.go":"Chiama","knock.note":"Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.",
-"letter.title":"Messaggi lasciati per te","letter.noneTitle":"Non risponde nessuno adesso.","letter.noneSub":"Puoi lasciare un messaggio: lo troverà appena apre l'app.","letter.ph":"Scrivi qui il tuo messaggio","letter.leave":"Lascia il messaggio","letter.cancel":"Lascia perdere","letter.needText":"Scrivi due parole, così sa cosa volevi.","letter.left":"Messaggio lasciato. Lo troverà appena apre l'app.","letter.failed":"Non sono riuscito a lasciare il messaggio. Riprova.","letter.callBack":"Richiama","letter.dismiss":"Fatto"
+"letter.title":"Messaggi lasciati per te","letter.noneTitle":"Non risponde nessuno adesso.","letter.noneSub":"Puoi lasciare un messaggio: lo troverà appena apre l'app.","letter.ph":"Scrivi qui il tuo messaggio","letter.leave":"Lascia il messaggio","letter.cancel":"Lascia perdere","letter.needText":"Scrivi due parole, così sa cosa volevi.","letter.left":"Messaggio lasciato. Lo troverà appena apre l'app.","letter.failed":"Non sono riuscito a lasciare il messaggio. Riprova.","letter.callBack":"Richiama","letter.dismiss":"Fatto",
+"home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso"
 });
 
 Object.assign(I18N.fr, {
@@ -266,8 +268,8 @@ Object.assign(I18N.fr, {
 "home.title":"Parlez à qui vous voulez, où qu'il soit",
 "home.sub":"Messages, photos, vidéos, appels. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
 "home.nameLabel":"Votre nom","home.namePh":"Votre nom",
-"home.startT":"Démarrer une discussion","home.startD":"Créez une invitation à envoyer à quelqu'un",
-"home.joinT":"J'ai reçu une invitation","home.joinD":"Collez ou ouvrez le lien qu'on vous a envoyé",
+
+
 "home.legalSummary":"Comment ça marche, en trois lignes techniques",
 "home.legalBody":"Cela révèle votre adresse réseau (IP) à votre interlocuteur ; il faut que vous soyez tous les deux en ligne en même temps, sinon rien n'arrive, et sur des réseaux très filtrés les appels peuvent ne pas se connecter ; aucun site web ne peut jamais empêcher une capture d'écran. Pour la sécurité quand elle compte vraiment, utilisez Signal, Session ou Briar plutôt que ceci.",
 "nav.back":"Retour",
@@ -373,7 +375,8 @@ Object.assign(I18N.fr, {
 "addr.title":"🪪 Votre adresse permanente","addr.sub":"À donner à la place du numéro de téléphone. Qui la possède peut vous joindre quand il veut, sans connaître ni votre nom ni votre numéro. Désactivée par défaut.","addr.qrHint":"La scanner vous appelle directement","addr.share":"Envoyer votre adresse","addr.showQr":"Afficher le QR","addr.reachNote":"Pour qu'on puisse vous joindre même l'application fermée, activez les notifications ci-dessous.","addr.dialLabel":"Vous avez l'adresse de quelqu'un ?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"L'appeler","addr.badFormat":"Cette adresse est mal écrite. Ce sont 12 caractères, comme DV-K7M2-9QRT-X4WP.","addr.itsYou":"C'est votre propre adresse.","addr.callingTitle":"J'appelle…","addr.callingHint":"Si son application est fermée, je fais sonner son téléphone. Cela peut prendre un instant.","addr.noAnswer":"Pas de réponse. La personne a été prévenue : réessayez plus tard.","addr.dialFailed":"Je n'ai pas pu appeler cette adresse.","addr.incomingTitle":"Quelqu'un vous cherche","addr.incomingSub":"Le nom et le motif ont été écrits par la personne qui appelle : tant que vous n'acceptez pas, rien ne prouve qu'elle soit vraiment celle-là.","addr.incomingToast":"Quelqu'un appelle votre adresse.","addr.accept":"Accepter","addr.ignore":"Ignorer","addr.verified":"Vérifié : la personne qui a répondu possède bien l'adresse {a}. Personne n'a pu s'interposer.","addr.blockedIn":"Appel d'une personne que vous aviez écartée : ignoré.","addr.shareText":"Vous pouvez me joindre ici, sans mon numéro de téléphone. Mon adresse DigitalValut Logos est {a}\n\nTouchez pour m'appeler :",
 "addr.incomingAt":"via « {name} »","burn.title":"Adresses jetables","burn.help":"Une par annonce, une par inconnu. Supprimez-la une fois terminé et cette personne ne peut plus vous joindre — elle n'a jamais eu la vraie.","burn.namePh":"Pour quoi ? ex. Canapé d'occasion","burn.add":"Créer","burn.send":"Envoyer cette adresse","burn.delete":"Supprimer","burn.deleted":"« {name} » supprimée. Cette adresse ne répond plus.","burn.made":"« {name} » créée. Vous pouvez la donner.","burn.needName":"Donnez-lui un nom, pour savoir à qui vous l'avez donnée.","burn.full":"Vous pouvez en avoir {n} à la fois. Supprimez-en une pour en créer une autre.","burn.untitled":"Sans nom",
 "knock.title":"Vous contactez","knock.nameLabel":"Comment vous appelez-vous ?","knock.namePh":"Votre nom","knock.msgLabel":"Que vous faut-il ? (facultatif)","knock.msgPh":"ex. Avez-vous des chaussures en 42 ?","knock.go":"Appeler","knock.note":"Votre nom et cette phrase ne sont vus que par la personne appelée. Aucun serveur ne peut les lire.",
-"letter.title":"Messages laissés pour vous","letter.noneTitle":"Personne ne répond pour le moment.","letter.noneSub":"Vous pouvez laisser un message : la personne le trouvera dès qu'elle ouvrira l'application.","letter.ph":"Écrivez votre message ici","letter.leave":"Laisser le message","letter.cancel":"Laisser tomber","letter.needText":"Écrivez deux mots, qu'elle sache ce que vous vouliez.","letter.left":"Message laissé. La personne le trouvera en ouvrant l'application.","letter.failed":"Je n'ai pas pu laisser le message. Réessayez.","letter.callBack":"Rappeler","letter.dismiss":"Terminé"
+"letter.title":"Messages laissés pour vous","letter.noneTitle":"Personne ne répond pour le moment.","letter.noneSub":"Vous pouvez laisser un message : la personne le trouvera dès qu'elle ouvrira l'application.","letter.ph":"Écrivez votre message ici","letter.leave":"Laisser le message","letter.cancel":"Laisser tomber","letter.needText":"Écrivez deux mots, qu'elle sache ce que vous vouliez.","letter.left":"Message laissé. La personne le trouvera en ouvrant l'application.","letter.failed":"Je n'ai pas pu laisser le message. Réessayez.","letter.callBack":"Rappeler","letter.dismiss":"Terminé",
+"home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours"
 });
 
 Object.assign(I18N.de, {
@@ -382,8 +385,8 @@ Object.assign(I18N.de, {
 "home.title":"Sprich mit jedem, wo immer er ist",
 "home.sub":"Nachrichten, Fotos, Video, Anrufe. Keine Anmeldung, keine Telefonnummer, für immer kostenlos.",
 "home.nameLabel":"Dein Name","home.namePh":"Dein Name",
-"home.startT":"Chat starten","home.startD":"Erstelle eine Einladung, die du jemandem schickst",
-"home.joinT":"Ich habe eine Einladung erhalten","home.joinD":"Füge den Link ein, den dir jemand geschickt hat",
+
+
 "home.legalSummary":"Wie es funktioniert, in drei technischen Zeilen",
 "home.legalBody":"Es zeigt deine Netzwerkadresse (IP) demjenigen, mit dem du sprichst; ihr müsst beide gleichzeitig online sein, sonst kommt nichts an, und in stark gefilterten Netzwerken verbinden sich Anrufe möglicherweise nicht; keine Website kann jemals einen Screenshot verhindern. Für Sicherheit, wenn es wirklich zählt, nutze Signal, Session oder Briar statt dem hier.",
 "nav.back":"Zurück",
@@ -489,7 +492,8 @@ Object.assign(I18N.de, {
 "addr.title":"🪪 Deine dauerhafte Adresse","addr.sub":"Gib sie statt einer Telefonnummer weiter. Wer sie hat, erreicht dich jederzeit, ohne deinen Namen oder deine Nummer zu kennen. Standardmäßig aus.","addr.qrHint":"Wer ihn scannt, ruft dich direkt an","addr.share":"Adresse senden","addr.showQr":"QR anzeigen","addr.reachNote":"Damit man dich auch bei geschlossener App erreicht, schalte unten die Hinweise ein.","addr.dialLabel":"Hast du die Adresse von jemandem?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Anrufen","addr.badFormat":"Diese Adresse ist falsch geschrieben. Es sind 12 Zeichen, etwa DV-K7M2-9QRT-X4WP.","addr.itsYou":"Das ist deine eigene Adresse.","addr.callingTitle":"Ich rufe an…","addr.callingHint":"Ist die App dort geschlossen, lasse ich das Telefon klingeln. Das kann einen Moment dauern.","addr.noAnswer":"Keine Antwort. Die Person wurde benachrichtigt — versuch es später.","addr.dialFailed":"Ich konnte diese Adresse nicht anrufen.","addr.incomingTitle":"Jemand sucht dich","addr.incomingSub":"Name und Grund hat die anrufende Person selbst geschrieben: bis du annimmst, kann niemand beweisen, dass sie das wirklich ist.","addr.incomingToast":"Jemand ruft deine Adresse an.","addr.accept":"Annehmen","addr.ignore":"Ignorieren","addr.verified":"Bestätigt: wer geantwortet hat, besitzt die Adresse {a} wirklich. Niemand kann sich dazwischengeschoben haben.","addr.blockedIn":"Anruf von jemandem, den du abgewiesen hattest: ignoriert.","addr.shareText":"Hier erreichst du mich, ganz ohne meine Telefonnummer. Meine DigitalValut-Logos-Adresse ist {a}\n\nZum Anrufen tippen:",
 "addr.incomingAt":"über „{name}“","burn.title":"Wegwerf-Adressen","burn.help":"Eine pro Anzeige, eine pro Fremdem. Löschst du sie, kommt diese Person nicht mehr an dich heran — deine echte hatte sie nie.","burn.namePh":"Wofür? z. B. Gebrauchtes Sofa","burn.add":"Anlegen","burn.send":"Diese Adresse senden","burn.delete":"Löschen","burn.deleted":"„{name}“ gelöscht. Diese Adresse antwortet nicht mehr.","burn.made":"„{name}“ angelegt. Du kannst sie jetzt weitergeben.","burn.needName":"Gib ihr einen Namen, damit du weißt, wem du sie gegeben hast.","burn.full":"Du kannst {n} gleichzeitig haben. Lösche eine, um eine neue anzulegen.","burn.untitled":"Ohne Namen",
 "knock.title":"Du kontaktierst","knock.nameLabel":"Wie heißt du?","knock.namePh":"Dein Name","knock.msgLabel":"Was brauchst du? (optional)","knock.msgPh":"z. B. Habt ihr Schuhe in Größe 42?","knock.go":"Anrufen","knock.note":"Deinen Namen und diesen Satz sieht nur die angerufene Person. Kein Server kann sie lesen.",
-"letter.title":"Nachrichten für dich","letter.noneTitle":"Gerade antwortet niemand.","letter.noneSub":"Du kannst eine Nachricht hinterlassen: sie wird sie finden, sobald sie die App öffnet.","letter.ph":"Schreib deine Nachricht hier","letter.leave":"Nachricht hinterlassen","letter.cancel":"Doch nicht","letter.needText":"Schreib zwei Zeilen, damit sie weiß, worum es ging.","letter.left":"Nachricht hinterlassen. Sie wird sie beim Öffnen der App finden.","letter.failed":"Ich konnte die Nachricht nicht hinterlassen. Versuch es nochmal.","letter.callBack":"Zurückrufen","letter.dismiss":"Erledigt"
+"letter.title":"Nachrichten für dich","letter.noneTitle":"Gerade antwortet niemand.","letter.noneSub":"Du kannst eine Nachricht hinterlassen: sie wird sie finden, sobald sie die App öffnet.","letter.ph":"Schreib deine Nachricht hier","letter.leave":"Nachricht hinterlassen","letter.cancel":"Doch nicht","letter.needText":"Schreib zwei Zeilen, damit sie weiß, worum es ging.","letter.left":"Nachricht hinterlassen. Sie wird sie beim Öffnen der App finden.","letter.failed":"Ich konnte die Nachricht nicht hinterlassen. Versuch es nochmal.","letter.callBack":"Zurückrufen","letter.dismiss":"Erledigt",
+"home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut"
 });
 
 Object.assign(I18N.es, {
@@ -498,8 +502,8 @@ Object.assign(I18N.es, {
 "home.title":"Habla con quien quieras, esté donde esté",
 "home.sub":"Mensajes, fotos, vídeo, llamadas. Sin registro, sin número de teléfono, gratis para siempre.",
 "home.nameLabel":"Tu nombre","home.namePh":"Tu nombre",
-"home.startT":"Iniciar un chat","home.startD":"Crea una invitación para enviar a alguien",
-"home.joinT":"Recibí una invitación","home.joinD":"Pega o abre el enlace que te enviaron",
+
+
 "home.legalSummary":"Cómo funciona, en tres líneas técnicas",
 "home.legalBody":"Revela tu dirección de red (IP) a quien hables; hace falta que ambos estéis en línea a la vez, si no, no llega nada, y en redes muy filtradas las llamadas pueden no conectarse; ninguna web puede impedir jamás una captura de pantalla. Para seguridad cuando de verdad importa, usa Signal, Session o Briar en lugar de esto.",
 "nav.back":"Atrás",
@@ -605,7 +609,8 @@ Object.assign(I18N.es, {
 "addr.title":"🪪 Tu dirección permanente","addr.sub":"Dala en lugar del número de teléfono. Quien la tenga puede buscarte cuando quiera, sin saber tu nombre ni tu número. Desactivada por defecto.","addr.qrHint":"Quien lo escanea te llama directamente","addr.share":"Enviar tu dirección","addr.showQr":"Mostrar el QR","addr.reachNote":"Para que puedan localizarte también con la aplicación cerrada, activa los avisos aquí abajo.","addr.dialLabel":"¿Tienes la dirección de alguien?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Llamarla","addr.badFormat":"Esa dirección está mal escrita. Son 12 caracteres, como DV-K7M2-9QRT-X4WP.","addr.itsYou":"Esa es tu propia dirección.","addr.callingTitle":"Llamando…","addr.callingHint":"Si tiene la aplicación cerrada, le hago sonar el teléfono. Puede tardar un momento.","addr.noAnswer":"No ha contestado. Ya se le ha avisado: inténtalo más tarde.","addr.dialFailed":"No he podido llamar a esa dirección.","addr.incomingTitle":"Alguien te está buscando","addr.incomingSub":"El nombre y el motivo los ha escrito quien llama: hasta que no aceptes, nadie puede demostrar que sea esa persona de verdad.","addr.incomingToast":"Alguien está llamando a tu dirección.","addr.accept":"Aceptar","addr.ignore":"Ignorar","addr.verified":"Verificado: quien ha respondido posee de verdad la dirección {a}. Nadie ha podido meterse en medio.","addr.blockedIn":"Llamada de alguien a quien habías rechazado: ignorada.","addr.shareText":"Puedes buscarme aquí, sin mi número de teléfono. Mi dirección en DigitalValut Logos es {a}\n\nToca para llamarme:",
 "addr.incomingAt":"a través de «{name}»","burn.title":"Direcciones de usar y tirar","burn.help":"Una por anuncio, una por desconocido. Cuando termines la borras y esa persona ya no puede localizarte — nunca tuvo la de verdad.","burn.namePh":"¿Para qué? p. ej. Sofá de segunda mano","burn.add":"Crear","burn.send":"Enviar esta dirección","burn.delete":"Borrar","burn.deleted":"«{name}» borrada. Esa dirección ya no responde.","burn.made":"«{name}» creada. Ya puedes darla.","burn.needName":"Ponle un nombre, así sabes a quién se la diste.","burn.full":"Puedes tener {n} a la vez. Borra una para crear otra.","burn.untitled":"Sin nombre",
 "knock.title":"Estás contactando con","knock.nameLabel":"¿Cómo te llamas?","knock.namePh":"Tu nombre","knock.msgLabel":"¿Qué necesitas? (opcional)","knock.msgPh":"p. ej. ¿Tenéis zapatos del 42?","knock.go":"Llamar","knock.note":"Tu nombre y esta frase solo los ve la persona a la que llamas. Ningún servidor puede leerlos.",
-"letter.title":"Mensajes que te han dejado","letter.noneTitle":"Ahora mismo no contesta nadie.","letter.noneSub":"Puedes dejar un mensaje: lo encontrará en cuanto abra la aplicación.","letter.ph":"Escribe aquí tu mensaje","letter.leave":"Dejar el mensaje","letter.cancel":"Déjalo","letter.needText":"Escribe dos palabras, así sabrá qué querías.","letter.left":"Mensaje dejado. Lo encontrará al abrir la aplicación.","letter.failed":"No he podido dejar el mensaje. Inténtalo otra vez.","letter.callBack":"Devolver la llamada","letter.dismiss":"Hecho"
+"letter.title":"Mensajes que te han dejado","letter.noneTitle":"Ahora mismo no contesta nadie.","letter.noneSub":"Puedes dejar un mensaje: lo encontrará en cuanto abra la aplicación.","letter.ph":"Escribe aquí tu mensaje","letter.leave":"Dejar el mensaje","letter.cancel":"Déjalo","letter.needText":"Escribe dos palabras, así sabrá qué querías.","letter.left":"Mensaje dejado. Lo encontrará al abrir la aplicación.","letter.failed":"No he podido dejar el mensaje. Inténtalo otra vez.","letter.callBack":"Devolver la llamada","letter.dismiss":"Hecho",
+"home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando"
 });
 
 Object.assign(I18N.pt, {
@@ -614,8 +619,8 @@ Object.assign(I18N.pt, {
 "home.title":"Fale com quem quiser, onde quer que esteja",
 "home.sub":"Mensagens, fotos, vídeo, chamadas. Sem registo, sem número de telefone, grátis para sempre.",
 "home.nameLabel":"O seu nome","home.namePh":"O seu nome",
-"home.startT":"Iniciar uma conversa","home.startD":"Crie um convite para enviar a alguém",
-"home.joinT":"Recebi um convite","home.joinD":"Cole ou abra o link que lhe enviaram",
+
+
 "home.legalSummary":"Como funciona, em três linhas técnicas",
 "home.legalBody":"Revela o seu endereço de rede (IP) a quem fala consigo; é preciso que ambos estejam online ao mesmo tempo, senão nada chega, e em redes muito filtradas as chamadas podem não ligar; nenhum site pode impedir uma captura de ecrã, nunca. Para segurança quando realmente importa, use Signal, Session ou Briar em vez disto.",
 "nav.back":"Voltar",
@@ -721,7 +726,8 @@ Object.assign(I18N.pt, {
 "addr.title":"🪪 O seu endereço permanente","addr.sub":"Dê este em vez do número de telefone. Quem o tiver pode procurá-lo quando quiser, sem saber o seu nome nem o seu número. Desativado por predefinição.","addr.qrHint":"Quem o ler chama-o diretamente","addr.share":"Enviar o seu endereço","addr.showQr":"Mostrar o QR","addr.reachNote":"Para que o possam alcançar mesmo com a aplicação fechada, ative os avisos aqui em baixo.","addr.dialLabel":"Tem o endereço de alguém?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Ligar","addr.badFormat":"Esse endereço está mal escrito. São 12 caracteres, como DV-K7M2-9QRT-X4WP.","addr.itsYou":"Esse é o seu próprio endereço.","addr.callingTitle":"A ligar…","addr.callingHint":"Se tiver a aplicação fechada, faço tocar o telemóvel. Pode demorar um instante.","addr.noAnswer":"Não atendeu. Já foi avisada: tente mais tarde.","addr.dialFailed":"Não consegui ligar para esse endereço.","addr.incomingTitle":"Alguém está à sua procura","addr.incomingSub":"O nome e o motivo foram escritos por quem liga: enquanto não aceitar, ninguém pode provar que é mesmo essa pessoa.","addr.incomingToast":"Alguém está a ligar para o seu endereço.","addr.accept":"Aceitar","addr.ignore":"Ignorar","addr.verified":"Verificado: quem respondeu possui mesmo o endereço {a}. Ninguém se pode ter metido pelo meio.","addr.blockedIn":"Chamada de alguém que tinha recusado: ignorada.","addr.shareText":"Pode encontrar-me aqui, sem o meu número de telefone. O meu endereço no DigitalValut Logos é {a}\n\nToque para me ligar:",
 "addr.incomingAt":"através de «{name}»","burn.title":"Endereços descartáveis","burn.help":"Um por anúncio, um por desconhecido. Quando acabar, apaga-o e essa pessoa deixa de o encontrar — nunca teve o verdadeiro.","burn.namePh":"Para quê? ex. Sofá usado","burn.add":"Criar","burn.send":"Enviar este endereço","burn.delete":"Apagar","burn.deleted":"«{name}» apagado. Esse endereço já não responde.","burn.made":"«{name}» criado. Já o pode dar.","burn.needName":"Dê-lhe um nome, para saber a quem o deu.","burn.full":"Pode ter {n} ao mesmo tempo. Apague um para criar outro.","burn.untitled":"Sem nome",
 "knock.title":"Está a contactar","knock.nameLabel":"Como se chama?","knock.namePh":"O seu nome","knock.msgLabel":"Do que precisa? (opcional)","knock.msgPh":"ex. Têm sapatos do 42?","knock.go":"Ligar","knock.note":"O seu nome e esta frase só são vistos pela pessoa a quem liga. Nenhum servidor os consegue ler.",
-"letter.title":"Mensagens deixadas para si","letter.noneTitle":"Ninguém está a responder agora.","letter.noneSub":"Pode deixar uma mensagem: vai encontrá-la assim que abrir a aplicação.","letter.ph":"Escreva aqui a sua mensagem","letter.leave":"Deixar a mensagem","letter.cancel":"Deixe estar","letter.needText":"Escreva duas palavras, para saber o que queria.","letter.left":"Mensagem deixada. Vai encontrá-la ao abrir a aplicação.","letter.failed":"Não consegui deixar a mensagem. Tente de novo.","letter.callBack":"Ligar de volta","letter.dismiss":"Feito"
+"letter.title":"Mensagens deixadas para si","letter.noneTitle":"Ninguém está a responder agora.","letter.noneSub":"Pode deixar uma mensagem: vai encontrá-la assim que abrir a aplicação.","letter.ph":"Escreva aqui a sua mensagem","letter.leave":"Deixar a mensagem","letter.cancel":"Deixe estar","letter.needText":"Escreva duas palavras, para saber o que queria.","letter.left":"Mensagem deixada. Vai encontrá-la ao abrir a aplicação.","letter.failed":"Não consegui deixar a mensagem. Tente de novo.","letter.callBack":"Ligar de volta","letter.dismiss":"Feito",
+"home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar"
 });
 
 Object.assign(I18N.ru, {
@@ -730,8 +736,8 @@ Object.assign(I18N.ru, {
 "home.title":"Говорите с кем хотите, где бы они ни были",
 "home.sub":"Сообщения, фото, видео, звонки. Без регистрации, без номера телефона, бесплатно навсегда.",
 "home.nameLabel":"Ваше имя","home.namePh":"Ваше имя",
-"home.startT":"Начать чат","home.startD":"Создайте приглашение, чтобы отправить кому-то",
-"home.joinT":"Я получил приглашение","home.joinD":"Вставьте или откройте ссылку, которую вам прислали",
+
+
 "home.legalSummary":"Как это работает, в трёх технических строках",
 "home.legalBody":"Это раскрывает ваш сетевой адрес (IP) собеседнику; нужно, чтобы вы оба были онлайн одновременно, иначе ничего не дойдёт, а в сильно фильтруемых сетях звонки могут не соединиться; ни один сайт никогда не может предотвратить скриншот. Для безопасности, когда это действительно важно, используйте Signal, Session или Briar вместо этого.",
 "nav.back":"Назад",
@@ -837,7 +843,8 @@ Object.assign(I18N.ru, {
 "addr.title":"🪪 Ваш постоянный адрес","addr.sub":"Давайте его вместо номера телефона. Тот, у кого он есть, сможет связаться с вами в любой момент, не зная ни вашего имени, ни номера. По умолчанию выключено.","addr.qrHint":"Кто его отсканирует, сразу позвонит вам","addr.share":"Отправить адрес","addr.showQr":"Показать QR","addr.reachNote":"Чтобы вас могли застать и при закрытом приложении, включите уведомления ниже.","addr.dialLabel":"Есть чей-то адрес?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Позвонить","addr.badFormat":"Адрес записан неверно. Это 12 символов, например DV-K7M2-9QRT-X4WP.","addr.itsYou":"Это ваш собственный адрес.","addr.callingTitle":"Звоню…","addr.callingHint":"Если приложение закрыто, я заставлю телефон зазвонить. Это может занять момент.","addr.noAnswer":"Ответа нет. Я предупредил — попробуйте позже.","addr.dialFailed":"Не удалось позвонить на этот адрес.","addr.incomingTitle":"Вас ищут","addr.incomingSub":"Имя и причину написал тот, кто звонит: пока вы не примете, никто не может доказать, что это действительно он.","addr.incomingToast":"Кто-то звонит на ваш адрес.","addr.accept":"Принять","addr.ignore":"Пропустить","addr.verified":"Проверено: ответивший действительно владеет адресом {a}. Никто не мог вклиниться.","addr.blockedIn":"Звонок от того, кому вы уже отказали: пропущен.","addr.shareText":"Со мной можно связаться здесь, без номера телефона. Мой адрес в DigitalValut Logos — {a}\n\nНажмите, чтобы позвонить:",
 "addr.incomingAt":"через «{name}»","burn.title":"Одноразовые адреса","burn.help":"По одному на объявление, по одному на незнакомца. Удалите — и этот человек больше вас не найдёт: настоящего у него никогда не было.","burn.namePh":"Для чего? напр. Диван б/у","burn.add":"Создать","burn.send":"Отправить этот адрес","burn.delete":"Удалить","burn.deleted":"«{name}» удалён. Этот адрес больше не отвечает.","burn.made":"«{name}» создан. Можно раздавать.","burn.needName":"Дайте ему имя, чтобы помнить, кому отдали.","burn.full":"Одновременно можно иметь {n}. Удалите один, чтобы создать новый.","burn.untitled":"Без имени",
 "knock.title":"Вы связываетесь с","knock.nameLabel":"Как вас зовут?","knock.namePh":"Ваше имя","knock.msgLabel":"Что вам нужно? (не обязательно)","knock.msgPh":"напр. Есть обувь 42 размера?","knock.go":"Позвонить","knock.note":"Ваше имя и эту фразу видит только тот, кому вы звоните. Ни один сервер их не прочтёт.",
-"letter.title":"Оставленные вам сообщения","letter.noneTitle":"Сейчас никто не отвечает.","letter.noneSub":"Можно оставить сообщение: его увидят, как только откроют приложение.","letter.ph":"Напишите сообщение здесь","letter.leave":"Оставить сообщение","letter.cancel":"Не надо","letter.needText":"Напишите пару слов, чтобы было понятно, зачем вы звонили.","letter.left":"Сообщение оставлено. Его увидят при открытии приложения.","letter.failed":"Не удалось оставить сообщение. Попробуйте ещё раз.","letter.callBack":"Перезвонить","letter.dismiss":"Готово"
+"letter.title":"Оставленные вам сообщения","letter.noneTitle":"Сейчас никто не отвечает.","letter.noneSub":"Можно оставить сообщение: его увидят, как только откроют приложение.","letter.ph":"Напишите сообщение здесь","letter.leave":"Оставить сообщение","letter.cancel":"Не надо","letter.needText":"Напишите пару слов, чтобы было понятно, зачем вы звонили.","letter.left":"Сообщение оставлено. Его увидят при открытии приложения.","letter.failed":"Не удалось оставить сообщение. Попробуйте ещё раз.","letter.callBack":"Перезвонить","letter.dismiss":"Готово",
+"home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение"
 });
 
 Object.assign(I18N.zh, {
@@ -846,8 +853,8 @@ Object.assign(I18N.zh, {
 "home.title":"随时随地，和你想聊的人聊天",
 "home.sub":"消息、照片、视频、通话。无需注册，无需电话号码，永久免费。",
 "home.nameLabel":"你的名字","home.namePh":"你的名字",
-"home.startT":"开始聊天","home.startD":"创建一个邀请发给某人",
-"home.joinT":"我收到了邀请","home.joinD":"粘贴或打开对方发给你的链接",
+
+
 "home.legalSummary":"工作原理，三句技术说明",
 "home.legalBody":"它会向和你聊天的人显示你的网络地址（IP）；需要双方同时在线，否则无法送达，在过滤严格的网络上通话可能无法连接；任何网站都无法阻止截图，永远不能。当安全真正重要时，请使用 Signal、Session 或 Briar，而不是这个。",
 "nav.back":"返回",
@@ -953,7 +960,8 @@ Object.assign(I18N.zh, {
 "addr.title":"🪪 你的永久地址","addr.sub":"把它给别人，代替电话号码。拿到它的人随时都能找到你，而不必知道你的名字或号码。默认关闭。","addr.qrHint":"扫一下就能直接呼叫你","addr.share":"发送你的地址","addr.showQr":"显示二维码","addr.reachNote":"想让别人在应用关闭时也能找到你，请打开下面的通知。","addr.dialLabel":"有别人的地址吗？","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"呼叫","addr.badFormat":"这个地址写得不对。它是 12 个字符，例如 DV-K7M2-9QRT-X4WP。","addr.itsYou":"这是你自己的地址。","addr.callingTitle":"正在呼叫…","addr.callingHint":"如果对方的应用关着，我会让手机响起来。可能需要一点时间。","addr.noAnswer":"没有回应。已经通知过对方了，稍后再试。","addr.dialFailed":"无法呼叫这个地址。","addr.incomingTitle":"有人在找你","addr.incomingSub":"名字和理由是呼叫方自己写的：在你接受之前，没有人能证明他确实是那个人。","addr.incomingToast":"有人正在呼叫你的地址。","addr.accept":"接受","addr.ignore":"忽略","addr.verified":"已验证：应答的一方确实拥有地址 {a}。不可能有人插在中间。","addr.blockedIn":"来自你已拒绝过的人的呼叫：已忽略。","addr.shareText":"你可以在这里找到我，不需要我的电话号码。我的 DigitalValut Logos 地址是 {a}\n\n点一下就能呼叫我：",
 "addr.incomingAt":"通过“{name}”","burn.title":"一次性地址","burn.help":"每条广告一个，每个陌生人一个。用完删掉，那个人就再也找不到你——他从来没拿到过你真正的地址。","burn.namePh":"用来做什么？例如：二手沙发","burn.add":"创建","burn.send":"发送这个地址","burn.delete":"删除","burn.deleted":"“{name}”已删除。该地址不再应答。","burn.made":"“{name}”已创建，可以发给别人了。","burn.needName":"给它起个名字，这样你知道给了谁。","burn.full":"最多同时保留 {n} 个。删掉一个才能再建。","burn.untitled":"未命名",
 "knock.title":"你正在联系","knock.nameLabel":"你叫什么名字？","knock.namePh":"你的名字","knock.msgLabel":"你需要什么？（可不填）","knock.msgPh":"例如：有42码的鞋吗？","knock.go":"呼叫","knock.note":"你的名字和这句话只有被叫的人能看到。任何服务器都读不到。",
-"letter.title":"留给你的消息","letter.noneTitle":"现在没有人接听。","letter.noneSub":"你可以留个消息：对方一打开应用就会看到。","letter.ph":"在这里写下你的消息","letter.leave":"留下消息","letter.cancel":"算了","letter.needText":"写上一两句，让对方知道你想说什么。","letter.left":"消息已留下。对方打开应用就会看到。","letter.failed":"没能留下消息，请再试一次。","letter.callBack":"回拨","letter.dismiss":"完成"
+"letter.title":"留给你的消息","letter.noneTitle":"现在没有人接听。","letter.noneSub":"你可以留个消息：对方一打开应用就会看到。","letter.ph":"在这里写下你的消息","letter.leave":"留下消息","letter.cancel":"算了","letter.needText":"写上一两句，让对方知道你想说什么。","letter.left":"消息已留下。对方打开应用就会看到。","letter.failed":"没能留下消息，请再试一次。","letter.callBack":"回拨","letter.dismiss":"完成",
+"home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接"
 });
 
 Object.assign(I18N.ar, {
@@ -962,8 +970,8 @@ Object.assign(I18N.ar, {
 "home.title":"تحدّث مع من تريد، أينما كان",
 "home.sub":"رسائل، صور، فيديو، مكالمات. بلا تسجيل، بلا رقم هاتف، مجانًا للأبد.",
 "home.nameLabel":"اسمك","home.namePh":"اسمك",
-"home.startT":"ابدأ محادثة","home.startD":"أنشئ دعوة لإرسالها لأحدهم",
-"home.joinT":"استلمت دعوة","home.joinD":"الصق أو افتح الرابط الذي أرسله لك أحدهم",
+
+
 "home.legalSummary":"كيف يعمل هذا، في ثلاثة أسطر تقنية",
 "home.legalBody":"يكشف هذا عنوان شبكتك (IP) لمن تتحدث معه؛ يتطلب أن تكونا متصلَين في الوقت نفسه، وإلا لن يصل شيء، وفي الشبكات شديدة التصفية قد لا تتصل المكالمات؛ لا يمكن لأي موقع أن يمنع لقطة شاشة، أبدًا. للأمان عندما يهم الأمر حقًا، استخدم Signal أو Session أو Briar بدلًا من هذا.",
 "nav.back":"رجوع",
@@ -1069,7 +1077,8 @@ Object.assign(I18N.ar, {
 "addr.title":"🪪 عنوانك الدائم","addr.sub":"أعطِه بدلًا من رقم هاتفك. من يملكه يستطيع الوصول إليك متى شاء، دون معرفة اسمك ولا رقمك. متوقف افتراضيًا.","addr.qrHint":"من يمسحه يتصل بك مباشرة","addr.share":"أرسل عنوانك","addr.showQr":"أظهر رمز QR","addr.reachNote":"لكي يصلوا إليك حتى والتطبيق مغلق، فعّل التنبيهات في الأسفل.","addr.dialLabel":"هل لديك عنوان أحدهم؟","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"اتصل به","addr.badFormat":"هذا العنوان مكتوب بشكل خاطئ. إنه 12 حرفًا، مثل DV-K7M2-9QRT-X4WP.","addr.itsYou":"هذا عنوانك أنت.","addr.callingTitle":"جارٍ الاتصال…","addr.callingHint":"إن كان تطبيقه مغلقًا سأجعل هاتفه يرن. قد يستغرق الأمر لحظة.","addr.noAnswer":"لم يردّ. لقد نبّهته: حاول لاحقًا.","addr.dialFailed":"لم أتمكن من الاتصال بهذا العنوان.","addr.incomingTitle":"أحدهم يبحث عنك","addr.incomingSub":"الاسم والسبب كتبهما من يتصل بك: إلى أن تقبل، لا أحد يستطيع إثبات أنه فعلًا ذلك الشخص.","addr.incomingToast":"أحدهم يتصل بعنوانك.","addr.accept":"اقبل","addr.ignore":"تجاهل","addr.verified":"تم التحقق: من ردّ يملك فعلًا العنوان {a}. لا يمكن لأحد أن يكون قد توسّط.","addr.blockedIn":"اتصال من شخص سبق أن رفضته: تم تجاهله.","addr.shareText":"يمكنك الوصول إليّ هنا، دون رقم هاتفي. عنواني على DigitalValut Logos هو {a}\n\nاضغط للاتصال بي:",
 "addr.incomingAt":"عبر «{name}»","burn.title":"عناوين للاستعمال مرة واحدة","burn.help":"واحد لكل إعلان، وواحد لكل غريب. احذفه عند الانتهاء فلا يعود ذلك الشخص يصل إليك — لم يحصل على عنوانك الحقيقي أصلًا.","burn.namePh":"لماذا؟ مثلًا: أريكة مستعملة","burn.add":"إنشاء","burn.send":"أرسل هذا العنوان","burn.delete":"احذف","burn.deleted":"تم حذف «{name}». هذا العنوان لم يعد يردّ.","burn.made":"تم إنشاء «{name}». يمكنك إعطاؤه الآن.","burn.needName":"أعطه اسمًا لتعرف لمن أعطيته.","burn.full":"يمكنك الاحتفاظ بـ {n} في وقت واحد. احذف واحدًا لإنشاء آخر.","burn.untitled":"بلا اسم",
 "knock.title":"أنت تتواصل مع","knock.nameLabel":"ما اسمك؟","knock.namePh":"اسمك","knock.msgLabel":"ماذا تحتاج؟ (اختياري)","knock.msgPh":"مثلًا: هل لديكم حذاء مقاس 42؟","knock.go":"اتصل","knock.note":"اسمك وهذه الجملة لا يراهما إلا الشخص الذي تتصل به. لا يستطيع أي خادم قراءتهما.",
-"letter.title":"رسائل تُركت لك","letter.noneTitle":"لا أحد يردّ الآن.","letter.noneSub":"يمكنك ترك رسالة: سيجدها فور فتحه للتطبيق.","letter.ph":"اكتب رسالتك هنا","letter.leave":"اترك الرسالة","letter.cancel":"لا بأس","letter.needText":"اكتب كلمتين ليعرف ماذا أردت.","letter.left":"تُركت الرسالة. سيجدها عند فتح التطبيق.","letter.failed":"لم أتمكن من ترك الرسالة. حاول مرة أخرى.","letter.callBack":"عاود الاتصال","letter.dismiss":"تم"
+"letter.title":"رسائل تُركت لك","letter.noneTitle":"لا أحد يردّ الآن.","letter.noneSub":"يمكنك ترك رسالة: سيجدها فور فتحه للتطبيق.","letter.ph":"اكتب رسالتك هنا","letter.leave":"اترك الرسالة","letter.cancel":"لا بأس","letter.needText":"اكتب كلمتين ليعرف ماذا أردت.","letter.left":"تُركت الرسالة. سيجدها عند فتح التطبيق.","letter.failed":"لم أتمكن من ترك الرسالة. حاول مرة أخرى.","letter.callBack":"عاود الاتصال","letter.dismiss":"تم",
+"home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال"
 });
 
 Object.assign(I18N.ur, {
@@ -1078,8 +1087,8 @@ Object.assign(I18N.ur, {
 "home.title":"جس سے چاہیں بات کریں، وہ جہاں بھی ہو",
 "home.sub":"پیغامات، تصاویر، ویڈیو، کالز۔ کوئی سائن اپ نہیں، کوئی فون نمبر نہیں، ہمیشہ کے لیے مفت۔",
 "home.nameLabel":"آپ کا نام","home.namePh":"آپ کا نام",
-"home.startT":"چیٹ شروع کریں","home.startD":"کسی کو بھیجنے کے لیے دعوت بنائیں",
-"home.joinT":"مجھے دعوت ملی","home.joinD":"وہ لنک پیسٹ یا کھولیں جو آپ کو بھیجا گیا",
+
+
 "home.legalSummary":"یہ کیسے کام کرتا ہے، تین تکنیکی سطروں میں",
 "home.legalBody":"یہ آپ کا نیٹ ورک ایڈریس (IP) اس شخص کو ظاہر کرتا ہے جس سے آپ بات کر رہے ہیں؛ دونوں کا ایک ہی وقت میں آن لائن ہونا ضروری ہے، ورنہ کچھ نہیں پہنچے گا، اور سخت فلٹر شدہ نیٹ ورکس پر کالز کنیکٹ نہیں ہو سکتیں؛ کوئی ویب سائٹ کبھی بھی اسکرین شاٹ نہیں روک سکتی۔ جب سیکیورٹی واقعی اہم ہو تو اس کے بجائے Signal، Session یا Briar استعمال کریں۔",
 "nav.back":"واپس",
@@ -1185,7 +1194,8 @@ Object.assign(I18N.ur, {
 "addr.title":"🪪 آپ کا مستقل پتہ","addr.sub":"فون نمبر کے بجائے یہ دیں۔ جس کے پاس یہ ہو وہ جب چاہے آپ تک پہنچ سکتا ہے، آپ کا نام یا نمبر جانے بغیر۔ بطور ڈیفالٹ بند۔","addr.qrHint":"جو اسے اسکین کرے سیدھا آپ کو کال کرے گا","addr.share":"اپنا پتہ بھیجیں","addr.showQr":"QR دکھائیں","addr.reachNote":"تاکہ ایپ بند ہونے پر بھی لوگ آپ تک پہنچ سکیں، نیچے اطلاعات آن کریں۔","addr.dialLabel":"کیا آپ کے پاس کسی کا پتہ ہے؟","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"کال کریں","addr.badFormat":"یہ پتہ صحیح نہیں لکھا۔ یہ 12 حروف کا ہوتا ہے، جیسے DV-K7M2-9QRT-X4WP۔","addr.itsYou":"یہ تو آپ کا اپنا پتہ ہے۔","addr.callingTitle":"کال کی جا رہی ہے…","addr.callingHint":"اگر ان کی ایپ بند ہو تو میں ان کا فون بجا دوں گا۔ اس میں کچھ لمحے لگ سکتے ہیں۔","addr.noAnswer":"کوئی جواب نہیں۔ میں نے اطلاع دے دی ہے: بعد میں کوشش کریں۔","addr.dialFailed":"میں اس پتے پر کال نہیں کر سکا۔","addr.incomingTitle":"کوئی آپ کو ڈھونڈ رہا ہے","addr.incomingSub":"نام اور وجہ کال کرنے والے نے خود لکھی ہے: جب تک آپ قبول نہ کریں، کوئی ثابت نہیں کر سکتا کہ وہ واقعی وہی شخص ہے۔","addr.incomingToast":"کوئی آپ کے پتے پر کال کر رہا ہے۔","addr.accept":"قبول کریں","addr.ignore":"نظرانداز کریں","addr.verified":"تصدیق ہو گئی: جواب دینے والا واقعی پتے {a} کا مالک ہے۔ کوئی درمیان میں نہیں آ سکتا تھا۔","addr.blockedIn":"اس شخص کی کال جسے آپ پہلے رد کر چکے تھے: نظرانداز کر دی گئی۔","addr.shareText":"آپ مجھ تک یہاں پہنچ سکتے ہیں، میرے فون نمبر کے بغیر۔ DigitalValut Logos پر میرا پتہ {a} ہے\n\nمجھے کال کرنے کے لیے ٹیپ کریں:",
 "addr.incomingAt":"«{name}» کے ذریعے","burn.title":"ایک بار استعمال ہونے والے پتے","burn.help":"ہر اشتہار کے لیے ایک، ہر اجنبی کے لیے ایک۔ کام ختم ہو تو حذف کر دیں، وہ شخص پھر آپ تک نہیں پہنچ سکتا — اصل پتہ تو اُس کے پاس تھا ہی نہیں۔","burn.namePh":"کس لیے؟ مثلاً: پرانا صوفہ","burn.add":"بنائیں","burn.send":"یہ پتہ بھیجیں","burn.delete":"حذف کریں","burn.deleted":"«{name}» حذف ہو گیا۔ وہ پتہ اب جواب نہیں دیتا۔","burn.made":"«{name}» بن گیا۔ اب آپ اسے دے سکتے ہیں۔","burn.needName":"اسے نام دیں تاکہ یاد رہے کسے دیا تھا۔","burn.full":"ایک وقت میں زیادہ سے زیادہ {n} رکھ سکتے ہیں۔ نیا بنانے کے لیے ایک حذف کریں۔","burn.untitled":"بے نام",
 "knock.title":"آپ رابطہ کر رہے ہیں","knock.nameLabel":"آپ کا نام کیا ہے؟","knock.namePh":"آپ کا نام","knock.msgLabel":"آپ کو کیا چاہیے؟ (اختیاری)","knock.msgPh":"مثلاً: کیا آپ کے پاس 42 نمبر کے جوتے ہیں؟","knock.go":"کال کریں","knock.note":"آپ کا نام اور یہ جملہ صرف وہی شخص دیکھتا ہے جسے آپ کال کر رہے ہیں۔ کوئی سرور انہیں نہیں پڑھ سکتا۔",
-"letter.title":"آپ کے لیے چھوڑے گئے پیغامات","letter.noneTitle":"ابھی کوئی جواب نہیں دے رہا۔","letter.noneSub":"آپ پیغام چھوڑ سکتے ہیں: ایپ کھولتے ہی انہیں مل جائے گا۔","letter.ph":"اپنا پیغام یہاں لکھیں","letter.leave":"پیغام چھوڑیں","letter.cancel":"رہنے دیں","letter.needText":"دو لفظ لکھ دیں تاکہ انہیں معلوم ہو آپ کیا چاہتے تھے۔","letter.left":"پیغام چھوڑ دیا گیا۔ ایپ کھولتے ہی مل جائے گا۔","letter.failed":"میں پیغام نہیں چھوڑ سکا۔ دوبارہ کوشش کریں۔","letter.callBack":"واپس کال کریں","letter.dismiss":"ہو گیا"
+"letter.title":"آپ کے لیے چھوڑے گئے پیغامات","letter.noneTitle":"ابھی کوئی جواب نہیں دے رہا۔","letter.noneSub":"آپ پیغام چھوڑ سکتے ہیں: ایپ کھولتے ہی انہیں مل جائے گا۔","letter.ph":"اپنا پیغام یہاں لکھیں","letter.leave":"پیغام چھوڑیں","letter.cancel":"رہنے دیں","letter.needText":"دو لفظ لکھ دیں تاکہ انہیں معلوم ہو آپ کیا چاہتے تھے۔","letter.left":"پیغام چھوڑ دیا گیا۔ ایپ کھولتے ہی مل جائے گا۔","letter.failed":"میں پیغام نہیں چھوڑ سکا۔ دوبارہ کوشش کریں۔","letter.callBack":"واپس کال کریں","letter.dismiss":"ہو گیا",
+"home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے"
 });
 
 Object.assign(I18N.hi, {
@@ -1194,8 +1204,8 @@ Object.assign(I18N.hi, {
 "home.title":"जिससे चाहें बात करें, वे कहीं भी हों",
 "home.sub":"संदेश, फ़ोटो, वीडियो, कॉल। कोई साइन-अप नहीं, कोई फ़ोन नंबर नहीं, हमेशा के लिए मुफ़्त।",
 "home.nameLabel":"आपका नाम","home.namePh":"आपका नाम",
-"home.startT":"चैट शुरू करें","home.startD":"किसी को भेजने के लिए एक निमंत्रण बनाएं",
-"home.joinT":"मुझे निमंत्रण मिला","home.joinD":"वह लिंक पेस्ट या खोलें जो आपको भेजा गया",
+
+
 "home.legalSummary":"यह कैसे काम करता है, तीन तकनीकी पंक्तियों में",
 "home.legalBody":"यह आपका नेटवर्क पता (IP) उस व्यक्ति को दिखाता है जिससे आप बात कर रहे हैं; ज़रूरी है कि आप दोनों एक ही समय पर ऑनलाइन हों, वरना कुछ नहीं पहुँचेगा, और भारी फ़िल्टर वाले नेटवर्क पर कॉल कनेक्ट नहीं हो सकतीं; कोई भी वेबसाइट कभी स्क्रीनशॉट नहीं रोक सकती। जब सुरक्षा वाकई मायने रखे, तो इसके बजाय Signal, Session या Briar का उपयोग करें।",
 "nav.back":"वापस",
@@ -1301,7 +1311,8 @@ Object.assign(I18N.hi, {
 "addr.title":"🪪 आपका स्थायी पता","addr.sub":"फ़ोन नंबर की जगह यह दें। जिसके पास यह हो वह जब चाहे आप तक पहुँच सकता है, आपका नाम या नंबर जाने बिना। डिफ़ॉल्ट रूप से बंद।","addr.qrHint":"जो इसे स्कैन करे सीधे आपको कॉल करेगा","addr.share":"अपना पता भेजें","addr.showQr":"QR दिखाएं","addr.reachNote":"ताकि ऐप बंद होने पर भी लोग आप तक पहुँच सकें, नीचे सूचनाएं चालू करें।","addr.dialLabel":"किसी का पता है आपके पास?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"कॉल करें","addr.badFormat":"यह पता ठीक से नहीं लिखा है। यह 12 अक्षरों का होता है, जैसे DV-K7M2-9QRT-X4WP।","addr.itsYou":"यह तो आपका अपना पता है।","addr.callingTitle":"कॉल किया जा रहा है…","addr.callingHint":"अगर उनका ऐप बंद है तो मैं उनका फ़ोन बजा दूंगा। इसमें थोड़ा समय लग सकता है।","addr.noAnswer":"कोई जवाब नहीं। मैंने बता दिया है: बाद में कोशिश करें।","addr.dialFailed":"मैं इस पते पर कॉल नहीं कर सका।","addr.incomingTitle":"कोई आपको ढूंढ रहा है","addr.incomingSub":"नाम और कारण कॉल करने वाले ने खुद लिखे हैं: जब तक आप स्वीकार न करें, कोई साबित नहीं कर सकता कि वह सचमुच वही व्यक्ति है।","addr.incomingToast":"कोई आपके पते पर कॉल कर रहा है।","addr.accept":"स्वीकार करें","addr.ignore":"अनदेखा करें","addr.verified":"सत्यापित: जिसने जवाब दिया वह सचमुच पते {a} का मालिक है। कोई बीच में नहीं आ सकता था।","addr.blockedIn":"उस व्यक्ति की कॉल जिसे आपने पहले मना कर दिया था: अनदेखी की गई।","addr.shareText":"आप मुझ तक यहाँ पहुँच सकते हैं, मेरे फ़ोन नंबर के बिना। DigitalValut Logos पर मेरा पता {a} है\n\nमुझे कॉल करने के लिए टैप करें:",
 "addr.incomingAt":"«{name}» के ज़रिए","burn.title":"इस्तेमाल करके फेंकने वाले पते","burn.help":"हर विज्ञापन के लिए एक, हर अजनबी के लिए एक। काम पूरा हो तो मिटा दें और वह व्यक्ति आप तक नहीं पहुँच सकता — असली पता उसके पास कभी था ही नहीं।","burn.namePh":"किस लिए? जैसे: पुराना सोफ़ा","burn.add":"बनाएं","burn.send":"यह पता भेजें","burn.delete":"मिटाएं","burn.deleted":"«{name}» मिटा दिया। वह पता अब जवाब नहीं देता।","burn.made":"«{name}» बन गया। अब आप इसे दे सकते हैं।","burn.needName":"इसे नाम दें, ताकि पता रहे किसे दिया था।","burn.full":"एक साथ ज़्यादा से ज़्यादा {n} रख सकते हैं। नया बनाने के लिए एक मिटाएं।","burn.untitled":"बिना नाम",
 "knock.title":"आप संपर्क कर रहे हैं","knock.nameLabel":"आपका नाम क्या है?","knock.namePh":"आपका नाम","knock.msgLabel":"आपको क्या चाहिए? (वैकल्पिक)","knock.msgPh":"जैसे: क्या 42 नंबर के जूते हैं?","knock.go":"कॉल करें","knock.note":"आपका नाम और यह वाक्य सिर्फ़ वही व्यक्ति देखता है जिसे आप कॉल कर रहे हैं। कोई सर्वर इन्हें नहीं पढ़ सकता।",
-"letter.title":"आपके लिए छोड़े गए संदेश","letter.noneTitle":"अभी कोई जवाब नहीं दे रहा।","letter.noneSub":"आप संदेश छोड़ सकते हैं: ऐप खोलते ही उन्हें मिल जाएगा।","letter.ph":"अपना संदेश यहाँ लिखें","letter.leave":"संदेश छोड़ें","letter.cancel":"रहने दें","letter.needText":"दो शब्द लिख दें, ताकि उन्हें पता चले आप क्या चाहते थे।","letter.left":"संदेश छोड़ दिया। ऐप खोलते ही उन्हें मिल जाएगा।","letter.failed":"मैं संदेश नहीं छोड़ सका। फिर कोशिश करें।","letter.callBack":"वापस कॉल करें","letter.dismiss":"हो गया"
+"letter.title":"आपके लिए छोड़े गए संदेश","letter.noneTitle":"अभी कोई जवाब नहीं दे रहा।","letter.noneSub":"आप संदेश छोड़ सकते हैं: ऐप खोलते ही उन्हें मिल जाएगा।","letter.ph":"अपना संदेश यहाँ लिखें","letter.leave":"संदेश छोड़ें","letter.cancel":"रहने दें","letter.needText":"दो शब्द लिख दें, ताकि उन्हें पता चले आप क्या चाहते थे।","letter.left":"संदेश छोड़ दिया। ऐप खोलते ही उन्हें मिल जाएगा।","letter.failed":"मैं संदेश नहीं छोड़ सका। फिर कोशिश करें।","letter.callBack":"वापस कॉल करें","letter.dismiss":"हो गया",
+"home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है"
 });
 
 Object.assign(I18N.bn, {
@@ -1310,8 +1321,8 @@ Object.assign(I18N.bn, {
 "home.title":"যার সাথে চান কথা বলুন, তিনি যেখানেই থাকুন",
 "home.sub":"বার্তা, ছবি, ভিডিও, কল। কোনো সাইন-আপ নেই, কোনো ফোন নম্বর নেই, চিরকালের জন্য বিনামূল্যে।",
 "home.nameLabel":"আপনার নাম","home.namePh":"আপনার নাম",
-"home.startT":"চ্যাট শুরু করুন","home.startD":"কাউকে পাঠানোর জন্য একটি আমন্ত্রণ তৈরি করুন",
-"home.joinT":"আমি একটি আমন্ত্রণ পেয়েছি","home.joinD":"আপনাকে পাঠানো লিঙ্কটি পেস্ট বা খুলুন",
+
+
 "home.legalSummary":"এটি কীভাবে কাজ করে, তিনটি প্রযুক্তিগত লাইনে",
 "home.legalBody":"এটি আপনি যার সাথে কথা বলছেন তাকে আপনার নেটওয়ার্ক ঠিকানা (IP) দেখায়; আপনাদের দুজনকেই একই সময়ে অনলাইনে থাকতে হবে, নাহলে কিছুই পৌঁছাবে না, এবং অত্যন্ত ফিল্টার করা নেটওয়ার্কে কল সংযুক্ত নাও হতে পারে; কোনো ওয়েবসাইট কখনও স্ক্রিনশট আটকাতে পারে না। যখন নিরাপত্তা সত্যিই গুরুত্বপূর্ণ, তখন এর পরিবর্তে Signal, Session বা Briar ব্যবহার করুন।",
 "nav.back":"পিছনে",
@@ -1417,7 +1428,8 @@ Object.assign(I18N.bn, {
 "addr.title":"🪪 আপনার স্থায়ী ঠিকানা","addr.sub":"ফোন নম্বরের বদলে এটি দিন। যার কাছে এটি আছে সে যখন খুশি আপনার সঙ্গে যোগাযোগ করতে পারবে, আপনার নাম বা নম্বর না জেনেই। ডিফল্টভাবে বন্ধ।","addr.qrHint":"যে এটি স্ক্যান করবে সরাসরি আপনাকে ডাকবে","addr.share":"আপনার ঠিকানা পাঠান","addr.showQr":"QR দেখান","addr.reachNote":"অ্যাপ বন্ধ থাকলেও যাতে আপনাকে পাওয়া যায়, নিচের বিজ্ঞপ্তি চালু করুন।","addr.dialLabel":"কারও ঠিকানা আছে?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"ডাকুন","addr.badFormat":"এই ঠিকানাটি ঠিকভাবে লেখা হয়নি। এটি ১২টি অক্ষরের, যেমন DV-K7M2-9QRT-X4WP।","addr.itsYou":"এটি তো আপনার নিজের ঠিকানা।","addr.callingTitle":"ডাকা হচ্ছে…","addr.callingHint":"তাঁর অ্যাপ বন্ধ থাকলে আমি ফোন বাজিয়ে দেব। একটু সময় লাগতে পারে।","addr.noAnswer":"সাড়া নেই। জানিয়ে দিয়েছি: পরে চেষ্টা করুন।","addr.dialFailed":"এই ঠিকানায় ডাকতে পারিনি।","addr.incomingTitle":"কেউ আপনাকে খুঁজছে","addr.incomingSub":"নাম আর কারণ যিনি ডাকছেন তিনিই লিখেছেন: আপনি গ্রহণ না করা পর্যন্ত কেউ প্রমাণ করতে পারে না যে তিনি সত্যিই সেই ব্যক্তি।","addr.incomingToast":"কেউ আপনার ঠিকানায় ডাকছে।","addr.accept":"গ্রহণ করুন","addr.ignore":"উপেক্ষা করুন","addr.verified":"যাচাই হয়েছে: যিনি সাড়া দিয়েছেন তিনি সত্যিই {a} ঠিকানার মালিক। কেউ মাঝখানে ঢুকতে পারেনি।","addr.blockedIn":"আপনি আগে ফিরিয়ে দিয়েছেন এমন কারও ডাক: উপেক্ষা করা হয়েছে।","addr.shareText":"আমাকে এখানে পাওয়া যাবে, আমার ফোন নম্বর ছাড়াই। DigitalValut Logos-এ আমার ঠিকানা {a}\n\nআমাকে ডাকতে ট্যাপ করুন:",
 "addr.incomingAt":"«{name}»-এর মাধ্যমে","burn.title":"একবার ব্যবহারের ঠিকানা","burn.help":"প্রতিটি বিজ্ঞাপনের জন্য একটি, প্রতিটি অপরিচিতের জন্য একটি। কাজ শেষে মুছে দিন, সেই ব্যক্তি আর আপনাকে পাবে না — আসলটি তার কাছে কখনও ছিলই না।","burn.namePh":"কীসের জন্য? যেমন: পুরনো সোফা","burn.add":"তৈরি করুন","burn.send":"এই ঠিকানা পাঠান","burn.delete":"মুছুন","burn.deleted":"«{name}» মোছা হয়েছে। ওই ঠিকানা আর সাড়া দেয় না।","burn.made":"«{name}» তৈরি হয়েছে। এখন দিতে পারেন।","burn.needName":"একটি নাম দিন, যাতে মনে থাকে কাকে দিয়েছেন।","burn.full":"একসঙ্গে সর্বোচ্চ {n}টি রাখতে পারেন। নতুন বানাতে একটি মুছুন।","burn.untitled":"নামহীন",
 "knock.title":"আপনি যোগাযোগ করছেন","knock.nameLabel":"আপনার নাম কী?","knock.namePh":"আপনার নাম","knock.msgLabel":"আপনার কী দরকার? (ইচ্ছা হলে)","knock.msgPh":"যেমন: ৪২ সাইজের জুতো আছে?","knock.go":"ডাকুন","knock.note":"আপনার নাম আর এই বাক্যটি কেবল যাকে ডাকছেন তিনিই দেখেন। কোনও সার্ভার সেগুলি পড়তে পারে না।",
-"letter.title":"আপনার জন্য রাখা বার্তা","letter.noneTitle":"এখন কেউ সাড়া দিচ্ছে না।","letter.noneSub":"আপনি একটি বার্তা রেখে যেতে পারেন: অ্যাপ খুললেই তিনি দেখতে পাবেন।","letter.ph":"আপনার বার্তা এখানে লিখুন","letter.leave":"বার্তা রাখুন","letter.cancel":"থাক","letter.needText":"দু-এক কথা লিখুন, যাতে বোঝেন আপনি কী চেয়েছিলেন।","letter.left":"বার্তা রাখা হয়েছে। অ্যাপ খুললেই দেখতে পাবেন।","letter.failed":"বার্তা রাখতে পারিনি। আবার চেষ্টা করুন।","letter.callBack":"ফিরে ডাকুন","letter.dismiss":"হয়েছে"
+"letter.title":"আপনার জন্য রাখা বার্তা","letter.noneTitle":"এখন কেউ সাড়া দিচ্ছে না।","letter.noneSub":"আপনি একটি বার্তা রেখে যেতে পারেন: অ্যাপ খুললেই তিনি দেখতে পাবেন।","letter.ph":"আপনার বার্তা এখানে লিখুন","letter.leave":"বার্তা রাখুন","letter.cancel":"থাক","letter.needText":"দু-এক কথা লিখুন, যাতে বোঝেন আপনি কী চেয়েছিলেন।","letter.left":"বার্তা রাখা হয়েছে। অ্যাপ খুললেই দেখতে পাবেন।","letter.failed":"বার্তা রাখতে পারিনি। আবার চেষ্টা করুন।","letter.callBack":"ফিরে ডাকুন","letter.dismiss":"হয়েছে",
+"home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে"
 });
 
 Object.assign(I18N.id, {
@@ -1426,8 +1438,8 @@ Object.assign(I18N.id, {
 "home.title":"Bicara dengan siapa pun yang Anda mau, di mana pun mereka berada",
 "home.sub":"Pesan, foto, video, panggilan. Tanpa pendaftaran, tanpa nomor telepon, gratis selamanya.",
 "home.nameLabel":"Nama Anda","home.namePh":"Nama Anda",
-"home.startT":"Mulai obrolan","home.startD":"Buat undangan untuk dikirim ke seseorang",
-"home.joinT":"Saya menerima undangan","home.joinD":"Tempel atau buka tautan yang dikirim seseorang",
+
+
 "home.legalSummary":"Cara kerjanya, dalam tiga baris teknis",
 "home.legalBody":"Ini mengungkapkan alamat jaringan (IP) Anda kepada lawan bicara Anda; Anda berdua harus online bersamaan, jika tidak tidak ada yang sampai, dan pada jaringan yang sangat difilter panggilan mungkin tidak tersambung; tidak ada situs web yang bisa mencegah tangkapan layar, tidak pernah. Untuk keamanan saat benar-benar penting, gunakan Signal, Session, atau Briar sebagai gantinya.",
 "nav.back":"Kembali",
@@ -1533,7 +1545,8 @@ Object.assign(I18N.id, {
 "addr.title":"🪪 Alamat permanen Anda","addr.sub":"Berikan ini sebagai ganti nomor telepon. Siapa pun yang memilikinya bisa menghubungi Anda kapan saja, tanpa tahu nama maupun nomor Anda. Nonaktif secara default.","addr.qrHint":"Yang memindainya langsung menelepon Anda","addr.share":"Kirim alamat Anda","addr.showQr":"Tampilkan QR","addr.reachNote":"Agar orang bisa menghubungi Anda meski aplikasi tertutup, aktifkan pemberitahuan di bawah.","addr.dialLabel":"Punya alamat seseorang?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Telepon","addr.badFormat":"Alamat itu salah tulis. Panjangnya 12 karakter, seperti DV-K7M2-9QRT-X4WP.","addr.itsYou":"Itu alamat Anda sendiri.","addr.callingTitle":"Menelepon…","addr.callingHint":"Kalau aplikasinya tertutup, saya akan membunyikan ponselnya. Bisa perlu sejenak.","addr.noAnswer":"Tidak ada jawaban. Sudah diberi tahu: coba lagi nanti.","addr.dialFailed":"Saya tidak bisa menelepon alamat itu.","addr.incomingTitle":"Ada yang mencari Anda","addr.incomingSub":"Nama dan alasannya ditulis sendiri oleh si penelepon: sampai Anda menerima, tidak ada yang bisa membuktikan dia memang orang itu.","addr.incomingToast":"Ada yang menelepon alamat Anda.","addr.accept":"Terima","addr.ignore":"Abaikan","addr.verified":"Terverifikasi: yang menjawab benar-benar pemilik alamat {a}. Tidak mungkin ada yang menyusup di tengah.","addr.blockedIn":"Panggilan dari orang yang pernah Anda tolak: diabaikan.","addr.shareText":"Anda bisa menghubungi saya di sini, tanpa nomor telepon saya. Alamat DigitalValut Logos saya adalah {a}\n\nKetuk untuk menelepon saya:",
 "addr.incomingAt":"lewat “{name}”","burn.title":"Alamat sekali pakai","burn.help":"Satu untuk tiap iklan, satu untuk tiap orang asing. Hapus kalau sudah selesai, dan orang itu tak bisa menghubungi Anda lagi — alamat asli Anda tak pernah dia pegang.","burn.namePh":"Untuk apa? mis. Sofa bekas","burn.add":"Buat","burn.send":"Kirim alamat ini","burn.delete":"Hapus","burn.deleted":"“{name}” dihapus. Alamat itu tidak menjawab lagi.","burn.made":"“{name}” dibuat. Sekarang bisa Anda berikan.","burn.needName":"Beri nama, supaya Anda ingat sudah memberikannya ke siapa.","burn.full":"Maksimal {n} sekaligus. Hapus satu untuk membuat yang baru.","burn.untitled":"Tanpa nama",
 "knock.title":"Anda menghubungi","knock.nameLabel":"Siapa nama Anda?","knock.namePh":"Nama Anda","knock.msgLabel":"Anda perlu apa? (boleh kosong)","knock.msgPh":"mis. Ada sepatu ukuran 42?","knock.go":"Telepon","knock.note":"Nama Anda dan kalimat ini hanya dilihat oleh orang yang Anda telepon. Tidak ada server yang bisa membacanya.",
-"letter.title":"Pesan yang ditinggalkan untuk Anda","letter.noneTitle":"Sekarang tidak ada yang menjawab.","letter.noneSub":"Anda bisa meninggalkan pesan: dia akan menemukannya begitu membuka aplikasi.","letter.ph":"Tulis pesan Anda di sini","letter.leave":"Tinggalkan pesan","letter.cancel":"Tidak jadi","letter.needText":"Tulis satu dua kalimat, supaya dia tahu apa yang Anda mau.","letter.left":"Pesan ditinggalkan. Dia akan menemukannya saat membuka aplikasi.","letter.failed":"Saya tidak bisa meninggalkan pesan. Coba lagi.","letter.callBack":"Telepon balik","letter.dismiss":"Selesai"
+"letter.title":"Pesan yang ditinggalkan untuk Anda","letter.noneTitle":"Sekarang tidak ada yang menjawab.","letter.noneSub":"Anda bisa meninggalkan pesan: dia akan menemukannya begitu membuka aplikasi.","letter.ph":"Tulis pesan Anda di sini","letter.leave":"Tinggalkan pesan","letter.cancel":"Tidak jadi","letter.needText":"Tulis satu dua kalimat, supaya dia tahu apa yang Anda mau.","letter.left":"Pesan ditinggalkan. Dia akan menemukannya saat membuka aplikasi.","letter.failed":"Saya tidak bisa meninggalkan pesan. Coba lagi.","letter.callBack":"Telepon balik","letter.dismiss":"Selesai",
+"home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan"
 });
 
 function t(key, fallback){
@@ -1583,7 +1596,7 @@ function applyLang(code){
    loaded and did nothing. */
 let inboxTimer = null;
 function showScreen(id){
-  ['screenHome','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
+  ['screenHome','screenSettings','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
   window.scrollTo(0,0);
   if (id === 'screenHome') startInboxPolling(); else stopInboxPolling();
   sayScreen(id);
@@ -1655,6 +1668,11 @@ for (const id of ['easyRow','voiceRow']){
     if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); $(id).click(); }
   });
 }
+/* Everything that is a choice rather than an action lives one tap away, so
+   the home can be the two things someone actually came to do. */
+$('btnSettings').addEventListener('click', () => showScreen('screenSettings'));
+$('backFromSettings').addEventListener('click', () => showScreen('screenHome'));
+
 $('goStart').addEventListener('click', () => { showScreen('screenStart'); showQuickLayoutA(); startQuickShare(); });
 $('goJoin').addEventListener('click', () => { showScreen('screenJoin'); showQuickLayoutB(); $('quickCodeIn').value = ''; $('quickCodeIn').focus(); });
 /* leaving the screen abandons whatever handshake it had started — otherwise its
@@ -2026,6 +2044,34 @@ async function connectionRoute(){
   }catch(e){ return null; }
 }
 
+/* The same measurement the arrival card makes, kept on screen for as long as
+   the conversation lasts. Nothing here is decorative: "direct" is only ever
+   shown when the selected candidate pair really has no relay in it. */
+async function paintConnDot(){
+  const dot = $('connDot'), lbl = $('connState');
+  if (!dot) return;
+  dot.classList.remove('direct','relay','down');
+  if (!pc || pc.connectionState === 'closed' || pc.connectionState === 'failed'){
+    dot.classList.add('down');
+    dot.setAttribute('aria-label', t('conn.down','Connessione caduta'));
+    lbl.textContent = t('conn.downShort','caduta');
+    return;
+  }
+  const route = await connectionRoute();
+  if (route === 'relay'){
+    dot.classList.add('relay');
+    dot.setAttribute('aria-label', t('conn.relay','Collegamento sicuro, attraverso un ponte cifrato'));
+    lbl.textContent = t('conn.relayShort','collegata (ponte)');
+  } else if (route === 'direct'){
+    dot.classList.add('direct');
+    dot.setAttribute('aria-label', t('conn.direct','Collegamento diretto fra i due telefoni'));
+    lbl.textContent = t('conn.directShort','collegata direttamente');
+  } else {
+    dot.setAttribute('aria-label', t('conn.working','Collegamento in corso'));
+    lbl.textContent = t('chat.connected','connessa');
+  }
+}
+
 function showConnectedFlash(nick){
   return new Promise(async resolve => {
     const box = $('connectedFlash');
@@ -2182,7 +2228,10 @@ async function newPeerConnection(){
   const [cert, iceServers] = await Promise.all([myIdentity(), fetchIceServers()]);
   const config = { iceServers };
   if (cert) config.certificates = [cert];
-  return new RTCPeerConnection(config);
+  const conn = new RTCPeerConnection(config);
+  /* the dot follows the connection rather than a guess about it */
+  conn.addEventListener('connectionstatechange', () => { if (pc === conn) paintConnDot(); });
+  return conn;
 }
 
 /* ---------- trust on first use, pinned to the device rather than the name ----------
@@ -4562,7 +4611,7 @@ function onDcMessage(ev){
       }
       peerNick = (msg.nick || '').trim();
       if (peerNick){
-        $('connState').textContent = t('chat.connected');
+        paintConnDot();
         $('peerNameLbl').textContent = peerNick;
         $('peerAvatar').textContent = initials(peerNick);
         loadHistoryFor(peerNick);
@@ -4909,6 +4958,7 @@ function destroyNow(tellPeer){
   $('destructCountdown').classList.add('hide');
   $('btnDisarmDestruct').classList.add('hide');
   $('connState').textContent = t('session.closed');
+  paintConnDot();
 }
 $('btnArmDestruct').addEventListener('click', () => {
   const minutes = parseInt($('destructMinutes').value, 10);

@@ -64,25 +64,7 @@
     <img src="modifica-icon-512.png" alt="">
     <div class="name">DigitalValut Logos</div>
     <div class="spacer"></div>
-    <div class="textsize" role="group" aria-label="Dimensione del testo">
-      <button type="button" data-ts="" title="Testo normale">A</button>
-      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
-      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
-    </div>
-    <select id="langSel" aria-label="Language"></select>
-  </div>
-
-  <div class="banner accent hide" id="onboardBanner">
-    <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza MIT),
-      di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
-      Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
-    <button class="x" id="onboardClose" aria-label="close">×</button>
-  </div>
-
-  <div class="banner accent hide" id="installBar">
-    <div class="f1" id="installText"></div>
-    <button class="mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
-    <button class="x" id="installClose" aria-label="close">×</button>
+    <button class="gear" id="btnSettings" aria-label="Impostazioni" title="Impostazioni">⚙</button>
   </div>
 
   <!-- ============================ HOME ============================ -->
@@ -91,8 +73,6 @@
       <img src="modifica-icon-512.png" alt="DigitalValut Logos">
       <h1 data-i18n="home.title">Parla con chi vuoi, ovunque sia</h1>
       <p data-i18n="home.sub">Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.</p>
-      <button class="btn ghost mt8" id="btnShareApp">
-        <span class="ic">📣</span><span data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span></button>
     </div>
 
     <!-- Only ever after a conversation that actually happened, and only until
@@ -107,22 +87,45 @@
         <span class="ic">📣</span><span data-i18n="viral.btn">Fallo sapere a qualcuno</span></button>
     </div>
 
-    <div class="card">
-      <label class="fieldlabel" data-i18n="home.nameLabel">Come ti chiami</label>
-      <input type="text" id="nickInput" class="sans-input" maxlength="30" spellcheck="true" autocapitalize="words" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
+    <!-- The whole home, in two verbs. Everything that used to sit around
+         these — the name, the address, the switches, the small print — is one
+         tap away behind the gear, because none of it is what someone opening
+         this app came to do. -->
+    <div class="bigchoices">
+      <button class="bigchoice" id="goStart">
+        <span class="ic" aria-hidden="true">💬</span>
+        <span class="t" data-i18n="home.bigStart">Parla con qualcuno</span>
+        <span class="d" data-i18n="home.bigStartD">Crea un invito da mandare</span>
+      </button>
+      <button class="bigchoice" id="goJoin">
+        <span class="ic" aria-hidden="true">🔑</span>
+        <span class="t" data-i18n="home.bigJoin">Ho un codice</span>
+        <span class="d" data-i18n="home.bigJoinD">Mi hanno mandato un invito</span>
+      </button>
     </div>
 
-    <div class="choices">
-      <button class="choicecard" id="goStart">
-        <div class="ic">🚀</div>
-        <div><div class="t" data-i18n="home.startT">Inizia una chat</div>
-          <div class="d" data-i18n="home.startD">Crea un invito da mandare a qualcuno</div></div>
-      </button>
-      <button class="choicecard" id="goJoin">
-        <div class="ic">✉️</div>
-        <div><div class="t" data-i18n="home.joinT">Ho ricevuto un invito</div>
-          <div class="d" data-i18n="home.joinD">Incolla o apri il link che ti hanno mandato</div></div>
-      </button>
+    <!-- Still said, still dismissible, but under the two buttons rather than
+         on top of them: six lines of legal text was the first thing a new
+         person met, and it pushed the only two things they could do off the
+         bottom of an ordinary phone screen. -->
+    <div class="banner accent hide" id="onboardBanner">
+      <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza MIT),
+        di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
+        Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
+      <button class="x" id="onboardClose" aria-label="close">×</button>
+    </div>
+
+    <div class="banner accent hide" id="installBar">
+      <div class="f1" id="installText"></div>
+      <button class="mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
+      <button class="x" id="installClose" aria-label="close">×</button>
+    </div>
+
+    <!-- Useful, but not what anyone opens the app to do, so it sits under the
+         two things that are. -->
+    <div class="sharerow">
+      <button class="btn ghost" id="btnShareApp">
+        <span class="ic">📣</span><span data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span></button>
     </div>
 
     <!-- The permanent address. Off by default, because switching it on means
@@ -145,6 +148,70 @@
       <button class="btn primary big mt16" id="btnKnockGo">
         <span class="ic">📞</span><span data-i18n="knock.go">Chiama</span></button>
       <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
+    </div>
+
+    
+
+    <!-- Left while nobody was here. Collected once, then kept on this device
+         only: the server no longer has them to give again. -->
+    <div class="card hide" id="lettersCard">
+      <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
+      <div id="lettersList"></div>
+    </div>
+
+    <!-- Someone is calling the public address. Nothing is answered until this
+         is answered, because an address anyone may hold is an address anyone
+         may ring. -->
+    <div class="card hide" id="addrIncoming">
+      <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
+      <span class="whichaddr hide" id="addrIncomingWhich"></span>
+      <div class="whoknocks" id="addrIncomingWho"></div>
+      <div class="whyknocks hide" id="addrIncomingMsg"></div>
+      <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
+      <div class="toolsrow">
+        <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
+        <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
+      </div>
+    </div>
+
+    <div class="card hide" id="contactsCard">
+      <h3 data-i18n="contacts.title">Contatti recenti</h3>
+      <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
+        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
+      <div id="contactsList"></div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+  </section>
+
+
+  <!-- ============================ SETTINGS ============================
+       Everything that is a choice rather than an action. Nothing here is
+       needed to use the app; all of it used to be stacked on the home screen,
+       where it buried the two things that are. -->
+  <section id="screenSettings" class="hide">
+    <button class="btn ghost" id="backFromSettings">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <div class="card">
+      <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
+      <select id="langSel" aria-label="Language"></select>
+      <label class="fieldlabel mt16" data-i18n="set.textsize">Dimensione del testo</label>
+      <div class="textsize" role="group" aria-label="Dimensione del testo">
+      <button type="button" data-ts="" title="Testo normale">A</button>
+      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
+      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
+    </div>
+    </div>
+
+    <div class="card">
+      <label class="fieldlabel" data-i18n="home.nameLabel">Come ti chiami</label>
+      <input type="text" id="nickInput" class="sans-input" maxlength="30" spellcheck="true" autocapitalize="words" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
     </div>
 
     <div class="card" id="addrCard">
@@ -190,35 +257,6 @@
         <button class="btn mt10" id="btnAddrDial"><span class="ic">📞</span><span data-i18n="addr.dial">Chiamalo</span></button>
         <div class="status" id="addrDialStatus"></div>
       </div>
-    </div>
-
-    <!-- Left while nobody was here. Collected once, then kept on this device
-         only: the server no longer has them to give again. -->
-    <div class="card hide" id="lettersCard">
-      <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
-      <div id="lettersList"></div>
-    </div>
-
-    <!-- Someone is calling the public address. Nothing is answered until this
-         is answered, because an address anyone may hold is an address anyone
-         may ring. -->
-    <div class="card hide" id="addrIncoming">
-      <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
-      <span class="whichaddr hide" id="addrIncomingWhich"></span>
-      <div class="whoknocks" id="addrIncomingWho"></div>
-      <div class="whyknocks hide" id="addrIncomingMsg"></div>
-      <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
-      <div class="toolsrow">
-        <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
-        <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
-      </div>
-    </div>
-
-    <div class="card hide" id="contactsCard">
-      <h3 data-i18n="contacts.title">Contatti recenti</h3>
-      <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
-        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
-      <div id="contactsList"></div>
     </div>
 
     <div class="card" id="easyCard">
@@ -424,7 +462,12 @@
   <section id="screenChat" class="hide">
     <div class="chatheader">
       <div class="avatar" id="peerAvatar">?</div>
-      <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span id="connState" data-i18n="chat.connected">connessa</span>
+      <!-- What the connection is actually doing, at a glance and without
+           reading: green means the two phones are talking directly, amber
+           means a hostile network forced the encrypted relay, red means it
+           has stopped. Read from the connection's own statistics, never
+           guessed. -->
+      <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span class="cdot" id="connDot" role="img"></span><span id="connState" data-i18n="chat.connected">connessa</span>
         · <button id="btnVerify" class="linkbtn" data-i18n="verify.badge">🔒 verifica</button></div>
       <button class="iconbtn" id="btnCallAudio" title="Chiamata">📞</button>
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata">🎥</button>
