@@ -79,6 +79,22 @@
     color:var(--accent2);background:var(--bg2);border:1px solid var(--line);
     border-radius:var(--r-sm);padding:16px 12px;margin:16px 0 12px;word-break:break-all;
     -webkit-user-select:all;user-select:all}
+  .burners{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+  .burners .helptext{margin-bottom:12px}
+  .burnerrow{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:8px;
+    background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm)}
+  .burnerrow .who{flex:1;min-width:0}
+  .burnerrow .who b{display:block;color:var(--ink);font-size:0.9375rem;font-weight:650;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .burnerrow .who code{display:block;font-family:var(--mono);font-size:0.8125rem;color:var(--accent2);
+    letter-spacing:.03em;margin-top:2px;-webkit-user-select:all;user-select:all}
+  .burnerrow button{flex:none;background:none;border:1px solid var(--line);border-radius:99px;
+    color:var(--dim);font-size:0.9375rem;padding:6px 11px;cursor:pointer}
+  .burnerrow button:hover{color:var(--ink);border-color:var(--dim)}
+  .burnerrow button.kill:hover{color:var(--bad);border-color:var(--bad)}
+  .burnernew{display:flex;flex-direction:column}
+  .whichaddr{display:block;color:var(--accent2);font-size:0.875rem;margin-bottom:4px}
+
   .addrdial{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
   input.mono{font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
   #addrIncoming b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
