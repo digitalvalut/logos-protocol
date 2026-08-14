@@ -126,7 +126,8 @@ Object.assign(I18N.en, {
 "wake.waitsNote":"You can close the app: I'll let you know when they open the invite.","wake.calling":"Letting {name} know…","wake.callingHint":"Their phone has been buzzed. The moment they open the app you're connected — you can wait here.","wake.noAnswer":"They've been alerted but haven't opened the app yet. Try again later.",
 "quick.helpAWaits":"Send it with the button below — the other person just taps it and they're in. Or read them the six digits out loud.",
 "verify.inPerson":"verified in person","verify.inPersonDone":"Verified in person: you scanned the code off this person's own screen, so nobody can have got in between. There is no need to read the three words.","sas.leadMismatch":"Careful: whoever answered is not the phone whose code you scanned. It may be a mistake, but it is also exactly what you would see if someone had got in between. Don't write anything until you have read the three words aloud to each other.",
-"easy.title":"👋 Simple mode","easy.sub":"Just two big buttons and nothing else around them. For anyone who would rather not think about any of it — or for whoever is setting the phone up for them.","easy.voiceTitle":"🔊 Say it out loud","easy.voiceSub":"The app tells you what to do in your own language. For anyone who finds the screen hard to read.","easy.voiceOn":"All right. From now on I'll tell you what to do out loud.","easy.sayHome":"Tap the first button to start a chat. Tap the second one if someone sent you an invite.","easy.sayStart":"This is your code. Press the orange button to send it to whoever you like.","easy.sayJoin":"Type the six digits you were given.","easy.sayChat":"You're connected. You can talk now."
+"easy.title":"👋 Simple mode","easy.sub":"Just two big buttons and nothing else around them. For anyone who would rather not think about any of it — or for whoever is setting the phone up for them.","easy.voiceTitle":"🔊 Say it out loud","easy.voiceSub":"The app tells you what to do in your own language. For anyone who finds the screen hard to read.","easy.voiceOn":"All right. From now on I'll tell you what to do out loud.","easy.sayHome":"Tap the first button to start a chat. Tap the second one if someone sent you an invite.","easy.sayStart":"This is your code. Press the orange button to send it to whoever you like.","easy.sayJoin":"Type the six digits you were given.","easy.sayChat":"You're connected. You can talk now.",
+"broker.down":"The service that helps you find each other isn't responding. The long code below still works: it goes through no server at all."
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -241,7 +242,8 @@ Object.assign(I18N.it, {
 "wake.waitsNote":"Puoi chiudere l'app: quando aprono l'invito ti avviso io.","wake.calling":"Sto avvisando {name}…","wake.callingHint":"Ho fatto squillare il suo telefono. Appena apre l'app siete connessi — puoi aspettare qui.","wake.noAnswer":"L'ho avvisata ma non ha ancora aperto l'app. Riprova più tardi.",
 "quick.helpAWaits":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce.",
 "verify.inPerson":"verificato di persona","verify.inPersonDone":"Verificato di persona: hai inquadrato il codice sullo schermo di questa persona, quindi nessuno può essersi messo in mezzo. Non serve dirsi le tre parole.","sas.leadMismatch":"Attenzione: chi ha risposto non è il telefono del codice che hai inquadrato. Può essere un errore, ma è anche esattamente ciò che si vedrebbe se qualcuno si fosse messo in mezzo. Non scrivere nulla finché non vi siete detti le tre parole a voce.",
-"easy.title":"👋 Modalità semplice","easy.sub":"Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.","easy.voiceTitle":"🔊 Dillo ad alta voce","easy.voiceSub":"L'app dice a voce cosa fare, nella tua lingua. Serve a chi fa fatica a leggere lo schermo.","easy.voiceOn":"Va bene. Da adesso ti dico a voce cosa fare.","easy.sayHome":"Tocca il primo pulsante per iniziare una chat. Tocca il secondo se ti hanno mandato un invito.","easy.sayStart":"Questo è il tuo codice. Premi il pulsante arancione per mandarlo a chi vuoi.","easy.sayJoin":"Scrivi le sei cifre che ti hanno dato.","easy.sayChat":"Siete connessi. Ora potete parlare."
+"easy.title":"👋 Modalità semplice","easy.sub":"Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.","easy.voiceTitle":"🔊 Dillo ad alta voce","easy.voiceSub":"L'app dice a voce cosa fare, nella tua lingua. Serve a chi fa fatica a leggere lo schermo.","easy.voiceOn":"Va bene. Da adesso ti dico a voce cosa fare.","easy.sayHome":"Tocca il primo pulsante per iniziare una chat. Tocca il secondo se ti hanno mandato un invito.","easy.sayStart":"Questo è il tuo codice. Premi il pulsante arancione per mandarlo a chi vuoi.","easy.sayJoin":"Scrivi le sei cifre che ti hanno dato.","easy.sayChat":"Siete connessi. Ora potete parlare.",
+"broker.down":"Il servizio che vi fa incontrare non risponde. Il codice lungo qui sotto funziona lo stesso: non passa da nessun server."
 });
 
 Object.assign(I18N.fr, {
@@ -349,7 +351,8 @@ Object.assign(I18N.fr, {
 "wake.waitsNote":"Vous pouvez fermer l'application : je vous préviens quand l'invitation sera ouverte.","wake.calling":"J'préviens {name}…","wake.callingHint":"Son téléphone a sonné. Dès qu'elle ouvre l'application, vous êtes connectés — vous pouvez attendre ici.","wake.noAnswer":"Elle a été prévenue mais n'a pas encore ouvert l'application. Réessayez plus tard.",
 "quick.helpAWaits":"Envoyez-le avec le bouton ci-dessous — l'autre personne n'a qu'à le toucher et elle est connectée. Ou dictez-lui les six chiffres à voix haute.",
 "verify.inPerson":"vérifié en personne","verify.inPersonDone":"Vérifié en personne : vous avez scanné le code sur l'écran de cette personne, donc personne n'a pu s'interposer. Inutile de vous dire les trois mots.","sas.leadMismatch":"Attention : la personne qui a répondu n'est pas le téléphone dont vous avez scanné le code. Cela peut être une erreur, mais c'est aussi exactement ce que l'on verrait si quelqu'un s'était interposé. N'écrivez rien avant de vous être dit les trois mots à voix haute.",
-"easy.title":"👋 Mode simple","easy.sub":"Deux grands boutons et rien d'autre autour. Pour qui préfère ne penser à rien — ou pour qui prépare le téléphone de quelqu'un d'autre.","easy.voiceTitle":"🔊 Dis-le à voix haute","easy.voiceSub":"L'application dit à voix haute quoi faire, dans votre langue. Pour qui a du mal à lire l'écran.","easy.voiceOn":"D'accord. À partir de maintenant je vous dis quoi faire à voix haute.","easy.sayHome":"Touchez le premier bouton pour commencer une discussion. Touchez le second si on vous a envoyé une invitation.","easy.sayStart":"Voici votre code. Appuyez sur le bouton orange pour l'envoyer à qui vous voulez.","easy.sayJoin":"Tapez les six chiffres qu'on vous a donnés.","easy.sayChat":"Vous êtes connectés. Vous pouvez parler."
+"easy.title":"👋 Mode simple","easy.sub":"Deux grands boutons et rien d'autre autour. Pour qui préfère ne penser à rien — ou pour qui prépare le téléphone de quelqu'un d'autre.","easy.voiceTitle":"🔊 Dis-le à voix haute","easy.voiceSub":"L'application dit à voix haute quoi faire, dans votre langue. Pour qui a du mal à lire l'écran.","easy.voiceOn":"D'accord. À partir de maintenant je vous dis quoi faire à voix haute.","easy.sayHome":"Touchez le premier bouton pour commencer une discussion. Touchez le second si on vous a envoyé une invitation.","easy.sayStart":"Voici votre code. Appuyez sur le bouton orange pour l'envoyer à qui vous voulez.","easy.sayJoin":"Tapez les six chiffres qu'on vous a donnés.","easy.sayChat":"Vous êtes connectés. Vous pouvez parler.",
+"broker.down":"Le service qui vous aide à vous trouver ne répond pas. Le code long ci-dessous fonctionne quand même : il ne passe par aucun serveur."
 });
 
 Object.assign(I18N.de, {
@@ -457,7 +460,8 @@ Object.assign(I18N.de, {
 "wake.waitsNote":"Du kannst die App schließen: Ich sage dir Bescheid, wenn die Einladung geöffnet wird.","wake.calling":"Ich benachrichtige {name}…","wake.callingHint":"Das Telefon hat gebrummt. Sobald die App geöffnet wird, seid ihr verbunden — du kannst hier warten.","wake.noAnswer":"Die Person wurde benachrichtigt, hat die App aber noch nicht geöffnet. Versuch es später noch einmal.",
 "quick.helpAWaits":"Schick ihn mit der Schaltfläche unten — die andere Person tippt einfach darauf und ist drin. Oder sag ihr die sechs Ziffern laut vor.",
 "verify.inPerson":"persönlich bestätigt","verify.inPersonDone":"Persönlich bestätigt: Du hast den Code vom Bildschirm dieser Person selbst gescannt, also kann sich niemand dazwischengeschoben haben. Die drei Wörter braucht ihr nicht.","sas.leadMismatch":"Achtung: Wer geantwortet hat, ist nicht das Telefon, dessen Code du gescannt hast. Das kann ein Versehen sein — es ist aber auch genau das, was man sähe, wenn sich jemand dazwischengeschoben hätte. Schreib nichts, bevor ihr euch die drei Wörter laut vorgelesen habt.",
-"easy.title":"👋 Einfacher Modus","easy.sub":"Nur zwei große Schaltflächen und sonst nichts. Für alle, die über nichts nachdenken möchten — oder für die Person, die das Telefon für sie einrichtet.","easy.voiceTitle":"🔊 Laut vorlesen","easy.voiceSub":"Die App sagt dir in deiner Sprache, was zu tun ist. Für alle, denen das Lesen am Bildschirm schwerfällt.","easy.voiceOn":"In Ordnung. Ab jetzt sage ich dir laut, was zu tun ist.","easy.sayHome":"Tippe auf die erste Schaltfläche, um einen Chat zu beginnen. Auf die zweite, wenn dir jemand eine Einladung geschickt hat.","easy.sayStart":"Das ist dein Code. Drück die orange Schaltfläche, um ihn zu verschicken.","easy.sayJoin":"Tippe die sechs Ziffern ein, die man dir gegeben hat.","easy.sayChat":"Ihr seid verbunden. Jetzt könnt ihr reden."
+"easy.title":"👋 Einfacher Modus","easy.sub":"Nur zwei große Schaltflächen und sonst nichts. Für alle, die über nichts nachdenken möchten — oder für die Person, die das Telefon für sie einrichtet.","easy.voiceTitle":"🔊 Laut vorlesen","easy.voiceSub":"Die App sagt dir in deiner Sprache, was zu tun ist. Für alle, denen das Lesen am Bildschirm schwerfällt.","easy.voiceOn":"In Ordnung. Ab jetzt sage ich dir laut, was zu tun ist.","easy.sayHome":"Tippe auf die erste Schaltfläche, um einen Chat zu beginnen. Auf die zweite, wenn dir jemand eine Einladung geschickt hat.","easy.sayStart":"Das ist dein Code. Drück die orange Schaltfläche, um ihn zu verschicken.","easy.sayJoin":"Tippe die sechs Ziffern ein, die man dir gegeben hat.","easy.sayChat":"Ihr seid verbunden. Jetzt könnt ihr reden.",
+"broker.down":"Der Dienst, über den ihr euch findet, antwortet nicht. Der lange Code unten funktioniert trotzdem: Er läuft über gar keinen Server."
 });
 
 Object.assign(I18N.es, {
@@ -565,7 +569,8 @@ Object.assign(I18N.es, {
 "wake.waitsNote":"Puedes cerrar la aplicación: te aviso cuando abran la invitación.","wake.calling":"Estoy avisando a {name}…","wake.callingHint":"Su teléfono ha sonado. En cuanto abra la aplicación estaréis conectados — puedes esperar aquí.","wake.noAnswer":"Le he avisado pero aún no ha abierto la aplicación. Inténtalo más tarde.",
 "quick.helpAWaits":"Envíalo con el botón de abajo — a la otra persona le basta con tocarlo y ya está dentro. O dile las seis cifras en voz alta.",
 "verify.inPerson":"verificado en persona","verify.inPersonDone":"Verificado en persona: has escaneado el código en la pantalla de esta persona, así que nadie ha podido meterse en medio. No hace falta deciros las tres palabras.","sas.leadMismatch":"Atención: quien ha respondido no es el teléfono cuyo código escaneaste. Puede ser un error, pero también es exactamente lo que se vería si alguien se hubiera metido en medio. No escribas nada hasta que os hayáis dicho las tres palabras en voz alta.",
-"easy.title":"👋 Modo sencillo","easy.sub":"Solo dos botones grandes y nada más alrededor. Para quien prefiere no pensar en nada — o para quien le prepara el teléfono a otra persona.","easy.voiceTitle":"🔊 Dilo en voz alta","easy.voiceSub":"La aplicación te dice en voz alta qué hacer, en tu idioma. Para quien le cuesta leer la pantalla.","easy.voiceOn":"De acuerdo. A partir de ahora te digo en voz alta qué hacer.","easy.sayHome":"Toca el primer botón para empezar una conversación. Toca el segundo si te han mandado una invitación.","easy.sayStart":"Este es tu código. Pulsa el botón naranja para mandárselo a quien quieras.","easy.sayJoin":"Escribe las seis cifras que te han dado.","easy.sayChat":"Estáis conectados. Ya podéis hablar."
+"easy.title":"👋 Modo sencillo","easy.sub":"Solo dos botones grandes y nada más alrededor. Para quien prefiere no pensar en nada — o para quien le prepara el teléfono a otra persona.","easy.voiceTitle":"🔊 Dilo en voz alta","easy.voiceSub":"La aplicación te dice en voz alta qué hacer, en tu idioma. Para quien le cuesta leer la pantalla.","easy.voiceOn":"De acuerdo. A partir de ahora te digo en voz alta qué hacer.","easy.sayHome":"Toca el primer botón para empezar una conversación. Toca el segundo si te han mandado una invitación.","easy.sayStart":"Este es tu código. Pulsa el botón naranja para mandárselo a quien quieras.","easy.sayJoin":"Escribe las seis cifras que te han dado.","easy.sayChat":"Estáis conectados. Ya podéis hablar.",
+"broker.down":"El servicio que os ayuda a encontraros no responde. El código largo de abajo funciona igualmente: no pasa por ningún servidor."
 });
 
 Object.assign(I18N.pt, {
@@ -673,7 +678,8 @@ Object.assign(I18N.pt, {
 "wake.waitsNote":"Pode fechar a aplicação: eu aviso-o quando abrirem o convite.","wake.calling":"A avisar {name}…","wake.callingHint":"O telemóvel tocou. Assim que abrir a aplicação ficam ligados — pode esperar aqui.","wake.noAnswer":"Já foi avisada mas ainda não abriu a aplicação. Tente mais tarde.",
 "quick.helpAWaits":"Envie-o com o botão abaixo — a outra pessoa só tem de tocar nele e está ligada. Ou diga-lhe os seis algarismos em voz alta.",
 "verify.inPerson":"verificado presencialmente","verify.inPersonDone":"Verificado presencialmente: leu o código no ecrã desta pessoa, portanto ninguém se pode ter metido pelo meio. Não é preciso dizerem as três palavras.","sas.leadMismatch":"Atenção: quem respondeu não é o telemóvel cujo código leu. Pode ser um engano, mas é também exatamente o que se veria se alguém se tivesse metido pelo meio. Não escreva nada enquanto não disserem as três palavras em voz alta.",
-"easy.title":"👋 Modo simples","easy.sub":"Apenas dois botões grandes e mais nada à volta. Para quem prefere não pensar em nada — ou para quem prepara o telemóvel a outra pessoa.","easy.voiceTitle":"🔊 Diz em voz alta","easy.voiceSub":"A aplicação diz em voz alta o que fazer, na sua língua. Para quem tem dificuldade em ler o ecrã.","easy.voiceOn":"Muito bem. A partir de agora digo-lhe em voz alta o que fazer.","easy.sayHome":"Toque no primeiro botão para começar uma conversa. Toque no segundo se lhe enviaram um convite.","easy.sayStart":"Este é o seu código. Carregue no botão laranja para o enviar a quem quiser.","easy.sayJoin":"Escreva os seis algarismos que lhe deram.","easy.sayChat":"Estão ligados. Já podem falar."
+"easy.title":"👋 Modo simples","easy.sub":"Apenas dois botões grandes e mais nada à volta. Para quem prefere não pensar em nada — ou para quem prepara o telemóvel a outra pessoa.","easy.voiceTitle":"🔊 Diz em voz alta","easy.voiceSub":"A aplicação diz em voz alta o que fazer, na sua língua. Para quem tem dificuldade em ler o ecrã.","easy.voiceOn":"Muito bem. A partir de agora digo-lhe em voz alta o que fazer.","easy.sayHome":"Toque no primeiro botão para começar uma conversa. Toque no segundo se lhe enviaram um convite.","easy.sayStart":"Este é o seu código. Carregue no botão laranja para o enviar a quem quiser.","easy.sayJoin":"Escreva os seis algarismos que lhe deram.","easy.sayChat":"Estão ligados. Já podem falar.",
+"broker.down":"O serviço que vos ajuda a encontrarem-se não responde. O código longo abaixo funciona na mesma: não passa por servidor nenhum."
 });
 
 Object.assign(I18N.ru, {
@@ -781,7 +787,8 @@ Object.assign(I18N.ru, {
 "wake.waitsNote":"Можно закрыть приложение: я сообщу, когда приглашение откроют.","wake.calling":"Сообщаю {name}…","wake.callingHint":"Телефон уже звонит. Как только приложение откроют, вы соединитесь — можно подождать здесь.","wake.noAnswer":"Я сообщил, но приложение ещё не открыли. Попробуйте позже.",
 "quick.helpAWaits":"Отправьте её кнопкой ниже — другому человеку достаточно нажать, и он внутри. Или продиктуйте шесть цифр вслух.",
 "verify.inPerson":"проверено лично","verify.inPersonDone":"Проверено лично: вы отсканировали код прямо с экрана этого человека, значит никто не мог вклиниться между вами. Три слова произносить не нужно.","sas.leadMismatch":"Внимание: ответил не тот телефон, чей код вы отсканировали. Возможно, это ошибка, но именно так выглядело бы и вклинивание постороннего. Ничего не пишите, пока не произнесёте друг другу три слова вслух.",
-"easy.title":"👋 Простой режим","easy.sub":"Только две большие кнопки и больше ничего. Для тех, кто не хочет ни о чём думать — или для того, кто настраивает телефон другому.","easy.voiceTitle":"🔊 Говорить вслух","easy.voiceSub":"Приложение вслух подсказывает, что делать, на вашем языке. Для тех, кому трудно читать с экрана.","easy.voiceOn":"Хорошо. Теперь я буду говорить вслух, что делать.","easy.sayHome":"Нажмите первую кнопку, чтобы начать разговор. Вторую — если вам прислали приглашение.","easy.sayStart":"Это ваш код. Нажмите оранжевую кнопку, чтобы отправить его кому хотите.","easy.sayJoin":"Введите шесть цифр, которые вам дали.","easy.sayChat":"Вы соединены. Теперь можно говорить."
+"easy.title":"👋 Простой режим","easy.sub":"Только две большие кнопки и больше ничего. Для тех, кто не хочет ни о чём думать — или для того, кто настраивает телефон другому.","easy.voiceTitle":"🔊 Говорить вслух","easy.voiceSub":"Приложение вслух подсказывает, что делать, на вашем языке. Для тех, кому трудно читать с экрана.","easy.voiceOn":"Хорошо. Теперь я буду говорить вслух, что делать.","easy.sayHome":"Нажмите первую кнопку, чтобы начать разговор. Вторую — если вам прислали приглашение.","easy.sayStart":"Это ваш код. Нажмите оранжевую кнопку, чтобы отправить его кому хотите.","easy.sayJoin":"Введите шесть цифр, которые вам дали.","easy.sayChat":"Вы соединены. Теперь можно говорить.",
+"broker.down":"Служба, которая помогает вам найти друг друга, не отвечает. Длинный код ниже работает всё равно: он не проходит ни через какой сервер."
 });
 
 Object.assign(I18N.zh, {
@@ -889,7 +896,8 @@ Object.assign(I18N.zh, {
 "wake.waitsNote":"你可以关闭应用：邀请被打开时我会通知你。","wake.calling":"正在通知 {name}…","wake.callingHint":"对方的手机已经响了。只要对方打开应用，你们就会连接上——可以在这里等待。","wake.noAnswer":"已经通知过了，但对方还没有打开应用。请稍后再试。",
 "quick.helpAWaits":"用下面的按钮发送——对方只要点一下就连上了。或者把这六位数字念给对方听。",
 "verify.inPerson":"已当面验证","verify.inPersonDone":"已当面验证：你是从对方本人的屏幕上扫的码，所以不可能有人插在中间。不需要再核对那三个词。","sas.leadMismatch":"注意：应答的并不是你扫码的那部手机。这可能是个误会，但如果真有人插在中间，看到的也正是这样。在你们当面核对完那三个词之前，不要写任何内容。",
-"easy.title":"👋 简单模式","easy.sub":"只有两个大按钮，周围什么都没有。给不想操心的人——也给替别人设置手机的人。","easy.voiceTitle":"🔊 读出来","easy.voiceSub":"应用会用你的语言把该做的事读出来。适合看屏幕吃力的人。","easy.voiceOn":"好的。从现在起我会把该做的事读给你听。","easy.sayHome":"点第一个按钮开始聊天。如果别人给你发了邀请，就点第二个。","easy.sayStart":"这是你的号码。按橙色按钮把它发给你想发的人。","easy.sayJoin":"输入别人给你的六位数字。","easy.sayChat":"已经连上了。现在可以说话了。"
+"easy.title":"👋 简单模式","easy.sub":"只有两个大按钮，周围什么都没有。给不想操心的人——也给替别人设置手机的人。","easy.voiceTitle":"🔊 读出来","easy.voiceSub":"应用会用你的语言把该做的事读出来。适合看屏幕吃力的人。","easy.voiceOn":"好的。从现在起我会把该做的事读给你听。","easy.sayHome":"点第一个按钮开始聊天。如果别人给你发了邀请，就点第二个。","easy.sayStart":"这是你的号码。按橙色按钮把它发给你想发的人。","easy.sayJoin":"输入别人给你的六位数字。","easy.sayChat":"已经连上了。现在可以说话了。",
+"broker.down":"帮你们互相找到对方的服务没有响应。下面的长号码照样能用：它完全不经过任何服务器。"
 });
 
 Object.assign(I18N.ar, {
@@ -997,7 +1005,8 @@ Object.assign(I18N.ar, {
 "wake.waitsNote":"يمكنك إغلاق التطبيق: سأخبرك عندما تُفتح الدعوة.","wake.calling":"أُبلغ {name}…","wake.callingHint":"لقد رنّ هاتفه. بمجرد فتح التطبيق ستكونان متصلين — يمكنك الانتظار هنا.","wake.noAnswer":"تم إبلاغه لكنه لم يفتح التطبيق بعد. حاول لاحقًا.",
 "quick.helpAWaits":"أرسله بالزر أدناه — يكفي أن يلمسه الشخص الآخر ليدخل. أو اقرأ له الأرقام الستة بصوت عالٍ.",
 "verify.inPerson":"تم التحقق شخصيًا","verify.inPersonDone":"تم التحقق شخصيًا: لقد مسحت الرمز من شاشة هذا الشخص نفسه، فلا يمكن لأحد أن يكون قد توسّط بينكما. لا حاجة لقول الكلمات الثلاث.","sas.leadMismatch":"انتبه: من ردّ ليس الهاتف الذي مسحت رمزه. قد يكون خطأً، لكنه أيضًا بالضبط ما كنت ستراه لو تدخّل أحد بينكما. لا تكتب شيئًا قبل أن تتبادلا الكلمات الثلاث بصوت مسموع.",
-"easy.title":"👋 الوضع البسيط","easy.sub":"زرّان كبيران فقط ولا شيء آخر حولهما. لمن لا يريد التفكير في شيء — أو لمن يُعدّ الهاتف لشخص آخر.","easy.voiceTitle":"🔊 قُلها بصوت عالٍ","easy.voiceSub":"يقول لك التطبيق بصوت عالٍ ما عليك فعله، بلغتك. لمن يجد صعوبة في قراءة الشاشة.","easy.voiceOn":"حسنًا. من الآن سأقول لك بصوت عالٍ ما عليك فعله.","easy.sayHome":"المس الزر الأول لبدء محادثة. والمس الثاني إذا أرسل لك أحدهم دعوة.","easy.sayStart":"هذا هو رمزك. اضغط الزر البرتقالي لإرساله لمن تشاء.","easy.sayJoin":"اكتب الأرقام الستة التي أُعطيت لك.","easy.sayChat":"تم الاتصال. يمكنكما التحدث الآن."
+"easy.title":"👋 الوضع البسيط","easy.sub":"زرّان كبيران فقط ولا شيء آخر حولهما. لمن لا يريد التفكير في شيء — أو لمن يُعدّ الهاتف لشخص آخر.","easy.voiceTitle":"🔊 قُلها بصوت عالٍ","easy.voiceSub":"يقول لك التطبيق بصوت عالٍ ما عليك فعله، بلغتك. لمن يجد صعوبة في قراءة الشاشة.","easy.voiceOn":"حسنًا. من الآن سأقول لك بصوت عالٍ ما عليك فعله.","easy.sayHome":"المس الزر الأول لبدء محادثة. والمس الثاني إذا أرسل لك أحدهم دعوة.","easy.sayStart":"هذا هو رمزك. اضغط الزر البرتقالي لإرساله لمن تشاء.","easy.sayJoin":"اكتب الأرقام الستة التي أُعطيت لك.","easy.sayChat":"تم الاتصال. يمكنكما التحدث الآن.",
+"broker.down":"الخدمة التي تساعدكما على إيجاد بعضكما لا تستجيب. الرمز الطويل بالأسفل يعمل رغم ذلك: فهو لا يمر عبر أي خادم إطلاقًا."
 });
 
 Object.assign(I18N.ur, {
@@ -1105,7 +1114,8 @@ Object.assign(I18N.ur, {
 "wake.waitsNote":"آپ ایپ بند کر سکتے ہیں: جب دعوت کھولی جائے گی تو میں آپ کو بتا دوں گا۔","wake.calling":"{name} کو اطلاع دی جا رہی ہے…","wake.callingHint":"ان کا فون بج چکا ہے۔ جیسے ہی وہ ایپ کھولیں گے آپ جڑ جائیں گے — آپ یہاں انتظار کر سکتے ہیں۔","wake.noAnswer":"انہیں اطلاع دے دی گئی ہے لیکن انہوں نے ابھی تک ایپ نہیں کھولی۔ بعد میں دوبارہ کوشش کریں۔",
 "quick.helpAWaits":"نیچے دیے گئے بٹن سے بھیجیں — دوسرے شخص کو بس اسے چھونا ہے اور وہ اندر ہے۔ یا انہیں چھ ہندسے بول کر بتا دیں۔",
 "verify.inPerson":"بالمشافہ تصدیق شدہ","verify.inPersonDone":"بالمشافہ تصدیق شدہ: آپ نے کوڈ اسی شخص کی اپنی اسکرین سے اسکین کیا ہے، لہٰذا کوئی درمیان میں نہیں آ سکتا۔ تین الفاظ کہنے کی ضرورت نہیں۔","sas.leadMismatch":"خبردار: جواب دینے والا وہ فون نہیں جس کا کوڈ آپ نے اسکین کیا تھا۔ یہ غلطی ہو سکتی ہے، لیکن اگر کوئی درمیان میں آ گیا ہوتا تو بھی بالکل ایسا ہی دکھائی دیتا۔ جب تک آپ ایک دوسرے کو تین الفاظ بول کر نہ بتا لیں، کچھ نہ لکھیں۔",
-"easy.title":"👋 آسان موڈ","easy.sub":"صرف دو بڑے بٹن اور ان کے ارد گرد کچھ نہیں۔ اُن کے لیے جو کچھ سوچنا نہیں چاہتے — یا اُس کے لیے جو کسی اور کا فون تیار کر رہا ہے۔","easy.voiceTitle":"🔊 بول کر بتاؤ","easy.voiceSub":"ایپ آپ کی زبان میں بول کر بتاتی ہے کہ کیا کرنا ہے۔ اُن کے لیے جنہیں اسکرین پڑھنا مشکل لگتا ہے۔","easy.voiceOn":"ٹھیک ہے۔ اب سے میں بول کر بتاؤں گا کہ کیا کرنا ہے۔","easy.sayHome":"بات چیت شروع کرنے کے لیے پہلا بٹن دبائیں۔ اگر کسی نے آپ کو دعوت بھیجی ہے تو دوسرا دبائیں۔","easy.sayStart":"یہ آپ کا کوڈ ہے۔ جسے چاہیں بھیجنے کے لیے نارنجی بٹن دبائیں۔","easy.sayJoin":"جو چھ ہندسے آپ کو دیے گئے ہیں وہ لکھیں۔","easy.sayChat":"رابطہ ہو گیا۔ اب آپ بات کر سکتے ہیں۔"
+"easy.title":"👋 آسان موڈ","easy.sub":"صرف دو بڑے بٹن اور ان کے ارد گرد کچھ نہیں۔ اُن کے لیے جو کچھ سوچنا نہیں چاہتے — یا اُس کے لیے جو کسی اور کا فون تیار کر رہا ہے۔","easy.voiceTitle":"🔊 بول کر بتاؤ","easy.voiceSub":"ایپ آپ کی زبان میں بول کر بتاتی ہے کہ کیا کرنا ہے۔ اُن کے لیے جنہیں اسکرین پڑھنا مشکل لگتا ہے۔","easy.voiceOn":"ٹھیک ہے۔ اب سے میں بول کر بتاؤں گا کہ کیا کرنا ہے۔","easy.sayHome":"بات چیت شروع کرنے کے لیے پہلا بٹن دبائیں۔ اگر کسی نے آپ کو دعوت بھیجی ہے تو دوسرا دبائیں۔","easy.sayStart":"یہ آپ کا کوڈ ہے۔ جسے چاہیں بھیجنے کے لیے نارنجی بٹن دبائیں۔","easy.sayJoin":"جو چھ ہندسے آپ کو دیے گئے ہیں وہ لکھیں۔","easy.sayChat":"رابطہ ہو گیا۔ اب آپ بات کر سکتے ہیں۔",
+"broker.down":"وہ سروس جو آپ کو ایک دوسرے تک پہنچاتی ہے جواب نہیں دے رہی۔ نیچے دیا گیا لمبا کوڈ پھر بھی کام کرتا ہے: یہ کسی سرور سے نہیں گزرتا۔"
 });
 
 Object.assign(I18N.hi, {
@@ -1213,7 +1223,8 @@ Object.assign(I18N.hi, {
 "wake.waitsNote":"आप ऐप बंद कर सकते हैं: जब वे निमंत्रण खोलेंगे तो मैं आपको बता दूंगा।","wake.calling":"{name} को बता रहा हूँ…","wake.callingHint":"उनका फ़ोन बज चुका है। जैसे ही वे ऐप खोलेंगे, आप जुड़ जाएंगे — आप यहाँ इंतज़ार कर सकते हैं।","wake.noAnswer":"उन्हें बता दिया गया है लेकिन उन्होंने अभी तक ऐप नहीं खोला। बाद में फिर कोशिश करें।",
 "quick.helpAWaits":"नीचे दिए बटन से भेजें — दूसरे व्यक्ति को बस उसे छूना है और वे अंदर हैं। या उन्हें छह अंक बोलकर बता दें।",
 "verify.inPerson":"आमने-सामने सत्यापित","verify.inPersonDone":"आमने-सामने सत्यापित: आपने कोड इसी व्यक्ति की स्क्रीन से स्कैन किया है, इसलिए कोई बीच में नहीं आ सकता। तीन शब्द बोलने की ज़रूरत नहीं।","sas.leadMismatch":"सावधान: जिसने जवाब दिया वह वह फ़ोन नहीं है जिसका कोड आपने स्कैन किया था। यह ग़लती हो सकती है, लेकिन अगर कोई बीच में आ गया होता तो भी ठीक ऐसा ही दिखता। जब तक आप एक-दूसरे को तीन शब्द बोलकर न बता लें, कुछ न लिखें।",
-"easy.title":"👋 आसान मोड","easy.sub":"बस दो बड़े बटन और आसपास कुछ नहीं। उनके लिए जो कुछ सोचना नहीं चाहते — या जो किसी और का फ़ोन तैयार कर रहे हैं।","easy.voiceTitle":"🔊 बोलकर बताओ","easy.voiceSub":"ऐप आपकी भाषा में बोलकर बताता है कि क्या करना है। उनके लिए जिन्हें स्क्रीन पढ़ना मुश्किल लगता है।","easy.voiceOn":"ठीक है। अब से मैं बोलकर बताऊंगा कि क्या करना है।","easy.sayHome":"बातचीत शुरू करने के लिए पहला बटन दबाएं। अगर किसी ने आपको निमंत्रण भेजा है तो दूसरा दबाएं।","easy.sayStart":"यह आपका कोड है। जिसे चाहें भेजने के लिए नारंगी बटन दबाएं।","easy.sayJoin":"आपको दिए गए छह अंक लिखें।","easy.sayChat":"जुड़ गए। अब आप बात कर सकते हैं।"
+"easy.title":"👋 आसान मोड","easy.sub":"बस दो बड़े बटन और आसपास कुछ नहीं। उनके लिए जो कुछ सोचना नहीं चाहते — या जो किसी और का फ़ोन तैयार कर रहे हैं।","easy.voiceTitle":"🔊 बोलकर बताओ","easy.voiceSub":"ऐप आपकी भाषा में बोलकर बताता है कि क्या करना है। उनके लिए जिन्हें स्क्रीन पढ़ना मुश्किल लगता है।","easy.voiceOn":"ठीक है। अब से मैं बोलकर बताऊंगा कि क्या करना है।","easy.sayHome":"बातचीत शुरू करने के लिए पहला बटन दबाएं। अगर किसी ने आपको निमंत्रण भेजा है तो दूसरा दबाएं।","easy.sayStart":"यह आपका कोड है। जिसे चाहें भेजने के लिए नारंगी बटन दबाएं।","easy.sayJoin":"आपको दिए गए छह अंक लिखें।","easy.sayChat":"जुड़ गए। अब आप बात कर सकते हैं।",
+"broker.down":"जो सेवा आपको एक-दूसरे तक पहुँचाती है वह जवाब नहीं दे रही। नीचे दिया लंबा कोड फिर भी काम करता है: यह किसी सर्वर से नहीं गुज़रता।"
 });
 
 Object.assign(I18N.bn, {
@@ -1321,7 +1332,8 @@ Object.assign(I18N.bn, {
 "wake.waitsNote":"আপনি অ্যাপটি বন্ধ করতে পারেন: আমন্ত্রণ খোলা হলে আমি আপনাকে জানাব।","wake.calling":"{name}-কে জানানো হচ্ছে…","wake.callingHint":"তাঁর ফোন বেজে উঠেছে। তিনি অ্যাপ খোলামাত্র আপনারা যুক্ত হয়ে যাবেন — আপনি এখানে অপেক্ষা করতে পারেন।","wake.noAnswer":"তাঁকে জানানো হয়েছে কিন্তু তিনি এখনও অ্যাপ খোলেননি। পরে আবার চেষ্টা করুন।",
 "quick.helpAWaits":"নিচের বোতাম দিয়ে পাঠান — অন্য ব্যক্তিকে শুধু সেটিতে চাপ দিতে হবে, ব্যস। অথবা তাঁকে ছয়টি সংখ্যা মুখে বলে দিন।",
 "verify.inPerson":"সামনাসামনি যাচাই করা","verify.inPersonDone":"সামনাসামনি যাচাই করা: আপনি কোডটি এই ব্যক্তিরই স্ক্রিন থেকে স্ক্যান করেছেন, তাই কেউ মাঝখানে ঢুকতে পারেনি। তিনটি শব্দ বলার দরকার নেই।","sas.leadMismatch":"সাবধান: যে সাড়া দিয়েছে সেটি আপনার স্ক্যান করা কোডের ফোন নয়। এটি ভুল হতে পারে, কিন্তু কেউ মাঝখানে ঢুকে পড়লেও ঠিক এমনটাই দেখা যেত। একে অপরকে মুখে তিনটি শব্দ না বলা পর্যন্ত কিছু লিখবেন না।",
-"easy.title":"👋 সহজ মোড","easy.sub":"শুধু দুটি বড় বোতাম, আশেপাশে আর কিছু নেই। যাঁরা কিছু ভাবতে চান না তাঁদের জন্য — বা যিনি অন্য কারও ফোন গুছিয়ে দিচ্ছেন তাঁর জন্য।","easy.voiceTitle":"🔊 জোরে বলে দাও","easy.voiceSub":"অ্যাপটি আপনার ভাষায় বলে দেয় কী করতে হবে। যাঁদের পর্দা পড়তে কষ্ট হয় তাঁদের জন্য।","easy.voiceOn":"ঠিক আছে। এখন থেকে আমি বলে দেব কী করতে হবে।","easy.sayHome":"কথা শুরু করতে প্রথম বোতামে চাপ দিন। কেউ আমন্ত্রণ পাঠিয়ে থাকলে দ্বিতীয়টিতে চাপ দিন।","easy.sayStart":"এটি আপনার কোড। যাকে চান পাঠাতে কমলা বোতামে চাপ দিন।","easy.sayJoin":"আপনাকে দেওয়া ছয়টি সংখ্যা লিখুন।","easy.sayChat":"যুক্ত হয়ে গেছে। এখন কথা বলতে পারেন।"
+"easy.title":"👋 সহজ মোড","easy.sub":"শুধু দুটি বড় বোতাম, আশেপাশে আর কিছু নেই। যাঁরা কিছু ভাবতে চান না তাঁদের জন্য — বা যিনি অন্য কারও ফোন গুছিয়ে দিচ্ছেন তাঁর জন্য।","easy.voiceTitle":"🔊 জোরে বলে দাও","easy.voiceSub":"অ্যাপটি আপনার ভাষায় বলে দেয় কী করতে হবে। যাঁদের পর্দা পড়তে কষ্ট হয় তাঁদের জন্য।","easy.voiceOn":"ঠিক আছে। এখন থেকে আমি বলে দেব কী করতে হবে।","easy.sayHome":"কথা শুরু করতে প্রথম বোতামে চাপ দিন। কেউ আমন্ত্রণ পাঠিয়ে থাকলে দ্বিতীয়টিতে চাপ দিন।","easy.sayStart":"এটি আপনার কোড। যাকে চান পাঠাতে কমলা বোতামে চাপ দিন।","easy.sayJoin":"আপনাকে দেওয়া ছয়টি সংখ্যা লিখুন।","easy.sayChat":"যুক্ত হয়ে গেছে। এখন কথা বলতে পারেন।",
+"broker.down":"যে পরিষেবা আপনাদের একে অপরকে খুঁজে পেতে সাহায্য করে সেটি সাড়া দিচ্ছে না। নিচের লম্বা কোডটি তবুও কাজ করে: এটি কোনো সার্ভারের মধ্য দিয়ে যায় না।"
 });
 
 Object.assign(I18N.id, {
@@ -1429,7 +1441,8 @@ Object.assign(I18N.id, {
 "wake.waitsNote":"Anda boleh menutup aplikasi: saya akan memberi tahu saat undangan dibuka.","wake.calling":"Memberi tahu {name}…","wake.callingHint":"Ponselnya sudah berdering. Begitu aplikasi dibuka, Anda langsung terhubung — Anda bisa menunggu di sini.","wake.noAnswer":"Sudah diberi tahu tetapi aplikasinya belum dibuka. Coba lagi nanti.",
 "quick.helpAWaits":"Kirim dengan tombol di bawah — orang lain tinggal menyentuhnya dan langsung masuk. Atau bacakan enam angkanya dengan suara.",
 "verify.inPerson":"terverifikasi langsung","verify.inPersonDone":"Terverifikasi langsung: Anda memindai kode dari layar orang ini sendiri, jadi tidak ada yang bisa menyelip di tengah. Tidak perlu menyebutkan tiga kata itu.","sas.leadMismatch":"Hati-hati: yang menjawab bukan ponsel yang kodenya Anda pindai. Bisa jadi kekeliruan, tetapi itu juga persis yang akan terlihat jika ada yang menyelip di tengah. Jangan menulis apa pun sebelum kalian saling menyebutkan tiga kata itu dengan suara.",
-"easy.title":"👋 Mode sederhana","easy.sub":"Hanya dua tombol besar dan tidak ada apa-apa lagi di sekelilingnya. Untuk siapa pun yang tidak ingin memikirkan apa pun — atau untuk yang menyiapkan ponsel bagi orang lain.","easy.voiceTitle":"🔊 Bacakan dengan suara","easy.voiceSub":"Aplikasi memberi tahu apa yang harus dilakukan dengan suara, dalam bahasa Anda. Untuk yang kesulitan membaca layar.","easy.voiceOn":"Baik. Mulai sekarang saya akan memberi tahu dengan suara apa yang harus dilakukan.","easy.sayHome":"Sentuh tombol pertama untuk memulai obrolan. Sentuh yang kedua jika ada yang mengirimi Anda undangan.","easy.sayStart":"Ini kode Anda. Tekan tombol oranye untuk mengirimkannya kepada siapa pun.","easy.sayJoin":"Ketik enam angka yang diberikan kepada Anda.","easy.sayChat":"Sudah terhubung. Sekarang Anda bisa bicara."
+"easy.title":"👋 Mode sederhana","easy.sub":"Hanya dua tombol besar dan tidak ada apa-apa lagi di sekelilingnya. Untuk siapa pun yang tidak ingin memikirkan apa pun — atau untuk yang menyiapkan ponsel bagi orang lain.","easy.voiceTitle":"🔊 Bacakan dengan suara","easy.voiceSub":"Aplikasi memberi tahu apa yang harus dilakukan dengan suara, dalam bahasa Anda. Untuk yang kesulitan membaca layar.","easy.voiceOn":"Baik. Mulai sekarang saya akan memberi tahu dengan suara apa yang harus dilakukan.","easy.sayHome":"Sentuh tombol pertama untuk memulai obrolan. Sentuh yang kedua jika ada yang mengirimi Anda undangan.","easy.sayStart":"Ini kode Anda. Tekan tombol oranye untuk mengirimkannya kepada siapa pun.","easy.sayJoin":"Ketik enam angka yang diberikan kepada Anda.","easy.sayChat":"Sudah terhubung. Sekarang Anda bisa bicara.",
+"broker.down":"Layanan yang membantu kalian saling menemukan tidak merespons. Kode panjang di bawah tetap berfungsi: ia tidak melewati server mana pun."
 });
 
 function t(key, fallback){
@@ -2588,16 +2601,42 @@ async function pairKey(fromFp, toFp){
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(fromFp + '>' + toFp));
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')).join('');
 }
+/* ---------------- knowing the difference between "empty" and "unreachable" ----------------
+   An empty mailbox and a mailbox that cannot be reached at all look identical
+   from the calling code — both are "nothing came back" — and the app used to
+   treat them the same, which produced the worst possible message: someone
+   whose helper Worker was down was told their code was wrong. It was not.
+   Nothing was wrong with it; there was simply nothing on the other end to hold
+   it. Worth separating, because the honest answer has a way out attached: the
+   long invite code passes through no server whatsoever, so it keeps working
+   when everything here does not. */
+let brokerReachable = true;
 async function mailboxPut(key, obj){
-  try{ const res = await fetch(MAILBOX_BASE + key, { method:'PUT', body: JSON.stringify(obj) }); return res.ok; }
-  catch(e){ return false; }
+  try{
+    const res = await fetch(MAILBOX_BASE + key, { method:'PUT', body: JSON.stringify(obj) });
+    brokerReachable = true;
+    return res.ok;
+  }catch(e){ brokerReachable = false; return false; }
 }
 async function mailboxGet(key){
   try{
     const res = await fetch(MAILBOX_BASE + key, { method:'GET' });
+    brokerReachable = true; /* a 404 is a perfectly healthy answer: the slot is empty */
     if (res.status !== 200) return null;
     return await res.json();
-  }catch(e){ return null; }
+  }catch(e){ brokerReachable = false; return null; }
+}
+
+/* Says what actually happened and hands over the thing that still works,
+   rather than leaving someone poking at a code that was never the problem. */
+function brokerDownFallback(side){
+  if (side === 'A'){
+    hideBigConnectingA(false); /* false: reveal the long-code layout */
+    setStatus($('statusA'), t('broker.down','Il servizio che vi fa incontrare non risponde. Il codice lungo qui sotto funziona lo stesso: non passa da nessun server.'), 'bad');
+  } else {
+    hideBigConnectingB(false);
+    setStatus($('statusB'), t('broker.down','Il servizio che vi fa incontrare non risponde. Il codice lungo qui sotto funziona lo stesso: non passa da nessun server.'), 'bad');
+  }
 }
 
 /* ============ nothing readable ever reaches the mailbox ============
@@ -3331,7 +3370,14 @@ async function startQuickShare(existingCode, quiet){
   const offerKey = await slotId(sec.seed, 'offer');
   const answerKey = await slotId(sec.seed, 'answer');
   /* published straight away, candidates or not — they follow on their own */
-  await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
+  const published = await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
+  if (!published && !brokerReachable){
+    /* nothing to wait for: no code was ever put anywhere for anyone to find */
+    pump.stop();
+    clearPendingInvite();
+    if (!quiet) brokerDownFallback('A');
+    return;
+  }
 
   /* the note that lets this invite outlive the screen it was made on, and the
      code itself so that opening the app again can resume this exact invite */
@@ -3515,12 +3561,14 @@ async function tryQuickConnect(){
     /* a wrong code and an expired one are indistinguishable here by design:
        without the right key nothing decrypts, so there is nothing to tell apart */
     if (!msg || !msg.sdp){
+      quickConnecting = false;
+      $('btnQuickConnect').disabled = false;
+      /* the code was never the problem if there was nothing there to ask */
+      if (!brokerReachable){ brokerDownFallback('B'); return; }
       hideBigConnectingB(true);
       setStatus($('quickStatusB'), knocked
         ? t('wake.noAnswer','L\'ho avvisata ma non ha ancora aperto l\'app. Riprova più tardi.')
         : t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
-      quickConnecting = false;
-      $('btnQuickConnect').disabled = false;
       return;
     }
     /* back to the ordinary wording for the handshake that is about to run */
