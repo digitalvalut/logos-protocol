@@ -29,17 +29,33 @@
       guessed or leaked endpoint could not produce, since they would not have
       a subscription to send to in the first place.
       Needs VAPID_PUBLIC_KEY (plain text) and VAPID_PRIVATE_JWK (secret) — see
-      README.md. */
+      README.md.
 
-const ALLOWED_ORIGIN = 'https://digitalvalut.github.io';
+   4. A wake slot (PUT/GET /wake/:key) — lets an invite survive being closed, so
+      two people no longer have to be looking at their screens in the same
+      minute. Holds one sealed blob saying how to buzz whoever made the invite,
+      readable only by someone who already has the invite code. Same KV
+      namespace, longer life, and reading does not consume it. See the comment
+      above handleWake for the trade-off this makes and why. */
+
+/* More than one origin is allowed so the app can move to its own domain without
+   a moment where connections stop working: both answer for as long as the move
+   takes, and the old one can be dropped afterwards. */
+const ALLOWED_ORIGINS = [
+  'https://digitalvalut.github.io',
+  'https://logos.digitalvalut.it',
+];
+const ALLOWED_ORIGIN = ALLOWED_ORIGINS[0]; // what an unknown origin is answered with
 const TURN_TTL_SECONDS = 86400; // 24h — long enough for the longest realistic call
 const MAILBOX_TTL_SECONDS = 120; // long enough to open the app and be found, no longer
+const WAKE_TTL_SECONDS = 24 * 3600; // an invite is opened when the other person next picks up their phone
 const MAX_BODY_BYTES = 8192; // an encrypted offer/answer is ~1.5KB once sealed and base64'd; this is generous headroom
+const MAX_WAKE_BYTES = 1024; // a sealed push subscription and nothing else
 const KEY_RE = /^[0-9a-f]{64}$/; // a hex SHA-256, nothing else is a valid mailbox key
 
 function corsHeaders(origin){
   return {
-    'Access-Control-Allow-Origin': origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN,
+    'Access-Control-Allow-Origin': ALLOWED_ORIGINS.indexOf(origin) >= 0 ? origin : ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Vary': 'Origin',
@@ -189,6 +205,54 @@ async function handleKnock(request, env, cors){
   }
 }
 
+/* ---------------- the wake slot: an invite that survives being closed ----------------
+   The mailbox above lives two minutes, which is right for a handshake and wrong
+   for real life: an invite sent over WhatsApp is not opened in the next ninety
+   seconds, it is opened when the other person next picks up their phone. Before
+   this, that meant the invite was simply dead by then, and the two people had to
+   be looking at their screens at the same moment for anything to happen at all.
+
+   This slot holds one thing and nothing else: how to buzz the person who made
+   the invite, so that whoever opens it later can say "come back, I'm here". It
+   is sealed with the key derived from the invite code, exactly like everything
+   in the mailbox, so this Worker cannot read it either — what it stores is an
+   opaque blob it has no way to interpret.
+
+   Two deliberate differences from the mailbox. It lives 24 hours, because that
+   is the honest span of "I'll look at my phone later". And reading does not
+   delete, because the person opening an invite may well have to try twice, and
+   an invite that stopped working after one look would be the same problem in a
+   different costume.
+
+   The trade-off, stated plainly: someone who guessed an invite code could read
+   this slot and cause the phone that made the invite to buzz. They would learn
+   nothing — no name, no message, no contacts, and the notification itself
+   carries no content — and the knock limiter caps it at six in five minutes per
+   person. A stranger being able to make a phone buzz six times is a real cost;
+   being unable to reach anyone who isn't staring at their screen was a larger
+   one. */
+async function handleWake(request, env, cors, key){
+  if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
+  if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
+
+  if (request.method === 'PUT'){
+    const body = await request.text();
+    if (!body || body.length > MAX_WAKE_BYTES) return json({ error: 'bad body' }, 400, cors);
+    await env.MAILBOX.put('w:' + key, body, { expirationTtl: WAKE_TTL_SECONDS });
+    return json({ ok: true }, 200, cors);
+  }
+
+  if (request.method === 'GET'){
+    if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
+    const val = await env.MAILBOX.get('w:' + key);
+    if (val === null) return json({ empty: true }, 404, cors);
+    /* left in place on purpose — see above */
+    return new Response(val, { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+  }
+
+  return json({ error: 'method not allowed' }, 405, cors);
+}
+
 async function handleMailbox(request, env, cors, key){
   if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
   if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
@@ -231,7 +295,7 @@ export default {
        casual, accidental kind of abuse (someone finding the URL and hammering
        it) without adding a login this app was built specifically not to
        have. */
-    if (origin && origin !== ALLOWED_ORIGIN) return json({ error: 'Forbidden' }, 403, cors);
+    if (origin && ALLOWED_ORIGINS.indexOf(origin) < 0) return json({ error: 'Forbidden' }, 403, cors);
 
     if (url.pathname === '/' || url.pathname === '/turn'){
       if (request.method !== 'GET') return json({ error: 'method not allowed' }, 405, cors);
@@ -240,6 +304,9 @@ export default {
 
     const m = url.pathname.match(/^\/mailbox\/([0-9a-f]{64})$/);
     if (m) return handleMailbox(request, env, cors, m[1]);
+
+    const w = url.pathname.match(/^\/wake\/([0-9a-f]{64})$/);
+    if (w) return handleWake(request, env, cors, w[1]);
 
     if (url.pathname === '/knock'){
       if (request.method !== 'POST') return json({ error: 'method not allowed' }, 405, cors);

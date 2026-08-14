@@ -126,6 +126,12 @@
      and copyable, so a failure can be photographed or read out loud instead of
      staying an unexplained blank screen */
   .diagline{font-family:var(--mono);font-size:0.75rem;color:var(--faint);margin-top:8px;line-height:1.6}
+  /* only ever shown once the invite really can outlive this screen — it is a
+     promise the app has already checked it can keep */
+  .waitsnote{display:flex;align-items:center;gap:9px;margin-top:14px;padding:11px 13px;
+    background:rgba(122,162,255,0.09);border:1px solid rgba(122,162,255,0.28);
+    border-radius:var(--r-sm);color:var(--dim);font-size:0.875rem;line-height:1.5}
+  .waitsnote .ic{font-size:1.05rem;flex:none}
   .hide{display:none!important}
   .codebox{font-family:var(--mono);font-size:0.6875rem;background:#0d0f12;border:1px solid var(--line);
     border-radius:var(--r-sm);padding:10px 12px;color:var(--dim);word-break:break-all;max-height:80px;

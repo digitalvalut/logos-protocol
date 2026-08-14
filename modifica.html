@@ -138,19 +138,23 @@
 
     <div class="card bigconnecting hide" id="bigConnectingA">
       <div class="spinner" aria-hidden="true"></div>
-      <div class="bigTitle" data-i18n="connect.bigTitle">Connessione in corso…</div>
-      <div class="bigHint" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+      <div class="bigTitle" id="bigTitleA" data-i18n="connect.bigTitle">Connessione in corso…</div>
+      <div class="bigHint" id="bigHintA" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
     </div>
 
     <div class="card" id="quickStartCard">
       <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo codice</div></div>
-      <div class="helptext" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.</div>
+      <div class="helptext" id="quickHelpA" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.</div>
       <div class="quickcode" id="quickCodeOut">······</div>
       <div class="qrbox hide" id="quickQr">
         <canvas id="quickQrCanvas" aria-label="Codice QR dell'invito"></canvas>
         <div class="qrhint" data-i18n="quick.qrHint">Oppure inquadralo con la fotocamera del telefono</div>
       </div>
       <button class="btn primary big" id="btnShareQuick"><span class="ic">📤</span><span data-i18n="quick.share">Manda l'invito</span></button>
+      <div class="waitsnote hide" id="inviteWaitsNote">
+        <span class="ic" aria-hidden="true">💤</span>
+        <span data-i18n="wake.waitsNote">Puoi chiudere l'app: quando aprono l'invito ti avviso io.</span>
+      </div>
       <div class="status" id="quickStatusA"></div>
       <div class="diagline hide" id="diagQuickA"></div>
       <button class="btn hide mt10" id="btnRetryQuickA"><span class="ic">🔄</span><span data-i18n="quick.newCode">Genera un nuovo codice</span></button>
@@ -208,8 +212,8 @@
 
     <div class="card bigconnecting hide" id="bigConnectingB">
       <div class="spinner" aria-hidden="true"></div>
-      <div class="bigTitle" data-i18n="connect.bigTitle">Connessione in corso…</div>
-      <div class="bigHint" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+      <div class="bigTitle" id="bigTitleB" data-i18n="connect.bigTitle">Connessione in corso…</div>
+      <div class="bigHint" id="bigHintB" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
     </div>
 
     <div class="card" id="quickJoinCard">

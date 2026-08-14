@@ -122,7 +122,9 @@ Object.assign(I18N.en, {
 "sas.confirmed":"Contact verified.",
 "sas.refused":"The words did not match: this conversation is not considered safe. Close it and start again with a fresh code.",
 "connect.bigTitle":"Connecting…","connect.bigHint":"Don't close the app — it only takes a few seconds.",
-"autoclean.title":"🗑️ Automatic cleanup","autoclean.sub":"Deletes conversations older than a set number of days on its own, so they don't keep taking up space on your phone. Off by default: nothing is ever deleted on its own unless you turn this on.","autoclean.after":"Delete conversations older than:","autoclean.d7":"7 days","autoclean.d30":"30 days","autoclean.d90":"90 days","autoclean.d365":"1 year"
+"autoclean.title":"🗑️ Automatic cleanup","autoclean.sub":"Deletes conversations older than a set number of days on its own, so they don't keep taking up space on your phone. Off by default: nothing is ever deleted on its own unless you turn this on.","autoclean.after":"Delete conversations older than:","autoclean.d7":"7 days","autoclean.d30":"30 days","autoclean.d90":"90 days","autoclean.d365":"1 year",
+"wake.waitsNote":"You can close the app: I'll let you know when they open the invite.","wake.calling":"Letting {name} know…","wake.callingHint":"Their phone has been buzzed. The moment they open the app you're connected — you can wait here.","wake.noAnswer":"They've been alerted but haven't opened the app yet. Try again later.",
+"quick.helpAWaits":"Send it with the button below — the other person just taps it and they're in. Or read them the six digits out loud."
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -233,7 +235,9 @@ Object.assign(I18N.it, {
 "sas.confirmed":"Contatto verificato.",
 "sas.refused":"Le parole non coincidevano: questa conversazione non è considerata sicura. Chiudila e ricominciate con un codice nuovo.",
 "connect.bigTitle":"Connessione in corso…","connect.bigHint":"Non chiudere l'app — ci vogliono pochi secondi.",
-"autoclean.title":"🗑️ Pulizia automatica","autoclean.sub":"Cancella da sola le conversazioni più vecchie di tot giorni, per non far crescere lo spazio occupato sul telefono. Spenta di base: senza attivarla, non si cancella mai nulla da solo.","autoclean.after":"Cancella le conversazioni più vecchie di:","autoclean.d7":"7 giorni","autoclean.d30":"30 giorni","autoclean.d90":"90 giorni","autoclean.d365":"1 anno"
+"autoclean.title":"🗑️ Pulizia automatica","autoclean.sub":"Cancella da sola le conversazioni più vecchie di tot giorni, per non far crescere lo spazio occupato sul telefono. Spenta di base: senza attivarla, non si cancella mai nulla da solo.","autoclean.after":"Cancella le conversazioni più vecchie di:","autoclean.d7":"7 giorni","autoclean.d30":"30 giorni","autoclean.d90":"90 giorni","autoclean.d365":"1 anno",
+"wake.waitsNote":"Puoi chiudere l'app: quando aprono l'invito ti avviso io.","wake.calling":"Sto avvisando {name}…","wake.callingHint":"Ho fatto squillare il suo telefono. Appena apre l'app siete connessi — puoi aspettare qui.","wake.noAnswer":"L'ho avvisata ma non ha ancora aperto l'app. Riprova più tardi.",
+"quick.helpAWaits":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce."
 });
 
 Object.assign(I18N.fr, {
@@ -337,7 +341,9 @@ Object.assign(I18N.fr, {
 "sas.confirmed":"Contact vérifié.",
 "sas.refused":"Les mots ne correspondaient pas : cette conversation n'est pas considérée comme sûre. Fermez-la et recommencez avec un nouveau code.",
 "connect.bigTitle":"Connexion en cours…","connect.bigHint":"Ne fermez pas l'appli — cela ne prend que quelques secondes.",
-"autoclean.title":"🗑️ Nettoyage automatique","autoclean.sub":"Supprime tout seul les discussions plus anciennes qu'un certain nombre de jours, pour qu'elles n'occupent pas d'espace sur votre téléphone. Désactivé par défaut : rien n'est jamais supprimé tout seul sans que vous l'activiez.","autoclean.after":"Supprimer les discussions plus anciennes que :","autoclean.d7":"7 jours","autoclean.d30":"30 jours","autoclean.d90":"90 jours","autoclean.d365":"1 an"
+"autoclean.title":"🗑️ Nettoyage automatique","autoclean.sub":"Supprime tout seul les discussions plus anciennes qu'un certain nombre de jours, pour qu'elles n'occupent pas d'espace sur votre téléphone. Désactivé par défaut : rien n'est jamais supprimé tout seul sans que vous l'activiez.","autoclean.after":"Supprimer les discussions plus anciennes que :","autoclean.d7":"7 jours","autoclean.d30":"30 jours","autoclean.d90":"90 jours","autoclean.d365":"1 an",
+"wake.waitsNote":"Vous pouvez fermer l'application : je vous préviens quand l'invitation sera ouverte.","wake.calling":"J'préviens {name}…","wake.callingHint":"Son téléphone a sonné. Dès qu'elle ouvre l'application, vous êtes connectés — vous pouvez attendre ici.","wake.noAnswer":"Elle a été prévenue mais n'a pas encore ouvert l'application. Réessayez plus tard.",
+"quick.helpAWaits":"Envoyez-le avec le bouton ci-dessous — l'autre personne n'a qu'à le toucher et elle est connectée. Ou dictez-lui les six chiffres à voix haute."
 });
 
 Object.assign(I18N.de, {
@@ -441,7 +447,9 @@ Object.assign(I18N.de, {
 "sas.confirmed":"Kontakt verifiziert.",
 "sas.refused":"Die Wörter stimmten nicht überein: dieses Gespräch gilt nicht als sicher. Schließe es und beginne erneut mit einem neuen Code.",
 "connect.bigTitle":"Verbindung wird hergestellt…","connect.bigHint":"Schließe die App nicht — es dauert nur ein paar Sekunden.",
-"autoclean.title":"🗑️ Automatische Bereinigung","autoclean.sub":"Löscht von selbst Unterhaltungen, die älter als eine festgelegte Anzahl Tage sind, damit sie nicht weiter Speicherplatz auf deinem Telefon belegen. Standardmäßig aus: Ohne dass du das hier einschaltest, wird nie von selbst etwas gelöscht.","autoclean.after":"Unterhaltungen löschen, die älter sind als:","autoclean.d7":"7 Tage","autoclean.d30":"30 Tage","autoclean.d90":"90 Tage","autoclean.d365":"1 Jahr"
+"autoclean.title":"🗑️ Automatische Bereinigung","autoclean.sub":"Löscht von selbst Unterhaltungen, die älter als eine festgelegte Anzahl Tage sind, damit sie nicht weiter Speicherplatz auf deinem Telefon belegen. Standardmäßig aus: Ohne dass du das hier einschaltest, wird nie von selbst etwas gelöscht.","autoclean.after":"Unterhaltungen löschen, die älter sind als:","autoclean.d7":"7 Tage","autoclean.d30":"30 Tage","autoclean.d90":"90 Tage","autoclean.d365":"1 Jahr",
+"wake.waitsNote":"Du kannst die App schließen: Ich sage dir Bescheid, wenn die Einladung geöffnet wird.","wake.calling":"Ich benachrichtige {name}…","wake.callingHint":"Das Telefon hat gebrummt. Sobald die App geöffnet wird, seid ihr verbunden — du kannst hier warten.","wake.noAnswer":"Die Person wurde benachrichtigt, hat die App aber noch nicht geöffnet. Versuch es später noch einmal.",
+"quick.helpAWaits":"Schick ihn mit der Schaltfläche unten — die andere Person tippt einfach darauf und ist drin. Oder sag ihr die sechs Ziffern laut vor."
 });
 
 Object.assign(I18N.es, {
@@ -545,7 +553,9 @@ Object.assign(I18N.es, {
 "sas.confirmed":"Contacto verificado.",
 "sas.refused":"Las palabras no coincidían: esta conversación no se considera segura. Ciérrala y empezad de nuevo con un código nuevo.",
 "connect.bigTitle":"Conectando…","connect.bigHint":"No cierres la app — solo tarda unos segundos.",
-"autoclean.title":"🗑️ Limpieza automática","autoclean.sub":"Borra por sí sola las conversaciones más antiguas que un número determinado de días, para que no sigan ocupando espacio en tu teléfono. Desactivado por defecto: nada se borra solo a menos que actives esto.","autoclean.after":"Borrar conversaciones más antiguas que:","autoclean.d7":"7 días","autoclean.d30":"30 días","autoclean.d90":"90 días","autoclean.d365":"1 año"
+"autoclean.title":"🗑️ Limpieza automática","autoclean.sub":"Borra por sí sola las conversaciones más antiguas que un número determinado de días, para que no sigan ocupando espacio en tu teléfono. Desactivado por defecto: nada se borra solo a menos que actives esto.","autoclean.after":"Borrar conversaciones más antiguas que:","autoclean.d7":"7 días","autoclean.d30":"30 días","autoclean.d90":"90 días","autoclean.d365":"1 año",
+"wake.waitsNote":"Puedes cerrar la aplicación: te aviso cuando abran la invitación.","wake.calling":"Estoy avisando a {name}…","wake.callingHint":"Su teléfono ha sonado. En cuanto abra la aplicación estaréis conectados — puedes esperar aquí.","wake.noAnswer":"Le he avisado pero aún no ha abierto la aplicación. Inténtalo más tarde.",
+"quick.helpAWaits":"Envíalo con el botón de abajo — a la otra persona le basta con tocarlo y ya está dentro. O dile las seis cifras en voz alta."
 });
 
 Object.assign(I18N.pt, {
@@ -649,7 +659,9 @@ Object.assign(I18N.pt, {
 "sas.confirmed":"Contacto verificado.",
 "sas.refused":"As palavras não coincidiram: esta conversa não é considerada segura. Feche-a e recomecem com um código novo.",
 "connect.bigTitle":"A ligar…","connect.bigHint":"Não feche a app — demora apenas alguns segundos.",
-"autoclean.title":"🗑️ Limpeza automática","autoclean.sub":"Apaga sozinha as conversas mais antigas do que um certo número de dias, para não continuarem a ocupar espaço no seu telemóvel. Desativado por predefinição: nada é apagado sozinho a menos que ative isto.","autoclean.after":"Apagar conversas mais antigas do que:","autoclean.d7":"7 dias","autoclean.d30":"30 dias","autoclean.d90":"90 dias","autoclean.d365":"1 ano"
+"autoclean.title":"🗑️ Limpeza automática","autoclean.sub":"Apaga sozinha as conversas mais antigas do que um certo número de dias, para não continuarem a ocupar espaço no seu telemóvel. Desativado por predefinição: nada é apagado sozinho a menos que ative isto.","autoclean.after":"Apagar conversas mais antigas do que:","autoclean.d7":"7 dias","autoclean.d30":"30 dias","autoclean.d90":"90 dias","autoclean.d365":"1 ano",
+"wake.waitsNote":"Pode fechar a aplicação: eu aviso-o quando abrirem o convite.","wake.calling":"A avisar {name}…","wake.callingHint":"O telemóvel tocou. Assim que abrir a aplicação ficam ligados — pode esperar aqui.","wake.noAnswer":"Já foi avisada mas ainda não abriu a aplicação. Tente mais tarde.",
+"quick.helpAWaits":"Envie-o com o botão abaixo — a outra pessoa só tem de tocar nele e está ligada. Ou diga-lhe os seis algarismos em voz alta."
 });
 
 Object.assign(I18N.ru, {
@@ -753,7 +765,9 @@ Object.assign(I18N.ru, {
 "sas.confirmed":"Контакт подтверждён.",
 "sas.refused":"Слова не совпали: этот разговор не считается безопасным. Закройте его и начните заново с новым кодом.",
 "connect.bigTitle":"Идёт подключение…","connect.bigHint":"Не закрывайте приложение — это займёт всего несколько секунд.",
-"autoclean.title":"🗑️ Автоматическая очистка","autoclean.sub":"Сама удаляет разговоры старше указанного числа дней, чтобы они не занимали место на телефоне. По умолчанию выключено: ничего не удаляется само, пока вы это не включите.","autoclean.after":"Удалять разговоры старше:","autoclean.d7":"7 дней","autoclean.d30":"30 дней","autoclean.d90":"90 дней","autoclean.d365":"1 года"
+"autoclean.title":"🗑️ Автоматическая очистка","autoclean.sub":"Сама удаляет разговоры старше указанного числа дней, чтобы они не занимали место на телефоне. По умолчанию выключено: ничего не удаляется само, пока вы это не включите.","autoclean.after":"Удалять разговоры старше:","autoclean.d7":"7 дней","autoclean.d30":"30 дней","autoclean.d90":"90 дней","autoclean.d365":"1 года",
+"wake.waitsNote":"Можно закрыть приложение: я сообщу, когда приглашение откроют.","wake.calling":"Сообщаю {name}…","wake.callingHint":"Телефон уже звонит. Как только приложение откроют, вы соединитесь — можно подождать здесь.","wake.noAnswer":"Я сообщил, но приложение ещё не открыли. Попробуйте позже.",
+"quick.helpAWaits":"Отправьте её кнопкой ниже — другому человеку достаточно нажать, и он внутри. Или продиктуйте шесть цифр вслух."
 });
 
 Object.assign(I18N.zh, {
@@ -857,7 +871,9 @@ Object.assign(I18N.zh, {
 "sas.confirmed":"联系人已验证。",
 "sas.refused":"词语不匹配：此对话不被视为安全。请关闭它，用新代码重新开始。",
 "connect.bigTitle":"正在连接…","connect.bigHint":"请不要关闭应用——只需几秒钟。",
-"autoclean.title":"🗑️ 自动清理","autoclean.sub":"自动删除超过设定天数的对话，这样它们就不会一直占用手机空间。默认关闭：除非你自己打开此项，否则不会自动删除任何内容。","autoclean.after":"删除早于以下时间的对话：","autoclean.d7":"7 天","autoclean.d30":"30 天","autoclean.d90":"90 天","autoclean.d365":"1 年"
+"autoclean.title":"🗑️ 自动清理","autoclean.sub":"自动删除超过设定天数的对话，这样它们就不会一直占用手机空间。默认关闭：除非你自己打开此项，否则不会自动删除任何内容。","autoclean.after":"删除早于以下时间的对话：","autoclean.d7":"7 天","autoclean.d30":"30 天","autoclean.d90":"90 天","autoclean.d365":"1 年",
+"wake.waitsNote":"你可以关闭应用：邀请被打开时我会通知你。","wake.calling":"正在通知 {name}…","wake.callingHint":"对方的手机已经响了。只要对方打开应用，你们就会连接上——可以在这里等待。","wake.noAnswer":"已经通知过了，但对方还没有打开应用。请稍后再试。",
+"quick.helpAWaits":"用下面的按钮发送——对方只要点一下就连上了。或者把这六位数字念给对方听。"
 });
 
 Object.assign(I18N.ar, {
@@ -961,7 +977,9 @@ Object.assign(I18N.ar, {
 "sas.confirmed":"تم التحقق من جهة الاتصال.",
 "sas.refused":"الكلمات غير متطابقة: لا تُعتبر هذه المحادثة آمنة. أغلقها وابدآ من جديد برمز جديد.",
 "connect.bigTitle":"جارٍ الاتصال…","connect.bigHint":"لا تغلق التطبيق — يستغرق الأمر ثوانٍ قليلة فقط.",
-"autoclean.title":"🗑️ تنظيف تلقائي","autoclean.sub":"يحذف تلقائيًا المحادثات الأقدم من عدد معين من الأيام، حتى لا تستمر في شغل مساحة على هاتفك. متوقف افتراضيًا: لا يُحذف شيء تلقائيًا أبدًا ما لم تفعّل هذا بنفسك.","autoclean.after":"حذف المحادثات الأقدم من:","autoclean.d7":"7 أيام","autoclean.d30":"30 يومًا","autoclean.d90":"90 يومًا","autoclean.d365":"سنة واحدة"
+"autoclean.title":"🗑️ تنظيف تلقائي","autoclean.sub":"يحذف تلقائيًا المحادثات الأقدم من عدد معين من الأيام، حتى لا تستمر في شغل مساحة على هاتفك. متوقف افتراضيًا: لا يُحذف شيء تلقائيًا أبدًا ما لم تفعّل هذا بنفسك.","autoclean.after":"حذف المحادثات الأقدم من:","autoclean.d7":"7 أيام","autoclean.d30":"30 يومًا","autoclean.d90":"90 يومًا","autoclean.d365":"سنة واحدة",
+"wake.waitsNote":"يمكنك إغلاق التطبيق: سأخبرك عندما تُفتح الدعوة.","wake.calling":"أُبلغ {name}…","wake.callingHint":"لقد رنّ هاتفه. بمجرد فتح التطبيق ستكونان متصلين — يمكنك الانتظار هنا.","wake.noAnswer":"تم إبلاغه لكنه لم يفتح التطبيق بعد. حاول لاحقًا.",
+"quick.helpAWaits":"أرسله بالزر أدناه — يكفي أن يلمسه الشخص الآخر ليدخل. أو اقرأ له الأرقام الستة بصوت عالٍ."
 });
 
 Object.assign(I18N.ur, {
@@ -1065,7 +1083,9 @@ Object.assign(I18N.ur, {
 "sas.confirmed":"رابطہ تصدیق شدہ۔",
 "sas.refused":"الفاظ میل نہیں کھاتے: یہ گفتگو محفوظ نہیں سمجھی جاتی۔ اسے بند کریں اور نئے کوڈ کے ساتھ دوبارہ شروع کریں۔",
 "connect.bigTitle":"رابطہ قائم ہو رہا ہے…","connect.bigHint":"ایپ بند نہ کریں — اس میں صرف چند سیکنڈ لگتے ہیں۔",
-"autoclean.title":"🗑️ خودکار صفائی","autoclean.sub":"ایک مقررہ تعداد کے دنوں سے پرانی گفتگو کو خود بخود حذف کرتا ہے، تاکہ وہ آپ کے فون پر جگہ گھیرتی نہ رہیں۔ بطور ڈیفالٹ بند: جب تک آپ خود اسے آن نہ کریں، کچھ بھی خود بخود حذف نہیں ہوتا۔","autoclean.after":"اس سے پرانی گفتگو حذف کریں:","autoclean.d7":"7 دن","autoclean.d30":"30 دن","autoclean.d90":"90 دن","autoclean.d365":"1 سال"
+"autoclean.title":"🗑️ خودکار صفائی","autoclean.sub":"ایک مقررہ تعداد کے دنوں سے پرانی گفتگو کو خود بخود حذف کرتا ہے، تاکہ وہ آپ کے فون پر جگہ گھیرتی نہ رہیں۔ بطور ڈیفالٹ بند: جب تک آپ خود اسے آن نہ کریں، کچھ بھی خود بخود حذف نہیں ہوتا۔","autoclean.after":"اس سے پرانی گفتگو حذف کریں:","autoclean.d7":"7 دن","autoclean.d30":"30 دن","autoclean.d90":"90 دن","autoclean.d365":"1 سال",
+"wake.waitsNote":"آپ ایپ بند کر سکتے ہیں: جب دعوت کھولی جائے گی تو میں آپ کو بتا دوں گا۔","wake.calling":"{name} کو اطلاع دی جا رہی ہے…","wake.callingHint":"ان کا فون بج چکا ہے۔ جیسے ہی وہ ایپ کھولیں گے آپ جڑ جائیں گے — آپ یہاں انتظار کر سکتے ہیں۔","wake.noAnswer":"انہیں اطلاع دے دی گئی ہے لیکن انہوں نے ابھی تک ایپ نہیں کھولی۔ بعد میں دوبارہ کوشش کریں۔",
+"quick.helpAWaits":"نیچے دیے گئے بٹن سے بھیجیں — دوسرے شخص کو بس اسے چھونا ہے اور وہ اندر ہے۔ یا انہیں چھ ہندسے بول کر بتا دیں۔"
 });
 
 Object.assign(I18N.hi, {
@@ -1169,7 +1189,9 @@ Object.assign(I18N.hi, {
 "sas.confirmed":"संपर्क सत्यापित।",
 "sas.refused":"शब्द मेल नहीं खाए: यह बातचीत सुरक्षित नहीं मानी जाती। इसे बंद करें और एक नए कोड के साथ फिर से शुरू करें।",
 "connect.bigTitle":"कनेक्ट हो रहा है…","connect.bigHint":"ऐप बंद न करें — इसमें बस कुछ सेकंड लगते हैं।",
-"autoclean.title":"🗑️ अपने आप सफ़ाई","autoclean.sub":"एक तय दिनों से पुरानी बातचीत अपने आप हटा देता है, ताकि वे आपके फ़ोन पर जगह घेरती न रहें। डिफ़ॉल्ट रूप से बंद: जब तक आप इसे खुद चालू न करें, कुछ भी अपने आप नहीं हटता।","autoclean.after":"इससे पुरानी बातचीत हटाएं:","autoclean.d7":"7 दिन","autoclean.d30":"30 दिन","autoclean.d90":"90 दिन","autoclean.d365":"1 साल"
+"autoclean.title":"🗑️ अपने आप सफ़ाई","autoclean.sub":"एक तय दिनों से पुरानी बातचीत अपने आप हटा देता है, ताकि वे आपके फ़ोन पर जगह घेरती न रहें। डिफ़ॉल्ट रूप से बंद: जब तक आप इसे खुद चालू न करें, कुछ भी अपने आप नहीं हटता।","autoclean.after":"इससे पुरानी बातचीत हटाएं:","autoclean.d7":"7 दिन","autoclean.d30":"30 दिन","autoclean.d90":"90 दिन","autoclean.d365":"1 साल",
+"wake.waitsNote":"आप ऐप बंद कर सकते हैं: जब वे निमंत्रण खोलेंगे तो मैं आपको बता दूंगा।","wake.calling":"{name} को बता रहा हूँ…","wake.callingHint":"उनका फ़ोन बज चुका है। जैसे ही वे ऐप खोलेंगे, आप जुड़ जाएंगे — आप यहाँ इंतज़ार कर सकते हैं।","wake.noAnswer":"उन्हें बता दिया गया है लेकिन उन्होंने अभी तक ऐप नहीं खोला। बाद में फिर कोशिश करें।",
+"quick.helpAWaits":"नीचे दिए बटन से भेजें — दूसरे व्यक्ति को बस उसे छूना है और वे अंदर हैं। या उन्हें छह अंक बोलकर बता दें।"
 });
 
 Object.assign(I18N.bn, {
@@ -1273,7 +1295,9 @@ Object.assign(I18N.bn, {
 "sas.confirmed":"পরিচিতি যাচাই করা হয়েছে।",
 "sas.refused":"শব্দগুলো মেলেনি: এই কথোপকথনটি নিরাপদ বলে বিবেচিত হয় না। এটি বন্ধ করুন এবং একটি নতুন কোড দিয়ে আবার শুরু করুন।",
 "connect.bigTitle":"সংযোগ হচ্ছে…","connect.bigHint":"অ্যাপ বন্ধ করবেন না — এতে মাত্র কয়েক সেকেন্ড লাগে।",
-"autoclean.title":"🗑️ স্বয়ংক্রিয় পরিষ্কার","autoclean.sub":"নির্দিষ্ট সংখ্যক দিনের চেয়ে পুরনো কথোপকথন নিজে থেকেই মুছে ফেলে, যাতে সেগুলো আপনার ফোনে জায়গা দখল করে না রাখে। ডিফল্টভাবে বন্ধ: আপনি নিজে চালু না করা পর্যন্ত কিছুই নিজে থেকে মুছে যায় না।","autoclean.after":"এর চেয়ে পুরনো কথোপকথন মুছুন:","autoclean.d7":"৭ দিন","autoclean.d30":"৩০ দিন","autoclean.d90":"৯০ দিন","autoclean.d365":"১ বছর"
+"autoclean.title":"🗑️ স্বয়ংক্রিয় পরিষ্কার","autoclean.sub":"নির্দিষ্ট সংখ্যক দিনের চেয়ে পুরনো কথোপকথন নিজে থেকেই মুছে ফেলে, যাতে সেগুলো আপনার ফোনে জায়গা দখল করে না রাখে। ডিফল্টভাবে বন্ধ: আপনি নিজে চালু না করা পর্যন্ত কিছুই নিজে থেকে মুছে যায় না।","autoclean.after":"এর চেয়ে পুরনো কথোপকথন মুছুন:","autoclean.d7":"৭ দিন","autoclean.d30":"৩০ দিন","autoclean.d90":"৯০ দিন","autoclean.d365":"১ বছর",
+"wake.waitsNote":"আপনি অ্যাপটি বন্ধ করতে পারেন: আমন্ত্রণ খোলা হলে আমি আপনাকে জানাব।","wake.calling":"{name}-কে জানানো হচ্ছে…","wake.callingHint":"তাঁর ফোন বেজে উঠেছে। তিনি অ্যাপ খোলামাত্র আপনারা যুক্ত হয়ে যাবেন — আপনি এখানে অপেক্ষা করতে পারেন।","wake.noAnswer":"তাঁকে জানানো হয়েছে কিন্তু তিনি এখনও অ্যাপ খোলেননি। পরে আবার চেষ্টা করুন।",
+"quick.helpAWaits":"নিচের বোতাম দিয়ে পাঠান — অন্য ব্যক্তিকে শুধু সেটিতে চাপ দিতে হবে, ব্যস। অথবা তাঁকে ছয়টি সংখ্যা মুখে বলে দিন।"
 });
 
 Object.assign(I18N.id, {
@@ -1377,7 +1401,9 @@ Object.assign(I18N.id, {
 "sas.confirmed":"Kontak terverifikasi.",
 "sas.refused":"Kata-kata tidak cocok: percakapan ini tidak dianggap aman. Tutup dan mulai lagi dengan kode baru.",
 "connect.bigTitle":"Menyambungkan…","connect.bigHint":"Jangan tutup aplikasi — hanya perlu beberapa detik.",
-"autoclean.title":"🗑️ Pembersihan otomatis","autoclean.sub":"Menghapus sendiri percakapan yang lebih lama dari jumlah hari tertentu, agar tidak terus memakan ruang di ponsel Anda. Nonaktif secara default: tidak ada yang terhapus sendiri kecuali Anda mengaktifkan ini.","autoclean.after":"Hapus percakapan yang lebih lama dari:","autoclean.d7":"7 hari","autoclean.d30":"30 hari","autoclean.d90":"90 hari","autoclean.d365":"1 tahun"
+"autoclean.title":"🗑️ Pembersihan otomatis","autoclean.sub":"Menghapus sendiri percakapan yang lebih lama dari jumlah hari tertentu, agar tidak terus memakan ruang di ponsel Anda. Nonaktif secara default: tidak ada yang terhapus sendiri kecuali Anda mengaktifkan ini.","autoclean.after":"Hapus percakapan yang lebih lama dari:","autoclean.d7":"7 hari","autoclean.d30":"30 hari","autoclean.d90":"90 hari","autoclean.d365":"1 tahun",
+"wake.waitsNote":"Anda boleh menutup aplikasi: saya akan memberi tahu saat undangan dibuka.","wake.calling":"Memberi tahu {name}…","wake.callingHint":"Ponselnya sudah berdering. Begitu aplikasi dibuka, Anda langsung terhubung — Anda bisa menunggu di sini.","wake.noAnswer":"Sudah diberi tahu tetapi aplikasinya belum dibuka. Coba lagi nanti.",
+"quick.helpAWaits":"Kirim dengan tombol di bawah — orang lain tinggal menyentuhnya dan langsung masuk. Atau bacakan enam angkanya dengan suara."
 });
 
 function t(key, fallback){
@@ -1983,6 +2009,9 @@ function initials(name){
   return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
 function enterChat(){
+  /* whatever invite got us here has done its job — leaving it pending would put
+     a dead code back on the air at every app open for the next day */
+  clearPendingInvite();
   showScreen('screenChat');
   $('peerNameLbl').textContent = t('chat.someone');
   $('peerAvatar').textContent = '?';
@@ -2370,15 +2399,19 @@ function disableNotifications(){
 }
 /* fire-and-forget: a knock is a nice-to-have on top of the mailbox poll that
    already runs, never something the connection flow waits on or fails without */
-function sendKnock(contact){
-  if (!contact || !contact.push || !contact.push.endpoint) return;
+function knockEndpoint(endpoint){
+  if (typeof endpoint !== 'string' || !endpoint.startsWith('https://')) return;
   try{
     fetch(KNOCK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ endpoint: contact.push.endpoint }),
+      body: JSON.stringify({ endpoint }),
     }).catch(()=>{});
   }catch(e){}
+}
+function sendKnock(contact){
+  if (!contact || !contact.push) return;
+  knockEndpoint(contact.push.endpoint);
 }
 
 function paintNotifyToggle(on){
@@ -2528,6 +2561,73 @@ async function mailboxGetSealed(key, sec){
   if (!env) return null;
   return openFrom(sec.key, env);
 }
+
+/* ============================== an invite that waits ==============================
+   Until now both people had to be looking at their screens within the same two
+   minutes, because that is how long the mailbox holds anything. That is not how
+   an invite sent over WhatsApp is actually read: it is read when the other
+   person next picks up their phone, which might be three hours later.
+
+   So alongside the invite, the app leaves one sealed note in a slot that lives a
+   day and is not consumed by being read. The note says only how to buzz the
+   person who made the invite — nothing else, sealed with the same key derived
+   from the invite code, so the Worker holding it cannot read it any more than it
+   can read a message.
+
+   What that buys: the person who made the invite can close the app entirely.
+   Whoever opens the invite later finds no live offer, reads the note, and rings
+   them. Their phone buzzes, they open the app, the invite quietly goes live
+   again on the same code, and the two connect. Nobody had to be waiting. */
+const WAKE_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/wake/';
+
+async function wakePut(key, obj){
+  try{ const res = await fetch(WAKE_BASE + key, { method:'PUT', body: JSON.stringify(obj) }); return res.ok; }
+  catch(e){ return false; }
+}
+async function wakeGet(key){
+  try{
+    const res = await fetch(WAKE_BASE + key, { method:'GET' });
+    if (res.status !== 200) return null;
+    return await res.json();
+  }catch(e){ return null; }
+}
+async function wakePutSealed(key, sec, obj){ return wakePut(key, await sealFor(sec.key, obj)); }
+async function wakeGetSealed(key, sec){
+  const env = await wakeGet(key);
+  if (!env) return null;
+  return openFrom(sec.key, env);
+}
+
+/* Only ever written if this device can actually be reached — an invite that
+   promises to ring someone who has notifications switched off would be a lie
+   told to the person opening it. */
+async function publishWakeSlot(sec){
+  if (!notifyPref()) return false;
+  const clean = sanitizePushSub(await ensurePushSubscription());
+  if (!clean) return false;
+  try{
+    await wakePutSealed(await slotId(sec.seed, 'wake'), sec, { push: clean, nick: myNick() });
+    return true;
+  }catch(e){ return false; }
+}
+
+/* The code of an invite that is still out there somewhere, so that opening the
+   app can put it back on the air on the *same* code — a different one would
+   leave whoever is holding the link waiting at an address nobody is at. */
+const PENDING_KEY = 'dvlogos-pending-invite';
+const PENDING_MAX_AGE = 24 * 3600 * 1000; /* matches the wake slot's own life */
+function savePendingInvite(code){
+  try{ localStorage.setItem(PENDING_KEY, JSON.stringify({ code, at: Date.now() })); }catch(e){}
+}
+function readPendingInvite(){
+  try{
+    const p = JSON.parse(localStorage.getItem(PENDING_KEY) || 'null');
+    if (!p || !p.code || !p.at) return null;
+    if (Date.now() - p.at > PENDING_MAX_AGE){ clearPendingInvite(); return null; }
+    return p;
+  }catch(e){ return null; }
+}
+function clearPendingInvite(){ try{ localStorage.removeItem(PENDING_KEY); }catch(e){} }
 
 /* Same envelope the manual "create invite" button already produces, so the auto-reconnect
    fallback below can reveal it as a completely ordinary invite if nobody answers. */
@@ -2978,7 +3078,20 @@ $('toggleLongInviteB').addEventListener('click', showLongLayoutB);
    replaces the whole form with one big, unambiguous state for exactly as long
    as a connection attempt is actually running, on both sides, everywhere one
    can start: the short code, the long code, and reconnecting to a contact. */
+/* The same big card says two different things depending on what is actually
+   happening — "hold on, this is connecting" and "I have rung them, they are not
+   here yet" are very different waits, and a wait you understand is bearable. */
+function setBigConnectingText(side, title, hint){
+  $('bigTitle' + side).textContent = title;
+  $('bigHint' + side).textContent = hint;
+}
+function resetBigConnectingText(side){
+  setBigConnectingText(side,
+    t('connect.bigTitle','Connessione in corso…'),
+    t('connect.bigHint','Non chiudere l\'app — ci vogliono pochi secondi.'));
+}
 function showBigConnectingA(){
+  resetBigConnectingText('A');
   $('quickStartCard').classList.add('hide');
   $('longInviteWrapA').classList.add('hide');
   $('toggleLongInviteA').classList.add('hide');
@@ -2989,6 +3102,7 @@ function hideBigConnectingA(restoreQuick){
   if (restoreQuick) showQuickLayoutA(); else showLongLayoutA();
 }
 function showBigConnectingB(){
+  resetBigConnectingText('B');
   $('quickJoinCard').classList.add('hide');
   $('longInviteWrapB').classList.add('hide');
   $('toggleLongInviteB').classList.add('hide');
@@ -3065,12 +3179,22 @@ function candidatePump(pcObj, sec, mine, theirs){
 let quickPump = null;
 function stopQuickPump(){ if (quickPump){ quickPump.stop(); quickPump = null; } }
 
-async function startQuickShare(){
+/* `existingCode` puts a specific invite back on the air instead of minting a new
+   one — used when someone has been rung about an invite they left out there, and
+   the code in that person's hands has to keep working.
+   `quiet` means "do this in the background": the app was opened for some other
+   reason and there is no need to drag anyone to the invite screen unless it turns
+   out somebody is genuinely waiting at the other end. */
+async function startQuickShare(existingCode, quiet){
   stopQuickPump();
-  const code = makeQuickCode();
+  const code = existingCode || makeQuickCode();
   $('quickCodeOut').textContent = formatQuickCode(code);
   paintQr(code);
   $('btnRetryQuickA').classList.add('hide');
+  /* both start from "this invite dies with the screen" and are corrected below
+     only once the app has confirmed it really can ring for this person */
+  $('inviteWaitsNote').classList.add('hide');
+  $('quickHelpA').textContent = t('quick.helpA');
   setStatus($('quickStatusA'), t('quick.waiting','In attesa che l\'altra persona digiti il codice…'));
 
   pc = await newPeerConnection();
@@ -3090,6 +3214,18 @@ async function startQuickShare(){
   /* published straight away, candidates or not — they follow on their own */
   await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
 
+  /* the note that lets this invite outlive the screen it was made on, and the
+     code itself so that opening the app again can resume this exact invite */
+  savePendingInvite(code);
+  publishWakeSlot(sec).then(ok => {
+    if (quiet) return;
+    $('inviteWaitsNote').classList.toggle('hide', !ok);
+    /* "valid as long as you keep this screen open" stops being true the moment
+       the invite can ring for itself, and two sentences contradicting each
+       other on the same card are worse than either of them alone */
+    $('quickHelpA').textContent = ok ? t('quick.helpAWaits') : t('quick.helpA');
+  }).catch(()=>{});
+
   /* An invite sent over WhatsApp is not read in the next ninety seconds. It is
      read when the other person next picks up their phone. The mailbox only
      holds anything for two minutes, so the invite is simply written again
@@ -3108,6 +3244,9 @@ async function startQuickShare(){
       /* somebody answered — the code has done its job, so it and the share
          button give way to one clear "connecting" state instead of just
          sitting there looking like nothing happened */
+      /* in the background case this is the moment it stops being background:
+         someone is genuinely at the other end, so bring the screen with it */
+      if (quiet && $('screenStart').classList.contains('hide')) showScreen('screenStart');
       showBigConnectingA();
       watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
         if (!ok) hideBigConnectingA(true);
@@ -3122,6 +3261,10 @@ async function startQuickShare(){
   }
   pump.stop();
   if (pc !== myPc) return;
+  /* nothing came of it: stop offering to resume an invite nobody took up, and
+     say so only on a screen someone is actually looking at */
+  if (readPendingInvite() && readPendingInvite().code === code) clearPendingInvite();
+  if (quiet) return;
   setStatus($('quickStatusA'), t('quick.expired','Il codice è scaduto senza risposta. Generane uno nuovo.'), 'bad');
   $('btnRetryQuickA').classList.remove('hide');
 }
@@ -3156,7 +3299,9 @@ $('btnShareQuick').addEventListener('click', async () => {
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
   await copyOrSelect(text, $('quickCodeOut'));
 });
-$('btnRetryQuickA').addEventListener('click', startQuickShare);
+/* wrapped, not passed directly: the click event would otherwise arrive as the
+   code to resume, and the app would try to put an Event object on the air */
+$('btnRetryQuickA').addEventListener('click', () => startQuickShare());
 
 /* A keyboard set to Arabic, Urdu, Hindi or Bengali often types its own digits
    by default — ٠-٩, ۰-۹ or ०-९ or ০-৯ — not 0-9. Those never matched \D and
@@ -3204,15 +3349,43 @@ async function tryQuickConnect(){
       if (Date.now() >= lookUntil) break;
       await new Promise(r => setTimeout(r, 1000));
     }
+    /* Nobody is sitting on the invite screen — which, for an invite sent over
+       WhatsApp and read three hours later, is the normal case rather than the
+       sad one. If whoever made it left word on how to be reached, ring them and
+       keep the line open: they open the app, the invite goes back on the air on
+       this very code, and the two connect without either having had to wait. */
+    let knocked = false;
+    if (!msg || !msg.sdp){
+      const wake = await wakeGetSealed(await slotId(sec.seed, 'wake'), sec);
+      if (wake && wake.push && wake.push.endpoint){
+        knockEndpoint(wake.push.endpoint);
+        knocked = true;
+        setBigConnectingText('B',
+          fill(t('wake.calling','Sto avvisando {name}…'), { name: wake.nick || t('chat.someone','Qualcuno') }),
+          t('wake.callingHint','Ho fatto squillare il suo telefono. Appena apre l\'app siete connessi — puoi aspettare qui.'));
+        const waitUntil = Date.now() + 180000;
+        while (Date.now() < waitUntil){
+          await new Promise(r => setTimeout(r, 1500));
+          if (!$('screenChat').classList.contains('hide')) return; /* something else got there first */
+          msg = await mailboxGetSealed(offerKey, sec);
+          if (msg && msg.sdp) break;
+        }
+      }
+    }
+
     /* a wrong code and an expired one are indistinguishable here by design:
        without the right key nothing decrypts, so there is nothing to tell apart */
     if (!msg || !msg.sdp){
       hideBigConnectingB(true);
-      setStatus($('quickStatusB'), t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
+      setStatus($('quickStatusB'), knocked
+        ? t('wake.noAnswer','L\'ho avvisata ma non ha ancora aperto l\'app. Riprova più tardi.')
+        : t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
       quickConnecting = false;
       $('btnQuickConnect').disabled = false;
       return;
     }
+    /* back to the ordinary wording for the handshake that is about to run */
+    resetBigConnectingText('B');
     stopQuickPump();
     pc = await newPeerConnection();
     pc.ondatachannel = ev => wireDataChannel(ev.channel);
@@ -3735,6 +3908,22 @@ if (!$('screenHome').classList.contains('hide')) startInboxPolling();
    a broken link but a blank app, because the exception stopped everything
    below it from ever running. Anything that acts on the address bar belongs
    after the app is fully assembled. */
+/* ---------------- picking an invite back up ----------------
+   Someone left an invite out there and closed the app. Whoever opens it later
+   rings them, and this is what happens when they answer that ring: the same
+   invite goes quietly back on the air, on the same code, without dragging
+   anyone to a screen they did not ask for. If nobody is actually waiting,
+   nothing visible happens at all and it lapses on its own. The moment an
+   answer does arrive, startQuickShare brings the screen with it.
+   Deliberately skipped when the app was opened *by* an invite link: that is
+   the other side of this same conversation, and it has its own flow below. */
+(function resumePendingInvite(){
+  if (/[#&][qi]=/.test(location.hash)) return;
+  const pending = readPendingInvite();
+  if (!pending) return;
+  try{ startQuickShare(pending.code, true); }catch(e){}
+})();
+
 (function autoFillFromHash(){
   const quick = location.hash.match(/[#&]q=(\d{6})\b/);
   if (quick){
