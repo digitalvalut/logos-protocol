@@ -112,6 +112,10 @@ Object.assign(I18N.en, {
 "quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.",
 "quick.shareText":"Here's the link to talk to me on DigitalValut Logos. Tap it and we're connected:",
 "quick.share":"Send the invitation",
+"notify.title":"🔔 Let me know when someone's looking for me",
+"notify.sub":"A notification if a contact tries to reach you and you don't have the app open — no name, no message, just a heads-up.",
+"notify.iosHint":"On iPhone this only works once you've added the app to your Home Screen first: tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>, and open the app from there.",
+"notify.blocked":"Notifications blocked by the browser. Check the site's settings.",
 "sas.title":"Security check",
 "sas.lead":"Say these three words to each other out loud. If you both see the same ones, nobody has come in between.",
 "sas.leadChanged":"Careful: this person no longer looks like the same one as last time. Usually that means a new phone or a reinstalled app — but it is also what being intercepted looks like. Say the three words out loud before going on.",
@@ -209,6 +213,10 @@ Object.assign(I18N.it, {
 "quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.",
 "quick.shareText":"Ecco il link per parlare con me su DigitalValut Logos. Toccalo e siamo connessi:",
 "quick.share":"Manda l'invito",
+"notify.title":"🔔 Avvisami quando qualcuno mi cerca",
+"notify.sub":"Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.",
+"notify.iosHint":"Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.",
+"notify.blocked":"Notifiche bloccate dal browser. Controlla le impostazioni del sito.",
 "sas.title":"Controllo di sicurezza",
 "sas.lead":"Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.",
 "sas.leadChanged":"Attenzione: questa persona non risulta più la stessa dell'ultima volta. Di solito è un telefono nuovo o l'app reinstallata — ma è anche il segno di qualcuno che si è messo in mezzo. Ditevi le tre parole a voce prima di continuare.",
@@ -574,7 +582,8 @@ function wireDataChannel(channel){
   dc.onopen = async () => {
     enterChat();
     const fp = await myFingerprintHex();
-    dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp }));
+    const push = notifyPref() ? await ensurePushSubscription() : null;
+    dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp, push }));
   };
   dc.onclose = () => { setStatus($('statusA'), t('session.newHint'), 'bad'); };
   dc.onmessage = onDcMessage;
@@ -995,13 +1004,19 @@ function loadContacts(){
   try{ return JSON.parse(localStorage.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
 }
 function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
-function touchContact(nick, fp){
+function touchContact(nick, fp, push){
   if (!nick) return;
   let list = loadContacts();
   const prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
   const keepFp = fp || (prev && prev.fp) || null;
+  /* `push` arrives fresh on every 'hello', which is exactly right: if someone
+     reinstalled the app or switched devices their old subscription is dead
+     anyway, and the only way to learn the new one is to hear it from them
+     directly, the same as everything else this app trusts. undefined (not
+     sent this message) keeps whatever was already on file; null clears it. */
+  const keepPush = push !== undefined ? push : (prev && prev.push) || null;
   list = list.filter(c => c.nick.toLowerCase() !== nick.toLowerCase());
-  list.unshift({ nick, lastSeen: Date.now(), fp: keepFp });
+  list.unshift({ nick, lastSeen: Date.now(), fp: keepFp, push: keepPush });
   if (list.length > 40) list = list.slice(0, 40);
   saveContacts(list);
   renderContacts();
@@ -1051,6 +1066,114 @@ $('contactsList').addEventListener('click', ev => {
     showQuickLayoutA();
     startQuickShare();
   }
+});
+
+/* ============================== knock (push notifications) ==============================
+   The one real limit left in reconnecting to a known contact: both people have to have the
+   app open at the same moment, because nothing here polls for you in the background. A knock
+   removes that, without adding the thing this app has avoided from the start — a server that
+   knows who your contacts are. Nobody's subscription is ever stored anywhere but the two
+   phones involved: it travels in the same 'hello' handshake as the safety fingerprint, over
+   the already-encrypted connection, the first time two people talk. Reaching someone later
+   means handing the Worker a subscription you already hold from that exchange; the Worker
+   signs a Web Push request with the project's key and forwards it, and forgets it immediately
+   after. The push itself says nothing — not a name, not a message — only "someone you have
+   met before wants to talk"; opening the app is what actually finds out who, over the mailbox,
+   the same as always.
+   iOS only allows this for a PWA added to the Home Screen (a real Apple restriction, not a
+   choice made here) — the toggle only appears where it can actually work. */
+const VAPID_PUBLIC_KEY = 'BM4QXIv3U4bOctmAoYQShEuxagG_99NF8QRRKqdwAo9XsabHFSmux_BRF2tY0c0TT_YxzUHs3lBb13PFAmTtKGY';
+const KNOCK_URL = 'https://digitalvalut-turn.burbeng78.workers.dev/knock';
+
+function sanitizePushSub(sub){
+  if (!sub || typeof sub !== 'object') return null;
+  if (typeof sub.endpoint !== 'string' || !sub.endpoint.startsWith('https://')) return null;
+  if (sub.endpoint.length > 1024) return null;
+  return { endpoint: sub.endpoint };
+}
+function pushSupported(){
+  /* standalone check matters only on iOS — Safari refuses Web Push from an
+     ordinary browser tab regardless of permission, but Chrome/Android and
+     desktop browsers support it in a plain tab too */
+  if (isIOS) return isStandalone && 'serviceWorker' in navigator && 'PushManager' in window;
+  return 'serviceWorker' in navigator && 'PushManager' in window && typeof Notification !== 'undefined';
+}
+function notifyPref(){ try{ return localStorage.getItem('dvlogos-notify') === '1'; }catch(e){ return false; } }
+function setNotifyPref(on){ try{ localStorage.setItem('dvlogos-notify', on ? '1' : '0'); }catch(e){} }
+
+let myPushSub = null;
+async function ensurePushSubscription(){
+  if (myPushSub) return myPushSub;
+  if (!pushSupported()) return null;
+  try{
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: VAPID_PUBLIC_KEY });
+    myPushSub = sub.toJSON();
+    return myPushSub;
+  }catch(e){ return null; }
+}
+async function enableNotifications(){
+  if (!pushSupported()) return false;
+  try{
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') return false;
+  }catch(e){ return false; }
+  const sub = await ensurePushSubscription();
+  if (sub) setNotifyPref(true);
+  return !!sub;
+}
+function disableNotifications(){
+  setNotifyPref(false);
+  navigator.serviceWorker && navigator.serviceWorker.ready.then(reg => reg.pushManager.getSubscription())
+    .then(sub => sub && sub.unsubscribe()).catch(()=>{});
+  myPushSub = null;
+}
+/* fire-and-forget: a knock is a nice-to-have on top of the mailbox poll that
+   already runs, never something the connection flow waits on or fails without */
+function sendKnock(contact){
+  if (!contact || !contact.push || !contact.push.endpoint) return;
+  try{
+    fetch(KNOCK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint: contact.push.endpoint }),
+    }).catch(()=>{});
+  }catch(e){}
+}
+
+function paintNotifyToggle(on){
+  $('notifyRow').classList.toggle('on', on);
+  $('notifyRow').setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+function initNotifyUI(){
+  if (pushSupported()){
+    $('notifyCard').classList.remove('hide');
+    $('notifyIosHint').classList.add('hide');
+    paintNotifyToggle(notifyPref() && Notification.permission === 'granted');
+  } else if (isIOS && !isStandalone && 'serviceWorker' in navigator){
+    /* explains itself instead of offering a switch that cannot work yet —
+       the same approach already used for the iOS install banner */
+    $('notifyCard').classList.remove('hide');
+    $('notifyIosHint').classList.remove('hide');
+    $('notifyRow').classList.add('hide');
+  }
+  /* anything else (a browser with no Push API at all) shows nothing, rather
+     than a control that can only ever fail */
+}
+$('notifyRow').addEventListener('click', async () => {
+  const goingOn = !$('notifyRow').classList.contains('on');
+  if (goingOn){
+    paintNotifyToggle(true);
+    const ok = await enableNotifications();
+    if (!ok){ paintNotifyToggle(false); toast(t('notify.blocked','Notifiche bloccate dal browser. Controlla le impostazioni del sito.')); }
+  } else {
+    disableNotifications();
+    paintNotifyToggle(false);
+  }
+});
+$('notifyRow').addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); $('notifyRow').click(); }
 });
 
 /* ============================== auto-reconnect (mailbox) ==============================
@@ -1215,6 +1338,9 @@ async function tryAutoReconnect(contact){
   const outKey = await pairKey(myFp, contact.fp);
   const inKey = await pairKey(contact.fp, myFp);
   const sent = await mailboxPutSealed(outKey, sec, { nick: myNick(), sdp: pc.localDescription.sdp });
+  /* does nothing if this contact never shared a subscription, or shared one
+     before notifications existed — silently a no-op, same as it always was */
+  sendKnock(contact);
 
   if (sent){
     /* The other side has to be sitting on the home screen for its own poll to
@@ -1922,7 +2048,7 @@ function onDcMessage(ev){
         $('peerNameLbl').textContent = peerNick;
         $('peerAvatar').textContent = initials(peerNick);
         loadHistoryFor(peerNick);
-        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null);
+        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push));
         sysLine(peerNick + ' ' + t('call.joined'));
         checkSafetyFor(peerNick);
       }
@@ -2283,6 +2409,7 @@ applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || '
 
 initLang();
 renderContacts();
+initNotifyUI();
 if (!$('screenHome').classList.contains('hide')) startInboxPolling();
 
 /* ---------------- opening an invite link ----------------

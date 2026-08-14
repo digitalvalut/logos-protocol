@@ -4,7 +4,7 @@
    Caches the app shell so it installs and opens without a connection; the
    WebRTC handshake itself still needs the internet to find the other peer. */
 
-const CACHE = 'logos-modifica-3.5';
+const CACHE = 'logos-modifica-3.6';
 const ASSETS = [
   './modifica.html',
   './modifica.css',
@@ -75,6 +75,34 @@ self.addEventListener('fetch', event => {
     caches.match(req, { ignoreSearch: true }).then(hit => {
       const live = fetch(req).then(res => keep(req, res)).catch(() => hit);
       return hit || live;
+    })
+  );
+});
+
+/* ---------------- the knock: a wake-up with nothing in it ----------------
+   The push carries no data at all — no name, no message, not even which
+   contact. It only ever means one thing: someone you have already connected
+   with once wants to talk. Reading who, and answering, both still happen
+   entirely inside the app over the same encrypted mailbox as always; the
+   notification's only job is to get the app opened. */
+self.addEventListener('push', () => {
+  self.registration.showNotification('DigitalValut Logos', {
+    body: 'Qualcuno vuole parlarti.',
+    icon: './modifica-icon-192.png',
+    badge: './modifica-icon-192.png',
+    tag: 'dvlogos-knock',
+    renotify: true,
+  });
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list){
+        if (c.url.indexOf('modifica.html') !== -1) return c.focus();
+      }
+      return self.clients.openWindow('./modifica.html');
     })
   );
 });

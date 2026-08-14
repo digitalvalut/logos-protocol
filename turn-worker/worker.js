@@ -1,5 +1,5 @@
-/* DigitalValut Logos — small Cloudflare Worker backing two things for the
-   chat, both deliberately minimal:
+/* DigitalValut Logos — small Cloudflare Worker backing three things for the
+   chat, all deliberately minimal:
 
    1. TURN credentials (GET /turn) — hands out short-lived (24h) relay
       credentials so two phones on different mobile carriers can find each
@@ -14,7 +14,22 @@
       minutes, and deleted the moment it's read. There is no account, no
       list of contacts, no message content here — only "someone is trying to
       reach this hash right now", gone as soon as it's picked up or expired.
-      Needs a KV namespace bound as MAILBOX — see README.md. */
+      Needs a KV namespace bound as MAILBOX — see README.md.
+
+   3. A knock (POST /knock) — wakes up someone's phone via a Web Push
+      notification when they are not on the mailbox-polling screen. This
+      Worker never learns who anyone's contacts are: the caller must already
+      hold the other side's push subscription, handed over directly between
+      the two of them the same way the safety fingerprint is — over the
+      encrypted data channel, the first time they connected. Nothing about a
+      subscription is ever written to storage here; this route only signs a
+      Web Push request with the account's VAPID key and forwards it. The push
+      itself carries no content — no name, no message — only "someone you
+      have met before wants to talk", which is exactly what a stranger with a
+      guessed or leaked endpoint could not produce, since they would not have
+      a subscription to send to in the first place.
+      Needs VAPID_PUBLIC_KEY (plain text) and VAPID_PRIVATE_JWK (secret) — see
+      README.md. */
 
 const ALLOWED_ORIGIN = 'https://digitalvalut.github.io';
 const TURN_TTL_SECONDS = 86400; // 24h — long enough for the longest realistic call
@@ -25,7 +40,7 @@ const KEY_RE = /^[0-9a-f]{64}$/; // a hex SHA-256, nothing else is a valid mailb
 function corsHeaders(origin){
   return {
     'Access-Control-Allow-Origin': origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN,
-    'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Vary': 'Origin',
   };
@@ -93,6 +108,87 @@ function overRateLimit(request){
   return rec.n > RL_MAX_LOOKUPS;
 }
 
+/* ---------------- the knock: signed here, never stored here ----------------
+   Web Push authentication (RFC 8292): a JWT signed with the account's VAPID
+   private key, naming the push service as audience. The push itself carries
+   no payload, so none of RFC 8291's message encryption is needed — an empty
+   POST is a complete, valid push in the Web Push protocol (RFC 8030), and the
+   service worker's own generic text is what the person actually sees. */
+async function signVapidJwt(privateJwk, audience){
+  const key = await crypto.subtle.importKey(
+    'jwk', privateJwk, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']
+  );
+  const b64url = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const header = { typ: 'JWT', alg: 'ES256' };
+  const now = Math.floor(Date.now() / 1000);
+  const payload = { aud: audience, exp: now + 12 * 3600, sub: 'mailto:info@digitalvalut.it' };
+  const signingInput = b64url(new TextEncoder().encode(JSON.stringify(header))) + '.' +
+                        b64url(new TextEncoder().encode(JSON.stringify(payload)));
+  const sig = await crypto.subtle.sign(
+    { name: 'ECDSA', hash: 'SHA-256' }, key, new TextEncoder().encode(signingInput)
+  );
+  /* Web Crypto's ECDSA output is already raw r||s (IEEE P1363) — exactly the
+     form JWS ES256 requires, no DER conversion needed. Verified independently
+     against a reference implementation before this shipped. */
+  return signingInput + '.' + b64url(sig);
+}
+
+/* A knock reaches one specific person, so it is metered per target as well as
+   per sender — six in five minutes is generous for "trying to reach a friend"
+   and a hard stop on using this as a way to harass someone with notifications. */
+const KNOCK_WINDOW_MS = 5 * 60000;
+const KNOCK_MAX_PER_TARGET = 6;
+const knockHits = new Map();
+
+async function overKnockLimit(endpoint){
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(endpoint));
+  const key = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')).join('');
+  const now = Date.now();
+  let rec = knockHits.get(key);
+  if (!rec || now >= rec.resetAt){ rec = { n: 0, resetAt: now + KNOCK_WINDOW_MS }; knockHits.set(key, rec); }
+  rec.n++;
+  if (knockHits.size > 4000) for (const [k, v] of knockHits) if (now >= v.resetAt) knockHits.delete(k);
+  return rec.n > KNOCK_MAX_PER_TARGET;
+}
+
+async function handleKnock(request, env, cors){
+  if (!env.VAPID_PRIVATE_JWK || !env.VAPID_PUBLIC_KEY) return json({ error: 'push not configured' }, 500, cors);
+  if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
+
+  let body;
+  try{ body = await request.json(); }catch(e){ return json({ error: 'bad body' }, 400, cors); }
+  const endpoint = body && body.endpoint;
+  if (typeof endpoint !== 'string' || endpoint.length > 1024) return json({ error: 'bad subscription' }, 400, cors);
+
+  let url;
+  try{ url = new URL(endpoint); }catch(e){ return json({ error: 'bad subscription' }, 400, cors); }
+  /* https only — this Worker is about to make a signed request to whatever
+     URL it is handed, so the scheme is worth pinning down even though the
+     request carries nothing sensitive */
+  if (url.protocol !== 'https:') return json({ error: 'bad subscription' }, 400, cors);
+
+  if (await overKnockLimit(endpoint)) return json({ error: 'too many attempts' }, 429, cors);
+
+  try{
+    const privateJwk = JSON.parse(env.VAPID_PRIVATE_JWK);
+    const jwt = await signVapidJwt(privateJwk, url.origin);
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        Authorization: `vapid t=${jwt}, k=${env.VAPID_PUBLIC_KEY}`,
+        TTL: '60',
+        'Content-Length': '0',
+      },
+    });
+    /* the push service's own status is not this Worker's business to
+       interpret beyond ok/not-ok — a stale or revoked subscription on the
+       other end looks the same to us as any other failure */
+    return json({ ok: res.ok }, 200, cors);
+  }catch(e){
+    return json({ error: 'Worker error' }, 500, cors);
+  }
+}
+
 async function handleMailbox(request, env, cors, key){
   if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
   if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
@@ -144,6 +240,11 @@ export default {
 
     const m = url.pathname.match(/^\/mailbox\/([0-9a-f]{64})$/);
     if (m) return handleMailbox(request, env, cors, m[1]);
+
+    if (url.pathname === '/knock'){
+      if (request.method !== 'POST') return json({ error: 'method not allowed' }, 405, cors);
+      return handleKnock(request, env, cors);
+    }
 
     return json({ error: 'not found' }, 404, cors);
   },
