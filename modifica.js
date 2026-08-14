@@ -3980,8 +3980,17 @@ async function sha256Hex(buf){
     const rows = [];
     for (const f of ['modifica.html', 'modifica.css', 'modifica.js']){
       const res = await fetch(base + f, { cache: 'no-store' });
-      if (!res.ok) return;
+      if (!res.ok){ rows.length = 0; break; }
       rows.push(f + '  ' + await sha256Hex(await res.arrayBuffer()));
+    }
+    /* The single-file build has no separate files to fetch, and a page that
+       cannot check itself is exactly the page nobody should trust. So it hashes
+       the one file it is: same guarantee, one line instead of three. */
+    if (!rows.length){
+      const self = await fetch(location.href, { cache: 'no-store' });
+      if (!self.ok) return;
+      const name = location.pathname.replace(/^.*\//, '') || 'index.html';
+      rows.push(name + '  ' + await sha256Hex(await self.arrayBuffer()));
     }
     $('sealLine').textContent = t('footer.seal','SHA-256: ');
     for (const r of rows){
