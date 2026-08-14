@@ -125,6 +125,54 @@
       </button>
     </div>
 
+    <!-- The permanent address. Off by default, because switching it on means
+         "anyone holding this can reach me", and that is a decision, not a
+         default. It is derived from this device's own certificate and is
+         never registered anywhere: there is no directory of addresses, here
+         or anywhere else, so there is nothing to leak, subpoena or sell. -->
+    <div class="card" id="addrCard">
+      <div class="switchrow" id="addrRow" role="button" tabindex="0" aria-pressed="false">
+        <div class="txt">
+          <b data-i18n="addr.title">🪪 Il tuo indirizzo permanente</b>
+          <span data-i18n="addr.sub">Da dare al posto del numero di telefono. Chi ce l'ha può cercarti quando vuole, senza sapere il tuo nome né il tuo numero. Spento di base.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+
+      <div class="hide" id="addrOn">
+        <div class="addrbox" id="addrMine">DV-····-····-····</div>
+        <div class="qrbox hide" id="addrQr">
+          <canvas id="addrQrCanvas" aria-label="Codice QR del tuo indirizzo"></canvas>
+          <div class="qrhint" data-i18n="addr.qrHint">Chi lo inquadra ti chiama direttamente</div>
+        </div>
+        <div class="toolsrow">
+          <button class="btn primary" id="btnAddrShare"><span class="ic">📤</span><span data-i18n="addr.share">Manda il tuo indirizzo</span></button>
+          <button class="btn" id="btnAddrQr"><span class="ic">▦</span><span data-i18n="addr.showQr">Mostra il QR</span></button>
+        </div>
+        <div class="helptext mt12" id="addrReachNote" data-i18n="addr.reachNote">Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.</div>
+      </div>
+
+      <div class="addrdial">
+        <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
+        <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
+               data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
+        <button class="btn mt10" id="btnAddrDial"><span class="ic">📞</span><span data-i18n="addr.dial">Chiamalo</span></button>
+        <div class="status" id="addrDialStatus"></div>
+      </div>
+    </div>
+
+    <!-- Someone is calling the public address. Nothing is answered until this
+         is answered, because an address anyone may hold is an address anyone
+         may ring. -->
+    <div class="card hide" id="addrIncoming">
+      <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
+      <span class="lead" data-i18n="addr.incomingSub">Sta usando il tuo indirizzo permanente. Non sai ancora chi è: lo saprai solo se accetti.</span>
+      <div class="toolsrow">
+        <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
+        <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
+      </div>
+    </div>
+
     <div class="card hide" id="contactsCard">
       <h3 data-i18n="contacts.title">Contatti recenti</h3>
       <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
