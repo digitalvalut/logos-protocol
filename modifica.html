@@ -192,6 +192,13 @@
       </div>
     </div>
 
+    <!-- Left while nobody was here. Collected once, then kept on this device
+         only: the server no longer has them to give again. -->
+    <div class="card hide" id="lettersCard">
+      <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
+      <div id="lettersList"></div>
+    </div>
+
     <!-- Someone is calling the public address. Nothing is answered until this
          is answered, because an address anyone may hold is an address anyone
          may ring. -->
@@ -352,6 +359,20 @@
       <div class="spinner" aria-hidden="true"></div>
       <div class="bigTitle" id="bigTitleB" data-i18n="connect.bigTitle">Connessione in corso…</div>
       <div class="bigHint" id="bigHintB" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+    </div>
+
+    <!-- Nobody answered. Rather than an error and a lost errand, the thing the
+         person came here to say can still be left. -->
+    <div class="card hide" id="leaveLetter">
+      <b data-i18n="letter.noneTitle">Non risponde nessuno adesso.</b>
+      <span class="lead" data-i18n="letter.noneSub">Puoi lasciare un messaggio: lo troverà appena apre l'app.</span>
+      <input type="text" id="letterText" class="sans-input" maxlength="300"
+             data-i18n-ph="letter.ph" placeholder="Scrivi qui il tuo messaggio">
+      <div class="toolsrow">
+        <button class="btn primary" id="btnLeaveLetter"><span class="ic">✉️</span><span data-i18n="letter.leave">Lascia il messaggio</span></button>
+        <button class="btn" id="btnLeaveCancel" data-i18n="letter.cancel">Lascia perdere</button>
+      </div>
+      <div class="status" id="letterStatus"></div>
     </div>
 
     <div class="card" id="quickJoinCard">

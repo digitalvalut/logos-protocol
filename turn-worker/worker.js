@@ -253,6 +253,65 @@ async function handleWake(request, env, cors, key){
   return json({ error: 'method not allowed' }, 405, cors);
 }
 
+/* ---------------- the letterbox: a message for someone who is not there ----------------
+   Everything else here assumes both people are awake at the same time. A shop
+   at eleven at night is not, and neither is anyone else with a life, so until
+   now a call to an address that nobody answered simply evaporated — the caller
+   was told to try later, and whatever they wanted to say was lost.
+
+   This is the one place where something is kept for longer than a handshake,
+   and it is worth being exact about what that means. What is stored is a
+   sealed blob, encrypted with a key derived from the address, which this
+   Worker does not have and cannot derive. It sits under a name that is a hash,
+   for at most a week, and is deleted the moment it is collected. What the
+   Worker can see is that something arrived for some hash at some time — no
+   name, no text, no idea who sent it or who will read it.
+
+   That is a real change to the promise, and it is deliberately opt-in on the
+   client. "No server keeps anything" becomes "a server holds an envelope it
+   cannot open, for a few days, and only if you use this".
+
+   Each letter gets its own random name so two arriving at once cannot
+   overwrite each other, and a listing by prefix is what gathers them up. The
+   cap stops one address being filled up forever by somebody with nothing
+   better to do. */
+const LETTER_TTL_SECONDS = 7 * 24 * 3600;
+const MAX_LETTER_BYTES = 4096;
+const MAX_LETTERS = 20;
+const RAND_RE = /^[0-9a-f]{16,32}$/;
+
+async function handleLetter(request, env, cors, key, rand){
+  if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
+  if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
+  const prefix = 'l:' + key + ':';
+
+  if (request.method === 'PUT'){
+    if (!RAND_RE.test(rand || '')) return json({ error: 'bad key' }, 400, cors);
+    const body = await request.text();
+    if (!body || body.length > MAX_LETTER_BYTES) return json({ error: 'bad body' }, 400, cors);
+    const held = await env.MAILBOX.list({ prefix, limit: MAX_LETTERS + 1 });
+    if (held.keys.length >= MAX_LETTERS) return json({ error: 'letterbox full' }, 429, cors);
+    await env.MAILBOX.put(prefix + rand, body, { expirationTtl: LETTER_TTL_SECONDS });
+    return json({ ok: true }, 200, cors);
+  }
+
+  if (request.method === 'GET'){
+    if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
+    const held = await env.MAILBOX.list({ prefix, limit: MAX_LETTERS });
+    const out = [];
+    for (const k of held.keys){
+      const v = await env.MAILBOX.get(k.name);
+      if (v === null) continue;
+      out.push(v);
+      /* collected means gone, exactly like the mailbox */
+      await env.MAILBOX.delete(k.name);
+    }
+    return new Response(JSON.stringify(out), { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+  }
+
+  return json({ error: 'method not allowed' }, 405, cors);
+}
+
 async function handleMailbox(request, env, cors, key){
   if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
   if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
@@ -307,6 +366,12 @@ export default {
 
     const w = url.pathname.match(/^\/wake\/([0-9a-f]{64})$/);
     if (w) return handleWake(request, env, cors, w[1]);
+
+    /* PUT names the letter, GET collects everything waiting */
+    const lp = url.pathname.match(/^\/letter\/([0-9a-f]{64})\/([0-9a-f]{16,32})$/);
+    if (lp) return handleLetter(request, env, cors, lp[1], lp[2]);
+    const lg = url.pathname.match(/^\/letter\/([0-9a-f]{64})$/);
+    if (lg) return handleLetter(request, env, cors, lg[1], null);
 
     if (url.pathname === '/knock'){
       if (request.method !== 'POST') return json({ error: 'method not allowed' }, 405, cors);
