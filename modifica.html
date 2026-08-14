@@ -403,6 +403,24 @@
   </footer>
 </div>
 
+<!-- The instant two people actually connect. Every line on it is measured, not
+     claimed: the route comes from the connection's own statistics, the time from
+     a clock started when the attempt began. Tap anywhere to skip it. -->
+<div class="flash hide" id="connectedFlash" role="status" aria-live="polite">
+  <div class="flashcard">
+    <svg class="flashcheck" viewBox="0 0 52 52" aria-hidden="true">
+      <circle class="fc-ring" cx="26" cy="26" r="23"/>
+      <path class="fc-tick" d="M15 26.5 L22.5 34 L37 19.5"/>
+    </svg>
+    <div class="flashtitle" id="flashTitle">Connessi</div>
+    <div class="flashfacts">
+      <div class="ff" id="flashRoute"><span class="ic" aria-hidden="true">🔗</span><span></span></div>
+      <div class="ff"><span class="ic" aria-hidden="true">🔒</span><span data-i18n="flash.noserver">Nessun server può leggere quello che vi dite</span></div>
+      <div class="ff hide" id="flashTime"><span class="ic" aria-hidden="true">⚡</span><span></span></div>
+    </div>
+  </div>
+</div>
+
 <script src="modifica.js"></script>
 </body>
 </html>
