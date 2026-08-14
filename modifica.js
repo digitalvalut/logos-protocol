@@ -124,7 +124,8 @@ Object.assign(I18N.en, {
 "connect.bigTitle":"Connecting…","connect.bigHint":"Don't close the app — it only takes a few seconds.",
 "autoclean.title":"🗑️ Automatic cleanup","autoclean.sub":"Deletes conversations older than a set number of days on its own, so they don't keep taking up space on your phone. Off by default: nothing is ever deleted on its own unless you turn this on.","autoclean.after":"Delete conversations older than:","autoclean.d7":"7 days","autoclean.d30":"30 days","autoclean.d90":"90 days","autoclean.d365":"1 year",
 "wake.waitsNote":"You can close the app: I'll let you know when they open the invite.","wake.calling":"Letting {name} know…","wake.callingHint":"Their phone has been buzzed. The moment they open the app you're connected — you can wait here.","wake.noAnswer":"They've been alerted but haven't opened the app yet. Try again later.",
-"quick.helpAWaits":"Send it with the button below — the other person just taps it and they're in. Or read them the six digits out loud."
+"quick.helpAWaits":"Send it with the button below — the other person just taps it and they're in. Or read them the six digits out loud.",
+"verify.inPerson":"verified in person","verify.inPersonDone":"Verified in person: you scanned the code off this person's own screen, so nobody can have got in between. There is no need to read the three words.","sas.leadMismatch":"Careful: whoever answered is not the phone whose code you scanned. It may be a mistake, but it is also exactly what you would see if someone had got in between. Don't write anything until you have read the three words aloud to each other."
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -237,7 +238,8 @@ Object.assign(I18N.it, {
 "connect.bigTitle":"Connessione in corso…","connect.bigHint":"Non chiudere l'app — ci vogliono pochi secondi.",
 "autoclean.title":"🗑️ Pulizia automatica","autoclean.sub":"Cancella da sola le conversazioni più vecchie di tot giorni, per non far crescere lo spazio occupato sul telefono. Spenta di base: senza attivarla, non si cancella mai nulla da solo.","autoclean.after":"Cancella le conversazioni più vecchie di:","autoclean.d7":"7 giorni","autoclean.d30":"30 giorni","autoclean.d90":"90 giorni","autoclean.d365":"1 anno",
 "wake.waitsNote":"Puoi chiudere l'app: quando aprono l'invito ti avviso io.","wake.calling":"Sto avvisando {name}…","wake.callingHint":"Ho fatto squillare il suo telefono. Appena apre l'app siete connessi — puoi aspettare qui.","wake.noAnswer":"L'ho avvisata ma non ha ancora aperto l'app. Riprova più tardi.",
-"quick.helpAWaits":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce."
+"quick.helpAWaits":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce.",
+"verify.inPerson":"verificato di persona","verify.inPersonDone":"Verificato di persona: hai inquadrato il codice sullo schermo di questa persona, quindi nessuno può essersi messo in mezzo. Non serve dirsi le tre parole.","sas.leadMismatch":"Attenzione: chi ha risposto non è il telefono del codice che hai inquadrato. Può essere un errore, ma è anche esattamente ciò che si vedrebbe se qualcuno si fosse messo in mezzo. Non scrivere nulla finché non vi siete detti le tre parole a voce."
 });
 
 Object.assign(I18N.fr, {
@@ -343,7 +345,8 @@ Object.assign(I18N.fr, {
 "connect.bigTitle":"Connexion en cours…","connect.bigHint":"Ne fermez pas l'appli — cela ne prend que quelques secondes.",
 "autoclean.title":"🗑️ Nettoyage automatique","autoclean.sub":"Supprime tout seul les discussions plus anciennes qu'un certain nombre de jours, pour qu'elles n'occupent pas d'espace sur votre téléphone. Désactivé par défaut : rien n'est jamais supprimé tout seul sans que vous l'activiez.","autoclean.after":"Supprimer les discussions plus anciennes que :","autoclean.d7":"7 jours","autoclean.d30":"30 jours","autoclean.d90":"90 jours","autoclean.d365":"1 an",
 "wake.waitsNote":"Vous pouvez fermer l'application : je vous préviens quand l'invitation sera ouverte.","wake.calling":"J'préviens {name}…","wake.callingHint":"Son téléphone a sonné. Dès qu'elle ouvre l'application, vous êtes connectés — vous pouvez attendre ici.","wake.noAnswer":"Elle a été prévenue mais n'a pas encore ouvert l'application. Réessayez plus tard.",
-"quick.helpAWaits":"Envoyez-le avec le bouton ci-dessous — l'autre personne n'a qu'à le toucher et elle est connectée. Ou dictez-lui les six chiffres à voix haute."
+"quick.helpAWaits":"Envoyez-le avec le bouton ci-dessous — l'autre personne n'a qu'à le toucher et elle est connectée. Ou dictez-lui les six chiffres à voix haute.",
+"verify.inPerson":"vérifié en personne","verify.inPersonDone":"Vérifié en personne : vous avez scanné le code sur l'écran de cette personne, donc personne n'a pu s'interposer. Inutile de vous dire les trois mots.","sas.leadMismatch":"Attention : la personne qui a répondu n'est pas le téléphone dont vous avez scanné le code. Cela peut être une erreur, mais c'est aussi exactement ce que l'on verrait si quelqu'un s'était interposé. N'écrivez rien avant de vous être dit les trois mots à voix haute."
 });
 
 Object.assign(I18N.de, {
@@ -449,7 +452,8 @@ Object.assign(I18N.de, {
 "connect.bigTitle":"Verbindung wird hergestellt…","connect.bigHint":"Schließe die App nicht — es dauert nur ein paar Sekunden.",
 "autoclean.title":"🗑️ Automatische Bereinigung","autoclean.sub":"Löscht von selbst Unterhaltungen, die älter als eine festgelegte Anzahl Tage sind, damit sie nicht weiter Speicherplatz auf deinem Telefon belegen. Standardmäßig aus: Ohne dass du das hier einschaltest, wird nie von selbst etwas gelöscht.","autoclean.after":"Unterhaltungen löschen, die älter sind als:","autoclean.d7":"7 Tage","autoclean.d30":"30 Tage","autoclean.d90":"90 Tage","autoclean.d365":"1 Jahr",
 "wake.waitsNote":"Du kannst die App schließen: Ich sage dir Bescheid, wenn die Einladung geöffnet wird.","wake.calling":"Ich benachrichtige {name}…","wake.callingHint":"Das Telefon hat gebrummt. Sobald die App geöffnet wird, seid ihr verbunden — du kannst hier warten.","wake.noAnswer":"Die Person wurde benachrichtigt, hat die App aber noch nicht geöffnet. Versuch es später noch einmal.",
-"quick.helpAWaits":"Schick ihn mit der Schaltfläche unten — die andere Person tippt einfach darauf und ist drin. Oder sag ihr die sechs Ziffern laut vor."
+"quick.helpAWaits":"Schick ihn mit der Schaltfläche unten — die andere Person tippt einfach darauf und ist drin. Oder sag ihr die sechs Ziffern laut vor.",
+"verify.inPerson":"persönlich bestätigt","verify.inPersonDone":"Persönlich bestätigt: Du hast den Code vom Bildschirm dieser Person selbst gescannt, also kann sich niemand dazwischengeschoben haben. Die drei Wörter braucht ihr nicht.","sas.leadMismatch":"Achtung: Wer geantwortet hat, ist nicht das Telefon, dessen Code du gescannt hast. Das kann ein Versehen sein — es ist aber auch genau das, was man sähe, wenn sich jemand dazwischengeschoben hätte. Schreib nichts, bevor ihr euch die drei Wörter laut vorgelesen habt."
 });
 
 Object.assign(I18N.es, {
@@ -555,7 +559,8 @@ Object.assign(I18N.es, {
 "connect.bigTitle":"Conectando…","connect.bigHint":"No cierres la app — solo tarda unos segundos.",
 "autoclean.title":"🗑️ Limpieza automática","autoclean.sub":"Borra por sí sola las conversaciones más antiguas que un número determinado de días, para que no sigan ocupando espacio en tu teléfono. Desactivado por defecto: nada se borra solo a menos que actives esto.","autoclean.after":"Borrar conversaciones más antiguas que:","autoclean.d7":"7 días","autoclean.d30":"30 días","autoclean.d90":"90 días","autoclean.d365":"1 año",
 "wake.waitsNote":"Puedes cerrar la aplicación: te aviso cuando abran la invitación.","wake.calling":"Estoy avisando a {name}…","wake.callingHint":"Su teléfono ha sonado. En cuanto abra la aplicación estaréis conectados — puedes esperar aquí.","wake.noAnswer":"Le he avisado pero aún no ha abierto la aplicación. Inténtalo más tarde.",
-"quick.helpAWaits":"Envíalo con el botón de abajo — a la otra persona le basta con tocarlo y ya está dentro. O dile las seis cifras en voz alta."
+"quick.helpAWaits":"Envíalo con el botón de abajo — a la otra persona le basta con tocarlo y ya está dentro. O dile las seis cifras en voz alta.",
+"verify.inPerson":"verificado en persona","verify.inPersonDone":"Verificado en persona: has escaneado el código en la pantalla de esta persona, así que nadie ha podido meterse en medio. No hace falta deciros las tres palabras.","sas.leadMismatch":"Atención: quien ha respondido no es el teléfono cuyo código escaneaste. Puede ser un error, pero también es exactamente lo que se vería si alguien se hubiera metido en medio. No escribas nada hasta que os hayáis dicho las tres palabras en voz alta."
 });
 
 Object.assign(I18N.pt, {
@@ -661,7 +666,8 @@ Object.assign(I18N.pt, {
 "connect.bigTitle":"A ligar…","connect.bigHint":"Não feche a app — demora apenas alguns segundos.",
 "autoclean.title":"🗑️ Limpeza automática","autoclean.sub":"Apaga sozinha as conversas mais antigas do que um certo número de dias, para não continuarem a ocupar espaço no seu telemóvel. Desativado por predefinição: nada é apagado sozinho a menos que ative isto.","autoclean.after":"Apagar conversas mais antigas do que:","autoclean.d7":"7 dias","autoclean.d30":"30 dias","autoclean.d90":"90 dias","autoclean.d365":"1 ano",
 "wake.waitsNote":"Pode fechar a aplicação: eu aviso-o quando abrirem o convite.","wake.calling":"A avisar {name}…","wake.callingHint":"O telemóvel tocou. Assim que abrir a aplicação ficam ligados — pode esperar aqui.","wake.noAnswer":"Já foi avisada mas ainda não abriu a aplicação. Tente mais tarde.",
-"quick.helpAWaits":"Envie-o com o botão abaixo — a outra pessoa só tem de tocar nele e está ligada. Ou diga-lhe os seis algarismos em voz alta."
+"quick.helpAWaits":"Envie-o com o botão abaixo — a outra pessoa só tem de tocar nele e está ligada. Ou diga-lhe os seis algarismos em voz alta.",
+"verify.inPerson":"verificado presencialmente","verify.inPersonDone":"Verificado presencialmente: leu o código no ecrã desta pessoa, portanto ninguém se pode ter metido pelo meio. Não é preciso dizerem as três palavras.","sas.leadMismatch":"Atenção: quem respondeu não é o telemóvel cujo código leu. Pode ser um engano, mas é também exatamente o que se veria se alguém se tivesse metido pelo meio. Não escreva nada enquanto não disserem as três palavras em voz alta."
 });
 
 Object.assign(I18N.ru, {
@@ -767,7 +773,8 @@ Object.assign(I18N.ru, {
 "connect.bigTitle":"Идёт подключение…","connect.bigHint":"Не закрывайте приложение — это займёт всего несколько секунд.",
 "autoclean.title":"🗑️ Автоматическая очистка","autoclean.sub":"Сама удаляет разговоры старше указанного числа дней, чтобы они не занимали место на телефоне. По умолчанию выключено: ничего не удаляется само, пока вы это не включите.","autoclean.after":"Удалять разговоры старше:","autoclean.d7":"7 дней","autoclean.d30":"30 дней","autoclean.d90":"90 дней","autoclean.d365":"1 года",
 "wake.waitsNote":"Можно закрыть приложение: я сообщу, когда приглашение откроют.","wake.calling":"Сообщаю {name}…","wake.callingHint":"Телефон уже звонит. Как только приложение откроют, вы соединитесь — можно подождать здесь.","wake.noAnswer":"Я сообщил, но приложение ещё не открыли. Попробуйте позже.",
-"quick.helpAWaits":"Отправьте её кнопкой ниже — другому человеку достаточно нажать, и он внутри. Или продиктуйте шесть цифр вслух."
+"quick.helpAWaits":"Отправьте её кнопкой ниже — другому человеку достаточно нажать, и он внутри. Или продиктуйте шесть цифр вслух.",
+"verify.inPerson":"проверено лично","verify.inPersonDone":"Проверено лично: вы отсканировали код прямо с экрана этого человека, значит никто не мог вклиниться между вами. Три слова произносить не нужно.","sas.leadMismatch":"Внимание: ответил не тот телефон, чей код вы отсканировали. Возможно, это ошибка, но именно так выглядело бы и вклинивание постороннего. Ничего не пишите, пока не произнесёте друг другу три слова вслух."
 });
 
 Object.assign(I18N.zh, {
@@ -873,7 +880,8 @@ Object.assign(I18N.zh, {
 "connect.bigTitle":"正在连接…","connect.bigHint":"请不要关闭应用——只需几秒钟。",
 "autoclean.title":"🗑️ 自动清理","autoclean.sub":"自动删除超过设定天数的对话，这样它们就不会一直占用手机空间。默认关闭：除非你自己打开此项，否则不会自动删除任何内容。","autoclean.after":"删除早于以下时间的对话：","autoclean.d7":"7 天","autoclean.d30":"30 天","autoclean.d90":"90 天","autoclean.d365":"1 年",
 "wake.waitsNote":"你可以关闭应用：邀请被打开时我会通知你。","wake.calling":"正在通知 {name}…","wake.callingHint":"对方的手机已经响了。只要对方打开应用，你们就会连接上——可以在这里等待。","wake.noAnswer":"已经通知过了，但对方还没有打开应用。请稍后再试。",
-"quick.helpAWaits":"用下面的按钮发送——对方只要点一下就连上了。或者把这六位数字念给对方听。"
+"quick.helpAWaits":"用下面的按钮发送——对方只要点一下就连上了。或者把这六位数字念给对方听。",
+"verify.inPerson":"已当面验证","verify.inPersonDone":"已当面验证：你是从对方本人的屏幕上扫的码，所以不可能有人插在中间。不需要再核对那三个词。","sas.leadMismatch":"注意：应答的并不是你扫码的那部手机。这可能是个误会，但如果真有人插在中间，看到的也正是这样。在你们当面核对完那三个词之前，不要写任何内容。"
 });
 
 Object.assign(I18N.ar, {
@@ -979,7 +987,8 @@ Object.assign(I18N.ar, {
 "connect.bigTitle":"جارٍ الاتصال…","connect.bigHint":"لا تغلق التطبيق — يستغرق الأمر ثوانٍ قليلة فقط.",
 "autoclean.title":"🗑️ تنظيف تلقائي","autoclean.sub":"يحذف تلقائيًا المحادثات الأقدم من عدد معين من الأيام، حتى لا تستمر في شغل مساحة على هاتفك. متوقف افتراضيًا: لا يُحذف شيء تلقائيًا أبدًا ما لم تفعّل هذا بنفسك.","autoclean.after":"حذف المحادثات الأقدم من:","autoclean.d7":"7 أيام","autoclean.d30":"30 يومًا","autoclean.d90":"90 يومًا","autoclean.d365":"سنة واحدة",
 "wake.waitsNote":"يمكنك إغلاق التطبيق: سأخبرك عندما تُفتح الدعوة.","wake.calling":"أُبلغ {name}…","wake.callingHint":"لقد رنّ هاتفه. بمجرد فتح التطبيق ستكونان متصلين — يمكنك الانتظار هنا.","wake.noAnswer":"تم إبلاغه لكنه لم يفتح التطبيق بعد. حاول لاحقًا.",
-"quick.helpAWaits":"أرسله بالزر أدناه — يكفي أن يلمسه الشخص الآخر ليدخل. أو اقرأ له الأرقام الستة بصوت عالٍ."
+"quick.helpAWaits":"أرسله بالزر أدناه — يكفي أن يلمسه الشخص الآخر ليدخل. أو اقرأ له الأرقام الستة بصوت عالٍ.",
+"verify.inPerson":"تم التحقق شخصيًا","verify.inPersonDone":"تم التحقق شخصيًا: لقد مسحت الرمز من شاشة هذا الشخص نفسه، فلا يمكن لأحد أن يكون قد توسّط بينكما. لا حاجة لقول الكلمات الثلاث.","sas.leadMismatch":"انتبه: من ردّ ليس الهاتف الذي مسحت رمزه. قد يكون خطأً، لكنه أيضًا بالضبط ما كنت ستراه لو تدخّل أحد بينكما. لا تكتب شيئًا قبل أن تتبادلا الكلمات الثلاث بصوت مسموع."
 });
 
 Object.assign(I18N.ur, {
@@ -1085,7 +1094,8 @@ Object.assign(I18N.ur, {
 "connect.bigTitle":"رابطہ قائم ہو رہا ہے…","connect.bigHint":"ایپ بند نہ کریں — اس میں صرف چند سیکنڈ لگتے ہیں۔",
 "autoclean.title":"🗑️ خودکار صفائی","autoclean.sub":"ایک مقررہ تعداد کے دنوں سے پرانی گفتگو کو خود بخود حذف کرتا ہے، تاکہ وہ آپ کے فون پر جگہ گھیرتی نہ رہیں۔ بطور ڈیفالٹ بند: جب تک آپ خود اسے آن نہ کریں، کچھ بھی خود بخود حذف نہیں ہوتا۔","autoclean.after":"اس سے پرانی گفتگو حذف کریں:","autoclean.d7":"7 دن","autoclean.d30":"30 دن","autoclean.d90":"90 دن","autoclean.d365":"1 سال",
 "wake.waitsNote":"آپ ایپ بند کر سکتے ہیں: جب دعوت کھولی جائے گی تو میں آپ کو بتا دوں گا۔","wake.calling":"{name} کو اطلاع دی جا رہی ہے…","wake.callingHint":"ان کا فون بج چکا ہے۔ جیسے ہی وہ ایپ کھولیں گے آپ جڑ جائیں گے — آپ یہاں انتظار کر سکتے ہیں۔","wake.noAnswer":"انہیں اطلاع دے دی گئی ہے لیکن انہوں نے ابھی تک ایپ نہیں کھولی۔ بعد میں دوبارہ کوشش کریں۔",
-"quick.helpAWaits":"نیچے دیے گئے بٹن سے بھیجیں — دوسرے شخص کو بس اسے چھونا ہے اور وہ اندر ہے۔ یا انہیں چھ ہندسے بول کر بتا دیں۔"
+"quick.helpAWaits":"نیچے دیے گئے بٹن سے بھیجیں — دوسرے شخص کو بس اسے چھونا ہے اور وہ اندر ہے۔ یا انہیں چھ ہندسے بول کر بتا دیں۔",
+"verify.inPerson":"بالمشافہ تصدیق شدہ","verify.inPersonDone":"بالمشافہ تصدیق شدہ: آپ نے کوڈ اسی شخص کی اپنی اسکرین سے اسکین کیا ہے، لہٰذا کوئی درمیان میں نہیں آ سکتا۔ تین الفاظ کہنے کی ضرورت نہیں۔","sas.leadMismatch":"خبردار: جواب دینے والا وہ فون نہیں جس کا کوڈ آپ نے اسکین کیا تھا۔ یہ غلطی ہو سکتی ہے، لیکن اگر کوئی درمیان میں آ گیا ہوتا تو بھی بالکل ایسا ہی دکھائی دیتا۔ جب تک آپ ایک دوسرے کو تین الفاظ بول کر نہ بتا لیں، کچھ نہ لکھیں۔"
 });
 
 Object.assign(I18N.hi, {
@@ -1191,7 +1201,8 @@ Object.assign(I18N.hi, {
 "connect.bigTitle":"कनेक्ट हो रहा है…","connect.bigHint":"ऐप बंद न करें — इसमें बस कुछ सेकंड लगते हैं।",
 "autoclean.title":"🗑️ अपने आप सफ़ाई","autoclean.sub":"एक तय दिनों से पुरानी बातचीत अपने आप हटा देता है, ताकि वे आपके फ़ोन पर जगह घेरती न रहें। डिफ़ॉल्ट रूप से बंद: जब तक आप इसे खुद चालू न करें, कुछ भी अपने आप नहीं हटता।","autoclean.after":"इससे पुरानी बातचीत हटाएं:","autoclean.d7":"7 दिन","autoclean.d30":"30 दिन","autoclean.d90":"90 दिन","autoclean.d365":"1 साल",
 "wake.waitsNote":"आप ऐप बंद कर सकते हैं: जब वे निमंत्रण खोलेंगे तो मैं आपको बता दूंगा।","wake.calling":"{name} को बता रहा हूँ…","wake.callingHint":"उनका फ़ोन बज चुका है। जैसे ही वे ऐप खोलेंगे, आप जुड़ जाएंगे — आप यहाँ इंतज़ार कर सकते हैं।","wake.noAnswer":"उन्हें बता दिया गया है लेकिन उन्होंने अभी तक ऐप नहीं खोला। बाद में फिर कोशिश करें।",
-"quick.helpAWaits":"नीचे दिए बटन से भेजें — दूसरे व्यक्ति को बस उसे छूना है और वे अंदर हैं। या उन्हें छह अंक बोलकर बता दें।"
+"quick.helpAWaits":"नीचे दिए बटन से भेजें — दूसरे व्यक्ति को बस उसे छूना है और वे अंदर हैं। या उन्हें छह अंक बोलकर बता दें।",
+"verify.inPerson":"आमने-सामने सत्यापित","verify.inPersonDone":"आमने-सामने सत्यापित: आपने कोड इसी व्यक्ति की स्क्रीन से स्कैन किया है, इसलिए कोई बीच में नहीं आ सकता। तीन शब्द बोलने की ज़रूरत नहीं।","sas.leadMismatch":"सावधान: जिसने जवाब दिया वह वह फ़ोन नहीं है जिसका कोड आपने स्कैन किया था। यह ग़लती हो सकती है, लेकिन अगर कोई बीच में आ गया होता तो भी ठीक ऐसा ही दिखता। जब तक आप एक-दूसरे को तीन शब्द बोलकर न बता लें, कुछ न लिखें।"
 });
 
 Object.assign(I18N.bn, {
@@ -1297,7 +1308,8 @@ Object.assign(I18N.bn, {
 "connect.bigTitle":"সংযোগ হচ্ছে…","connect.bigHint":"অ্যাপ বন্ধ করবেন না — এতে মাত্র কয়েক সেকেন্ড লাগে।",
 "autoclean.title":"🗑️ স্বয়ংক্রিয় পরিষ্কার","autoclean.sub":"নির্দিষ্ট সংখ্যক দিনের চেয়ে পুরনো কথোপকথন নিজে থেকেই মুছে ফেলে, যাতে সেগুলো আপনার ফোনে জায়গা দখল করে না রাখে। ডিফল্টভাবে বন্ধ: আপনি নিজে চালু না করা পর্যন্ত কিছুই নিজে থেকে মুছে যায় না।","autoclean.after":"এর চেয়ে পুরনো কথোপকথন মুছুন:","autoclean.d7":"৭ দিন","autoclean.d30":"৩০ দিন","autoclean.d90":"৯০ দিন","autoclean.d365":"১ বছর",
 "wake.waitsNote":"আপনি অ্যাপটি বন্ধ করতে পারেন: আমন্ত্রণ খোলা হলে আমি আপনাকে জানাব।","wake.calling":"{name}-কে জানানো হচ্ছে…","wake.callingHint":"তাঁর ফোন বেজে উঠেছে। তিনি অ্যাপ খোলামাত্র আপনারা যুক্ত হয়ে যাবেন — আপনি এখানে অপেক্ষা করতে পারেন।","wake.noAnswer":"তাঁকে জানানো হয়েছে কিন্তু তিনি এখনও অ্যাপ খোলেননি। পরে আবার চেষ্টা করুন।",
-"quick.helpAWaits":"নিচের বোতাম দিয়ে পাঠান — অন্য ব্যক্তিকে শুধু সেটিতে চাপ দিতে হবে, ব্যস। অথবা তাঁকে ছয়টি সংখ্যা মুখে বলে দিন।"
+"quick.helpAWaits":"নিচের বোতাম দিয়ে পাঠান — অন্য ব্যক্তিকে শুধু সেটিতে চাপ দিতে হবে, ব্যস। অথবা তাঁকে ছয়টি সংখ্যা মুখে বলে দিন।",
+"verify.inPerson":"সামনাসামনি যাচাই করা","verify.inPersonDone":"সামনাসামনি যাচাই করা: আপনি কোডটি এই ব্যক্তিরই স্ক্রিন থেকে স্ক্যান করেছেন, তাই কেউ মাঝখানে ঢুকতে পারেনি। তিনটি শব্দ বলার দরকার নেই।","sas.leadMismatch":"সাবধান: যে সাড়া দিয়েছে সেটি আপনার স্ক্যান করা কোডের ফোন নয়। এটি ভুল হতে পারে, কিন্তু কেউ মাঝখানে ঢুকে পড়লেও ঠিক এমনটাই দেখা যেত। একে অপরকে মুখে তিনটি শব্দ না বলা পর্যন্ত কিছু লিখবেন না।"
 });
 
 Object.assign(I18N.id, {
@@ -1403,7 +1415,8 @@ Object.assign(I18N.id, {
 "connect.bigTitle":"Menyambungkan…","connect.bigHint":"Jangan tutup aplikasi — hanya perlu beberapa detik.",
 "autoclean.title":"🗑️ Pembersihan otomatis","autoclean.sub":"Menghapus sendiri percakapan yang lebih lama dari jumlah hari tertentu, agar tidak terus memakan ruang di ponsel Anda. Nonaktif secara default: tidak ada yang terhapus sendiri kecuali Anda mengaktifkan ini.","autoclean.after":"Hapus percakapan yang lebih lama dari:","autoclean.d7":"7 hari","autoclean.d30":"30 hari","autoclean.d90":"90 hari","autoclean.d365":"1 tahun",
 "wake.waitsNote":"Anda boleh menutup aplikasi: saya akan memberi tahu saat undangan dibuka.","wake.calling":"Memberi tahu {name}…","wake.callingHint":"Ponselnya sudah berdering. Begitu aplikasi dibuka, Anda langsung terhubung — Anda bisa menunggu di sini.","wake.noAnswer":"Sudah diberi tahu tetapi aplikasinya belum dibuka. Coba lagi nanti.",
-"quick.helpAWaits":"Kirim dengan tombol di bawah — orang lain tinggal menyentuhnya dan langsung masuk. Atau bacakan enam angkanya dengan suara."
+"quick.helpAWaits":"Kirim dengan tombol di bawah — orang lain tinggal menyentuhnya dan langsung masuk. Atau bacakan enam angkanya dengan suara.",
+"verify.inPerson":"terverifikasi langsung","verify.inPersonDone":"Terverifikasi langsung: Anda memindai kode dari layar orang ini sendiri, jadi tidak ada yang bisa menyelip di tengah. Tidak perlu menyebutkan tiga kata itu.","sas.leadMismatch":"Hati-hati: yang menjawab bukan ponsel yang kodenya Anda pindai. Bisa jadi kekeliruan, tetapi itu juga persis yang akan terlihat jika ada yang menyelip di tengah. Jangan menulis apa pun sebelum kalian saling menyebutkan tiga kata itu dengan suara."
 });
 
 function t(key, fallback){
@@ -1920,7 +1933,8 @@ function paintVerifyBadge(state){
   safetyState = state;
   const b = $('btnVerify');
   b.classList.remove('vok','vnew','vbad');
-  if (state === 'ok')      { b.classList.add('vok');  b.textContent = '🔒 ' + t('verify.known','verificato'); }
+  if (state === 'inperson'){ b.classList.add('vok');  b.textContent = '✅ ' + t('verify.inPerson','verificato di persona'); }
+  else if (state === 'ok') { b.classList.add('vok');  b.textContent = '🔒 ' + t('verify.known','verificato'); }
   else if (state === 'new'){ b.classList.add('vnew'); b.textContent = t('verify.badge','🔒 verifica'); }
   else if (state === 'changed'){ b.classList.add('vbad'); b.textContent = '⚠️ ' + t('verify.changedShort','codice cambiato'); }
   else { b.textContent = t('verify.badge','🔒 verifica'); }
@@ -1928,12 +1942,35 @@ function paintVerifyBadge(state){
 function readSafetyRec(key){ try{ return JSON.parse(localStorage.getItem(key) || 'null'); }catch(e){ return null; } }
 function writeSafetyRec(key, code){ try{ localStorage.setItem(key, JSON.stringify({ code, since: Date.now() })); }catch(e){} }
 
+/* Set only by opening a QR that was scanned off someone's screen in person —
+   see the note above paintQr for why a link never sets it. */
+let scannedFp = null;
+
 async function checkSafetyFor(nick){
   const code = await computeSafetyCode();
   const fpHex = remoteFpHex();
   if (!code || !fpHex) return;
   const key = safetyKeyFp(fpHex);
   let rec = readSafetyRec(key);
+
+  /* The QR said which phone would answer. Check what actually did. */
+  if (scannedFp){
+    const expected = scannedFp;
+    scannedFp = null; /* answers for this connection only */
+    if (fpHex.slice(0, expected.length) === expected){
+      writeSafetyRec(key, code);
+      paintVerifyBadge('inperson');
+      sysLine(t('verify.inPersonDone','Verificato di persona: hai inquadrato il codice sullo schermo di questa persona, quindi nessuno può essersi messo in mezzo. Non serve dirsi le tre parole.'));
+      return;
+    }
+    /* Not who the QR promised. Nothing here is trusted, and this is said as
+       plainly as it deserves. */
+    paintVerifyBadge('changed');
+    await showSasPanel('mismatch');
+    return;
+  }
+
+
   /* one-time carry-over from the old name-keyed records */
   if (!rec && nick){
     const old = readSafetyRec(safetyKey(nick));
@@ -1970,10 +2007,11 @@ async function showSasPanel(kind){
   const words = await computeSafetyWords();
   if (!words) return;
   $('sasWords').textContent = words.join('   ');
-  $('sasLead').textContent = kind === 'changed'
-    ? t('sas.leadChanged','Attenzione: questa persona non risulta più la stessa dell\'ultima volta. Di solito è un telefono nuovo o l\'app reinstallata — ma è anche il segno di qualcuno che si è messo in mezzo. Ditevi le tre parole a voce prima di continuare.')
-    : t('sas.lead','Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.');
-  $('sasPanel').classList.toggle('warn', kind === 'changed');
+  $('sasLead').textContent =
+      kind === 'mismatch' ? t('sas.leadMismatch','Attenzione: chi ha risposto non è il telefono del codice che hai inquadrato. Può essere un errore, ma è anche esattamente ciò che si vedrebbe se qualcuno si fosse messo in mezzo. Non scrivere nulla finché non vi siete detti le tre parole a voce.')
+    : kind === 'changed'  ? t('sas.leadChanged','Attenzione: questa persona non risulta più la stessa dell\'ultima volta. Di solito è un telefono nuovo o l\'app reinstallata — ma è anche il segno di qualcuno che si è messo in mezzo. Ditevi le tre parole a voce prima di continuare.')
+    :                       t('sas.lead','Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.');
+  $('sasPanel').classList.toggle('warn', kind === 'changed' || kind === 'mismatch');
   $('sasPanel').classList.remove('hide');
 }
 $('btnSasYes').addEventListener('click', () => { acceptNewSafety(); toast(t('sas.confirmed','Contatto verificato.')); });
@@ -3189,7 +3227,7 @@ async function startQuickShare(existingCode, quiet){
   stopQuickPump();
   const code = existingCode || makeQuickCode();
   $('quickCodeOut').textContent = formatQuickCode(code);
-  paintQr(code);
+  paintQr(code).catch(()=>{}); /* the QR is a convenience: never hold the invite up for it */
   $('btnRetryQuickA').classList.add('hide');
   /* both start from "this invite dies with the screen" and are corrected below
      only once the app has confirmed it really can ring for this person */
@@ -3270,12 +3308,32 @@ async function startQuickShare(existingCode, quiet){
 }
 function quickLink(code){ return location.origin + location.pathname + '#q=' + code; }
 
+/* ---------------- a QR held out in person is an authenticated channel ----------------
+   Everything else here has to assume the invite travelled through something
+   untrustworthy — WhatsApp, email, a scrap of paper — which is exactly why two
+   people are asked to read three words to each other afterwards.
+   A QR scanned off someone's screen while standing in front of them is different
+   in kind: the bytes went from their phone to your camera and through nothing
+   else. Nobody can substitute themselves in the middle of two metres of air.
+   So the QR — and only the QR — carries the fingerprint of the certificate that
+   phone will actually connect with. If what answers presents that same
+   fingerprint, it is provably that phone, and the spoken check has nothing left
+   to add. If it does not, that is not a hiccup: it is the one thing the spoken
+   check exists to catch, and it is said loudly.
+   Deliberately never added to the shared text link. A link arrives through a
+   channel nobody can vouch for, and anyone able to tamper with the link could
+   put their own fingerprint in it just as easily — auto-verifying that would
+   turn a real check into a rubber stamp. */
+const QR_FP_CHARS = 24; /* 96 bits of the fingerprint: far past forging, still a small QR */
+
 /* Drawn on a card that stays white even in dark mode: a scanner needs that
    contrast, and a QR inverted to match a dark theme is one most cameras
    refuse to read. */
-function paintQr(code){
+async function paintQr(code){
   const box = $('quickQr');
-  const m = qrMatrix(quickLink(code));
+  const fp = await myFingerprintHex();
+  const url = fp ? quickLink(code) + '&v=' + fp.slice(0, QR_FP_CHARS) : quickLink(code);
+  const m = qrMatrix(url);
   if (!m){ box.classList.add('hide'); return; }
   const size = m.length, quiet = 4, scale = 4, total = size + quiet * 2;
   const cv = $('quickQrCanvas');
@@ -3928,6 +3986,9 @@ if (!$('screenHome').classList.contains('hide')) startInboxPolling();
   const quick = location.hash.match(/[#&]q=(\d{6})\b/);
   if (quick){
     const code = quick[1];
+    /* only a QR carries this, and only a QR was ever held out in person */
+    const vouch = location.hash.match(/[#&]v=([0-9a-f]{8,64})\b/);
+    if (vouch) scannedFp = vouch[1];
     try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
     showScreen('screenJoin');
     showQuickLayoutB();
