@@ -267,6 +267,9 @@
   .miniform{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
   select.pill{background:#0d0f12;color:var(--ink);border:1.5px solid var(--line);border-radius:99px;
     padding:8px 12px;font-size:0.8125rem;font-family:inherit}
+  .autocleanOpts{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;
+    padding-top:14px;border-top:1px solid var(--line)}
+  .autocleanOpts label{font-size:0.8125rem;color:var(--dim)}
 
   footer{text-align:center;color:var(--faint);font-size:0.6562rem;margin-top:36px;line-height:1.9}
 

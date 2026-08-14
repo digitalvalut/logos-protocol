@@ -4,7 +4,7 @@
    Caches the app shell so it installs and opens without a connection; the
    WebRTC handshake itself still needs the internet to find the other peer. */
 
-const CACHE = 'logos-modifica-3.9';
+const CACHE = 'logos-modifica-3.10';
 const ASSETS = [
   './modifica.html',
   './modifica.css',

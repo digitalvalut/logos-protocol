@@ -121,7 +121,8 @@ Object.assign(I18N.en, {
 "sas.note":"Only needed the first time with this person: after that, the app remembers.",
 "sas.confirmed":"Contact verified.",
 "sas.refused":"The words did not match: this conversation is not considered safe. Close it and start again with a fresh code.",
-"connect.bigTitle":"Connecting…","connect.bigHint":"Don't close the app — it only takes a few seconds."
+"connect.bigTitle":"Connecting…","connect.bigHint":"Don't close the app — it only takes a few seconds.",
+"autoclean.title":"🗑️ Automatic cleanup","autoclean.sub":"Deletes conversations older than a set number of days on its own, so they don't keep taking up space on your phone. Off by default: nothing is ever deleted on its own unless you turn this on.","autoclean.after":"Delete conversations older than:","autoclean.d7":"7 days","autoclean.d30":"30 days","autoclean.d90":"90 days","autoclean.d365":"1 year"
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -231,7 +232,8 @@ Object.assign(I18N.it, {
 "sas.note":"Serve solo la prima volta con questa persona: dopo, l'app se lo ricorda.",
 "sas.confirmed":"Contatto verificato.",
 "sas.refused":"Le parole non coincidevano: questa conversazione non è considerata sicura. Chiudila e ricominciate con un codice nuovo.",
-"connect.bigTitle":"Connessione in corso…","connect.bigHint":"Non chiudere l'app — ci vogliono pochi secondi."
+"connect.bigTitle":"Connessione in corso…","connect.bigHint":"Non chiudere l'app — ci vogliono pochi secondi.",
+"autoclean.title":"🗑️ Pulizia automatica","autoclean.sub":"Cancella da sola le conversazioni più vecchie di tot giorni, per non far crescere lo spazio occupato sul telefono. Spenta di base: senza attivarla, non si cancella mai nulla da solo.","autoclean.after":"Cancella le conversazioni più vecchie di:","autoclean.d7":"7 giorni","autoclean.d30":"30 giorni","autoclean.d90":"90 giorni","autoclean.d365":"1 anno"
 });
 
 Object.assign(I18N.fr, {
@@ -334,7 +336,8 @@ Object.assign(I18N.fr, {
 "sas.note":"Nécessaire seulement la première fois avec cette personne : après, l'appli s'en souvient.",
 "sas.confirmed":"Contact vérifié.",
 "sas.refused":"Les mots ne correspondaient pas : cette conversation n'est pas considérée comme sûre. Fermez-la et recommencez avec un nouveau code.",
-"connect.bigTitle":"Connexion en cours…","connect.bigHint":"Ne fermez pas l'appli — cela ne prend que quelques secondes."
+"connect.bigTitle":"Connexion en cours…","connect.bigHint":"Ne fermez pas l'appli — cela ne prend que quelques secondes.",
+"autoclean.title":"🗑️ Nettoyage automatique","autoclean.sub":"Supprime tout seul les discussions plus anciennes qu'un certain nombre de jours, pour qu'elles n'occupent pas d'espace sur votre téléphone. Désactivé par défaut : rien n'est jamais supprimé tout seul sans que vous l'activiez.","autoclean.after":"Supprimer les discussions plus anciennes que :","autoclean.d7":"7 jours","autoclean.d30":"30 jours","autoclean.d90":"90 jours","autoclean.d365":"1 an"
 });
 
 Object.assign(I18N.de, {
@@ -437,7 +440,8 @@ Object.assign(I18N.de, {
 "sas.note":"Nur beim ersten Mal mit dieser Person nötig: danach merkt die App es sich.",
 "sas.confirmed":"Kontakt verifiziert.",
 "sas.refused":"Die Wörter stimmten nicht überein: dieses Gespräch gilt nicht als sicher. Schließe es und beginne erneut mit einem neuen Code.",
-"connect.bigTitle":"Verbindung wird hergestellt…","connect.bigHint":"Schließe die App nicht — es dauert nur ein paar Sekunden."
+"connect.bigTitle":"Verbindung wird hergestellt…","connect.bigHint":"Schließe die App nicht — es dauert nur ein paar Sekunden.",
+"autoclean.title":"🗑️ Automatische Bereinigung","autoclean.sub":"Löscht von selbst Unterhaltungen, die älter als eine festgelegte Anzahl Tage sind, damit sie nicht weiter Speicherplatz auf deinem Telefon belegen. Standardmäßig aus: Ohne dass du das hier einschaltest, wird nie von selbst etwas gelöscht.","autoclean.after":"Unterhaltungen löschen, die älter sind als:","autoclean.d7":"7 Tage","autoclean.d30":"30 Tage","autoclean.d90":"90 Tage","autoclean.d365":"1 Jahr"
 });
 
 Object.assign(I18N.es, {
@@ -540,7 +544,8 @@ Object.assign(I18N.es, {
 "sas.note":"Solo hace falta la primera vez con esta persona: después, la app lo recuerda.",
 "sas.confirmed":"Contacto verificado.",
 "sas.refused":"Las palabras no coincidían: esta conversación no se considera segura. Ciérrala y empezad de nuevo con un código nuevo.",
-"connect.bigTitle":"Conectando…","connect.bigHint":"No cierres la app — solo tarda unos segundos."
+"connect.bigTitle":"Conectando…","connect.bigHint":"No cierres la app — solo tarda unos segundos.",
+"autoclean.title":"🗑️ Limpieza automática","autoclean.sub":"Borra por sí sola las conversaciones más antiguas que un número determinado de días, para que no sigan ocupando espacio en tu teléfono. Desactivado por defecto: nada se borra solo a menos que actives esto.","autoclean.after":"Borrar conversaciones más antiguas que:","autoclean.d7":"7 días","autoclean.d30":"30 días","autoclean.d90":"90 días","autoclean.d365":"1 año"
 });
 
 Object.assign(I18N.pt, {
@@ -643,7 +648,8 @@ Object.assign(I18N.pt, {
 "sas.note":"Só é necessário na primeira vez com esta pessoa: depois, a app lembra-se.",
 "sas.confirmed":"Contacto verificado.",
 "sas.refused":"As palavras não coincidiram: esta conversa não é considerada segura. Feche-a e recomecem com um código novo.",
-"connect.bigTitle":"A ligar…","connect.bigHint":"Não feche a app — demora apenas alguns segundos."
+"connect.bigTitle":"A ligar…","connect.bigHint":"Não feche a app — demora apenas alguns segundos.",
+"autoclean.title":"🗑️ Limpeza automática","autoclean.sub":"Apaga sozinha as conversas mais antigas do que um certo número de dias, para não continuarem a ocupar espaço no seu telemóvel. Desativado por predefinição: nada é apagado sozinho a menos que ative isto.","autoclean.after":"Apagar conversas mais antigas do que:","autoclean.d7":"7 dias","autoclean.d30":"30 dias","autoclean.d90":"90 dias","autoclean.d365":"1 ano"
 });
 
 Object.assign(I18N.ru, {
@@ -746,7 +752,8 @@ Object.assign(I18N.ru, {
 "sas.note":"Нужно только в первый раз с этим человеком: потом приложение запомнит.",
 "sas.confirmed":"Контакт подтверждён.",
 "sas.refused":"Слова не совпали: этот разговор не считается безопасным. Закройте его и начните заново с новым кодом.",
-"connect.bigTitle":"Идёт подключение…","connect.bigHint":"Не закрывайте приложение — это займёт всего несколько секунд."
+"connect.bigTitle":"Идёт подключение…","connect.bigHint":"Не закрывайте приложение — это займёт всего несколько секунд.",
+"autoclean.title":"🗑️ Автоматическая очистка","autoclean.sub":"Сама удаляет разговоры старше указанного числа дней, чтобы они не занимали место на телефоне. По умолчанию выключено: ничего не удаляется само, пока вы это не включите.","autoclean.after":"Удалять разговоры старше:","autoclean.d7":"7 дней","autoclean.d30":"30 дней","autoclean.d90":"90 дней","autoclean.d365":"1 года"
 });
 
 Object.assign(I18N.zh, {
@@ -849,7 +856,8 @@ Object.assign(I18N.zh, {
 "sas.note":"只有第一次和此人连接时才需要：之后应用会记住。",
 "sas.confirmed":"联系人已验证。",
 "sas.refused":"词语不匹配：此对话不被视为安全。请关闭它，用新代码重新开始。",
-"connect.bigTitle":"正在连接…","connect.bigHint":"请不要关闭应用——只需几秒钟。"
+"connect.bigTitle":"正在连接…","connect.bigHint":"请不要关闭应用——只需几秒钟。",
+"autoclean.title":"🗑️ 自动清理","autoclean.sub":"自动删除超过设定天数的对话，这样它们就不会一直占用手机空间。默认关闭：除非你自己打开此项，否则不会自动删除任何内容。","autoclean.after":"删除早于以下时间的对话：","autoclean.d7":"7 天","autoclean.d30":"30 天","autoclean.d90":"90 天","autoclean.d365":"1 年"
 });
 
 Object.assign(I18N.ar, {
@@ -952,7 +960,8 @@ Object.assign(I18N.ar, {
 "sas.note":"مطلوب فقط في المرة الأولى مع هذا الشخص: بعدها، يتذكره التطبيق.",
 "sas.confirmed":"تم التحقق من جهة الاتصال.",
 "sas.refused":"الكلمات غير متطابقة: لا تُعتبر هذه المحادثة آمنة. أغلقها وابدآ من جديد برمز جديد.",
-"connect.bigTitle":"جارٍ الاتصال…","connect.bigHint":"لا تغلق التطبيق — يستغرق الأمر ثوانٍ قليلة فقط."
+"connect.bigTitle":"جارٍ الاتصال…","connect.bigHint":"لا تغلق التطبيق — يستغرق الأمر ثوانٍ قليلة فقط.",
+"autoclean.title":"🗑️ تنظيف تلقائي","autoclean.sub":"يحذف تلقائيًا المحادثات الأقدم من عدد معين من الأيام، حتى لا تستمر في شغل مساحة على هاتفك. متوقف افتراضيًا: لا يُحذف شيء تلقائيًا أبدًا ما لم تفعّل هذا بنفسك.","autoclean.after":"حذف المحادثات الأقدم من:","autoclean.d7":"7 أيام","autoclean.d30":"30 يومًا","autoclean.d90":"90 يومًا","autoclean.d365":"سنة واحدة"
 });
 
 Object.assign(I18N.ur, {
@@ -1055,7 +1064,8 @@ Object.assign(I18N.ur, {
 "sas.note":"صرف اس شخص کے ساتھ پہلی بار درکار ہے: اس کے بعد، ایپ اسے یاد رکھتی ہے۔",
 "sas.confirmed":"رابطہ تصدیق شدہ۔",
 "sas.refused":"الفاظ میل نہیں کھاتے: یہ گفتگو محفوظ نہیں سمجھی جاتی۔ اسے بند کریں اور نئے کوڈ کے ساتھ دوبارہ شروع کریں۔",
-"connect.bigTitle":"رابطہ قائم ہو رہا ہے…","connect.bigHint":"ایپ بند نہ کریں — اس میں صرف چند سیکنڈ لگتے ہیں۔"
+"connect.bigTitle":"رابطہ قائم ہو رہا ہے…","connect.bigHint":"ایپ بند نہ کریں — اس میں صرف چند سیکنڈ لگتے ہیں۔",
+"autoclean.title":"🗑️ خودکار صفائی","autoclean.sub":"ایک مقررہ تعداد کے دنوں سے پرانی گفتگو کو خود بخود حذف کرتا ہے، تاکہ وہ آپ کے فون پر جگہ گھیرتی نہ رہیں۔ بطور ڈیفالٹ بند: جب تک آپ خود اسے آن نہ کریں، کچھ بھی خود بخود حذف نہیں ہوتا۔","autoclean.after":"اس سے پرانی گفتگو حذف کریں:","autoclean.d7":"7 دن","autoclean.d30":"30 دن","autoclean.d90":"90 دن","autoclean.d365":"1 سال"
 });
 
 Object.assign(I18N.hi, {
@@ -1158,7 +1168,8 @@ Object.assign(I18N.hi, {
 "sas.note":"इस व्यक्ति के साथ केवल पहली बार ज़रूरी: उसके बाद, ऐप इसे याद रखता है।",
 "sas.confirmed":"संपर्क सत्यापित।",
 "sas.refused":"शब्द मेल नहीं खाए: यह बातचीत सुरक्षित नहीं मानी जाती। इसे बंद करें और एक नए कोड के साथ फिर से शुरू करें।",
-"connect.bigTitle":"कनेक्ट हो रहा है…","connect.bigHint":"ऐप बंद न करें — इसमें बस कुछ सेकंड लगते हैं।"
+"connect.bigTitle":"कनेक्ट हो रहा है…","connect.bigHint":"ऐप बंद न करें — इसमें बस कुछ सेकंड लगते हैं।",
+"autoclean.title":"🗑️ अपने आप सफ़ाई","autoclean.sub":"एक तय दिनों से पुरानी बातचीत अपने आप हटा देता है, ताकि वे आपके फ़ोन पर जगह घेरती न रहें। डिफ़ॉल्ट रूप से बंद: जब तक आप इसे खुद चालू न करें, कुछ भी अपने आप नहीं हटता।","autoclean.after":"इससे पुरानी बातचीत हटाएं:","autoclean.d7":"7 दिन","autoclean.d30":"30 दिन","autoclean.d90":"90 दिन","autoclean.d365":"1 साल"
 });
 
 Object.assign(I18N.bn, {
@@ -1261,7 +1272,8 @@ Object.assign(I18N.bn, {
 "sas.note":"এই ব্যক্তির সাথে শুধুমাত্র প্রথমবার প্রয়োজন: তারপর, অ্যাপ এটি মনে রাখে।",
 "sas.confirmed":"পরিচিতি যাচাই করা হয়েছে।",
 "sas.refused":"শব্দগুলো মেলেনি: এই কথোপকথনটি নিরাপদ বলে বিবেচিত হয় না। এটি বন্ধ করুন এবং একটি নতুন কোড দিয়ে আবার শুরু করুন।",
-"connect.bigTitle":"সংযোগ হচ্ছে…","connect.bigHint":"অ্যাপ বন্ধ করবেন না — এতে মাত্র কয়েক সেকেন্ড লাগে।"
+"connect.bigTitle":"সংযোগ হচ্ছে…","connect.bigHint":"অ্যাপ বন্ধ করবেন না — এতে মাত্র কয়েক সেকেন্ড লাগে।",
+"autoclean.title":"🗑️ স্বয়ংক্রিয় পরিষ্কার","autoclean.sub":"নির্দিষ্ট সংখ্যক দিনের চেয়ে পুরনো কথোপকথন নিজে থেকেই মুছে ফেলে, যাতে সেগুলো আপনার ফোনে জায়গা দখল করে না রাখে। ডিফল্টভাবে বন্ধ: আপনি নিজে চালু না করা পর্যন্ত কিছুই নিজে থেকে মুছে যায় না।","autoclean.after":"এর চেয়ে পুরনো কথোপকথন মুছুন:","autoclean.d7":"৭ দিন","autoclean.d30":"৩০ দিন","autoclean.d90":"৯০ দিন","autoclean.d365":"১ বছর"
 });
 
 Object.assign(I18N.id, {
@@ -1364,7 +1376,8 @@ Object.assign(I18N.id, {
 "sas.note":"Hanya diperlukan pertama kali dengan orang ini: setelah itu, aplikasi akan mengingatnya.",
 "sas.confirmed":"Kontak terverifikasi.",
 "sas.refused":"Kata-kata tidak cocok: percakapan ini tidak dianggap aman. Tutup dan mulai lagi dengan kode baru.",
-"connect.bigTitle":"Menyambungkan…","connect.bigHint":"Jangan tutup aplikasi — hanya perlu beberapa detik."
+"connect.bigTitle":"Menyambungkan…","connect.bigHint":"Jangan tutup aplikasi — hanya perlu beberapa detik.",
+"autoclean.title":"🗑️ Pembersihan otomatis","autoclean.sub":"Menghapus sendiri percakapan yang lebih lama dari jumlah hari tertentu, agar tidak terus memakan ruang di ponsel Anda. Nonaktif secara default: tidak ada yang terhapus sendiri kecuali Anda mengaktifkan ini.","autoclean.after":"Hapus percakapan yang lebih lama dari:","autoclean.d7":"7 hari","autoclean.d30":"30 hari","autoclean.d90":"90 hari","autoclean.d365":"1 tahun"
 });
 
 function t(key, fallback){
@@ -2169,6 +2182,57 @@ $('btnClearHistory').addEventListener('click', () => {
   $('msgs').innerHTML = '';
   toast(t('history.cleared'));
 });
+
+/* ============================== automatic cleanup (opt-in, off by default) ==============================
+   Separate from self-destruct on purpose: self-destruct is something you arm for one
+   conversation, right now, and it ends the session for both sides. This is quieter and
+   only ever touches this device — a housekeeping choice ("don't let old chats pile up on
+   my phone forever"), not a privacy action taken on someone else's behalf. Nothing here
+   is on unless the person switches it on themselves, and every message already carries
+   its own timestamp, so this needed no new bookkeeping to build. */
+function autocleanPref(){ try{ return localStorage.getItem('dvlogos-autoclean') === '1'; }catch(e){ return false; } }
+function setAutocleanPref(on){ try{ localStorage.setItem('dvlogos-autoclean', on ? '1' : '0'); }catch(e){} }
+function autocleanDays(){ try{ return parseInt(localStorage.getItem('dvlogos-autoclean-days'), 10) || 30; }catch(e){ return 30; } }
+function setAutocleanDays(days){ try{ localStorage.setItem('dvlogos-autoclean-days', String(days)); }catch(e){} }
+
+function runAutoclean(){
+  if (!autocleanPref()) return;
+  const cutoff = Date.now() - autocleanDays() * 24 * 3600 * 1000;
+  let keys = [];
+  try{ keys = Object.keys(localStorage); }catch(e){ return; }
+  for (const key of keys){
+    if (key.indexOf('dvlogos-history-') !== 0) continue;
+    let list;
+    try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){ continue; }
+    const kept = list.filter(m => m.t && m.t >= cutoff);
+    try{
+      if (kept.length) localStorage.setItem(key, JSON.stringify(kept));
+      else localStorage.removeItem(key); /* nothing left worth keeping the key for */
+    }catch(e){}
+  }
+}
+
+function paintAutocleanToggle(on){
+  $('autocleanRow').classList.toggle('on', on);
+  $('autocleanRow').setAttribute('aria-pressed', on ? 'true' : 'false');
+  $('autocleanOpts').classList.toggle('hide', !on);
+}
+$('autocleanDays').value = String(autocleanDays());
+paintAutocleanToggle(autocleanPref());
+$('autocleanRow').addEventListener('click', () => {
+  const on = !$('autocleanRow').classList.contains('on');
+  setAutocleanPref(on);
+  paintAutocleanToggle(on);
+  if (on) runAutoclean(); /* takes effect on old conversations right away, not only from now on */
+});
+$('autocleanRow').addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); $('autocleanRow').click(); }
+});
+$('autocleanDays').addEventListener('change', () => {
+  setAutocleanDays(parseInt($('autocleanDays').value, 10) || 30);
+  if (autocleanPref()) runAutoclean();
+});
+runAutoclean(); /* once per app open is enough — nobody's chat needs pruning mid-session */
 
 /* ============================== recent contacts (local only) ==============================
    Remembered automatically the moment someone's 'hello' arrives — no manual "add contact"
