@@ -257,6 +257,18 @@
 
   footer{text-align:center;color:var(--faint);font-size:0.6562rem;margin-top:36px;line-height:1.9}
 
+  /* ---- Arabic and Urdu read right to left ----
+     Chat bubble sides flip on their own: flex's `justify-content:flex-end`
+     already means "the side text ends on", which is the left in RTL, exactly
+     matching what WhatsApp/Telegram do. Only the few places styled with a
+     literal `left`/`right` rather than that logical direction need a nudge. */
+  [dir="rtl"] .choicecard{text-align:right}
+  [dir="rtl"] .banner.accent{border-left:none;border-right:3px solid var(--accent)}
+  [dir="rtl"] .bub .meta{text-align:left}
+  /* a code is a code in every language: force left-to-right so digits never
+     reorder or mirror inside an RTL page */
+  [dir="rtl"] .quickcode, [dir="rtl"] .quickinput, [dir="rtl"] .codebox{direction:ltr}
+
   @media(max-width:480px){
     .hero{padding:20px 6px 4px}
     .hero img{width:76px;height:76px}
