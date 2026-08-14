@@ -3,15 +3,10 @@ MIT License
 Copyright (c) 2026 Associazione di Promozione Sociale "DigitalValut" (Ente del Terzo Settore)
 C.F. 90036980846 — Piazza Palermo 4, 92024 Canicattì (AG), Italia
 
-This repository contains two free and open-source projects released by DigitalValut APS ETS:
-
-LOGOS — The Unbreakable Truth Protocol.
-Created and conceived by Dr. Giuseppe Falsone for DigitalValut. Donated to humanity.
-
-DigitalValut Logos — an experimental peer-to-peer chat, kept separate from LOGOS above.
+DigitalValut Logos — a zero-server, peer-to-peer encrypted chat.
 Conceived by Dr. Giuseppe Falsone for DigitalValut, built with the DigitalValut Team.
 
-Both are released under the same license below: free, open source, usable and downloadable
+Released under the license below: free, open source, usable and downloadable
 by anyone, anywhere in the world, at no cost.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

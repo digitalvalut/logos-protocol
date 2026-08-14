@@ -5,3 +5,13 @@ verità.rtf
 .DS_Store
 __pycache__/
 .claude/
+
+# LOGOS (the file-sealing tool) — kept locally, no longer published on GitHub
+LOGOS.html
+logos.py
+sw.js
+manifest.webmanifest
+icon-192.png
+icon-512.png
+apple-touch-icon.png
+PRESENTATION.md
