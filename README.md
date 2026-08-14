@@ -66,20 +66,6 @@ anyone — because there is no server handling your conversation at all.
 
 No app store, no account, nothing to buy.
 
-## Be clear about what it is and is not
-
-Honesty is what makes a tool trustworthy, so here are the limits, plainly:
-
-- It reveals your network address (IP) to whoever you're talking to — that's how a direct
-  connection works. It needs both of you online at the same time, or nothing arrives.
-- On very restrictive or heavily filtered networks, a direct connection may not be able to
-  form at all.
-- No website, this one included, can prevent the other person from taking a screenshot.
-- **For safety when it truly matters**, use a dedicated, professionally audited secure
-  messenger — **Signal**, **Session** or **Briar** — instead of this. DigitalValut Logos is
-  built to be simple, free and serverless, not to replace years of audited cryptographic
-  engineering.
-
 ## About
 
 Conceived by **Dr. Giuseppe Falsone** for **DigitalValut**, built with the DigitalValut Team.
@@ -114,10 +100,6 @@ opzionale (spenta di base) per non far crescere lo spazio occupato, un "colpetto
 discreto per farsi sentire senza tenere l'app aperta, codice QR o link per collegarsi, e
 tutta l'interfaccia in **13 lingue**. Si installa su iPhone, Android, Windows, Mac e Linux
 senza alcun account né pagamento.
-
-**Onestà sui limiti:** rivela il tuo indirizzo IP a chi parli con te, serve che siate online
-insieme, e su reti molto filtrate la connessione può non formarsi. Per la sicurezza quando
-conta davvero, usa Signal, Session o Briar.
 
 Ideato dal **Dott. Giuseppe Falsone** per **DigitalValut**, realizzato con il Team
 DigitalValut.
