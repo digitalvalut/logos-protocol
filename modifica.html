@@ -52,7 +52,7 @@
     <button class="x" id="onboardClose" aria-label="close">×</button>
   </div>
 
-  <div class="banner hide" id="installBar">
+  <div class="banner accent hide" id="installBar">
     <div class="f1" id="installText"></div>
     <button class="mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
     <button class="x" id="installClose" aria-label="close">×</button>
@@ -117,6 +117,12 @@
   <section id="screenStart" class="hide">
     <button class="btn ghost" id="backFromStart">‹ <span data-i18n="nav.back">Indietro</span></button>
 
+    <div class="card bigconnecting hide" id="bigConnectingA">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="bigTitle" data-i18n="connect.bigTitle">Connessione in corso…</div>
+      <div class="bigHint" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+    </div>
+
     <div class="card" id="quickStartCard">
       <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo codice</div></div>
       <div class="helptext" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.</div>
@@ -180,6 +186,12 @@
   <!-- ============================ JOIN ============================ -->
   <section id="screenJoin" class="hide">
     <button class="btn ghost" id="backFromJoin">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <div class="card bigconnecting hide" id="bigConnectingB">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="bigTitle" data-i18n="connect.bigTitle">Connessione in corso…</div>
+      <div class="bigHint" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+    </div>
 
     <div class="card" id="quickJoinCard">
       <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleB">Digita il codice</div></div>

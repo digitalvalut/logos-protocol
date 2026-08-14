@@ -120,7 +120,8 @@ Object.assign(I18N.en, {
 "sas.yes":"✓ Yes, they match","sas.no":"✕ No, they're different",
 "sas.note":"Only needed the first time with this person: after that, the app remembers.",
 "sas.confirmed":"Contact verified.",
-"sas.refused":"The words did not match: this conversation is not considered safe. Close it and start again with a fresh code."
+"sas.refused":"The words did not match: this conversation is not considered safe. Close it and start again with a fresh code.",
+"connect.bigTitle":"Connecting…","connect.bigHint":"Don't close the app — it only takes a few seconds."
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -229,7 +230,8 @@ Object.assign(I18N.it, {
 "sas.yes":"✓ Sì, sono uguali","sas.no":"✕ No, sono diverse",
 "sas.note":"Serve solo la prima volta con questa persona: dopo, l'app se lo ricorda.",
 "sas.confirmed":"Contatto verificato.",
-"sas.refused":"Le parole non coincidevano: questa conversazione non è considerata sicura. Chiudila e ricominciate con un codice nuovo."
+"sas.refused":"Le parole non coincidevano: questa conversazione non è considerata sicura. Chiudila e ricominciate con un codice nuovo.",
+"connect.bigTitle":"Connessione in corso…","connect.bigHint":"Non chiudere l'app — ci vogliono pochi secondi."
 });
 
 Object.assign(I18N.fr, {
@@ -331,7 +333,8 @@ Object.assign(I18N.fr, {
 "sas.yes":"✓ Oui, ils correspondent","sas.no":"✕ Non, ils sont différents",
 "sas.note":"Nécessaire seulement la première fois avec cette personne : après, l'appli s'en souvient.",
 "sas.confirmed":"Contact vérifié.",
-"sas.refused":"Les mots ne correspondaient pas : cette conversation n'est pas considérée comme sûre. Fermez-la et recommencez avec un nouveau code."
+"sas.refused":"Les mots ne correspondaient pas : cette conversation n'est pas considérée comme sûre. Fermez-la et recommencez avec un nouveau code.",
+"connect.bigTitle":"Connexion en cours…","connect.bigHint":"Ne fermez pas l'appli — cela ne prend que quelques secondes."
 });
 
 Object.assign(I18N.de, {
@@ -433,7 +436,8 @@ Object.assign(I18N.de, {
 "sas.yes":"✓ Ja, sie stimmen überein","sas.no":"✕ Nein, sie sind unterschiedlich",
 "sas.note":"Nur beim ersten Mal mit dieser Person nötig: danach merkt die App es sich.",
 "sas.confirmed":"Kontakt verifiziert.",
-"sas.refused":"Die Wörter stimmten nicht überein: dieses Gespräch gilt nicht als sicher. Schließe es und beginne erneut mit einem neuen Code."
+"sas.refused":"Die Wörter stimmten nicht überein: dieses Gespräch gilt nicht als sicher. Schließe es und beginne erneut mit einem neuen Code.",
+"connect.bigTitle":"Verbindung wird hergestellt…","connect.bigHint":"Schließe die App nicht — es dauert nur ein paar Sekunden."
 });
 
 Object.assign(I18N.es, {
@@ -535,7 +539,8 @@ Object.assign(I18N.es, {
 "sas.yes":"✓ Sí, coinciden","sas.no":"✕ No, son diferentes",
 "sas.note":"Solo hace falta la primera vez con esta persona: después, la app lo recuerda.",
 "sas.confirmed":"Contacto verificado.",
-"sas.refused":"Las palabras no coincidían: esta conversación no se considera segura. Ciérrala y empezad de nuevo con un código nuevo."
+"sas.refused":"Las palabras no coincidían: esta conversación no se considera segura. Ciérrala y empezad de nuevo con un código nuevo.",
+"connect.bigTitle":"Conectando…","connect.bigHint":"No cierres la app — solo tarda unos segundos."
 });
 
 Object.assign(I18N.pt, {
@@ -637,7 +642,8 @@ Object.assign(I18N.pt, {
 "sas.yes":"✓ Sim, correspondem","sas.no":"✕ Não, são diferentes",
 "sas.note":"Só é necessário na primeira vez com esta pessoa: depois, a app lembra-se.",
 "sas.confirmed":"Contacto verificado.",
-"sas.refused":"As palavras não coincidiram: esta conversa não é considerada segura. Feche-a e recomecem com um código novo."
+"sas.refused":"As palavras não coincidiram: esta conversa não é considerada segura. Feche-a e recomecem com um código novo.",
+"connect.bigTitle":"A ligar…","connect.bigHint":"Não feche a app — demora apenas alguns segundos."
 });
 
 Object.assign(I18N.ru, {
@@ -739,7 +745,8 @@ Object.assign(I18N.ru, {
 "sas.yes":"✓ Да, совпадают","sas.no":"✕ Нет, отличаются",
 "sas.note":"Нужно только в первый раз с этим человеком: потом приложение запомнит.",
 "sas.confirmed":"Контакт подтверждён.",
-"sas.refused":"Слова не совпали: этот разговор не считается безопасным. Закройте его и начните заново с новым кодом."
+"sas.refused":"Слова не совпали: этот разговор не считается безопасным. Закройте его и начните заново с новым кодом.",
+"connect.bigTitle":"Идёт подключение…","connect.bigHint":"Не закрывайте приложение — это займёт всего несколько секунд."
 });
 
 Object.assign(I18N.zh, {
@@ -841,7 +848,8 @@ Object.assign(I18N.zh, {
 "sas.yes":"✓ 是的，一致","sas.no":"✕ 不，不一致",
 "sas.note":"只有第一次和此人连接时才需要：之后应用会记住。",
 "sas.confirmed":"联系人已验证。",
-"sas.refused":"词语不匹配：此对话不被视为安全。请关闭它，用新代码重新开始。"
+"sas.refused":"词语不匹配：此对话不被视为安全。请关闭它，用新代码重新开始。",
+"connect.bigTitle":"正在连接…","connect.bigHint":"请不要关闭应用——只需几秒钟。"
 });
 
 Object.assign(I18N.ar, {
@@ -943,7 +951,8 @@ Object.assign(I18N.ar, {
 "sas.yes":"✓ نعم، متطابقة","sas.no":"✕ لا، مختلفة",
 "sas.note":"مطلوب فقط في المرة الأولى مع هذا الشخص: بعدها، يتذكره التطبيق.",
 "sas.confirmed":"تم التحقق من جهة الاتصال.",
-"sas.refused":"الكلمات غير متطابقة: لا تُعتبر هذه المحادثة آمنة. أغلقها وابدآ من جديد برمز جديد."
+"sas.refused":"الكلمات غير متطابقة: لا تُعتبر هذه المحادثة آمنة. أغلقها وابدآ من جديد برمز جديد.",
+"connect.bigTitle":"جارٍ الاتصال…","connect.bigHint":"لا تغلق التطبيق — يستغرق الأمر ثوانٍ قليلة فقط."
 });
 
 Object.assign(I18N.ur, {
@@ -1045,7 +1054,8 @@ Object.assign(I18N.ur, {
 "sas.yes":"✓ ہاں، میل کھاتے ہیں","sas.no":"✕ نہیں، مختلف ہیں",
 "sas.note":"صرف اس شخص کے ساتھ پہلی بار درکار ہے: اس کے بعد، ایپ اسے یاد رکھتی ہے۔",
 "sas.confirmed":"رابطہ تصدیق شدہ۔",
-"sas.refused":"الفاظ میل نہیں کھاتے: یہ گفتگو محفوظ نہیں سمجھی جاتی۔ اسے بند کریں اور نئے کوڈ کے ساتھ دوبارہ شروع کریں۔"
+"sas.refused":"الفاظ میل نہیں کھاتے: یہ گفتگو محفوظ نہیں سمجھی جاتی۔ اسے بند کریں اور نئے کوڈ کے ساتھ دوبارہ شروع کریں۔",
+"connect.bigTitle":"رابطہ قائم ہو رہا ہے…","connect.bigHint":"ایپ بند نہ کریں — اس میں صرف چند سیکنڈ لگتے ہیں۔"
 });
 
 Object.assign(I18N.hi, {
@@ -1147,7 +1157,8 @@ Object.assign(I18N.hi, {
 "sas.yes":"✓ हां, मेल खाते हैं","sas.no":"✕ नहीं, अलग हैं",
 "sas.note":"इस व्यक्ति के साथ केवल पहली बार ज़रूरी: उसके बाद, ऐप इसे याद रखता है।",
 "sas.confirmed":"संपर्क सत्यापित।",
-"sas.refused":"शब्द मेल नहीं खाए: यह बातचीत सुरक्षित नहीं मानी जाती। इसे बंद करें और एक नए कोड के साथ फिर से शुरू करें।"
+"sas.refused":"शब्द मेल नहीं खाए: यह बातचीत सुरक्षित नहीं मानी जाती। इसे बंद करें और एक नए कोड के साथ फिर से शुरू करें।",
+"connect.bigTitle":"कनेक्ट हो रहा है…","connect.bigHint":"ऐप बंद न करें — इसमें बस कुछ सेकंड लगते हैं।"
 });
 
 Object.assign(I18N.bn, {
@@ -1249,7 +1260,8 @@ Object.assign(I18N.bn, {
 "sas.yes":"✓ হ্যাঁ, মিলছে","sas.no":"✕ না, আলাদা",
 "sas.note":"এই ব্যক্তির সাথে শুধুমাত্র প্রথমবার প্রয়োজন: তারপর, অ্যাপ এটি মনে রাখে।",
 "sas.confirmed":"পরিচিতি যাচাই করা হয়েছে।",
-"sas.refused":"শব্দগুলো মেলেনি: এই কথোপকথনটি নিরাপদ বলে বিবেচিত হয় না। এটি বন্ধ করুন এবং একটি নতুন কোড দিয়ে আবার শুরু করুন।"
+"sas.refused":"শব্দগুলো মেলেনি: এই কথোপকথনটি নিরাপদ বলে বিবেচিত হয় না। এটি বন্ধ করুন এবং একটি নতুন কোড দিয়ে আবার শুরু করুন।",
+"connect.bigTitle":"সংযোগ হচ্ছে…","connect.bigHint":"অ্যাপ বন্ধ করবেন না — এতে মাত্র কয়েক সেকেন্ড লাগে।"
 });
 
 Object.assign(I18N.id, {
@@ -1351,7 +1363,8 @@ Object.assign(I18N.id, {
 "sas.yes":"✓ Ya, cocok","sas.no":"✕ Tidak, berbeda",
 "sas.note":"Hanya diperlukan pertama kali dengan orang ini: setelah itu, aplikasi akan mengingatnya.",
 "sas.confirmed":"Kontak terverifikasi.",
-"sas.refused":"Kata-kata tidak cocok: percakapan ini tidak dianggap aman. Tutup dan mulai lagi dengan kode baru."
+"sas.refused":"Kata-kata tidak cocok: percakapan ini tidak dianggap aman. Tutup dan mulai lagi dengan kode baru.",
+"connect.bigTitle":"Menyambungkan…","connect.bigHint":"Jangan tutup aplikasi — hanya perlu beberapa detik."
 });
 
 function t(key, fallback){
@@ -1410,8 +1423,10 @@ $('goJoin').addEventListener('click', () => { showScreen('screenJoin'); showQuic
 /* leaving the screen abandons whatever handshake it had started — otherwise its
    candidate polling would keep running in the background for a code nobody is
    going to type any more */
-$('backFromStart').addEventListener('click', () => { stopQuickPump(); showScreen('screenHome'); });
-$('backFromJoin').addEventListener('click', () => { stopQuickPump(); showScreen('screenHome'); });
+/* leaving mid-connection abandons the attempt — the big "connecting" state
+   would otherwise still be showing next time this screen opens */
+$('backFromStart').addEventListener('click', () => { stopQuickPump(); $('bigConnectingA').classList.add('hide'); showScreen('screenHome'); });
+$('backFromJoin').addEventListener('click', () => { stopQuickPump(); $('bigConnectingB').classList.add('hide'); showScreen('screenHome'); });
 
 /* your name, remembered on this device */
 try{ $('nickInput').value = localStorage.getItem('logos-modifica-nick') || ''; }catch(e){}
@@ -1453,7 +1468,14 @@ $('installClose').addEventListener('click', () => {
   $('installBar').classList.add('hide');
   try{ localStorage.setItem('dvlogos-install-dismissed','1'); }catch(e){}
 });
-if (isIOS && !isStandalone && location.protocol.startsWith('http')) showInstallBar(t('install.iosText'), false);
+/* A translated sentence alone was easy to skim past without ever spotting
+   which real icon it means — someone who does not recognise the word
+   "Condividi"/"Share" has nothing else to go on. This draws Safari's actual
+   share icon (a box with an arrow leaving the top) right next to the text,
+   the same shape in every language, so there is something to *look for* in
+   the toolbar, not just read about. */
+const IOS_SHARE_ICON = '<svg class="shareicon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.5V4"/><path d="M7.5 8.5L12 4l4.5 4.5"/><path d="M4.5 12.5v7a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-7"/></svg>';
+if (isIOS && !isStandalone && location.protocol.startsWith('http')) showInstallBar(IOS_SHARE_ICON + t('install.iosText'), false);
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load', () => { navigator.serviceWorker.register('modifica-sw.js', { scope: './modifica.html' }).catch(()=>{}); });
 }
@@ -2060,7 +2082,8 @@ $('btnConnectAsA').addEventListener('click', async () => {
     const parsed = isLocked(env) ? await openPayload(env, sessionPass) : env;
     if (parsed.type !== 'answer') throw new Error('bad');
     await pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
-    watchHandshakeProgress(pc, $('statusA'), $('diagA'));
+    showBigConnectingA();
+    watchHandshakeProgress(pc, $('statusA'), $('diagA'), null, ok => { if (!ok) hideBigConnectingA(false); });
   }catch(e){ setStatus($('statusA'), t('lock.badAnswer','—'), 'bad'); }
 });
 
@@ -2510,7 +2533,11 @@ async function tryAutoReconnect(contact){
            on watchHandshakeProgress; enabling it the instant an answer was
            found, while the connection itself was still several seconds from
            done, was the same bug as the quick-connect button */
-        watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump, () => { $('btnCreate').disabled = false; });
+        showBigConnectingA();
+        watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump, ok => {
+          $('btnCreate').disabled = false;
+          if (!ok) hideBigConnectingA(false);
+        });
         return;
       }
       await new Promise(r => setTimeout(r, 1200));
@@ -2879,6 +2906,35 @@ function showLongLayoutB(){
 $('toggleLongInviteA').addEventListener('click', showLongLayoutA);
 $('toggleLongInviteB').addEventListener('click', showLongLayoutB);
 
+/* ---------------- "connecting", shown so it cannot be missed ----------------
+   Found on a real device: someone opening an invite still saw the ordinary
+   code box and Connetti button sitting right there while the handshake ran
+   underneath — nothing wrong was happening, but a button that just sits there
+   reads as "stuck", and a nervous tap is a natural response to that. This
+   replaces the whole form with one big, unambiguous state for exactly as long
+   as a connection attempt is actually running, on both sides, everywhere one
+   can start: the short code, the long code, and reconnecting to a contact. */
+function showBigConnectingA(){
+  $('quickStartCard').classList.add('hide');
+  $('longInviteWrapA').classList.add('hide');
+  $('toggleLongInviteA').classList.add('hide');
+  $('bigConnectingA').classList.remove('hide');
+}
+function hideBigConnectingA(restoreQuick){
+  $('bigConnectingA').classList.add('hide');
+  if (restoreQuick) showQuickLayoutA(); else showLongLayoutA();
+}
+function showBigConnectingB(){
+  $('quickJoinCard').classList.add('hide');
+  $('longInviteWrapB').classList.add('hide');
+  $('toggleLongInviteB').classList.add('hide');
+  $('bigConnectingB').classList.remove('hide');
+}
+function hideBigConnectingB(restoreQuick){
+  $('bigConnectingB').classList.add('hide');
+  if (restoreQuick) showQuickLayoutB(); else showLongLayoutB();
+}
+
 /* ---------------- addresses that flow as they are found (trickle ICE) ----------------
    The first version of this waited for a side to finish collecting every network
    address it could reach, and only then sent its half of the handshake. That is what
@@ -2985,7 +3041,13 @@ async function startQuickShare(){
     if (msg && msg.sdp){
       await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
       await pump.remoteReady();
-      watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump);
+      /* somebody answered — the code has done its job, so it and the share
+         button give way to one clear "connecting" state instead of just
+         sitting there looking like nothing happened */
+      showBigConnectingA();
+      watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
+        if (!ok) hideBigConnectingA(true);
+      });
       return;
     }
     if (Date.now() >= nextRefresh){
@@ -3059,6 +3121,7 @@ async function tryQuickConnect(){
   quickConnecting = true;
   $('btnQuickConnect').disabled = true;
   setStatus($('quickStatusB'), t('lock.working','…'));
+  showBigConnectingB();
   try{
     const sec = await quickSecrets(code);
     const offerKey = await slotId(sec.seed, 'offer');
@@ -3080,6 +3143,7 @@ async function tryQuickConnect(){
     /* a wrong code and an expired one are indistinguishable here by design:
        without the right key nothing decrypts, so there is nothing to tell apart */
     if (!msg || !msg.sdp){
+      hideBigConnectingB(true);
       setStatus($('quickStatusB'), t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
       quickConnecting = false;
       $('btnQuickConnect').disabled = false;
@@ -3100,11 +3164,13 @@ async function tryQuickConnect(){
     /* the button stays disabled for the whole handshake now, not just until
        the offer was found — see the note on watchHandshakeProgress for why
        re-enabling it any earlier was a real bug, not a style choice */
-    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump, () => {
+    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump, ok => {
       quickConnecting = false;
       $('btnQuickConnect').disabled = false;
+      if (!ok) hideBigConnectingB(true); /* on success the screen is about to change to the chat anyway */
     });
   }catch(e){
+    hideBigConnectingB(true);
     quickConnecting = false;
     $('btnQuickConnect').disabled = false;
   }
@@ -3514,6 +3580,7 @@ $('btnNewSession').addEventListener('click', () => {
   $('btnRetryQuickA').classList.add('hide');
   $('quickCodeIn').value = ''; setStatus($('quickStatusB'), ''); $('diagQuickB').classList.add('hide');
   $('btnQuickConnect').disabled = false;
+  $('bigConnectingA').classList.add('hide'); $('bigConnectingB').classList.add('hide');
   showQuickLayoutA(); showQuickLayoutB();
   showScreen('screenHome');
 });
