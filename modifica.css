@@ -69,6 +69,18 @@
   .card h3{margin:0 0 6px;font-size:0.75rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;font-weight:700}
   .card .lead{color:var(--dim);font-size:0.9375rem;margin:2px 0 16px;line-height:1.6}
 
+  /* shown once, after a conversation that worked, and gone for good once waved
+     away — it earns its place by arriving after the proof, not before it */
+  .card.viral{position:relative;border-color:rgba(61,220,151,0.3);
+    background:linear-gradient(180deg,rgba(61,220,151,0.07),var(--bg2))}
+  .card.viral > b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
+  /* direct children only: an unrestricted `span` here also caught the labels
+     inside the button, turning them grey on orange */
+  .card.viral > span{display:block;color:var(--dim);font-size:0.9062rem;line-height:1.6;padding-inline-end:18px}
+  .card.viral .x{position:absolute;top:10px;inset-inline-end:12px;background:none;border:none;
+    color:var(--faint);font-size:1.25rem;line-height:1;padding:4px 6px;cursor:pointer}
+  .card.viral .x:hover{color:var(--dim)}
+
   label.fieldlabel{display:block;font-size:0.9375rem;color:var(--dim);margin:0 0 8px;font-weight:650}
   input[type=text],textarea{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);
     border-radius:var(--r-sm);padding:15px 16px;font-family:var(--mono);font-size:0.875rem;resize:vertical;

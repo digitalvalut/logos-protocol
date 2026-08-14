@@ -95,6 +95,18 @@
         <span class="ic">📣</span><span data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span></button>
     </div>
 
+    <!-- Only ever after a conversation that actually happened, and only until
+         it is waved away once. Asking someone to pass an app on before they
+         have seen it work is asking them to vouch for something they do not
+         know yet. -->
+    <div class="card viral hide" id="viralCard">
+      <button class="x" id="viralClose" aria-label="close">×</button>
+      <b data-i18n="viral.title">Ha funzionato.</b>
+      <span data-i18n="viral.sub">Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.</span>
+      <button class="btn primary mt12" id="btnViralShare">
+        <span class="ic">📣</span><span data-i18n="viral.btn">Fallo sapere a qualcuno</span></button>
+    </div>
+
     <div class="card">
       <label class="fieldlabel" data-i18n="home.nameLabel">Come ti chiami</label>
       <input type="text" id="nickInput" class="sans-input" maxlength="30" spellcheck="true" autocapitalize="words" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
