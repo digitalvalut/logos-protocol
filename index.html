@@ -14,8 +14,12 @@
   img-src 'self' data:;
   connect-src 'none';
   form-action 'none';
-  base-uri 'none';
-  frame-ancestors 'none'">
+  base-uri 'none'">
+<!-- frame-ancestors is deliberately absent: a browser ignores it when the
+     policy arrives in a <meta> tag, and a directive that only produces a
+     console warning is worse than no directive — it reads like protection
+     that is not there. It belongs in an HTTP header, which GitHub Pages does
+     not let us set. -->
 
 <meta name="description" content="Fatti chiamare senza dare il numero di telefono. Messaggi, foto e videochiamate direttamente fra due telefoni, senza registrarsi e senza server in mezzo. Gratis per sempre.">
 <link rel="canonical" href="https://digitalvalut.github.io/logos-protocol/">

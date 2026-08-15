@@ -267,6 +267,16 @@ test('the front door has no inline style or script the policy would block', () =
     'an inline <script> would be blocked by its own policy');
 });
 
+test('no page claims protection a <meta> policy cannot give', () => {
+  /* frame-ancestors is silently ignored when the policy comes from a meta tag.
+     Leaving it in looks like a defence and is only a console warning. */
+  for (const [name, html] of [['index.html', HOME_HTML], ['modifica.html', HTML]]){
+    const csp = (html.match(/Content-Security-Policy"\s*content="([\s\S]*?)"/) || [, ''])[1];
+    assert.ok(!/frame-ancestors/.test(csp),
+      `${name} declares frame-ancestors in a meta tag, where browsers ignore it`);
+  }
+});
+
 test('the front door actually leads into the app', () => {
   assert.match(HOME_HTML, /href="modifica\.html"/, 'nothing on the front door opens the app');
 });
