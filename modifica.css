@@ -607,6 +607,7 @@
   .step.waiting .lbl{color:var(--dim)}
   .helptext{color:var(--dim);font-size:0.9375rem;line-height:1.65;margin:0 0 16px}
   .helptext b{color:var(--ink)}
+  .helptext.warn{color:var(--warn)}
   /* a note that leads with its own icon rather than a raw emoji, same drawn
      line-set as every icon in the app */
   .helptext.wicon{display:flex;align-items:flex-start;gap:10px}

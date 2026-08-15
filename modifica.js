@@ -181,6 +181,11 @@ Object.assign(I18N.en, {
 "call.flipFail":"I can't switch camera on this phone.",
 "call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera.",
 "home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.",
+"addr.lifespan":"For security, this address renews itself once a year: not forever, but stable for a long time.",
+"addr.lifespanSoon":"In about {n} days this address will renew itself, for security. When it does, send it again to whoever uses it.",
+"health.addrLife":"Your address's lifespan",
+"health.addrLifeOk":"Still stable for about {n} more days.",
+"health.addrLifeSoon":"Will change in about {n} days.",
 "health.title":"How the app is doing",
 "health.sub":"If someone can't reach you, the reason is below.",
 "health.recheck":"Check again",
@@ -338,6 +343,11 @@ Object.assign(I18N.it, {
 "call.flipFail":"Non riesco a cambiare fotocamera su questo telefono.",
 "call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera.",
 "home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.",
+"addr.lifespan":"Per sicurezza, questo indirizzo si rinnova da solo una volta l'anno: non è per sempre, ma resta stabile a lungo.",
+"addr.lifespanSoon":"Fra circa {n} giorni questo indirizzo si rinnoverà da solo, per sicurezza. Quando succede, mandalo di nuovo a chi lo usa.",
+"health.addrLife":"Durata del tuo indirizzo",
+"health.addrLifeOk":"Ancora stabile per circa {n} giorni.",
+"health.addrLifeSoon":"Cambierà fra circa {n} giorni.",
 "health.title":"Come sta l'app",
 "health.sub":"Se qualcuno non riesce a raggiungerti, qui sotto c'è il motivo.",
 "health.recheck":"Controlla di nuovo",
@@ -488,6 +498,11 @@ Object.assign(I18N.fr, {
 "call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone.",
 "call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra.",
 "home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.",
+"addr.lifespan":"Par sécurité, cette adresse se renouvelle d'elle-même une fois par an : pas pour toujours, mais stable longtemps.",
+"addr.lifespanSoon":"Dans environ {n} jours, cette adresse se renouvellera d'elle-même, par sécurité. Quand ce sera fait, renvoyez-la à qui l'utilise.",
+"health.addrLife":"Durée de votre adresse",
+"health.addrLifeOk":"Encore stable pendant environ {n} jours.",
+"health.addrLifeSoon":"Changera dans environ {n} jours.",
 "health.title":"État de l'application",
 "health.sub":"Si quelqu'un n'arrive pas à vous joindre, la raison est ci-dessous.",
 "health.recheck":"Vérifier à nouveau",
@@ -638,6 +653,11 @@ Object.assign(I18N.de, {
 "call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln.",
 "call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera.",
 "home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.",
+"addr.lifespan":"Aus Sicherheitsgründen erneuert sich diese Adresse einmal im Jahr von selbst: nicht für immer, aber lange stabil.",
+"addr.lifespanSoon":"In etwa {n} Tagen erneuert sich diese Adresse aus Sicherheitsgründen von selbst. Wenn es soweit ist, schick sie erneut an alle, die sie nutzen.",
+"health.addrLife":"Lebensdauer deiner Adresse",
+"health.addrLifeOk":"Noch etwa {n} Tage stabil.",
+"health.addrLifeSoon":"Ändert sich in etwa {n} Tagen.",
 "health.title":"Wie es der App geht",
 "health.sub":"Wenn dich jemand nicht erreicht, steht der Grund hier unten.",
 "health.recheck":"Erneut prüfen",
@@ -788,6 +808,11 @@ Object.assign(I18N.es, {
 "call.flipFail":"No puedo cambiar de cámara en este teléfono.",
 "call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara.",
 "home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.",
+"addr.lifespan":"Por seguridad, esta dirección se renueva sola una vez al año: no es para siempre, pero es estable durante mucho tiempo.",
+"addr.lifespanSoon":"En unos {n} días esta dirección se renovará sola, por seguridad. Cuando ocurra, envíala de nuevo a quien la use.",
+"health.addrLife":"Duración de tu dirección",
+"health.addrLifeOk":"Todavía estable durante unos {n} días más.",
+"health.addrLifeSoon":"Cambiará en unos {n} días.",
 "health.title":"Cómo está la aplicación",
 "health.sub":"Si alguien no consigue localizarte, aquí abajo está el motivo.",
 "health.recheck":"Comprobar de nuevo",
@@ -938,6 +963,11 @@ Object.assign(I18N.pt, {
 "call.flipFail":"Não consigo mudar de câmara neste telemóvel.",
 "call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara.",
 "home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.",
+"addr.lifespan":"Por segurança, este endereço renova-se sozinho uma vez por ano: não é para sempre, mas é estável durante muito tempo.",
+"addr.lifespanSoon":"Daqui a cerca de {n} dias este endereço vai renovar-se sozinho, por segurança. Quando isso acontecer, envie-o de novo a quem o usa.",
+"health.addrLife":"Duração do seu endereço",
+"health.addrLifeOk":"Ainda estável por mais cerca de {n} dias.",
+"health.addrLifeSoon":"Vai mudar daqui a cerca de {n} dias.",
 "health.title":"Como está a aplicação",
 "health.sub":"Se alguém não consegue alcançá-lo, o motivo está aqui em baixo.",
 "health.recheck":"Verificar de novo",
@@ -1088,6 +1118,11 @@ Object.assign(I18N.ru, {
 "call.flipFail":"На этом телефоне не удаётся переключить камеру.",
 "call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера.",
 "home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.",
+"addr.lifespan":"Из соображений безопасности этот адрес сам обновляется раз в год: не навсегда, но стабилен надолго.",
+"addr.lifespanSoon":"Примерно через {n} дней этот адрес обновится сам, из соображений безопасности. Когда это произойдёт, отправьте его заново тем, кто им пользуется.",
+"health.addrLife":"Срок действия вашего адреса",
+"health.addrLifeOk":"Ещё стабилен около {n} дней.",
+"health.addrLifeSoon":"Изменится примерно через {n} дней.",
 "health.title":"Как работает приложение",
 "health.sub":"Если кто-то не может до вас дозвониться, причина ниже.",
 "health.recheck":"Проверить снова",
@@ -1238,6 +1273,11 @@ Object.assign(I18N.zh, {
 "call.flipFail":"无法在这台手机上切换摄像头。",
 "call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。",
 "home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。",
+"addr.lifespan":"出于安全考虑，这个地址每年会自动更新一次：不是永久的，但会稳定很长一段时间。",
+"addr.lifespanSoon":"大约 {n} 天后，出于安全考虑，这个地址会自动更新。到时候，请把新地址再发给用到它的人。",
+"health.addrLife":"你的地址有效期",
+"health.addrLifeOk":"还能稳定大约 {n} 天。",
+"health.addrLifeSoon":"大约 {n} 天后会变化。",
 "health.title":"应用运行状况",
 "health.sub":"如果有人联系不上你，原因就在下面。",
 "health.recheck":"重新检查",
@@ -1388,6 +1428,11 @@ Object.assign(I18N.ar, {
 "call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف.",
 "call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط.",
 "home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.",
+"addr.lifespan":"لأسباب أمنية، يتجدد هذا العنوان تلقائيًا مرة كل عام: ليس إلى الأبد، لكنه يبقى ثابتًا لفترة طويلة.",
+"addr.lifespanSoon":"خلال نحو {n} يومًا سيتجدد هذا العنوان تلقائيًا، لأسباب أمنية. عندما يحدث ذلك، أرسله من جديد لمن يستخدمه.",
+"health.addrLife":"مدة صلاحية عنوانك",
+"health.addrLifeOk":"لا يزال ثابتًا لنحو {n} يومًا بعد.",
+"health.addrLifeSoon":"سيتغيّر خلال نحو {n} يومًا.",
 "health.title":"حالة التطبيق",
 "health.sub":"إذا لم يستطع أحدهم الوصول إليك، فالسبب مذكور أدناه.",
 "health.recheck":"تحقّق مرة أخرى",
@@ -1538,6 +1583,11 @@ Object.assign(I18N.ur, {
 "call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔",
 "call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔",
 "home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔",
+"addr.lifespan":"حفاظتی وجوہات کی بنا پر، یہ پتہ سال میں ایک بار خود بخود تجدید ہوتا ہے: ہمیشہ کے لیے نہیں، مگر طویل عرصے تک مستحکم رہتا ہے۔",
+"addr.lifespanSoon":"تقریباً {n} دنوں میں یہ پتہ حفاظتی وجوہات کی بنا پر خود بخود تجدید ہو جائے گا۔ ایسا ہونے پر، اسے دوبارہ ان لوگوں کو بھیجیں جو اسے استعمال کرتے ہیں۔",
+"health.addrLife":"آپ کے پتے کی مدت",
+"health.addrLifeOk":"ابھی مزید تقریباً {n} دن مستحکم رہے گا۔",
+"health.addrLifeSoon":"تقریباً {n} دنوں میں تبدیل ہو جائے گا۔",
 "health.title":"ایپ کی حالت",
 "health.sub":"اگر کوئی آپ تک نہیں پہنچ پا رہا تو وجہ نیچے لکھی ہے۔",
 "health.recheck":"دوبارہ جانچیں",
@@ -1688,6 +1738,11 @@ Object.assign(I18N.hi, {
 "call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।",
 "call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।",
 "home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।",
+"addr.lifespan":"सुरक्षा के लिए, यह पता साल में एक बार खुद-ब-खुद नवीनीकृत होता है: हमेशा के लिए नहीं, पर लंबे समय तक स्थिर रहता है।",
+"addr.lifespanSoon":"लगभग {n} दिनों में यह पता सुरक्षा के लिए खुद-ब-खुद नवीनीकृत हो जाएगा। ऐसा होने पर, इसे फिर से उन लोगों को भेजें जो इसका इस्तेमाल करते हैं।",
+"health.addrLife":"आपके पते की अवधि",
+"health.addrLifeOk":"अभी और लगभग {n} दिन स्थिर रहेगा।",
+"health.addrLifeSoon":"लगभग {n} दिनों में बदल जाएगा।",
 "health.title":"ऐप की स्थिति",
 "health.sub":"अगर कोई आप तक नहीं पहुँच पा रहा, तो कारण नीचे लिखा है।",
 "health.recheck":"फिर से जाँचें",
@@ -1838,6 +1893,11 @@ Object.assign(I18N.bn, {
 "call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।",
 "call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।",
 "home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।",
+"addr.lifespan":"নিরাপত্তার জন্য, এই ঠিকানা বছরে একবার নিজে থেকেই নবায়ন হয়: চিরকালের জন্য নয়, তবে দীর্ঘদিন স্থিতিশীল থাকে।",
+"addr.lifespanSoon":"প্রায় {n} দিনের মধ্যে নিরাপত্তার জন্য এই ঠিকানা নিজে থেকেই নবায়ন হয়ে যাবে। তখন, যারা এটি ব্যবহার করে তাদের আবার পাঠিয়ে দিন।",
+"health.addrLife":"আপনার ঠিকানার মেয়াদ",
+"health.addrLifeOk":"আরও প্রায় {n} দিন স্থিতিশীল থাকবে।",
+"health.addrLifeSoon":"প্রায় {n} দিনের মধ্যে বদলে যাবে।",
 "health.title":"অ্যাপ কেমন চলছে",
 "health.sub":"কেউ যদি আপনার কাছে পৌঁছাতে না পারে, কারণটি নিচে দেওয়া আছে।",
 "health.recheck":"আবার দেখুন",
@@ -1988,6 +2048,11 @@ Object.assign(I18N.id, {
 "call.flipFail":"Tidak bisa mengganti kamera di ponsel ini.",
 "call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera.",
 "home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.",
+"addr.lifespan":"Demi keamanan, alamat ini memperbarui dirinya sendiri setahun sekali: bukan selamanya, tapi stabil untuk waktu yang lama.",
+"addr.lifespanSoon":"Sekitar {n} hari lagi alamat ini akan memperbarui dirinya sendiri, demi keamanan. Saat itu terjadi, kirim lagi ke siapa pun yang memakainya.",
+"health.addrLife":"Masa berlaku alamat Anda",
+"health.addrLifeOk":"Masih stabil sekitar {n} hari lagi.",
+"health.addrLifeSoon":"Akan berubah sekitar {n} hari lagi.",
 "health.title":"Kondisi aplikasi",
 "health.sub":"Kalau ada yang tidak bisa menghubungi Anda, alasannya ada di bawah.",
 "health.recheck":"Periksa lagi",
@@ -4210,6 +4275,18 @@ async function renderBurners(){
   else setStatus($('burnerStatus'), '');
 }
 
+/* How many days until this device's own identity — and with it, the address
+   derived from it — renews itself. Left unfixed on purpose (see myIdentity()):
+   the app does not try to make the address last forever, only tells the truth
+   about the year it actually lasts, before that becomes "nobody answers any
+   more" instead of a sentence on this screen. */
+async function addressDaysLeft(){
+  const cert = await myIdentity();
+  if (!cert || !cert.expires) return null;
+  return Math.max(0, Math.ceil((cert.expires - Date.now()) / (24*3600*1000)));
+}
+const ADDR_RENEW_SOON_DAYS = 60;
+
 async function paintAddrCard(){
   const on = addrOn();
   $('addrRow').classList.toggle('on', on);
@@ -4220,6 +4297,18 @@ async function paintAddrCard(){
     /* an address nobody can ring while the app is shut is half an address, and
        saying so here is more use than discovering it later */
     $('addrReachNote').classList.toggle('hide', notifyPref());
+    const days = await addressDaysLeft();
+    const life = $('addrLifespan');
+    if (days === null){
+      life.classList.add('hide');
+    } else {
+      life.classList.remove('hide');
+      const soon = days <= ADDR_RENEW_SOON_DAYS;
+      life.classList.toggle('warn', soon);
+      life.textContent = soon
+        ? fill(t('addr.lifespanSoon','Fra circa {n} giorni questo indirizzo si rinnoverà da solo, per sicurezza. Quando succede, mandalo di nuovo a chi lo usa.'), { n: days })
+        : t('addr.lifespan',"Per sicurezza, questo indirizzo si rinnova da solo una volta l'anno: non è per sempre, ma resta stabile a lungo.");
+    }
   } else {
     $('addrQr').classList.add('hide');
   }
@@ -4302,7 +4391,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.40';
+const APP_VERSION = 'logos-modifica-3.41';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -4362,6 +4451,16 @@ async function runHealth(){
   else if (busyWithSomeone()) rows.push(['warn', t('health.addr'), t('health.busy')]);
   else if (!addrPollTimer) rows.push(['bad', t('health.addr'), t('health.stopped')]);
   else rows.push(['ok', t('health.addr'), t('health.addrOk')]);
+
+  /* 1b — how long that address has left, not just whether it works right now */
+  if (activeSlots().length){
+    const days = await addressDaysLeft();
+    if (days !== null){
+      rows.push(days <= ADDR_RENEW_SOON_DAYS
+        ? ['warn', t('health.addrLife'), fill(t('health.addrLifeSoon','Cambierà fra circa {n} giorni.'), { n: days })]
+        : ['ok', t('health.addrLife'), fill(t('health.addrLifeOk','Ancora stabile per circa {n} giorni.'), { n: days })]);
+    }
+  }
 
   /* 2 — people already known */
   const known = loadContacts().filter(c => c.fp).length;

@@ -275,6 +275,12 @@
           <button class="btn" id="btnAddrQr"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/></svg></span><span data-i18n="addr.showQr">Mostra il QR</span></button>
         </div>
         <div class="helptext mt12" id="addrReachNote" data-i18n="addr.reachNote">Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.</div>
+        <!-- Said plainly, in the same place the address itself lives, rather
+             than buried in a diagnostic screen: this is not forever. A
+             certificate this address is derived from renews itself once a
+             year for security, which changes the address too — better said
+             here, up front, than discovered as "nobody answers any more". -->
+        <div class="helptext mt8" id="addrLifespan"></div>
       </div>
 
       <!-- The ones meant to be thrown away. An address given to a stranger is a
