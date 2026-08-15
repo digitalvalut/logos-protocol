@@ -2,42 +2,110 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=modifica.html">
-<title>DigitalValut Logos</title>
-<link rel="canonical" href="modifica.html">
-<meta name="description" content="Messaggi, foto e videochiamate direttamente tra due telefoni. Nessun numero di telefono, nessun server in mezzo, gratis per sempre.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DigitalValut Logos — fatti chiamare senza dare il numero</title>
 
-<!-- Repeated here rather than left to the redirect: a preview fetcher reads the
-     page it was handed and does not follow a meta-refresh, so the short address
-     everyone will actually paste needs its own card. Same card, one place it
-     could otherwise have gone missing. -->
+<!-- Same discipline as the app itself: nothing is loaded from anywhere else,
+     so there is no third party to trust and nothing to compromise. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self';
+  style-src 'self';
+  img-src 'self' data:;
+  connect-src 'none';
+  form-action 'none';
+  base-uri 'none';
+  frame-ancestors 'none'">
+
+<meta name="description" content="Fatti chiamare senza dare il numero di telefono. Messaggi, foto e videochiamate direttamente fra due telefoni, senza registrarsi e senza server in mezzo. Gratis per sempre.">
+<link rel="canonical" href="https://digitalvalut.github.io/logos-protocol/">
+
+<!-- The card people see when the address is pasted into a chat. It has to stand
+     on its own: a preview fetcher reads this page and nothing else. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DigitalValut Logos">
 <meta property="og:locale" content="it_IT">
 <meta property="og:url" content="https://digitalvalut.github.io/logos-protocol/">
-<meta property="og:title" content="Parla in privato, senza account">
-<meta property="og:description" content="Messaggi, foto e videochiamate direttamente tra due telefoni. Nessun numero di telefono, nessun server in mezzo, gratis per sempre.">
+<meta property="og:title" content="Fatti chiamare senza dare il numero">
+<meta property="og:description" content="Messaggi, foto e videochiamate direttamente fra due telefoni. Senza registrarsi, senza numero di telefono, gratis per sempre.">
 <meta property="og:image" content="https://digitalvalut.github.io/logos-protocol/modifica-preview.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="DigitalValut Logos — parla in privato, senza account">
+<meta property="og:image:alt" content="DigitalValut Logos">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Parla in privato, senza account">
-<meta name="twitter:description" content="Messaggi, foto e videochiamate direttamente tra due telefoni. Nessun numero di telefono, nessun server in mezzo, gratis per sempre.">
+<meta name="twitter:title" content="Fatti chiamare senza dare il numero">
+<meta name="twitter:description" content="Messaggi, foto e videochiamate direttamente fra due telefoni. Senza registrarsi, senza numero di telefono, gratis per sempre.">
 <meta name="twitter:image" content="https://digitalvalut.github.io/logos-protocol/modifica-preview.jpg">
-<style>
-body{background:#0b0d10;color:#e8edf2;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-     display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center}
-a{color:#7aa2ff}
-h1{letter-spacing:.22em;font-weight:600}
-p{color:#96a3b0;font-size:14px}
-</style>
+
+<link rel="icon" href="modifica-icon-192.png">
+<link rel="apple-touch-icon" href="modifica-apple-touch-icon.png">
+<link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div>
-  <h1>L O G O S</h1>
-  <p>Apertura della chat… se non succede nulla, <a href="modifica.html">clicca qui</a>.</p>
-</div>
+
+<header class="top">
+  <div class="brand">
+    <img src="modifica-icon-512.png" alt="" width="34" height="34">
+    <span>DigitalValut Logos</span>
+  </div>
+  <select id="langSel" aria-label="Language"></select>
+</header>
+
+<main>
+
+  <section class="hero">
+    <img class="mark" src="modifica-icon-512.png" alt="DigitalValut Logos" width="96" height="96">
+    <h1 data-i18n="hero.title">Fatti chiamare senza dare il numero.</h1>
+    <p class="lede" data-i18n="hero.sub">Messaggi, foto e videochiamate direttamente fra due telefoni. Senza registrarsi, senza numero di telefono, gratis per sempre.</p>
+    <a class="cta" href="modifica.html" data-i18n="hero.cta">Apri l'app</a>
+    <p class="under" data-i18n="hero.note">Si apre nel browser. Non c'è niente da installare e niente da registrare.</p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <h2 data-i18n="what.1t">Dai un indirizzo, non il numero</h2>
+      <p data-i18n="what.1b">Chi ce l'ha ti raggiunge quando vuole, senza conoscere il tuo numero di telefono.</p>
+    </div>
+    <div class="card">
+      <h2 data-i18n="what.2t">E quando basta, chiudi la porta</h2>
+      <p data-i18n="what.2b">Crea un indirizzo usa e getta per un annuncio o per uno sconosciuto. Lo cancelli e quella persona non ti trova più.</p>
+    </div>
+    <div class="card">
+      <h2 data-i18n="what.3t">Nessuno legge in mezzo</h2>
+      <p data-i18n="what.3b">Messaggi, foto e chiamate passano da un telefono all'altro. Il contenuto non attraversa nessun server.</p>
+    </div>
+  </section>
+
+  <section class="steps">
+    <h2 class="sectitle" data-i18n="how.title">Come funziona</h2>
+    <ol>
+      <li data-i18n="how.1">Apri l'app: non c'è niente da registrare.</li>
+      <li data-i18n="how.2">Manda il tuo indirizzo, o un invito, come preferisci.</li>
+      <li data-i18n="how.3">Quando l'altra persona lo tocca, siete collegati.</li>
+    </ol>
+  </section>
+
+  <!-- The part most products leave out. This project has held on to it from the
+       beginning: a tool that hides what it cannot do is asking to be trusted
+       about everything else too. -->
+  <section class="honest">
+    <h2 class="sectitle" data-i18n="limits.title">Cosa non fa</h2>
+    <p data-i18n="limits.body">Serve che siate online tutti e due nello stesso momento, altrimenti non arriva niente. Chi parla con te vede il tuo indirizzo di rete (IP). Su reti molto filtrate le chiamate possono non collegarsi. E nessun sito al mondo può impedire a qualcuno di fare uno screenshot.</p>
+    <p class="why" data-i18n="limits.why">Lo scriviamo qui, in prima pagina, perché preferiamo dirtelo prima che dopo.</p>
+  </section>
+
+  <section class="last">
+    <a class="cta" href="modifica.html" data-i18n="hero.cta">Apri l'app</a>
+  </section>
+
+</main>
+
+<footer>
+  <p data-i18n="foot.who">Software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Utilizzabile gratis da chiunque, ovunque nel mondo.</p>
+  <p><a href="https://github.com/digitalvalut/logos-protocol" data-i18n="foot.code">Il codice, in chiaro, per chiunque voglia controllarlo</a></p>
+</footer>
+
+<script src="index.js"></script>
 </body>
 </html>

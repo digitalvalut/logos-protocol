@@ -166,14 +166,26 @@ test('the app knows exactly which origins the Worker answers for', () => {
 /* Loading no code written by anybody else is this app's strongest security
    property. It is worth a test rather than a good intention. */
 
-test('the page loads no script, style or font from anywhere else', () => {
+/* A <link rel="canonical"> names a page, it does not fetch one — only the rels
+   below actually pull something down, and those are the ones that matter. */
+const FETCHING_RELS = /\b(stylesheet|preload|prefetch|modulepreload|prerender|icon|apple-touch-icon|manifest)\b/i;
+
+function loadsFromElsewhere(html){
   const offenders = [];
-  for (const m of HTML.matchAll(/<(script|link)\b[^>]*>/gi)){
+  for (const m of html.matchAll(/<(script|link)\b[^>]*>/gi)){
     const tag = m[0];
     const url = (tag.match(/(?:src|href)="([^"]+)"/i) || [])[1];
     if (!url) continue;
-    if (/^https?:\/\//i.test(url) || url.startsWith('//')) offenders.push(tag.trim());
+    if (!(/^https?:\/\//i.test(url) || url.startsWith('//'))) continue;
+    const isScript = /^<script/i.test(tag);
+    const rel = (tag.match(/\brel="([^"]*)"/i) || [, ''])[1];
+    if (isScript || FETCHING_RELS.test(rel)) offenders.push(tag.trim());
   }
+  return offenders;
+}
+
+test('the page loads no script, style or font from anywhere else', () => {
+  const offenders = loadsFromElsewhere(HTML);
   assert.deepStrictEqual(offenders, [], `loaded from elsewhere:\n${offenders.join('\n')}`);
 });
 
@@ -201,6 +213,73 @@ test('the service worker caches every file the app is made of', () => {
   const missingOnDisk = cached.filter(f => !fs.existsSync(path.join(ROOT, f)));
   assert.deepStrictEqual(missingOnDisk, [],
     `the service worker caches files that do not exist: ${missingOnDisk.join(', ')}`);
+});
+
+/* ------------------------------------------------------- the front door -- */
+/* The page somebody is sent before they have decided to care. It is held to
+   the same standard as the app: thirteen languages, nothing loaded from
+   anywhere else, and no promise the app cannot keep. */
+
+const HOME_HTML = read('index.html');
+const HOME_JS = read('index.js');
+
+function homeDictionaries(){
+  const out = {};
+  for (const m of HOME_JS.matchAll(/^T\.(\w+) = \{([\s\S]*?)^\};/gm)){
+    const keys = [...m[2].matchAll(/^\s*'([^']+)':/gm)].map(k => k[1]);
+    out[m[1]] = keys;
+  }
+  return out;
+}
+
+test('the front door speaks the same thirteen languages as the app', () => {
+  const dicts = homeDictionaries();
+  assert.deepStrictEqual(Object.keys(dicts).sort(), [...LANGS].sort());
+});
+
+test('no language is missing a line on the front door', () => {
+  const dicts = homeDictionaries();
+  const base = new Set(dicts.it);
+  for (const lg of LANGS){
+    const missing = [...base].filter(k => !dicts[lg].includes(k)).sort();
+    const extra = dicts[lg].filter(k => !base.has(k)).sort();
+    assert.deepStrictEqual(missing, [], `the front door in ${lg} is missing: ${missing.join(', ')}`);
+    assert.deepStrictEqual(extra, [], `the front door in ${lg} has spare lines: ${extra.join(', ')}`);
+  }
+});
+
+test('every line the front door shows has been written', () => {
+  const base = new Set(homeDictionaries().it);
+  const asked = new Set([...HOME_HTML.matchAll(/data-i18n="([^"]+)"/g)].map(m => m[1]));
+  const unknown = [...asked].filter(k => !base.has(k)).sort();
+  assert.deepStrictEqual(unknown, [], `the front door asks for lines nobody wrote: ${unknown.join(', ')}`);
+});
+
+test('the front door loads nothing from anywhere else either', () => {
+  const offenders = loadsFromElsewhere(HOME_HTML);
+  assert.deepStrictEqual(offenders, [], `the front door loads from elsewhere:\n${offenders.join('\n')}`);
+});
+
+test('the front door has no inline style or script the policy would block', () => {
+  assert.deepStrictEqual([...HOME_HTML.matchAll(/\sstyle="[^"]*"/g)].map(m => m[0].trim()), []);
+  assert.ok(!/<style[\s>]/i.test(HOME_HTML), 'an inline <style> block would be blocked by its own policy');
+  assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/i.test(HOME_HTML),
+    'an inline <script> would be blocked by its own policy');
+});
+
+test('the front door actually leads into the app', () => {
+  assert.match(HOME_HTML, /href="modifica\.html"/, 'nothing on the front door opens the app');
+});
+
+test('the front door does not promise more than the app delivers', () => {
+  /* The one line that must never soften: needing both people online at once is
+     the real cost of having no server, and it belongs on the front page. */
+  const dicts = homeDictionaries();
+  for (const lg of LANGS){
+    assert.ok(dicts[lg].includes('limits.body'),
+      `the honest limits are missing from the front door in ${lg}`);
+  }
+  assert.match(HOME_HTML, /data-i18n="limits\.body"/, 'the limits are not shown on the page at all');
 });
 
 /* --------------------------------------------------------- the stylesheet -- */
