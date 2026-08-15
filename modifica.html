@@ -128,10 +128,17 @@
 
 
 
-    <div class="banner accent hide" id="installBar">
-      <div class="f1" id="installText"></div>
-      <button class="mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
+    <!-- Redrawn from a plain strip of text into something that looks like what
+         it is offering: a real app icon, a real title, one clear button — the
+         same visual language as the two big choices above, not a system alert
+         borrowed from elsewhere in the page. -->
+    <div class="installcard hide" id="installBar">
       <button class="x" id="installClose" aria-label="close">×</button>
+      <img class="installicon" src="modifica-icon-512.png" alt="" width="56" height="56">
+      <div class="installbody">
+        <div id="installText"></div>
+        <button class="btn primary hide" id="installBtn" data-i18n="install.btn">Installa</button>
+      </div>
     </div>
 
     <!-- Same shape and same width as the two above, so it is a real target for
