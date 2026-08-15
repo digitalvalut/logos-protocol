@@ -1,0 +1,40 @@
+# Runs on every push and every pull request, before anything reaches anybody.
+#
+# Nothing is installed: no npm, no node_modules, no test framework beyond the
+# one built into Node. That is deliberate. This app loads no code written by
+# anybody else, and a pipeline that pulled in three hundred packages to check
+# it would quietly undo the very thing being checked.
+name: controlli
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  controlli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: I controlli statici e la logica
+        # senza argomenti: Node trova da solo i file in tests/
+        run: node --test --test-timeout=30000
+
+      - name: Il file unico si costruisce ancora
+        # also the guard that refuses to build while the two version
+        # numbers disagree — the oldest trap in this project
+        run: python3 build-single-file.py
+
+      - name: Il file unico non è stato lasciato indietro
+        # a stale single-file build is a copy of the app with last week's bugs
+        # in it, sitting there looking current
+        run: |
+          if ! git diff --quiet -- digitalvalut-logos.html 2>/dev/null; then
+            echo "::warning::digitalvalut-logos.html non è aggiornato rispetto ai sorgenti"
+          fi
