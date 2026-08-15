@@ -134,11 +134,21 @@
       <button class="x" id="installClose" aria-label="close">×</button>
     </div>
 
-    <!-- Useful, but not what anyone opens the app to do, so it sits under the
-         two things that are. -->
+    <!-- Same shape and same width as the two above, so it is a real target for
+         a real finger — but flat rather than raised, because it is not what
+         anyone opened the app to do and it should not compete with the two
+         things that are. -->
     <div class="sharerow">
-      <button class="btn ghost" id="btnShareApp">
-        <span class="ic">📣</span><span data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span></button>
+      <button class="bigchoice quiet" id="btnShareApp">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="24" cy="7.5" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="24" cy="24.5" r="4"/>
+            <path d="M11.6 14.1 20.4 9.6M11.6 17.9l8.8 4.5"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
+      </button>
     </div>
 
     <!-- The permanent address. Off by default, because switching it on means
@@ -513,6 +523,9 @@
       <div class="callctrl">
         <button id="btnMuteCall" title="Muto">🎤</button>
         <button id="btnCamCall" title="Camera">🎥</button>
+        <!-- Only ever shown during a video call on a phone that actually has a
+             second camera — asked of the device, not assumed. -->
+        <button id="btnFlipCam" class="hide" title="Gira la fotocamera">🔄</button>
         <button id="btnSpeakerCall" class="hide" title="Altoparlante">🔊</button>
         <button class="hangup" id="btnHangup" data-i18n="call.hangup">Chiudi</button>
       </div>

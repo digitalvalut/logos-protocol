@@ -224,8 +224,16 @@
   .cdot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(255,92,108,.18)}
 
 
-  /* secondary, and placed where secondary things go */
-  .sharerow{text-align:center;margin-top:18px}
+  /* Same size and shape as the two above — a small link was a target nobody
+     over sixty could hit — but flat and quiet, so the eye still lands on the
+     two things that matter first. */
+  .sharerow{margin-top:14px}
+  .bigchoice.quiet{padding:18px 20px;background:transparent;border-style:dashed;
+    border-color:var(--line);gap:0}
+  .bigchoice.quiet .ic{width:28px;height:28px;margin-bottom:9px;color:var(--faint)}
+  .bigchoice.quiet .t{font-size:1.0625rem;font-weight:700;color:var(--dim)}
+  .bigchoice.quiet:hover{border-color:var(--dim);border-style:solid}
+  .bigchoice.quiet:hover .t{color:var(--ink)}
   .gear{background:none;border:1px solid var(--line);border-radius:50%;color:var(--dim);
     width:38px;height:38px;padding:0;cursor:pointer;flex:none;
     display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
@@ -414,6 +422,24 @@
   .callctrl button{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.14);
     color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px)}
   .callctrl button.hangup{width:auto;border-radius:99px;padding:0 18px;background:var(--bad);font-weight:700;font-size:0.8125rem}
+
+  /* ---------------- a voice call is not a video with the picture off ----------------
+     The controls sit at the bottom of the picture, which works only while there
+     is a picture holding the box open. Hiding the video for voice calls left a
+     box with nothing in it but absolutely-positioned children, so it collapsed
+     to no height and clipped its own hang-up button away — the call could not
+     be ended at all. Voice calls now get a real layout of their own instead of
+     borrowing the video's. */
+  #callBox.voice{background:var(--panel);border:1px solid var(--line);padding:16px 14px 14px;
+    display:flex;flex-direction:column;align-items:center;gap:14px}
+  #callBox.voice #callStatus{position:static;background:none;padding:0;color:var(--dim);
+    font-size:0.9375rem;backdrop-filter:none;text-align:center}
+  #callBox.voice .callctrl{position:static;justify-content:center;flex-wrap:wrap}
+  #callBox.voice .callctrl button{width:52px;height:52px;font-size:1.25rem;
+    background:var(--panel2);border:1px solid var(--line);color:var(--ink)}
+  #callBox.voice .callctrl button.hangup{width:auto;min-width:120px;background:var(--bad);
+    border-color:transparent;color:#fff;font-size:0.9375rem;padding:0 22px}
+  #callBox.voice .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
   /* on = loudspeaker active; off = whatever the phone's other output is (earpiece,
      if the browser exposes one — not guaranteed on every device, see the JS) */
   .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink)}

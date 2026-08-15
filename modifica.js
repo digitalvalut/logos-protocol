@@ -135,7 +135,8 @@ Object.assign(I18N.en, {
 "addr.incomingAt":"through “{name}”","burn.title":"Throwaway addresses","burn.help":"One per listing, one per stranger. Delete it when you're done and that person can't reach you any more — they never had your real one.","burn.namePh":"What for? e.g. Second-hand sofa","burn.add":"Create","burn.send":"Send this address","burn.delete":"Delete","burn.deleted":"“{name}” deleted. That address no longer answers.","burn.made":"“{name}” created. You can hand it out now.","burn.needName":"Give it a name, so you know who you gave it to.","burn.full":"You can have {n} at a time. Delete one to make another.","burn.untitled":"Unnamed",
 "knock.title":"You are contacting","knock.nameLabel":"What's your name?","knock.namePh":"Your name","knock.msgLabel":"What do you need? (optional)","knock.msgPh":"e.g. Do you have size 42 shoes?","knock.go":"Call","knock.note":"Your name and this line are seen only by the person you're calling. No server can read them.",
 "letter.title":"Messages left for you","letter.noneTitle":"Nobody is answering right now.","letter.noneSub":"You can leave a message: they'll find it as soon as they open the app.","letter.ph":"Write your message here","letter.leave":"Leave the message","letter.cancel":"Never mind","letter.needText":"Write a line or two, so they know what you wanted.","letter.left":"Message left. They'll find it when they open the app.","letter.failed":"I couldn't leave the message. Try again.","letter.callBack":"Call back","letter.dismiss":"Done",
-"home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting"
+"home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting",
+"call.flipFail":"I can't switch camera on this phone."
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -259,7 +260,8 @@ Object.assign(I18N.it, {
 "addr.incomingAt":"tramite «{name}»","burn.title":"Indirizzi usa e getta","burn.help":"Uno per ogni annuncio o sconosciuto. Quando hai finito lo cancelli e quella persona non ti trova più — il tuo indirizzo vero non l'ha mai avuto.","burn.namePh":"Per cosa? es. Divano usato","burn.add":"Crea","burn.send":"Manda questo indirizzo","burn.delete":"Cancella","burn.deleted":"«{name}» cancellato. Quell'indirizzo non risponde più.","burn.made":"«{name}» creato. Ora puoi darlo a chi vuoi.","burn.needName":"Dagli un nome, così sai a chi l'hai dato.","burn.full":"Puoi averne al massimo {n} insieme. Cancellane uno per farne un altro.","burn.untitled":"Senza nome",
 "knock.title":"Stai contattando","knock.nameLabel":"Come ti chiami?","knock.namePh":"Il tuo nome","knock.msgLabel":"Cosa ti serve? (se vuoi)","knock.msgPh":"es. Avete le scarpe numero 42?","knock.go":"Chiama","knock.note":"Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.",
 "letter.title":"Messaggi lasciati per te","letter.noneTitle":"Non risponde nessuno adesso.","letter.noneSub":"Puoi lasciare un messaggio: lo troverà appena apre l'app.","letter.ph":"Scrivi qui il tuo messaggio","letter.leave":"Lascia il messaggio","letter.cancel":"Lascia perdere","letter.needText":"Scrivi due parole, così sa cosa volevi.","letter.left":"Messaggio lasciato. Lo troverà appena apre l'app.","letter.failed":"Non sono riuscito a lasciare il messaggio. Riprova.","letter.callBack":"Richiama","letter.dismiss":"Fatto",
-"home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso"
+"home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso",
+"call.flipFail":"Non riesco a cambiare fotocamera su questo telefono."
 });
 
 Object.assign(I18N.fr, {
@@ -376,7 +378,8 @@ Object.assign(I18N.fr, {
 "addr.incomingAt":"via « {name} »","burn.title":"Adresses jetables","burn.help":"Une par annonce, une par inconnu. Supprimez-la une fois terminé et cette personne ne peut plus vous joindre — elle n'a jamais eu la vraie.","burn.namePh":"Pour quoi ? ex. Canapé d'occasion","burn.add":"Créer","burn.send":"Envoyer cette adresse","burn.delete":"Supprimer","burn.deleted":"« {name} » supprimée. Cette adresse ne répond plus.","burn.made":"« {name} » créée. Vous pouvez la donner.","burn.needName":"Donnez-lui un nom, pour savoir à qui vous l'avez donnée.","burn.full":"Vous pouvez en avoir {n} à la fois. Supprimez-en une pour en créer une autre.","burn.untitled":"Sans nom",
 "knock.title":"Vous contactez","knock.nameLabel":"Comment vous appelez-vous ?","knock.namePh":"Votre nom","knock.msgLabel":"Que vous faut-il ? (facultatif)","knock.msgPh":"ex. Avez-vous des chaussures en 42 ?","knock.go":"Appeler","knock.note":"Votre nom et cette phrase ne sont vus que par la personne appelée. Aucun serveur ne peut les lire.",
 "letter.title":"Messages laissés pour vous","letter.noneTitle":"Personne ne répond pour le moment.","letter.noneSub":"Vous pouvez laisser un message : la personne le trouvera dès qu'elle ouvrira l'application.","letter.ph":"Écrivez votre message ici","letter.leave":"Laisser le message","letter.cancel":"Laisser tomber","letter.needText":"Écrivez deux mots, qu'elle sache ce que vous vouliez.","letter.left":"Message laissé. La personne le trouvera en ouvrant l'application.","letter.failed":"Je n'ai pas pu laisser le message. Réessayez.","letter.callBack":"Rappeler","letter.dismiss":"Terminé",
-"home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours"
+"home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours",
+"call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone."
 });
 
 Object.assign(I18N.de, {
@@ -493,7 +496,8 @@ Object.assign(I18N.de, {
 "addr.incomingAt":"über „{name}“","burn.title":"Wegwerf-Adressen","burn.help":"Eine pro Anzeige, eine pro Fremdem. Löschst du sie, kommt diese Person nicht mehr an dich heran — deine echte hatte sie nie.","burn.namePh":"Wofür? z. B. Gebrauchtes Sofa","burn.add":"Anlegen","burn.send":"Diese Adresse senden","burn.delete":"Löschen","burn.deleted":"„{name}“ gelöscht. Diese Adresse antwortet nicht mehr.","burn.made":"„{name}“ angelegt. Du kannst sie jetzt weitergeben.","burn.needName":"Gib ihr einen Namen, damit du weißt, wem du sie gegeben hast.","burn.full":"Du kannst {n} gleichzeitig haben. Lösche eine, um eine neue anzulegen.","burn.untitled":"Ohne Namen",
 "knock.title":"Du kontaktierst","knock.nameLabel":"Wie heißt du?","knock.namePh":"Dein Name","knock.msgLabel":"Was brauchst du? (optional)","knock.msgPh":"z. B. Habt ihr Schuhe in Größe 42?","knock.go":"Anrufen","knock.note":"Deinen Namen und diesen Satz sieht nur die angerufene Person. Kein Server kann sie lesen.",
 "letter.title":"Nachrichten für dich","letter.noneTitle":"Gerade antwortet niemand.","letter.noneSub":"Du kannst eine Nachricht hinterlassen: sie wird sie finden, sobald sie die App öffnet.","letter.ph":"Schreib deine Nachricht hier","letter.leave":"Nachricht hinterlassen","letter.cancel":"Doch nicht","letter.needText":"Schreib zwei Zeilen, damit sie weiß, worum es ging.","letter.left":"Nachricht hinterlassen. Sie wird sie beim Öffnen der App finden.","letter.failed":"Ich konnte die Nachricht nicht hinterlassen. Versuch es nochmal.","letter.callBack":"Zurückrufen","letter.dismiss":"Erledigt",
-"home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut"
+"home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut",
+"call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln."
 });
 
 Object.assign(I18N.es, {
@@ -610,7 +614,8 @@ Object.assign(I18N.es, {
 "addr.incomingAt":"a través de «{name}»","burn.title":"Direcciones de usar y tirar","burn.help":"Una por anuncio, una por desconocido. Cuando termines la borras y esa persona ya no puede localizarte — nunca tuvo la de verdad.","burn.namePh":"¿Para qué? p. ej. Sofá de segunda mano","burn.add":"Crear","burn.send":"Enviar esta dirección","burn.delete":"Borrar","burn.deleted":"«{name}» borrada. Esa dirección ya no responde.","burn.made":"«{name}» creada. Ya puedes darla.","burn.needName":"Ponle un nombre, así sabes a quién se la diste.","burn.full":"Puedes tener {n} a la vez. Borra una para crear otra.","burn.untitled":"Sin nombre",
 "knock.title":"Estás contactando con","knock.nameLabel":"¿Cómo te llamas?","knock.namePh":"Tu nombre","knock.msgLabel":"¿Qué necesitas? (opcional)","knock.msgPh":"p. ej. ¿Tenéis zapatos del 42?","knock.go":"Llamar","knock.note":"Tu nombre y esta frase solo los ve la persona a la que llamas. Ningún servidor puede leerlos.",
 "letter.title":"Mensajes que te han dejado","letter.noneTitle":"Ahora mismo no contesta nadie.","letter.noneSub":"Puedes dejar un mensaje: lo encontrará en cuanto abra la aplicación.","letter.ph":"Escribe aquí tu mensaje","letter.leave":"Dejar el mensaje","letter.cancel":"Déjalo","letter.needText":"Escribe dos palabras, así sabrá qué querías.","letter.left":"Mensaje dejado. Lo encontrará al abrir la aplicación.","letter.failed":"No he podido dejar el mensaje. Inténtalo otra vez.","letter.callBack":"Devolver la llamada","letter.dismiss":"Hecho",
-"home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando"
+"home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando",
+"call.flipFail":"No puedo cambiar de cámara en este teléfono."
 });
 
 Object.assign(I18N.pt, {
@@ -727,7 +732,8 @@ Object.assign(I18N.pt, {
 "addr.incomingAt":"através de «{name}»","burn.title":"Endereços descartáveis","burn.help":"Um por anúncio, um por desconhecido. Quando acabar, apaga-o e essa pessoa deixa de o encontrar — nunca teve o verdadeiro.","burn.namePh":"Para quê? ex. Sofá usado","burn.add":"Criar","burn.send":"Enviar este endereço","burn.delete":"Apagar","burn.deleted":"«{name}» apagado. Esse endereço já não responde.","burn.made":"«{name}» criado. Já o pode dar.","burn.needName":"Dê-lhe um nome, para saber a quem o deu.","burn.full":"Pode ter {n} ao mesmo tempo. Apague um para criar outro.","burn.untitled":"Sem nome",
 "knock.title":"Está a contactar","knock.nameLabel":"Como se chama?","knock.namePh":"O seu nome","knock.msgLabel":"Do que precisa? (opcional)","knock.msgPh":"ex. Têm sapatos do 42?","knock.go":"Ligar","knock.note":"O seu nome e esta frase só são vistos pela pessoa a quem liga. Nenhum servidor os consegue ler.",
 "letter.title":"Mensagens deixadas para si","letter.noneTitle":"Ninguém está a responder agora.","letter.noneSub":"Pode deixar uma mensagem: vai encontrá-la assim que abrir a aplicação.","letter.ph":"Escreva aqui a sua mensagem","letter.leave":"Deixar a mensagem","letter.cancel":"Deixe estar","letter.needText":"Escreva duas palavras, para saber o que queria.","letter.left":"Mensagem deixada. Vai encontrá-la ao abrir a aplicação.","letter.failed":"Não consegui deixar a mensagem. Tente de novo.","letter.callBack":"Ligar de volta","letter.dismiss":"Feito",
-"home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar"
+"home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar",
+"call.flipFail":"Não consigo mudar de câmara neste telemóvel."
 });
 
 Object.assign(I18N.ru, {
@@ -844,7 +850,8 @@ Object.assign(I18N.ru, {
 "addr.incomingAt":"через «{name}»","burn.title":"Одноразовые адреса","burn.help":"По одному на объявление, по одному на незнакомца. Удалите — и этот человек больше вас не найдёт: настоящего у него никогда не было.","burn.namePh":"Для чего? напр. Диван б/у","burn.add":"Создать","burn.send":"Отправить этот адрес","burn.delete":"Удалить","burn.deleted":"«{name}» удалён. Этот адрес больше не отвечает.","burn.made":"«{name}» создан. Можно раздавать.","burn.needName":"Дайте ему имя, чтобы помнить, кому отдали.","burn.full":"Одновременно можно иметь {n}. Удалите один, чтобы создать новый.","burn.untitled":"Без имени",
 "knock.title":"Вы связываетесь с","knock.nameLabel":"Как вас зовут?","knock.namePh":"Ваше имя","knock.msgLabel":"Что вам нужно? (не обязательно)","knock.msgPh":"напр. Есть обувь 42 размера?","knock.go":"Позвонить","knock.note":"Ваше имя и эту фразу видит только тот, кому вы звоните. Ни один сервер их не прочтёт.",
 "letter.title":"Оставленные вам сообщения","letter.noneTitle":"Сейчас никто не отвечает.","letter.noneSub":"Можно оставить сообщение: его увидят, как только откроют приложение.","letter.ph":"Напишите сообщение здесь","letter.leave":"Оставить сообщение","letter.cancel":"Не надо","letter.needText":"Напишите пару слов, чтобы было понятно, зачем вы звонили.","letter.left":"Сообщение оставлено. Его увидят при открытии приложения.","letter.failed":"Не удалось оставить сообщение. Попробуйте ещё раз.","letter.callBack":"Перезвонить","letter.dismiss":"Готово",
-"home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение"
+"home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение",
+"call.flipFail":"На этом телефоне не удаётся переключить камеру."
 });
 
 Object.assign(I18N.zh, {
@@ -961,7 +968,8 @@ Object.assign(I18N.zh, {
 "addr.incomingAt":"通过“{name}”","burn.title":"一次性地址","burn.help":"每条广告一个，每个陌生人一个。用完删掉，那个人就再也找不到你——他从来没拿到过你真正的地址。","burn.namePh":"用来做什么？例如：二手沙发","burn.add":"创建","burn.send":"发送这个地址","burn.delete":"删除","burn.deleted":"“{name}”已删除。该地址不再应答。","burn.made":"“{name}”已创建，可以发给别人了。","burn.needName":"给它起个名字，这样你知道给了谁。","burn.full":"最多同时保留 {n} 个。删掉一个才能再建。","burn.untitled":"未命名",
 "knock.title":"你正在联系","knock.nameLabel":"你叫什么名字？","knock.namePh":"你的名字","knock.msgLabel":"你需要什么？（可不填）","knock.msgPh":"例如：有42码的鞋吗？","knock.go":"呼叫","knock.note":"你的名字和这句话只有被叫的人能看到。任何服务器都读不到。",
 "letter.title":"留给你的消息","letter.noneTitle":"现在没有人接听。","letter.noneSub":"你可以留个消息：对方一打开应用就会看到。","letter.ph":"在这里写下你的消息","letter.leave":"留下消息","letter.cancel":"算了","letter.needText":"写上一两句，让对方知道你想说什么。","letter.left":"消息已留下。对方打开应用就会看到。","letter.failed":"没能留下消息，请再试一次。","letter.callBack":"回拨","letter.dismiss":"完成",
-"home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接"
+"home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接",
+"call.flipFail":"无法在这台手机上切换摄像头。"
 });
 
 Object.assign(I18N.ar, {
@@ -1078,7 +1086,8 @@ Object.assign(I18N.ar, {
 "addr.incomingAt":"عبر «{name}»","burn.title":"عناوين للاستعمال مرة واحدة","burn.help":"واحد لكل إعلان، وواحد لكل غريب. احذفه عند الانتهاء فلا يعود ذلك الشخص يصل إليك — لم يحصل على عنوانك الحقيقي أصلًا.","burn.namePh":"لماذا؟ مثلًا: أريكة مستعملة","burn.add":"إنشاء","burn.send":"أرسل هذا العنوان","burn.delete":"احذف","burn.deleted":"تم حذف «{name}». هذا العنوان لم يعد يردّ.","burn.made":"تم إنشاء «{name}». يمكنك إعطاؤه الآن.","burn.needName":"أعطه اسمًا لتعرف لمن أعطيته.","burn.full":"يمكنك الاحتفاظ بـ {n} في وقت واحد. احذف واحدًا لإنشاء آخر.","burn.untitled":"بلا اسم",
 "knock.title":"أنت تتواصل مع","knock.nameLabel":"ما اسمك؟","knock.namePh":"اسمك","knock.msgLabel":"ماذا تحتاج؟ (اختياري)","knock.msgPh":"مثلًا: هل لديكم حذاء مقاس 42؟","knock.go":"اتصل","knock.note":"اسمك وهذه الجملة لا يراهما إلا الشخص الذي تتصل به. لا يستطيع أي خادم قراءتهما.",
 "letter.title":"رسائل تُركت لك","letter.noneTitle":"لا أحد يردّ الآن.","letter.noneSub":"يمكنك ترك رسالة: سيجدها فور فتحه للتطبيق.","letter.ph":"اكتب رسالتك هنا","letter.leave":"اترك الرسالة","letter.cancel":"لا بأس","letter.needText":"اكتب كلمتين ليعرف ماذا أردت.","letter.left":"تُركت الرسالة. سيجدها عند فتح التطبيق.","letter.failed":"لم أتمكن من ترك الرسالة. حاول مرة أخرى.","letter.callBack":"عاود الاتصال","letter.dismiss":"تم",
-"home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال"
+"home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال",
+"call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف."
 });
 
 Object.assign(I18N.ur, {
@@ -1195,7 +1204,8 @@ Object.assign(I18N.ur, {
 "addr.incomingAt":"«{name}» کے ذریعے","burn.title":"ایک بار استعمال ہونے والے پتے","burn.help":"ہر اشتہار کے لیے ایک، ہر اجنبی کے لیے ایک۔ کام ختم ہو تو حذف کر دیں، وہ شخص پھر آپ تک نہیں پہنچ سکتا — اصل پتہ تو اُس کے پاس تھا ہی نہیں۔","burn.namePh":"کس لیے؟ مثلاً: پرانا صوفہ","burn.add":"بنائیں","burn.send":"یہ پتہ بھیجیں","burn.delete":"حذف کریں","burn.deleted":"«{name}» حذف ہو گیا۔ وہ پتہ اب جواب نہیں دیتا۔","burn.made":"«{name}» بن گیا۔ اب آپ اسے دے سکتے ہیں۔","burn.needName":"اسے نام دیں تاکہ یاد رہے کسے دیا تھا۔","burn.full":"ایک وقت میں زیادہ سے زیادہ {n} رکھ سکتے ہیں۔ نیا بنانے کے لیے ایک حذف کریں۔","burn.untitled":"بے نام",
 "knock.title":"آپ رابطہ کر رہے ہیں","knock.nameLabel":"آپ کا نام کیا ہے؟","knock.namePh":"آپ کا نام","knock.msgLabel":"آپ کو کیا چاہیے؟ (اختیاری)","knock.msgPh":"مثلاً: کیا آپ کے پاس 42 نمبر کے جوتے ہیں؟","knock.go":"کال کریں","knock.note":"آپ کا نام اور یہ جملہ صرف وہی شخص دیکھتا ہے جسے آپ کال کر رہے ہیں۔ کوئی سرور انہیں نہیں پڑھ سکتا۔",
 "letter.title":"آپ کے لیے چھوڑے گئے پیغامات","letter.noneTitle":"ابھی کوئی جواب نہیں دے رہا۔","letter.noneSub":"آپ پیغام چھوڑ سکتے ہیں: ایپ کھولتے ہی انہیں مل جائے گا۔","letter.ph":"اپنا پیغام یہاں لکھیں","letter.leave":"پیغام چھوڑیں","letter.cancel":"رہنے دیں","letter.needText":"دو لفظ لکھ دیں تاکہ انہیں معلوم ہو آپ کیا چاہتے تھے۔","letter.left":"پیغام چھوڑ دیا گیا۔ ایپ کھولتے ہی مل جائے گا۔","letter.failed":"میں پیغام نہیں چھوڑ سکا۔ دوبارہ کوشش کریں۔","letter.callBack":"واپس کال کریں","letter.dismiss":"ہو گیا",
-"home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے"
+"home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے",
+"call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔"
 });
 
 Object.assign(I18N.hi, {
@@ -1312,7 +1322,8 @@ Object.assign(I18N.hi, {
 "addr.incomingAt":"«{name}» के ज़रिए","burn.title":"इस्तेमाल करके फेंकने वाले पते","burn.help":"हर विज्ञापन के लिए एक, हर अजनबी के लिए एक। काम पूरा हो तो मिटा दें और वह व्यक्ति आप तक नहीं पहुँच सकता — असली पता उसके पास कभी था ही नहीं।","burn.namePh":"किस लिए? जैसे: पुराना सोफ़ा","burn.add":"बनाएं","burn.send":"यह पता भेजें","burn.delete":"मिटाएं","burn.deleted":"«{name}» मिटा दिया। वह पता अब जवाब नहीं देता।","burn.made":"«{name}» बन गया। अब आप इसे दे सकते हैं।","burn.needName":"इसे नाम दें, ताकि पता रहे किसे दिया था।","burn.full":"एक साथ ज़्यादा से ज़्यादा {n} रख सकते हैं। नया बनाने के लिए एक मिटाएं।","burn.untitled":"बिना नाम",
 "knock.title":"आप संपर्क कर रहे हैं","knock.nameLabel":"आपका नाम क्या है?","knock.namePh":"आपका नाम","knock.msgLabel":"आपको क्या चाहिए? (वैकल्पिक)","knock.msgPh":"जैसे: क्या 42 नंबर के जूते हैं?","knock.go":"कॉल करें","knock.note":"आपका नाम और यह वाक्य सिर्फ़ वही व्यक्ति देखता है जिसे आप कॉल कर रहे हैं। कोई सर्वर इन्हें नहीं पढ़ सकता।",
 "letter.title":"आपके लिए छोड़े गए संदेश","letter.noneTitle":"अभी कोई जवाब नहीं दे रहा।","letter.noneSub":"आप संदेश छोड़ सकते हैं: ऐप खोलते ही उन्हें मिल जाएगा।","letter.ph":"अपना संदेश यहाँ लिखें","letter.leave":"संदेश छोड़ें","letter.cancel":"रहने दें","letter.needText":"दो शब्द लिख दें, ताकि उन्हें पता चले आप क्या चाहते थे।","letter.left":"संदेश छोड़ दिया। ऐप खोलते ही उन्हें मिल जाएगा।","letter.failed":"मैं संदेश नहीं छोड़ सका। फिर कोशिश करें।","letter.callBack":"वापस कॉल करें","letter.dismiss":"हो गया",
-"home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है"
+"home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है",
+"call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।"
 });
 
 Object.assign(I18N.bn, {
@@ -1429,7 +1440,8 @@ Object.assign(I18N.bn, {
 "addr.incomingAt":"«{name}»-এর মাধ্যমে","burn.title":"একবার ব্যবহারের ঠিকানা","burn.help":"প্রতিটি বিজ্ঞাপনের জন্য একটি, প্রতিটি অপরিচিতের জন্য একটি। কাজ শেষে মুছে দিন, সেই ব্যক্তি আর আপনাকে পাবে না — আসলটি তার কাছে কখনও ছিলই না।","burn.namePh":"কীসের জন্য? যেমন: পুরনো সোফা","burn.add":"তৈরি করুন","burn.send":"এই ঠিকানা পাঠান","burn.delete":"মুছুন","burn.deleted":"«{name}» মোছা হয়েছে। ওই ঠিকানা আর সাড়া দেয় না।","burn.made":"«{name}» তৈরি হয়েছে। এখন দিতে পারেন।","burn.needName":"একটি নাম দিন, যাতে মনে থাকে কাকে দিয়েছেন।","burn.full":"একসঙ্গে সর্বোচ্চ {n}টি রাখতে পারেন। নতুন বানাতে একটি মুছুন।","burn.untitled":"নামহীন",
 "knock.title":"আপনি যোগাযোগ করছেন","knock.nameLabel":"আপনার নাম কী?","knock.namePh":"আপনার নাম","knock.msgLabel":"আপনার কী দরকার? (ইচ্ছা হলে)","knock.msgPh":"যেমন: ৪২ সাইজের জুতো আছে?","knock.go":"ডাকুন","knock.note":"আপনার নাম আর এই বাক্যটি কেবল যাকে ডাকছেন তিনিই দেখেন। কোনও সার্ভার সেগুলি পড়তে পারে না।",
 "letter.title":"আপনার জন্য রাখা বার্তা","letter.noneTitle":"এখন কেউ সাড়া দিচ্ছে না।","letter.noneSub":"আপনি একটি বার্তা রেখে যেতে পারেন: অ্যাপ খুললেই তিনি দেখতে পাবেন।","letter.ph":"আপনার বার্তা এখানে লিখুন","letter.leave":"বার্তা রাখুন","letter.cancel":"থাক","letter.needText":"দু-এক কথা লিখুন, যাতে বোঝেন আপনি কী চেয়েছিলেন।","letter.left":"বার্তা রাখা হয়েছে। অ্যাপ খুললেই দেখতে পাবেন।","letter.failed":"বার্তা রাখতে পারিনি। আবার চেষ্টা করুন।","letter.callBack":"ফিরে ডাকুন","letter.dismiss":"হয়েছে",
-"home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে"
+"home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে",
+"call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।"
 });
 
 Object.assign(I18N.id, {
@@ -1546,7 +1558,8 @@ Object.assign(I18N.id, {
 "addr.incomingAt":"lewat “{name}”","burn.title":"Alamat sekali pakai","burn.help":"Satu untuk tiap iklan, satu untuk tiap orang asing. Hapus kalau sudah selesai, dan orang itu tak bisa menghubungi Anda lagi — alamat asli Anda tak pernah dia pegang.","burn.namePh":"Untuk apa? mis. Sofa bekas","burn.add":"Buat","burn.send":"Kirim alamat ini","burn.delete":"Hapus","burn.deleted":"“{name}” dihapus. Alamat itu tidak menjawab lagi.","burn.made":"“{name}” dibuat. Sekarang bisa Anda berikan.","burn.needName":"Beri nama, supaya Anda ingat sudah memberikannya ke siapa.","burn.full":"Maksimal {n} sekaligus. Hapus satu untuk membuat yang baru.","burn.untitled":"Tanpa nama",
 "knock.title":"Anda menghubungi","knock.nameLabel":"Siapa nama Anda?","knock.namePh":"Nama Anda","knock.msgLabel":"Anda perlu apa? (boleh kosong)","knock.msgPh":"mis. Ada sepatu ukuran 42?","knock.go":"Telepon","knock.note":"Nama Anda dan kalimat ini hanya dilihat oleh orang yang Anda telepon. Tidak ada server yang bisa membacanya.",
 "letter.title":"Pesan yang ditinggalkan untuk Anda","letter.noneTitle":"Sekarang tidak ada yang menjawab.","letter.noneSub":"Anda bisa meninggalkan pesan: dia akan menemukannya begitu membuka aplikasi.","letter.ph":"Tulis pesan Anda di sini","letter.leave":"Tinggalkan pesan","letter.cancel":"Tidak jadi","letter.needText":"Tulis satu dua kalimat, supaya dia tahu apa yang Anda mau.","letter.left":"Pesan ditinggalkan. Dia akan menemukannya saat membuka aplikasi.","letter.failed":"Saya tidak bisa meninggalkan pesan. Coba lagi.","letter.callBack":"Telepon balik","letter.dismiss":"Selesai",
-"home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan"
+"home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan",
+"call.flipFail":"Tidak bisa mengganti kamera di ponsel ini."
 });
 
 function t(key, fallback){
@@ -4809,6 +4822,8 @@ async function startCall(kind){
   try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: kind === 'video' }); }
   catch(e){ showMediaHelp(e); callState = 'idle'; callKind = null; return; }
   $('callBox').classList.remove('hide');
+  $('callBox').classList.toggle('voice', kind !== 'video');
+  $('remoteVideo').classList.toggle('hide', kind !== 'video');
   $('localVideo').classList.toggle('hide', kind !== 'video');
   $('localVideo').srcObject = localStream;
   setCallStatus(kind === 'video' ? t('call.ringingVideo') : t('call.ringingAudio'));
@@ -4852,11 +4867,14 @@ $('btnAcceptCall').addEventListener('click', async () => {
   }
   localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
   $('callBox').classList.remove('hide');
+  $('callBox').classList.toggle('voice', callKind !== 'video');
+  $('remoteVideo').classList.toggle('hide', callKind !== 'video');
   $('localVideo').classList.toggle('hide', callKind !== 'video');
   $('localVideo').srcObject = localStream;
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
   initSpeakerToggle();
+  initFlipCam();
   sig({ type: 'call-accept' });
 });
 $('btnDeclineCall').addEventListener('click', () => {
@@ -4870,6 +4888,7 @@ async function onCallAccepted(){
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
   initSpeakerToggle();
+  initFlipCam();
 }
 async function onCallOfferSdp(sdp){
   await pc.setRemoteDescription({ type: 'offer', sdp });
@@ -4883,6 +4902,8 @@ function endCall(tellPeer){
   $('callBox').classList.add('hide'); $('incomingCall').classList.add('hide');
   $('remoteVideo').srcObject = null; $('localVideo').srcObject = null;
   $('remoteAudio').srcObject = null; $('remoteVideo').classList.remove('hide');
+  $('callBox').classList.remove('voice');
+  $('btnFlipCam').classList.add('hide'); facing = 'user';
   callState = 'idle'; callKind = null; micOn = true; camOn = true;
   $('btnMuteCall').textContent = '🎤'; $('btnCamCall').textContent = '🎥';
   speakerOn = false; $('btnSpeakerCall').classList.add('hide'); $('btnSpeakerCall').classList.remove('on');
@@ -4899,6 +4920,49 @@ $('btnCamCall').addEventListener('click', () => {
   if (!localStream) return;
   camOn = !camOn; localStream.getVideoTracks().forEach(tr => tr.enabled = camOn);
   $('btnCamCall').textContent = camOn ? '🎥' : '🚫';
+});
+
+/* ---------------- front camera or back camera ----------------
+   Swapping the track on the sender rather than rebuilding the call: the
+   connection, the encryption and the agreed format all stay exactly as they
+   were, so the other side simply starts seeing the other camera with nothing
+   to renegotiate and no gap in the call.
+   The button only appears where there is genuinely a second camera to turn to,
+   which is asked of the device rather than guessed from it being a phone. */
+let facing = 'user';
+async function haveTwoCameras(){
+  try{
+    const d = await navigator.mediaDevices.enumerateDevices();
+    return d.filter(x => x.kind === 'videoinput').length > 1;
+  }catch(e){ return false; }
+}
+async function initFlipCam(){
+  const show = callKind === 'video' && await haveTwoCameras();
+  $('btnFlipCam').classList.toggle('hide', !show);
+}
+$('btnFlipCam').addEventListener('click', async () => {
+  if (!localStream || !pc || callKind !== 'video') return;
+  const want = facing === 'user' ? 'environment' : 'user';
+  $('btnFlipCam').disabled = true;
+  try{
+    const fresh = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: want } }, audio: false
+    });
+    const track = fresh.getVideoTracks()[0];
+    if (!track) throw new Error('no camera');
+    const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
+    if (sender) await sender.replaceTrack(track);
+    /* the old one is stopped only once the new one is actually in place, so a
+       phone that refuses the second camera is left with the first still running */
+    for (const old of localStream.getVideoTracks()){ localStream.removeTrack(old); old.stop(); }
+    localStream.addTrack(track);
+    track.enabled = camOn;
+    $('localVideo').srcObject = localStream;
+    facing = want;
+  }catch(e){
+    toast(t('call.flipFail','Non riesco a cambiare fotocamera su questo telefono.'));
+  }
+  $('btnFlipCam').disabled = false;
 });
 
 /* ---------------- which thing the far end's voice comes out of ----------------
@@ -4918,8 +4982,12 @@ function attachRemoteStream(stream){
   if (other.srcObject) other.srcObject = null;
   if (el.srcObject !== stream) el.srcObject = stream;
   /* a voice call had been showing an empty black rectangle where the picture
-     would be, which reads as something broken rather than as "no video" */
-  $('remoteVideo').classList.toggle('hide', callKind !== 'video');
+     would be, which reads as something broken rather than as "no video".
+     The box switches layout with it: without the video there is nothing to
+     hold it open, and the controls inside would be clipped away. */
+  const voice = callKind !== 'video';
+  $('remoteVideo').classList.toggle('hide', voice);
+  $('callBox').classList.toggle('voice', voice);
   applySpeakerChoice();
 }
 
