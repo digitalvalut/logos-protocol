@@ -418,10 +418,20 @@
     background:#0d0f12;border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;
     text-align:center;line-height:1.7;margin:12px 0}
   .chatheader .iconbtn{background:var(--panel2);border:1.5px solid var(--line);width:46px;height:46px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;font-size:1.1875rem;cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:1.1875rem;cursor:pointer;flex-shrink:0;color:var(--ink);
     transition:border-color .15s,transform .12s}
   .chatheader .iconbtn:active{transform:scale(.94)}
   .chatheader .iconbtn:hover{border-color:var(--accent)}
+
+  /* the drawn-icon set: one size rule for every button that holds one, so a
+     phone icon, a mic icon and a trash icon all sit at the same visual weight
+     wherever they turn up */
+  .btnicon{width:20px;height:20px;display:block;flex:none}
+  .chatheader .iconbtn .btnicon{width:21px;height:21px}
+  .callctrl button .btnicon{width:20px;height:20px}
+  #callBox.voice .callctrl button .btnicon{width:23px;height:23px}
+  #composer .iconbtn .btnicon{width:22px;height:22px}
+  .btn .ic svg.btnicon{width:18px;height:18px}
 
   #callBox{background:#000;border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px;box-shadow:var(--shadow)}
   #remoteVideo{width:100%;max-height:360px;display:block;background:#000}
@@ -432,7 +442,8 @@
     padding:5px 12px;border-radius:99px;backdrop-filter:blur(6px)}
   .callctrl{position:absolute;bottom:12px;left:12px;display:flex;gap:8px}
   .callctrl button{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.14);
-    color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px)}
+    color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center}
   .callctrl button.hangup{width:auto;border-radius:99px;padding:0 18px;background:var(--bad);font-weight:700;font-size:0.8125rem}
 
   /* ---------------- a voice call is not a video with the picture off ----------------
@@ -448,7 +459,8 @@
     font-size:0.9375rem;backdrop-filter:none;text-align:center}
   #callBox.voice .callctrl{position:static;justify-content:center;flex-wrap:wrap}
   #callBox.voice .callctrl button{width:52px;height:52px;font-size:1.25rem;
-    background:var(--panel2);border:1px solid var(--line);color:var(--ink)}
+    background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    display:flex;align-items:center;justify-content:center}
   #callBox.voice .callctrl button.hangup{width:auto;min-width:120px;background:var(--bad);
     border-color:transparent;color:#fff;font-size:0.9375rem;padding:0 22px}
   #callBox.voice .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
@@ -475,7 +487,7 @@
 
   #composer{display:flex;align-items:flex-end;gap:6px;padding:9px;background:var(--panel2);border-top:1px solid var(--line);position:relative}
   #composer .iconbtn{background:none;border:none;color:var(--dim);font-size:1.1875rem;padding:8px;cursor:pointer;
-    border-radius:50%;flex-shrink:0;line-height:1}
+    border-radius:50%;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
   #composer .iconbtn:hover{background:var(--panel);color:var(--ink)}
   #msgInput{flex:1;border-radius:22px;padding:12px 17px;font-family:var(--sans);font-size:1.0625rem;
     background:var(--bg2);border:1.5px solid var(--line)}

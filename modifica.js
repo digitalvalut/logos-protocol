@@ -1,6 +1,42 @@
 "use strict";
 const $ = id => document.getElementById(id);
 
+/* ============================== drawn icons ==============================
+   Everywhere a functional button showed a raw emoji — phone, camera, mic,
+   speaker, paperclip, send, copy, trash, flame — it rendered as a different
+   picture, a different size and a different colour on every phone, next to
+   icons that were already drawn as consistent inline SVG (the gear, the two
+   home buttons). Half a design system reads as no design system.
+   One small set, same stroke weight and viewBox as those, used everywhere a
+   button *acts* rather than *expresses* — the emoji picker's own smiley face
+   and the reaction grid stay exactly as they are, because showing an emoji
+   is correct there; it is the point of the button. */
+const ICONS = {
+  phone:'<path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/>',
+  video:'<rect x="3" y="7" width="12.5" height="10" rx="2.2"/><path d="M15.5 11.2 21 8v8l-5.5-3.2"/>',
+  videoOff:'<path d="M3 3l18 18"/><path d="M15.5 11.2 21 8v8l-5.5-3.2"/><path d="M15.3 7H5.2C4 7 3 8 3 9.2v5.6c0 .7.3 1.3.9 1.7"/><path d="M9.3 7h3l2.7 2.7"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21M8.5 21h7"/>',
+  micOff:'<path d="M3 3l18 18"/><path d="M15 9.5V6a3 3 0 0 0-5.9-.8"/><path d="M9 9v2a3 3 0 0 0 4.3 2.7"/><path d="M5.5 11a6.5 6.5 0 0 0 9.3 5.9"/><path d="M12 17.5V21M8.5 21h7"/>',
+  speakerLow:'<path d="M4 9.5v5h3.3L12 18V6L7.3 9.5H4z"/><path d="M16 9.5a4 4 0 0 1 0 5"/>',
+  speakerLoud:'<path d="M4 9.5v5h3.3L12 18V6L7.3 9.5H4z"/><path d="M16 8.2a5.8 5.8 0 0 1 0 7.6M18.6 6.2a9.4 9.4 0 0 1 0 11.6"/>',
+  flip:'<path d="M17 2.5 20 5.5 17 8.5"/><path d="M4 12a8 8 0 0 1 13.9-5.4L20 5.5"/><path d="M7 21.5 4 18.5 7 15.5"/><path d="M20 12a8 8 0 0 1-13.9 5.4L4 18.5"/>',
+  attach:'<path d="M15.5 6.5 8 14a3 3 0 0 0 4.2 4.2l7.6-7.6a5 5 0 0 0-7.1-7.1L4.9 11.3a7 7 0 0 0 9.9 9.9"/>',
+  send:'<path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/>',
+  copy:'<rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/>',
+  trash:'<path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/>',
+  flame:'<path d="M12 2.5c1 3 3.5 3.6 3.5 7a3.5 3.5 0 0 1-7 0c0-1 .3-1.6.8-2.3.4.9 1.2 1.3 1.2 1.3-.6-2.5.3-4 1.5-6z"/><path d="M8.3 12.5a5.7 5.7 0 0 0 7.4 5.4A6 6 0 0 0 19 12.8c0-1.6-.5-2.6-1.2-3.6.1 1.6-.5 2.6-1.3 3.2"/>',
+  plus:'<path d="M12 4.5v15M4.5 12h15"/>',
+  grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/>',
+  link:'<path d="M9.5 14.5 14.5 9.5"/><path d="M11 6.5l1.3-1.3a3.7 3.7 0 0 1 5.2 5.2L16 12"/><path d="M13 17.5l-1.3 1.3a3.7 3.7 0 0 1-5.2-5.2L8 12"/>',
+  lock:'<rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+  bolt:'<path d="M12.5 3 5 13.5h5.5L11 21l7.5-10.5H13z"/>',
+};
+function svgIcon(name, cls){
+  return '<svg class="btnicon' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+}
+function setIcon(id, name){ const el = $(id); if (el) el.innerHTML = svgIcon(name); }
+
 /* ============================== i18n ==============================
    The same 13 languages LOGOS.html already ships, same codes, so the two
    apps read as one project rather than two half-translated ones. */
@@ -4630,7 +4666,7 @@ $('btnMic').addEventListener('click', async () => {
   mediaRecorder.ondataavailable = ev => { if (ev.data.size > 0) recordedChunks.push(ev.data); };
   mediaRecorder.onstop = () => {
     stream.getTracks().forEach(tr => tr.stop());
-    $('btnMic').textContent = '🎤';
+    setIcon('btnMic','mic');
     const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
     sendFile(new File([blob], 'vocale.webm', { type: blob.type }));
   };
@@ -4961,7 +4997,7 @@ function endCall(tellPeer){
   $('callBox').classList.remove('voice');
   $('btnFlipCam').classList.add('hide'); facing = 'user';
   callState = 'idle'; callKind = null; micOn = true; camOn = true;
-  $('btnMuteCall').textContent = '🎤'; $('btnCamCall').textContent = '🎥';
+  setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video');
   speakerOn = false; $('btnSpeakerCall').classList.add('hide'); $('btnSpeakerCall').classList.remove('on');
 }
 $('btnCallAudio').addEventListener('click', () => startCall('audio'));
@@ -4970,12 +5006,12 @@ $('btnHangup').addEventListener('click', () => endCall(true));
 $('btnMuteCall').addEventListener('click', () => {
   if (!localStream) return;
   micOn = !micOn; localStream.getAudioTracks().forEach(tr => tr.enabled = micOn);
-  $('btnMuteCall').textContent = micOn ? '🎤' : '🔇';
+  setIcon('btnMuteCall', micOn ? 'mic' : 'micOff');
 });
 $('btnCamCall').addEventListener('click', () => {
   if (!localStream) return;
   camOn = !camOn; localStream.getVideoTracks().forEach(tr => tr.enabled = camOn);
-  $('btnCamCall').textContent = camOn ? '🎥' : '🚫';
+  setIcon('btnCamCall', camOn ? 'video' : 'videoOff');
 });
 
 /* ---------------- front camera or back camera ----------------
@@ -5149,7 +5185,7 @@ async function initSpeakerToggle(){
      reason usually still has that reason on the next call */
   speakerOn = speakerPref();
   $('btnSpeakerCall').classList.toggle('on', speakerOn);
-  $('btnSpeakerCall').textContent = speakerOn ? '🔊' : '🔈';
+  setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
   await applySpeakerChoice();
 }
 $('btnSpeakerCall').addEventListener('click', async () => {
@@ -5163,7 +5199,7 @@ $('btnSpeakerCall').addEventListener('click', async () => {
     speakerOn = want;
     setSpeakerPref(speakerOn);   /* remembered for the next call */
     $('btnSpeakerCall').classList.toggle('on', speakerOn);
-    $('btnSpeakerCall').textContent = speakerOn ? '🔊' : '🔈';
+    setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
   }catch(e){
     toast(t('call.speakerFail','Non riesco a cambiare l\'altoparlante su questo telefono.'));
   }
@@ -5320,6 +5356,12 @@ for (const b of document.querySelectorAll('.textsize button')){
   b.addEventListener('click', () => applyTextSize(b.dataset.ts || ''));
 }
 applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || ''; }catch(e){ return ''; } })());
+
+/* static icons that never toggle — set once, here, rather than baked into the
+   HTML, so the markup and the icon set stay defined in exactly one place */
+setIcon('btnCallAudio','phone'); setIcon('btnCallVideo','video');
+setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video'); setIcon('btnFlipCam','flip');
+setIcon('btnAttach','attach'); setIcon('btnMic','mic');
 
 initLang();
 renderContacts();

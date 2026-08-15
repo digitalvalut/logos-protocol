@@ -65,7 +65,7 @@
     <div class="name">DigitalValut Logos</div>
     <div class="spacer"></div>
     <button class="gear" id="btnSettings" aria-label="Impostazioni" title="Impostazioni">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+      <svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="3.1"/>
         <path d="M19.2 14.4a1.6 1.6 0 0 0 .32 1.77l.06.06a1.94 1.94 0 1 1-2.75 2.75l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47v.17a1.94 1.94 0 1 1-3.88 0v-.09a1.6 1.6 0 0 0-1.05-1.47 1.6 1.6 0 0 0-1.77.32l-.06.06a1.94 1.94 0 1 1-2.75-2.75l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-.97h-.17a1.94 1.94 0 1 1 0-3.88h.09a1.6 1.6 0 0 0 1.47-1.05 1.6 1.6 0 0 0-.32-1.77l-.06-.06a1.94 1.94 0 1 1 2.75-2.75l.06.06a1.6 1.6 0 0 0 1.77.32h.08a1.6 1.6 0 0 0 .97-1.47v-.17a1.94 1.94 0 1 1 3.88 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a1.94 1.94 0 1 1 2.75 2.75l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97h.17a1.94 1.94 0 1 1 0 3.88h-.09a1.6 1.6 0 0 0-1.47.97z"/>
@@ -169,7 +169,7 @@
       <input type="text" id="knockMsg" class="sans-input" maxlength="140"
              data-i18n-ph="knock.msgPh" placeholder="es. Avete le scarpe numero 42?">
       <button class="btn primary big mt16" id="btnKnockGo">
-        <span class="ic">📞</span><span data-i18n="knock.go">Chiama</span></button>
+        <span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="knock.go">Chiama</span></button>
       <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
     </div>
 
@@ -264,8 +264,8 @@
           <div class="qrhint" data-i18n="addr.qrHint">Chi lo inquadra ti chiama direttamente</div>
         </div>
         <div class="toolsrow">
-          <button class="btn primary" id="btnAddrShare"><span class="ic">📤</span><span data-i18n="addr.share">Manda il tuo indirizzo</span></button>
-          <button class="btn" id="btnAddrQr"><span class="ic">▦</span><span data-i18n="addr.showQr">Mostra il QR</span></button>
+          <button class="btn primary" id="btnAddrShare"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="addr.share">Manda il tuo indirizzo</span></button>
+          <button class="btn" id="btnAddrQr"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/></svg></span><span data-i18n="addr.showQr">Mostra il QR</span></button>
         </div>
         <div class="helptext mt12" id="addrReachNote" data-i18n="addr.reachNote">Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.</div>
       </div>
@@ -279,7 +279,7 @@
         <div class="burnernew">
           <input type="text" id="burnerName" class="sans-input" maxlength="40" autocomplete="off"
                  data-i18n-ph="burn.namePh" placeholder="Per cosa? es. Divano usato">
-          <button class="btn mt10" id="btnBurnerAdd"><span class="ic">＋</span><span data-i18n="burn.add">Crea</span></button>
+          <button class="btn mt10" id="btnBurnerAdd"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v15M4.5 12h15"/></svg></span><span data-i18n="burn.add">Crea</span></button>
         </div>
         <div class="status" id="burnerStatus"></div>
       </div>
@@ -288,7 +288,7 @@
         <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
         <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
                data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
-        <button class="btn mt10" id="btnAddrDial"><span class="ic">📞</span><span data-i18n="addr.dial">Chiamalo</span></button>
+        <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
         <div class="status" id="addrDialStatus"></div>
       </div>
     </div>
@@ -366,14 +366,14 @@
         <canvas id="quickQrCanvas" aria-label="Codice QR dell'invito"></canvas>
         <div class="qrhint" data-i18n="quick.qrHint">Oppure inquadralo con la fotocamera del telefono</div>
       </div>
-      <button class="btn primary big" id="btnShareQuick"><span class="ic">📤</span><span data-i18n="quick.share">Manda l'invito</span></button>
+      <button class="btn primary big" id="btnShareQuick"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="quick.share">Manda l'invito</span></button>
       <div class="waitsnote hide" id="inviteWaitsNote">
         <span class="ic" aria-hidden="true">💤</span>
         <span data-i18n="wake.waitsNote">Puoi chiudere l'app: quando aprono l'invito ti avviso io.</span>
       </div>
       <div class="status" id="quickStatusA"></div>
       <div class="diagline hide" id="diagQuickA"></div>
-      <button class="btn hide mt10" id="btnRetryQuickA"><span class="ic">🔄</span><span data-i18n="quick.newCode">Genera un nuovo codice</span></button>
+      <button class="btn hide mt10" id="btnRetryQuickA"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2.5 20 5.5 17 8.5"/><path d="M4 12a8 8 0 0 1 13.9-5.4L20 5.5"/><path d="M7 21.5 4 18.5 7 15.5"/><path d="M20 12a8 8 0 0 1-13.9 5.4L4 18.5"/></svg></span><span data-i18n="quick.newCode">Genera un nuovo codice</span></button>
     </div>
     <button class="btn ghost linkbtn mt10" id="toggleLongInviteA" data-i18n="quick.useLong">Preferisci il codice lungo?</button>
 
@@ -389,16 +389,16 @@
           </div>
           <div class="sw" aria-hidden="true"></div>
         </div>
-        <button class="btn primary big" id="btnCreate"><span class="ic">✉️</span><span data-i18n="start.create">Prepara l'invito</span></button>
+        <button class="btn primary big" id="btnCreate"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="start.create">Prepara l'invito</span></button>
         <div id="offerBlock" class="hide mt16">
           <div class="passbox hide" id="passBox">
             <div class="cap" data-i18n="lock.passCap">Parola d'ordine</div>
             <div class="word" id="passWord"></div>
             <div class="hint" data-i18n="lock.passHint">Dilla a voce, o su un canale diverso da quello dove mandi il codice. Senza di questa il codice non si apre.</div>
           </div>
-          <button class="btn primary big" id="btnShareOffer"><span class="ic">📤</span><span data-i18n="start.share">Manda l'invito</span></button>
+          <button class="btn primary big" id="btnShareOffer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="start.share">Manda l'invito</span></button>
           <div class="btnrow">
-            <button class="btn" id="btnCopyOffer"><span class="ic">📋</span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+            <button class="btn" id="btnCopyOffer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.copyCode">Copia il codice</span></button>
           </div>
           <details class="showcode" id="offerDetails">
             <summary data-i18n="btn.showCode">Mostra il codice</summary>
@@ -413,7 +413,7 @@
           <b>Incolla</b>. Poi entrate insieme nella chat.</div>
         <textarea id="answerIn" data-i18n-ph="start.pastePh" placeholder="Incolla qui la risposta…"></textarea>
         <div class="pasteline">
-          <button class="btn" id="btnPasteAnswer"><span class="ic">📋</span><span data-i18n="btn.paste">Incolla</span></button>
+          <button class="btn" id="btnPasteAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
         </div>
         <button class="btn primary big mt10" id="btnConnectAsA" data-i18n="btn.connect">Entra nella chat</button>
         <div class="status" id="statusA"></div>
@@ -440,7 +440,7 @@
       <input type="text" id="letterText" class="sans-input" maxlength="300"
              data-i18n-ph="letter.ph" placeholder="Scrivi qui il tuo messaggio">
       <div class="toolsrow">
-        <button class="btn primary" id="btnLeaveLetter"><span class="ic">✉️</span><span data-i18n="letter.leave">Lascia il messaggio</span></button>
+        <button class="btn primary" id="btnLeaveLetter"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="letter.leave">Lascia il messaggio</span></button>
         <button class="btn" id="btnLeaveCancel" data-i18n="letter.cancel">Lascia perdere</button>
       </div>
       <div class="status" id="letterStatus"></div>
@@ -464,7 +464,7 @@
           premi il pulsante arancione. Altrimenti premi <b>Incolla</b>.</div>
         <textarea id="offerIn" data-i18n-ph="join.pastePh" placeholder="Incolla qui l'invito…"></textarea>
         <div class="pasteline">
-          <button class="btn" id="btnPasteOffer"><span class="ic">📋</span><span data-i18n="btn.paste">Incolla</span></button>
+          <button class="btn" id="btnPasteOffer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
         </div>
         <div id="passAsk" class="hide mt12">
           <div class="helptext mb8" data-i18n="lock.ask">🔐 Questo invito è chiuso a chiave. Scrivi la parola d'ordine che ti hanno detto a voce.</div>
@@ -476,9 +476,9 @@
           <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="join.s2">Manda la risposta</div></div>
           <div class="helptext" data-i18n="join.s2help">Ultimo passo: rimanda questo alla persona che ti ha invitato,
             e siete connessi.</div>
-          <button class="btn primary big" id="btnShareAnswer"><span class="ic">📤</span><span data-i18n="join.sendAnswer">Manda la risposta</span></button>
+          <button class="btn primary big" id="btnShareAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="join.sendAnswer">Manda la risposta</span></button>
           <div class="btnrow">
-            <button class="btn" id="btnCopyAnswer"><span class="ic">📋</span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+            <button class="btn" id="btnCopyAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.copyCode">Copia il codice</span></button>
           </div>
           <details class="showcode" id="answerDetails">
             <summary data-i18n="btn.showCode">Mostra il codice</summary>
@@ -502,8 +502,8 @@
            guessed. -->
       <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span class="cdot" id="connDot" role="img"></span><span id="connState" data-i18n="chat.connected">connessa</span>
         · <button id="btnVerify" class="linkbtn" data-i18n="verify.badge">🔒 verifica</button></div>
-      <button class="iconbtn" id="btnCallAudio" title="Chiamata">📞</button>
-      <button class="iconbtn" id="btnCallVideo" title="Videochiamata">🎥</button>
+      <button class="iconbtn" id="btnCallAudio" title="Chiamata"></button>
+      <button class="iconbtn" id="btnCallVideo" title="Videochiamata"></button>
       <button class="iconbtn" id="btnMenu" title="Altro">⋯</button>
     </div>
 
@@ -520,12 +520,12 @@
       <video id="localVideo" autoplay playsinline muted></video>
       <div id="callStatus"></div>
       <div class="callctrl">
-        <button id="btnMuteCall" title="Muto">🎤</button>
-        <button id="btnCamCall" title="Camera">🎥</button>
+        <button id="btnMuteCall" title="Muto"></button>
+        <button id="btnCamCall" title="Camera"></button>
         <!-- Only ever shown during a video call on a phone that actually has a
              second camera — asked of the device, not assumed. -->
-        <button id="btnFlipCam" class="hide" title="Gira la fotocamera">🔄</button>
-        <button id="btnSpeakerCall" class="hide" title="Altoparlante">🔊</button>
+        <button id="btnFlipCam" class="hide" title="Gira la fotocamera"></button>
+        <button id="btnSpeakerCall" class="hide" title="Altoparlante"></button>
         <button class="hangup" id="btnHangup" data-i18n="call.hangup">Chiudi</button>
       </div>
     </div>
@@ -589,9 +589,9 @@
       <div id="composer">
         <button class="iconbtn" id="btnEmoji" title="Emoji">😊</button>
         <div id="emojiPop" class="hide"></div>
-        <button class="iconbtn" id="btnAttach" title="Allega">📎</button>
+        <button class="iconbtn" id="btnAttach" title="Allega"></button>
         <input type="file" id="fileInput" class="filehide" tabindex="-1" aria-hidden="true">
-        <button class="iconbtn" id="btnMic" title="Vocale">🎤</button>
+        <button class="iconbtn" id="btnMic" title="Vocale"></button>
         <input type="text" id="msgInput" spellcheck="true" autocapitalize="sentences" autocomplete="off" data-i18n-ph="chat.typePh" placeholder="Scrivi un messaggio…">
         <button id="btnSend" title="Invia">➤</button>
       </div>
@@ -606,12 +606,12 @@
           <option value="15">15 min</option>
           <option value="60">1 h</option>
         </select>
-        <button class="btn" id="btnArmDestruct"><span class="ic">🔥</span><span data-i18n="menu.arm">Autodistruzione</span></button>
+        <button class="btn" id="btnArmDestruct"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5c1 3 3.5 3.6 3.5 7a3.5 3.5 0 0 1-7 0c0-1 .3-1.6.8-2.3.4.9 1.2 1.3 1.2 1.3-.6-2.5.3-4 1.5-6z"/><path d="M8.3 12.5a5.7 5.7 0 0 0 7.4 5.4A6 6 0 0 0 19 12.8c0-1.6-.5-2.6-1.2-3.6.1 1.6-.5 2.6-1.3 3.2"/></svg></span><span data-i18n="menu.arm">Autodistruzione</span></button>
         <span class="status ok hide m0" id="destructCountdown"></span>
         <button class="btn hide" id="btnDisarmDestruct" data-i18n="menu.disarm">Annulla</button>
       </div>
       <div class="toolsrow">
-        <button class="btn" id="btnClearHistory"><span class="ic">🧹</span><span data-i18n="menu.clearHistory">Svuota cronologia</span></button>
+        <button class="btn" id="btnClearHistory"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span><span data-i18n="menu.clearHistory">Svuota cronologia</span></button>
         <button class="btn danger" id="btnNewSession"><span class="ic">✕</span><span data-i18n="menu.endChat">Termina chat</span></button>
       </div>
       <div class="lead mt12" data-i18n="menu.historyNote">La cronologia resta solo su questo dispositivo,
@@ -651,9 +651,9 @@
     </svg>
     <div class="flashtitle" id="flashTitle">Connessi</div>
     <div class="flashfacts">
-      <div class="ff" id="flashRoute"><span class="ic" aria-hidden="true">🔗</span><span></span></div>
-      <div class="ff"><span class="ic" aria-hidden="true">🔒</span><span data-i18n="flash.noserver">Nessun server può leggere quello che vi dite</span></div>
-      <div class="ff hide" id="flashTime"><span class="ic" aria-hidden="true">⚡</span><span></span></div>
+      <div class="ff" id="flashRoute"><span class="ic" aria-hidden="true"><svg class="btnicon" style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 14.5 14.5 9.5"/><path d="M11 6.5l1.3-1.3a3.7 3.7 0 0 1 5.2 5.2L16 12"/><path d="M13 17.5l-1.3 1.3a3.7 3.7 0 0 1-5.2-5.2L8 12"/></svg></span><span></span></div>
+      <div class="ff"><span class="ic" aria-hidden="true"><svg class="btnicon" style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span><span data-i18n="flash.noserver">Nessun server può leggere quello che vi dite</span></div>
+      <div class="ff hide" id="flashTime"><span class="ic" aria-hidden="true"><svg class="btnicon" style="width:16px;height:16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 3 5 13.5h5.5L11 21l7.5-10.5H13z"/></svg></span><span></span></div>
     </div>
   </div>
 </div>
