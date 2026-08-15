@@ -187,7 +187,7 @@ Object.assign(I18N.en, {
 "health.addrOk":"Can call you right now.",
 "health.addrOff":"Your address is off. Turn it on above.",
 "health.contacts":"Your contacts",
-"health.contactsOk":"All {n} can find you again right now.",
+"health.contactsOk":"They can find you again right now.",
 "health.contactsNone":"You have no contacts yet.",
 "health.broker":"The service that introduces you",
 "health.brokerOk":"Answering.",
@@ -344,7 +344,7 @@ Object.assign(I18N.it, {
 "health.addrOk":"Ti può chiamare adesso.",
 "health.addrOff":"Il tuo indirizzo è spento. Accendilo qui sopra.",
 "health.contacts":"I tuoi contatti",
-"health.contactsOk":"Tutti e {n} ti possono ritrovare adesso.",
+"health.contactsOk":"Ti possono ritrovare adesso.",
 "health.contactsNone":"Non hai ancora nessun contatto.",
 "health.broker":"Il servizio che vi fa incontrare",
 "health.brokerOk":"Risponde.",
@@ -494,7 +494,7 @@ Object.assign(I18N.fr, {
 "health.addrOk":"Peut vous appeler maintenant.",
 "health.addrOff":"Votre adresse est désactivée. Activez-la ci-dessus.",
 "health.contacts":"Vos contacts",
-"health.contactsOk":"Tous les {n} peuvent vous retrouver maintenant.",
+"health.contactsOk":"Ils peuvent vous retrouver maintenant.",
 "health.contactsNone":"Vous n'avez encore aucun contact.",
 "health.broker":"Le service qui vous met en relation",
 "health.brokerOk":"Répond.",
@@ -644,7 +644,7 @@ Object.assign(I18N.de, {
 "health.addrOk":"Kann dich jetzt anrufen.",
 "health.addrOff":"Deine Adresse ist aus. Schalte sie oben ein.",
 "health.contacts":"Deine Kontakte",
-"health.contactsOk":"Alle {n} können dich jetzt wiederfinden.",
+"health.contactsOk":"Sie können dich jetzt wiederfinden.",
 "health.contactsNone":"Du hast noch keine Kontakte.",
 "health.broker":"Der Dienst, der euch zusammenbringt",
 "health.brokerOk":"Antwortet.",
@@ -794,7 +794,7 @@ Object.assign(I18N.es, {
 "health.addrOk":"Puede llamarte ahora mismo.",
 "health.addrOff":"Tu dirección está apagada. Actívala aquí arriba.",
 "health.contacts":"Tus contactos",
-"health.contactsOk":"Los {n} pueden volver a encontrarte ahora.",
+"health.contactsOk":"Pueden volver a encontrarte ahora.",
 "health.contactsNone":"Todavía no tienes ningún contacto.",
 "health.broker":"El servicio que os pone en contacto",
 "health.brokerOk":"Responde.",
@@ -944,7 +944,7 @@ Object.assign(I18N.pt, {
 "health.addrOk":"Pode ligar-lhe agora mesmo.",
 "health.addrOff":"O seu endereço está desligado. Ligue-o aqui em cima.",
 "health.contacts":"Os seus contactos",
-"health.contactsOk":"Todos os {n} podem reencontrá-lo agora.",
+"health.contactsOk":"Podem reencontrá-lo agora.",
 "health.contactsNone":"Ainda não tem nenhum contacto.",
 "health.broker":"O serviço que vos põe em contacto",
 "health.brokerOk":"Responde.",
@@ -1094,7 +1094,7 @@ Object.assign(I18N.ru, {
 "health.addrOk":"Может позвонить вам прямо сейчас.",
 "health.addrOff":"Ваш адрес выключен. Включите его выше.",
 "health.contacts":"Ваши контакты",
-"health.contactsOk":"Все {n} могут найти вас прямо сейчас.",
+"health.contactsOk":"Они могут найти вас прямо сейчас.",
 "health.contactsNone":"У вас пока нет контактов.",
 "health.broker":"Служба, которая вас соединяет",
 "health.brokerOk":"Отвечает.",
@@ -1244,7 +1244,7 @@ Object.assign(I18N.zh, {
 "health.addrOk":"现在就能呼叫你。",
 "health.addrOff":"你的地址是关闭的。请在上面打开它。",
 "health.contacts":"你的联系人",
-"health.contactsOk":"全部 {n} 位现在都能重新找到你。",
+"health.contactsOk":"他们现在就能重新找到你。",
 "health.contactsNone":"你还没有联系人。",
 "health.broker":"帮你们牵线的服务",
 "health.brokerOk":"有回应。",
@@ -1394,7 +1394,7 @@ Object.assign(I18N.ar, {
 "health.addrOk":"يستطيع الاتصال بك الآن.",
 "health.addrOff":"عنوانك مُطفأ. فعّله في الأعلى.",
 "health.contacts":"جهات اتصالك",
-"health.contactsOk":"جميع الـ{n} يستطيعون إيجادك الآن.",
+"health.contactsOk":"يستطيعون إيجادك الآن.",
 "health.contactsNone":"ليس لديك جهات اتصال بعد.",
 "health.broker":"الخدمة التي تجمعكما",
 "health.brokerOk":"يستجيب.",
@@ -1544,7 +1544,7 @@ Object.assign(I18N.ur, {
 "health.addrOk":"ابھی آپ کو کال کر سکتا ہے۔",
 "health.addrOff":"آپ کا پتہ بند ہے۔ اوپر سے اسے آن کریں۔",
 "health.contacts":"آپ کے رابطے",
-"health.contactsOk":"تمام {n} ابھی آپ کو دوبارہ پا سکتے ہیں۔",
+"health.contactsOk":"وہ ابھی آپ کو دوبارہ پا سکتے ہیں۔",
 "health.contactsNone":"ابھی آپ کا کوئی رابطہ نہیں ہے۔",
 "health.broker":"جو سروس آپ کو ملاتی ہے",
 "health.brokerOk":"جواب دے رہی ہے۔",
@@ -1694,7 +1694,7 @@ Object.assign(I18N.hi, {
 "health.addrOk":"अभी आपको कॉल कर सकता है।",
 "health.addrOff":"आपका पता बंद है। ऊपर से इसे चालू करें।",
 "health.contacts":"आपके संपर्क",
-"health.contactsOk":"सभी {n} अभी आपको दोबारा पा सकते हैं।",
+"health.contactsOk":"वे अभी आपको दोबारा पा सकते हैं।",
 "health.contactsNone":"आपका अभी कोई संपर्क नहीं है।",
 "health.broker":"जो सेवा आपको मिलाती है",
 "health.brokerOk":"जवाब दे रही है।",
@@ -1844,7 +1844,7 @@ Object.assign(I18N.bn, {
 "health.addrOk":"এখনই আপনাকে ডাকতে পারে।",
 "health.addrOff":"আপনার ঠিকানা বন্ধ। উপরে গিয়ে চালু করুন।",
 "health.contacts":"আপনার পরিচিতরা",
-"health.contactsOk":"সব {n} জন এখনই আপনাকে আবার খুঁজে পেতে পারেন।",
+"health.contactsOk":"তাঁরা এখনই আপনাকে আবার খুঁজে পেতে পারেন।",
 "health.contactsNone":"আপনার এখনও কোনো পরিচিত নেই।",
 "health.broker":"যে সেবা আপনাদের যোগাযোগ করায়",
 "health.brokerOk":"সাড়া দিচ্ছে।",
@@ -1994,7 +1994,7 @@ Object.assign(I18N.id, {
 "health.addrOk":"Bisa menelepon Anda sekarang.",
 "health.addrOff":"Alamat Anda mati. Nyalakan di atas.",
 "health.contacts":"Kontak Anda",
-"health.contactsOk":"Semua {n} bisa menemukan Anda lagi sekarang.",
+"health.contactsOk":"Mereka bisa menemukan Anda lagi sekarang.",
 "health.contactsNone":"Anda belum punya kontak.",
 "health.broker":"Layanan yang mempertemukan Anda",
 "health.brokerOk":"Menjawab.",
@@ -4292,7 +4292,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.38';
+const APP_VERSION = 'logos-modifica-3.39';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -4358,7 +4358,7 @@ async function runHealth(){
   if (!known) rows.push(['off', t('health.contacts'), t('health.contactsNone')]);
   else if (busyWithSomeone()) rows.push(['warn', t('health.contacts'), t('health.busy')]);
   else if (!inboxTimer) rows.push(['bad', t('health.contacts'), t('health.stopped')]);
-  else rows.push(['ok', t('health.contacts'), fill(t('health.contactsOk'), { n: known })]);
+  else rows.push(['ok', t('health.contacts'), t('health.contactsOk')]);
 
   /* 3 — the thing that introduces two people */
   const broker = await brokerAlive();
