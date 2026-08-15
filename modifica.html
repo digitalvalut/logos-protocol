@@ -73,6 +73,44 @@
     </button>
   </div>
 
+  <!-- These two live outside every screen section on purpose: a call can be
+       started from Settings (typing an address) and can arrive while any
+       screen at all is open, not only Home. Nested inside one screen, either
+       card would stay invisible — un-hidden in the DOM but sitting inside a
+       section CSS was hiding — while whoever it was for sat looking at
+       something else entirely. -->
+  <!-- Arriving by address used to drop someone straight into a call before
+       they had said who they were, so the other end got "Qualcuno" and no
+       reason. One screen, three things, one big button. -->
+  <div class="card knock hide" id="knockCard">
+    <div class="knocktitle" data-i18n="knock.title">Stai contattando</div>
+    <div class="knockwho" id="knockWho">DV-····-····-····</div>
+    <label class="fieldlabel mt16" for="knockName" data-i18n="knock.nameLabel">Come ti chiami?</label>
+    <input type="text" id="knockName" class="sans-input" maxlength="30" autocapitalize="words"
+           data-i18n-ph="knock.namePh" placeholder="Il tuo nome">
+    <label class="fieldlabel mt12" for="knockMsg" data-i18n="knock.msgLabel">Cosa ti serve? (se vuoi)</label>
+    <input type="text" id="knockMsg" class="sans-input" maxlength="140"
+           data-i18n-ph="knock.msgPh" placeholder="es. Avete le scarpe numero 42?">
+    <button class="btn primary big mt16" id="btnKnockGo">
+      <span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="knock.go">Chiama</span></button>
+    <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
+  </div>
+
+  <!-- Someone is calling the public address. Nothing is answered until this
+       is answered, because an address anyone may hold is an address anyone
+       may ring. -->
+  <div class="card hide" id="addrIncoming">
+    <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
+    <span class="whichaddr hide" id="addrIncomingWhich"></span>
+    <div class="whoknocks" id="addrIncomingWho"></div>
+    <div class="whyknocks hide" id="addrIncomingMsg"></div>
+    <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
+    <div class="toolsrow">
+      <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
+      <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
+    </div>
+  </div>
+
   <!-- ============================ HOME ============================ -->
   <section id="screenHome">
     <div class="hero">
@@ -158,50 +196,11 @@
       </button>
     </div>
 
-    <!-- The permanent address. Off by default, because switching it on means
-         "anyone holding this can reach me", and that is a decision, not a
-         default. It is derived from this device's own certificate and is
-         never registered anywhere: there is no directory of addresses, here
-         or anywhere else, so there is nothing to leak, subpoena or sell. -->
-    <!-- Arriving by address used to drop someone straight into a call before
-         they had said who they were, so the other end got "Qualcuno" and no
-         reason. One screen, three things, one big button. -->
-    <div class="card knock hide" id="knockCard">
-      <div class="knocktitle" data-i18n="knock.title">Stai contattando</div>
-      <div class="knockwho" id="knockWho">DV-····-····-····</div>
-      <label class="fieldlabel mt16" for="knockName" data-i18n="knock.nameLabel">Come ti chiami?</label>
-      <input type="text" id="knockName" class="sans-input" maxlength="30" autocapitalize="words"
-             data-i18n-ph="knock.namePh" placeholder="Il tuo nome">
-      <label class="fieldlabel mt12" for="knockMsg" data-i18n="knock.msgLabel">Cosa ti serve? (se vuoi)</label>
-      <input type="text" id="knockMsg" class="sans-input" maxlength="140"
-             data-i18n-ph="knock.msgPh" placeholder="es. Avete le scarpe numero 42?">
-      <button class="btn primary big mt16" id="btnKnockGo">
-        <span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="knock.go">Chiama</span></button>
-      <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
-    </div>
-
-    
-
     <!-- Left while nobody was here. Collected once, then kept on this device
          only: the server no longer has them to give again. -->
     <div class="card hide" id="lettersCard">
       <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
       <div id="lettersList"></div>
-    </div>
-
-    <!-- Someone is calling the public address. Nothing is answered until this
-         is answered, because an address anyone may hold is an address anyone
-         may ring. -->
-    <div class="card hide" id="addrIncoming">
-      <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
-      <span class="whichaddr hide" id="addrIncomingWhich"></span>
-      <div class="whoknocks" id="addrIncomingWho"></div>
-      <div class="whyknocks hide" id="addrIncomingMsg"></div>
-      <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
-      <div class="toolsrow">
-        <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
-        <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
-      </div>
     </div>
 
     <div class="card hide" id="contactsCard">

@@ -3432,9 +3432,13 @@ function startAddrPolling(){
   addrCheckOnce();
 }
 function stopAddrPolling(){ clearInterval(addrPollTimer); addrPollTimer = null; }
+/* Reachable on whichever screen is open, not only Home — sending the address
+   itself usually means switching away to WhatsApp or Messages first, which is
+   exactly what makes the tab go hidden and stop here. It has to pick back up
+   wherever the app was left, not only if that happened to be Home. */
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') stopAddrPolling();
-  else if (!$('screenHome').classList.contains('hide')) startAddrPolling();
+  else startAddrPolling();
 });
 
 async function acceptAddrCall(){
