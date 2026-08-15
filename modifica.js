@@ -23,7 +23,7 @@ Object.assign(I18N.en, {
 
 
 "home.legalSummary":"How it works, in three technical lines",
-"home.legalBody":"It reveals your network address (IP) to whoever you talk to; it needs both of you online at once, otherwise nothing arrives, and on heavily filtered networks calls may not connect; no website can prevent a screenshot, ever. For safety when it truly matters, use Signal, Session or Briar instead of this.",
+"home.legalBody":"It reveals your network address (IP) to whoever you talk to; it needs both of you online at once, otherwise nothing arrives, and on heavily filtered networks calls may not connect; no website can prevent a screenshot, ever.",
 "nav.back":"Back",
 "start.share":"Send the invite","btn.copyCode":"Copy the code",
 "join.sendAnswer":"Send the reply",
@@ -147,7 +147,7 @@ Object.assign(I18N.it, {
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
 "home.nameLabel":"Come ti chiami","home.namePh":"Il tuo nome",
 "home.legalSummary":"Come funziona, in tre righe tecniche",
-"home.legalBody":"Rivela il tuo indirizzo di rete (IP) a chi parli con te; serve che siate online insieme, altrimenti non arriva nulla, e su reti molto filtrate le chiamate possono non collegarsi; nessun sito web può impedire uno screenshot, a nessuno. Per la sicurezza quando conta davvero, usa Signal, Session o Briar invece di questa.",
+"home.legalBody":"Rivela il tuo indirizzo di rete (IP) a chi parli con te; serve che siate online insieme, altrimenti non arriva nulla, e su reti molto filtrate le chiamate possono non collegarsi; nessun sito web può impedire uno screenshot, a nessuno.",
 "contacts.title":"Contatti recenti",
 "contacts.note":"Un tocco per rivederli: quello che vi siete detti è rimasto qui. Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.",
 "verify.title":"Codice di sicurezza",
@@ -277,7 +277,7 @@ Object.assign(I18N.fr, {
 
 
 "home.legalSummary":"Comment ça marche, en trois lignes techniques",
-"home.legalBody":"Cela révèle votre adresse réseau (IP) à votre interlocuteur ; il faut que vous soyez tous les deux en ligne en même temps, sinon rien n'arrive, et sur des réseaux très filtrés les appels peuvent ne pas se connecter ; aucun site web ne peut jamais empêcher une capture d'écran. Pour la sécurité quand elle compte vraiment, utilisez Signal, Session ou Briar plutôt que ceci.",
+"home.legalBody":"Cela révèle votre adresse réseau (IP) à votre interlocuteur ; il faut que vous soyez tous les deux en ligne en même temps, sinon rien n'arrive, et sur des réseaux très filtrés les appels peuvent ne pas se connecter ; aucun site web ne peut jamais empêcher une capture d'écran.",
 "nav.back":"Retour",
 "start.create":"Préparer l'invitation","start.share":"Envoyer l'invitation","btn.copyCode":"Copier le code",
 "start.pastePh":"Collez la réponse ici…","btn.connect":"Entrer dans la discussion",
@@ -397,7 +397,7 @@ Object.assign(I18N.de, {
 
 
 "home.legalSummary":"Wie es funktioniert, in drei technischen Zeilen",
-"home.legalBody":"Es zeigt deine Netzwerkadresse (IP) demjenigen, mit dem du sprichst; ihr müsst beide gleichzeitig online sein, sonst kommt nichts an, und in stark gefilterten Netzwerken verbinden sich Anrufe möglicherweise nicht; keine Website kann jemals einen Screenshot verhindern. Für Sicherheit, wenn es wirklich zählt, nutze Signal, Session oder Briar statt dem hier.",
+"home.legalBody":"Es zeigt deine Netzwerkadresse (IP) demjenigen, mit dem du sprichst; ihr müsst beide gleichzeitig online sein, sonst kommt nichts an, und in stark gefilterten Netzwerken verbinden sich Anrufe möglicherweise nicht; keine Website kann jemals einen Screenshot verhindern.",
 "nav.back":"Zurück",
 "start.create":"Einladung vorbereiten","start.share":"Einladung senden","btn.copyCode":"Code kopieren",
 "start.pastePh":"Antwort hier einfügen…","btn.connect":"In den Chat gehen",
@@ -517,7 +517,7 @@ Object.assign(I18N.es, {
 
 
 "home.legalSummary":"Cómo funciona, en tres líneas técnicas",
-"home.legalBody":"Revela tu dirección de red (IP) a quien hables; hace falta que ambos estéis en línea a la vez, si no, no llega nada, y en redes muy filtradas las llamadas pueden no conectarse; ninguna web puede impedir jamás una captura de pantalla. Para seguridad cuando de verdad importa, usa Signal, Session o Briar en lugar de esto.",
+"home.legalBody":"Revela tu dirección de red (IP) a quien hables; hace falta que ambos estéis en línea a la vez, si no, no llega nada, y en redes muy filtradas las llamadas pueden no conectarse; ninguna web puede impedir jamás una captura de pantalla.",
 "nav.back":"Atrás",
 "start.create":"Preparar la invitación","start.share":"Enviar la invitación","btn.copyCode":"Copiar el código",
 "start.pastePh":"Pega aquí la respuesta…","btn.connect":"Entrar en el chat",
@@ -637,7 +637,7 @@ Object.assign(I18N.pt, {
 
 
 "home.legalSummary":"Como funciona, em três linhas técnicas",
-"home.legalBody":"Revela o seu endereço de rede (IP) a quem fala consigo; é preciso que ambos estejam online ao mesmo tempo, senão nada chega, e em redes muito filtradas as chamadas podem não ligar; nenhum site pode impedir uma captura de ecrã, nunca. Para segurança quando realmente importa, use Signal, Session ou Briar em vez disto.",
+"home.legalBody":"Revela o seu endereço de rede (IP) a quem fala consigo; é preciso que ambos estejam online ao mesmo tempo, senão nada chega, e em redes muito filtradas as chamadas podem não ligar; nenhum site pode impedir uma captura de ecrã, nunca.",
 "nav.back":"Voltar",
 "start.create":"Preparar o convite","start.share":"Enviar o convite","btn.copyCode":"Copiar o código",
 "start.pastePh":"Cole aqui a resposta…","btn.connect":"Entrar na conversa",
@@ -757,7 +757,7 @@ Object.assign(I18N.ru, {
 
 
 "home.legalSummary":"Как это работает, в трёх технических строках",
-"home.legalBody":"Это раскрывает ваш сетевой адрес (IP) собеседнику; нужно, чтобы вы оба были онлайн одновременно, иначе ничего не дойдёт, а в сильно фильтруемых сетях звонки могут не соединиться; ни один сайт никогда не может предотвратить скриншот. Для безопасности, когда это действительно важно, используйте Signal, Session или Briar вместо этого.",
+"home.legalBody":"Это раскрывает ваш сетевой адрес (IP) собеседнику; нужно, чтобы вы оба были онлайн одновременно, иначе ничего не дойдёт, а в сильно фильтруемых сетях звонки могут не соединиться; ни один сайт никогда не может предотвратить скриншот.",
 "nav.back":"Назад",
 "start.create":"Подготовить приглашение","start.share":"Отправить приглашение","btn.copyCode":"Скопировать код",
 "start.pastePh":"Вставьте ответ сюда…","btn.connect":"Войти в чат",
@@ -877,7 +877,7 @@ Object.assign(I18N.zh, {
 
 
 "home.legalSummary":"工作原理，三句技术说明",
-"home.legalBody":"它会向和你聊天的人显示你的网络地址（IP）；需要双方同时在线，否则无法送达，在过滤严格的网络上通话可能无法连接；任何网站都无法阻止截图，永远不能。当安全真正重要时，请使用 Signal、Session 或 Briar，而不是这个。",
+"home.legalBody":"它会向和你聊天的人显示你的网络地址（IP）；需要双方同时在线，否则无法送达，在过滤严格的网络上通话可能无法连接；任何网站都无法阻止截图，永远不能。",
 "nav.back":"返回",
 "start.create":"准备邀请","start.share":"发送邀请","btn.copyCode":"复制代码",
 "start.pastePh":"在此粘贴回复…","btn.connect":"进入聊天",
@@ -997,7 +997,7 @@ Object.assign(I18N.ar, {
 
 
 "home.legalSummary":"كيف يعمل هذا، في ثلاثة أسطر تقنية",
-"home.legalBody":"يكشف هذا عنوان شبكتك (IP) لمن تتحدث معه؛ يتطلب أن تكونا متصلَين في الوقت نفسه، وإلا لن يصل شيء، وفي الشبكات شديدة التصفية قد لا تتصل المكالمات؛ لا يمكن لأي موقع أن يمنع لقطة شاشة، أبدًا. للأمان عندما يهم الأمر حقًا، استخدم Signal أو Session أو Briar بدلًا من هذا.",
+"home.legalBody":"يكشف هذا عنوان شبكتك (IP) لمن تتحدث معه؛ يتطلب أن تكونا متصلَين في الوقت نفسه، وإلا لن يصل شيء، وفي الشبكات شديدة التصفية قد لا تتصل المكالمات؛ لا يمكن لأي موقع أن يمنع لقطة شاشة، أبدًا.",
 "nav.back":"رجوع",
 "start.create":"تجهيز الدعوة","start.share":"إرسال الدعوة","btn.copyCode":"نسخ الرمز",
 "start.pastePh":"الصق الرد هنا…","btn.connect":"ادخل إلى المحادثة",
@@ -1117,7 +1117,7 @@ Object.assign(I18N.ur, {
 
 
 "home.legalSummary":"یہ کیسے کام کرتا ہے، تین تکنیکی سطروں میں",
-"home.legalBody":"یہ آپ کا نیٹ ورک ایڈریس (IP) اس شخص کو ظاہر کرتا ہے جس سے آپ بات کر رہے ہیں؛ دونوں کا ایک ہی وقت میں آن لائن ہونا ضروری ہے، ورنہ کچھ نہیں پہنچے گا، اور سخت فلٹر شدہ نیٹ ورکس پر کالز کنیکٹ نہیں ہو سکتیں؛ کوئی ویب سائٹ کبھی بھی اسکرین شاٹ نہیں روک سکتی۔ جب سیکیورٹی واقعی اہم ہو تو اس کے بجائے Signal، Session یا Briar استعمال کریں۔",
+"home.legalBody":"یہ آپ کا نیٹ ورک ایڈریس (IP) اس شخص کو ظاہر کرتا ہے جس سے آپ بات کر رہے ہیں؛ دونوں کا ایک ہی وقت میں آن لائن ہونا ضروری ہے، ورنہ کچھ نہیں پہنچے گا، اور سخت فلٹر شدہ نیٹ ورکس پر کالز کنیکٹ نہیں ہو سکتیں؛ کوئی ویب سائٹ کبھی بھی اسکرین شاٹ نہیں روک سکتی۔",
 "nav.back":"واپس",
 "start.create":"دعوت تیار کریں","start.share":"دعوت بھیجیں","btn.copyCode":"کوڈ کاپی کریں",
 "start.pastePh":"جواب یہاں پیسٹ کریں…","btn.connect":"چیٹ میں جائیں",
@@ -1237,7 +1237,7 @@ Object.assign(I18N.hi, {
 
 
 "home.legalSummary":"यह कैसे काम करता है, तीन तकनीकी पंक्तियों में",
-"home.legalBody":"यह आपका नेटवर्क पता (IP) उस व्यक्ति को दिखाता है जिससे आप बात कर रहे हैं; ज़रूरी है कि आप दोनों एक ही समय पर ऑनलाइन हों, वरना कुछ नहीं पहुँचेगा, और भारी फ़िल्टर वाले नेटवर्क पर कॉल कनेक्ट नहीं हो सकतीं; कोई भी वेबसाइट कभी स्क्रीनशॉट नहीं रोक सकती। जब सुरक्षा वाकई मायने रखे, तो इसके बजाय Signal, Session या Briar का उपयोग करें।",
+"home.legalBody":"यह आपका नेटवर्क पता (IP) उस व्यक्ति को दिखाता है जिससे आप बात कर रहे हैं; ज़रूरी है कि आप दोनों एक ही समय पर ऑनलाइन हों, वरना कुछ नहीं पहुँचेगा, और भारी फ़िल्टर वाले नेटवर्क पर कॉल कनेक्ट नहीं हो सकतीं; कोई भी वेबसाइट कभी स्क्रीनशॉट नहीं रोक सकती।",
 "nav.back":"वापस",
 "start.create":"निमंत्रण तैयार करें","start.share":"निमंत्रण भेजें","btn.copyCode":"कोड कॉपी करें",
 "start.pastePh":"जवाब यहाँ पेस्ट करें…","btn.connect":"चैट में जाएं",
@@ -1357,7 +1357,7 @@ Object.assign(I18N.bn, {
 
 
 "home.legalSummary":"এটি কীভাবে কাজ করে, তিনটি প্রযুক্তিগত লাইনে",
-"home.legalBody":"এটি আপনি যার সাথে কথা বলছেন তাকে আপনার নেটওয়ার্ক ঠিকানা (IP) দেখায়; আপনাদের দুজনকেই একই সময়ে অনলাইনে থাকতে হবে, নাহলে কিছুই পৌঁছাবে না, এবং অত্যন্ত ফিল্টার করা নেটওয়ার্কে কল সংযুক্ত নাও হতে পারে; কোনো ওয়েবসাইট কখনও স্ক্রিনশট আটকাতে পারে না। যখন নিরাপত্তা সত্যিই গুরুত্বপূর্ণ, তখন এর পরিবর্তে Signal, Session বা Briar ব্যবহার করুন।",
+"home.legalBody":"এটি আপনি যার সাথে কথা বলছেন তাকে আপনার নেটওয়ার্ক ঠিকানা (IP) দেখায়; আপনাদের দুজনকেই একই সময়ে অনলাইনে থাকতে হবে, নাহলে কিছুই পৌঁছাবে না, এবং অত্যন্ত ফিল্টার করা নেটওয়ার্কে কল সংযুক্ত নাও হতে পারে; কোনো ওয়েবসাইট কখনও স্ক্রিনশট আটকাতে পারে না।",
 "nav.back":"পিছনে",
 "start.create":"আমন্ত্রণ প্রস্তুত করুন","start.share":"আমন্ত্রণ পাঠান","btn.copyCode":"কোড কপি করুন",
 "start.pastePh":"উত্তর এখানে পেস্ট করুন…","btn.connect":"চ্যাটে প্রবেশ করুন",
@@ -1477,7 +1477,7 @@ Object.assign(I18N.id, {
 
 
 "home.legalSummary":"Cara kerjanya, dalam tiga baris teknis",
-"home.legalBody":"Ini mengungkapkan alamat jaringan (IP) Anda kepada lawan bicara Anda; Anda berdua harus online bersamaan, jika tidak tidak ada yang sampai, dan pada jaringan yang sangat difilter panggilan mungkin tidak tersambung; tidak ada situs web yang bisa mencegah tangkapan layar, tidak pernah. Untuk keamanan saat benar-benar penting, gunakan Signal, Session, atau Briar sebagai gantinya.",
+"home.legalBody":"Ini mengungkapkan alamat jaringan (IP) Anda kepada lawan bicara Anda; Anda berdua harus online bersamaan, jika tidak tidak ada yang sampai, dan pada jaringan yang sangat difilter panggilan mungkin tidak tersambung; tidak ada situs web yang bisa mencegah tangkapan layar, tidak pernah.",
 "nav.back":"Kembali",
 "start.create":"Siapkan undangan","start.share":"Kirim undangan","btn.copyCode":"Salin kode",
 "start.pastePh":"Tempel balasan di sini…","btn.connect":"Masuk ke obrolan",
