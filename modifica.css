@@ -427,6 +427,9 @@
      phone icon, a mic icon and a trash icon all sit at the same visual weight
      wherever they turn up */
   .btnicon{width:20px;height:20px;display:block;flex:none}
+  /* a class, not a style attribute: this app's own Content-Security-Policy
+     blocks inline styles, so sizing an icon that way silently did nothing */
+  .btnicon.sm{width:16px;height:16px}
   .chatheader .iconbtn .btnicon{width:21px;height:21px}
   .callctrl button .btnicon{width:20px;height:20px}
   #callBox.voice .callctrl button .btnicon{width:23px;height:23px}

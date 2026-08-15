@@ -2035,6 +2035,24 @@ function diagLine(pcObj){
    attempt already emptied — a frightening "wrong code" while the real
    connection quietly succeeds underneath it. Found exactly that happening on
    a real device. */
+/* The one question every failure path has to ask before it opens its mouth.
+   A phone telling someone the code was wrong, or that it could not connect,
+   while the other phone is sitting in the conversation, is the worst thing this
+   app can do: it is not a cosmetic slip, it makes a working product look
+   broken and sends people back to WhatsApp. So no failure is ever announced
+   without checking, at that exact moment, whether the thing actually worked —
+   the chat being open, this connection reporting itself connected, or its own
+   data channel being live. Its own: the global one can belong to a different
+   attempt entirely. */
+function connectionWorking(pcObj){
+  if (!$('screenChat').classList.contains('hide')) return true;
+  if (pcObj){
+    if (pcObj.connectionState === 'connected') return true;
+    if (pcObj.__dc && pcObj.__dc.readyState === 'open') return true;
+  }
+  return false;
+}
+
 function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
   let settled = false, failTimer = null;
@@ -2062,15 +2080,19 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
       clearTimeout(failTimer);
       failTimer = setTimeout(() => {
         if (settled) return;
-        if (pcObj.connectionState === 'connected') return;
-        if (dc && dc.readyState === 'open') return;
+        if (connectionWorking(pcObj)) return;
         settled = true; stop();
         setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
         if (onSettle) onSettle(false);
       }, 12000);
       return;
     }
+    /* 'closed' had no guard at all, unlike 'failed' — it spoke the instant it
+       arrived. But a connection closes for ordinary reasons too (the session
+       being reset, a second attempt taking over), and announcing defeat for
+       those printed a failure over a conversation that was fine. */
     if (st === 'closed'){
+      if (connectionWorking(pcObj)) return;
       settled = true; stop();
       setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
       if (onSettle) onSettle(false);
@@ -2081,8 +2103,7 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
      settle anything: the candidates must keep flowing and the diagnostic must
      keep updating, because the connection very often still lands after this. */
   setTimeout(() => {
-    if (settled || pcObj.connectionState === 'connected') return;
-    if (dc && dc.readyState === 'open') return;
+    if (settled || connectionWorking(pcObj)) return;
     setStatus(statusEl, t('connect.slow','Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.'));
   }, 25000);
   /* A safety net, not a verdict either: connectionState can in principle sit in
@@ -2091,7 +2112,7 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
      reload. This only ever fires if nothing else already has. */
   setTimeout(() => {
     if (settled) return;
-    if (pcObj.connectionState === 'connected' || (dc && dc.readyState === 'open')) return;
+    if (connectionWorking(pcObj)) return;
     settled = true; stop();
     setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
     if (onSettle) onSettle(false);
@@ -2110,6 +2131,12 @@ let peerNick = '';
 function wireDataChannel(channel){
   dc = channel;
   dc.binaryType = 'arraybuffer';
+  /* Also hung on the connection it belongs to. The failure checks used to ask
+     the global `dc` whether the channel was open, which is a different question
+     from "is *this* connection working" the moment there is more than one
+     attempt in play — and answering the wrong question is how a phone ends up
+     announcing a failure that never happened. */
+  if (pc) pc.__dc = channel;
   pc.ontrack = ev => attachRemoteStream(ev.streams[0]);
   dc.onopen = async () => {
     enterChat();
@@ -4332,7 +4359,15 @@ function stopQuickPump(){ if (quickPump){ quickPump.stop(); quickPump = null; } 
    `quiet` means "do this in the background": the app was opened for some other
    reason and there is no need to drag anyone to the invite screen unless it turns
    out somebody is genuinely waiting at the other end. */
+let sharing = false;
 async function startQuickShare(existingCode, quiet){
+  /* Two of these running at once means two codes published and only the second
+     one listened to — so a code shown on screen, or already photographed off a
+     QR, could belong to the attempt that has quietly been abandoned. Cheap to
+     prevent, and impossible to debug from the outside if it happens. */
+  if (sharing && !existingCode) return;
+  sharing = true;
+  try{
   stopQuickPump();
   const code = existingCode || makeQuickCode();
   $('quickCodeOut').textContent = formatQuickCode(code);
@@ -4419,8 +4454,10 @@ async function startQuickShare(existingCode, quiet){
      say so only on a screen someone is actually looking at */
   if (readPendingInvite() && readPendingInvite().code === code) clearPendingInvite();
   if (quiet) return;
+  if (connectionWorking(myPc)) return;   /* somebody did answer after all */
   setStatus($('quickStatusA'), t('quick.expired','Il codice è scaduto senza risposta. Generane uno nuovo.'), 'bad');
   $('btnRetryQuickA').classList.remove('hide');
+  } finally { sharing = false; }
 }
 function quickLink(code){ return location.origin + location.pathname + '#q=' + code; }
 
@@ -4540,7 +4577,12 @@ async function tryQuickConnect(){
         const waitUntil = Date.now() + 180000;
         while (Date.now() < waitUntil){
           await new Promise(r => setTimeout(r, 1500));
-          if (!$('screenChat').classList.contains('hide')) return; /* something else got there first */
+          if (!$('screenChat').classList.contains('hide')){
+            /* something else got there first — but leaving the flag set would
+               disable the button until the page was reloaded */
+            quickConnecting = false; $('btnQuickConnect').disabled = false;
+            return;
+          }
           msg = await mailboxGetSealed(offerKey, sec);
           if (msg && msg.sdp) break;
         }
@@ -4552,6 +4594,12 @@ async function tryQuickConnect(){
     if (!msg || !msg.sdp){
       quickConnecting = false;
       $('btnQuickConnect').disabled = false;
+      /* Never over the top of a conversation that is already working. The
+         mailbox is read-once, so a second look at a code that has already been
+         spent finds nothing and looks exactly like a wrong one — which is how
+         a phone came to announce a bad code while the other phone was in the
+         chat. Nothing was wrong; the question was asked twice. */
+      if (connectionWorking(pc)) return;
       /* the code was never the problem if there was nothing there to ask */
       if (!brokerReachable){ brokerDownFallback('B'); return; }
       hideBigConnectingB(true);
@@ -4583,9 +4631,10 @@ async function tryQuickConnect(){
       if (!ok) hideBigConnectingB(true); /* on success the screen is about to change to the chat anyway */
     });
   }catch(e){
-    hideBigConnectingB(true);
     quickConnecting = false;
     $('btnQuickConnect').disabled = false;
+    if (connectionWorking(pc)) return;
+    hideBigConnectingB(true);
   }
 }
 $('btnQuickConnect').addEventListener('click', tryQuickConnect);
