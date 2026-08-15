@@ -1686,7 +1686,12 @@ let inboxTimer = null;
 function showScreen(id){
   ['screenHome','screenSettings','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
   window.scrollTo(0,0);
-  if (id === 'screenHome') startInboxPolling(); else stopInboxPolling();
+  /* Both ways in are re-armed on every screen change rather than tied to one
+     screen: being reachable is not a property of which page someone happens to
+     be looking at. Both are idempotent and both check for themselves whether
+     this is a good moment, so calling them here is free. */
+  startInboxPolling();
+  startAddrPolling();
   sayScreen(id);
 }
 
@@ -3400,10 +3405,12 @@ async function publishAddress(){
 
 /* ---------------- being called at any of the addresses ---------------- */
 let addrPollTimer = null, addrPending = null;
-/* the connection an invite is merely *waiting* on, and "we are the caller" */
-let quickSharePc = null, dialing = false;
+/* the connection an invite is merely *waiting* on, "we are the caller", and
+   "a known contact is being let in right now" */
+let quickSharePc = null, dialing = false, autoAccepting = false;
 
-/* A connection object exists for several different reasons, and only some of
+/* ---- the one question every way of being reached has to ask ----
+   A connection object exists for several different reasons, and only some of
    them mean "not now". The one that broke this: startQuickShare holds a
    connection open for a quarter of an hour while an invite waits for someone
    to type the code — and it resumes a saved invite *in the background* every
@@ -3414,10 +3421,16 @@ let quickSharePc = null, dialing = false;
    bring them back.
    Standing down is right for a conversation already running, or a call being
    set up. It was never right for an invite merely on hold — that one gives
-   way by itself the moment a call is accepted. */
-function addrBusy(){
+   way by itself the moment a call is accepted.
+   Deliberately ONE function, asked by every route in: the same mistake was
+   written out twice, independently, for addresses and for known contacts, and
+   fixing one of them left the other just as deaf. There is now a single place
+   where "am I free to be reached?" is answered, and anything new that lets
+   somebody in has to ask it here. */
+function busyWithSomeone(){
   if (addrPending) return true;                                  /* already ringing */
   if (dialing) return true;                                      /* we are the one calling */
+  if (autoAccepting) return true;                                /* letting a contact in */
   if (!$('screenChat').classList.contains('hide')) return true;  /* talking already */
   if (dc && dc.readyState === 'open') return true;               /* talking already */
   if (!pc) return false;
@@ -3430,7 +3443,7 @@ function addrBusy(){
 }
 
 async function addrCheckOnce(){
-  if (addrBusy()) return;
+  if (busyWithSomeone()) return;
   const slots = activeSlots();
   if (!slots.length) return;
   for (const n of slots){
@@ -3475,8 +3488,8 @@ function stopAddrPolling(){ clearInterval(addrPollTimer); addrPollTimer = null; 
    exactly what makes the tab go hidden and stop here. It has to pick back up
    wherever the app was left, not only if that happened to be Home. */
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') stopAddrPolling();
-  else startAddrPolling();
+  if (document.visibilityState === 'hidden'){ stopAddrPolling(); stopInboxPolling(); }
+  else { startAddrPolling(); startInboxPolling(); }
 });
 
 async function acceptAddrCall(){
@@ -3974,11 +3987,15 @@ async function tryAutoReconnect(contact){
   $('btnCreate').disabled = false;
 }
 
-/* While sitting on the home screen with known contacts, check whether any of them is trying
-   to reach this device right now. Stops the instant the screen changes — a call in progress,
-   an open chat or a manual invite in flight should never be interrupted by this. */
+/* Whether any known contact is trying to reach this device right now.
+   This used to say `if (pc) return` and to run only while the home screen was
+   showing — the identical mistake made for addresses, written out a second
+   time here. Both together meant a person could be sitting with the app open,
+   looking at their own settings, with an invite quietly resumed in the
+   background, and be unreachable by every route at once while the screen said
+   nothing at all. Same question as the address, asked in the same place. */
 async function checkInboxOnce(){
-  if (pc) return; // already connecting or connected to someone
+  if (busyWithSomeone()) return;
   const myFp = await myFingerprintHex();
   if (!myFp) return;
   const contacts = loadContacts().filter(c => c.fp);
@@ -3990,7 +4007,7 @@ async function checkInboxOnce(){
   }
 }
 function startInboxPolling(){
-  if (inboxTimer) return;
+  if (inboxTimer || document.visibilityState === 'hidden') return;
   inboxTimer = setInterval(checkInboxOnce, 4000);
   checkInboxOnce();
 }
@@ -3999,24 +4016,39 @@ function stopInboxPolling(){
   inboxTimer = null;
 }
 async function acceptIncomingAutoOffer(contact, msg, sec){
-  stopInboxPolling();
-  stopQuickPump();
-  const myFp = await myFingerprintHex();
-  pc = await newPeerConnection();
-  pc.ondatachannel = ev => wireDataChannel(ev.channel);
-  /* the key both sides derive independently from the caller's fingerprint then
-     the callee's — here `contact.fp` is the caller and `myFp` is us */
-  const pump = candidatePump(pc, sec, 'b', 'a');
-  quickPump = pump;
-  await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
-  await pump.remoteReady();
-  const answer = await pc.createAnswer();
-  await pc.setLocalDescription(answer);
-  const outKey = await pairKey(myFp, contact.fp);
-  /* answered at once, so the other side stops knocking at a door we have not opened */
-  await mailboxPutSealed(outKey, sec, { sdp: pc.localDescription.sdp });
-  watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
-  /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
+  /* This used to stop the polling outright to keep itself from being entered
+     twice. That worked, but any failure below then left the timer switched off
+     for good and this device silently unreachable until the next navigation —
+     the same silent deafness, arrived at from a different direction. A flag
+     stops the second entry; nothing stops the listening. */
+  if (autoAccepting) return;
+  autoAccepting = true;
+  let myPc = null;
+  try{
+    stopQuickPump();
+    const myFp = await myFingerprintHex();
+    pc = await newPeerConnection();
+    myPc = pc;
+    quickSharePc = null;   /* a contact getting through supersedes a waiting invite */
+    pc.ondatachannel = ev => wireDataChannel(ev.channel);
+    /* the key both sides derive independently from the caller's fingerprint then
+       the callee's — here `contact.fp` is the caller and `myFp` is us */
+    const pump = candidatePump(pc, sec, 'b', 'a');
+    quickPump = pump;
+    await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+    await pump.remoteReady();
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    const outKey = await pairKey(myFp, contact.fp);
+    /* answered at once, so the other side stops knocking at a door we have not opened */
+    await mailboxPutSealed(outKey, sec, { sdp: pc.localDescription.sdp });
+    watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
+    /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
+  }catch(e){
+    /* a half-built connection left in the global would read as "busy" forever
+       and close this device off to everyone */
+    if (pc === myPc){ try{ pc.close(); }catch(_){} pc = null; }
+  } finally { autoAccepting = false; }
 }
 
 /* ============================== QR code ==============================
@@ -5518,7 +5550,9 @@ renderContacts();
 initNotifyUI();
 paintAddrCard();
 renderLetters();
-if (!$('screenHome').classList.contains('hide')) startInboxPolling();
+/* not "only if the home screen happens to be showing": whichever screen the
+   app opens on, a known contact must still be able to get through */
+startInboxPolling();
 
 /* ---------------- opening an invite link ----------------
    Two shapes arrive here. `#q=` is the short code turned into something you can
