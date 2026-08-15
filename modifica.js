@@ -84,7 +84,7 @@ Object.assign(I18N.en, {
 "call.micFail":"Microphone or camera unavailable, or permission denied.",
 "call.micFailNotFound":"No microphone or camera found on this device.",
 "call.micFailBusy":"Your microphone or camera is already being used by another app (Zoom, Teams, another tab…). Close it and try again.",
-"call.micFailDenied":"The browser has blocked the microphone and camera for this site. Check the lock icon next to the address bar and allow access, then reload the page.",
+"call.micFailDenied":"The browser has blocked the microphone and camera for this site. Follow the steps below, then reload the page.",
 "reconnect.trying":"Trying to reconnect to {n}…",
 "reconnect.offline":"{n} doesn't seem to be online right now. Here's the code to send by hand.",
 "call.noSpeakerFound":"Can't find a separate speaker on this phone.",
@@ -174,7 +174,8 @@ Object.assign(I18N.en, {
 "home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting",
 "call.flipFail":"I can't switch camera on this phone.",
 "call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera.",
-"home.alreadyTalking":"You're already in a conversation. To start another, close this one first."
+"home.alreadyTalking":"You're already in a conversation. To start another, close this one first.",
+"media.stepsAndroidApp":"Go back to your phone's Home screen|Press and hold the <b>DigitalValut Logos</b> icon|Tap <b>App info</b> (or the ⓘ icon)|Tap <b>Permissions</b>, then turn on <b>Microphone</b> and <b>Camera</b>|Reopen the app"
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -251,7 +252,7 @@ Object.assign(I18N.it, {
 "call.micFail":"Microfono o fotocamera non disponibili, o permesso negato.",
 "call.micFailNotFound":"Non trovo un microfono o una fotocamera su questo dispositivo.",
 "call.micFailBusy":"Il microfono o la fotocamera sono già in uso da un'altra app (Zoom, Teams, un'altra scheda…). Chiudila e riprova.",
-"call.micFailDenied":"Il browser ha bloccato microfono e fotocamera per questo sito. Controlla l'icona del lucchetto vicino all'indirizzo e consenti l'accesso, poi ricarica la pagina.",
+"call.micFailDenied":"Il browser ha bloccato microfono e fotocamera per questo sito. Segui i passaggi qui sotto, poi ricarica la pagina.",
 "reconnect.trying":"Provo a ricollegarmi a {n}…",
 "reconnect.offline":"{n} non sembra online in questo momento. Ecco il codice da mandare a mano.",
 "call.noSpeakerFound":"Non trovo un altoparlante separato su questo telefono.",
@@ -301,7 +302,8 @@ Object.assign(I18N.it, {
 "home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso",
 "call.flipFail":"Non riesco a cambiare fotocamera su questo telefono.",
 "call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera.",
-"home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa."
+"home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.",
+"media.stepsAndroidApp":"Torna alla schermata Home del telefono|Tieni premuta l'icona di <b>DigitalValut Logos</b>|Tocca <b>Informazioni app</b> (o l'icona ⓘ)|Tocca <b>Autorizzazioni</b>, poi attiva <b>Microfono</b> e <b>Fotocamera</b>|Riapri l'app"
 });
 
 Object.assign(I18N.fr, {
@@ -340,7 +342,7 @@ Object.assign(I18N.fr, {
 "call.micFail":"Microphone ou caméra indisponible, ou permission refusée.",
 "call.micFailNotFound":"Aucun microphone ou caméra trouvé sur cet appareil.",
 "call.micFailBusy":"Votre microphone ou caméra est déjà utilisé par une autre application (Zoom, Teams, un autre onglet…). Fermez-la et réessayez.",
-"call.micFailDenied":"Le navigateur a bloqué le microphone et la caméra pour ce site. Vérifiez l'icône du cadenas à côté de la barre d'adresse et autorisez l'accès, puis rechargez la page.",
+"call.micFailDenied":"Le navigateur a bloqué le microphone et la caméra pour ce site. Suivez les étapes ci-dessous, puis rechargez la page.",
 "reconnect.trying":"Tentative de reconnexion à {n}…",
 "reconnect.offline":"{n} ne semble pas en ligne pour le moment. Voici le code à envoyer à la main.",
 "call.noSpeakerFound":"Impossible de trouver un haut-parleur séparé sur ce téléphone.",
@@ -421,7 +423,8 @@ Object.assign(I18N.fr, {
 "home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours",
 "call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone.",
 "call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra.",
-"home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci."
+"home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.",
+"media.stepsAndroidApp":"Retournez à l'écran d'accueil du téléphone|Appuyez longuement sur l'icône <b>DigitalValut Logos</b>|Touchez <b>Infos sur l'appli</b> (ou l'icône ⓘ)|Touchez <b>Autorisations</b>, puis activez <b>Microphone</b> et <b>Caméra</b>|Rouvrez l'application"
 });
 
 Object.assign(I18N.de, {
@@ -460,7 +463,7 @@ Object.assign(I18N.de, {
 "call.micFail":"Mikrofon oder Kamera nicht verfügbar, oder Berechtigung verweigert.",
 "call.micFailNotFound":"Kein Mikrofon oder Kamera auf diesem Gerät gefunden.",
 "call.micFailBusy":"Dein Mikrofon oder deine Kamera wird bereits von einer anderen App verwendet (Zoom, Teams, ein anderer Tab…). Schließe sie und versuche es erneut.",
-"call.micFailDenied":"Der Browser hat Mikrofon und Kamera für diese Seite blockiert. Prüfe das Schloss-Symbol neben der Adressleiste und erlaube den Zugriff, lade dann die Seite neu.",
+"call.micFailDenied":"Der Browser hat Mikrofon und Kamera für diese Seite blockiert. Folge den Schritten unten, lade dann die Seite neu.",
 "reconnect.trying":"Verbinde erneut mit {n}…",
 "reconnect.offline":"{n} scheint gerade nicht online zu sein. Hier ist der Code zum manuellen Versenden.",
 "call.noSpeakerFound":"Kein separater Lautsprecher auf diesem Telefon gefunden.",
@@ -541,7 +544,8 @@ Object.assign(I18N.de, {
 "home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut",
 "call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln.",
 "call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera.",
-"home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses."
+"home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.",
+"media.stepsAndroidApp":"Geh zurück zum Startbildschirm deines Telefons|Halte das Symbol von <b>DigitalValut Logos</b> gedrückt|Tippe auf <b>App-Info</b> (oder das Symbol ⓘ)|Tippe auf <b>Berechtigungen</b> und schalte dann <b>Mikrofon</b> und <b>Kamera</b> ein|Öffne die App erneut"
 });
 
 Object.assign(I18N.es, {
@@ -580,7 +584,7 @@ Object.assign(I18N.es, {
 "call.micFail":"Micrófono o cámara no disponibles, o permiso denegado.",
 "call.micFailNotFound":"No se encontró micrófono ni cámara en este dispositivo.",
 "call.micFailBusy":"Tu micrófono o cámara ya están siendo usados por otra aplicación (Zoom, Teams, otra pestaña…). Ciérrala e inténtalo de nuevo.",
-"call.micFailDenied":"El navegador ha bloqueado el micrófono y la cámara para este sitio. Comprueba el icono del candado junto a la barra de direcciones y permite el acceso, luego recarga la página.",
+"call.micFailDenied":"El navegador ha bloqueado el micrófono y la cámara para este sitio. Sigue los pasos de abajo y luego recarga la página.",
 "reconnect.trying":"Intentando reconectar con {n}…",
 "reconnect.offline":"{n} no parece estar en línea ahora mismo. Aquí tienes el código para enviarlo a mano.",
 "call.noSpeakerFound":"No se encuentra un altavoz independiente en este teléfono.",
@@ -661,7 +665,8 @@ Object.assign(I18N.es, {
 "home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando",
 "call.flipFail":"No puedo cambiar de cámara en este teléfono.",
 "call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara.",
-"home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta."
+"home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.",
+"media.stepsAndroidApp":"Vuelve a la pantalla de inicio del teléfono|Mantén pulsado el icono de <b>DigitalValut Logos</b>|Toca <b>Información de la app</b> (o el icono ⓘ)|Toca <b>Permisos</b> y activa <b>Micrófono</b> y <b>Cámara</b>|Vuelve a abrir la app"
 });
 
 Object.assign(I18N.pt, {
@@ -700,7 +705,7 @@ Object.assign(I18N.pt, {
 "call.micFail":"Microfone ou câmara indisponíveis, ou permissão negada.",
 "call.micFailNotFound":"Nenhum microfone ou câmara encontrados neste dispositivo.",
 "call.micFailBusy":"O seu microfone ou câmara já estão a ser usados por outra aplicação (Zoom, Teams, outro separador…). Feche-a e tente novamente.",
-"call.micFailDenied":"O navegador bloqueou o microfone e a câmara para este site. Verifique o ícone do cadeado junto à barra de endereço e permita o acesso, depois recarregue a página.",
+"call.micFailDenied":"O navegador bloqueou o microfone e a câmara para este site. Siga os passos abaixo e depois recarregue a página.",
 "reconnect.trying":"A tentar reconectar a {n}…",
 "reconnect.offline":"{n} não parece estar online neste momento. Aqui está o código para enviar manualmente.",
 "call.noSpeakerFound":"Não foi encontrado um altifalante separado neste telemóvel.",
@@ -781,7 +786,8 @@ Object.assign(I18N.pt, {
 "home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar",
 "call.flipFail":"Não consigo mudar de câmara neste telemóvel.",
 "call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara.",
-"home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta."
+"home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.",
+"media.stepsAndroidApp":"Volte ao ecrã principal do telemóvel|Mantenha premido o ícone do <b>DigitalValut Logos</b>|Toque em <b>Informações da app</b> (ou no ícone ⓘ)|Toque em <b>Autorizações</b> e ative <b>Microfone</b> e <b>Câmara</b>|Reabra a aplicação"
 });
 
 Object.assign(I18N.ru, {
@@ -820,7 +826,7 @@ Object.assign(I18N.ru, {
 "call.micFail":"Микрофон или камера недоступны, либо доступ запрещён.",
 "call.micFailNotFound":"На этом устройстве не найден микрофон или камера.",
 "call.micFailBusy":"Ваш микрофон или камера уже используются другим приложением (Zoom, Teams, другая вкладка…). Закройте его и попробуйте снова.",
-"call.micFailDenied":"Браузер заблокировал микрофон и камеру для этого сайта. Проверьте значок замка рядом с адресной строкой и разрешите доступ, затем перезагрузите страницу.",
+"call.micFailDenied":"Браузер заблокировал микрофон и камеру для этого сайта. Выполните шаги ниже, затем перезагрузите страницу.",
 "reconnect.trying":"Пытаемся снова соединиться с {n}…",
 "reconnect.offline":"{n}, похоже, сейчас не в сети. Вот код, чтобы отправить вручную.",
 "call.noSpeakerFound":"Не удаётся найти отдельный динамик на этом телефоне.",
@@ -901,7 +907,8 @@ Object.assign(I18N.ru, {
 "home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение",
 "call.flipFail":"На этом телефоне не удаётся переключить камеру.",
 "call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера.",
-"home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот."
+"home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.",
+"media.stepsAndroidApp":"Вернитесь на главный экран телефона|Нажмите и удерживайте значок <b>DigitalValut Logos</b>|Нажмите <b>О приложении</b> (или значок ⓘ)|Нажмите <b>Разрешения</b>, включите <b>Микрофон</b> и <b>Камеру</b>|Откройте приложение снова"
 });
 
 Object.assign(I18N.zh, {
@@ -940,7 +947,7 @@ Object.assign(I18N.zh, {
 "call.micFail":"麦克风或摄像头不可用，或权限被拒绝。",
 "call.micFailNotFound":"此设备未找到麦克风或摄像头。",
 "call.micFailBusy":"你的麦克风或摄像头已被另一个应用占用（Zoom、Teams、另一个标签页……）。请关闭它后重试。",
-"call.micFailDenied":"浏览器已阻止此网站使用麦克风和摄像头。请检查地址栏旁的锁形图标并允许访问，然后重新加载页面。",
+"call.micFailDenied":"浏览器已阻止此网站使用麦克风和摄像头。请按以下步骤操作，然后重新加载页面。",
 "reconnect.trying":"正在尝试重新连接 {n}…",
 "reconnect.offline":"{n} 目前似乎不在线。这是可以手动发送的代码。",
 "call.noSpeakerFound":"在此手机上找不到独立扬声器。",
@@ -1021,7 +1028,8 @@ Object.assign(I18N.zh, {
 "home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接",
 "call.flipFail":"无法在这台手机上切换摄像头。",
 "call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。",
-"home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。"
+"home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。",
+"media.stepsAndroidApp":"返回手机主屏幕|长按 <b>DigitalValut Logos</b> 图标|点按<b>应用信息</b>（或 ⓘ 图标）|点按<b>权限</b>，然后开启<b>麦克风</b>和<b>摄像头</b>|重新打开应用"
 });
 
 Object.assign(I18N.ar, {
@@ -1060,7 +1068,7 @@ Object.assign(I18N.ar, {
 "call.micFail":"الميكروفون أو الكاميرا غير متاحين، أو تم رفض الإذن.",
 "call.micFailNotFound":"لم يُعثر على ميكروفون أو كاميرا على هذا الجهاز.",
 "call.micFailBusy":"الميكروفون أو الكاميرا قيد الاستخدام بالفعل من تطبيق آخر (Zoom، Teams، تبويب آخر…). أغلقه وأعد المحاولة.",
-"call.micFailDenied":"حظر المتصفح الميكروفون والكاميرا لهذا الموقع. تحقق من أيقونة القفل بجانب شريط العنوان واسمح بالوصول، ثم أعد تحميل الصفحة.",
+"call.micFailDenied":"حظر المتصفح الميكروفون والكاميرا لهذا الموقع. اتبع الخطوات أدناه، ثم أعد تحميل الصفحة.",
 "reconnect.trying":"جارٍ محاولة إعادة الاتصال بـ {n}…",
 "reconnect.offline":"{n} لا يبدو متصلًا الآن. إليك الرمز لإرساله يدويًا.",
 "call.noSpeakerFound":"تعذّر العثور على مكبر صوت منفصل على هذا الهاتف.",
@@ -1141,7 +1149,8 @@ Object.assign(I18N.ar, {
 "home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال",
 "call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف.",
 "call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط.",
-"home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا."
+"home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.",
+"media.stepsAndroidApp":"ارجع إلى الشاشة الرئيسية للهاتف|اضغط مطولًا على أيقونة <b>DigitalValut Logos</b>|اضغط <b>معلومات التطبيق</b> (أو أيقونة ⓘ)|اضغط <b>الأذونات</b>، ثم فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد فتح التطبيق"
 });
 
 Object.assign(I18N.ur, {
@@ -1180,7 +1189,7 @@ Object.assign(I18N.ur, {
 "call.micFail":"مائیکروفون یا کیمرا دستیاب نہیں، یا اجازت مسترد کر دی گئی۔",
 "call.micFailNotFound":"اس ڈیوائس پر کوئی مائیکروفون یا کیمرا نہیں ملا۔",
 "call.micFailBusy":"آپ کا مائیکروفون یا کیمرا پہلے سے کسی اور ایپ کے زیر استعمال ہے (Zoom، Teams، ایک اور ٹیب…)۔ اسے بند کریں اور دوبارہ کوشش کریں۔",
-"call.micFailDenied":"براؤزر نے اس سائٹ کے لیے مائیکروفون اور کیمرا بلاک کر دیا ہے۔ ایڈریس بار کے ساتھ لاک آئیکن چیک کریں اور رسائی کی اجازت دیں، پھر صفحہ دوبارہ لوڈ کریں۔",
+"call.micFailDenied":"براؤزر نے اس سائٹ کے لیے مائیکروفون اور کیمرا بلاک کر دیا ہے۔ نیچے دیے گئے مراحل پر عمل کریں، پھر صفحہ دوبارہ لوڈ کریں۔",
 "reconnect.trying":"{n} سے دوبارہ رابطہ کرنے کی کوشش ہو رہی ہے…",
 "reconnect.offline":"{n} ابھی آن لائن نظر نہیں آتا۔ یہ ہے دستی طور پر بھیجنے کے لیے کوڈ۔",
 "call.noSpeakerFound":"اس فون پر الگ اسپیکر نہیں مل سکا۔",
@@ -1261,7 +1270,8 @@ Object.assign(I18N.ur, {
 "home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے",
 "call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔",
 "call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔",
-"home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔"
+"home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔",
+"media.stepsAndroidApp":"فون کی ہوم اسکرین پر واپس جائیں|<b>DigitalValut Logos</b> آئیکن کو دبائے رکھیں|<b>ایپ کی معلومات</b> (یا ⓘ آئیکن) پر ٹیپ کریں|<b>اجازتیں</b> پر ٹیپ کریں، پھر <b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|ایپ دوبارہ کھولیں"
 });
 
 Object.assign(I18N.hi, {
@@ -1300,7 +1310,7 @@ Object.assign(I18N.hi, {
 "call.micFail":"माइक्रोफ़ोन या कैमरा उपलब्ध नहीं, या अनुमति अस्वीकृत।",
 "call.micFailNotFound":"इस डिवाइस पर कोई माइक्रोफ़ोन या कैमरा नहीं मिला।",
 "call.micFailBusy":"आपका माइक्रोफ़ोन या कैमरा पहले से किसी और ऐप द्वारा उपयोग में है (Zoom, Teams, कोई और टैब…)। इसे बंद करें और फिर कोशिश करें।",
-"call.micFailDenied":"ब्राउज़र ने इस साइट के लिए माइक्रोफ़ोन और कैमरा ब्लॉक कर दिया है। एड्रेस बार के पास लॉक आइकन जांचें और पहुंच की अनुमति दें, फिर पेज रीलोड करें।",
+"call.micFailDenied":"ब्राउज़र ने इस साइट के लिए माइक्रोफ़ोन और कैमरा ब्लॉक कर दिया है। नीचे दिए स्टेप्स फ़ॉलो करें, फिर पेज रीलोड करें।",
 "reconnect.trying":"{n} से फिर से जुड़ने की कोशिश हो रही है…",
 "reconnect.offline":"{n} अभी ऑनलाइन नहीं लग रहा। यह रहा हाथ से भेजने के लिए कोड।",
 "call.noSpeakerFound":"इस फ़ोन पर अलग स्पीकर नहीं मिल सका।",
@@ -1381,7 +1391,8 @@ Object.assign(I18N.hi, {
 "home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है",
 "call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।",
 "call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।",
-"home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।"
+"home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।",
+"media.stepsAndroidApp":"फ़ोन की होम स्क्रीन पर वापस जाएं|<b>DigitalValut Logos</b> आइकन को दबाकर रखें|<b>ऐप की जानकारी</b> (या ⓘ आइकन) पर टैप करें|<b>अनुमतियां</b> पर टैप करें, फिर <b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|ऐप फिर से खोलें"
 });
 
 Object.assign(I18N.bn, {
@@ -1420,7 +1431,7 @@ Object.assign(I18N.bn, {
 "call.micFail":"মাইক্রোফোন বা ক্যামেরা উপলব্ধ নয়, বা অনুমতি প্রত্যাখ্যাত।",
 "call.micFailNotFound":"এই ডিভাইসে কোনো মাইক্রোফোন বা ক্যামেরা পাওয়া যায়নি।",
 "call.micFailBusy":"আপনার মাইক্রোফোন বা ক্যামেরা ইতিমধ্যে অন্য একটি অ্যাপ ব্যবহার করছে (Zoom, Teams, অন্য একটি ট্যাব…)। এটি বন্ধ করে আবার চেষ্টা করুন।",
-"call.micFailDenied":"ব্রাউজার এই সাইটের জন্য মাইক্রোফোন এবং ক্যামেরা ব্লক করেছে। ঠিকানা বারের পাশে লক আইকনটি পরীক্ষা করুন এবং অ্যাক্সেসের অনুমতি দিন, তারপর পৃষ্ঠাটি পুনরায় লোড করুন।",
+"call.micFailDenied":"ব্রাউজার এই সাইটের জন্য মাইক্রোফোন এবং ক্যামেরা ব্লক করেছে। নিচের ধাপগুলো অনুসরণ করুন, তারপর পৃষ্ঠাটি পুনরায় লোড করুন।",
 "reconnect.trying":"{n}-এর সাথে আবার সংযোগের চেষ্টা হচ্ছে…",
 "reconnect.offline":"{n} এখন অনলাইনে আছেন বলে মনে হচ্ছে না। হাতে পাঠানোর জন্য এই কোডটি রইল।",
 "call.noSpeakerFound":"এই ফোনে আলাদা স্পিকার পাওয়া যাচ্ছে না।",
@@ -1501,7 +1512,8 @@ Object.assign(I18N.bn, {
 "home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে",
 "call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।",
 "call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।",
-"home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।"
+"home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।",
+"media.stepsAndroidApp":"ফোনের হোম স্ক্রিনে ফিরে যান|<b>DigitalValut Logos</b> আইকনটি চেপে ধরে রাখুন|<b>অ্যাপ তথ্য</b> (বা ⓘ আইকন) ট্যাপ করুন|<b>অনুমতি</b> ট্যাপ করুন, তারপর <b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|অ্যাপটি আবার খুলুন"
 });
 
 Object.assign(I18N.id, {
@@ -1540,7 +1552,7 @@ Object.assign(I18N.id, {
 "call.micFail":"Mikrofon atau kamera tidak tersedia, atau izin ditolak.",
 "call.micFailNotFound":"Tidak ditemukan mikrofon atau kamera di perangkat ini.",
 "call.micFailBusy":"Mikrofon atau kamera Anda sudah digunakan oleh aplikasi lain (Zoom, Teams, tab lain…). Tutup aplikasi itu dan coba lagi.",
-"call.micFailDenied":"Browser telah memblokir mikrofon dan kamera untuk situs ini. Periksa ikon gembok di sebelah bilah alamat dan izinkan akses, lalu muat ulang halaman.",
+"call.micFailDenied":"Peramban telah memblokir mikrofon dan kamera untuk situs ini. Ikuti langkah di bawah, lalu muat ulang halaman.",
 "reconnect.trying":"Mencoba menyambung kembali ke {n}…",
 "reconnect.offline":"{n} sepertinya sedang tidak online. Ini kodenya untuk dikirim secara manual.",
 "call.noSpeakerFound":"Tidak dapat menemukan speaker terpisah di ponsel ini.",
@@ -1621,7 +1633,8 @@ Object.assign(I18N.id, {
 "home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan",
 "call.flipFail":"Tidak bisa mengganti kamera di ponsel ini.",
 "call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera.",
-"home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini."
+"home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.",
+"media.stepsAndroidApp":"Kembali ke layar Utama ponsel|Tekan lama ikon <b>DigitalValut Logos</b>|Ketuk <b>Info aplikasi</b> (atau ikon ⓘ)|Ketuk <b>Izin</b>, lalu aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Buka lagi aplikasinya"
 });
 
 function t(key, fallback){
@@ -4820,7 +4833,13 @@ function micFailMessage(e){
   if (name === 'NotReadableError' || name === 'TrackStartError')
     return t('call.micFailBusy','Il microfono o la fotocamera sono già in uso da un\'altra app (Zoom, Teams, un\'altra scheda…). Chiudila e riprova.');
   if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError')
-    return t('call.micFailDenied','Il browser ha bloccato microfono e fotocamera per questo sito. Controlla l\'icona del lucchetto vicino all\'indirizzo e consenti l\'accesso, poi ricarica la pagina.');
+    /* Deliberately says nothing about *where* the fix lives — it used to name
+       the padlock icon here, unconditionally, which was flatly wrong advice on
+       an iPhone and impossible advice on an installed Android app, where there
+       is no address bar to hold one. Where the fix actually is depends on the
+       browser and, on Android, on whether the app was installed — that
+       distinction is what the numbered steps below exist for. */
+    return t('call.micFailDenied','Il browser ha bloccato microfono e fotocamera per questo sito. Segui i passaggi qui sotto, poi ricarica la pagina.');
   return t('call.micFail','Microfono o fotocamera non disponibili, o permesso negato.');
 }
 
@@ -4837,7 +4856,14 @@ function micFailMessage(e){
 function browserFamily(){
   const ua = navigator.userAgent;
   if (isIOS) return 'ios';
-  if (/Android/.test(ua)) return 'android';
+  /* An Android app added to the Home Screen has no address bar at all, so
+     "tap the padlock" is not a harder version of the fix — it is impossible
+     to follow, full stop. Reported directly: someone declined a call, got
+     told to tap a padlock that was not on their screen, and had no way back
+     in. An installed PWA on Android is wrapped in its own Android package
+     (a WebAPK), which is why it gets its own entry in the phone's own App
+     info screen — a completely different, and completely reachable, path. */
+  if (/Android/.test(ua)) return isStandalone ? 'android-app' : 'android';
   /* Chrome and Edge both put it behind the padlock, and both say they are
      Safari in the user agent, so Safari has to be what is left over */
   if (/Edg\//.test(ua) || /Chrome\//.test(ua) || /Chromium/.test(ua)) return 'chrome';
@@ -4852,6 +4878,8 @@ function mediaHelpSteps(){
       'Apri <b>Impostazioni</b> sull\'iPhone|Scendi e tocca <b>Safari</b>|Tocca <b>Microfono</b> e poi <b>Fotocamera</b>: metti <b>Chiedi</b> o <b>Consenti</b>|Torna qui e ricarica la pagina');
     case 'android': return t('media.stepsAndroid',
       'Tocca il <b>lucchetto</b> vicino all\'indirizzo, in alto|Tocca <b>Autorizzazioni</b>|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina');
+    case 'android-app': return t('media.stepsAndroidApp',
+      'Torna alla schermata Home del telefono|Tieni premuta l\'icona di <b>DigitalValut Logos</b>|Tocca <b>Informazioni app</b> (o l\'icona ⓘ)|Tocca <b>Autorizzazioni</b>, poi attiva <b>Microfono</b> e <b>Fotocamera</b>|Riapri l\'app');
     case 'chrome': return t('media.stepsChrome',
       'Clicca il <b>lucchetto</b> a sinistra dell\'indirizzo|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina');
     case 'safari': return t('media.stepsSafariMac',
