@@ -416,6 +416,10 @@
   .switchrow{display:flex;align-items:center;gap:14px;background:#0b0d11;border:1.5px solid var(--line);
     border-radius:var(--r-sm);padding:16px;margin-bottom:16px;cursor:pointer;user-select:none;
     transition:border-color .15s}
+  /* the section's own icon, drawn in the same line-set as everywhere else in the
+     app — dim until the switch is on, same as the two big home-screen icons */
+  .switchrow > .ic{width:22px;height:22px;flex-shrink:0;color:var(--faint);transition:color .15s}
+  .switchrow.on > .ic{color:var(--accent2)}
   .switchrow .txt{flex:1;min-width:0}
   .switchrow .txt b{font-size:1rem;display:block}
   .switchrow .txt span{font-size:0.8125rem;color:var(--faint);line-height:1.55;display:block;margin-top:4px}
@@ -444,6 +448,11 @@
   .linkbtn{background:none;border:none;color:var(--dim);font-size:0.8125rem;padding:0;cursor:pointer;
     text-decoration:underline;font-family:inherit;min-height:0}
   .linkbtn:hover{color:var(--accent)}
+  /* drawn instead of a raw emoji, sized to sit on the same line as the text it
+     labels — .btnicon is display:block by default, which inside an otherwise
+     plain inline button would drop to its own line instead of sitting beside
+     the text, so that is overridden here specifically */
+  .linkbtn .btnicon{display:inline-block;width:13px;height:13px;vertical-align:-2px;margin-inline-end:3px}
   /* the verify badge carries the state at a glance, so nobody has to open a panel
      to find out the connection is not the one they had last time */
   .linkbtn.vok{color:var(--ok);text-decoration:none}
@@ -598,6 +607,10 @@
   .step.waiting .lbl{color:var(--dim)}
   .helptext{color:var(--dim);font-size:0.9375rem;line-height:1.65;margin:0 0 16px}
   .helptext b{color:var(--ink)}
+  /* a note that leads with its own icon rather than a raw emoji, same drawn
+     line-set as every icon in the app */
+  .helptext.wicon{display:flex;align-items:flex-start;gap:10px}
+  .helptext.wicon .btnicon{flex:none;margin-top:1px;color:var(--accent2)}
 
   /* the code itself is machinery: available, but never the thing in the way */
   details.showcode{margin-top:14px}
