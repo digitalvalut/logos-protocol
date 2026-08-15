@@ -346,6 +346,22 @@
       </div>
     </div>
 
+    <!-- The app saying, in plain words, whether it is actually working.
+         Written after a bug that made this device unreachable by every route
+         at once and stayed invisible for days: nothing on any screen could
+         have told anyone, and the only symptom was other people saying "non
+         ti trovo". Every line here answers one question a person would
+         actually ask, and every red line says what to do about it. -->
+    <div class="card" id="healthCard">
+      <h3 data-i18n="health.title">Come sta l'app</h3>
+      <div class="helptext" data-i18n="health.sub">Se qualcuno non riesce a raggiungerti, qui sotto c'è il motivo.</div>
+      <div id="healthList"></div>
+      <div class="toolsrow">
+        <button class="btn" id="btnHealthCheck" data-i18n="health.recheck">Controlla di nuovo</button>
+        <button class="btn" id="btnHealthCopy" data-i18n="health.copy">Copia il resoconto</button>
+      </div>
+    </div>
+
     <details class="legal">
       <summary data-i18n="home.legalSummary">Come funziona, in tre righe tecniche</summary>
       <div class="body" data-i18n="home.legalBody">Rivela il tuo indirizzo di rete (IP) a chi parli con te; serve che siate

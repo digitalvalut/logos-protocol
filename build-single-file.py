@@ -47,7 +47,27 @@ def read(name):
     return path.read_text(encoding="utf-8")
 
 
+def check_version_matches():
+    """The app reports the version it is running so a stale cached shell can be
+    seen instead of guessed — but that only works while APP_VERSION in
+    modifica.js and CACHE in modifica-sw.js say the same thing. Forgetting to
+    bump one of them is the single mistake that has cost this project the most
+    time, so the build refuses to produce anything until they agree."""
+    js_v = re.search(r"APP_VERSION\s*=\s*'([^']+)'", read("modifica.js"))
+    sw_v = re.search(r"CACHE\s*=\s*'([^']+)'", read("modifica-sw.js"))
+    if not js_v or not sw_v:
+        sys.exit("cannot find APP_VERSION in modifica.js or CACHE in modifica-sw.js")
+    if js_v.group(1) != sw_v.group(1):
+        sys.exit(
+            f"version mismatch — modifica.js says {js_v.group(1)}, "
+            f"modifica-sw.js says {sw_v.group(1)}. Bump both, then build again."
+        )
+    return js_v.group(1)
+
+
 def main():
+    version = check_version_matches()
+    print(f"version {version} — modifica.js and modifica-sw.js agree")
     html = read("modifica.html")
     css = read("modifica.css")
     js = read("modifica.js")

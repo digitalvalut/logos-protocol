@@ -310,6 +310,21 @@
   .contactrow .rm{background:none;border:none;color:var(--faint);font-size:1rem;padding:6px;cursor:pointer;flex-shrink:0}
   .contactrow .rm:hover{color:var(--bad)}
 
+  /* the app's own state, said out loud. A row is readable at a glance by the
+     colour of its dot and readable properly by anyone who cannot tell those
+     colours apart, because the state is also written in words. */
+  .healthrow{display:flex;align-items:flex-start;gap:11px;padding:12px 2px;
+    border-bottom:1px solid var(--line)}
+  .healthrow:last-child{border-bottom:none}
+  .healthdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;background:var(--faint)}
+  .healthdot.ok{background:var(--ok);box-shadow:0 0 0 3px rgba(61,220,151,.18)}
+  .healthdot.warn{background:var(--warn);box-shadow:0 0 0 3px rgba(255,182,72,.18)}
+  .healthdot.bad{background:var(--bad);box-shadow:0 0 0 3px rgba(255,92,108,.18)}
+  .healthrow .ht{flex:1;min-width:0}
+  .healthrow .ht b{display:block;font-size:0.9375rem;font-weight:700;color:var(--ink)}
+  .healthrow .ht span{display:block;font-size:0.875rem;color:var(--dim);line-height:1.55;margin-top:2px}
+  .healthrow.bad .ht span{color:var(--bad)}
+
   /* visually hidden but still "present" — display:none on a file input breaks
      the native picker in some installed-app (standalone PWA) contexts on iOS */
   .filehide{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;

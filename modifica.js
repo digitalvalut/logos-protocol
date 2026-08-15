@@ -175,6 +175,35 @@ Object.assign(I18N.en, {
 "call.flipFail":"I can't switch camera on this phone.",
 "call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera.",
 "home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.",
+"health.title":"How the app is doing",
+"health.sub":"If someone can't reach you, the reason is below.",
+"health.recheck":"Check again",
+"health.copy":"Copy the report",
+"health.copied":"Report copied.",
+"health.checking":"Checking…",
+"health.busy":"Paused: you're already in a conversation.",
+"health.stopped":"I'm not listening. Close the app and open it again.",
+"health.addr":"Anyone holding your address",
+"health.addrOk":"Can call you right now.",
+"health.addrOff":"Your address is off. Turn it on above.",
+"health.contacts":"Your contacts",
+"health.contactsOk":"All {n} can find you again right now.",
+"health.contactsNone":"You have no contacts yet.",
+"health.broker":"The service that introduces you",
+"health.brokerOk":"Answering.",
+"health.brokerBad":"Not answering. The long codes still work: they go through no server at all.",
+"health.brokerOrigin":"This copy of the app is at an address the service doesn't recognise: it won't work from here. Open the official one.",
+"health.closed":"With the app closed",
+"health.closedOk":"They can make your phone ring.",
+"health.closedOff":"They can't reach you. Turn on notifications above.",
+"health.closedDenied":"The browser is blocking notifications: with the app closed, nobody reaches you.",
+"health.closedIos":"On iPhone you first have to add the app to the Home screen.",
+"health.mic":"Microphone",
+"health.micOk":"Available.",
+"health.micBad":"Blocked by the browser: you won't be able to make or take calls.",
+"health.micUnknown":"I can't tell until you try a call.",
+"health.version":"Version in use",
+"health.versionOld":"Part of the app is still the old one. Close it and open it again.",
 "media.stepsAndroidApp":"Go back to your phone's Home screen|Press and hold the <b>DigitalValut Logos</b> icon|Tap <b>App info</b> (or the ⓘ icon)|Tap <b>Permissions</b>, then turn on <b>Microphone</b> and <b>Camera</b>|Reopen the app"
 });
 Object.assign(I18N.it, {
@@ -303,6 +332,35 @@ Object.assign(I18N.it, {
 "call.flipFail":"Non riesco a cambiare fotocamera su questo telefono.",
 "call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera.",
 "home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.",
+"health.title":"Come sta l'app",
+"health.sub":"Se qualcuno non riesce a raggiungerti, qui sotto c'è il motivo.",
+"health.recheck":"Controlla di nuovo",
+"health.copy":"Copia il resoconto",
+"health.copied":"Resoconto copiato.",
+"health.checking":"Sto controllando…",
+"health.busy":"In pausa: sei già in una conversazione.",
+"health.stopped":"Non sto ascoltando. Chiudi e riapri l'app.",
+"health.addr":"Chi ha il tuo indirizzo",
+"health.addrOk":"Ti può chiamare adesso.",
+"health.addrOff":"Il tuo indirizzo è spento. Accendilo qui sopra.",
+"health.contacts":"I tuoi contatti",
+"health.contactsOk":"Tutti e {n} ti possono ritrovare adesso.",
+"health.contactsNone":"Non hai ancora nessun contatto.",
+"health.broker":"Il servizio che vi fa incontrare",
+"health.brokerOk":"Risponde.",
+"health.brokerBad":"Non risponde. Restano i codici lunghi, che non passano da nessun server.",
+"health.brokerOrigin":"Questa copia dell'app è su un indirizzo che il servizio non riconosce: da qui non funzionerà. Apri quella ufficiale.",
+"health.closed":"Con l'app chiusa",
+"health.closedOk":"Ti possono far squillare il telefono.",
+"health.closedOff":"Non ti raggiungono. Accendi gli avvisi qui sopra.",
+"health.closedDenied":"Il browser blocca gli avvisi: con l'app chiusa non ti raggiunge nessuno.",
+"health.closedIos":"Su iPhone serve prima aggiungere l'app alla schermata Home.",
+"health.mic":"Microfono",
+"health.micOk":"Disponibile.",
+"health.micBad":"Bloccato dal browser: non potrai fare né ricevere chiamate.",
+"health.micUnknown":"Non posso saperlo finché non provi una chiamata.",
+"health.version":"Versione in uso",
+"health.versionOld":"Una parte dell'app è ancora vecchia. Chiudila e riaprila.",
 "media.stepsAndroidApp":"Torna alla schermata Home del telefono|Tieni premuta l'icona di <b>DigitalValut Logos</b>|Tocca <b>Informazioni app</b> (o l'icona ⓘ)|Tocca <b>Autorizzazioni</b>, poi attiva <b>Microfono</b> e <b>Fotocamera</b>|Riapri l'app"
 });
 
@@ -424,6 +482,35 @@ Object.assign(I18N.fr, {
 "call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone.",
 "call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra.",
 "home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.",
+"health.title":"État de l'application",
+"health.sub":"Si quelqu'un n'arrive pas à vous joindre, la raison est ci-dessous.",
+"health.recheck":"Vérifier à nouveau",
+"health.copy":"Copier le rapport",
+"health.copied":"Rapport copié.",
+"health.checking":"Vérification…",
+"health.busy":"En pause : vous êtes déjà dans une conversation.",
+"health.stopped":"Je n'écoute pas. Fermez l'application et rouvrez-la.",
+"health.addr":"Qui possède votre adresse",
+"health.addrOk":"Peut vous appeler maintenant.",
+"health.addrOff":"Votre adresse est désactivée. Activez-la ci-dessus.",
+"health.contacts":"Vos contacts",
+"health.contactsOk":"Tous les {n} peuvent vous retrouver maintenant.",
+"health.contactsNone":"Vous n'avez encore aucun contact.",
+"health.broker":"Le service qui vous met en relation",
+"health.brokerOk":"Répond.",
+"health.brokerBad":"Ne répond pas. Les codes longs fonctionnent encore : ils ne passent par aucun serveur.",
+"health.brokerOrigin":"Cette copie de l'application est à une adresse que le service ne reconnaît pas : elle ne marchera pas d'ici. Ouvrez l'officielle.",
+"health.closed":"Application fermée",
+"health.closedOk":"Ils peuvent faire sonner votre téléphone.",
+"health.closedOff":"Ils ne vous joignent pas. Activez les notifications ci-dessus.",
+"health.closedDenied":"Le navigateur bloque les notifications : application fermée, personne ne vous joint.",
+"health.closedIos":"Sur iPhone, il faut d'abord ajouter l'application à l'écran d'accueil.",
+"health.mic":"Microphone",
+"health.micOk":"Disponible.",
+"health.micBad":"Bloqué par le navigateur : vous ne pourrez ni passer ni recevoir d'appels.",
+"health.micUnknown":"Je ne peux pas le savoir tant que vous n'essayez pas un appel.",
+"health.version":"Version utilisée",
+"health.versionOld":"Une partie de l'application est encore l'ancienne. Fermez-la et rouvrez-la.",
 "media.stepsAndroidApp":"Retournez à l'écran d'accueil du téléphone|Appuyez longuement sur l'icône <b>DigitalValut Logos</b>|Touchez <b>Infos sur l'appli</b> (ou l'icône ⓘ)|Touchez <b>Autorisations</b>, puis activez <b>Microphone</b> et <b>Caméra</b>|Rouvrez l'application"
 });
 
@@ -545,6 +632,35 @@ Object.assign(I18N.de, {
 "call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln.",
 "call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera.",
 "home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.",
+"health.title":"Wie es der App geht",
+"health.sub":"Wenn dich jemand nicht erreicht, steht der Grund hier unten.",
+"health.recheck":"Erneut prüfen",
+"health.copy":"Bericht kopieren",
+"health.copied":"Bericht kopiert.",
+"health.checking":"Ich prüfe…",
+"health.busy":"Pausiert: du bist schon in einem Gespräch.",
+"health.stopped":"Ich höre nicht zu. Schließe die App und öffne sie neu.",
+"health.addr":"Wer deine Adresse hat",
+"health.addrOk":"Kann dich jetzt anrufen.",
+"health.addrOff":"Deine Adresse ist aus. Schalte sie oben ein.",
+"health.contacts":"Deine Kontakte",
+"health.contactsOk":"Alle {n} können dich jetzt wiederfinden.",
+"health.contactsNone":"Du hast noch keine Kontakte.",
+"health.broker":"Der Dienst, der euch zusammenbringt",
+"health.brokerOk":"Antwortet.",
+"health.brokerBad":"Antwortet nicht. Die langen Codes gehen weiter: sie laufen über keinen Server.",
+"health.brokerOrigin":"Diese Kopie der App liegt auf einer Adresse, die der Dienst nicht kennt: von hier aus geht es nicht. Öffne die offizielle.",
+"health.closed":"Bei geschlossener App",
+"health.closedOk":"Sie können dein Telefon klingeln lassen.",
+"health.closedOff":"Sie erreichen dich nicht. Schalte oben die Hinweise ein.",
+"health.closedDenied":"Der Browser blockiert Hinweise: bei geschlossener App erreicht dich niemand.",
+"health.closedIos":"Auf dem iPhone musst du die App zuerst zum Home-Bildschirm hinzufügen.",
+"health.mic":"Mikrofon",
+"health.micOk":"Verfügbar.",
+"health.micBad":"Vom Browser blockiert: du kannst weder anrufen noch Anrufe annehmen.",
+"health.micUnknown":"Das weiß ich erst, wenn du einen Anruf versuchst.",
+"health.version":"Verwendete Version",
+"health.versionOld":"Ein Teil der App ist noch der alte. Schließe sie und öffne sie neu.",
 "media.stepsAndroidApp":"Geh zurück zum Startbildschirm deines Telefons|Halte das Symbol von <b>DigitalValut Logos</b> gedrückt|Tippe auf <b>App-Info</b> (oder das Symbol ⓘ)|Tippe auf <b>Berechtigungen</b> und schalte dann <b>Mikrofon</b> und <b>Kamera</b> ein|Öffne die App erneut"
 });
 
@@ -666,6 +782,35 @@ Object.assign(I18N.es, {
 "call.flipFail":"No puedo cambiar de cámara en este teléfono.",
 "call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara.",
 "home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.",
+"health.title":"Cómo está la aplicación",
+"health.sub":"Si alguien no consigue localizarte, aquí abajo está el motivo.",
+"health.recheck":"Comprobar de nuevo",
+"health.copy":"Copiar el informe",
+"health.copied":"Informe copiado.",
+"health.checking":"Comprobando…",
+"health.busy":"En pausa: ya estás en una conversación.",
+"health.stopped":"No estoy escuchando. Cierra la aplicación y vuelve a abrirla.",
+"health.addr":"Quien tenga tu dirección",
+"health.addrOk":"Puede llamarte ahora mismo.",
+"health.addrOff":"Tu dirección está apagada. Actívala aquí arriba.",
+"health.contacts":"Tus contactos",
+"health.contactsOk":"Los {n} pueden volver a encontrarte ahora.",
+"health.contactsNone":"Todavía no tienes ningún contacto.",
+"health.broker":"El servicio que os pone en contacto",
+"health.brokerOk":"Responde.",
+"health.brokerBad":"No responde. Quedan los códigos largos, que no pasan por ningún servidor.",
+"health.brokerOrigin":"Esta copia de la aplicación está en una dirección que el servicio no reconoce: desde aquí no funcionará. Abre la oficial.",
+"health.closed":"Con la aplicación cerrada",
+"health.closedOk":"Pueden hacer sonar tu teléfono.",
+"health.closedOff":"No te localizan. Activa los avisos aquí arriba.",
+"health.closedDenied":"El navegador bloquea los avisos: con la aplicación cerrada no te localiza nadie.",
+"health.closedIos":"En iPhone hay que añadir antes la aplicación a la pantalla de inicio.",
+"health.mic":"Micrófono",
+"health.micOk":"Disponible.",
+"health.micBad":"Bloqueado por el navegador: no podrás hacer ni recibir llamadas.",
+"health.micUnknown":"No puedo saberlo hasta que pruebes una llamada.",
+"health.version":"Versión en uso",
+"health.versionOld":"Una parte de la aplicación sigue siendo la antigua. Ciérrala y vuelve a abrirla.",
 "media.stepsAndroidApp":"Vuelve a la pantalla de inicio del teléfono|Mantén pulsado el icono de <b>DigitalValut Logos</b>|Toca <b>Información de la app</b> (o el icono ⓘ)|Toca <b>Permisos</b> y activa <b>Micrófono</b> y <b>Cámara</b>|Vuelve a abrir la app"
 });
 
@@ -787,6 +932,35 @@ Object.assign(I18N.pt, {
 "call.flipFail":"Não consigo mudar de câmara neste telemóvel.",
 "call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara.",
 "home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.",
+"health.title":"Como está a aplicação",
+"health.sub":"Se alguém não consegue alcançá-lo, o motivo está aqui em baixo.",
+"health.recheck":"Verificar de novo",
+"health.copy":"Copiar o relatório",
+"health.copied":"Relatório copiado.",
+"health.checking":"A verificar…",
+"health.busy":"Em pausa: já está numa conversa.",
+"health.stopped":"Não estou à escuta. Feche a aplicação e volte a abri-la.",
+"health.addr":"Quem tem o seu endereço",
+"health.addrOk":"Pode ligar-lhe agora mesmo.",
+"health.addrOff":"O seu endereço está desligado. Ligue-o aqui em cima.",
+"health.contacts":"Os seus contactos",
+"health.contactsOk":"Todos os {n} podem reencontrá-lo agora.",
+"health.contactsNone":"Ainda não tem nenhum contacto.",
+"health.broker":"O serviço que vos põe em contacto",
+"health.brokerOk":"Responde.",
+"health.brokerBad":"Não responde. Restam os códigos longos, que não passam por nenhum servidor.",
+"health.brokerOrigin":"Esta cópia da aplicação está num endereço que o serviço não reconhece: daqui não vai funcionar. Abra a oficial.",
+"health.closed":"Com a aplicação fechada",
+"health.closedOk":"Podem fazer o seu telemóvel tocar.",
+"health.closedOff":"Não o alcançam. Ative os avisos aqui em cima.",
+"health.closedDenied":"O navegador bloqueia os avisos: com a aplicação fechada, ninguém o alcança.",
+"health.closedIos":"No iPhone é preciso primeiro adicionar a aplicação ao ecrã principal.",
+"health.mic":"Microfone",
+"health.micOk":"Disponível.",
+"health.micBad":"Bloqueado pelo navegador: não poderá fazer nem receber chamadas.",
+"health.micUnknown":"Não posso saber até que tente uma chamada.",
+"health.version":"Versão em uso",
+"health.versionOld":"Uma parte da aplicação ainda é a antiga. Feche-a e volte a abri-la.",
 "media.stepsAndroidApp":"Volte ao ecrã principal do telemóvel|Mantenha premido o ícone do <b>DigitalValut Logos</b>|Toque em <b>Informações da app</b> (ou no ícone ⓘ)|Toque em <b>Autorizações</b> e ative <b>Microfone</b> e <b>Câmara</b>|Reabra a aplicação"
 });
 
@@ -908,6 +1082,35 @@ Object.assign(I18N.ru, {
 "call.flipFail":"На этом телефоне не удаётся переключить камеру.",
 "call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера.",
 "home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.",
+"health.title":"Как работает приложение",
+"health.sub":"Если кто-то не может до вас дозвониться, причина ниже.",
+"health.recheck":"Проверить снова",
+"health.copy":"Скопировать отчёт",
+"health.copied":"Отчёт скопирован.",
+"health.checking":"Проверяю…",
+"health.busy":"Пауза: вы уже в разговоре.",
+"health.stopped":"Я не слушаю. Закройте приложение и откройте снова.",
+"health.addr":"Тот, у кого есть ваш адрес",
+"health.addrOk":"Может позвонить вам прямо сейчас.",
+"health.addrOff":"Ваш адрес выключен. Включите его выше.",
+"health.contacts":"Ваши контакты",
+"health.contactsOk":"Все {n} могут найти вас прямо сейчас.",
+"health.contactsNone":"У вас пока нет контактов.",
+"health.broker":"Служба, которая вас соединяет",
+"health.brokerOk":"Отвечает.",
+"health.brokerBad":"Не отвечает. Остаются длинные коды — они не проходят ни через один сервер.",
+"health.brokerOrigin":"Эта копия приложения находится по адресу, который служба не признаёт: отсюда работать не будет. Откройте официальную.",
+"health.closed":"При закрытом приложении",
+"health.closedOk":"Они могут заставить ваш телефон зазвонить.",
+"health.closedOff":"Они до вас не достучатся. Включите уведомления выше.",
+"health.closedDenied":"Браузер блокирует уведомления: при закрытом приложении до вас никто не достучится.",
+"health.closedIos":"На iPhone нужно сначала добавить приложение на экран «Домой».",
+"health.mic":"Микрофон",
+"health.micOk":"Доступен.",
+"health.micBad":"Заблокирован браузером: вы не сможете ни звонить, ни принимать звонки.",
+"health.micUnknown":"Я не могу это узнать, пока вы не попробуете позвонить.",
+"health.version":"Используемая версия",
+"health.versionOld":"Часть приложения всё ещё старая. Закройте его и откройте снова.",
 "media.stepsAndroidApp":"Вернитесь на главный экран телефона|Нажмите и удерживайте значок <b>DigitalValut Logos</b>|Нажмите <b>О приложении</b> (или значок ⓘ)|Нажмите <b>Разрешения</b>, включите <b>Микрофон</b> и <b>Камеру</b>|Откройте приложение снова"
 });
 
@@ -1029,6 +1232,35 @@ Object.assign(I18N.zh, {
 "call.flipFail":"无法在这台手机上切换摄像头。",
 "call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。",
 "home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。",
+"health.title":"应用运行状况",
+"health.sub":"如果有人联系不上你，原因就在下面。",
+"health.recheck":"重新检查",
+"health.copy":"复制报告",
+"health.copied":"报告已复制。",
+"health.checking":"正在检查…",
+"health.busy":"已暂停：你已经在一个对话中。",
+"health.stopped":"我没有在监听。请关闭应用后重新打开。",
+"health.addr":"拿到你地址的人",
+"health.addrOk":"现在就能呼叫你。",
+"health.addrOff":"你的地址是关闭的。请在上面打开它。",
+"health.contacts":"你的联系人",
+"health.contactsOk":"全部 {n} 位现在都能重新找到你。",
+"health.contactsNone":"你还没有联系人。",
+"health.broker":"帮你们牵线的服务",
+"health.brokerOk":"有回应。",
+"health.brokerBad":"没有回应。长代码仍然可用：它们不经过任何服务器。",
+"health.brokerOrigin":"这份应用副本所在的地址不被服务认可：从这里无法工作。请打开官方的那个。",
+"health.closed":"应用关闭时",
+"health.closedOk":"他们能让你的手机响起来。",
+"health.closedOff":"他们找不到你。请在上面打开通知。",
+"health.closedDenied":"浏览器阻止了通知：应用关闭时没人能找到你。",
+"health.closedIos":"在 iPhone 上需要先把应用添加到主屏幕。",
+"health.mic":"麦克风",
+"health.micOk":"可用。",
+"health.micBad":"被浏览器阻止：你将无法拨打或接听呼叫。",
+"health.micUnknown":"在你尝试呼叫之前我无法知道。",
+"health.version":"正在使用的版本",
+"health.versionOld":"应用的一部分还是旧的。请关闭后重新打开。",
 "media.stepsAndroidApp":"返回手机主屏幕|长按 <b>DigitalValut Logos</b> 图标|点按<b>应用信息</b>（或 ⓘ 图标）|点按<b>权限</b>，然后开启<b>麦克风</b>和<b>摄像头</b>|重新打开应用"
 });
 
@@ -1150,6 +1382,35 @@ Object.assign(I18N.ar, {
 "call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف.",
 "call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط.",
 "home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.",
+"health.title":"حالة التطبيق",
+"health.sub":"إذا لم يستطع أحدهم الوصول إليك، فالسبب مذكور أدناه.",
+"health.recheck":"تحقّق مرة أخرى",
+"health.copy":"انسخ التقرير",
+"health.copied":"تم نسخ التقرير.",
+"health.checking":"جارٍ التحقق…",
+"health.busy":"متوقف مؤقتًا: أنت بالفعل في محادثة.",
+"health.stopped":"لست أستمع. أغلق التطبيق ثم افتحه من جديد.",
+"health.addr":"من يملك عنوانك",
+"health.addrOk":"يستطيع الاتصال بك الآن.",
+"health.addrOff":"عنوانك مُطفأ. فعّله في الأعلى.",
+"health.contacts":"جهات اتصالك",
+"health.contactsOk":"جميع الـ{n} يستطيعون إيجادك الآن.",
+"health.contactsNone":"ليس لديك جهات اتصال بعد.",
+"health.broker":"الخدمة التي تجمعكما",
+"health.brokerOk":"يستجيب.",
+"health.brokerBad":"لا يستجيب. تبقى الرموز الطويلة، وهي لا تمر بأي خادم.",
+"health.brokerOrigin":"هذه النسخة من التطبيق على عنوان لا تعرفه الخدمة: لن تعمل من هنا. افتح النسخة الرسمية.",
+"health.closed":"والتطبيق مغلق",
+"health.closedOk":"يمكنهم جعل هاتفك يرن.",
+"health.closedOff":"لا يصلون إليك. فعّل التنبيهات في الأعلى.",
+"health.closedDenied":"المتصفح يحجب التنبيهات: والتطبيق مغلق لن يصل إليك أحد.",
+"health.closedIos":"على iPhone عليك أولًا إضافة التطبيق إلى الشاشة الرئيسية.",
+"health.mic":"الميكروفون",
+"health.micOk":"متاح.",
+"health.micBad":"محجوب من المتصفح: لن تتمكن من إجراء المكالمات ولا تلقّيها.",
+"health.micUnknown":"لا أستطيع معرفة ذلك حتى تجرّب مكالمة.",
+"health.version":"النسخة المستخدمة",
+"health.versionOld":"جزء من التطبيق ما زال قديمًا. أغلقه ثم افتحه من جديد.",
 "media.stepsAndroidApp":"ارجع إلى الشاشة الرئيسية للهاتف|اضغط مطولًا على أيقونة <b>DigitalValut Logos</b>|اضغط <b>معلومات التطبيق</b> (أو أيقونة ⓘ)|اضغط <b>الأذونات</b>، ثم فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد فتح التطبيق"
 });
 
@@ -1271,6 +1532,35 @@ Object.assign(I18N.ur, {
 "call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔",
 "call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔",
 "home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔",
+"health.title":"ایپ کی حالت",
+"health.sub":"اگر کوئی آپ تک نہیں پہنچ پا رہا تو وجہ نیچے لکھی ہے۔",
+"health.recheck":"دوبارہ جانچیں",
+"health.copy":"رپورٹ کاپی کریں",
+"health.copied":"رپورٹ کاپی ہو گئی۔",
+"health.checking":"جانچ رہا ہوں…",
+"health.busy":"وقفہ: آپ پہلے ہی ایک گفتگو میں ہیں۔",
+"health.stopped":"میں سن نہیں رہا۔ ایپ بند کر کے دوبارہ کھولیں۔",
+"health.addr":"جس کے پاس آپ کا پتہ ہے",
+"health.addrOk":"ابھی آپ کو کال کر سکتا ہے۔",
+"health.addrOff":"آپ کا پتہ بند ہے۔ اوپر سے اسے آن کریں۔",
+"health.contacts":"آپ کے رابطے",
+"health.contactsOk":"تمام {n} ابھی آپ کو دوبارہ پا سکتے ہیں۔",
+"health.contactsNone":"ابھی آپ کا کوئی رابطہ نہیں ہے۔",
+"health.broker":"جو سروس آپ کو ملاتی ہے",
+"health.brokerOk":"جواب دے رہی ہے۔",
+"health.brokerBad":"جواب نہیں دے رہی۔ لمبے کوڈ اب بھی کام کرتے ہیں: وہ کسی سرور سے نہیں گزرتے۔",
+"health.brokerOrigin":"ایپ کی یہ نقل ایسے پتے پر ہے جسے سروس نہیں پہچانتی: یہاں سے کام نہیں کرے گی۔ سرکاری والی کھولیں۔",
+"health.closed":"ایپ بند ہونے پر",
+"health.closedOk":"وہ آپ کا فون بجا سکتے ہیں۔",
+"health.closedOff":"وہ آپ تک نہیں پہنچ سکتے۔ اوپر اطلاعات آن کریں۔",
+"health.closedDenied":"براؤزر اطلاعات روک رہا ہے: ایپ بند ہو تو کوئی آپ تک نہیں پہنچے گا۔",
+"health.closedIos":"آئی فون پر پہلے ایپ کو ہوم اسکرین میں شامل کرنا ہوگا۔",
+"health.mic":"مائیکروفون",
+"health.micOk":"دستیاب ہے۔",
+"health.micBad":"براؤزر نے روک رکھا ہے: آپ نہ کال کر سکیں گے نہ وصول۔",
+"health.micUnknown":"جب تک آپ کال آزما نہ لیں، میں نہیں جان سکتا۔",
+"health.version":"زیرِ استعمال ورژن",
+"health.versionOld":"ایپ کا ایک حصہ اب بھی پرانا ہے۔ اسے بند کر کے دوبارہ کھولیں۔",
 "media.stepsAndroidApp":"فون کی ہوم اسکرین پر واپس جائیں|<b>DigitalValut Logos</b> آئیکن کو دبائے رکھیں|<b>ایپ کی معلومات</b> (یا ⓘ آئیکن) پر ٹیپ کریں|<b>اجازتیں</b> پر ٹیپ کریں، پھر <b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|ایپ دوبارہ کھولیں"
 });
 
@@ -1392,6 +1682,35 @@ Object.assign(I18N.hi, {
 "call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।",
 "call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।",
 "home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।",
+"health.title":"ऐप की स्थिति",
+"health.sub":"अगर कोई आप तक नहीं पहुँच पा रहा, तो कारण नीचे लिखा है।",
+"health.recheck":"फिर से जाँचें",
+"health.copy":"रिपोर्ट कॉपी करें",
+"health.copied":"रिपोर्ट कॉपी हो गई।",
+"health.checking":"जाँच रहा हूँ…",
+"health.busy":"रुका हुआ: आप पहले से एक बातचीत में हैं।",
+"health.stopped":"मैं सुन नहीं रहा। ऐप बंद करके दोबारा खोलें।",
+"health.addr":"जिसके पास आपका पता है",
+"health.addrOk":"अभी आपको कॉल कर सकता है।",
+"health.addrOff":"आपका पता बंद है। ऊपर से इसे चालू करें।",
+"health.contacts":"आपके संपर्क",
+"health.contactsOk":"सभी {n} अभी आपको दोबारा पा सकते हैं।",
+"health.contactsNone":"आपका अभी कोई संपर्क नहीं है।",
+"health.broker":"जो सेवा आपको मिलाती है",
+"health.brokerOk":"जवाब दे रही है।",
+"health.brokerBad":"जवाब नहीं दे रही। लंबे कोड अब भी चलते हैं: वे किसी सर्वर से नहीं गुज़रते।",
+"health.brokerOrigin":"ऐप की यह नकल ऐसे पते पर है जिसे सेवा नहीं पहचानती: यहाँ से काम नहीं करेगी। आधिकारिक वाली खोलें।",
+"health.closed":"ऐप बंद होने पर",
+"health.closedOk":"वे आपका फ़ोन बजा सकते हैं।",
+"health.closedOff":"वे आप तक नहीं पहुँच सकते। ऊपर सूचनाएं चालू करें।",
+"health.closedDenied":"ब्राउज़र सूचनाएं रोक रहा है: ऐप बंद होने पर कोई आप तक नहीं पहुँचेगा।",
+"health.closedIos":"iPhone पर पहले ऐप को होम स्क्रीन में जोड़ना होगा।",
+"health.mic":"माइक्रोफ़ोन",
+"health.micOk":"उपलब्ध है।",
+"health.micBad":"ब्राउज़र ने रोक रखा है: आप न कॉल कर सकेंगे न ले सकेंगे।",
+"health.micUnknown":"जब तक आप कॉल आज़मा नहीं लेते, मैं नहीं जान सकता।",
+"health.version":"इस्तेमाल हो रहा संस्करण",
+"health.versionOld":"ऐप का एक हिस्सा अब भी पुराना है। इसे बंद करके दोबारा खोलें।",
 "media.stepsAndroidApp":"फ़ोन की होम स्क्रीन पर वापस जाएं|<b>DigitalValut Logos</b> आइकन को दबाकर रखें|<b>ऐप की जानकारी</b> (या ⓘ आइकन) पर टैप करें|<b>अनुमतियां</b> पर टैप करें, फिर <b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|ऐप फिर से खोलें"
 });
 
@@ -1513,6 +1832,35 @@ Object.assign(I18N.bn, {
 "call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।",
 "call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।",
 "home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।",
+"health.title":"অ্যাপ কেমন চলছে",
+"health.sub":"কেউ যদি আপনার কাছে পৌঁছাতে না পারে, কারণটি নিচে দেওয়া আছে।",
+"health.recheck":"আবার দেখুন",
+"health.copy":"রিপোর্ট কপি করুন",
+"health.copied":"রিপোর্ট কপি হয়েছে।",
+"health.checking":"পরীক্ষা করছি…",
+"health.busy":"বিরতি: আপনি ইতিমধ্যে একটি কথোপকথনে আছেন।",
+"health.stopped":"আমি শুনছি না। অ্যাপটি বন্ধ করে আবার খুলুন।",
+"health.addr":"যার কাছে আপনার ঠিকানা আছে",
+"health.addrOk":"এখনই আপনাকে ডাকতে পারে।",
+"health.addrOff":"আপনার ঠিকানা বন্ধ। উপরে গিয়ে চালু করুন।",
+"health.contacts":"আপনার পরিচিতরা",
+"health.contactsOk":"সব {n} জন এখনই আপনাকে আবার খুঁজে পেতে পারেন।",
+"health.contactsNone":"আপনার এখনও কোনো পরিচিত নেই।",
+"health.broker":"যে সেবা আপনাদের যোগাযোগ করায়",
+"health.brokerOk":"সাড়া দিচ্ছে।",
+"health.brokerBad":"সাড়া দিচ্ছে না। লম্বা কোডগুলো এখনও চলে: সেগুলো কোনো সার্ভার দিয়ে যায় না।",
+"health.brokerOrigin":"অ্যাপের এই কপিটি এমন ঠিকানায় আছে যা সেবাটি চেনে না: এখান থেকে কাজ করবে না। আসলটি খুলুন।",
+"health.closed":"অ্যাপ বন্ধ থাকলে",
+"health.closedOk":"তাঁরা আপনার ফোন বাজাতে পারেন।",
+"health.closedOff":"তাঁরা আপনার কাছে পৌঁছাতে পারবেন না। উপরে বিজ্ঞপ্তি চালু করুন।",
+"health.closedDenied":"ব্রাউজার বিজ্ঞপ্তি আটকাচ্ছে: অ্যাপ বন্ধ থাকলে কেউ আপনার কাছে পৌঁছাবে না।",
+"health.closedIos":"আইফোনে আগে অ্যাপটি হোম স্ক্রিনে যোগ করতে হবে।",
+"health.mic":"মাইক্রোফোন",
+"health.micOk":"পাওয়া যাচ্ছে।",
+"health.micBad":"ব্রাউজার আটকে রেখেছে: আপনি ডাকতেও পারবেন না, ধরতেও পারবেন না।",
+"health.micUnknown":"আপনি একবার ডাকার চেষ্টা না করলে আমি জানতে পারব না।",
+"health.version":"ব্যবহৃত সংস্করণ",
+"health.versionOld":"অ্যাপের একটি অংশ এখনও পুরোনো। বন্ধ করে আবার খুলুন।",
 "media.stepsAndroidApp":"ফোনের হোম স্ক্রিনে ফিরে যান|<b>DigitalValut Logos</b> আইকনটি চেপে ধরে রাখুন|<b>অ্যাপ তথ্য</b> (বা ⓘ আইকন) ট্যাপ করুন|<b>অনুমতি</b> ট্যাপ করুন, তারপর <b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|অ্যাপটি আবার খুলুন"
 });
 
@@ -1634,6 +1982,35 @@ Object.assign(I18N.id, {
 "call.flipFail":"Tidak bisa mengganti kamera di ponsel ini.",
 "call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera.",
 "home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.",
+"health.title":"Kondisi aplikasi",
+"health.sub":"Kalau ada yang tidak bisa menghubungi Anda, alasannya ada di bawah.",
+"health.recheck":"Periksa lagi",
+"health.copy":"Salin laporan",
+"health.copied":"Laporan disalin.",
+"health.checking":"Sedang memeriksa…",
+"health.busy":"Dijeda: Anda sudah dalam percakapan.",
+"health.stopped":"Saya tidak mendengarkan. Tutup aplikasi lalu buka lagi.",
+"health.addr":"Siapa pun yang punya alamat Anda",
+"health.addrOk":"Bisa menelepon Anda sekarang.",
+"health.addrOff":"Alamat Anda mati. Nyalakan di atas.",
+"health.contacts":"Kontak Anda",
+"health.contactsOk":"Semua {n} bisa menemukan Anda lagi sekarang.",
+"health.contactsNone":"Anda belum punya kontak.",
+"health.broker":"Layanan yang mempertemukan Anda",
+"health.brokerOk":"Menjawab.",
+"health.brokerBad":"Tidak menjawab. Kode panjang masih bisa: itu tidak melewati server mana pun.",
+"health.brokerOrigin":"Salinan aplikasi ini ada di alamat yang tidak dikenali layanan: dari sini tidak akan jalan. Buka yang resmi.",
+"health.closed":"Saat aplikasi tertutup",
+"health.closedOk":"Mereka bisa membunyikan ponsel Anda.",
+"health.closedOff":"Mereka tidak bisa menghubungi Anda. Nyalakan pemberitahuan di atas.",
+"health.closedDenied":"Peramban memblokir pemberitahuan: saat aplikasi tertutup, tidak ada yang bisa menghubungi Anda.",
+"health.closedIos":"Di iPhone Anda harus menambahkan aplikasi ke layar Utama dulu.",
+"health.mic":"Mikrofon",
+"health.micOk":"Tersedia.",
+"health.micBad":"Diblokir peramban: Anda tidak akan bisa menelepon atau menerima panggilan.",
+"health.micUnknown":"Saya tidak bisa tahu sampai Anda mencoba menelepon.",
+"health.version":"Versi yang dipakai",
+"health.versionOld":"Sebagian aplikasi masih yang lama. Tutup lalu buka lagi.",
 "media.stepsAndroidApp":"Kembali ke layar Utama ponsel|Tekan lama ikon <b>DigitalValut Logos</b>|Ketuk <b>Info aplikasi</b> (atau ikon ⓘ)|Ketuk <b>Izin</b>, lalu aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Buka lagi aplikasinya"
 });
 
@@ -1773,6 +2150,9 @@ $('btnSettings').addEventListener('click', () => {
   settingsCameFrom = ['screenHome','screenStart','screenJoin','screenChat']
     .find(s => !$(s).classList.contains('hide')) || 'screenHome';
   showScreen('screenSettings');
+  /* measured when the screen is opened, not cached from earlier: a stale
+     "everything is fine" would be worse than saying nothing at all */
+  runHealth();
 });
 $('backFromSettings').addEventListener('click', () => showScreen(settingsCameFrom));
 
@@ -3016,6 +3396,12 @@ $('notifyRow').addEventListener('keydown', e => {
    a message: only "someone who knows this hash is trying to reach that hash right now". A
    message is picked up at most once and expires within two minutes either way. */
 const MAILBOX_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/mailbox/';
+/* The Worker answers for these origins and refuses every other one outright.
+   Kept here as well so the app can say *why* nothing works when it is being
+   served from somewhere else — a local test server, or a copy someone put on
+   their own host — instead of leaving a spinner running and then blaming the
+   person who was called. Must match ALLOWED_ORIGINS in turn-worker/worker.js. */
+const SERVICE_ORIGINS = ['https://digitalvalut.github.io', 'https://logos.digitalvalut.it'];
 
 async function myFingerprintHex(){
   const cert = await myIdentity();
@@ -3894,6 +4280,144 @@ $('btnAddrIgnore').addEventListener('click', () => {
   if (addrPending && addrPending.msg) blockFp(addrPending.msg.fp);
   addrPending = null;
   $('addrIncoming').classList.add('hide');
+});
+
+/* ============================== how the app is doing ==============================
+   A bug once left this device unreachable by every route at once — the address
+   and the contact list both — and stayed invisible for days, because nothing
+   anywhere on any screen said so. The only symptom was other people saying
+   "non ti trovo", which is the one symptom the person affected cannot see.
+   So the app now answers, in the same plain words as everything else: can
+   people reach you right now, and if not, what do you do about it. Every
+   check here is measured, never assumed — and where it genuinely cannot be
+   known (a microphone nobody has asked for yet) it says that instead of
+   guessing. */
+const APP_VERSION = 'logos-modifica-3.38';
+
+/* what is *actually* running, not what this file thinks should be: the page is
+   fetched network-first so the code is always current, but the cached shell
+   behind it may not be, and that gap is the oldest trap in this project */
+async function swVersion(){
+  try{
+    if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return null;
+    return await new Promise(res => {
+      const ch = new MessageChannel();
+      const bail = setTimeout(() => res(null), 1500);
+      ch.port1.onmessage = e => { clearTimeout(bail); res(e.data); };
+      navigator.serviceWorker.controller.postMessage({ type: 'version' }, [ch.port2]);
+    });
+  }catch(e){ return null; }
+}
+
+async function brokerAlive(){
+  /* asked before the network is touched: a copy served from anywhere else is
+     refused by the Worker outright, and no amount of retrying changes it */
+  if (SERVICE_ORIGINS.indexOf(location.origin) < 0) return 'origin';
+  try{
+    /* any answer at all means it is there — a 404 on an empty slot is the
+       healthy case, and even a "too many requests" proves it is alive */
+    await Promise.race([
+      fetch(MAILBOX_BASE + '0'.repeat(64), { method: 'GET', cache: 'no-store' }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('slow')), 6000)),
+    ]);
+    return 'ok';
+  }catch(e){ return 'bad'; }
+}
+
+async function micHealth(){
+  try{
+    if (!navigator.permissions || !navigator.permissions.query) return 'unknown';
+    const st = await navigator.permissions.query({ name: 'microphone' });
+    return st.state === 'granted' ? 'ok' : st.state === 'denied' ? 'bad' : 'unknown';
+  }catch(e){ return 'unknown'; }   /* several browsers refuse the question entirely */
+}
+
+function reachableWhenClosed(){
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !isStandalone) return 'ios';
+  if (typeof Notification === 'undefined') return 'off';
+  if (Notification.permission === 'denied') return 'denied';
+  if (!notifyPref() || Notification.permission !== 'granted') return 'off';
+  return 'ok';
+}
+
+let healthRows = [];
+async function runHealth(){
+  const list = $('healthList');
+  if (!list) return;
+  list.textContent = t('health.checking', 'Sto controllando…');
+
+  const rows = [];
+  /* 1 — the address */
+  if (!activeSlots().length) rows.push(['off', t('health.addr'), t('health.addrOff')]);
+  else if (busyWithSomeone()) rows.push(['warn', t('health.addr'), t('health.busy')]);
+  else if (!addrPollTimer) rows.push(['bad', t('health.addr'), t('health.stopped')]);
+  else rows.push(['ok', t('health.addr'), t('health.addrOk')]);
+
+  /* 2 — people already known */
+  const known = loadContacts().filter(c => c.fp).length;
+  if (!known) rows.push(['off', t('health.contacts'), t('health.contactsNone')]);
+  else if (busyWithSomeone()) rows.push(['warn', t('health.contacts'), t('health.busy')]);
+  else if (!inboxTimer) rows.push(['bad', t('health.contacts'), t('health.stopped')]);
+  else rows.push(['ok', t('health.contacts'), fill(t('health.contactsOk'), { n: known })]);
+
+  /* 3 — the thing that introduces two people */
+  const broker = await brokerAlive();
+  rows.push(broker === 'ok' ? ['ok', t('health.broker'), t('health.brokerOk')]
+          : broker === 'origin' ? ['bad', t('health.broker'), t('health.brokerOrigin')]
+          : ['bad', t('health.broker'), t('health.brokerBad')]);
+
+  /* 4 — with the app shut */
+  const closed = reachableWhenClosed();
+  rows.push(closed === 'ok' ? ['ok', t('health.closed'), t('health.closedOk')]
+          : closed === 'ios' ? ['warn', t('health.closed'), t('health.closedIos')]
+          : closed === 'denied' ? ['bad', t('health.closed'), t('health.closedDenied')]
+          : ['warn', t('health.closed'), t('health.closedOff')]);
+
+  /* 5 — being able to speak */
+  const mic = await micHealth();
+  rows.push(mic === 'ok' ? ['ok', t('health.mic'), t('health.micOk')]
+          : mic === 'bad' ? ['bad', t('health.mic'), t('health.micBad')]
+          : ['off', t('health.mic'), t('health.micUnknown')]);
+
+  /* 6 — is the copy running actually the current one */
+  const running = await swVersion();
+  rows.push(!running ? ['off', t('health.version'), APP_VERSION]
+          : running === APP_VERSION ? ['ok', t('health.version'), APP_VERSION]
+          : ['warn', t('health.version'), t('health.versionOld')]);
+
+  healthRows = rows;
+  list.textContent = '';
+  for (const [state, title, detail] of rows){
+    const row = document.createElement('div');
+    row.className = 'healthrow' + (state === 'bad' ? ' bad' : '');
+    const dot = document.createElement('div');
+    dot.className = 'healthdot' + (state === 'off' ? '' : ' ' + state);
+    const box = document.createElement('div');
+    box.className = 'ht';
+    const name = document.createElement('b');
+    name.textContent = title;
+    const why = document.createElement('span');
+    why.textContent = detail;
+    box.appendChild(name); box.appendChild(why);
+    row.appendChild(dot); row.appendChild(box);
+    list.appendChild(row);
+  }
+}
+
+/* Something a person can paste into a message when they ask for help, so the
+   answer does not have to start with ten questions. Deliberately carries
+   nothing about who they talk to: no addresses, no names, no contacts —
+   only whether each part of the machinery is working. */
+function healthReport(){
+  const lines = ['DigitalValut Logos — ' + APP_VERSION, location.origin, navigator.userAgent, ''];
+  for (const [state, title, detail] of healthRows) lines.push('[' + state + '] ' + title + ' — ' + detail);
+  return lines.join('\n');
+}
+
+$('btnHealthCheck').addEventListener('click', runHealth);
+$('btnHealthCopy').addEventListener('click', async () => {
+  await copyOrSelect(healthReport(), $('healthList'));
+  toast(t('health.copied', 'Resoconto copiato.'));
 });
 
 /* Same envelope the manual "create invite" button already produces, so the auto-reconnect

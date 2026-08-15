@@ -4,7 +4,7 @@
    Caches the app shell so it installs and opens without a connection; the
    WebRTC handshake itself still needs the internet to find the other peer. */
 
-const CACHE = 'logos-modifica-3.37';
+const CACHE = 'logos-modifica-3.38';
 const ASSETS = [
   './modifica.html',
   './modifica.css',
@@ -77,6 +77,17 @@ self.addEventListener('fetch', event => {
       return hit || live;
     })
   );
+});
+
+/* Asked by the app's own health check. The page is served network-first, so
+   the code running is always current — but this file is not, and a stale
+   service worker still serving an old shell is exactly the failure that has
+   cost this project more time than any other. Now it can be seen instead of
+   guessed. */
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'version' && event.ports && event.ports[0]){
+    event.ports[0].postMessage(CACHE);
+  }
 });
 
 /* ---------------- the knock: a wake-up with nothing in it ----------------
