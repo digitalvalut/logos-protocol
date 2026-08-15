@@ -137,7 +137,8 @@ Object.assign(I18N.en, {
 "letter.title":"Messages left for you","letter.noneTitle":"Nobody is answering right now.","letter.noneSub":"You can leave a message: they'll find it as soon as they open the app.","letter.ph":"Write your message here","letter.leave":"Leave the message","letter.cancel":"Never mind","letter.needText":"Write a line or two, so they know what you wanted.","letter.left":"Message left. They'll find it when they open the app.","letter.failed":"I couldn't leave the message. Try again.","letter.callBack":"Call back","letter.dismiss":"Done",
 "home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting",
 "call.flipFail":"I can't switch camera on this phone.",
-"call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera."
+"call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera.",
+"home.alreadyTalking":"You're already in a conversation. To start another, close this one first."
 });
 Object.assign(I18N.it, {
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -263,7 +264,8 @@ Object.assign(I18N.it, {
 "letter.title":"Messaggi lasciati per te","letter.noneTitle":"Non risponde nessuno adesso.","letter.noneSub":"Puoi lasciare un messaggio: lo troverà appena apre l'app.","letter.ph":"Scrivi qui il tuo messaggio","letter.leave":"Lascia il messaggio","letter.cancel":"Lascia perdere","letter.needText":"Scrivi due parole, così sa cosa volevi.","letter.left":"Messaggio lasciato. Lo troverà appena apre l'app.","letter.failed":"Non sono riuscito a lasciare il messaggio. Riprova.","letter.callBack":"Richiama","letter.dismiss":"Fatto",
 "home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso",
 "call.flipFail":"Non riesco a cambiare fotocamera su questo telefono.",
-"call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera."
+"call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera.",
+"home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa."
 });
 
 Object.assign(I18N.fr, {
@@ -382,7 +384,8 @@ Object.assign(I18N.fr, {
 "letter.title":"Messages laissés pour vous","letter.noneTitle":"Personne ne répond pour le moment.","letter.noneSub":"Vous pouvez laisser un message : la personne le trouvera dès qu'elle ouvrira l'application.","letter.ph":"Écrivez votre message ici","letter.leave":"Laisser le message","letter.cancel":"Laisser tomber","letter.needText":"Écrivez deux mots, qu'elle sache ce que vous vouliez.","letter.left":"Message laissé. La personne le trouvera en ouvrant l'application.","letter.failed":"Je n'ai pas pu laisser le message. Réessayez.","letter.callBack":"Rappeler","letter.dismiss":"Terminé",
 "home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours",
 "call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone.",
-"call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra."
+"call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra.",
+"home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci."
 });
 
 Object.assign(I18N.de, {
@@ -501,7 +504,8 @@ Object.assign(I18N.de, {
 "letter.title":"Nachrichten für dich","letter.noneTitle":"Gerade antwortet niemand.","letter.noneSub":"Du kannst eine Nachricht hinterlassen: sie wird sie finden, sobald sie die App öffnet.","letter.ph":"Schreib deine Nachricht hier","letter.leave":"Nachricht hinterlassen","letter.cancel":"Doch nicht","letter.needText":"Schreib zwei Zeilen, damit sie weiß, worum es ging.","letter.left":"Nachricht hinterlassen. Sie wird sie beim Öffnen der App finden.","letter.failed":"Ich konnte die Nachricht nicht hinterlassen. Versuch es nochmal.","letter.callBack":"Zurückrufen","letter.dismiss":"Erledigt",
 "home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut",
 "call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln.",
-"call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera."
+"call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera.",
+"home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses."
 });
 
 Object.assign(I18N.es, {
@@ -620,7 +624,8 @@ Object.assign(I18N.es, {
 "letter.title":"Mensajes que te han dejado","letter.noneTitle":"Ahora mismo no contesta nadie.","letter.noneSub":"Puedes dejar un mensaje: lo encontrará en cuanto abra la aplicación.","letter.ph":"Escribe aquí tu mensaje","letter.leave":"Dejar el mensaje","letter.cancel":"Déjalo","letter.needText":"Escribe dos palabras, así sabrá qué querías.","letter.left":"Mensaje dejado. Lo encontrará al abrir la aplicación.","letter.failed":"No he podido dejar el mensaje. Inténtalo otra vez.","letter.callBack":"Devolver la llamada","letter.dismiss":"Hecho",
 "home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando",
 "call.flipFail":"No puedo cambiar de cámara en este teléfono.",
-"call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara."
+"call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara.",
+"home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta."
 });
 
 Object.assign(I18N.pt, {
@@ -739,7 +744,8 @@ Object.assign(I18N.pt, {
 "letter.title":"Mensagens deixadas para si","letter.noneTitle":"Ninguém está a responder agora.","letter.noneSub":"Pode deixar uma mensagem: vai encontrá-la assim que abrir a aplicação.","letter.ph":"Escreva aqui a sua mensagem","letter.leave":"Deixar a mensagem","letter.cancel":"Deixe estar","letter.needText":"Escreva duas palavras, para saber o que queria.","letter.left":"Mensagem deixada. Vai encontrá-la ao abrir a aplicação.","letter.failed":"Não consegui deixar a mensagem. Tente de novo.","letter.callBack":"Ligar de volta","letter.dismiss":"Feito",
 "home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar",
 "call.flipFail":"Não consigo mudar de câmara neste telemóvel.",
-"call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara."
+"call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara.",
+"home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta."
 });
 
 Object.assign(I18N.ru, {
@@ -858,7 +864,8 @@ Object.assign(I18N.ru, {
 "letter.title":"Оставленные вам сообщения","letter.noneTitle":"Сейчас никто не отвечает.","letter.noneSub":"Можно оставить сообщение: его увидят, как только откроют приложение.","letter.ph":"Напишите сообщение здесь","letter.leave":"Оставить сообщение","letter.cancel":"Не надо","letter.needText":"Напишите пару слов, чтобы было понятно, зачем вы звонили.","letter.left":"Сообщение оставлено. Его увидят при открытии приложения.","letter.failed":"Не удалось оставить сообщение. Попробуйте ещё раз.","letter.callBack":"Перезвонить","letter.dismiss":"Готово",
 "home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение",
 "call.flipFail":"На этом телефоне не удаётся переключить камеру.",
-"call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера."
+"call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера.",
+"home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот."
 });
 
 Object.assign(I18N.zh, {
@@ -977,7 +984,8 @@ Object.assign(I18N.zh, {
 "letter.title":"留给你的消息","letter.noneTitle":"现在没有人接听。","letter.noneSub":"你可以留个消息：对方一打开应用就会看到。","letter.ph":"在这里写下你的消息","letter.leave":"留下消息","letter.cancel":"算了","letter.needText":"写上一两句，让对方知道你想说什么。","letter.left":"消息已留下。对方打开应用就会看到。","letter.failed":"没能留下消息，请再试一次。","letter.callBack":"回拨","letter.dismiss":"完成",
 "home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接",
 "call.flipFail":"无法在这台手机上切换摄像头。",
-"call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。"
+"call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。",
+"home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。"
 });
 
 Object.assign(I18N.ar, {
@@ -1096,7 +1104,8 @@ Object.assign(I18N.ar, {
 "letter.title":"رسائل تُركت لك","letter.noneTitle":"لا أحد يردّ الآن.","letter.noneSub":"يمكنك ترك رسالة: سيجدها فور فتحه للتطبيق.","letter.ph":"اكتب رسالتك هنا","letter.leave":"اترك الرسالة","letter.cancel":"لا بأس","letter.needText":"اكتب كلمتين ليعرف ماذا أردت.","letter.left":"تُركت الرسالة. سيجدها عند فتح التطبيق.","letter.failed":"لم أتمكن من ترك الرسالة. حاول مرة أخرى.","letter.callBack":"عاود الاتصال","letter.dismiss":"تم",
 "home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال",
 "call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف.",
-"call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط."
+"call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط.",
+"home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا."
 });
 
 Object.assign(I18N.ur, {
@@ -1215,7 +1224,8 @@ Object.assign(I18N.ur, {
 "letter.title":"آپ کے لیے چھوڑے گئے پیغامات","letter.noneTitle":"ابھی کوئی جواب نہیں دے رہا۔","letter.noneSub":"آپ پیغام چھوڑ سکتے ہیں: ایپ کھولتے ہی انہیں مل جائے گا۔","letter.ph":"اپنا پیغام یہاں لکھیں","letter.leave":"پیغام چھوڑیں","letter.cancel":"رہنے دیں","letter.needText":"دو لفظ لکھ دیں تاکہ انہیں معلوم ہو آپ کیا چاہتے تھے۔","letter.left":"پیغام چھوڑ دیا گیا۔ ایپ کھولتے ہی مل جائے گا۔","letter.failed":"میں پیغام نہیں چھوڑ سکا۔ دوبارہ کوشش کریں۔","letter.callBack":"واپس کال کریں","letter.dismiss":"ہو گیا",
 "home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے",
 "call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔",
-"call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔"
+"call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔",
+"home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔"
 });
 
 Object.assign(I18N.hi, {
@@ -1334,7 +1344,8 @@ Object.assign(I18N.hi, {
 "letter.title":"आपके लिए छोड़े गए संदेश","letter.noneTitle":"अभी कोई जवाब नहीं दे रहा।","letter.noneSub":"आप संदेश छोड़ सकते हैं: ऐप खोलते ही उन्हें मिल जाएगा।","letter.ph":"अपना संदेश यहाँ लिखें","letter.leave":"संदेश छोड़ें","letter.cancel":"रहने दें","letter.needText":"दो शब्द लिख दें, ताकि उन्हें पता चले आप क्या चाहते थे।","letter.left":"संदेश छोड़ दिया। ऐप खोलते ही उन्हें मिल जाएगा।","letter.failed":"मैं संदेश नहीं छोड़ सका। फिर कोशिश करें।","letter.callBack":"वापस कॉल करें","letter.dismiss":"हो गया",
 "home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है",
 "call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।",
-"call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।"
+"call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।",
+"home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।"
 });
 
 Object.assign(I18N.bn, {
@@ -1453,7 +1464,8 @@ Object.assign(I18N.bn, {
 "letter.title":"আপনার জন্য রাখা বার্তা","letter.noneTitle":"এখন কেউ সাড়া দিচ্ছে না।","letter.noneSub":"আপনি একটি বার্তা রেখে যেতে পারেন: অ্যাপ খুললেই তিনি দেখতে পাবেন।","letter.ph":"আপনার বার্তা এখানে লিখুন","letter.leave":"বার্তা রাখুন","letter.cancel":"থাক","letter.needText":"দু-এক কথা লিখুন, যাতে বোঝেন আপনি কী চেয়েছিলেন।","letter.left":"বার্তা রাখা হয়েছে। অ্যাপ খুললেই দেখতে পাবেন।","letter.failed":"বার্তা রাখতে পারিনি। আবার চেষ্টা করুন।","letter.callBack":"ফিরে ডাকুন","letter.dismiss":"হয়েছে",
 "home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে",
 "call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।",
-"call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।"
+"call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।",
+"home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।"
 });
 
 Object.assign(I18N.id, {
@@ -1572,7 +1584,8 @@ Object.assign(I18N.id, {
 "letter.title":"Pesan yang ditinggalkan untuk Anda","letter.noneTitle":"Sekarang tidak ada yang menjawab.","letter.noneSub":"Anda bisa meninggalkan pesan: dia akan menemukannya begitu membuka aplikasi.","letter.ph":"Tulis pesan Anda di sini","letter.leave":"Tinggalkan pesan","letter.cancel":"Tidak jadi","letter.needText":"Tulis satu dua kalimat, supaya dia tahu apa yang Anda mau.","letter.left":"Pesan ditinggalkan. Dia akan menemukannya saat membuka aplikasi.","letter.failed":"Saya tidak bisa meninggalkan pesan. Coba lagi.","letter.callBack":"Telepon balik","letter.dismiss":"Selesai",
 "home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan",
 "call.flipFail":"Tidak bisa mengganti kamera di ponsel ini.",
-"call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera."
+"call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera.",
+"home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini."
 });
 
 function t(key, fallback){
@@ -1696,11 +1709,41 @@ for (const id of ['easyRow','voiceRow']){
 }
 /* Everything that is a choice rather than an action lives one tap away, so
    the home can be the two things someone actually came to do. */
-$('btnSettings').addEventListener('click', () => showScreen('screenSettings'));
-$('backFromSettings').addEventListener('click', () => showScreen('screenHome'));
+/* Back has to mean back. Sending it to the home screen no matter where it was
+   opened from looked, to anyone who tapped the gear during a call, exactly like
+   the line dropping: the call was still running, but it was off screen — and
+   the first thing offered on the home screen starts a new connection, which
+   really would have ended it. */
+let settingsCameFrom = 'screenHome';
+$('btnSettings').addEventListener('click', () => {
+  settingsCameFrom = ['screenHome','screenStart','screenJoin','screenChat']
+    .find(s => !$(s).classList.contains('hide')) || 'screenHome';
+  showScreen('screenSettings');
+});
+$('backFromSettings').addEventListener('click', () => showScreen(settingsCameFrom));
 
-$('goStart').addEventListener('click', () => { showScreen('screenStart'); showQuickLayoutA(); startQuickShare(); });
-$('goJoin').addEventListener('click', () => { showScreen('screenJoin'); showQuickLayoutB(); $('quickCodeIn').value = ''; $('quickCodeIn').focus(); });
+/* Creating an invite builds a new connection over the top of whatever was
+   there, which would silently end a conversation still in progress — and
+   nothing said so. Anyone who wandered back to the home screen mid-call and
+   pressed the obvious orange button lost the call and never learned why.
+   Now it takes you back to the conversation instead, and ending it stays a
+   deliberate act on the chat's own "end chat" button. */
+$('goStart').addEventListener('click', () => {
+  if (dc && dc.readyState === 'open'){
+    showScreen('screenChat');
+    toast(t('home.alreadyTalking','Sei già in una conversazione. Per iniziarne un\'altra, chiudi prima questa.'));
+    return;
+  }
+  showScreen('screenStart'); showQuickLayoutA(); startQuickShare();
+});
+$('goJoin').addEventListener('click', () => {
+  if (dc && dc.readyState === 'open'){
+    showScreen('screenChat');
+    toast(t('home.alreadyTalking','Sei già in una conversazione. Per iniziarne un\'altra, chiudi prima questa.'));
+    return;
+  }
+  showScreen('screenJoin'); showQuickLayoutB(); $('quickCodeIn').value = ''; $('quickCodeIn').focus();
+});
 /* leaving the screen abandons whatever handshake it had started — otherwise its
    candidate polling would keep running in the background for a code nobody is
    going to type any more */

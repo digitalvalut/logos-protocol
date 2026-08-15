@@ -113,7 +113,7 @@
         <span class="t" data-i18n="home.bigStart">Parla con qualcuno</span>
         <span class="d" data-i18n="home.bigStartD">Crea un invito da mandare</span>
       </button>
-      <button class="bigchoice" id="goJoin">
+      <button class="bigchoice enter" id="goJoin">
         <span class="ic" aria-hidden="true">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
                stroke-linecap="round" stroke-linejoin="round">
@@ -620,13 +620,24 @@
     </div>
   </section>
 
+  <!-- Six lines of credits and two pages of hashes sat under every screen,
+       which on a phone is most of a scroll of nothing anyone came for. It is
+       all still here, and still one tap from anywhere — just folded, so the
+       screen ends where the app ends. -->
   <footer>
-    DigitalValut Logos — <span data-i18n="footer.text">software libero e open source (licenza MIT), un progetto di DigitalValut APS ETS.</span><br>
-    <span data-i18n="footer.noserver">Nessun server: la connessione è diretta tra i due browser via WebRTC.</span><br>
-    <span data-i18n="footer.author">Ideato dal Dott. Giuseppe Falsone per DigitalValut. © 2026 DigitalValut e il Team DigitalValut.</span><br>
-    <a href="LICENSE" data-i18n="footer.license" class="faintlink">Leggi la licenza open source</a> ·
-    <a href="https://github.com/digitalvalut/logos-protocol" class="faintlink" data-i18n="footer.source">Codice sorgente su GitHub</a>
-    <div id="sealLine" class="selfseal hide mt10"></div>
+    <details id="footerMore">
+      <summary>
+        <span>DigitalValut Logos</span>
+        <span class="ell" data-i18n="footer.text">software libero e open source (licenza MIT), un progetto di DigitalValut APS ETS.</span>
+      </summary>
+      <div class="more">
+        <span data-i18n="footer.noserver">Nessun server: la connessione è diretta tra i due browser via WebRTC.</span><br>
+        <span data-i18n="footer.author">Ideato dal Dott. Giuseppe Falsone per DigitalValut. © 2026 DigitalValut e il Team DigitalValut.</span><br>
+        <a href="LICENSE" data-i18n="footer.license" class="faintlink">Leggi la licenza open source</a> ·
+        <a href="https://github.com/digitalvalut/logos-protocol" class="faintlink" data-i18n="footer.source">Codice sorgente su GitHub</a>
+        <div id="sealLine" class="selfseal hide mt10"></div>
+      </div>
+    </details>
   </footer>
 </div>
 

@@ -197,16 +197,26 @@
   .bigchoice .t{font-weight:800;font-size:1.5rem;letter-spacing:-.02em;line-height:1.15}
   .bigchoice .d{color:var(--dim);font-size:0.9375rem;line-height:1.45;margin-top:5px}
 
-  /* The one most people want, and it should not need reading to know that.
-     Filled rather than merely tinted: a hesitant primary is the same as no
-     primary at all. */
+  /* A colour each, so which is which is answered before anything is read.
+     Orange starts something; blue opens something you were given; green passes
+     it on. Filled rather than merely tinted — a hesitant button is the same as
+     no button at all — and the text on each is dark, which is what keeps it
+     readable on a bright fill. */
   .bigchoice.primary{background:linear-gradient(160deg,var(--accent2),var(--accent));
     border-color:transparent;color:var(--accent-ink);
     box-shadow:0 10px 30px rgba(255,145,77,.28)}
   .bigchoice.primary:hover{box-shadow:0 16px 40px rgba(255,145,77,.36)}
   .bigchoice.primary .ic{color:var(--accent-ink);opacity:.9}
   .bigchoice.primary .d{color:rgba(26,14,5,.72)}
-  .bigchoice:not(.primary):hover{border-color:var(--dim)}
+
+  .bigchoice.enter{background:linear-gradient(160deg,#9dbaff,#6f97f5);
+    border-color:transparent;color:#0a1330;
+    box-shadow:0 10px 30px rgba(111,151,245,.26)}
+  .bigchoice.enter:hover{box-shadow:0 16px 40px rgba(111,151,245,.34)}
+  .bigchoice.enter .ic{color:#0a1330;opacity:.9}
+  .bigchoice.enter .d{color:rgba(10,19,48,.70)}
+
+  .bigchoice:not(.primary):not(.enter):hover{border-color:var(--dim)}
 
   /* Stacked at every width, on purpose. Side by side would put the two on the
      same footing and ask which one first; one above the other answers that
@@ -228,12 +238,14 @@
      over sixty could hit — but flat and quiet, so the eye still lands on the
      two things that matter first. */
   .sharerow{margin-top:14px}
-  .bigchoice.quiet{padding:18px 20px;background:transparent;border-style:dashed;
-    border-color:var(--line);gap:0}
-  .bigchoice.quiet .ic{width:28px;height:28px;margin-bottom:9px;color:var(--faint)}
-  .bigchoice.quiet .t{font-size:1.0625rem;font-weight:700;color:var(--dim)}
-  .bigchoice.quiet:hover{border-color:var(--dim);border-style:solid}
-  .bigchoice.quiet:hover .t{color:var(--ink)}
+  /* Green, but held back: still obviously a button and still the same width,
+     while staying behind the two that are why anyone opened the app. */
+  .bigchoice.quiet{padding:18px 20px;gap:0;
+    background:linear-gradient(180deg,rgba(61,220,151,.10),rgba(61,220,151,.03));
+    border-color:rgba(61,220,151,.34)}
+  .bigchoice.quiet .ic{width:28px;height:28px;margin-bottom:9px;color:var(--ok)}
+  .bigchoice.quiet .t{font-size:1.0625rem;font-weight:700;color:var(--ok)}
+  .bigchoice.quiet:hover{border-color:var(--ok)}
   .gear{background:none;border:1px solid var(--line);border-radius:50%;color:var(--dim);
     width:38px;height:38px;padding:0;cursor:pointer;flex:none;
     display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
@@ -488,7 +500,17 @@
     padding-top:14px;border-top:1px solid var(--line)}
   .autocleanOpts label{font-size:0.8125rem;color:var(--dim)}
 
-  footer{text-align:center;color:var(--faint);font-size:0.6562rem;margin-top:36px;line-height:1.9}
+  footer{text-align:center;color:var(--faint);font-size:0.6562rem;margin-top:32px;line-height:1.9}
+  /* one folded line instead of six unfolded ones, opened by whoever wants it */
+  #footerMore summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+    justify-content:center;gap:6px;padding:6px 4px;flex-wrap:wrap}
+  #footerMore summary::-webkit-details-marker{display:none}
+  #footerMore summary::after{content:"›";display:inline-block;transition:transform .15s;
+    font-size:0.875rem;line-height:1}
+  #footerMore[open] summary::after{transform:rotate(90deg)}
+  #footerMore summary span:first-child{color:var(--dim);font-weight:650}
+  #footerMore summary .ell{max-width:min(60vw,26em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #footerMore .more{padding-top:8px}
 
   /* ---- Arabic and Urdu read right to left ----
      Chat bubble sides flip on their own: flex's `justify-content:flex-end`
