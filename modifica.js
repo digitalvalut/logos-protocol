@@ -3570,6 +3570,16 @@ $('notifyRow').addEventListener('click', async () => {
     paintNotifyToggle(true);
     const ok = await enableNotifications();
     if (!ok){ paintNotifyToggle(false); toast(t('notify.blocked','Notifiche bloccate dal browser. Controlla le impostazioni del sito.')); }
+    else if (activeSlots().length){
+      /* publishAddress() refuses to write anything at all while notifications
+         are off — there is no subscription yet to write. The natural order is
+         address first, then this switch, and nothing used to redo that write
+         once a subscription existed: the address stayed reachable only while
+         the app itself was open, silently, until it happened to be closed and
+         reopened. Whoever dialled it in between knocked at a door that had
+         never actually left word of where it lived. */
+      publishAddress();
+    }
   } else {
     disableNotifications();
     paintNotifyToggle(false);
