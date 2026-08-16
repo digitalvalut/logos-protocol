@@ -1,0 +1,255 @@
+# DigitalValut Logos — dossier tecnico completo
+
+**Documento pensato per essere incollato dentro un'intelligenza artificiale** per
+chiedere consigli sul progetto.
+
+> ## ⚠️ Come usare questo file
+>
+> Incollalo per intero, poi fai la tua domanda. Contiene apposta tre sezioni che
+> servono a **evitare consigli inutili**:
+> - **§4 — cosa l'app fa già** (perché non ti venga riproposto)
+> - **§8 — cosa è stato scartato e perché** (perché non ti venga riproposto)
+> - **§7 — i vincoli veri** (perché il consiglio sia realizzabile)
+>
+> Se salti quelle sezioni, riceverai suggerimenti per funzioni che esistono già
+> da mesi. È successo davvero.
+>
+> **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
+
+*Versione descritta: `logos-modifica-3.45` — 16 agosto 2026*
+
+---
+
+## 1. Cos'è, in una riga
+
+Una chat cifrata da persona a persona che gira **interamente dentro il browser**,
+senza account, senza numero di telefono, senza che nessun server veda mai il
+contenuto di quello che due persone si dicono.
+
+- **App online:** https://digitalvalut.github.io/logos-protocol/
+- **Codice pubblico:** https://github.com/digitalvalut/logos-protocol
+- **Licenza:** MIT — **Proprietà:** DigitalValut APS ETS (associazione italiana no-profit)
+
+---
+
+## 2. Architettura
+
+Due browser si collegano **direttamente** fra loro con **WebRTC**. Messaggi,
+file e chiamate viaggiano da un dispositivo all'altro senza attraversare nessun
+server intermedio.
+
+Esiste **un solo componente lato server**: un Cloudflare Worker (416 righe) che
+fa esclusivamente da "ufficio postale" per la fase di presentazione:
+
+| Rotta | A cosa serve | Quanto conserva |
+|---|---|---|
+| `/turn` | Genera le credenziali per il ponte, usato quando le reti non permettono il collegamento diretto | niente |
+| `/mailbox/<hash>` | Scambio delle buste cifrate di presentazione | **120 secondi**, cancellata alla lettura |
+| `/wake/<hash>` | "Come farmi squillare il telefono" (iscrizione notifiche, cifrata) | 24 ore |
+| `/letter/<hash>` | Messaggi lasciati a chi non risponde | **7 giorni**, max 20, cancellati alla lettura |
+| `/knock` | Inoltra una notifica push firmata VAPID — **senza contenuto** | niente, nessuna iscrizione salvata |
+
+**Tutto ciò che passa dal Worker è cifrato prima di partire.** Il Worker non
+può leggere nulla: vede solo hash a 64 caratteri e buste opache.
+
+### Dimensioni
+
+| File | Righe | Cosa |
+|---|---|---|
+| `modifica.js` | 6.492 | Tutta la logica dell'app + 13 lingue |
+| `modifica.html` | 709 | Le schermate |
+| `modifica.css` | 647 | L'aspetto |
+| `turn-worker/worker.js` | 416 | Il Worker |
+| `index.html/js/css` | 555 | La pagina di presentazione pubblica |
+
+**Dipendenze esterne a runtime: ZERO.** Nessun CDN, nessun npm, nessuna
+libreria. Nessuna riga di codice scritta da altri viene caricata.
+
+---
+
+## 3. Crittografia
+
+**Nessuna crittografia è scritta a mano.** Tutto usa Web Crypto del browser:
+
+- **AES-256-GCM** per le buste (7 punti)
+- **PBKDF2-SHA256** per irrobustire i codici corti (100.000 giri per il codice
+  a 6 cifre, 250.000 per la parola d'ordine opzionale)
+- **HKDF-SHA256** dove il segreto è già lungo (impronte di certificato)
+- **ECDSA P-256** per il certificato d'identità del dispositivo
+- **DTLS-SRTP** (nativo del browser) protegge messaggi, file e chiamate
+
+**Verifica dell'identità**: modello ZRTP (RFC 6189) — tre parole da dirsi a
+voce. La fiducia è ancorata all'**impronta del certificato**, non al nome, che
+chiunque può dichiarare.
+
+---
+
+## 4. Cosa l'app fa GIÀ
+
+> ⚠️ **Leggi questa sezione prima di suggerire qualcosa.** Ogni voce qui sotto
+> è già implementata, collaudata e online.
+
+### Tre modi di collegarsi
+- **Codice a 6 cifre** + link condivisibile + **codice QR**
+- **Indirizzo permanente** (`DV-XXXX-XXXX-XXXX`), non registrato in nessun elenco
+- **Fino a 8 indirizzi usa e getta**, con nome, cancellabili singolarmente
+- **Rubrica locale**: dopo il primo contatto, un tocco sul nome ricollega da
+  solo — nessun codice da reinserire ✅ *già esistente*
+
+### Quando l'altro non c'è
+- **Invito che aspetta 24 ore**: chi lo crea può chiudere l'app
+- **Notifica push** senza contenuto ("Qualcuno vuole parlarti")
+- **Lettera** fino a 7 giorni per chi non risponde
+- **Biglietto automatico**: una chiamata senza risposta lascia traccia da sola
+
+### In chat
+Messaggi, emoji, **messaggi vocali**, foto, video, file di qualsiasi tipo,
+**chiamate audio e video**, cambio fotocamera, muto, vivavoce, autodistruzione
+a tempo, pulizia automatica opzionale, svuota cronologia.
+
+### Interfaccia e accessibilità
+- **13 lingue** complete (it, en, ar, bn, de, es, fr, hi, id, pt, ru, ur, zh),
+  con RTL per arabo e urdu
+- **Modalità semplice**: due pulsanti giganti
+- **Lettura vocale** delle istruzioni
+- **Tre dimensioni di testo**
+- **Condivisione nativa** (Web Share API) in 6 punti ✅ *già esistente*
+- Installabile come app (PWA), funziona offline
+- **Scheda "Come sta l'app"**: dice in parole semplici se sei raggiungibile e,
+  se non lo sei, perché
+
+### Resilienza
+- **File unico**: tutta l'app in un solo HTML da mettere ovunque
+- **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
+- **54 test automatici** a ogni pubblicazione, senza installare niente
+
+---
+
+## 5. Il limite fondamentale
+
+**Servono entrambi online nello stesso momento.** È il prezzo del non avere
+server, ed è architetturale. Mitigato da: invito che aspetta 24h, notifiche
+push, lettera 7 giorni. Ma non eliminato.
+
+Altri limiti dichiarati apertamente nell'app stessa:
+- Chi parla con te **vede il tuo indirizzo di rete (IP)**
+- Su reti molto filtrate le chiamate possono non collegarsi
+- Nessun sito può impedire uno screenshot
+- **Se cambi telefono o cancelli i dati del browser, perdi indirizzo e rubrica**
+  — nessun recupero (problema aperto e riconosciuto)
+- L'indirizzo "permanente" **si rinnova da solo una volta l'anno** (l'app
+  avvisa 60 giorni prima)
+
+---
+
+## 6. Problemi noti ancora aperti
+
+### P2 — l'indirizzo pubblico è anche la chiave di lettura (IL PIÙ IMPORTANTE)
+
+La chiave che cifra le buste dirette a un indirizzo è ricavata **dalla sola
+stringa dell'indirizzo**, che è pubblica per definizione. Conseguenza: chi
+possiede un indirizzo può leggere i metadati delle chiamate dirette a
+quell'indirizzo (nome di chi chiama, motivo, suo IP) e le lettere lasciate lì.
+
+**Correzione già progettata** (non ancora eseguita): l'indirizzo deve diventare
+**l'impronta di una chiave pubblica** invece della chiave stessa. Chi chiama
+scarica la chiave pubblica del destinatario, **verifica che il suo hash
+corrisponda all'indirizzo** (questo la autentica: una chiave sostituita darebbe
+un indirizzo diverso), poi cifra con ECDH verso di essa. Solo chi possiede la
+parte privata può aprire.
+
+Comporta: **tutti gli indirizzi cambiano**, serve una rotta nuova nel Worker con
+scadenza lunga, vanno rifatte anche cassetta lettere e slot di risveglio.
+
+### Altri, minori
+- **iOS mai collaudato su dispositivo reale** (nessun iPhone disponibile)
+- Nessun **audit indipendente** esterno
+- Le connessioni abbandonate non vengono chiuse esplicitamente (misurato: nessun
+  impatto pratico, 10 tentativi di fila non degradano nulla)
+
+---
+
+## 7. I vincoli veri
+
+> ⚠️ **Un consiglio che ignora questi vincoli non è realizzabile.**
+
+1. **Nessun budget.** Associazione no-profit. Niente dominio a pagamento
+   (sta su github.io per scelta), niente servizi a pagamento.
+2. **Un solo manutentore**, non programmatore di professione. Ogni cosa
+   aggiunta va mantenuta da lui per anni.
+3. **Zero dipendenze a runtime, e va preservato.** È la proprietà di sicurezza
+   più forte del progetto: non esiste catena di fornitura da compromettere.
+4. **CSP severa**: `script-src 'self'`, `style-src 'self'`. Niente stili o
+   script inline, niente WebAssembly senza indebolire la politica.
+5. **Licenza MIT di proprietà di un ETS.** Una dipendenza GPL/AGPL
+   costringerebbe l'intera app a cambiare licenza — problema legale, non tecnico.
+6. **Il pubblico include persone anziane e non tecniche.** Qualunque cosa
+   richieda competenza tecnica all'utente è, per questo progetto, un fallimento.
+7. **Il Worker accetta solo due origini** (`digitalvalut.github.io` e
+   `logos.digitalvalut.it`): da localhost gli indirizzi non funzionano.
+
+---
+
+## 8. Cosa è già stato valutato e SCARTATO (con il motivo)
+
+> ⚠️ **Non riproporre queste cose senza un argomento nuovo.**
+
+| Proposta | Perché è stata scartata |
+|---|---|
+| **Instradare dentro Tor** | **Impossibile**, non difficile: Tor trasporta TCP, WebRTC richiede UDP; JavaScript non può scegliere il proprio trasporto; Tor Browser stesso **disattiva** WebRTC perché rivela l'IP. |
+| **"Il sistema più complesso possibile"** | In sicurezza la complessità è il nemico. WireGuard ha sostituito OpenVPN passando da ~100.000 righe a ~4.000. Un sistema che nessuno può verificare non è sicuro, è opaco. |
+| **Livello post-quantistico** | Analizzato a fondo: il pezzo che si potrebbe rafforzare in JS (le buste) **non usa lo scambio di chiavi che il quantistico romperebbe**; il pezzo che ne avrebbe bisogno (la telefonata, dentro DTLS) **JavaScript non può toccarlo**. Guadagno reale quasi nullo. |
+| **Proof-of-work contro gli abusi** | Penalizza il telefono vecchio e la persona meno paziente — il pubblico di quest'app — e infastidisce a malapena chi ha le macchine per abusarne. Sostituito con un normale limite di richieste. |
+| **Dominio personalizzato a pagamento** | Nessun budget. Resta su github.io. |
+| **Consigliare una VPN agli utenti** | Risolve solo l'IP (1 problema su 5) e spingerebbe utenti non tecnici verso VPN gratuite, che spesso rivendono i dati: peggio di niente. |
+| **Gruppi (chat a più persone)** | Tecnicamente possibile fino a 4-5 persone, ma moltiplica i modi di rompersi. Rimandato dopo l'audit indipendente. |
+| **Modalità "ponte sempre attivo" con interruttore** | Un interruttore di sicurezza spento di base non protegge nessuno, e chiede all'utente di fare l'ingegnere. Meglio: attivarlo **da solo** quando si parla con sconosciuti. *(progettato, non ancora eseguito)* |
+
+---
+
+## 9. Storia recente (per capire il metodo)
+
+Nell'ultima sessione di lavoro sono state trovate e corrette **otto falle reali**,
+tutte verificate **provandole dal vivo**, non leggendo il codice:
+
+1. L'app diventava **irraggiungibile da tutte le strade** quando un invito
+   restava in attesa — invisibile, per giorni
+2. **L'autodistruzione non distruggeva niente**: diceva "conversazione
+   autodistrutta" e lasciava una copia intera sul telefono
+3. Un partner ostile poteva **esaurire la memoria** dichiarando un file da 10
+   byte e mandandone 25 MB
+4. Il controllo di sicurezza **non bloccava nulla** neanche quando l'app stessa
+   diceva "qualcuno potrebbe essersi messo in mezzo"
+5. La cronologia era indicizzata **per soprannome**, non per certificato
+6. Chi possedeva un indirizzo poteva **intercettare e bloccare** le chiamate
+7. Le **notifiche non arrivavano mai** se attivate dopo l'indirizzo (ordine
+   naturale per chiunque)
+8. La rotta delle credenziali TURN **non aveva nessun limite** — l'unica che
+   costa soldi veri quando abusata
+
+**Metodo applicato**: ogni correzione è protetta da un test automatico, e ogni
+test è validato **rimettendo dentro la falla originale** per verificare che
+diventi rosso. Due test sono stati riscritti perché passavano anche col codice
+sabotato.
+
+---
+
+## 10. Domande utili da fare a un'AI
+
+Se vuoi un parere davvero utile, chiedi cose come:
+
+- Come progettereste **P2** (§6) rispettando i vincoli §7?
+- Come si risolve la **perdita di identità al cambio telefono** senza
+  introdurre account né server?
+- Cosa manca perché un'associazione possa **basarci sopra un servizio reale**?
+- Quali domande farebbe un **auditor di sicurezza indipendente**?
+- Come si rende comprensibile a una persona anziana che **servono entrambi
+  online**?
+
+**Domanda da NON fare**: "che funzioni aggiungeresti?" — porta a riproporre
+cose della §4 che esistono già.
+
+---
+
+*Dossier generato il 16 agosto 2026 sulla versione `logos-modifica-3.45`.*
+*Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*
