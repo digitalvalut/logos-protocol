@@ -302,6 +302,35 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('turning notifications on after the address republishes it', async () => {
+    /* publishAddress() refuses to write anything while notifications are off
+       — there is no subscription yet. The natural order is address first,
+       then this switch, and nothing used to redo that write once a
+       subscription existed: whoever dialled the address in between knocked at
+       a door that had never left word of where it lived, until the app
+       happened to be closed and reopened. */
+    const app = loadApp();
+    /* Module load fires off its own async work (paintAddrCard and friends) that
+       is still settling at this point. The first version of this test stubbed
+       publishAddress() immediately and passed even against the unfixed code —
+       one of those still-pending calls resolved into the stub by coincidence
+       of timing and called it anyway, which is not the same as the click
+       handler having called it. Letting things settle first closes that gap. */
+    await app.run('new Promise(r => setTimeout(r, 20))');
+    app.run(`
+      setAddrOn(true);
+      window.enableNotifications = async function(){ return true; };
+      window.__published = 0;
+      window.publishAddress = async function(){ window.__published++; return true; };
+    `);
+    /* invoked directly rather than through .click(), so the real promise the
+       listener returns can be awaited from the Node side instead of racing it */
+    await app.run(`$('notifyRow').listeners.click[0]()`);
+    assert.ok(app.run('window.__published') >= 1,
+      'the address must be republished once a subscription actually exists');
+    app.stop();
+  });
+
   test('the Worker meters writes, not only reads', () => {
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
     assert.ok(!/request\.method === 'GET' && overRateLimit/.test(worker),
