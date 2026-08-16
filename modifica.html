@@ -411,7 +411,12 @@
     <button class="btn ghost linkbtn mt10" id="toggleLongInviteA" data-i18n="quick.useLong">Preferisci il codice lungo?</button>
 
     <div class="hide" id="longInviteWrapA">
-      <div class="card mt10">
+      <!-- Hidden as a whole, not just disabled, when this screen is showing a
+           reconnect to someone already known rather than a brand new invite:
+           none of "send this code", the passphrase toggle or "prepare the
+           invite" mean anything there, and a disabled-but-visible button still
+           reads as something to try. -->
+      <div class="card mt10" id="manualInviteCard">
         <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="start.s1">Manda l'invito</div></div>
         <div class="helptext" data-i18n="start.s1help">Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere
           come mandarlo: WhatsApp, messaggio, email — quello che usi di solito.</div>
@@ -442,14 +447,21 @@
         </div>
       </div>
       <div class="card hide" id="pasteAnswerCard">
-        <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="start.s2">Incolla la sua risposta</div></div>
-        <div class="helptext" data-i18n="start.s2help">L'altra persona ti rimanderà un messaggio. Copialo, torna qui e premi
-          <b>Incolla</b>. Poi entrate insieme nella chat.</div>
-        <textarea id="answerIn" data-i18n-ph="start.pastePh" placeholder="Incolla qui la risposta…"></textarea>
-        <div class="pasteline">
-          <button class="btn" id="btnPasteAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
+        <!-- Everything above the status line only makes sense while manually
+             pairing with a stranger's code. Reconnecting to somebody already
+             in the address book hides this part and keeps only the two lines
+             below it: there is nothing here to paste, and no invite step to
+             read about, while the app is doing that quietly on its own. -->
+        <div id="pasteAnswerForm">
+          <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="start.s2">Incolla la sua risposta</div></div>
+          <div class="helptext" data-i18n="start.s2help">L'altra persona ti rimanderà un messaggio. Copialo, torna qui e premi
+            <b>Incolla</b>. Poi entrate insieme nella chat.</div>
+          <textarea id="answerIn" data-i18n-ph="start.pastePh" placeholder="Incolla qui la risposta…"></textarea>
+          <div class="pasteline">
+            <button class="btn" id="btnPasteAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
+          </div>
+          <button class="btn primary big mt10" id="btnConnectAsA" data-i18n="btn.connect">Entra nella chat</button>
         </div>
-        <button class="btn primary big mt10" id="btnConnectAsA" data-i18n="btn.connect">Entra nella chat</button>
         <div class="status" id="statusA"></div>
         <div class="diagline hide" id="diagA"></div>
       </div>

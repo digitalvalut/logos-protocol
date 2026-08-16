@@ -331,6 +331,36 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('reconnecting to a known contact hides the create-a-new-invite controls', () => {
+    /* Tapping a contact reused the manual-invite screen for its status line
+       and left everything else on it visible too: a passphrase toggle, a
+       "prepare the invite" button, a box to paste a code that was never
+       coming. All of it looked like something to do while the real work
+       already happening quietly underneath. */
+    const app = loadApp();
+    app.run(`
+      window.tryAutoReconnect = async function(){};
+      saveContacts([{ nick: 'Giuseppe', fp: 'aa'.repeat(32), lastSeen: Date.now() }]);
+      /* the fake DOM's closest() is a stub — a real click bubbling from a
+         child would resolve it properly, so a hand-built target reproduces
+         exactly what the handler receives without needing that machinery */
+      window.__row = document.createElement('div');
+      window.__row.setAttribute('data-nick', 'Giuseppe');
+    `);
+    app.run(`
+      $('contactsList').listeners.click[0]({ target: {
+        closest: sel => sel === '[data-rm]' ? null : sel === '.contactrow' ? window.__row : null
+      } });
+    `);
+    assert.strictEqual(app.run("$('manualInviteCard').classList.contains('hide')"), true,
+      '"Protezione extra" and "Prepara l\'invito" have nothing to do with reconnecting');
+    assert.strictEqual(app.run("$('pasteAnswerForm').classList.contains('hide')"), true,
+      'nothing was ever going to arrive to paste');
+    assert.strictEqual(app.run("$('pasteAnswerCard').classList.contains('hide')"), false,
+      'the status line the reconnect actually writes to must stay visible');
+    app.stop();
+  });
+
   test('the Worker meters writes, not only reads', () => {
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
     assert.ok(!/request\.method === 'GET' && overRateLimit/.test(worker),

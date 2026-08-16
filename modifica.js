@@ -3456,10 +3456,11 @@ $('contactsList').addEventListener('click', ev => {
   const contact = loadContacts().find(c => c.nick === nick);
   showScreen('screenStart');
   if (contact && contact.fp){
-    /* a targeted reconnect to someone specific isn't the "get a shareable code" flow —
-       it reuses the long-invite screen's status/diagnostic line, which already does the
-       right thing regardless of which layout is showing */
-    showLongLayoutA();
+    /* a targeted reconnect to someone specific isn't the "get a shareable code"
+       flow — it reuses this screen's status/diagnostic line, with everything
+       that belongs to creating a fresh invite hidden rather than just left
+       sitting there, disabled but still looking like something to press */
+    showContactReconnectLayout();
     tryAutoReconnect(contact);
   } else {
     showQuickLayoutA();
@@ -4538,7 +4539,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.44';
+const APP_VERSION = 'logos-modifica-3.45';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -5126,6 +5127,24 @@ function showLongLayoutA(){
   $('quickStartCard').classList.add('hide');
   $('toggleLongInviteA').classList.add('hide');
   $('longInviteWrapA').classList.remove('hide');
+  /* back to the ordinary state in case a contact reconnect hid these last */
+  $('manualInviteCard').classList.remove('hide');
+  $('pasteAnswerForm').classList.remove('hide');
+}
+/* Reconnecting to somebody already in the address book reuses this screen's
+   status line — the same measurement, "provo a ricollegarmi", the caller
+   already trusts — but showed the rest of it too: a passphrase toggle, a
+   "prepare the invite" button, a box to paste a code that was never going to
+   arrive. All of it looked like something to do, while the real work was
+   already happening quietly underneath. Nothing here is created new, so
+   nothing here is shown. */
+function showContactReconnectLayout(){
+  $('quickStartCard').classList.add('hide');
+  $('toggleLongInviteA').classList.add('hide');
+  $('longInviteWrapA').classList.remove('hide');
+  $('manualInviteCard').classList.add('hide');
+  $('pasteAnswerCard').classList.remove('hide');
+  $('pasteAnswerForm').classList.add('hide');
 }
 function showQuickLayoutB(){
   $('quickJoinCard').classList.remove('hide');
@@ -6273,6 +6292,8 @@ $('btnNewSession').addEventListener('click', () => {
   $('offerBlock').classList.add('hide'); $('offerOut').textContent = '';
   $('answerBlock').classList.add('hide'); $('answerOut').textContent = '';
   $('pasteAnswerCard').classList.add('hide');
+  /* undoes showContactReconnectLayout(), in case the reset happens mid-reconnect */
+  $('manualInviteCard').classList.remove('hide'); $('pasteAnswerForm').classList.remove('hide');
   $('offerIn').value = ''; $('answerIn').value = '';
   $('passBox').classList.add('hide'); $('passWord').textContent = '';
   $('passAsk').classList.add('hide'); $('passIn').value = ''; sessionPass = '';
