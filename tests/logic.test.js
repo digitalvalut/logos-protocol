@@ -367,6 +367,29 @@ test.describe('what the audit found', () => {
       'an unmetered write lets anyone holding an address bury the calls meant for it');
     assert.ok(/if \(overRateLimit\(request\)\)/.test(worker), 'the mailbox no longer meters at all');
   });
+
+  test('the Worker meters the credentials route too', () => {
+    /* The only route that spends money when abused, and the only one that
+       had no limit at all: credentials handed out here are usable for a day
+       of real relay capacity, billed to this account. */
+    const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
+    const turnRoute = worker.slice(worker.indexOf("url.pathname === '/turn'"));
+    const untilNextRoute = turnRoute.slice(0, turnRoute.indexOf('mailbox'));
+    assert.match(untilNextRoute, /overTurnLimit\(request\)/,
+      'harvesting TURN credentials must cost the harvester something');
+    assert.match(worker, /RL_TURN_MAX\s*=\s*\d+/, 'the credentials budget is gone');
+  });
+
+  test('the credentials budget is tighter than the mailbox budget', () => {
+    /* They exist for opposite reasons: a mailbox poll happens ~150 times per
+       honest connection, credentials once per page load. Sharing one number
+       would mean either starving the first or leaving the second wide open. */
+    const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
+    const mail = Number((worker.match(/RL_MAX_LOOKUPS\s*=\s*(\d+)/) || [])[1]);
+    const turn = Number((worker.match(/RL_TURN_MAX\s*=\s*(\d+)/) || [])[1]);
+    assert.ok(mail > 0 && turn > 0, 'both budgets must be set');
+    assert.ok(turn < mail, `credentials (${turn}) should be metered tighter than lookups (${mail})`);
+  });
 });
 
 /* ------------------------------------------------------------------------

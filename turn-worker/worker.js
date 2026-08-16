@@ -110,19 +110,42 @@ async function handleTurn(env, cors){
    someone trying to reach a friend. */
 const RL_WINDOW_MS = 60000;
 const RL_MAX_LOOKUPS = 300;
+
+/* The credentials route is metered separately, and far more tightly.
+   A mailbox poll is something one honest connection does around a hundred and
+   fifty times while two phones are finding each other, so that budget has to
+   be generous. Credentials are the opposite shape: the app asks once per page
+   load and keeps the answer for the whole visit, because what comes back is
+   valid for a day. Anything past a couple a second from one address is not
+   somebody opening the app.
+   Worth separating because the two abuses cost differently. Hammering the
+   mailbox wastes lookups, which are free. Harvesting credentials hands
+   somebody a day of real relay capacity billed to this account — the only
+   thing here that costs actual money, and until now the only route with no
+   limit on it at all.
+   Still generous on purpose: a school or an office behind one address can
+   have many people open the app at once, and a refused credential is not a
+   dead end — the app falls back to a direct connection on its own, which
+   works on most networks. */
+const RL_TURN_MAX = 120;
 const rlHits = new Map();
 
-function overRateLimit(request){
+/* One counter, kept per purpose as well as per address, so a busy
+   conversation cannot spend the credentials budget and vice versa. */
+function overLimit(request, bucket, max){
   const ip = request.headers.get('CF-Connecting-IP');
   if (!ip) return false; /* nothing to attribute it to: do not punish the request */
   const now = Date.now();
-  let rec = rlHits.get(ip);
-  if (!rec || now >= rec.resetAt){ rec = { n: 0, resetAt: now + RL_WINDOW_MS }; rlHits.set(ip, rec); }
+  const key = bucket + ':' + ip;
+  let rec = rlHits.get(key);
+  if (!rec || now >= rec.resetAt){ rec = { n: 0, resetAt: now + RL_WINDOW_MS }; rlHits.set(key, rec); }
   rec.n++;
   /* keep the map from growing without bound on a long-lived isolate */
   if (rlHits.size > 4000) for (const [k, v] of rlHits) if (now >= v.resetAt) rlHits.delete(k);
-  return rec.n > RL_MAX_LOOKUPS;
+  return rec.n > max;
 }
+function overRateLimit(request){ return overLimit(request, 'mail', RL_MAX_LOOKUPS); }
+function overTurnLimit(request){ return overLimit(request, 'turn', RL_TURN_MAX); }
 
 /* ---------------- the knock: signed here, never stored here ----------------
    Web Push authentication (RFC 8292): a JWT signed with the account's VAPID
@@ -364,6 +387,10 @@ export default {
 
     if (url.pathname === '/' || url.pathname === '/turn'){
       if (request.method !== 'GET') return json({ error: 'method not allowed' }, 405, cors);
+      /* The one route that was never metered, and the only one that spends
+         money when it is. Credentials handed out here are usable for a day by
+         whoever holds them. */
+      if (overTurnLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
       return handleTurn(env, cors);
     }
 
