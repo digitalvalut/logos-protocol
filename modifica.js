@@ -181,6 +181,10 @@ Object.assign(I18N.en, {
 "call.flipFail":"I can't switch camera on this phone.",
 "call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera.",
 "home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.",
+"sas.blocked":"Say the three words out loud first: this person is no longer the same one.",
+"file.tooBig":"An incoming file was stopped: it did not match what was declared.",
+"health.storage":"Phone storage",
+"health.storageFull":"Full: conversations are no longer being saved. Free up space on the phone.",
 "addr.lifespan":"For security, this address renews itself once a year: not forever, but stable for a long time.",
 "addr.lifespanSoon":"In about {n} days this address will renew itself, for security. When it does, send it again to whoever uses it.",
 "health.addrLife":"Your address's lifespan",
@@ -343,6 +347,10 @@ Object.assign(I18N.it, {
 "call.flipFail":"Non riesco a cambiare fotocamera su questo telefono.",
 "call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera.",
 "home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.",
+"sas.blocked":"Prima dite le tre parole a voce: questa persona non risulta più la stessa.",
+"file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.",
+"health.storage":"Memoria del telefono",
+"health.storageFull":"Piena: le conversazioni non vengono più salvate. Libera spazio sul telefono.",
 "addr.lifespan":"Per sicurezza, questo indirizzo si rinnova da solo una volta l'anno: non è per sempre, ma resta stabile a lungo.",
 "addr.lifespanSoon":"Fra circa {n} giorni questo indirizzo si rinnoverà da solo, per sicurezza. Quando succede, mandalo di nuovo a chi lo usa.",
 "health.addrLife":"Durata del tuo indirizzo",
@@ -498,6 +506,10 @@ Object.assign(I18N.fr, {
 "call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone.",
 "call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra.",
 "home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.",
+"sas.blocked":"Dites d'abord les trois mots à voix haute : cette personne n'est plus la même.",
+"file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.",
+"health.storage":"Mémoire du téléphone",
+"health.storageFull":"Pleine : les conversations ne sont plus enregistrées. Libérez de l'espace sur le téléphone.",
 "addr.lifespan":"Par sécurité, cette adresse se renouvelle d'elle-même une fois par an : pas pour toujours, mais stable longtemps.",
 "addr.lifespanSoon":"Dans environ {n} jours, cette adresse se renouvellera d'elle-même, par sécurité. Quand ce sera fait, renvoyez-la à qui l'utilise.",
 "health.addrLife":"Durée de votre adresse",
@@ -653,6 +665,10 @@ Object.assign(I18N.de, {
 "call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln.",
 "call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera.",
 "home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.",
+"sas.blocked":"Sagt euch zuerst die drei Wörter laut: diese Person ist nicht mehr dieselbe.",
+"file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.",
+"health.storage":"Speicher des Telefons",
+"health.storageFull":"Voll: Unterhaltungen werden nicht mehr gespeichert. Schaff Platz auf dem Telefon.",
 "addr.lifespan":"Aus Sicherheitsgründen erneuert sich diese Adresse einmal im Jahr von selbst: nicht für immer, aber lange stabil.",
 "addr.lifespanSoon":"In etwa {n} Tagen erneuert sich diese Adresse aus Sicherheitsgründen von selbst. Wenn es soweit ist, schick sie erneut an alle, die sie nutzen.",
 "health.addrLife":"Lebensdauer deiner Adresse",
@@ -808,6 +824,10 @@ Object.assign(I18N.es, {
 "call.flipFail":"No puedo cambiar de cámara en este teléfono.",
 "call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara.",
 "home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.",
+"sas.blocked":"Decíos antes las tres palabras en voz alta: esta persona ya no es la misma.",
+"file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.",
+"health.storage":"Memoria del teléfono",
+"health.storageFull":"Llena: las conversaciones ya no se guardan. Libera espacio en el teléfono.",
 "addr.lifespan":"Por seguridad, esta dirección se renueva sola una vez al año: no es para siempre, pero es estable durante mucho tiempo.",
 "addr.lifespanSoon":"En unos {n} días esta dirección se renovará sola, por seguridad. Cuando ocurra, envíala de nuevo a quien la use.",
 "health.addrLife":"Duración de tu dirección",
@@ -963,6 +983,10 @@ Object.assign(I18N.pt, {
 "call.flipFail":"Não consigo mudar de câmara neste telemóvel.",
 "call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara.",
 "home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.",
+"sas.blocked":"Digam primeiro as três palavras em voz alta: esta pessoa já não é a mesma.",
+"file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.",
+"health.storage":"Memória do telemóvel",
+"health.storageFull":"Cheia: as conversas já não são guardadas. Liberte espaço no telemóvel.",
 "addr.lifespan":"Por segurança, este endereço renova-se sozinho uma vez por ano: não é para sempre, mas é estável durante muito tempo.",
 "addr.lifespanSoon":"Daqui a cerca de {n} dias este endereço vai renovar-se sozinho, por segurança. Quando isso acontecer, envie-o de novo a quem o usa.",
 "health.addrLife":"Duração do seu endereço",
@@ -1118,6 +1142,10 @@ Object.assign(I18N.ru, {
 "call.flipFail":"На этом телефоне не удаётся переключить камеру.",
 "call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера.",
 "home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.",
+"sas.blocked":"Сначала произнесите три слова вслух: это уже не тот же человек.",
+"file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.",
+"health.storage":"Память телефона",
+"health.storageFull":"Заполнена: разговоры больше не сохраняются. Освободите место на телефоне.",
 "addr.lifespan":"Из соображений безопасности этот адрес сам обновляется раз в год: не навсегда, но стабилен надолго.",
 "addr.lifespanSoon":"Примерно через {n} дней этот адрес обновится сам, из соображений безопасности. Когда это произойдёт, отправьте его заново тем, кто им пользуется.",
 "health.addrLife":"Срок действия вашего адреса",
@@ -1273,6 +1301,10 @@ Object.assign(I18N.zh, {
 "call.flipFail":"无法在这台手机上切换摄像头。",
 "call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。",
 "home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。",
+"sas.blocked":"请先把三个词念出来核对：这个人已经不是原来那位了。",
+"file.tooBig":"一个接收中的文件已被中止：它与声明的不符。",
+"health.storage":"手机存储",
+"health.storageFull":"已满：对话不再被保存。请清理手机空间。",
 "addr.lifespan":"出于安全考虑，这个地址每年会自动更新一次：不是永久的，但会稳定很长一段时间。",
 "addr.lifespanSoon":"大约 {n} 天后，出于安全考虑，这个地址会自动更新。到时候，请把新地址再发给用到它的人。",
 "health.addrLife":"你的地址有效期",
@@ -1428,6 +1460,10 @@ Object.assign(I18N.ar, {
 "call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف.",
 "call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط.",
 "home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.",
+"sas.blocked":"قولا الكلمات الثلاث بصوت عالٍ أولًا: هذا الشخص لم يعد نفسه.",
+"file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.",
+"health.storage":"ذاكرة الهاتف",
+"health.storageFull":"ممتلئة: لم تعد المحادثات تُحفظ. أفرغ بعض المساحة في الهاتف.",
 "addr.lifespan":"لأسباب أمنية، يتجدد هذا العنوان تلقائيًا مرة كل عام: ليس إلى الأبد، لكنه يبقى ثابتًا لفترة طويلة.",
 "addr.lifespanSoon":"خلال نحو {n} يومًا سيتجدد هذا العنوان تلقائيًا، لأسباب أمنية. عندما يحدث ذلك، أرسله من جديد لمن يستخدمه.",
 "health.addrLife":"مدة صلاحية عنوانك",
@@ -1583,6 +1619,10 @@ Object.assign(I18N.ur, {
 "call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔",
 "call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔",
 "home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔",
+"sas.blocked":"پہلے تینوں الفاظ بول کر ملائیں: یہ شخص اب وہی نہیں رہا۔",
+"file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔",
+"health.storage":"فون کی میموری",
+"health.storageFull":"بھری ہوئی ہے: گفتگو اب محفوظ نہیں ہو رہی۔ فون میں جگہ خالی کریں۔",
 "addr.lifespan":"حفاظتی وجوہات کی بنا پر، یہ پتہ سال میں ایک بار خود بخود تجدید ہوتا ہے: ہمیشہ کے لیے نہیں، مگر طویل عرصے تک مستحکم رہتا ہے۔",
 "addr.lifespanSoon":"تقریباً {n} دنوں میں یہ پتہ حفاظتی وجوہات کی بنا پر خود بخود تجدید ہو جائے گا۔ ایسا ہونے پر، اسے دوبارہ ان لوگوں کو بھیجیں جو اسے استعمال کرتے ہیں۔",
 "health.addrLife":"آپ کے پتے کی مدت",
@@ -1738,6 +1778,10 @@ Object.assign(I18N.hi, {
 "call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।",
 "call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।",
 "home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।",
+"sas.blocked":"पहले तीनों शब्द बोलकर मिलाएँ: यह व्यक्ति अब वही नहीं रहा।",
+"file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।",
+"health.storage":"फ़ोन की मेमोरी",
+"health.storageFull":"भरी हुई है: बातचीत अब सहेजी नहीं जा रही। फ़ोन में जगह खाली करें।",
 "addr.lifespan":"सुरक्षा के लिए, यह पता साल में एक बार खुद-ब-खुद नवीनीकृत होता है: हमेशा के लिए नहीं, पर लंबे समय तक स्थिर रहता है।",
 "addr.lifespanSoon":"लगभग {n} दिनों में यह पता सुरक्षा के लिए खुद-ब-खुद नवीनीकृत हो जाएगा। ऐसा होने पर, इसे फिर से उन लोगों को भेजें जो इसका इस्तेमाल करते हैं।",
 "health.addrLife":"आपके पते की अवधि",
@@ -1893,6 +1937,10 @@ Object.assign(I18N.bn, {
 "call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।",
 "call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।",
 "home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।",
+"sas.blocked":"আগে তিনটি শব্দ মুখে বলে মিলিয়ে নিন: এই ব্যক্তি আর আগের জন নন।",
+"file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।",
+"health.storage":"ফোনের মেমোরি",
+"health.storageFull":"পূর্ণ: কথোপকথন আর সংরক্ষিত হচ্ছে না। ফোনে জায়গা খালি করুন।",
 "addr.lifespan":"নিরাপত্তার জন্য, এই ঠিকানা বছরে একবার নিজে থেকেই নবায়ন হয়: চিরকালের জন্য নয়, তবে দীর্ঘদিন স্থিতিশীল থাকে।",
 "addr.lifespanSoon":"প্রায় {n} দিনের মধ্যে নিরাপত্তার জন্য এই ঠিকানা নিজে থেকেই নবায়ন হয়ে যাবে। তখন, যারা এটি ব্যবহার করে তাদের আবার পাঠিয়ে দিন।",
 "health.addrLife":"আপনার ঠিকানার মেয়াদ",
@@ -2048,6 +2096,10 @@ Object.assign(I18N.id, {
 "call.flipFail":"Tidak bisa mengganti kamera di ponsel ini.",
 "call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera.",
 "home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.",
+"sas.blocked":"Ucapkan dulu ketiga kata itu: orang ini bukan lagi orang yang sama.",
+"file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.",
+"health.storage":"Penyimpanan ponsel",
+"health.storageFull":"Penuh: percakapan tidak lagi disimpan. Kosongkan ruang di ponsel.",
 "addr.lifespan":"Demi keamanan, alamat ini memperbarui dirinya sendiri setahun sekali: bukan selamanya, tapi stabil untuk waktu yang lama.",
 "addr.lifespanSoon":"Sekitar {n} hari lagi alamat ini akan memperbarui dirinya sendiri, demi keamanan. Saat itu terjadi, kirim lagi ke siapa pun yang memakainya.",
 "health.addrLife":"Masa berlaku alamat Anda",
@@ -3198,12 +3250,37 @@ $('btnCopyAnswer').addEventListener('click', async () => {
    everything it touches actually exists — see autoFillFromHash(). */
 
 /* ============================== history (local, per contact name) ============================== */
+/* A name is a claim: anyone can say they are Maria, and the conversation filed
+   under that name would be handed to them. The safety records learned this
+   lesson already and moved to the certificate fingerprint, which the handshake
+   itself proves; the history was left behind and is caught up here. The
+   name-keyed form is still read once, so nobody loses what they had. */
 function historyKey(nick){ return 'dvlogos-history-' + (nick||'').trim().toLowerCase(); }
+function historyKeyFp(fpHex){ return 'dvlogos-history-fp-' + fpHex; }
+/* whichever key this conversation should be using right now */
+function historyKeyNow(nick){
+  const fp = remoteFpHex();
+  return fp ? historyKeyFp(fp) : historyKey(nick);
+}
 function loadHistoryPlaceholder(){ $('msgs').innerHTML = ''; }
 function loadHistoryFor(nick){
   $('msgs').innerHTML = '';
   let list = [];
-  try{ list = JSON.parse(localStorage.getItem(historyKey(nick)) || '[]'); }catch(e){}
+  const key = historyKeyNow(nick);
+  try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
+  /* one-time carry-over from the old name-keyed form, and only for a device
+     whose safety code is already the one we trust for this person — an
+     impostor claiming the name gets nothing */
+  if (!list.length && key !== historyKey(nick) && safetyState === 'ok'){
+    try{
+      const old = JSON.parse(localStorage.getItem(historyKey(nick)) || '[]');
+      if (old.length){
+        list = old;
+        localStorage.setItem(key, JSON.stringify(old));
+        localStorage.removeItem(historyKey(nick));
+      }
+    }catch(e){}
+  }
   if (list.length){
     const d = document.createElement('div'); d.className = 'daymark';
     d.textContent = (CURLANG==='it' ? 'Cronologia con ' : 'History with ') + nick;
@@ -3213,15 +3290,42 @@ function loadHistoryFor(nick){
 }
 function saveToHistory(nick, html, mine){
   if (!nick) return;
-  const key = historyKey(nick);
+  /* A conversation with a timer on it is one somebody wants gone. Writing it to
+     disk and deleting it afterwards is not the same thing as never writing it:
+     a deleted key can survive in the browser's own storage internals, and the
+     moment between the two is a moment where the phone holds it. So an armed
+     session never touches the disk at all. */
+  if (destructArmed) return;
+  const key = historyKeyNow(nick);
   let list = [];
   try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
   list.push({ html, mine, t: Date.now() });
   if (list.length > 300) list = list.slice(-300);
-  try{ localStorage.setItem(key, JSON.stringify(list)); }catch(e){}
+  try{ localStorage.setItem(key, JSON.stringify(list)); }
+  catch(e){
+    /* the phone is full, or storage is refused. Saying nothing meant the
+       history quietly stopped being kept and the only way to find out was to
+       notice it missing later. */
+    historyBroken = true;
+  }
+}
+/* Declared here, beside the function that reads them, rather than next to the
+   self-destruct button far below: this runs on every message and must never
+   depend on how far down the file has been reached. */
+let historyBroken = false, destructArmed = false;
+
+/* Everything this device kept about one person. Used by the self-destruct,
+   which until now cleared only what was on the screen — so the app said
+   "conversation self-destructed" while a full copy sat on the phone and came
+   back the next time the same person connected. */
+function forgetHistoryFor(nick){
+  /* both forms: the one in use now and the older name-keyed one, so a
+     conversation cannot survive the destruction by hiding under the other */
+  try{ localStorage.removeItem(historyKeyNow(nick)); }catch(e){}
+  if (nick) try{ localStorage.removeItem(historyKey(nick)); }catch(e){}
 }
 $('btnClearHistory').addEventListener('click', () => {
-  if (peerNick) try{ localStorage.removeItem(historyKey(peerNick)); }catch(e){}
+  forgetHistoryFor(peerNick);
   $('msgs').innerHTML = '';
   toast(t('history.cleared'));
 });
@@ -4391,7 +4495,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.41';
+const APP_VERSION = 'logos-modifica-3.42';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -4461,6 +4565,10 @@ async function runHealth(){
         : ['ok', t('health.addrLife'), fill(t('health.addrLifeOk','Ancora stabile per circa {n} giorni.'), { n: days })]);
     }
   }
+
+  /* 1c — the phone refusing to store anything, which until now failed in
+     complete silence: the history simply stopped being kept */
+  if (historyBroken) rows.push(['bad', t('health.storage'), t('health.storageFull')]);
 
   /* 2 — people already known */
   const known = loadContacts().filter(c => c.fp).length;
@@ -5423,13 +5531,31 @@ $('msgInput').addEventListener('keydown', ev => { if (ev.key === 'Enter') sendTe
 function sendText(){
   const text = $('msgInput').value.trim();
   if (!text || !dc || dc.readyState !== 'open') return;
+  if (blockedBySafety()) return;
   dc.send(JSON.stringify({ type: 'text', text }));
   renderMsg(esc(text) + '<div class="meta">' + timeNow() + '</div>', true);
   $('msgInput').value = '';
 }
 
+/* The one case where the app should stand in the way rather than merely warn.
+   "changed" means the person on the other end is not the device that was here
+   last time — usually a new phone, sometimes exactly what somebody stepping
+   into the middle would look like. The app already said so in words and then
+   let the conversation carry on regardless, which made the warning decorative.
+   First contact is different and stays advisory: there is nothing yet to
+   contradict, and a check that blocks every first message would be dismissed
+   every time. */
+function blockedBySafety(){
+  if (safetyState !== 'changed') return false;
+  $('sasPanel').classList.remove('hide');
+  $('sasPanel').scrollIntoView({ block: 'center', behavior: 'smooth' });
+  toast(t('sas.blocked','Prima dite le tre parole a voce: questa persona non risulta più la stessa.'));
+  return true;
+}
+
 async function sendFile(file){
   if (!file || !dc || dc.readyState !== 'open') return;
+  if (blockedBySafety()) return;
   const id = Math.random().toString(36).slice(2);
   dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
   let off = 0;
@@ -5492,6 +5618,11 @@ document.addEventListener('click', ev => {
 $('btnMenu').addEventListener('click', () => $('menuPanel').classList.toggle('hide'));
 
 const incoming = {};
+/* Generous for anything anybody actually sends by hand, and far below what it
+   takes to exhaust a phone's memory. A real transfer never approaches either. */
+const MAX_INCOMING_BYTES = 512 * 1024 * 1024;
+const MAX_OPEN_TRANSFERS = 20;
+
 function onDcMessage(ev){
   if (typeof ev.data === 'string'){
     let msg; try{ msg = JSON.parse(ev.data); }catch(e){ return; }
@@ -5529,7 +5660,16 @@ function onDcMessage(ev){
       const label = peerNick ? '<span class="who">'+esc(peerNick)+'</span>' : '';
       renderMsg(label + esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
     } else if (msg.type === 'file-start'){
-      incoming[msg.id] = { chunks: [], meta: msg };
+      /* The other side declares what it is about to send. Until now nothing
+         ever checked that declaration against what actually arrived: a peer
+         could announce ten bytes and then push megabytes, or open thousands of
+         transfers and finish none, until the phone ran out of memory. Both are
+         now bounded — and a peer that does either is not sending you a file. */
+      if (typeof msg.id !== 'string' || !msg.id) return;
+      if (Object.keys(incoming).length >= MAX_OPEN_TRANSFERS) return;
+      const declared = Number(msg.size);
+      if (!(declared >= 0) || declared > MAX_INCOMING_BYTES) return;
+      incoming[msg.id] = { chunks: [], got: 0, meta: msg, cap: Math.min(declared, MAX_INCOMING_BYTES) };
     } else if (msg.type === 'file-end'){
       const rec = incoming[msg.id]; if (!rec) return;
       const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
@@ -5549,7 +5689,17 @@ function onDcMessage(ev){
     const bytes = new Uint8Array(ev.data);
     const id = new TextDecoder().decode(bytes.subarray(0,16)).trim();
     const rec = incoming[id];
-    if (rec) rec.chunks.push(bytes.subarray(16));
+    if (!rec) return;
+    const piece = bytes.subarray(16);
+    /* more than was promised: the transfer is abandoned rather than trusted,
+       because whatever this is, it is not the file that was announced */
+    if (rec.got + piece.byteLength > rec.cap){
+      delete incoming[id];
+      sysLine(t('file.tooBig','Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.'));
+      return;
+    }
+    rec.got += piece.byteLength;
+    rec.chunks.push(piece);
   }
 }
 
@@ -6023,8 +6173,13 @@ $('btnSpeakerCall').addEventListener('click', async () => {
 let destructTimer = null, destructDeadline = 0;
 function destroyNow(tellPeer){
   clearInterval(destructTimer); destructTimer = null;
+  destructArmed = false;
   if (tellPeer && dc && dc.readyState === 'open'){ try{ dc.send(JSON.stringify({ type:'wipe' })); }catch(e){} }
   endCall(false);
+  /* The whole point, and until now the one thing it did not do: emptying the
+     screen is not destroying anything. Whatever was written down about this
+     person goes with it, or the sentence below is a lie. */
+  forgetHistoryFor(peerNick);
   $('msgs').innerHTML = '';
   sysLine(t('destruct.done'));
   if (dc) try{ dc.close(); }catch(e){}
@@ -6038,6 +6193,11 @@ function destroyNow(tellPeer){
 $('btnArmDestruct').addEventListener('click', () => {
   const minutes = parseInt($('destructMinutes').value, 10);
   destructDeadline = Date.now() + minutes * 60000;
+  /* from this moment nothing more is written to the phone, and what is already
+     written for this person goes now rather than at the end — arming it is the
+     decision; the countdown is only how long you still have to read it */
+  destructArmed = true;
+  forgetHistoryFor(peerNick);
   $('destructCountdown').classList.remove('hide');
   $('btnDisarmDestruct').classList.remove('hide');
   const tick = () => {
@@ -6050,10 +6210,16 @@ $('btnArmDestruct').addEventListener('click', () => {
 });
 $('btnDisarmDestruct').addEventListener('click', () => {
   clearInterval(destructTimer); destructTimer = null;
+  /* saving resumes from here on. What was said while the timer was running was
+     never written down and is not recovered — which is what was asked for. */
+  destructArmed = false;
   $('destructCountdown').classList.add('hide'); $('btnDisarmDestruct').classList.add('hide');
 });
 $('btnNewSession').addEventListener('click', () => {
   clearInterval(destructTimer); destructTimer = null;
+  /* the timer belonged to the conversation that just ended: leaving it armed
+     would silently stop this device saving anything, for ever */
+  destructArmed = false;
   $('destructCountdown').classList.add('hide'); $('btnDisarmDestruct').classList.add('hide');
   stopQuickPump();
   endCall(false);

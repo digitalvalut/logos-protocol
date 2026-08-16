@@ -214,6 +214,103 @@ test.describe('knowing the phone', () => {
 });
 
 /* ------------------------------------------------------------------------
+   Findings from the August 2026 audit. Each of these was a real behaviour of
+   the shipped app, proved by running it, before it was fixed — so each test
+   here is the exact experiment that caught it.
+   ------------------------------------------------------------------------ */
+test.describe('what the audit found', () => {
+
+  test('self-destruct actually destroys, instead of only clearing the screen', () => {
+    /* It used to say "conversation self-destructed" while a full copy stayed
+       in storage and came back the next time the same person connected. */
+    const app = loadApp();
+    app.run('peerNick = "Maria"; renderMsg("un segreto", true);');
+    assert.ok(app.run('(localStorage.getItem("dvlogos-history-maria")||"").length') > 0,
+      'the message should have been saved in the first place');
+    app.run('destroyNow(false);');
+    assert.strictEqual(app.run('(localStorage.getItem("dvlogos-history-maria")||"").length'), 0,
+      'saying it self-destructed while keeping a copy is the one lie this app must not tell');
+    app.stop();
+  });
+
+  test('nothing is written to the phone at all while the timer is running', () => {
+    const app = loadApp();
+    app.run('peerNick = "Giulia"; destructArmed = true; renderMsg("detto sotto il timer", true);');
+    assert.strictEqual(app.run('(localStorage.getItem("dvlogos-history-giulia")||"").length'), 0,
+      'writing it and deleting it later is not the same as never writing it');
+    app.stop();
+  });
+
+  test('a peer that sends more than it declared is cut off', () => {
+    /* declared ten bytes, then pushed megabytes: every chunk was accepted */
+    const app = loadApp();
+    app.run(`onDcMessage({ data: JSON.stringify({ type:'file-start', id:'x', name:'a', mime:'', size: 10 }) });`);
+    app.run(`
+      var big = new Uint8Array(16 + 4096);
+      big.set(new TextEncoder().encode('x'.padEnd(16,' ')), 0);
+      for (var i = 0; i < 50; i++) onDcMessage({ data: big.buffer });
+    `);
+    assert.strictEqual(app.run('incoming["x"] ? 1 : 0'), 0,
+      'a transfer that overruns what it promised must be abandoned, not accumulated');
+    app.stop();
+  });
+
+  test('a peer cannot open unlimited transfers and never finish them', () => {
+    const app = loadApp();
+    app.run(`for (var i = 0; i < 500; i++) onDcMessage({ data: JSON.stringify({ type:'file-start', id:'f'+i, name:'x', mime:'', size:1 }) });`);
+    const open = app.run('Object.keys(incoming).length');
+    assert.ok(open <= 20, `unbounded open transfers exhaust the phone's memory (found ${open})`);
+    app.stop();
+  });
+
+  test('sending is refused while the other side is not who they were', () => {
+    /* the app said "this may be somebody stepping into the middle" and then
+       let the conversation carry on regardless.
+       Tested through the buttons a person actually presses, not through the
+       helper they call: a check nothing consults is not a check. */
+    const app = loadApp();
+    app.run('var sent = 0; dc = { readyState: "open", send: function(){ sent++; } };');
+    app.run('$("msgInput").value = "un messaggio";');
+
+    app.run('safetyState = "changed";');
+    app.run('sendText();');
+    assert.strictEqual(app.run('sent'), 0, 'nothing may leave while the identity is in doubt');
+
+    app.run('safetyState = "ok"; $("msgInput").value = "un messaggio";');
+    app.run('sendText();');
+    assert.strictEqual(app.run('sent'), 1, 'and it must send normally once it is not');
+    app.stop();
+  });
+
+  test('history is filed under the certificate, not under a name anyone can claim', () => {
+    /* Checked by behaviour: with a known peer certificate the conversation must
+       land under a key derived from that certificate, and an impostor claiming
+       the same name must not be handed it. */
+    const app = loadApp();
+    app.run('remoteFpHex = function(){ return "abc123"; };');
+    app.run('peerNick = "Maria"; renderMsg("solo per la vera Maria", true);');
+    const underFingerprint = app.run('(localStorage.getItem("dvlogos-history-fp-abc123")||"").length');
+    const underName = app.run('(localStorage.getItem("dvlogos-history-maria")||"").length');
+    assert.ok(underFingerprint > 0, 'the conversation should be filed under the certificate');
+    assert.strictEqual(underName, 0, 'filing it under the name hands it to anyone who claims the name');
+
+    /* an impostor: same name, different device */
+    app.run('remoteFpHex = function(){ return "999impostore"; };');
+    app.run('safetyState = "new"; loadHistoryFor("Maria");');
+    assert.ok(!app.run('$("msgs").textContent').includes('solo per la vera Maria'),
+      'somebody else claiming the name must not be shown the real one\'s conversation');
+    app.stop();
+  });
+
+  test('the Worker meters writes, not only reads', () => {
+    const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
+    assert.ok(!/request\.method === 'GET' && overRateLimit/.test(worker),
+      'an unmetered write lets anyone holding an address bury the calls meant for it');
+    assert.ok(/if \(overRateLimit\(request\)\)/.test(worker), 'the mailbox no longer meters at all');
+  });
+});
+
+/* ------------------------------------------------------------------------
    The health card has to report what is true, including when the truth is
    "this copy of the app cannot work from here".
    ------------------------------------------------------------------------ */

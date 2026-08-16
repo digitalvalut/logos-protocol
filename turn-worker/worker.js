@@ -316,9 +316,15 @@ async function handleMailbox(request, env, cors, key){
   if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
   if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
 
-  /* only reads are metered: a read is what a code-guesser needs, and a write
-     only ever puts something into a slot nobody else can find or decrypt */
-  if (request.method === 'GET' && overRateLimit(request)){
+  /* Both reads and writes are metered now. The original reasoning — that a
+     write "only ever puts something into a slot nobody else can find or
+     decrypt" — holds for the six-digit codes, whose slot nobody can compute
+     without the code. It does not hold for the permanent and throwaway
+     addresses: those are meant to be handed out, and anyone holding one can
+     work out the slot it maps to. An unmetered write was therefore a way for
+     somebody with your address to bury your incoming calls under their own,
+     as fast as they liked, for free. */
+  if (overRateLimit(request)){
     return json({ error: 'too many attempts' }, 429, cors);
   }
 
