@@ -180,7 +180,7 @@ Object.assign(I18N.en, {
 "home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting",
 "call.flipFail":"I can't switch camera on this phone.",
 "call.flipBusy":"The camera is in use by another app. Close it and try again.","call.flipDenied":"The browser has blocked the camera for this site.","call.flipOnlyOne":"This device has only one camera.",
-"home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.",
+"home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.","home.busyReconnect":"You're busy right now. Finish or close the current connection before trying again.",
 "letter.missed":"Wanted to talk to you.",
 "sas.blocked":"Say the three words out loud first: this person is no longer the same one.",
 "file.tooBig":"An incoming file was stopped: it did not match what was declared.",
@@ -347,7 +347,7 @@ Object.assign(I18N.it, {
 "home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso",
 "call.flipFail":"Non riesco a cambiare fotocamera su questo telefono.",
 "call.flipBusy":"La fotocamera è occupata da un'altra app. Chiudila e riprova.","call.flipDenied":"Il browser ha bloccato la fotocamera per questo sito.","call.flipOnlyOne":"Questo dispositivo ha una sola fotocamera.",
-"home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.",
+"home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.","home.busyReconnect":"Sei occupato al momento. Chiudi o completa la connessione in corso prima di riprovare.",
 "letter.missed":"Voleva parlarti.",
 "sas.blocked":"Prima dite le tre parole a voce: questa persona non risulta più la stessa.",
 "file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.",
@@ -507,7 +507,7 @@ Object.assign(I18N.fr, {
 "home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours",
 "call.flipFail":"Je n'arrive pas à changer de caméra sur ce téléphone.",
 "call.flipBusy":"La caméra est utilisée par une autre application. Fermez-la et réessayez.","call.flipDenied":"Le navigateur a bloqué la caméra pour ce site.","call.flipOnlyOne":"Cet appareil n'a qu'une seule caméra.",
-"home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.",
+"home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.","home.busyReconnect":"Vous êtes occupé pour le moment. Terminez ou fermez la connexion en cours avant de réessayer.",
 "letter.missed":"Voulait vous parler.",
 "sas.blocked":"Dites d'abord les trois mots à voix haute : cette personne n'est plus la même.",
 "file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.",
@@ -667,7 +667,7 @@ Object.assign(I18N.de, {
 "home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut",
 "call.flipFail":"Ich kann auf diesem Telefon nicht zur anderen Kamera wechseln.",
 "call.flipBusy":"Die Kamera wird von einer anderen App benutzt. Schließe sie und versuch es nochmal.","call.flipDenied":"Der Browser hat die Kamera für diese Seite blockiert.","call.flipOnlyOne":"Dieses Gerät hat nur eine Kamera.",
-"home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.",
+"home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.","home.busyReconnect":"Du bist gerade beschäftigt. Beende oder schließe die aktuelle Verbindung, bevor du es erneut versuchst.",
 "letter.missed":"Wollte mit dir sprechen.",
 "sas.blocked":"Sagt euch zuerst die drei Wörter laut: diese Person ist nicht mehr dieselbe.",
 "file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.",
@@ -827,7 +827,7 @@ Object.assign(I18N.es, {
 "home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando",
 "call.flipFail":"No puedo cambiar de cámara en este teléfono.",
 "call.flipBusy":"La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.","call.flipDenied":"El navegador ha bloqueado la cámara para este sitio.","call.flipOnlyOne":"Este dispositivo solo tiene una cámara.",
-"home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.",
+"home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.","home.busyReconnect":"Estás ocupado ahora mismo. Termina o cierra la conexión actual antes de volver a intentarlo.",
 "letter.missed":"Quería hablar contigo.",
 "sas.blocked":"Decíos antes las tres palabras en voz alta: esta persona ya no es la misma.",
 "file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.",
@@ -987,7 +987,7 @@ Object.assign(I18N.pt, {
 "home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar",
 "call.flipFail":"Não consigo mudar de câmara neste telemóvel.",
 "call.flipBusy":"A câmara está a ser usada por outra aplicação. Feche-a e tente de novo.","call.flipDenied":"O navegador bloqueou a câmara para este site.","call.flipOnlyOne":"Este dispositivo só tem uma câmara.",
-"home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.",
+"home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.","home.busyReconnect":"Está ocupado neste momento. Termine ou feche a ligação atual antes de tentar novamente.",
 "letter.missed":"Queria falar consigo.",
 "sas.blocked":"Digam primeiro as três palavras em voz alta: esta pessoa já não é a mesma.",
 "file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.",
@@ -1147,7 +1147,7 @@ Object.assign(I18N.ru, {
 "home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение",
 "call.flipFail":"На этом телефоне не удаётся переключить камеру.",
 "call.flipBusy":"Камера занята другим приложением. Закройте его и попробуйте снова.","call.flipDenied":"Браузер заблокировал камеру для этого сайта.","call.flipOnlyOne":"У этого устройства только одна камера.",
-"home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.",
+"home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.","home.busyReconnect":"Сейчас вы заняты. Завершите или закройте текущее соединение, прежде чем пробовать снова.",
 "letter.missed":"Хотел(а) с вами поговорить.",
 "sas.blocked":"Сначала произнесите три слова вслух: это уже не тот же человек.",
 "file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.",
@@ -1307,7 +1307,7 @@ Object.assign(I18N.zh, {
 "home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接",
 "call.flipFail":"无法在这台手机上切换摄像头。",
 "call.flipBusy":"摄像头正被其他应用占用。请关闭后重试。","call.flipDenied":"浏览器已阻止此网站使用摄像头。","call.flipOnlyOne":"此设备只有一个摄像头。",
-"home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。",
+"home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。","home.busyReconnect":"您现在正忙。请先完成或关闭当前连接，再重试。",
 "letter.missed":"想跟你说说话。",
 "sas.blocked":"请先把三个词念出来核对：这个人已经不是原来那位了。",
 "file.tooBig":"一个接收中的文件已被中止：它与声明的不符。",
@@ -1467,7 +1467,7 @@ Object.assign(I18N.ar, {
 "home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال",
 "call.flipFail":"لا أستطيع تبديل الكاميرا على هذا الهاتف.",
 "call.flipBusy":"الكاميرا مستخدَمة من تطبيق آخر. أغلقه ثم حاول مجددًا.","call.flipDenied":"حظر المتصفح الكاميرا لهذا الموقع.","call.flipOnlyOne":"هذا الجهاز به كاميرا واحدة فقط.",
-"home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.",
+"home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.","home.busyReconnect":"أنت مشغول الآن. أنهِ الاتصال الحالي أو أغلقه قبل المحاولة مرة أخرى.",
 "letter.missed":"أراد التحدث إليك.",
 "sas.blocked":"قولا الكلمات الثلاث بصوت عالٍ أولًا: هذا الشخص لم يعد نفسه.",
 "file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.",
@@ -1627,7 +1627,7 @@ Object.assign(I18N.ur, {
 "home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے",
 "call.flipFail":"اس فون پر کیمرہ تبدیل نہیں کر سکتا۔",
 "call.flipBusy":"کیمرہ کسی دوسری ایپ کے زیرِ استعمال ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔","call.flipDenied":"براؤزر نے اس سائٹ کے لیے کیمرہ روک دیا ہے۔","call.flipOnlyOne":"اس آلے میں صرف ایک کیمرہ ہے۔",
-"home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔",
+"home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔","home.busyReconnect":"آپ ابھی مصروف ہیں۔ دوبارہ کوشش کرنے سے پہلے موجودہ کنکشن مکمل کریں یا بند کریں۔",
 "letter.missed":"آپ سے بات کرنا چاہتا تھا۔",
 "sas.blocked":"پہلے تینوں الفاظ بول کر ملائیں: یہ شخص اب وہی نہیں رہا۔",
 "file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔",
@@ -1787,7 +1787,7 @@ Object.assign(I18N.hi, {
 "home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है",
 "call.flipFail":"इस फ़ोन पर कैमरा नहीं बदल सकता।",
 "call.flipBusy":"कैमरा किसी दूसरे ऐप में इस्तेमाल हो रहा है। उसे बंद करके फिर कोशिश करें।","call.flipDenied":"ब्राउज़र ने इस साइट के लिए कैमरा रोक दिया है।","call.flipOnlyOne":"इस डिवाइस में सिर्फ़ एक कैमरा है।",
-"home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।",
+"home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।","home.busyReconnect":"आप अभी व्यस्त हैं। दोबारा कोशिश करने से पहले मौजूदा कनेक्शन पूरा करें या बंद करें।",
 "letter.missed":"आपसे बात करना चाहता था।",
 "sas.blocked":"पहले तीनों शब्द बोलकर मिलाएँ: यह व्यक्ति अब वही नहीं रहा।",
 "file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।",
@@ -1947,7 +1947,7 @@ Object.assign(I18N.bn, {
 "home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে",
 "call.flipFail":"এই ফোনে ক্যামেরা বদলাতে পারছি না।",
 "call.flipBusy":"ক্যামেরা অন্য অ্যাপ ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।","call.flipDenied":"ব্রাউজার এই সাইটের জন্য ক্যামেরা আটকে রেখেছে।","call.flipOnlyOne":"এই ডিভাইসে একটিই ক্যামেরা আছে।",
-"home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।",
+"home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।","home.busyReconnect":"আপনি এখন ব্যস্ত আছেন। আবার চেষ্টা করার আগে বর্তমান সংযোগটি শেষ করুন বা বন্ধ করুন।",
 "letter.missed":"আপনার সঙ্গে কথা বলতে চেয়েছিলেন।",
 "sas.blocked":"আগে তিনটি শব্দ মুখে বলে মিলিয়ে নিন: এই ব্যক্তি আর আগের জন নন।",
 "file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।",
@@ -2107,7 +2107,7 @@ Object.assign(I18N.id, {
 "home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan",
 "call.flipFail":"Tidak bisa mengganti kamera di ponsel ini.",
 "call.flipBusy":"Kamera sedang dipakai aplikasi lain. Tutup dan coba lagi.","call.flipDenied":"Peramban memblokir kamera untuk situs ini.","call.flipOnlyOne":"Perangkat ini hanya punya satu kamera.",
-"home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.",
+"home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.","home.busyReconnect":"Anda sedang sibuk sekarang. Selesaikan atau tutup koneksi yang sedang berlangsung sebelum mencoba lagi.",
 "letter.missed":"Ingin bicara dengan Anda.",
 "sas.blocked":"Ucapkan dulu ketiga kata itu: orang ini bukan lagi orang yang sama.",
 "file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.",
@@ -3089,11 +3089,20 @@ $('btnCreate').addEventListener('click', async () => {
   $('btnCreate').disabled = true;
   setStatus($('statusA'), t('lock.working','…'));
   pc = await newPeerConnection();
-  wireDataChannel(pc.createDataChannel('logos-modifica'));
-  const offer = await pc.createOffer();
-  await pc.setLocalDescription(offer);
-  await waitIceComplete(pc);
-  const payload = { type: 'offer', sdp: pc.localDescription.sdp };
+  /* An inline handler, not a named function — which is exactly why this one
+     was missed the first time every other connection-creating function was
+     checked for this bug: nothing here matched "function" at the start of a
+     line. Held locally from here on for the same reason as everywhere else:
+     the four awaits below are four chances for the person to tap something
+     that replaces the global underneath this attempt. */
+  const myPc = pc;
+  manualInvitePc = myPc;
+  wireDataChannel(myPc.createDataChannel('logos-modifica'));
+  const offer = await myPc.createOffer();
+  await myPc.setLocalDescription(offer);
+  await waitIceComplete(myPc);
+  if (pc !== myPc){ return; }   /* superseded during the awaits above */
+  const payload = { type: 'offer', sdp: myPc.localDescription.sdp };
   let code;
   if (lockOn){
     sessionPass = makePassphrase();
@@ -3196,15 +3205,21 @@ $('btnCopyOffer').addEventListener('click', async () => {
   await copyOrSelect($('offerOut').textContent, $('offerOut'));
 });
 $('btnConnectAsA').addEventListener('click', async () => {
-  if (!pc) return;
+  /* checked against manualInvitePc, not just against pc: pc alone would still
+     say "yes, apply it" to whatever connection anything else — a contact tap,
+     an address auto-accept — replaced it with in the meantime. The pasted
+     answer belongs to one specific invite, and only that one. */
+  if (!pc || pc !== manualInvitePc) return;
+  const myPc = pc;
   try{
     const env = readEnvelope($('answerIn').value);
     /* the reply comes back sealed under the same passphrase we handed out */
     const parsed = isLocked(env) ? await openPayload(env, sessionPass) : env;
     if (parsed.type !== 'answer') throw new Error('bad');
-    await pc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
+    if (pc !== myPc){ return; }   /* superseded while that was in flight */
+    await myPc.setRemoteDescription({ type: 'answer', sdp: parsed.sdp });
     showBigConnectingA();
-    watchHandshakeProgress(pc, $('statusA'), $('diagA'), null, ok => { if (!ok) hideBigConnectingA(false); });
+    watchHandshakeProgress(myPc, $('statusA'), $('diagA'), null, ok => { if (!ok) hideBigConnectingA(false); });
   }catch(e){ setStatus($('statusA'), t('lock.badAnswer','—'), 'bad'); }
 });
 
@@ -3238,17 +3253,22 @@ $('btnCreateAnswer').addEventListener('click', async () => {
   setStatus($('statusB'), t('lock.working','…'));
   $('btnCreateAnswer').disabled = true;
   pc = await newPeerConnection();
-  pc.ondatachannel = ev => wireDataChannel(ev.channel);
-  await pc.setRemoteDescription({ type: 'offer', sdp: parsed.sdp });
-  const answer = await pc.createAnswer();
-  await pc.setLocalDescription(answer);
-  await waitIceComplete(pc);
-  const reply = { type: 'answer', sdp: pc.localDescription.sdp };
+  /* same inline-handler gap as the "prepare the invite" button above, and the
+     same fix: held locally, checked once the five awaits below have all had
+     their chance to let the global be replaced from underneath */
+  const myPc = pc;
+  myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+  await myPc.setRemoteDescription({ type: 'offer', sdp: parsed.sdp });
+  const answer = await myPc.createAnswer();
+  await myPc.setLocalDescription(answer);
+  await waitIceComplete(myPc);
+  if (pc !== myPc){ return; }   /* superseded during the awaits above */
+  const reply = { type: 'answer', sdp: myPc.localDescription.sdp };
   const code = sessionPass ? await sealPayload(reply, sessionPass) : b64encode(JSON.stringify(reply));
   $('answerOut').textContent = code;
   $('answerBlock').classList.remove('hide');
   if (await robustCopy(code)) toast(t('toast.sealCopied'));
-  watchHandshakeProgress(pc, $('statusB'), $('diagB'));
+  watchHandshakeProgress(myPc, $('statusB'), $('diagB'));
 });
 $('btnShareAnswer').addEventListener('click', async () => {
   const text = t('invite.answerText') + $('answerOut').textContent;
@@ -3340,6 +3360,7 @@ function forgetHistoryFor(nick){
 $('btnClearHistory').addEventListener('click', () => {
   forgetHistoryFor(peerNick);
   $('msgs').innerHTML = '';
+  releaseObjectUrls();   /* nothing on screen is pointing at them any more */
   toast(t('history.cleared'));
 });
 
@@ -3452,6 +3473,14 @@ $('contactsList').addEventListener('click', ev => {
   }
   const row = ev.target.closest('.contactrow');
   if (!row) return;
+  /* a tap here creates or replaces pc just like goStart/goJoin do, and was
+     the one entry point that never asked busyWithSomeone() first: tapping a
+     contact while a manual invite or another attempt was already mid-flight
+     silently tore it down, out from under whatever was waiting on it */
+  if (busyWithSomeone()){
+    toast(t('home.busyReconnect','Sei occupato al momento. Chiudi o completa la connessione in corso prima di riprovare.'));
+    return;
+  }
   const nick = row.getAttribute('data-nick');
   const contact = loadContacts().find(c => c.nick === nick);
   showScreen('screenStart');
@@ -3997,6 +4026,13 @@ let addrPollTimer = null, addrPending = null;
 /* the connection an invite is merely *waiting* on, "we are the caller", and
    "a known contact is being let in right now" */
 let quickSharePc = null, dialing = false, autoAccepting = false;
+/* the connection a manually-created invite (btnCreate) is waiting on someone
+   to paste an answer back into — distinct from quickSharePc, which waits on a
+   *typed* code instead of a pasted one. btnConnectAsA checks this before
+   applying whatever is in the paste box, so a stale click (or one fired after
+   something else quietly replaced pc underneath it) can't hand a connection
+   the wrong remote description */
+let manualInvitePc = null;
 
 /* ---- the one question every way of being reached has to ask ----
    A connection object exists for several different reasons, and only some of
@@ -4091,20 +4127,28 @@ async function acceptAddrCall(){
   try{
     stopQuickPump();
     pc = await newPeerConnection();
+    /* Held locally and used instead of the global from here on. Everything
+       below waits — for the description, for candidates, for the mailbox —
+       and anything the person does meanwhile (tapping a contact, answering a
+       second call) replaces the global underneath. Reading it afterwards
+       published this call's answer built from a different connection, which
+       broke both of them. */
+    const myPc = pc;
     quickSharePc = null;   /* answering supersedes any invite that was on hold */
-    pc.ondatachannel = ev => wireDataChannel(ev.channel);
-    const pump = candidatePump(pc, sec, 'ab', 'ac');
+    myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+    const pump = candidatePump(myPc, sec, 'ab', 'ac');
     quickPump = pump;
-    await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+    await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+    const answer = await myPc.createAnswer();
+    await myPc.setLocalDescription(answer);
+    if (pc !== myPc){ pump.stop(); return; }   /* superseded while we waited */
     /* which of this device's addresses answered. The caller needs it to check
        the answer against the address it dialled, and it gives nothing away:
        without the certificate behind it, knowing the number proves nothing. */
     await mailboxPutSealed(await slotId(sec.seed, 'addr-answer-' + msg.rid), sec,
-      { sdp: pc.localDescription.sdp, nick: myNick(), slot: slot | 0 });
-    watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
+      { sdp: myPc.localDescription.sdp, nick: myNick(), slot: slot | 0 });
+    watchHandshakeProgress(myPc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
       if (!ok) hideBigConnectingA(true);
     });
   }catch(e){ hideBigConnectingA(true); }
@@ -4170,15 +4214,16 @@ async function dialAddress(raw){
     pc = await newPeerConnection();
     myPc = pc;
     quickSharePc = null;   /* whatever invite was on hold, this call supersedes it */
-    wireDataChannel(pc.createDataChannel('logos-modifica'));
-    const pump = candidatePump(pc, sec, 'ac', 'ab');
+    wireDataChannel(myPc.createDataChannel('logos-modifica'));
+    const pump = candidatePump(myPc, sec, 'ac', 'ab');
     quickPump = pump;
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
+    const offer = await myPc.createOffer();
+    await myPc.setLocalDescription(offer);
+    if (pc !== myPc){ pump.stop(); return; }   /* superseded during the awaits above */
     /* our own address travels with it: it is what lets the other side turn a
        nuisance away for good, and it is theirs to check the same way */
     const published = await mailboxPutSealed(await slotId(sec.seed, 'addr-offer'), sec,
-      { sdp: pc.localDescription.sdp, nick: myNick(), rid, fp: await myFingerprintHex(), intro: outgoingIntro });
+      { sdp: myPc.localDescription.sdp, nick: myNick(), rid, fp: await myFingerprintHex(), intro: outgoingIntro });
     /* Nothing was ever put anywhere for anyone to find. Waiting three minutes
        and then saying "non ha risposto" blames a person who was never rung —
        the commonest cause is this copy of the app being served from somewhere
@@ -4219,9 +4264,10 @@ async function dialAddress(raw){
       if (pc !== myPc){ pump.stop(); return; }
       got = await mailboxGetSealed(answerKey, sec);
       if (got && got.sdp) break;
+      if (pc !== myPc){ pump.stop(); return; }   /* superseded while waiting on the mailbox */
       if (Date.now() >= nextRefresh){
         await mailboxPutSealed(offerKey, sec,
-          { sdp: pc.localDescription.sdp, nick: myNick(), rid, fp: await myFingerprintHex(), intro: outgoingIntro });
+          { sdp: myPc.localDescription.sdp, nick: myNick(), rid, fp: await myFingerprintHex(), intro: outgoingIntro });
         nextRefresh = Date.now() + 80000;
       }
       await new Promise(r => setTimeout(r, 1500));
@@ -4245,9 +4291,10 @@ async function dialAddress(raw){
     /* which of their addresses answered, so the check below is made against
        the right one */
     dialedSlot = got.slot | 0;
-    await pc.setRemoteDescription({ type:'answer', sdp: got.sdp });
+    await myPc.setRemoteDescription({ type:'answer', sdp: got.sdp });
     await pump.remoteReady();
-    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump, ok => {
+    if (pc !== myPc) return;   /* superseded during the awaits just above */
+    watchHandshakeProgress(myPc, $('quickStatusB'), $('diagQuickB'), pump, ok => {
       if (!ok){ dialedAddress = null; dialedSlot = 0; hideBigConnectingB(true); }
     });
   }catch(e){
@@ -4539,7 +4586,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.45';
+const APP_VERSION = 'logos-modifica-3.46';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -4711,24 +4758,28 @@ async function tryAutoReconnect(contact){
 
   stopQuickPump();
   pc = await newPeerConnection();
-  wireDataChannel(pc.createDataChannel('logos-modifica'));
+  /* used instead of the global for the rest of this attempt: everything below
+     waits, and whatever the person does meanwhile replaces the global */
+  const myPc = pc;
+  wireDataChannel(myPc.createDataChannel('logos-modifica'));
   /* same trickle exchange as the short code above, and for the same reason:
      waiting for gathering to finish before speaking made one side declare
      failure while the other was already connected. The key comes from the two
      fingerprints, which both sides already hold and nobody else knows, so this
      path is encrypted too — the relay never sees these addresses either. */
   const sec = await pairSecrets(myFp + ':' + contact.fp);
-  const pump = candidatePump(pc, sec, 'a', 'b');
+  const pump = candidatePump(myPc, sec, 'a', 'b');
   quickPump = pump;
-  const offer = await pc.createOffer();
-  await pc.setLocalDescription(offer);
+  const offer = await myPc.createOffer();
+  await myPc.setLocalDescription(offer);
+  if (pc !== myPc){ pump.stop(); return; }   /* superseded while we waited */
 
   /* the announcement slot stays derived from the plain fingerprints: the other
      side has to be able to find it while only knowing who might call, before it
      has any key material for this particular attempt */
   const outKey = await pairKey(myFp, contact.fp);
   const inKey = await pairKey(contact.fp, myFp);
-  const sent = await mailboxPutSealed(outKey, sec, { nick: myNick(), sdp: pc.localDescription.sdp });
+  const sent = await mailboxPutSealed(outKey, sec, { nick: myNick(), sdp: myPc.localDescription.sdp });
   /* does nothing if this contact never shared a subscription, or shared one
      before notifications existed — silently a no-op, same as it always was */
   sendKnock(contact);
@@ -4740,17 +4791,20 @@ async function tryAutoReconnect(contact){
        mailbox holds a message for two minutes, comfortably longer. */
     const deadline = Date.now() + 45000;
     while (Date.now() < deadline){
-      if (!pc || pc.signalingState === 'closed'){ pump.stop(); return; } // user navigated away or started something else
+      /* both conditions: the connection closing, and something else having
+         taken the global over — the second is invisible to the first */
+      if (pc !== myPc || myPc.signalingState === 'closed'){ pump.stop(); return; }
       const msg = await mailboxGetSealed(inKey, sec);
       if (msg && msg.sdp){
-        await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
+        if (pc !== myPc){ pump.stop(); return; }
+        await myPc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
         await pump.remoteReady();
         /* re-enabled only once the handshake actually settles — see the note
            on watchHandshakeProgress; enabling it the instant an answer was
            found, while the connection itself was still several seconds from
            done, was the same bug as the quick-connect button */
         showBigConnectingA();
-        watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump, ok => {
+        watchHandshakeProgress(myPc, $('statusA'), $('diagA'), pump, ok => {
           $('btnCreate').disabled = false;
           if (!ok) hideBigConnectingA(false);
         });
@@ -4764,9 +4818,9 @@ async function tryAutoReconnect(contact){
      offer already sitting in `pc`, so nothing is wasted. By now gathering has long
      finished, so the description carries every address it ever found. */
   pump.stop();
-  if (!pc || pc.signalingState === 'closed') return;
+  if (pc !== myPc || myPc.signalingState === 'closed') return;
   setStatus($('statusA'), fill(t('reconnect.offline','{n} non sembra online in questo momento. Ecco il codice da mandare a mano.'), { n: contact.nick }), 'bad');
-  const code = await sealOrEncodeOffer(pc);
+  const code = await sealOrEncodeOffer(myPc);
   revealInviteCode(code);
   if (await robustCopy(code)) toast(t('toast.sealCopied'));
   $('btnCreate').disabled = false;
@@ -4813,21 +4867,24 @@ async function acceptIncomingAutoOffer(contact, msg, sec){
     stopQuickPump();
     const myFp = await myFingerprintHex();
     pc = await newPeerConnection();
+    /* held locally and used instead of the global for the rest of this: the
+       waits below give anything the person does time to replace it */
     myPc = pc;
     quickSharePc = null;   /* a contact getting through supersedes a waiting invite */
-    pc.ondatachannel = ev => wireDataChannel(ev.channel);
+    myPc.ondatachannel = ev => wireDataChannel(ev.channel);
     /* the key both sides derive independently from the caller's fingerprint then
        the callee's — here `contact.fp` is the caller and `myFp` is us */
-    const pump = candidatePump(pc, sec, 'b', 'a');
+    const pump = candidatePump(myPc, sec, 'b', 'a');
     quickPump = pump;
-    await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+    await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+    const answer = await myPc.createAnswer();
+    await myPc.setLocalDescription(answer);
+    if (pc !== myPc){ pump.stop(); return; }   /* superseded while we waited */
     const outKey = await pairKey(myFp, contact.fp);
     /* answered at once, so the other side stops knocking at a door we have not opened */
-    await mailboxPutSealed(outKey, sec, { sdp: pc.localDescription.sdp });
-    watchHandshakeProgress(pc, $('statusA'), $('diagA'), pump);
+    await mailboxPutSealed(outKey, sec, { sdp: myPc.localDescription.sdp });
+    watchHandshakeProgress(myPc, $('statusA'), $('diagA'), pump);
     /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
   }catch(e){
     /* a half-built connection left in the global would read as "busy" forever
@@ -5295,25 +5352,33 @@ async function startQuickShare(existingCode, quiet){
   setStatus($('quickStatusA'), t('quick.waiting','In attesa che l\'altra persona digiti il codice…'));
 
   pc = await newPeerConnection();
+  /* Every operation below targets this, the connection this call actually
+     made, never the bare global — the guards further down catch most of the
+     ways the global gets replaced from underneath, but every single one of
+     them is followed by another await, which is one more chance for a guard
+     to have already passed and the read to happen anyway. Reading `myPc`
+     throughout means even a missed guard cannot mix two attempts together;
+     at worst this attempt keeps talking to its own, now-abandoned
+     connection, rather than silently completing someone else's. */
   const myPc = pc;
   /* marked as "an invite on hold" so being reachable at the address carries on
      regardless: this one waits fifteen minutes, and it used to take the
      address down with it for the whole of them */
   quickSharePc = myPc;
-  wireDataChannel(pc.createDataChannel('logos-modifica'));
+  wireDataChannel(myPc.createDataChannel('logos-modifica'));
   const sec = await quickSecrets(code);
   if (pc !== myPc) return;
-  const pump = candidatePump(pc, sec, 'a', 'b');
+  const pump = candidatePump(myPc, sec, 'a', 'b');
   quickPump = pump;
 
-  const offer = await pc.createOffer();
-  await pc.setLocalDescription(offer);
+  const offer = await myPc.createOffer();
+  await myPc.setLocalDescription(offer);
   if (pc !== myPc){ pump.stop(); return; }
 
   const offerKey = await slotId(sec.seed, 'offer');
   const answerKey = await slotId(sec.seed, 'answer');
   /* published straight away, candidates or not — they follow on their own */
-  const published = await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
+  const published = await mailboxPutSealed(offerKey, sec, { sdp: myPc.localDescription.sdp, nick: myNick() });
   if (!published && !brokerReachable){
     /* nothing to wait for: no code was ever put anywhere for anyone to find */
     pump.stop();
@@ -5346,9 +5411,11 @@ async function startQuickShare(existingCode, quiet){
   while (Date.now() < deadline){
     if (pc !== myPc){ pump.stop(); return; }
     const msg = await mailboxGetSealed(answerKey, sec);
+    if (pc !== myPc){ pump.stop(); return; }   /* superseded while that was in flight */
     if (msg && msg.sdp){
-      await pc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
+      await myPc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
       await pump.remoteReady();
+      if (pc !== myPc){ pump.stop(); return; }   /* likewise, across these two */
       /* somebody answered — the code has done its job, so it and the share
          button give way to one clear "connecting" state instead of just
          sitting there looking like nothing happened */
@@ -5357,13 +5424,13 @@ async function startQuickShare(existingCode, quiet){
       if (quiet && $('screenStart').classList.contains('hide')) showScreen('screenStart');
       quickSharePc = null;   /* no longer "on hold": this is a real connection now */
       showBigConnectingA();
-      watchHandshakeProgress(pc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
+      watchHandshakeProgress(myPc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
         if (!ok) hideBigConnectingA(true);
       });
       return;
     }
     if (Date.now() >= nextRefresh){
-      await mailboxPutSealed(offerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
+      await mailboxPutSealed(offerKey, sec, { sdp: myPc.localDescription.sdp, nick: myNick() });
       nextRefresh = Date.now() + 80000;
     }
     await new Promise(r => setTimeout(r, 1200));
@@ -5532,20 +5599,24 @@ async function tryQuickConnect(){
     resetBigConnectingText('B');
     stopQuickPump();
     pc = await newPeerConnection();
-    pc.ondatachannel = ev => wireDataChannel(ev.channel);
-    const pump = candidatePump(pc, sec, 'b', 'a');
+    /* used instead of the global from here on: the waits below give anything
+       the person does time to replace it underneath */
+    const myPc = pc;
+    myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+    const pump = candidatePump(myPc, sec, 'b', 'a');
     quickPump = pump;
-    await pc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
+    await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+    const answer = await myPc.createAnswer();
+    await myPc.setLocalDescription(answer);
+    if (pc !== myPc){ pump.stop(); return; }   /* superseded while we waited */
     /* sent immediately: the other side needs this before it will recognise us,
        and everything still being gathered follows behind it */
-    await mailboxPutSealed(answerKey, sec, { sdp: pc.localDescription.sdp, nick: myNick() });
+    await mailboxPutSealed(answerKey, sec, { sdp: myPc.localDescription.sdp, nick: myNick() });
     /* the button stays disabled for the whole handshake now, not just until
        the offer was found — see the note on watchHandshakeProgress for why
        re-enabling it any earlier was a real bug, not a style choice */
-    watchHandshakeProgress(pc, $('quickStatusB'), $('diagQuickB'), pump, ok => {
+    watchHandshakeProgress(myPc, $('quickStatusB'), $('diagQuickB'), pump, ok => {
       quickConnecting = false;
       $('btnQuickConnect').disabled = false;
       if (!ok) hideBigConnectingB(true); /* on success the screen is about to change to the chat anyway */
@@ -5607,6 +5678,20 @@ function sendText(){
    First contact is different and stays advisory: there is nothing yet to
    contradict, and a check that blocks every first message would be dismissed
    every time. */
+/* Every photo, video and file that crosses the chat gets a blob URL, and the
+   browser keeps the whole blob alive for as long as that URL exists. Nothing
+   ever released them, so a long conversation full of photos grew in memory
+   until the tab was closed — on a phone, that is the tab dying.
+   They cannot be released the moment they are made: the <img> on screen is
+   still using it. They are released when the messages themselves go, which is
+   the only moment nothing can be pointing at them any more. */
+const liveObjectUrls = new Set();
+function keepObjectUrl(url){ liveObjectUrls.add(url); return url; }
+function releaseObjectUrls(){
+  for (const u of liveObjectUrls){ try{ URL.revokeObjectURL(u); }catch(e){} }
+  liveObjectUrls.clear();
+}
+
 function blockedBySafety(){
   if (safetyState !== 'changed') return false;
   $('sasPanel').classList.remove('hide');
@@ -5631,7 +5716,7 @@ async function sendFile(file){
     off = end;
   }
   dc.send(JSON.stringify({ type: 'file-end', id }));
-  const url = URL.createObjectURL(file);
+  const url = keepObjectUrl(URL.createObjectURL(file));
   const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
   const preview = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
                 : isAud ? '<audio src="'+url+'" controls></audio>' : '<a href="'+url+'" download="'+esc(file.name)+'" class="filelink">📄 '+esc(file.name)+' ↓</a>';
@@ -5735,7 +5820,7 @@ function onDcMessage(ev){
     } else if (msg.type === 'file-end'){
       const rec = incoming[msg.id]; if (!rec) return;
       const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
-      const url = URL.createObjectURL(blob);
+      const url = keepObjectUrl(URL.createObjectURL(blob));
       const mime = rec.meta.mime || '';
       const isImg = mime.startsWith('image/'), isVid = mime.startsWith('video/'), isAud = mime.startsWith('audio/');
       let html = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
@@ -6243,6 +6328,10 @@ function destroyNow(tellPeer){
      person goes with it, or the sentence below is a lie. */
   forgetHistoryFor(peerNick);
   $('msgs').innerHTML = '';
+  /* the photos and files that crossed this conversation go out of memory with
+     it: keeping them alive would be its own quiet contradiction of the word
+     "destroyed" */
+  releaseObjectUrls();
   sysLine(t('destruct.done'));
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
@@ -6289,6 +6378,7 @@ $('btnNewSession').addEventListener('click', () => {
   if (pc) try{ pc.close(); }catch(e){}
   pc = null; dc = null; peerNick = '';
   $('msgs').innerHTML = '';
+  releaseObjectUrls();
   $('offerBlock').classList.add('hide'); $('offerOut').textContent = '';
   $('answerBlock').classList.add('hide'); $('answerOut').textContent = '';
   $('pasteAnswerCard').classList.add('hide');
@@ -6301,7 +6391,7 @@ $('btnNewSession').addEventListener('click', () => {
   $('sasPanel').classList.add('hide'); $('sasPanel').classList.remove('warn');
   $('mediaHelp').classList.add('hide'); $('mediaWarn').classList.add('hide');
   $('addrIncoming').classList.add('hide'); addrPending = null; dialedAddress = null; dialedSlot = 0;
-  dialing = false; quickSharePc = null;
+  dialing = false; quickSharePc = null; manualInvitePc = null;
   hideKnockCard(); outgoingIntro = '';
   $('leaveLetter').classList.add('hide'); letterTarget = null;
   setStatus($('addrDialStatus'), ''); $('addrDialIn').value = '';

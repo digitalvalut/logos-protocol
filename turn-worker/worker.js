@@ -179,6 +179,25 @@ const KNOCK_WINDOW_MS = 5 * 60000;
 const KNOCK_MAX_PER_TARGET = 6;
 const knockHits = new Map();
 
+/* The push services the browsers this app runs on actually use. Matched on
+   the exact host or on a dot-suffix, never with a bare `includes` — that
+   would have let `fcm.googleapis.com.attacker.example` straight through. */
+const PUSH_HOSTS = [
+  'fcm.googleapis.com',                 /* Chrome, Edge, most Android */
+  'android.googleapis.com',             /* older Chrome */
+  'updates.push.services.mozilla.com',  /* Firefox */
+  'web.push.apple.com',                 /* Safari, iOS */
+];
+const PUSH_SUFFIXES = [
+  '.notify.windows.com',                /* Edge / Windows, sharded hostnames */
+  '.push.apple.com',                    /* Apple, sharded hostnames */
+];
+function isKnownPushHost(host){
+  host = String(host).toLowerCase();
+  if (PUSH_HOSTS.indexOf(host) >= 0) return true;
+  return PUSH_SUFFIXES.some(s => host.endsWith(s));
+}
+
 async function overKnockLimit(endpoint){
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(endpoint));
   const key = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,'0')).join('');
@@ -205,6 +224,14 @@ async function handleKnock(request, env, cors){
      URL it is handed, so the scheme is worth pinning down even though the
      request carries nothing sensitive */
   if (url.protocol !== 'https:') return json({ error: 'bad subscription' }, 400, cors);
+  /* And only to somewhere that is actually a push service. Without this the
+     route would send a POST to any https address on earth on request: it
+     carries no data and returns nothing but ok/not-ok, so there is little to
+     steal — but it still means this Worker could be pointed at a stranger's
+     server, and requests arriving from Cloudflare rather than from whoever
+     asked for them. The browsers that exist publish to these four families
+     and no others. */
+  if (!isKnownPushHost(url.hostname)) return json({ error: 'bad subscription' }, 400, cors);
 
   if (await overKnockLimit(endpoint)) return json({ error: 'too many attempts' }, 429, cors);
 

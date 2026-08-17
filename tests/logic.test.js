@@ -361,6 +361,51 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('reconnecting to a contact is refused while another attempt is already in flight', () => {
+    /* $('contactsList') was the one route into tryAutoReconnect that never
+       asked busyWithSomeone() first — tapping a contact while, say, a call
+       was already up silently tore the working connection down to start a
+       new one. goStart/goJoin already ask; this route has to as well. */
+    const app = loadApp();
+    app.run(`
+      var reconnectCalled = false;
+      window.tryAutoReconnect = async function(){ reconnectCalled = true; };
+      saveContacts([{ nick: 'Giuseppe', fp: 'aa'.repeat(32), lastSeen: Date.now() }]);
+      window.__row = document.createElement('div');
+      window.__row.setAttribute('data-nick', 'Giuseppe');
+      dc = { readyState: 'open' };
+    `);
+    app.run(`
+      $('contactsList').listeners.click[0]({ target: {
+        closest: sel => sel === '[data-rm]' ? null : sel === '.contactrow' ? window.__row : null
+      } });
+    `);
+    assert.strictEqual(app.run('reconnectCalled'), false,
+      'tapping a contact while something else holds the connection open must not tear it down');
+    app.stop();
+  });
+
+  test('pasting a reply into a manual invite is refused once something else replaced the connection', () => {
+    /* btnConnectAsA had nothing standing between it and applying a pasted
+       answer but "if (!pc) return" — any route that replaced the global pc
+       in between (a contact tap, an address auto-accept) left this button
+       still willing to apply the reply, just to the wrong connection.
+       manualInvitePc is the fix: it must refuse unless pc is still exactly
+       the connection this invite was created for. */
+    const app = loadApp();
+    app.run(`
+      manualInvitePc = new RTCPeerConnection();
+      pc = new RTCPeerConnection();   /* something else replaced it */
+      pc.applied = null;
+      pc.setRemoteDescription = function(d){ this.applied = d; return Promise.resolve(); };
+      $('answerIn').value = b64encode(JSON.stringify({ type: 'answer', sdp: 'v=0 not-for-this-connection' }));
+    `);
+    app.run("$('btnConnectAsA').listeners.click[0]();");
+    assert.strictEqual(app.run('pc.applied'), null,
+      'a pasted answer must never be applied to a connection other than the one the invite was created for');
+    app.stop();
+  });
+
   test('the Worker meters writes, not only reads', () => {
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
     assert.ok(!/request\.method === 'GET' && overRateLimit/.test(worker),
@@ -378,6 +423,49 @@ test.describe('what the audit found', () => {
     assert.match(untilNextRoute, /overTurnLimit\(request\)/,
       'harvesting TURN credentials must cost the harvester something');
     assert.match(worker, /RL_TURN_MAX\s*=\s*\d+/, 'the credentials budget is gone');
+  });
+
+  test('every attempt that creates a connection notices being superseded', () => {
+    /* Each of these creates a connection, then waits — for a description, for
+       candidates, for the mailbox — and afterwards published `pc.localDescription`,
+       the global. Anything the person did meanwhile (tapping a contact,
+       answering a second call) replaced that global underneath, so the answer
+       for one attempt was built from a different connection and broke both.
+       Only two of the eight guarded against it. */
+    for (const fn of ['acceptAddrCall', 'tryAutoReconnect', 'acceptIncomingAutoOffer',
+                      'tryQuickConnect', 'dialAddress', 'startQuickShare']){
+      const start = SOURCE.indexOf(`async function ${fn}(`);
+      assert.ok(start > 0, `${fn} not found`);
+      const body = SOURCE.slice(start, SOURCE.indexOf('\n}\n', start));
+      assert.match(body, /myPc/,
+        `${fn} does not hold its own connection and can publish another one's description`);
+      assert.ok(!/\bpc\.localDescription\b/.test(body),
+        `${fn} still reads the global pc.localDescription after awaiting`);
+    }
+  });
+
+  test('blob URLs are released when the messages holding them go', () => {
+    /* Every photo and file made one, nothing ever released them, and the
+       browser keeps the whole blob alive for as long as the URL exists — on a
+       phone, a long photo-heavy chat ended as a dead tab. */
+    assert.match(SOURCE, /function releaseObjectUrls/, 'nothing releases them');
+    assert.ok(!/[^p]URL\.createObjectURL/.test(SOURCE.replace(/keepObjectUrl\(URL\.createObjectURL/g, 'keepObjectUrl(X')),
+      'a blob URL is being created without being registered for release');
+    const destroy = SOURCE.slice(SOURCE.indexOf('function destroyNow'));
+    assert.match(destroy.slice(0, destroy.indexOf('\n}\n')), /releaseObjectUrls\(\)/,
+      'self-destruct must not leave the photos it destroyed alive in memory');
+  });
+
+  test('the knock only reaches real push services', () => {
+    /* Without this the route would POST to any https address on request:
+       little to steal, but this Worker could be pointed at a stranger's
+       server with the requests appearing to come from Cloudflare. */
+    const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
+    assert.match(worker, /isKnownPushHost/, 'any host is still accepted');
+    /* the classic mistake this must not make */
+    assert.ok(!/includes\(\s*['"]googleapis/.test(worker),
+      'a substring match would accept fcm.googleapis.com.attacker.example');
+    assert.match(worker, /endsWith\(s\)/, 'suffixes must be anchored to the end of the host');
   });
 
   test('the credentials budget is tighter than the mailbox budget', () => {
