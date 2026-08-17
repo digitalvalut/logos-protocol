@@ -52,6 +52,12 @@ const WAKE_TTL_SECONDS = 24 * 3600; // an invite is opened when the other person
 const MAX_BODY_BYTES = 8192; // an encrypted offer/answer is ~1.5KB once sealed and base64'd; this is generous headroom
 const MAX_WAKE_BYTES = 1024; // a sealed push subscription and nothing else
 const KEY_RE = /^[0-9a-f]{64}$/; // a hex SHA-256, nothing else is a valid mailbox key
+/* A published address key has to outlive everything else here: an address is
+   handed out once and dialled months later, so a key that expired would turn a
+   printed address into a dead one. A year, matched to how long the device's own
+   key material lasts, and rewritten every time the app opens. */
+const PUBKEY_TTL_SECONDS = 365 * 24 * 3600;
+const MAX_PUBKEY_BYTES = 512; // a raw P-256 point is 65 bytes, 88 once base64'd
 
 function corsHeaders(origin){
   return {
@@ -303,6 +309,88 @@ async function handleWake(request, env, cors, key){
   return json({ error: 'method not allowed' }, 405, cors);
 }
 
+/* ---------------- where an address publishes the key it is made of ----------------
+   An address is the hash of a public key, and this is where that public key
+   lives so whoever dials the address can fetch it and encrypt to it. Nothing
+   secret is stored — a public key is public — but two properties have to hold,
+   and only one of them is obvious.
+
+   The obvious one: whoever calls must be sure the key really belongs to the
+   address they dialled. That is theirs to check, not ours: they hash the key
+   they were handed and see whether it comes out as the address they already
+   have. A substituted key hashes to a different address and is rejected.
+
+   The one that needs work is here. Without a check on the way in, anybody could
+   PUT over anybody else's slot — the slot name is derived from the address,
+   which is public, so it is trivially computable. They could not impersonate
+   the owner (the hash check above defeats that), but they could overwrite the
+   key with junk and leave a printed address permanently undiallable. So the
+   write is verified instead: recompute the address from the key being
+   published, recompute which slot that address owns, and refuse unless it is
+   the slot being written to. The only person who can write here is somebody
+   holding a key that genuinely hashes to this address. One SHA-256, and the
+   slot becomes unforgeable rather than merely obscure.
+
+   Kept deliberately in step with `addressFromPub` in modifica.js; a test holds
+   the two implementations to the same answers, because a silent drift between
+   them would make every address on the far side unreachable. */
+const ADDR_ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+const ADDR_LEN = 12;
+
+async function sha256Hex(str){
+  const d = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)));
+  return [...d].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function addressFromPub(pubB64, slot){
+  const d = new Uint8Array(await crypto.subtle.digest('SHA-256',
+    new TextEncoder().encode('logos-address-v2:' + pubB64 + '/' + (slot | 0))));
+  let bin = '';
+  for (let i = 0; i < 8; i++) bin += d[i].toString(2).padStart(8, '0');
+  let out = '';
+  for (let i = 0; i < ADDR_LEN; i++) out += ADDR_ALPHABET[parseInt(bin.slice(i * 5, i * 5 + 5), 2)];
+  return out;
+}
+
+async function handleKey(request, env, cors, key){
+  if (!env.MAILBOX) return json({ error: 'mailbox not configured' }, 500, cors);
+  if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
+
+  if (request.method === 'PUT'){
+    /* metered like every other write: the slot is computable from a public
+       address, so this is reachable by anyone who has one */
+    if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
+    const body = await request.text();
+    if (!body || body.length > MAX_PUBKEY_BYTES) return json({ error: 'bad body' }, 400, cors);
+    let rec;
+    try{ rec = JSON.parse(body); }catch(e){ return json({ error: 'bad body' }, 400, cors); }
+    /* A raw P-256 point is 65 bytes, which is 88 base64 characters ending in
+       exactly ONE '=' — 65 mod 3 is 2, so there is a single byte of padding.
+       Written as '==' first time round, which rejected every legitimate key;
+       caught by generating real keys and feeding them in rather than reasoning
+       about the length. */
+    if (!rec || typeof rec.p !== 'string' || !/^[A-Za-z0-9+/]{87}=$/.test(rec.p)){
+      return json({ error: 'bad key material' }, 400, cors);
+    }
+    const n = rec.n | 0;
+    if (n < 0 || n > 255) return json({ error: 'bad slot' }, 400, cors);
+    const owns = await sha256Hex('logos-pubkey-v2:' + await addressFromPub(rec.p, n));
+    if (owns !== key) return json({ error: 'key does not own this slot' }, 403, cors);
+    await env.MAILBOX.put('k:' + key, JSON.stringify({ p: rec.p, n }), { expirationTtl: PUBKEY_TTL_SECONDS });
+    return json({ ok: true }, 200, cors);
+  }
+
+  if (request.method === 'GET'){
+    if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
+    const val = await env.MAILBOX.get('k:' + key);
+    if (val === null) return json({ empty: true }, 404, cors);
+    /* left in place: unlike a handshake message this is not consumed by being
+       read, and every future caller needs it */
+    return new Response(val, { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+  }
+
+  return json({ error: 'method not allowed' }, 405, cors);
+}
+
 /* ---------------- the letterbox: a message for someone who is not there ----------------
    Everything else here assumes both people are awake at the same time. A shop
    at eleven at night is not, and neither is anyone else with a life, so until
@@ -426,6 +514,9 @@ export default {
 
     const w = url.pathname.match(/^\/wake\/([0-9a-f]{64})$/);
     if (w) return handleWake(request, env, cors, w[1]);
+
+    const k = url.pathname.match(/^\/key\/([0-9a-f]{64})$/);
+    if (k) return handleKey(request, env, cors, k[1]);
 
     /* PUT names the letter, GET collects everything waiting */
     const lp = url.pathname.match(/^\/letter\/([0-9a-f]{64})\/([0-9a-f]{16,32})$/);
