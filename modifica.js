@@ -84,7 +84,7 @@ Object.assign(I18N.en, {
 "contacts.title":"Recent contacts",
 "contacts.note":"One tap to see them again: what you said to each other stayed here. Each time needs a fresh invite, because no server keeps anyone connected for you.",
 "toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand","toast.copySelected":"Copy failed — code selected for you, just press Ctrl/Cmd+C",
-"call.busy":"didn't answer — busy on another call.","call.declinedBy":"declined the call.",
+"call.busy":"didn't answer — busy on another call.","call.declinedBy":"declined the call.","call.connectFailed":"The call didn't connect. Try again.",
 "call.joined":"joined the chat.","call.videoInvite":"is video calling you","call.audioInvite":"is calling you",
 "call.inVideo":"Video call in progress…","call.inAudio":"Call in progress…","call.ringingVideo":"Video calling, waiting for answer…","call.ringingAudio":"Calling, waiting for answer…",
 "call.micFail":"Microphone or camera unavailable, or permission denied.",
@@ -183,7 +183,7 @@ Object.assign(I18N.en, {
 "home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.","home.busyReconnect":"You're busy right now. Finish or close the current connection before trying again.",
 "letter.missed":"Wanted to talk to you.",
 "sas.blocked":"Say the three words out loud first: this person is no longer the same one.",
-"file.tooBig":"An incoming file was stopped: it did not match what was declared.",
+"file.tooBig":"An incoming file was stopped: it did not match what was declared.","file.sendFailed":"Send interrupted: the connection closed partway through.",
 "health.storage":"Phone storage",
 "health.storageFull":"Full: conversations are no longer being saved. Free up space on the phone.",
 "addr.lifespan":"For security, this address renews itself once a year: not forever, but stable for a long time.",
@@ -291,7 +291,7 @@ Object.assign(I18N.it, {
 "verify.badge":"verifica","verify.close":"Chiudi",
 "verify.unavailable":"Non ancora disponibile — riprova tra un istante.",
 "toast.sealCopied":"Codice copiato","toast.copyFail":"Copia non riuscita — seleziona e copia a mano","toast.copySelected":"Copia non riuscita — l'ho selezionato per te, premi Ctrl/Cmd+C",
-"call.busy":"non ha risposto — occupato in un'altra chiamata.","call.declinedBy":"ha rifiutato la chiamata.",
+"call.busy":"non ha risposto — occupato in un'altra chiamata.","call.declinedBy":"ha rifiutato la chiamata.","call.connectFailed":"La chiamata non si è collegata. Riprova.",
 "call.joined":"si è unito alla chat.","call.videoInvite":"ti sta facendo una videochiamata","call.audioInvite":"ti sta chiamando",
 "call.inVideo":"Videochiamata in corso…","call.inAudio":"Chiamata in corso…","call.ringingVideo":"Chiamata video in corso, in attesa di risposta…","call.ringingAudio":"Chiamata in corso, in attesa di risposta…",
 "call.micFail":"Microfono o fotocamera non disponibili, o permesso negato.",
@@ -350,7 +350,7 @@ Object.assign(I18N.it, {
 "home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.","home.busyReconnect":"Sei occupato al momento. Chiudi o completa la connessione in corso prima di riprovare.",
 "letter.missed":"Voleva parlarti.",
 "sas.blocked":"Prima dite le tre parole a voce: questa persona non risulta più la stessa.",
-"file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.",
+"file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.","file.sendFailed":"Invio interrotto: la connessione si è chiusa a metà.",
 "health.storage":"Memoria del telefono",
 "health.storageFull":"Piena: le conversazioni non vengono più salvate. Libera spazio sul telefono.",
 "addr.lifespan":"Per sicurezza, questo indirizzo si rinnova da solo una volta l'anno: non è per sempre, ma resta stabile a lungo.",
@@ -420,7 +420,7 @@ Object.assign(I18N.fr, {
 "contacts.title":"Contacts récents",
 "contacts.note":"Un tap pour les revoir : ce que vous vous êtes dit est resté ici. Chaque fois, une nouvelle invitation est nécessaire, car aucun serveur ne garde personne connecté à votre place.",
 "toast.sealCopied":"Code copié","toast.copyFail":"Échec de la copie — sélectionnez et copiez à la main","toast.copySelected":"Échec de la copie — le code a été sélectionné pour vous, appuyez juste sur Ctrl/Cmd+C",
-"call.busy":"n'a pas répondu — occupé sur un autre appel.","call.declinedBy":"a refusé l'appel.",
+"call.busy":"n'a pas répondu — occupé sur un autre appel.","call.declinedBy":"a refusé l'appel.","call.connectFailed":"L'appel ne s'est pas connecté. Réessayez.",
 "call.joined":"a rejoint la discussion.","call.videoInvite":"vous appelle en visio","call.audioInvite":"vous appelle",
 "call.inVideo":"Appel vidéo en cours…","call.inAudio":"Appel en cours…","call.ringingVideo":"Appel vidéo en cours, en attente de réponse…","call.ringingAudio":"Appel en cours, en attente de réponse…",
 "call.micFail":"Microphone ou caméra indisponible, ou permission refusée.",
@@ -510,7 +510,7 @@ Object.assign(I18N.fr, {
 "home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.","home.busyReconnect":"Vous êtes occupé pour le moment. Terminez ou fermez la connexion en cours avant de réessayer.",
 "letter.missed":"Voulait vous parler.",
 "sas.blocked":"Dites d'abord les trois mots à voix haute : cette personne n'est plus la même.",
-"file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.",
+"file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.","file.sendFailed":"Envoi interrompu : la connexion s'est fermée en cours de route.",
 "health.storage":"Mémoire du téléphone",
 "health.storageFull":"Pleine : les conversations ne sont plus enregistrées. Libérez de l'espace sur le téléphone.",
 "addr.lifespan":"Par sécurité, cette adresse se renouvelle d'elle-même une fois par an : pas pour toujours, mais stable longtemps.",
@@ -580,7 +580,7 @@ Object.assign(I18N.de, {
 "contacts.title":"Letzte Kontakte",
 "contacts.note":"Ein Tipp, um sie wiederzusehen: was ihr euch gesagt habt, ist hier geblieben. Jedes Mal braucht es eine neue Einladung, weil kein Server jemanden für dich verbunden hält.",
 "toast.sealCopied":"Code kopiert","toast.copyFail":"Kopieren fehlgeschlagen — von Hand auswählen und kopieren","toast.copySelected":"Kopieren fehlgeschlagen — Code für dich ausgewählt, drücke einfach Strg/Cmd+C",
-"call.busy":"hat nicht geantwortet — beschäftigt mit einem anderen Anruf.","call.declinedBy":"hat den Anruf abgelehnt.",
+"call.busy":"hat nicht geantwortet — beschäftigt mit einem anderen Anruf.","call.declinedBy":"hat den Anruf abgelehnt.","call.connectFailed":"Der Anruf konnte nicht verbunden werden. Versuche es erneut.",
 "call.joined":"ist dem Chat beigetreten.","call.videoInvite":"ruft dich per Video an","call.audioInvite":"ruft dich an",
 "call.inVideo":"Videoanruf läuft…","call.inAudio":"Anruf läuft…","call.ringingVideo":"Videoanruf, warte auf Antwort…","call.ringingAudio":"Anruf läuft, warte auf Antwort…",
 "call.micFail":"Mikrofon oder Kamera nicht verfügbar, oder Berechtigung verweigert.",
@@ -670,7 +670,7 @@ Object.assign(I18N.de, {
 "home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.","home.busyReconnect":"Du bist gerade beschäftigt. Beende oder schließe die aktuelle Verbindung, bevor du es erneut versuchst.",
 "letter.missed":"Wollte mit dir sprechen.",
 "sas.blocked":"Sagt euch zuerst die drei Wörter laut: diese Person ist nicht mehr dieselbe.",
-"file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.",
+"file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.","file.sendFailed":"Senden unterbrochen: die Verbindung wurde mittendrin geschlossen.",
 "health.storage":"Speicher des Telefons",
 "health.storageFull":"Voll: Unterhaltungen werden nicht mehr gespeichert. Schaff Platz auf dem Telefon.",
 "addr.lifespan":"Aus Sicherheitsgründen erneuert sich diese Adresse einmal im Jahr von selbst: nicht für immer, aber lange stabil.",
@@ -740,7 +740,7 @@ Object.assign(I18N.es, {
 "contacts.title":"Contactos recientes",
 "contacts.note":"Un toque para volver a verlos: lo que os dijisteis se quedó aquí. Cada vez hace falta una invitación nueva, porque ningún servidor mantiene a nadie conectado por vosotros.",
 "toast.sealCopied":"Código copiado","toast.copyFail":"Copia fallida — selecciona y copia a mano","toast.copySelected":"Copia fallida — código seleccionado para ti, solo pulsa Ctrl/Cmd+C",
-"call.busy":"no respondió — ocupado en otra llamada.","call.declinedBy":"rechazó la llamada.",
+"call.busy":"no respondió — ocupado en otra llamada.","call.declinedBy":"rechazó la llamada.","call.connectFailed":"La llamada no se conectó. Inténtalo de nuevo.",
 "call.joined":"se unió al chat.","call.videoInvite":"te está haciendo una videollamada","call.audioInvite":"te está llamando",
 "call.inVideo":"Videollamada en curso…","call.inAudio":"Llamada en curso…","call.ringingVideo":"Videollamada, esperando respuesta…","call.ringingAudio":"Llamando, esperando respuesta…",
 "call.micFail":"Micrófono o cámara no disponibles, o permiso denegado.",
@@ -830,7 +830,7 @@ Object.assign(I18N.es, {
 "home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.","home.busyReconnect":"Estás ocupado ahora mismo. Termina o cierra la conexión actual antes de volver a intentarlo.",
 "letter.missed":"Quería hablar contigo.",
 "sas.blocked":"Decíos antes las tres palabras en voz alta: esta persona ya no es la misma.",
-"file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.",
+"file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.","file.sendFailed":"Envío interrumpido: la conexión se cerró a mitad de camino.",
 "health.storage":"Memoria del teléfono",
 "health.storageFull":"Llena: las conversaciones ya no se guardan. Libera espacio en el teléfono.",
 "addr.lifespan":"Por seguridad, esta dirección se renueva sola una vez al año: no es para siempre, pero es estable durante mucho tiempo.",
@@ -900,7 +900,7 @@ Object.assign(I18N.pt, {
 "contacts.title":"Contactos recentes",
 "contacts.note":"Um toque para os rever: o que disseram um ao outro ficou aqui. Cada vez é preciso um convite novo, porque nenhum servidor mantém ninguém ligado por si.",
 "toast.sealCopied":"Código copiado","toast.copyFail":"Falha ao copiar — selecione e copie manualmente","toast.copySelected":"Falha ao copiar — código selecionado para si, basta premir Ctrl/Cmd+C",
-"call.busy":"não atendeu — ocupado noutra chamada.","call.declinedBy":"recusou a chamada.",
+"call.busy":"não atendeu — ocupado noutra chamada.","call.declinedBy":"recusou a chamada.","call.connectFailed":"A chamada não ligou. Tente novamente.",
 "call.joined":"entrou na conversa.","call.videoInvite":"está a fazer-lhe uma videochamada","call.audioInvite":"está a ligar-lhe",
 "call.inVideo":"Videochamada em curso…","call.inAudio":"Chamada em curso…","call.ringingVideo":"Videochamada, a aguardar resposta…","call.ringingAudio":"A chamar, a aguardar resposta…",
 "call.micFail":"Microfone ou câmara indisponíveis, ou permissão negada.",
@@ -990,7 +990,7 @@ Object.assign(I18N.pt, {
 "home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.","home.busyReconnect":"Está ocupado neste momento. Termine ou feche a ligação atual antes de tentar novamente.",
 "letter.missed":"Queria falar consigo.",
 "sas.blocked":"Digam primeiro as três palavras em voz alta: esta pessoa já não é a mesma.",
-"file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.",
+"file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.","file.sendFailed":"Envio interrompido: a ligação fechou a meio.",
 "health.storage":"Memória do telemóvel",
 "health.storageFull":"Cheia: as conversas já não são guardadas. Liberte espaço no telemóvel.",
 "addr.lifespan":"Por segurança, este endereço renova-se sozinho uma vez por ano: não é para sempre, mas é estável durante muito tempo.",
@@ -1060,7 +1060,7 @@ Object.assign(I18N.ru, {
 "contacts.title":"Недавние контакты",
 "contacts.note":"Одно касание, чтобы увидеть их снова: то, что вы сказали друг другу, осталось здесь. Каждый раз нужно новое приглашение, потому что ни один сервер не держит никого на связи за вас.",
 "toast.sealCopied":"Код скопирован","toast.copyFail":"Не удалось скопировать — выделите и скопируйте вручную","toast.copySelected":"Не удалось скопировать — код выделен за вас, просто нажмите Ctrl/Cmd+C",
-"call.busy":"не ответил(а) — занят(а) другим звонком.","call.declinedBy":"отклонил(а) звонок.",
+"call.busy":"не ответил(а) — занят(а) другим звонком.","call.declinedBy":"отклонил(а) звонок.","call.connectFailed":"Звонок не удалось установить. Попробуйте снова.",
 "call.joined":"присоединился(лась) к чату.","call.videoInvite":"видеозвонит вам","call.audioInvite":"звонит вам",
 "call.inVideo":"Идёт видеозвонок…","call.inAudio":"Идёт звонок…","call.ringingVideo":"Видеозвонок, ожидание ответа…","call.ringingAudio":"Звонок, ожидание ответа…",
 "call.micFail":"Микрофон или камера недоступны, либо доступ запрещён.",
@@ -1150,7 +1150,7 @@ Object.assign(I18N.ru, {
 "home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.","home.busyReconnect":"Сейчас вы заняты. Завершите или закройте текущее соединение, прежде чем пробовать снова.",
 "letter.missed":"Хотел(а) с вами поговорить.",
 "sas.blocked":"Сначала произнесите три слова вслух: это уже не тот же человек.",
-"file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.",
+"file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.","file.sendFailed":"Отправка прервана: соединение закрылось на середине.",
 "health.storage":"Память телефона",
 "health.storageFull":"Заполнена: разговоры больше не сохраняются. Освободите место на телефоне.",
 "addr.lifespan":"Из соображений безопасности этот адрес сам обновляется раз в год: не навсегда, но стабилен надолго.",
@@ -1220,7 +1220,7 @@ Object.assign(I18N.zh, {
 "contacts.title":"最近联系人",
 "contacts.note":"轻触即可再次查看：你们说过的话保留在这里。每次都需要一个新邀请，因为没有服务器替你们保持连接。",
 "toast.sealCopied":"代码已复制","toast.copyFail":"复制失败——请手动选择并复制","toast.copySelected":"复制失败——已为你选中代码，按 Ctrl/Cmd+C 即可",
-"call.busy":"未接听——正在通话中。","call.declinedBy":"拒绝了通话。",
+"call.busy":"未接听——正在通话中。","call.declinedBy":"拒绝了通话。","call.connectFailed":"通话未能连接。请重试。",
 "call.joined":"加入了聊天。","call.videoInvite":"正在给你打视频电话","call.audioInvite":"正在给你打电话",
 "call.inVideo":"视频通话进行中…","call.inAudio":"通话进行中…","call.ringingVideo":"视频呼叫中，等待接听…","call.ringingAudio":"呼叫中，等待接听…",
 "call.micFail":"麦克风或摄像头不可用，或权限被拒绝。",
@@ -1310,7 +1310,7 @@ Object.assign(I18N.zh, {
 "home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。","home.busyReconnect":"您现在正忙。请先完成或关闭当前连接，再重试。",
 "letter.missed":"想跟你说说话。",
 "sas.blocked":"请先把三个词念出来核对：这个人已经不是原来那位了。",
-"file.tooBig":"一个接收中的文件已被中止：它与声明的不符。",
+"file.tooBig":"一个接收中的文件已被中止：它与声明的不符。","file.sendFailed":"发送中断：连接在传输过程中关闭了。",
 "health.storage":"手机存储",
 "health.storageFull":"已满：对话不再被保存。请清理手机空间。",
 "addr.lifespan":"出于安全考虑，这个地址每年会自动更新一次：不是永久的，但会稳定很长一段时间。",
@@ -1380,7 +1380,7 @@ Object.assign(I18N.ar, {
 "contacts.title":"جهات الاتصال الأخيرة",
 "contacts.note":"لمسة واحدة لرؤيتهم مجددًا: ما قلتماه لبعضكما بقي هنا. في كل مرة تحتاجان إلى دعوة جديدة، لأن لا خادم يبقي أحدًا متصلًا نيابة عنكما.",
 "toast.sealCopied":"تم نسخ الرمز","toast.copyFail":"فشل النسخ — حدّد وانسخ يدويًا","toast.copySelected":"فشل النسخ — تم تحديد الرمز لك، فقط اضغط Ctrl/Cmd+C",
-"call.busy":"لم يرد — مشغول في مكالمة أخرى.","call.declinedBy":"رفض المكالمة.",
+"call.busy":"لم يرد — مشغول في مكالمة أخرى.","call.declinedBy":"رفض المكالمة.","call.connectFailed":"لم يتم توصيل المكالمة. حاول مرة أخرى.",
 "call.joined":"انضم إلى المحادثة.","call.videoInvite":"يتصل بك بالفيديو","call.audioInvite":"يتصل بك",
 "call.inVideo":"مكالمة فيديو جارية…","call.inAudio":"مكالمة جارية…","call.ringingVideo":"اتصال فيديو، في انتظار الرد…","call.ringingAudio":"اتصال جارٍ، في انتظار الرد…",
 "call.micFail":"الميكروفون أو الكاميرا غير متاحين، أو تم رفض الإذن.",
@@ -1470,7 +1470,7 @@ Object.assign(I18N.ar, {
 "home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.","home.busyReconnect":"أنت مشغول الآن. أنهِ الاتصال الحالي أو أغلقه قبل المحاولة مرة أخرى.",
 "letter.missed":"أراد التحدث إليك.",
 "sas.blocked":"قولا الكلمات الثلاث بصوت عالٍ أولًا: هذا الشخص لم يعد نفسه.",
-"file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.",
+"file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.","file.sendFailed":"توقف الإرسال: أُغلق الاتصال في المنتصف.",
 "health.storage":"ذاكرة الهاتف",
 "health.storageFull":"ممتلئة: لم تعد المحادثات تُحفظ. أفرغ بعض المساحة في الهاتف.",
 "addr.lifespan":"لأسباب أمنية، يتجدد هذا العنوان تلقائيًا مرة كل عام: ليس إلى الأبد، لكنه يبقى ثابتًا لفترة طويلة.",
@@ -1540,7 +1540,7 @@ Object.assign(I18N.ur, {
 "contacts.title":"حالیہ رابطے",
 "contacts.note":"دوبارہ دیکھنے کے لیے ایک ٹچ: جو کچھ آپ نے ایک دوسرے سے کہا وہ یہاں رہا۔ ہر بار ایک نئی دعوت درکار ہوتی ہے، کیونکہ کوئی سرور آپ کی جگہ کسی کو منسلک نہیں رکھتا۔",
 "toast.sealCopied":"کوڈ کاپی ہو گیا","toast.copyFail":"کاپی ناکام — دستی طور پر منتخب کریں اور کاپی کریں","toast.copySelected":"کاپی ناکام — کوڈ آپ کے لیے منتخب کر دیا گیا، بس Ctrl/Cmd+C دبائیں",
-"call.busy":"جواب نہیں دیا — کسی اور کال میں مصروف۔","call.declinedBy":"کال مسترد کر دی۔",
+"call.busy":"جواب نہیں دیا — کسی اور کال میں مصروف۔","call.declinedBy":"کال مسترد کر دی۔","call.connectFailed":"کال منسلک نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
 "call.joined":"چیٹ میں شامل ہو گیا۔","call.videoInvite":"آپ کو ویڈیو کال کر رہا ہے","call.audioInvite":"آپ کو کال کر رہا ہے",
 "call.inVideo":"ویڈیو کال جاری ہے…","call.inAudio":"کال جاری ہے…","call.ringingVideo":"ویڈیو کال ہو رہی ہے، جواب کا انتظار…","call.ringingAudio":"کال ہو رہی ہے، جواب کا انتظار…",
 "call.micFail":"مائیکروفون یا کیمرا دستیاب نہیں، یا اجازت مسترد کر دی گئی۔",
@@ -1630,7 +1630,7 @@ Object.assign(I18N.ur, {
 "home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔","home.busyReconnect":"آپ ابھی مصروف ہیں۔ دوبارہ کوشش کرنے سے پہلے موجودہ کنکشن مکمل کریں یا بند کریں۔",
 "letter.missed":"آپ سے بات کرنا چاہتا تھا۔",
 "sas.blocked":"پہلے تینوں الفاظ بول کر ملائیں: یہ شخص اب وہی نہیں رہا۔",
-"file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔",
+"file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔","file.sendFailed":"بھیجنا رک گیا: کنکشن درمیان میں بند ہو گیا۔",
 "health.storage":"فون کی میموری",
 "health.storageFull":"بھری ہوئی ہے: گفتگو اب محفوظ نہیں ہو رہی۔ فون میں جگہ خالی کریں۔",
 "addr.lifespan":"حفاظتی وجوہات کی بنا پر، یہ پتہ سال میں ایک بار خود بخود تجدید ہوتا ہے: ہمیشہ کے لیے نہیں، مگر طویل عرصے تک مستحکم رہتا ہے۔",
@@ -1700,7 +1700,7 @@ Object.assign(I18N.hi, {
 "contacts.title":"हाल के संपर्क",
 "contacts.note":"उन्हें फिर से देखने के लिए एक टैप: आपने एक-दूसरे से जो कहा वह यहाँ रह गया। हर बार एक नए निमंत्रण की ज़रूरत होती है, क्योंकि कोई सर्वर आपकी जगह किसी को जुड़ा हुआ नहीं रखता।",
 "toast.sealCopied":"कोड कॉपी हो गया","toast.copyFail":"कॉपी विफल — हाथ से चुनें और कॉपी करें","toast.copySelected":"कॉपी विफल — कोड आपके लिए चुन दिया गया है, बस Ctrl/Cmd+C दबाएं",
-"call.busy":"जवाब नहीं दिया — किसी और कॉल में व्यस्त।","call.declinedBy":"कॉल अस्वीकार कर दी।",
+"call.busy":"जवाब नहीं दिया — किसी और कॉल में व्यस्त।","call.declinedBy":"कॉल अस्वीकार कर दी।","call.connectFailed":"कॉल कनेक्ट नहीं हो सकी। फिर से कोशिश करें।",
 "call.joined":"चैट में शामिल हुआ।","call.videoInvite":"आपको वीडियो कॉल कर रहा है","call.audioInvite":"आपको कॉल कर रहा है",
 "call.inVideo":"वीडियो कॉल जारी है…","call.inAudio":"कॉल जारी है…","call.ringingVideo":"वीडियो कॉल हो रही है, जवाब का इंतज़ार…","call.ringingAudio":"कॉल हो रही है, जवाब का इंतज़ार…",
 "call.micFail":"माइक्रोफ़ोन या कैमरा उपलब्ध नहीं, या अनुमति अस्वीकृत।",
@@ -1790,7 +1790,7 @@ Object.assign(I18N.hi, {
 "home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।","home.busyReconnect":"आप अभी व्यस्त हैं। दोबारा कोशिश करने से पहले मौजूदा कनेक्शन पूरा करें या बंद करें।",
 "letter.missed":"आपसे बात करना चाहता था।",
 "sas.blocked":"पहले तीनों शब्द बोलकर मिलाएँ: यह व्यक्ति अब वही नहीं रहा।",
-"file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।",
+"file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।","file.sendFailed":"भेजना बीच में रुक गया: कनेक्शन बीच में बंद हो गया।",
 "health.storage":"फ़ोन की मेमोरी",
 "health.storageFull":"भरी हुई है: बातचीत अब सहेजी नहीं जा रही। फ़ोन में जगह खाली करें।",
 "addr.lifespan":"सुरक्षा के लिए, यह पता साल में एक बार खुद-ब-खुद नवीनीकृत होता है: हमेशा के लिए नहीं, पर लंबे समय तक स्थिर रहता है।",
@@ -1860,7 +1860,7 @@ Object.assign(I18N.bn, {
 "contacts.title":"সাম্প্রতিক পরিচিতি",
 "contacts.note":"তাদের আবার দেখতে একটি ট্যাপ: আপনারা একে অপরকে যা বলেছেন তা এখানে থেকে গেছে। প্রতিবার একটি নতুন আমন্ত্রণ প্রয়োজন, কারণ কোনো সার্ভার আপনার হয়ে কাউকে সংযুক্ত রাখে না।",
 "toast.sealCopied":"কোড কপি হয়েছে","toast.copyFail":"কপি ব্যর্থ — হাতে নির্বাচন করে কপি করুন","toast.copySelected":"কপি ব্যর্থ — আপনার জন্য কোড নির্বাচিত হয়েছে, শুধু Ctrl/Cmd+C চাপুন",
-"call.busy":"উত্তর দেননি — অন্য কলে ব্যস্ত।","call.declinedBy":"কল প্রত্যাখ্যান করেছেন।",
+"call.busy":"উত্তর দেননি — অন্য কলে ব্যস্ত।","call.declinedBy":"কল প্রত্যাখ্যান করেছেন।","call.connectFailed":"কলটি সংযুক্ত হয়নি। আবার চেষ্টা করুন।",
 "call.joined":"চ্যাটে যোগ দিয়েছেন।","call.videoInvite":"আপনাকে ভিডিও কল করছেন","call.audioInvite":"আপনাকে কল করছেন",
 "call.inVideo":"ভিডিও কল চলছে…","call.inAudio":"কল চলছে…","call.ringingVideo":"ভিডিও কল হচ্ছে, উত্তরের অপেক্ষায়…","call.ringingAudio":"কল হচ্ছে, উত্তরের অপেক্ষায়…",
 "call.micFail":"মাইক্রোফোন বা ক্যামেরা উপলব্ধ নয়, বা অনুমতি প্রত্যাখ্যাত।",
@@ -1950,7 +1950,7 @@ Object.assign(I18N.bn, {
 "home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।","home.busyReconnect":"আপনি এখন ব্যস্ত আছেন। আবার চেষ্টা করার আগে বর্তমান সংযোগটি শেষ করুন বা বন্ধ করুন।",
 "letter.missed":"আপনার সঙ্গে কথা বলতে চেয়েছিলেন।",
 "sas.blocked":"আগে তিনটি শব্দ মুখে বলে মিলিয়ে নিন: এই ব্যক্তি আর আগের জন নন।",
-"file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।",
+"file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।","file.sendFailed":"পাঠানো বন্ধ হয়ে গেছে: সংযোগ মাঝপথে বন্ধ হয়ে গেছে।",
 "health.storage":"ফোনের মেমোরি",
 "health.storageFull":"পূর্ণ: কথোপকথন আর সংরক্ষিত হচ্ছে না। ফোনে জায়গা খালি করুন।",
 "addr.lifespan":"নিরাপত্তার জন্য, এই ঠিকানা বছরে একবার নিজে থেকেই নবায়ন হয়: চিরকালের জন্য নয়, তবে দীর্ঘদিন স্থিতিশীল থাকে।",
@@ -2020,7 +2020,7 @@ Object.assign(I18N.id, {
 "contacts.title":"Kontak terbaru",
 "contacts.note":"Satu ketukan untuk melihat mereka lagi: apa yang kalian katakan satu sama lain tetap di sini. Setiap kali membutuhkan undangan baru, karena tidak ada server yang menjaga siapa pun tetap terhubung untuk Anda.",
 "toast.sealCopied":"Kode disalin","toast.copyFail":"Gagal menyalin — pilih dan salin secara manual","toast.copySelected":"Gagal menyalin — kode telah dipilihkan untuk Anda, cukup tekan Ctrl/Cmd+C",
-"call.busy":"tidak menjawab — sedang sibuk di panggilan lain.","call.declinedBy":"menolak panggilan.",
+"call.busy":"tidak menjawab — sedang sibuk di panggilan lain.","call.declinedBy":"menolak panggilan.","call.connectFailed":"Panggilan tidak tersambung. Coba lagi.",
 "call.joined":"bergabung ke obrolan.","call.videoInvite":"menelepon video Anda","call.audioInvite":"meneleponi Anda",
 "call.inVideo":"Panggilan video sedang berlangsung…","call.inAudio":"Panggilan sedang berlangsung…","call.ringingVideo":"Panggilan video, menunggu jawaban…","call.ringingAudio":"Memanggil, menunggu jawaban…",
 "call.micFail":"Mikrofon atau kamera tidak tersedia, atau izin ditolak.",
@@ -2110,7 +2110,7 @@ Object.assign(I18N.id, {
 "home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.","home.busyReconnect":"Anda sedang sibuk sekarang. Selesaikan atau tutup koneksi yang sedang berlangsung sebelum mencoba lagi.",
 "letter.missed":"Ingin bicara dengan Anda.",
 "sas.blocked":"Ucapkan dulu ketiga kata itu: orang ini bukan lagi orang yang sama.",
-"file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.",
+"file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.","file.sendFailed":"Pengiriman terputus: koneksi tertutup di tengah jalan.",
 "health.storage":"Penyimpanan ponsel",
 "health.storageFull":"Penuh: percakapan tidak lagi disimpan. Kosongkan ruang di ponsel.",
 "addr.lifespan":"Demi keamanan, alamat ini memperbarui dirinya sendiri setahun sekali: bukan selamanya, tapi stabil untuk waktu yang lama.",
@@ -4586,7 +4586,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.46';
+const APP_VERSION = 'logos-modifica-3.47';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -4883,7 +4883,16 @@ async function acceptIncomingAutoOffer(contact, msg, sec){
     if (pc !== myPc){ pump.stop(); return; }   /* superseded while we waited */
     const outKey = await pairKey(myFp, contact.fp);
     /* answered at once, so the other side stops knocking at a door we have not opened */
-    await mailboxPutSealed(outKey, sec, { sdp: myPc.localDescription.sdp });
+    const sent = await mailboxPutSealed(outKey, sec, { sdp: myPc.localDescription.sdp });
+    if (!sent){
+      /* proceeding here left the caller waiting on a reply that had never
+         left this device — silent until their own long timeout finally gave
+         up. This side can say so right away instead. */
+      pump.stop();
+      if (pc === myPc){ try{ pc.close(); }catch(_){} pc = null; }
+      setStatus($('statusA'), t('broker.down','Il servizio che vi fa incontrare non risponde. Il codice lungo qui sotto funziona lo stesso: non passa da nessun server.'), 'bad');
+      return;
+    }
     watchHandshakeProgress(myPc, $('statusA'), $('diagA'), pump);
     /* the data channel opening (wired above via wireDataChannel) takes it from here: enterChat() */
   }catch(e){
@@ -5704,18 +5713,27 @@ async function sendFile(file){
   if (!file || !dc || dc.readyState !== 'open') return;
   if (blockedBySafety()) return;
   const id = Math.random().toString(36).slice(2);
-  dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
-  let off = 0;
-  while (off < file.size){
-    const end = Math.min(off + CHUNK, file.size);
-    const buf = await file.slice(off, end).arrayBuffer();
-    const framed = new Uint8Array(buf.byteLength + 16);
-    framed.set(new TextEncoder().encode(id.padEnd(16,' ').slice(0,16)), 0);
-    framed.set(new Uint8Array(buf), 16);
-    await sendWithBackpressure(dc, framed);
-    off = end;
+  try{
+    dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
+    let off = 0;
+    while (off < file.size){
+      const end = Math.min(off + CHUNK, file.size);
+      const buf = await file.slice(off, end).arrayBuffer();
+      const framed = new Uint8Array(buf.byteLength + 16);
+      framed.set(new TextEncoder().encode(id.padEnd(16,' ').slice(0,16)), 0);
+      framed.set(new Uint8Array(buf), 16);
+      await sendWithBackpressure(dc, framed);
+      off = end;
+    }
+    dc.send(JSON.stringify({ type: 'file-end', id }));
+  }catch(e){
+    /* the bubble is only rendered after the loop finishes, so a channel that
+       closed mid-transfer used to leave nothing on screen at all — the file
+       the sender was watching simply never appeared, with no sign anything
+       had gone wrong */
+    toast(t('file.sendFailed','Invio interrotto: la connessione si è chiusa a metà.'));
+    return;
   }
-  dc.send(JSON.stringify({ type: 'file-end', id }));
   const url = keepObjectUrl(URL.createObjectURL(file));
   const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
   const preview = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
@@ -6052,7 +6070,14 @@ function handleCallSignal(msg){
       { name: peerNick || t('chat.someone') }));
   } else if (msg.type === 'call-accept'){ stopRing(); disarmCallTimeout(); onCallAccepted();
   } else if (msg.type === 'call-offer-sdp'){ onCallOfferSdp(msg.sdp);
-  } else if (msg.type === 'call-answer-sdp'){ pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(()=>{});
+  } else if (msg.type === 'call-answer-sdp'){
+    pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(() => {
+      /* the call already looks "active" from onCallAccepted() onward — left
+         silent, a failure here meant both people staring at a live-looking
+         call neither could actually hear */
+      endCall(true);
+      sysLine(t('call.connectFailed','La chiamata non si è collegata. Riprova.'));
+    });
   } else if (msg.type === 'call-end'){ stopRing(); disarmCallTimeout(); endCall(false); }
 }
 $('btnAcceptCall').addEventListener('click', async () => {
@@ -6532,7 +6557,13 @@ startInboxPolling();
   if (/[#&][qia]=/.test(location.hash)) return;
   const pending = readPendingInvite();
   if (!pending) return;
-  try{ startQuickShare(pending.code, true); }catch(e){}
+  /* startQuickShare is async: a synchronous try/catch here only ever caught
+     an error thrown before its first await, which in practice is none of
+     them — everything past that point became an unhandled promise rejection
+     instead, invisible to this catch. Caught properly now; still silent by
+     design (see the note above this function) rather than alarming someone
+     over a resume that may simply have nobody waiting on the other end. */
+  startQuickShare(pending.code, true).catch(() => {});
 })();
 
 function autoFillFromHash(){

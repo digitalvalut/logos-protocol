@@ -406,6 +406,24 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
+    /* the bubble is only rendered after the whole loop finishes, so a channel
+       that throws partway used to leave nothing on screen at all — no error,
+       no bubble, no sign anything had gone wrong. */
+    const app = loadApp();
+    app.run(`
+      dc = { readyState: 'open', send: function(){ throw new Error('channel closed'); } };
+      window.__msgsBefore = $('msgs').children.length;
+      window.__bodyBefore = document.body.children.length;
+      sendFile({ name: 'x.txt', type: 'text/plain', size: 3 });
+    `);
+    assert.strictEqual(app.run('$("msgs").children.length'), app.run('window.__msgsBefore'),
+      'a failed send must not claim the file was delivered');
+    assert.ok(app.run('document.body.children.length') > app.run('window.__bodyBefore'),
+      'nothing told the sender the file never went');
+    app.stop();
+  });
+
   test('the Worker meters writes, not only reads', () => {
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
     assert.ok(!/request\.method === 'GET' && overRateLimit/.test(worker),
