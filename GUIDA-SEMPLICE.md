@@ -183,7 +183,7 @@ Ve lo diciamo prima, non dopo.
 **DigitalValut** — Associazione di Promozione Sociale, Ente del Terzo Settore.
 Ideata dal Dott. Giuseppe Falsone.
 
-Software **libero e open source** (licenza MIT): il codice è pubblico e chiunque
+Software **libero e open source** (licenza Apache 2.0): il codice è pubblico e chiunque
 può controllarlo, copiarlo e rimetterlo online.
 
 - App: https://digitalvalut.github.io/logos-protocol/

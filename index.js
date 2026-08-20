@@ -1,3 +1,19 @@
+/*
+ * Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /* The front door, in every language the app itself speaks.
 
    Kept deliberately short. A landing page is read standing up, on a phone, by
@@ -34,7 +50,7 @@ T.it = {
   'limits.title': "Cosa non fa",
   'limits.body': "Serve che siate online tutti e due nello stesso momento, altrimenti non arriva niente. Chi parla con te vede il tuo indirizzo di rete (IP). Su reti molto filtrate le chiamate possono non collegarsi. E nessun sito al mondo può impedire a qualcuno di fare uno screenshot.",
   'limits.why': "Lo scriviamo qui, in prima pagina, perché preferiamo dirtelo prima che dopo.",
-  'foot.who': "Software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Utilizzabile gratis da chiunque, ovunque nel mondo.",
+  'foot.who': "Software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Utilizzabile gratis da chiunque, ovunque nel mondo.",
   'foot.code': "Il codice, in chiaro, per chiunque voglia controllarlo",
 };
 
@@ -56,7 +72,7 @@ T.en = {
   'limits.title': "What it doesn't do",
   'limits.body': "You both need to be online at the same time, otherwise nothing arrives. Whoever talks to you sees your network address (IP). On heavily filtered networks calls may not connect. And no website anywhere can stop somebody taking a screenshot.",
   'limits.why': "We put this on the front page because we would rather tell you now than later.",
-  'foot.who': "Free and open source software (MIT licence), owned by DigitalValut, an Italian non-profit social promotion association. Free for anyone to use, anywhere in the world.",
+  'foot.who': "Free and open source software (Apache 2.0 licence), owned by DigitalValut, an Italian non-profit social promotion association. Free for anyone to use, anywhere in the world.",
   'foot.code': "The code, in the open, for anyone who wants to check it",
 };
 
@@ -78,7 +94,7 @@ T.fr = {
   'limits.title': "Ce qu'elle ne fait pas",
   'limits.body': "Il faut que vous soyez en ligne tous les deux en même temps, sinon rien n'arrive. La personne qui vous parle voit votre adresse réseau (IP). Sur les réseaux très filtrés, les appels peuvent ne pas aboutir. Et aucun site au monde ne peut empêcher quelqu'un de faire une capture d'écran.",
   'limits.why': "Nous l'écrivons ici, en première page, parce que nous préférons vous le dire avant qu'après.",
-  'foot.who': "Logiciel libre et open source (licence MIT), propriété de DigitalValut, association italienne de promotion sociale à but non lucratif. Utilisable gratuitement par tous, partout dans le monde.",
+  'foot.who': "Logiciel libre et open source (licence Apache 2.0), propriété de DigitalValut, association italienne de promotion sociale à but non lucratif. Utilisable gratuitement par tous, partout dans le monde.",
   'foot.code': "Le code, en clair, pour qui veut le vérifier",
 };
 
@@ -100,7 +116,7 @@ T.de = {
   'limits.title': "Was sie nicht kann",
   'limits.body': "Ihr müsst beide gleichzeitig online sein, sonst kommt nichts an. Wer mit dir spricht, sieht deine Netzwerkadresse (IP). In stark gefilterten Netzen kommen Anrufe womöglich nicht zustande. Und keine Website der Welt kann jemanden am Bildschirmfoto hindern.",
   'limits.why': "Wir schreiben das auf die Startseite, weil wir es dir lieber vorher sagen als hinterher.",
-  'foot.who': "Freie und quelloffene Software (MIT-Lizenz), Eigentum von DigitalValut, einem italienischen gemeinnützigen Verein zur sozialen Förderung. Für alle kostenlos nutzbar, überall auf der Welt.",
+  'foot.who': "Freie und quelloffene Software (Apache 2.0-Lizenz), Eigentum von DigitalValut, einem italienischen gemeinnützigen Verein zur sozialen Förderung. Für alle kostenlos nutzbar, überall auf der Welt.",
   'foot.code': "Der Quelltext, offen, für alle die ihn prüfen wollen",
 };
 
@@ -122,7 +138,7 @@ T.es = {
   'limits.title': "Lo que no hace",
   'limits.body': "Hace falta que estéis los dos en línea a la vez, si no, no llega nada. Quien habla contigo ve tu dirección de red (IP). En redes muy filtradas las llamadas pueden no conectarse. Y ninguna web del mundo puede impedir que alguien haga una captura de pantalla.",
   'limits.why': "Lo escribimos aquí, en la portada, porque preferimos decírtelo antes que después.",
-  'foot.who': "Software libre y de código abierto (licencia MIT), propiedad de DigitalValut, asociación italiana sin ánimo de lucro de promoción social. Gratis para cualquiera, en cualquier parte del mundo.",
+  'foot.who': "Software libre y de código abierto (licencia Apache 2.0), propiedad de DigitalValut, asociación italiana sin ánimo de lucro de promoción social. Gratis para cualquiera, en cualquier parte del mundo.",
   'foot.code': "El código, a la vista, para quien quiera comprobarlo",
 };
 
@@ -144,7 +160,7 @@ T.pt = {
   'limits.title': "O que não faz",
   'limits.body': "É preciso que estejam os dois online ao mesmo tempo, senão não chega nada. Quem fala consigo vê o seu endereço de rede (IP). Em redes muito filtradas as chamadas podem não ligar. E nenhum site do mundo pode impedir alguém de tirar uma captura de ecrã.",
   'limits.why': "Escrevemos isto na primeira página porque preferimos dizer-lho antes do que depois.",
-  'foot.who': "Software livre e de código aberto (licença MIT), propriedade da DigitalValut, associação italiana sem fins lucrativos de promoção social. Utilizável gratuitamente por qualquer pessoa, em qualquer parte do mundo.",
+  'foot.who': "Software livre e de código aberto (licença Apache 2.0), propriedade da DigitalValut, associação italiana sem fins lucrativos de promoção social. Utilizável gratuitamente por qualquer pessoa, em qualquer parte do mundo.",
   'foot.code': "O código, à vista, para quem o quiser verificar",
 };
 
@@ -166,7 +182,7 @@ T.ru = {
   'limits.title': "Чего оно не делает",
   'limits.body': "Нужно, чтобы вы оба были в сети одновременно, иначе ничего не придёт. Тот, кто говорит с вами, видит ваш сетевой адрес (IP). В сильно фильтруемых сетях звонки могут не соединяться. И ни один сайт в мире не может помешать сделать снимок экрана.",
   'limits.why': "Мы пишем это на первой странице, потому что предпочитаем сказать заранее, а не потом.",
-  'foot.who': "Свободное программное обеспечение с открытым исходным кодом (лицензия MIT), принадлежит DigitalValut — итальянской некоммерческой ассоциации социального содействия. Бесплатно для всех и везде.",
+  'foot.who': "Свободное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит DigitalValut — итальянской некоммерческой ассоциации социального содействия. Бесплатно для всех и везде.",
   'foot.code': "Исходный код, открытый для всех, кто захочет его проверить",
 };
 
@@ -188,7 +204,7 @@ T.zh = {
   'limits.title': "它做不到什么",
   'limits.body': "需要你们两个同时在线，否则什么都收不到。和你通话的人能看到你的网络地址（IP）。在过滤严格的网络上，通话可能连不上。而且世界上没有任何网站能阻止别人截屏。",
   'limits.why': "我们把这些写在首页，因为我们宁愿事先告诉你，而不是事后。",
-  'foot.who': "自由开源软件（MIT 许可证），归意大利非营利社会促进协会 DigitalValut 所有。世界上任何人都可以免费使用。",
+  'foot.who': "自由开源软件（Apache 2.0 许可证），归意大利非营利社会促进协会 DigitalValut 所有。世界上任何人都可以免费使用。",
   'foot.code': "公开的源代码，供任何想检查的人查看",
 };
 
@@ -210,7 +226,7 @@ T.ar = {
   'limits.title': "ما لا يفعله",
   'limits.body': "يجب أن تكونا متصلين بالإنترنت في الوقت نفسه، وإلا لن يصل شيء. من يتحدث معك يرى عنوان شبكتك (IP). على الشبكات المُرشَّحة بشدة قد لا تنجح المكالمات. ولا يوجد موقع في العالم يستطيع منع أحد من التقاط صورة للشاشة.",
   'limits.why': "نكتب هذا في الصفحة الأولى لأننا نفضّل إخبارك قبل، لا بعد.",
-  'foot.who': "برمجية حرة ومفتوحة المصدر (رخصة MIT)، مملوكة لـ DigitalValut، وهي جمعية إيطالية غير ربحية للنهوض الاجتماعي. مجانية لأي شخص، في أي مكان في العالم.",
+  'foot.who': "برمجية حرة ومفتوحة المصدر (رخصة Apache 2.0)، مملوكة لـ DigitalValut، وهي جمعية إيطالية غير ربحية للنهوض الاجتماعي. مجانية لأي شخص، في أي مكان في العالم.",
   'foot.code': "الشيفرة، مكشوفة، لكل من أراد التحقق منها",
 };
 
@@ -232,7 +248,7 @@ T.ur = {
   'limits.title': "یہ کیا نہیں کرتا",
   'limits.body': "ضروری ہے کہ آپ دونوں ایک ہی وقت میں آن لائن ہوں، ورنہ کچھ نہیں پہنچے گا۔ جو آپ سے بات کرتا ہے وہ آپ کا نیٹ ورک پتہ (IP) دیکھتا ہے۔ سخت فلٹر شدہ نیٹ ورکس پر کالیں نہیں جڑ سکتیں۔ اور دنیا کی کوئی ویب سائٹ کسی کو اسکرین شاٹ لینے سے نہیں روک سکتی۔",
   'limits.why': "ہم یہ پہلے صفحے پر لکھ رہے ہیں کیونکہ ہم بعد میں بتانے کے بجائے پہلے بتانا بہتر سمجھتے ہیں۔",
-  'foot.who': "آزاد اور اوپن سورس سافٹ ویئر (MIT لائسنس)، جو DigitalValut کی ملکیت ہے — ایک اطالوی غیر منافع بخش سماجی فروغ کی انجمن۔ دنیا میں کہیں بھی، ہر کسی کے لیے مفت۔",
+  'foot.who': "آزاد اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو DigitalValut کی ملکیت ہے — ایک اطالوی غیر منافع بخش سماجی فروغ کی انجمن۔ دنیا میں کہیں بھی، ہر کسی کے لیے مفت۔",
   'foot.code': "کھلا ہوا کوڈ، ہر اُس شخص کے لیے جو اسے جانچنا چاہے",
 };
 
@@ -254,7 +270,7 @@ T.hi = {
   'limits.title': "यह क्या नहीं करता",
   'limits.body': "ज़रूरी है कि आप दोनों एक ही समय ऑनलाइन हों, वरना कुछ नहीं पहुँचेगा। जो आपसे बात करता है वह आपका नेटवर्क पता (IP) देखता है। बहुत छने हुए नेटवर्क पर कॉल नहीं जुड़ सकतीं। और दुनिया की कोई वेबसाइट किसी को स्क्रीनशॉट लेने से नहीं रोक सकती।",
   'limits.why': "हम यह पहले पन्ने पर लिख रहे हैं क्योंकि हमें बाद में बताने से पहले बताना बेहतर लगता है।",
-  'foot.who': "मुफ़्त और ओपन सोर्स सॉफ़्टवेयर (MIT लाइसेंस), DigitalValut की संपत्ति — एक इतालवी ग़ैर-लाभकारी सामाजिक संवर्धन संस्था। दुनिया में कहीं भी, हर किसी के लिए मुफ़्त।",
+  'foot.who': "मुफ़्त और ओपन सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), DigitalValut की संपत्ति — एक इतालवी ग़ैर-लाभकारी सामाजिक संवर्धन संस्था। दुनिया में कहीं भी, हर किसी के लिए मुफ़्त।",
   'foot.code': "खुला हुआ कोड, हर उस व्यक्ति के लिए जो इसे जाँचना चाहे",
 };
 
@@ -276,7 +292,7 @@ T.bn = {
   'limits.title': "এটি যা করে না",
   'limits.body': "আপনাদের দুজনকেই একই সময়ে অনলাইনে থাকতে হবে, নইলে কিছুই পৌঁছাবে না। যে আপনার সঙ্গে কথা বলে সে আপনার নেটওয়ার্ক ঠিকানা (IP) দেখতে পায়। খুব ছাঁকা নেটওয়ার্কে কল না-ও যুক্ত হতে পারে। আর পৃথিবীর কোনো ওয়েবসাইট কাউকে স্ক্রিনশট নেওয়া থেকে আটকাতে পারে না।",
   'limits.why': "আমরা এটি প্রথম পাতাতেই লিখছি, কারণ পরে বলার চেয়ে আগে বলাই ভালো মনে করি।",
-  'foot.who': "মুক্ত ও ওপেন সোর্স সফটওয়্যার (MIT লাইসেন্স), মালিকানা DigitalValut-এর — একটি ইতালীয় অলাভজনক সামাজিক উন্নয়ন সমিতি। পৃথিবীর যেকোনো জায়গায়, সবার জন্য বিনামূল্যে।",
+  'foot.who': "মুক্ত ও ওপেন সোর্স সফটওয়্যার (Apache 2.0 লাইসেন্স), মালিকানা DigitalValut-এর — একটি ইতালীয় অলাভজনক সামাজিক উন্নয়ন সমিতি। পৃথিবীর যেকোনো জায়গায়, সবার জন্য বিনামূল্যে।",
   'foot.code': "খোলা কোড, যে কেউ যাচাই করতে চাইলে",
 };
 
@@ -298,7 +314,7 @@ T.id = {
   'limits.title': "Yang tidak bisa dilakukannya",
   'limits.body': "Kalian berdua harus daring pada saat yang sama, kalau tidak, tidak ada yang sampai. Orang yang berbicara dengan Anda melihat alamat jaringan (IP) Anda. Di jaringan yang disaring ketat, panggilan bisa gagal tersambung. Dan tidak ada situs mana pun di dunia yang bisa mencegah orang mengambil tangkapan layar.",
   'limits.why': "Kami menulisnya di halaman depan karena kami lebih suka memberi tahu Anda sekarang daripada nanti.",
-  'foot.who': "Perangkat lunak bebas dan sumber terbuka (lisensi MIT), milik DigitalValut, sebuah asosiasi nirlaba Italia untuk promosi sosial. Gratis untuk siapa saja, di mana saja di dunia.",
+  'foot.who': "Perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), milik DigitalValut, sebuah asosiasi nirlaba Italia untuk promosi sosial. Gratis untuk siapa saja, di mana saja di dunia.",
   'foot.code': "Kodenya, terbuka, bagi siapa pun yang ingin memeriksanya",
 };
 

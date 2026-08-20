@@ -1,3 +1,18 @@
+/*
+ * Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 "use strict";
 const $ = id => document.getElementById(id);
 
@@ -57,7 +72,7 @@ let CURLANG = 'it';
 const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, id: {}, pt: {}, ru: {}, ur: {}, zh: {} };
 
 Object.assign(I18N.en, {
-"onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (MIT license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
+"onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
 "install.btn":"Install",
 "home.title":"Talk to anyone, wherever they are",
 "home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
@@ -75,7 +90,7 @@ Object.assign(I18N.en, {
 "menu.title":"Tools","menu.arm":"Self-destruct","menu.disarm":"Cancel",
 "menu.clearHistory":"Clear history","menu.endChat":"End chat",
 "menu.historyNote":"History stays only on this device, tied to the name of the person you're talking to. No server keeps it.",
-"footer.text":"free and open-source software (MIT license), a project of DigitalValut APS ETS.",
+"footer.text":"free and open-source software (Apache 2.0 license), a project of DigitalValut APS ETS.",
 "footer.noserver":"No server: the connection is direct between the two browsers via WebRTC.",
 "footer.author":"Conceived by Dr. Giuseppe Falsone for DigitalValut. © 2026 DigitalValut and the DigitalValut Team.",
 "footer.license":"Read the open-source license","footer.source":"Source code on GitHub",
@@ -223,7 +238,7 @@ Object.assign(I18N.en, {
 "media.stepsAndroidApp":"Go back to your phone's Home screen|Press and hold the <b>DigitalValut Logos</b> icon|Tap <b>App info</b> (or the ⓘ icon)|Tap <b>Permissions</b>, then turn on <b>Microphone</b> and <b>Camera</b>|Reopen the app"
 });
 Object.assign(I18N.it, {
-"onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza MIT), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
+"onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
 "install.btn":"Installa",
 "home.title":"Parla con chi vuoi, ovunque sia",
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
@@ -263,7 +278,7 @@ Object.assign(I18N.it, {
 "menu.title":"Strumenti","menu.arm":"Autodistruzione","menu.disarm":"Annulla",
 "menu.clearHistory":"Svuota cronologia","menu.endChat":"Termina chat",
 "menu.historyNote":"La cronologia resta solo su questo dispositivo, legata al nome della persona con cui parli. Nessun server la conserva.",
-"footer.text":"software libero e open source (licenza MIT), un progetto di DigitalValut APS ETS.",
+"footer.text":"software libero e open source (licenza Apache 2.0), un progetto di DigitalValut APS ETS.",
 "footer.noserver":"Nessun server: la connessione è diretta tra i due browser via WebRTC.",
 "footer.author":"Ideato dal Dott. Giuseppe Falsone per DigitalValut. © 2026 DigitalValut e il Team DigitalValut.",
 "footer.license":"Leggi la licenza open source","footer.source":"Codice sorgente su GitHub",
@@ -390,7 +405,7 @@ Object.assign(I18N.it, {
 });
 
 Object.assign(I18N.fr, {
-"onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence MIT), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
+"onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
 "install.btn":"Installer",
 "home.title":"Parlez à qui vous voulez, où qu'il soit",
 "home.sub":"Messages, photos, vidéos, appels. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
@@ -409,7 +424,7 @@ Object.assign(I18N.fr, {
 "menu.title":"Outils","menu.arm":"Autodestruction","menu.disarm":"Annuler",
 "menu.clearHistory":"Effacer l'historique","menu.endChat":"Terminer la discussion",
 "menu.historyNote":"L'historique reste uniquement sur cet appareil, lié au nom de la personne avec qui vous parlez. Aucun serveur ne le conserve.",
-"footer.text":"logiciel libre et open source (licence MIT), un projet de DigitalValut APS ETS.",
+"footer.text":"logiciel libre et open source (licence Apache 2.0), un projet de DigitalValut APS ETS.",
 "footer.noserver":"Aucun serveur : la connexion est directe entre les deux navigateurs via WebRTC.",
 "footer.author":"Conçu par le Dr Giuseppe Falsone pour DigitalValut. © 2026 DigitalValut et l'équipe DigitalValut.",
 "footer.license":"Lire la licence open source","footer.source":"Code source sur GitHub",
@@ -549,7 +564,7 @@ Object.assign(I18N.fr, {
 });
 
 Object.assign(I18N.de, {
-"onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (MIT-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
+"onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
 "install.btn":"Installieren",
 "home.title":"Sprich mit jedem, wo immer er ist",
 "home.sub":"Nachrichten, Fotos, Video, Anrufe. Keine Anmeldung, keine Telefonnummer, für immer kostenlos.",
@@ -568,7 +583,7 @@ Object.assign(I18N.de, {
 "menu.title":"Werkzeuge","menu.arm":"Selbstzerstörung","menu.disarm":"Abbrechen",
 "menu.clearHistory":"Verlauf löschen","menu.endChat":"Chat beenden",
 "menu.historyNote":"Der Verlauf bleibt nur auf diesem Gerät, verknüpft mit dem Namen der Person, mit der du sprichst. Kein Server speichert ihn.",
-"footer.text":"freie Open-Source-Software (MIT-Lizenz), ein Projekt von DigitalValut APS ETS.",
+"footer.text":"freie Open-Source-Software (Apache 2.0-Lizenz), ein Projekt von DigitalValut APS ETS.",
 "footer.noserver":"Kein Server: Die Verbindung ist direkt zwischen den beiden Browsern über WebRTC.",
 "footer.author":"Konzipiert von Dr. Giuseppe Falsone für DigitalValut. © 2026 DigitalValut und das DigitalValut-Team.",
 "footer.license":"Open-Source-Lizenz lesen","footer.source":"Quellcode auf GitHub",
@@ -708,7 +723,7 @@ Object.assign(I18N.de, {
 });
 
 Object.assign(I18N.es, {
-"onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia MIT), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
+"onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
 "install.btn":"Instalar",
 "home.title":"Habla con quien quieras, esté donde esté",
 "home.sub":"Mensajes, fotos, vídeo, llamadas. Sin registro, sin número de teléfono, gratis para siempre.",
@@ -727,7 +742,7 @@ Object.assign(I18N.es, {
 "menu.title":"Herramientas","menu.arm":"Autodestrucción","menu.disarm":"Cancelar",
 "menu.clearHistory":"Borrar historial","menu.endChat":"Terminar chat",
 "menu.historyNote":"El historial queda solo en este dispositivo, vinculado al nombre de la persona con quien hablas. Ningún servidor lo guarda.",
-"footer.text":"software libre y de código abierto (licencia MIT), un proyecto de DigitalValut APS ETS.",
+"footer.text":"software libre y de código abierto (licencia Apache 2.0), un proyecto de DigitalValut APS ETS.",
 "footer.noserver":"Sin servidor: la conexión es directa entre los dos navegadores mediante WebRTC.",
 "footer.author":"Concebido por el Dr. Giuseppe Falsone para DigitalValut. © 2026 DigitalValut y el equipo DigitalValut.",
 "footer.license":"Leer la licencia de código abierto","footer.source":"Código fuente en GitHub",
@@ -867,7 +882,7 @@ Object.assign(I18N.es, {
 });
 
 Object.assign(I18N.pt, {
-"onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença MIT), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
+"onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
 "install.btn":"Instalar",
 "home.title":"Fale com quem quiser, onde quer que esteja",
 "home.sub":"Mensagens, fotos, vídeo, chamadas. Sem registo, sem número de telefone, grátis para sempre.",
@@ -886,7 +901,7 @@ Object.assign(I18N.pt, {
 "menu.title":"Ferramentas","menu.arm":"Autodestruição","menu.disarm":"Cancelar",
 "menu.clearHistory":"Limpar histórico","menu.endChat":"Terminar conversa",
 "menu.historyNote":"O histórico fica apenas neste dispositivo, ligado ao nome da pessoa com quem fala. Nenhum servidor o guarda.",
-"footer.text":"software livre e de código aberto (licença MIT), um projeto da DigitalValut APS ETS.",
+"footer.text":"software livre e de código aberto (licença Apache 2.0), um projeto da DigitalValut APS ETS.",
 "footer.noserver":"Sem servidor: a ligação é direta entre os dois navegadores via WebRTC.",
 "footer.author":"Concebido pelo Dr. Giuseppe Falsone para a DigitalValut. © 2026 DigitalValut e a Equipa DigitalValut.",
 "footer.license":"Ler a licença de código aberto","footer.source":"Código-fonte no GitHub",
@@ -1026,7 +1041,7 @@ Object.assign(I18N.pt, {
 });
 
 Object.assign(I18N.ru, {
-"onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия MIT), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
+"onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
 "install.btn":"Установить",
 "home.title":"Говорите с кем хотите, где бы они ни были",
 "home.sub":"Сообщения, фото, видео, звонки. Без регистрации, без номера телефона, бесплатно навсегда.",
@@ -1045,7 +1060,7 @@ Object.assign(I18N.ru, {
 "menu.title":"Инструменты","menu.arm":"Самоуничтожение","menu.disarm":"Отмена",
 "menu.clearHistory":"Очистить историю","menu.endChat":"Завершить чат",
 "menu.historyNote":"История остаётся только на этом устройстве, привязана к имени собеседника. Ни один сервер её не хранит.",
-"footer.text":"бесплатное программное обеспечение с открытым исходным кодом (лицензия MIT), проект DigitalValut APS ETS.",
+"footer.text":"бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), проект DigitalValut APS ETS.",
 "footer.noserver":"Без сервера: соединение напрямую между двумя браузерами через WebRTC.",
 "footer.author":"Разработано доктором Джузеппе Фальсоне для DigitalValut. © 2026 DigitalValut и команда DigitalValut.",
 "footer.license":"Прочитать лицензию с открытым исходным кодом","footer.source":"Исходный код на GitHub",
@@ -1185,7 +1200,7 @@ Object.assign(I18N.ru, {
 });
 
 Object.assign(I18N.zh, {
-"onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（MIT 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
+"onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
 "install.btn":"安装",
 "home.title":"随时随地，和你想聊的人聊天",
 "home.sub":"消息、照片、视频、通话。无需注册，无需电话号码，永久免费。",
@@ -1204,7 +1219,7 @@ Object.assign(I18N.zh, {
 "menu.title":"工具","menu.arm":"自毁","menu.disarm":"取消",
 "menu.clearHistory":"清除记录","menu.endChat":"结束聊天",
 "menu.historyNote":"记录只保存在这台设备上，与和你聊天的人的名字绑定。没有服务器保存它。",
-"footer.text":"免费开源软件（MIT 许可证），DigitalValut APS ETS 的项目。",
+"footer.text":"免费开源软件（Apache 2.0 许可证），DigitalValut APS ETS 的项目。",
 "footer.noserver":"无服务器：两个浏览器之间通过 WebRTC 直接连接。",
 "footer.author":"由 Giuseppe Falsone 博士为 DigitalValut 构思。© 2026 DigitalValut 及 DigitalValut 团队。",
 "footer.license":"阅读开源许可证","footer.source":"GitHub 上的源代码",
@@ -1344,7 +1359,7 @@ Object.assign(I18N.zh, {
 });
 
 Object.assign(I18N.ar, {
-"onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة MIT)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
+"onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
 "install.btn":"تثبيت",
 "home.title":"تحدّث مع من تريد، أينما كان",
 "home.sub":"رسائل، صور، فيديو، مكالمات. بلا تسجيل، بلا رقم هاتف، مجانًا للأبد.",
@@ -1363,7 +1378,7 @@ Object.assign(I18N.ar, {
 "menu.title":"أدوات","menu.arm":"تدمير ذاتي","menu.disarm":"إلغاء",
 "menu.clearHistory":"مسح السجل","menu.endChat":"إنهاء المحادثة",
 "menu.historyNote":"يبقى السجل فقط على هذا الجهاز، مرتبطًا باسم الشخص الذي تتحدث معه. لا يحتفظ به أي خادم.",
-"footer.text":"برنامج حر ومفتوح المصدر (رخصة MIT)، مشروع تابع لـ DigitalValut APS ETS.",
+"footer.text":"برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مشروع تابع لـ DigitalValut APS ETS.",
 "footer.noserver":"بلا خادم: الاتصال مباشر بين المتصفحين عبر WebRTC.",
 "footer.author":"صمّمه الدكتور جوزيبي فالسوني لصالح DigitalValut. © 2026 DigitalValut وفريق DigitalValut.",
 "footer.license":"اقرأ رخصة المصدر المفتوح","footer.source":"الكود المصدري على GitHub",
@@ -1503,7 +1518,7 @@ Object.assign(I18N.ar, {
 });
 
 Object.assign(I18N.ur, {
-"onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (MIT لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
+"onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
 "install.btn":"انسٹال کریں",
 "home.title":"جس سے چاہیں بات کریں، وہ جہاں بھی ہو",
 "home.sub":"پیغامات، تصاویر، ویڈیو، کالز۔ کوئی سائن اپ نہیں، کوئی فون نمبر نہیں، ہمیشہ کے لیے مفت۔",
@@ -1522,7 +1537,7 @@ Object.assign(I18N.ur, {
 "menu.title":"ٹولز","menu.arm":"خود کار تباہی","menu.disarm":"منسوخ کریں",
 "menu.clearHistory":"تاریخ صاف کریں","menu.endChat":"چیٹ ختم کریں",
 "menu.historyNote":"تاریخ صرف اس ڈیوائس پر رہتی ہے، اس شخص کے نام سے منسلک جس سے آپ بات کر رہے ہیں۔ کوئی سرور اسے محفوظ نہیں رکھتا۔",
-"footer.text":"مفت اور اوپن سورس سافٹ ویئر (MIT لائسنس)، DigitalValut APS ETS کا ایک منصوبہ۔",
+"footer.text":"مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، DigitalValut APS ETS کا ایک منصوبہ۔",
 "footer.noserver":"کوئی سرور نہیں: کنکشن WebRTC کے ذریعے دونوں براؤزرز کے درمیان براہ راست ہے۔",
 "footer.author":"ڈاکٹر جوزیپے فالسونے نے DigitalValut کے لیے تصور کیا۔ © 2026 DigitalValut اور DigitalValut ٹیم۔",
 "footer.license":"اوپن سورس لائسنس پڑھیں","footer.source":"GitHub پر سورس کوڈ",
@@ -1662,7 +1677,7 @@ Object.assign(I18N.ur, {
 });
 
 Object.assign(I18N.hi, {
-"onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (MIT लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
+"onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
 "install.btn":"इंस्टॉल करें",
 "home.title":"जिससे चाहें बात करें, वे कहीं भी हों",
 "home.sub":"संदेश, फ़ोटो, वीडियो, कॉल। कोई साइन-अप नहीं, कोई फ़ोन नंबर नहीं, हमेशा के लिए मुफ़्त।",
@@ -1681,7 +1696,7 @@ Object.assign(I18N.hi, {
 "menu.title":"उपकरण","menu.arm":"स्व-विनाश","menu.disarm":"रद्द करें",
 "menu.clearHistory":"इतिहास साफ़ करें","menu.endChat":"चैट समाप्त करें",
 "menu.historyNote":"इतिहास केवल इस डिवाइस पर रहता है, उस व्यक्ति के नाम से जुड़ा जिससे आप बात कर रहे हैं। कोई सर्वर इसे नहीं रखता।",
-"footer.text":"मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (MIT लाइसेंस), DigitalValut APS ETS की एक परियोजना।",
+"footer.text":"मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), DigitalValut APS ETS की एक परियोजना।",
 "footer.noserver":"कोई सर्वर नहीं: कनेक्शन WebRTC के ज़रिए दोनों ब्राउज़रों के बीच सीधा है।",
 "footer.author":"DigitalValut के लिए डॉ. जुज़ेप्पे फ़ाल्सोने द्वारा परिकल्पित। © 2026 DigitalValut और DigitalValut टीम।",
 "footer.license":"ओपन-सोर्स लाइसेंस पढ़ें","footer.source":"GitHub पर सोर्स कोड",
@@ -1821,7 +1836,7 @@ Object.assign(I18N.hi, {
 });
 
 Object.assign(I18N.bn, {
-"onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (MIT লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
+"onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
 "install.btn":"ইনস্টল করুন",
 "home.title":"যার সাথে চান কথা বলুন, তিনি যেখানেই থাকুন",
 "home.sub":"বার্তা, ছবি, ভিডিও, কল। কোনো সাইন-আপ নেই, কোনো ফোন নম্বর নেই, চিরকালের জন্য বিনামূল্যে।",
@@ -1840,7 +1855,7 @@ Object.assign(I18N.bn, {
 "menu.title":"সরঞ্জাম","menu.arm":"স্ব-ধ্বংস","menu.disarm":"বাতিল করুন",
 "menu.clearHistory":"ইতিহাস মুছুন","menu.endChat":"চ্যাট শেষ করুন",
 "menu.historyNote":"ইতিহাস শুধুমাত্র এই ডিভাইসে থাকে, আপনি যার সাথে কথা বলছেন তার নামের সাথে যুক্ত। কোনো সার্ভার এটি রাখে না।",
-"footer.text":"বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (MIT লাইসেন্স), DigitalValut APS ETS-এর একটি প্রকল্প।",
+"footer.text":"বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), DigitalValut APS ETS-এর একটি প্রকল্প।",
 "footer.noserver":"কোনো সার্ভার নেই: WebRTC-এর মাধ্যমে দুটি ব্রাউজারের মধ্যে সংযোগ সরাসরি।",
 "footer.author":"DigitalValut-এর জন্য ড. জিউসেপ্পে ফালসোনে দ্বারা পরিকল্পিত। © 2026 DigitalValut এবং DigitalValut টিম।",
 "footer.license":"ওপেন-সোর্স লাইসেন্স পড়ুন","footer.source":"GitHub-এ সোর্স কোড",
@@ -1980,7 +1995,7 @@ Object.assign(I18N.bn, {
 });
 
 Object.assign(I18N.id, {
-"onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi MIT), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
+"onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
 "install.btn":"Pasang",
 "home.title":"Bicara dengan siapa pun yang Anda mau, di mana pun mereka berada",
 "home.sub":"Pesan, foto, video, panggilan. Tanpa pendaftaran, tanpa nomor telepon, gratis selamanya.",
@@ -1999,7 +2014,7 @@ Object.assign(I18N.id, {
 "menu.title":"Alat","menu.arm":"Penghancuran diri","menu.disarm":"Batal",
 "menu.clearHistory":"Hapus riwayat","menu.endChat":"Akhiri obrolan",
 "menu.historyNote":"Riwayat hanya tersimpan di perangkat ini, terkait dengan nama orang yang Anda ajak bicara. Tidak ada server yang menyimpannya.",
-"footer.text":"perangkat lunak bebas dan sumber terbuka (lisensi MIT), sebuah proyek DigitalValut APS ETS.",
+"footer.text":"perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), sebuah proyek DigitalValut APS ETS.",
 "footer.noserver":"Tanpa server: koneksi langsung antara dua browser melalui WebRTC.",
 "footer.author":"Digagas oleh Dr. Giuseppe Falsone untuk DigitalValut. © 2026 DigitalValut dan Tim DigitalValut.",
 "footer.license":"Baca lisensi sumber terbuka","footer.source":"Kode sumber di GitHub",

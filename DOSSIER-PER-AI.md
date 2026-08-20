@@ -28,7 +28,7 @@ contenuto di quello che due persone si dicono.
 
 - **App online:** https://digitalvalut.github.io/logos-protocol/
 - **Codice pubblico:** https://github.com/digitalvalut/logos-protocol
-- **Licenza:** MIT — **Proprietà:** DigitalValut APS ETS (associazione italiana no-profit)
+- **Licenza:** Apache 2.0 — **Proprietà:** DigitalValut APS ETS (associazione italiana no-profit)
 
 ---
 
@@ -181,8 +181,15 @@ scadenza lunga, vanno rifatte anche cassetta lettere e slot di risveglio.
    più forte del progetto: non esiste catena di fornitura da compromettere.
 4. **CSP severa**: `script-src 'self'`, `style-src 'self'`. Niente stili o
    script inline, niente WebAssembly senza indebolire la politica.
-5. **Licenza MIT di proprietà di un ETS.** Una dipendenza GPL/AGPL
-   costringerebbe l'intera app a cambiare licenza — problema legale, non tecnico.
+5. **Licenza Apache 2.0, di proprietà dell'ETS DigitalValut** (passata da MIT
+   il 20 agosto 2026). Permissiva di proposito: consente anche fork chiusi e
+   uso commerciale senza obbligo di restituire nulla — scelta fatta per
+   massimizzare la diffusione, verificata compatibile con lo statuto
+   dell'associazione (Art. 6 e 7: sviluppo/distribuzione software e
+   "royalties, licenze di proprietà intellettuale" sono attività statutarie
+   esplicite, non improvvisate). Resta comunque il vincolo #3: zero
+   dipendenze a runtime, quindi la domanda "questa libreria ha una licenza
+   compatibile?" non si pone quasi mai in pratica.
 6. **Il pubblico include persone anziane e non tecniche.** Qualunque cosa
    richieda competenza tecnica all'utente è, per questo progetto, un fallimento.
 7. **Il Worker accetta solo due origini** (`digitalvalut.github.io` e
