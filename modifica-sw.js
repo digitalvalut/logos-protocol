@@ -20,7 +20,7 @@
    Caches the app shell so it installs and opens without a connection; the
    WebRTC handshake itself still needs the internet to find the other peer. */
 
-const CACHE = 'logos-modifica-3.50';
+const CACHE = 'logos-modifica-3.51';
 const ASSETS = [
   './modifica.html',
   './modifica.css',
@@ -56,8 +56,41 @@ function keep(req, res){
   return res;
 }
 
+/* ---------------- share target: "share to" from another app ----------------
+   Android routes a share (a photo from the gallery, a PDF from a mail client,
+   whatever) here as a real POST with the files as multipart form data — a
+   static page cannot read that body, only a service worker can, which is why
+   this exists as a fetch handler and not app code. It never touches the
+   files themselves: they are stashed byte-for-byte in a scratch Cache and the
+   browser is sent straight back to the app, which is the only place that
+   ever decides what happens to them next. */
+const SHARE_CACHE = 'logos-modifica-share-temp';
+async function handleShare(event){
+  try{
+    const form = await event.request.formData();
+    const files = form.getAll('sharedFiles').filter(f => f && typeof f.arrayBuffer === 'function');
+    if (files.length){
+      const cache = await caches.open(SHARE_CACHE);
+      const stamp = Date.now().toString(36);
+      let i = 0;
+      for (const file of files){
+        const url = new URL('./__shared/' + stamp + '-' + (i++) + '/' + encodeURIComponent(file.name || 'file'), self.location.href);
+        await cache.put(url, new Response(file, { headers: { 'Content-Type': file.type || 'application/octet-stream' } }));
+      }
+    }
+  }catch(e){ /* nothing usable arrived; the app just opens normally */ }
+  return Response.redirect('./modifica.html?shared=1', 303);
+}
+
 self.addEventListener('fetch', event => {
   const req = event.request;
+  if (req.method === 'POST'){
+    const url = new URL(req.url);
+    if (url.origin === self.location.origin && url.pathname.endsWith('/modifica.html')){
+      event.respondWith(handleShare(event));
+    }
+    return;
+  }
   if (req.method !== 'GET') return;
   if (new URL(req.url).origin !== self.location.origin) return;
 

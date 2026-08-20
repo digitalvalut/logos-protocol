@@ -407,21 +407,197 @@ test.describe('what the audit found', () => {
   });
 
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
-    /* the bubble is only rendered after the whole loop finishes, so a channel
-       that throws partway used to leave nothing on screen at all — no error,
-       no bubble, no sign anything had gone wrong. */
+    /* Used to render nothing at all until the whole loop finished, so a
+       channel that threw partway left no error, no bubble, no sign anything
+       had gone wrong. A progress bubble now appears the moment the transfer
+       starts (see the next test) — the guarantee that matters here is no
+       longer "nothing appeared", it is "whatever appeared never claims the
+       file actually arrived". */
     const app = loadApp();
     app.run(`
       dc = { readyState: 'open', send: function(){ throw new Error('channel closed'); } };
-      window.__msgsBefore = $('msgs').children.length;
-      window.__bodyBefore = document.body.children.length;
       sendFile({ name: 'x.txt', type: 'text/plain', size: 3 });
     `);
-    assert.strictEqual(app.run('$("msgs").children.length'), app.run('window.__msgsBefore'),
+    const bubbleHtml = app.run("$('msgs').children[$('msgs').children.length - 1].children[0].innerHTML");
+    assert.ok(!/filelink|<img|<video|<audio/.test(bubbleHtml),
       'a failed send must not claim the file was delivered');
-    assert.ok(app.run('document.body.children.length') > app.run('window.__bodyBefore'),
-      'nothing told the sender the file never went');
+    assert.ok(bubbleHtml.includes(app.run("t('file.sendFailed')")),
+      'the bubble itself must say the send failed, not just a toast that can be missed');
     app.stop();
+  });
+
+  test('a file transfer shows progress instead of nothing until it finishes', () => {
+    /* A large file used to render no sign of life until it was entirely sent —
+       visually identical to having silently died. The bubble must exist from
+       the first chunk, and the bar must actually reach 100% by the last one
+       rather than stopping wherever the last throttled repaint happened to
+       land. */
+    const app = loadApp();
+    /* The fake DOM's own Blob is a two-line stand-in with no real slice() or
+       arrayBuffer() — and sendFile's success path ends by handing the file to
+       the real URL.createObjectURL (window.URL is Node's own, not the fake
+       one), which refuses anything that is not a genuine Blob instance. So a
+       real one is built here, in this file's realm, and handed across —
+       nothing before this test ever drove sendFile as far as that line. */
+    /* application/pdf on purpose: image/video/audio each get their own inline
+       preview, and the one this test means to reach — a plain download link —
+       is what everything else falls through to. */
+    const realFile = new Blob(['x'.repeat(40000)], { type: 'application/pdf' });
+    realFile.name = 'documento.pdf';
+    app.sandbox.__realFile = realFile;
+    /* Reading the bar mid-transfer from outside is a timing gamble — the file
+       is small and everything here is local, so it can finish before a test
+       ever gets a turn to look. Caught by sabotaging paint() during writing:
+       the earlier version of this test still passed with it disabled, because
+       it only checked that the bar *existed*, never that it actually moved.
+       Deterministic instead: the fake send() itself grabs a snapshot the
+       instant 'file-end' goes out — which in the real code happens right
+       after the loop's last, forced repaint and right before finish()
+       overwrites the bubble — so what it captures is exactly the state the
+       last chunk left behind, not a guess about scheduling. */
+    app.run(`
+      window.__capturedWidth = null; window.__capturedMeta = null;
+      dc = { readyState: 'open', send: function(x){
+        if (typeof x !== 'string') return;
+        let m; try{ m = JSON.parse(x); }catch(e){ return; }
+        if (m.type !== 'file-end') return;
+        const bub = $('msgs').children[$('msgs').children.length - 1].children[0];
+        window.__capturedWidth = bub.children[1].children[0].style.width;
+        window.__capturedMeta = bub.children[2].textContent;
+      } };
+      window.__p = sendFile(__realFile);
+    `);
+    /* The fake DOM's innerHTML is only ever what was last assigned to it as a
+       string — it does not serialise children added with appendChild, unlike
+       a real browser. renderTransferBubble builds the "during" state from
+       real nodes on purpose (see its own comment), so the bubble structure is
+       inspected directly here rather than pattern-matched out of innerHTML. */
+    const duringClasses = app.run(
+      "$('msgs').children[$('msgs').children.length - 1].children[0].children.map(c => c.className)"
+    );
+    assert.ok(duringClasses.includes('xferbar'), 'no progress bar appeared once the transfer began: ' + duringClasses);
+    const duringName = app.run(
+      "$('msgs').children[$('msgs').children.length - 1].children[0].children[0].children[1].textContent"
+    );
+    assert.strictEqual(duringName, 'documento.pdf', 'the filename is not shown while it sends');
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('window.__capturedWidth'), '100%',
+        'the bar never actually reached 100% before the file was marked sent');
+      assert.ok(!/^0 B/.test(app.run('window.__capturedMeta')),
+        'the progress label was still showing zero right before the file finished');
+      const finalHtml = app.run("$('msgs').children[$('msgs').children.length - 1].children[0].innerHTML");
+      assert.ok(!/xferbar/.test(finalHtml), 'the progress bar must be gone once the file is fully sent');
+      assert.ok(/filelink/.test(finalHtml), 'a completed generic file must show the real download link');
+      app.stop();
+    });
+  });
+
+  test('several files picked or dropped at once are sent one at a time, in order', () => {
+    /* Selecting or dropping thirty files used to mean pressing the send
+       button thirty times — technically possible, never actually done. The
+       real risk in fixing that is sending them in parallel instead: several
+       progress bars updating out of sync, chunks from different files
+       interleaved on the same channel for no benefit. This checks the
+       ordering property directly — every file's file-end must be seen before
+       the next file's file-start — rather than just that all three arrived. */
+    const app = loadApp();
+    const files = ['a.txt', 'b.txt', 'c.txt'].map(name => {
+      const f = new Blob(['x'.repeat(20000)], { type: 'text/plain' });
+      f.name = name;
+      return f;
+    });
+    app.sandbox.__queueFiles = files;
+    app.run(`
+      window.__log = [];
+      dc = { readyState: 'open', send: function(x){
+        if (typeof x !== 'string') return;
+        let m; try{ m = JSON.parse(x); }catch(e){ return; }
+        if (m.type === 'file-start') window.__log.push('start:' + m.name);
+        if (m.type === 'file-end') window.__log.push('end');
+      } };
+      window.__p = sendFilesQueue(__queueFiles);
+    `);
+    return app.run('window.__p').then(() => {
+      /* JSON round-trip, not the cross-realm array directly: it holds the
+         same values but deepStrictEqual also checks the constructor, and an
+         Array built inside the sandbox's own realm is not === the calling
+         context's Array even when every element matches. */
+      assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(window.__log)')), [
+        'start:a.txt', 'end', 'start:b.txt', 'end', 'start:c.txt', 'end',
+      ], 'files were not sent strictly one after another, in the order given');
+      app.stop();
+    });
+  });
+
+  function fakeShareCache(app, entries){
+    /* Mirrors what the real service worker leaves behind: a Cache whose keys
+       are the shared files' URLs and whose responses carry the file's bytes
+       and MIME type. A File constructor is added here too — nothing in the
+       rest of this suite has needed one, since sendFile/sendFilesQueue only
+       ever require a Blob-shaped object with a name on it, but the app's own
+       share-recovery code calls `new File(...)` directly on what it reads
+       back out of the cache. */
+    app.sandbox.File = File;
+    app.sandbox.__shareEntries = entries;
+    app.run(`
+      window.__shareStore = new Map(__shareEntries.map(function(e){ return [e.url, e]; }));
+      window.caches = {
+        open: function(){ return Promise.resolve({
+          keys: function(){ return Promise.resolve(Array.from(window.__shareStore.keys()).map(function(u){ return { url: u }; })); },
+          match: function(req){
+            const e = window.__shareStore.get(req.url);
+            if (!e) return Promise.resolve(undefined);
+            return Promise.resolve({ blob: function(){ return Promise.resolve(e.blob); },
+              headers: { get: function(k){ return k === 'Content-Type' ? e.type : null; } } });
+          },
+          delete: function(req){ window.__shareStore.delete(req.url); return Promise.resolve(true); },
+        }); },
+      };
+    `);
+  }
+
+  test('a file shared in from another app waits if nobody is connected yet, instead of vanishing', () => {
+    const app = loadApp();
+    fakeShareCache(app, [
+      { url: 'https://x/__shared/1/nota.txt', blob: new Blob(['ciao']), type: 'text/plain' },
+    ]);
+    app.run(`location.search = '?shared=1'; window.__p = checkForSharedFiles();`);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('pendingSharedFiles.length'), 1,
+        'a file shared in with no active chat should be held, not dropped');
+      assert.strictEqual(app.run('pendingSharedFiles[0].name'), 'nota.txt',
+        'the file lost its original name on the way out of the cache');
+      /* The app calls history.replaceState() to drop ?shared=1 from the URL so a
+         later reload can't re-import the same file — this fake DOM's
+         replaceState is a no-op that never writes back to location, so that
+         part is proven live in a real browser instead (verified separately),
+         not here. */
+      app.stop();
+    });
+  });
+
+  test('a file shared in while a chat is already open goes straight out, not into the waiting pile', () => {
+    const app = loadApp();
+    fakeShareCache(app, [
+      { url: 'https://x/__shared/1/foto.jpg', blob: new Blob(['x']), type: 'image/jpeg' },
+    ]);
+    app.run(`
+      window.__sent = [];
+      dc = { readyState: 'open', send: function(x){
+        if (typeof x !== 'string') return;
+        let m; try{ m = JSON.parse(x); }catch(e){ return; }
+        if (m.type === 'file-start') window.__sent.push(m.name);
+      } };
+      location.search = '?shared=1';
+      window.__p = checkForSharedFiles();
+    `);
+    return app.run('window.__p').then(() => {
+      assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(window.__sent)')), ['foto.jpg'],
+        'a file shared in mid-chat should be sent immediately, not left waiting for a connection that already exists');
+      assert.strictEqual(app.run('pendingSharedFiles.length'), 0,
+        'the file was sent, so it must not still be sitting in the waiting pile');
+      app.stop();
+    });
   });
 
   test('the Worker meters writes, not only reads', () => {

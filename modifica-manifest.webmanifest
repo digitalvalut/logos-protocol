@@ -1,7 +1,7 @@
 {
   "name": "DigitalValut Logos",
   "short_name": "DV Logos",
-  "description": "Software libero e open source di DigitalValut APS ETS: chat, chiamate e videochiamate dirette tra due browser, gratis per sempre, senza account.",
+  "description": "Software libero e open source di DigitalValut APS ETS: chat, chiamate, videochiamate e trasferimento file (foto, video, PDF, qualsiasi cosa, senza comprimerli) dirette tra due browser, gratis per sempre, senza account.",
   "id": "/logos-protocol/modifica",
   "start_url": "./modifica.html",
   "scope": "./modifica.html",
@@ -14,5 +14,15 @@
     { "src": "modifica-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "modifica-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "modifica-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ]
+  ],
+  "share_target": {
+    "action": "./modifica.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        { "name": "sharedFiles", "accept": ["*/*"] }
+      ]
+    }
+  }
 }

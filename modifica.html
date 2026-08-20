@@ -649,11 +649,18 @@
 
     <div id="chatArea">
       <div id="msgs"></div>
+      <!-- Desktop only in practice — a touch device has no drag gesture to
+           catch — shown only while something is actually being dragged over
+           the chat, never sitting there as a hint nobody asked for. -->
+      <div id="dropOverlay" class="hide">
+        <div class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 9.5 12 5l4.5 4.5"/><path d="M5 15.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2.5"/></svg></div>
+        <span data-i18n="chat.dropHere">Lascia qui per mandarli</span>
+      </div>
       <div id="composer">
         <button class="iconbtn" id="btnEmoji" title="Emoji"></button>
         <div id="emojiPop" class="hide"></div>
         <button class="iconbtn" id="btnAttach" title="Allega"></button>
-        <input type="file" id="fileInput" class="filehide" tabindex="-1" aria-hidden="true">
+        <input type="file" id="fileInput" class="filehide" tabindex="-1" aria-hidden="true" multiple>
         <button class="iconbtn" id="btnMic" title="Vocale"></button>
         <input type="text" id="msgInput" spellcheck="true" autocapitalize="sentences" autocomplete="off" data-i18n-ph="chat.typePh" placeholder="Scrivi un messaggio…">
         <button id="btnSend" title="Invia"></button>

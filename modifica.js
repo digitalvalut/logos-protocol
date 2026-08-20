@@ -85,7 +85,7 @@ Object.assign(I18N.en, {
 "nav.back":"Back",
 "start.share":"Send the invite","btn.copyCode":"Copy the code",
 "join.sendAnswer":"Send the reply",
-"chat.someone":"Someone","chat.connected":"connected","chat.typePh":"Write a message…",
+"chat.someone":"Someone","chat.connected":"connected","chat.typePh":"Write a message…","chat.dropHere":"Drop them here to send",
 "call.hangup":"End","call.accept":"Answer","call.decline":"Decline",
 "menu.title":"Tools","menu.arm":"Self-destruct","menu.disarm":"Cancel",
 "menu.clearHistory":"Clear history","menu.endChat":"End chat",
@@ -136,7 +136,7 @@ Object.assign(I18N.en, {
 "btn.showCode":"Show the code",
 "toast.clipboardEmpty":"There is nothing to paste.",
 "toast.pasteManually":"Hold your finger on the box and choose Paste.",
-"home.shareAppText":"Free, no account, works on any phone or computer — DigitalValut Logos:\n\n",
+"home.shareAppText":"Free, no account, works on any phone or computer, sends real files and photos at full quality — DigitalValut Logos:\n\n",
 "lock.title":"Extra protection",
 "lock.sub":"Locks the invite with a passphrase you say out loud. Worth turning on if the code travels over WhatsApp, email or SMS.",
 "lock.passCap":"Passphrase",
@@ -199,7 +199,8 @@ Object.assign(I18N.en, {
 "home.alreadyTalking":"You're already in a conversation. To start another, close this one first.","home.stillCalling":"I'm still calling. Wait for an answer, or cancel the call.","home.busyReconnect":"You're busy right now. Finish or close the current connection before trying again.",
 "letter.missed":"Wanted to talk to you.",
 "sas.blocked":"Say the three words out loud first: this person is no longer the same one.",
-"file.tooBig":"An incoming file was stopped: it did not match what was declared.","file.sendFailed":"Send interrupted: the connection closed partway through.",
+"file.tooBig":"An incoming file was stopped: it did not match what was declared.","file.sendFailed":"Send interrupted: the connection closed partway through.","file.progress":"{sent} of {total}",
+"share.pending":"{n} file ready to send — they'll go the moment you connect",
 "health.storage":"Phone storage",
 "health.storageFull":"Full: conversations are no longer being saved. Free up space on the phone.",
 "addr.lifespan":"This address does not expire. It stays valid as long as the app's data stays on this phone.",
@@ -269,11 +270,11 @@ Object.assign(I18N.it, {
 "btn.showCode":"Mostra il codice",
 "toast.clipboardEmpty":"Non c'\u00e8 niente da incollare.",
 "toast.pasteManually":"Tieni premuto sul riquadro e scegli Incolla.",
-"home.shareAppText":"Gratis, senza account, funziona su qualunque telefono o computer — DigitalValut Logos:\n\n",
+"home.shareAppText":"Gratis, senza account, funziona su qualunque telefono o computer, manda foto e file veri senza comprimerli — DigitalValut Logos:\n\n",
 "nav.back":"Indietro",
 "start.share":"Manda l'invito","btn.copyCode":"Copia il codice",
 "join.sendAnswer":"Manda la risposta",
-"chat.someone":"Qualcuno","chat.connected":"connessa","chat.typePh":"Scrivi un messaggio…",
+"chat.someone":"Qualcuno","chat.connected":"connessa","chat.typePh":"Scrivi un messaggio…","chat.dropHere":"Lascia qui per mandarli",
 "call.hangup":"Chiudi","call.accept":"Rispondi","call.decline":"Rifiuta",
 "menu.title":"Strumenti","menu.arm":"Autodistruzione","menu.disarm":"Annulla",
 "menu.clearHistory":"Svuota cronologia","menu.endChat":"Termina chat",
@@ -365,7 +366,8 @@ Object.assign(I18N.it, {
 "home.alreadyTalking":"Sei già in una conversazione. Per iniziarne un'altra, chiudi prima questa.","home.stillCalling":"Sto ancora chiamando. Aspetta la risposta, o annulla la chiamata.","home.busyReconnect":"Sei occupato al momento. Chiudi o completa la connessione in corso prima di riprovare.",
 "letter.missed":"Voleva parlarti.",
 "sas.blocked":"Prima dite le tre parole a voce: questa persona non risulta più la stessa.",
-"file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.","file.sendFailed":"Invio interrotto: la connessione si è chiusa a metà.",
+"file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.","file.sendFailed":"Invio interrotto: la connessione si è chiusa a metà.","file.progress":"{sent} di {total}",
+"share.pending":"{n} file pronti da mandare — arrivano appena ti colleghi",
 "health.storage":"Memoria del telefono",
 "health.storageFull":"Piena: le conversazioni non vengono più salvate. Libera spazio sul telefono.",
 "addr.lifespan":"Questo indirizzo non scade. Resta valido finché i dati dell'app restano su questo telefono.",
@@ -419,7 +421,7 @@ Object.assign(I18N.fr, {
 "start.pastePh":"Collez la réponse ici…","btn.connect":"Entrer dans la discussion",
 "join.pastePh":"Collez l'invitation ici…","join.generate":"Ouvrir l'invitation",
 "join.sendAnswer":"Envoyer la réponse",
-"chat.someone":"Quelqu'un","chat.connected":"connecté(e)","chat.typePh":"Écrivez un message…",
+"chat.someone":"Quelqu'un","chat.connected":"connecté(e)","chat.typePh":"Écrivez un message…","chat.dropHere":"Déposez-les ici pour les envoyer",
 "call.hangup":"Terminer","call.accept":"Répondre","call.decline":"Refuser",
 "menu.title":"Outils","menu.arm":"Autodestruction","menu.disarm":"Annuler",
 "menu.clearHistory":"Effacer l'historique","menu.endChat":"Terminer la discussion",
@@ -463,7 +465,7 @@ Object.assign(I18N.fr, {
 "join.s2help":"Dernière étape : renvoyez ceci à la personne qui vous a invité, et vous êtes connectés.",
 "btn.paste":"Coller","btn.showCode":"Afficher le code",
 "toast.clipboardEmpty":"Il n'y a rien à coller.","toast.pasteManually":"Maintenez le doigt sur la case et choisissez Coller.",
-"home.shareAppText":"Gratuit, sans compte, fonctionne sur tout téléphone ou ordinateur — DigitalValut Logos :\n\n",
+"home.shareAppText":"Gratuit, sans compte, fonctionne sur tout téléphone ou ordinateur, envoie photos et fichiers en qualité originale — DigitalValut Logos :\n\n",
 "lock.title":"Protection supplémentaire",
 "lock.sub":"Verrouille l'invitation avec une phrase secrète que vous dites à voix haute. Utile si le code passe par WhatsApp, e-mail ou SMS.",
 "lock.passCap":"Phrase secrète",
@@ -524,7 +526,8 @@ Object.assign(I18N.fr, {
 "home.alreadyTalking":"Vous êtes déjà dans une conversation. Pour en commencer une autre, fermez d'abord celle-ci.","home.stillCalling":"J'appelle encore. Attendez la réponse, ou annulez l'appel.","home.busyReconnect":"Vous êtes occupé pour le moment. Terminez ou fermez la connexion en cours avant de réessayer.",
 "letter.missed":"Voulait vous parler.",
 "sas.blocked":"Dites d'abord les trois mots à voix haute : cette personne n'est plus la même.",
-"file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.","file.sendFailed":"Envoi interrompu : la connexion s'est fermée en cours de route.",
+"file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.","file.sendFailed":"Envoi interrompu : la connexion s'est fermée en cours de route.","file.progress":"{sent} sur {total}",
+"share.pending":"{n} fichier(s) prêt(s) à envoyer — ils partent dès que vous êtes connectés",
 "health.storage":"Mémoire du téléphone",
 "health.storageFull":"Pleine : les conversations ne sont plus enregistrées. Libérez de l'espace sur le téléphone.",
 "addr.lifespan":"Cette adresse n'expire pas. Elle reste valable aussi longtemps que les données de l'application restent sur ce téléphone.",
@@ -578,7 +581,7 @@ Object.assign(I18N.de, {
 "start.pastePh":"Antwort hier einfügen…","btn.connect":"In den Chat gehen",
 "join.pastePh":"Einladung hier einfügen…","join.generate":"Einladung öffnen",
 "join.sendAnswer":"Antwort senden",
-"chat.someone":"Jemand","chat.connected":"verbunden","chat.typePh":"Nachricht schreiben…",
+"chat.someone":"Jemand","chat.connected":"verbunden","chat.typePh":"Nachricht schreiben…","chat.dropHere":"Hier ablegen, um sie zu senden",
 "call.hangup":"Beenden","call.accept":"Annehmen","call.decline":"Ablehnen",
 "menu.title":"Werkzeuge","menu.arm":"Selbstzerstörung","menu.disarm":"Abbrechen",
 "menu.clearHistory":"Verlauf löschen","menu.endChat":"Chat beenden",
@@ -622,7 +625,7 @@ Object.assign(I18N.de, {
 "join.s2help":"Letzter Schritt: schicke dies an die Person zurück, die dich eingeladen hat, und ihr seid verbunden.",
 "btn.paste":"Einfügen","btn.showCode":"Code anzeigen",
 "toast.clipboardEmpty":"Es gibt nichts zum Einfügen.","toast.pasteManually":"Halte den Finger auf das Feld und wähle Einfügen.",
-"home.shareAppText":"Kostenlos, ohne Konto, funktioniert auf jedem Telefon oder Computer — DigitalValut Logos:\n\n",
+"home.shareAppText":"Kostenlos, ohne Konto, funktioniert auf jedem Telefon oder Computer, sendet Fotos und Dateien in Originalqualität — DigitalValut Logos:\n\n",
 "lock.title":"Zusätzlicher Schutz",
 "lock.sub":"Sperrt die Einladung mit einer Passphrase, die du laut sagst. Sinnvoll, wenn der Code über WhatsApp, E-Mail oder SMS reist.",
 "lock.passCap":"Passphrase",
@@ -683,7 +686,8 @@ Object.assign(I18N.de, {
 "home.alreadyTalking":"Du bist schon in einem Gespräch. Um ein neues zu beginnen, beende zuerst dieses.","home.stillCalling":"Ich rufe noch an. Warte auf die Antwort oder brich den Anruf ab.","home.busyReconnect":"Du bist gerade beschäftigt. Beende oder schließe die aktuelle Verbindung, bevor du es erneut versuchst.",
 "letter.missed":"Wollte mit dir sprechen.",
 "sas.blocked":"Sagt euch zuerst die drei Wörter laut: diese Person ist nicht mehr dieselbe.",
-"file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.","file.sendFailed":"Senden unterbrochen: die Verbindung wurde mittendrin geschlossen.",
+"file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.","file.sendFailed":"Senden unterbrochen: die Verbindung wurde mittendrin geschlossen.","file.progress":"{sent} von {total}",
+"share.pending":"{n} Datei(en) bereit zum Senden — sie gehen raus, sobald ihr verbunden seid",
 "health.storage":"Speicher des Telefons",
 "health.storageFull":"Voll: Unterhaltungen werden nicht mehr gespeichert. Schaff Platz auf dem Telefon.",
 "addr.lifespan":"Diese Adresse läuft nicht ab. Sie bleibt gültig, solange die Daten der App auf diesem Telefon bleiben.",
@@ -737,7 +741,7 @@ Object.assign(I18N.es, {
 "start.pastePh":"Pega aquí la respuesta…","btn.connect":"Entrar en el chat",
 "join.pastePh":"Pega aquí la invitación…","join.generate":"Abrir la invitación",
 "join.sendAnswer":"Enviar la respuesta",
-"chat.someone":"Alguien","chat.connected":"conectado","chat.typePh":"Escribe un mensaje…",
+"chat.someone":"Alguien","chat.connected":"conectado","chat.typePh":"Escribe un mensaje…","chat.dropHere":"Suéltalos aquí para enviarlos",
 "call.hangup":"Terminar","call.accept":"Responder","call.decline":"Rechazar",
 "menu.title":"Herramientas","menu.arm":"Autodestrucción","menu.disarm":"Cancelar",
 "menu.clearHistory":"Borrar historial","menu.endChat":"Terminar chat",
@@ -781,7 +785,7 @@ Object.assign(I18N.es, {
 "join.s2help":"Último paso: envía esto de vuelta a quien te invitó, y estaréis conectados.",
 "btn.paste":"Pegar","btn.showCode":"Mostrar el código",
 "toast.clipboardEmpty":"No hay nada que pegar.","toast.pasteManually":"Mantén el dedo sobre el recuadro y elige Pegar.",
-"home.shareAppText":"Gratis, sin cuenta, funciona en cualquier teléfono u ordenador — DigitalValut Logos:\n\n",
+"home.shareAppText":"Gratis, sin cuenta, funciona en cualquier teléfono u ordenador, envía fotos y archivos en calidad original — DigitalValut Logos:\n\n",
 "lock.title":"Protección extra",
 "lock.sub":"Bloquea la invitación con una frase secreta que dices en voz alta. Útil si el código viaja por WhatsApp, correo o SMS.",
 "lock.passCap":"Frase secreta",
@@ -842,7 +846,8 @@ Object.assign(I18N.es, {
 "home.alreadyTalking":"Ya estás en una conversación. Para empezar otra, cierra antes esta.","home.stillCalling":"Todavía estoy llamando. Espera la respuesta o cancela la llamada.","home.busyReconnect":"Estás ocupado ahora mismo. Termina o cierra la conexión actual antes de volver a intentarlo.",
 "letter.missed":"Quería hablar contigo.",
 "sas.blocked":"Decíos antes las tres palabras en voz alta: esta persona ya no es la misma.",
-"file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.","file.sendFailed":"Envío interrumpido: la conexión se cerró a mitad de camino.",
+"file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.","file.sendFailed":"Envío interrumpido: la conexión se cerró a mitad de camino.","file.progress":"{sent} de {total}",
+"share.pending":"{n} archivo(s) listos para enviar — se envían en cuanto os conectéis",
 "health.storage":"Memoria del teléfono",
 "health.storageFull":"Llena: las conversaciones ya no se guardan. Libera espacio en el teléfono.",
 "addr.lifespan":"Esta dirección no caduca. Sigue siendo válida mientras los datos de la aplicación permanezcan en este teléfono.",
@@ -896,7 +901,7 @@ Object.assign(I18N.pt, {
 "start.pastePh":"Cole aqui a resposta…","btn.connect":"Entrar na conversa",
 "join.pastePh":"Cole aqui o convite…","join.generate":"Abrir o convite",
 "join.sendAnswer":"Enviar a resposta",
-"chat.someone":"Alguém","chat.connected":"ligado","chat.typePh":"Escreva uma mensagem…",
+"chat.someone":"Alguém","chat.connected":"ligado","chat.typePh":"Escreva uma mensagem…","chat.dropHere":"Largue-os aqui para enviar",
 "call.hangup":"Terminar","call.accept":"Atender","call.decline":"Recusar",
 "menu.title":"Ferramentas","menu.arm":"Autodestruição","menu.disarm":"Cancelar",
 "menu.clearHistory":"Limpar histórico","menu.endChat":"Terminar conversa",
@@ -940,7 +945,7 @@ Object.assign(I18N.pt, {
 "join.s2help":"Último passo: envie isto de volta para quem o convidou, e ficam ligados.",
 "btn.paste":"Colar","btn.showCode":"Mostrar o código",
 "toast.clipboardEmpty":"Não há nada para colar.","toast.pasteManually":"Mantenha o dedo na caixa e escolha Colar.",
-"home.shareAppText":"Grátis, sem conta, funciona em qualquer telemóvel ou computador — DigitalValut Logos:\n\n",
+"home.shareAppText":"Grátis, sem conta, funciona em qualquer telemóvel ou computador, envia fotos e ficheiros na qualidade original — DigitalValut Logos:\n\n",
 "lock.title":"Proteção extra",
 "lock.sub":"Bloqueia o convite com uma frase-passe que diz em voz alta. Vale a pena ativar se o código passar por WhatsApp, e-mail ou SMS.",
 "lock.passCap":"Frase-passe",
@@ -1001,7 +1006,8 @@ Object.assign(I18N.pt, {
 "home.alreadyTalking":"Já está numa conversa. Para começar outra, feche primeiro esta.","home.stillCalling":"Ainda estou a ligar. Espere pela resposta, ou cancele a chamada.","home.busyReconnect":"Está ocupado neste momento. Termine ou feche a ligação atual antes de tentar novamente.",
 "letter.missed":"Queria falar consigo.",
 "sas.blocked":"Digam primeiro as três palavras em voz alta: esta pessoa já não é a mesma.",
-"file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.","file.sendFailed":"Envio interrompido: a ligação fechou a meio.",
+"file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.","file.sendFailed":"Envio interrompido: a ligação fechou a meio.","file.progress":"{sent} de {total}",
+"share.pending":"{n} ficheiro(s) prontos para enviar — partem assim que se ligarem",
 "health.storage":"Memória do telemóvel",
 "health.storageFull":"Cheia: as conversas já não são guardadas. Liberte espaço no telemóvel.",
 "addr.lifespan":"Este endereço não expira. Mantém-se válido enquanto os dados da aplicação permanecerem neste telemóvel.",
@@ -1055,7 +1061,7 @@ Object.assign(I18N.ru, {
 "start.pastePh":"Вставьте ответ сюда…","btn.connect":"Войти в чат",
 "join.pastePh":"Вставьте приглашение сюда…","join.generate":"Открыть приглашение",
 "join.sendAnswer":"Отправить ответ",
-"chat.someone":"Кто-то","chat.connected":"на связи","chat.typePh":"Напишите сообщение…",
+"chat.someone":"Кто-то","chat.connected":"на связи","chat.typePh":"Напишите сообщение…","chat.dropHere":"Перетащите сюда, чтобы отправить",
 "call.hangup":"Завершить","call.accept":"Ответить","call.decline":"Отклонить",
 "menu.title":"Инструменты","menu.arm":"Самоуничтожение","menu.disarm":"Отмена",
 "menu.clearHistory":"Очистить историю","menu.endChat":"Завершить чат",
@@ -1099,7 +1105,7 @@ Object.assign(I18N.ru, {
 "join.s2help":"Последний шаг: отправьте это обратно тому, кто вас пригласил, и вы будете на связи.",
 "btn.paste":"Вставить","btn.showCode":"Показать код",
 "toast.clipboardEmpty":"Нечего вставить.","toast.pasteManually":"Удерживайте палец на поле и выберите Вставить.",
-"home.shareAppText":"Бесплатно, без аккаунта, работает на любом телефоне или компьютере — DigitalValut Logos:\n\n",
+"home.shareAppText":"Бесплатно, без аккаунта, работает на любом телефоне или компьютере, отправляет фото и файлы в исходном качестве — DigitalValut Logos:\n\n",
 "lock.title":"Дополнительная защита",
 "lock.sub":"Блокирует приглашение кодовой фразой, которую вы произносите вслух. Стоит включить, если код проходит через WhatsApp, почту или SMS.",
 "lock.passCap":"Кодовая фраза",
@@ -1160,7 +1166,8 @@ Object.assign(I18N.ru, {
 "home.alreadyTalking":"Вы уже в разговоре. Чтобы начать другой, сначала завершите этот.","home.stillCalling":"Я всё ещё звоню. Дождитесь ответа или отмените звонок.","home.busyReconnect":"Сейчас вы заняты. Завершите или закройте текущее соединение, прежде чем пробовать снова.",
 "letter.missed":"Хотел(а) с вами поговорить.",
 "sas.blocked":"Сначала произнесите три слова вслух: это уже не тот же человек.",
-"file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.","file.sendFailed":"Отправка прервана: соединение закрылось на середине.",
+"file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.","file.sendFailed":"Отправка прервана: соединение закрылось на середине.","file.progress":"{sent} из {total}",
+"share.pending":"Готово к отправке: {n} файл(ов) — уйдут, как только соединитесь",
 "health.storage":"Память телефона",
 "health.storageFull":"Заполнена: разговоры больше не сохраняются. Освободите место на телефоне.",
 "addr.lifespan":"Этот адрес не истекает. Он остаётся действительным, пока данные приложения хранятся на этом телефоне.",
@@ -1214,7 +1221,7 @@ Object.assign(I18N.zh, {
 "start.pastePh":"在此粘贴回复…","btn.connect":"进入聊天",
 "join.pastePh":"在此粘贴邀请…","join.generate":"打开邀请",
 "join.sendAnswer":"发送回复",
-"chat.someone":"某人","chat.connected":"已连接","chat.typePh":"写一条消息…",
+"chat.someone":"某人","chat.connected":"已连接","chat.typePh":"写一条消息…","chat.dropHere":"拖到这里发送",
 "call.hangup":"结束","call.accept":"接听","call.decline":"拒绝",
 "menu.title":"工具","menu.arm":"自毁","menu.disarm":"取消",
 "menu.clearHistory":"清除记录","menu.endChat":"结束聊天",
@@ -1258,7 +1265,7 @@ Object.assign(I18N.zh, {
 "join.s2help":"最后一步：把这个发回给邀请你的人，你们就连接上了。",
 "btn.paste":"粘贴","btn.showCode":"显示代码",
 "toast.clipboardEmpty":"没有可粘贴的内容。","toast.pasteManually":"按住方框并选择粘贴。",
-"home.shareAppText":"免费，无需账号，可在任何手机或电脑上使用——DigitalValut Logos：\n\n",
+"home.shareAppText":"免费，无需账号，可在任何手机或电脑上使用，发送照片和文件保持原画质——DigitalValut Logos：\n\n",
 "lock.title":"额外保护",
 "lock.sub":"用你口头说出的密语锁定邀请。如果代码通过 WhatsApp、邮件或短信传送，值得开启。",
 "lock.passCap":"密语",
@@ -1319,7 +1326,8 @@ Object.assign(I18N.zh, {
 "home.alreadyTalking":"你已经在一个对话中。要开始新的，请先结束这个。","home.stillCalling":"还在呼叫中。请等对方回应，或取消这次呼叫。","home.busyReconnect":"您现在正忙。请先完成或关闭当前连接，再重试。",
 "letter.missed":"想跟你说说话。",
 "sas.blocked":"请先把三个词念出来核对：这个人已经不是原来那位了。",
-"file.tooBig":"一个接收中的文件已被中止：它与声明的不符。","file.sendFailed":"发送中断：连接在传输过程中关闭了。",
+"file.tooBig":"一个接收中的文件已被中止：它与声明的不符。","file.sendFailed":"发送中断：连接在传输过程中关闭了。","file.progress":"{sent} / {total}",
+"share.pending":"{n} 个文件已准备好发送——一连接就会发送",
 "health.storage":"手机存储",
 "health.storageFull":"已满：对话不再被保存。请清理手机空间。",
 "addr.lifespan":"这个地址不会过期。只要应用的数据还在这台手机上，它就一直有效。",
@@ -1373,7 +1381,7 @@ Object.assign(I18N.ar, {
 "start.pastePh":"الصق الرد هنا…","btn.connect":"ادخل إلى المحادثة",
 "join.pastePh":"الصق الدعوة هنا…","join.generate":"فتح الدعوة",
 "join.sendAnswer":"إرسال الرد",
-"chat.someone":"شخص ما","chat.connected":"متصل","chat.typePh":"اكتب رسالة…",
+"chat.someone":"شخص ما","chat.connected":"متصل","chat.typePh":"اكتب رسالة…","chat.dropHere":"أفلتها هنا لإرسالها",
 "call.hangup":"إنهاء","call.accept":"رد","call.decline":"رفض",
 "menu.title":"أدوات","menu.arm":"تدمير ذاتي","menu.disarm":"إلغاء",
 "menu.clearHistory":"مسح السجل","menu.endChat":"إنهاء المحادثة",
@@ -1417,7 +1425,7 @@ Object.assign(I18N.ar, {
 "join.s2help":"الخطوة الأخيرة: أرسل هذا مرة أخرى إلى من دعاك، وستكونان متصلَين.",
 "btn.paste":"لصق","btn.showCode":"إظهار الرمز",
 "toast.clipboardEmpty":"لا يوجد شيء للصقه.","toast.pasteManually":"اضغط مطولًا على المربع واختر لصق.",
-"home.shareAppText":"مجاني، بلا حساب، يعمل على أي هاتف أو كمبيوتر — DigitalValut Logos:\n\n",
+"home.shareAppText":"مجاني، بلا حساب، يعمل على أي هاتف أو كمبيوتر، يرسل الصور والملفات بجودتها الأصلية — DigitalValut Logos:\n\n",
 "lock.title":"حماية إضافية",
 "lock.sub":"يقفل الدعوة بعبارة سرية تنطقها بصوت عالٍ. يستحق التفعيل إذا مرّ الرمز عبر واتساب أو البريد الإلكتروني أو الرسائل النصية.",
 "lock.passCap":"العبارة السرية",
@@ -1478,7 +1486,8 @@ Object.assign(I18N.ar, {
 "home.alreadyTalking":"أنت بالفعل في محادثة. لبدء أخرى، أغلق هذه أولًا.","home.stillCalling":"ما زلت أتصل. انتظر الرد، أو ألغِ الاتصال.","home.busyReconnect":"أنت مشغول الآن. أنهِ الاتصال الحالي أو أغلقه قبل المحاولة مرة أخرى.",
 "letter.missed":"أراد التحدث إليك.",
 "sas.blocked":"قولا الكلمات الثلاث بصوت عالٍ أولًا: هذا الشخص لم يعد نفسه.",
-"file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.","file.sendFailed":"توقف الإرسال: أُغلق الاتصال في المنتصف.",
+"file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.","file.sendFailed":"توقف الإرسال: أُغلق الاتصال في المنتصف.","file.progress":"{sent} من {total}",
+"share.pending":"{n} ملف جاهز للإرسال — سُيرسل بمجرد الاتصال",
 "health.storage":"ذاكرة الهاتف",
 "health.storageFull":"ممتلئة: لم تعد المحادثات تُحفظ. أفرغ بعض المساحة في الهاتف.",
 "addr.lifespan":"هذا العنوان لا تنتهي صلاحيته. يبقى صالحًا ما دامت بيانات التطبيق على هذا الهاتف.",
@@ -1532,7 +1541,7 @@ Object.assign(I18N.ur, {
 "start.pastePh":"جواب یہاں پیسٹ کریں…","btn.connect":"چیٹ میں جائیں",
 "join.pastePh":"دعوت یہاں پیسٹ کریں…","join.generate":"دعوت کھولیں",
 "join.sendAnswer":"جواب بھیجیں",
-"chat.someone":"کوئی","chat.connected":"منسلک","chat.typePh":"ایک پیغام لکھیں…",
+"chat.someone":"کوئی","chat.connected":"منسلک","chat.typePh":"ایک پیغام لکھیں…","chat.dropHere":"بھیجنے کے لیے یہاں چھوڑیں",
 "call.hangup":"ختم کریں","call.accept":"جواب دیں","call.decline":"مسترد کریں",
 "menu.title":"ٹولز","menu.arm":"خود کار تباہی","menu.disarm":"منسوخ کریں",
 "menu.clearHistory":"تاریخ صاف کریں","menu.endChat":"چیٹ ختم کریں",
@@ -1576,7 +1585,7 @@ Object.assign(I18N.ur, {
 "join.s2help":"آخری مرحلہ: یہ اس شخص کو واپس بھیجیں جس نے آپ کو مدعو کیا، اور آپ منسلک ہو جائیں گے۔",
 "btn.paste":"پیسٹ کریں","btn.showCode":"کوڈ دکھائیں",
 "toast.clipboardEmpty":"پیسٹ کرنے کے لیے کچھ نہیں ہے۔","toast.pasteManually":"باکس پر انگلی دبائے رکھیں اور پیسٹ منتخب کریں۔",
-"home.shareAppText":"مفت، بغیر اکاؤنٹ کے، کسی بھی فون یا کمپیوٹر پر کام کرتا ہے — DigitalValut Logos:\n\n",
+"home.shareAppText":"مفت، بغیر اکاؤنٹ کے، کسی بھی فون یا کمپیوٹر پر کام کرتا ہے، تصاویر اور فائلیں اصل کوالٹی میں بھیجتا ہے — DigitalValut Logos:\n\n",
 "lock.title":"اضافی تحفظ",
 "lock.sub":"دعوت کو ایک پاس فریز سے لاک کرتا ہے جو آپ بلند آواز میں کہتے ہیں۔ اگر کوڈ واٹس ایپ، ای میل یا SMS سے گزرتا ہے تو اسے آن کرنا فائدہ مند ہے۔",
 "lock.passCap":"پاس فریز",
@@ -1637,7 +1646,8 @@ Object.assign(I18N.ur, {
 "home.alreadyTalking":"آپ پہلے ہی ایک گفتگو میں ہیں۔ نئی شروع کرنے کے لیے پہلے اسے بند کریں۔","home.stillCalling":"میں ابھی بھی کال کر رہا ہوں۔ جواب کا انتظار کریں، یا کال منسوخ کریں۔","home.busyReconnect":"آپ ابھی مصروف ہیں۔ دوبارہ کوشش کرنے سے پہلے موجودہ کنکشن مکمل کریں یا بند کریں۔",
 "letter.missed":"آپ سے بات کرنا چاہتا تھا۔",
 "sas.blocked":"پہلے تینوں الفاظ بول کر ملائیں: یہ شخص اب وہی نہیں رہا۔",
-"file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔","file.sendFailed":"بھیجنا رک گیا: کنکشن درمیان میں بند ہو گیا۔",
+"file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔","file.sendFailed":"بھیجنا رک گیا: کنکشن درمیان میں بند ہو گیا۔","file.progress":"{sent} از {total}",
+"share.pending":"{n} فائل بھیجنے کے لیے تیار ہیں — جیسے ہی رابطہ ہو، چلی جائیں گی",
 "health.storage":"فون کی میموری",
 "health.storageFull":"بھری ہوئی ہے: گفتگو اب محفوظ نہیں ہو رہی۔ فون میں جگہ خالی کریں۔",
 "addr.lifespan":"یہ پتہ ختم نہیں ہوتا۔ جب تک ایپ کا ڈیٹا اس فون پر رہے، یہ کارآمد رہتا ہے۔",
@@ -1691,7 +1701,7 @@ Object.assign(I18N.hi, {
 "start.pastePh":"जवाब यहाँ पेस्ट करें…","btn.connect":"चैट में जाएं",
 "join.pastePh":"निमंत्रण यहाँ पेस्ट करें…","join.generate":"निमंत्रण खोलें",
 "join.sendAnswer":"जवाब भेजें",
-"chat.someone":"कोई","chat.connected":"जुड़ा हुआ","chat.typePh":"एक संदेश लिखें…",
+"chat.someone":"कोई","chat.connected":"जुड़ा हुआ","chat.typePh":"एक संदेश लिखें…","chat.dropHere":"भेजने के लिए यहाँ छोड़ें",
 "call.hangup":"समाप्त करें","call.accept":"जवाब दें","call.decline":"अस्वीकार करें",
 "menu.title":"उपकरण","menu.arm":"स्व-विनाश","menu.disarm":"रद्द करें",
 "menu.clearHistory":"इतिहास साफ़ करें","menu.endChat":"चैट समाप्त करें",
@@ -1735,7 +1745,7 @@ Object.assign(I18N.hi, {
 "join.s2help":"आखिरी कदम: इसे उस व्यक्ति को वापस भेजें जिसने आपको आमंत्रित किया, और आप जुड़ जाएंगे।",
 "btn.paste":"पेस्ट करें","btn.showCode":"कोड दिखाएं",
 "toast.clipboardEmpty":"पेस्ट करने के लिए कुछ नहीं है।","toast.pasteManually":"बॉक्स पर उंगली दबाए रखें और पेस्ट चुनें।",
-"home.shareAppText":"मुफ़्त, बिना खाते के, किसी भी फ़ोन या कंप्यूटर पर काम करता है — DigitalValut Logos:\n\n",
+"home.shareAppText":"मुफ़्त, बिना खाते के, किसी भी फ़ोन या कंप्यूटर पर काम करता है, फ़ोटो और फ़ाइलें असली क्वालिटी में भेजता है — DigitalValut Logos:\n\n",
 "lock.title":"अतिरिक्त सुरक्षा",
 "lock.sub":"निमंत्रण को एक पासफ़्रेज़ से लॉक करता है जिसे आप ज़ोर से बोलते हैं। अगर कोड WhatsApp, ईमेल या SMS से गुज़रता है तो इसे चालू करना फ़ायदेमंद है।",
 "lock.passCap":"पासफ़्रेज़",
@@ -1796,7 +1806,8 @@ Object.assign(I18N.hi, {
 "home.alreadyTalking":"आप पहले से एक बातचीत में हैं। दूसरी शुरू करने के लिए पहले इसे बंद करें।","home.stillCalling":"मैं अभी भी कॉल कर रहा हूँ। जवाब का इंतज़ार करें, या कॉल रद्द करें।","home.busyReconnect":"आप अभी व्यस्त हैं। दोबारा कोशिश करने से पहले मौजूदा कनेक्शन पूरा करें या बंद करें।",
 "letter.missed":"आपसे बात करना चाहता था।",
 "sas.blocked":"पहले तीनों शब्द बोलकर मिलाएँ: यह व्यक्ति अब वही नहीं रहा।",
-"file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।","file.sendFailed":"भेजना बीच में रुक गया: कनेक्शन बीच में बंद हो गया।",
+"file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।","file.sendFailed":"भेजना बीच में रुक गया: कनेक्शन बीच में बंद हो गया।","file.progress":"{sent} में से {total}",
+"share.pending":"{n} फ़ाइलें भेजने के लिए तैयार — जुड़ते ही चली जाएंगी",
 "health.storage":"फ़ोन की मेमोरी",
 "health.storageFull":"भरी हुई है: बातचीत अब सहेजी नहीं जा रही। फ़ोन में जगह खाली करें।",
 "addr.lifespan":"यह पता समाप्त नहीं होता। जब तक ऐप का डेटा इस फ़ोन पर है, यह मान्य रहता है।",
@@ -1850,7 +1861,7 @@ Object.assign(I18N.bn, {
 "start.pastePh":"উত্তর এখানে পেস্ট করুন…","btn.connect":"চ্যাটে প্রবেশ করুন",
 "join.pastePh":"আমন্ত্রণ এখানে পেস্ট করুন…","join.generate":"আমন্ত্রণ খুলুন",
 "join.sendAnswer":"উত্তর পাঠান",
-"chat.someone":"কেউ একজন","chat.connected":"সংযুক্ত","chat.typePh":"একটি বার্তা লিখুন…",
+"chat.someone":"কেউ একজন","chat.connected":"সংযুক্ত","chat.typePh":"একটি বার্তা লিখুন…","chat.dropHere":"পাঠাতে এখানে ছাড়ুন",
 "call.hangup":"শেষ করুন","call.accept":"উত্তর দিন","call.decline":"প্রত্যাখ্যান করুন",
 "menu.title":"সরঞ্জাম","menu.arm":"স্ব-ধ্বংস","menu.disarm":"বাতিল করুন",
 "menu.clearHistory":"ইতিহাস মুছুন","menu.endChat":"চ্যাট শেষ করুন",
@@ -1894,7 +1905,7 @@ Object.assign(I18N.bn, {
 "join.s2help":"শেষ ধাপ: যিনি আপনাকে আমন্ত্রণ জানিয়েছেন তার কাছে এটি ফেরত পাঠান, এবং আপনারা সংযুক্ত হয়ে যাবেন।",
 "btn.paste":"পেস্ট করুন","btn.showCode":"কোড দেখান",
 "toast.clipboardEmpty":"পেস্ট করার মতো কিছু নেই।","toast.pasteManually":"বাক্সের উপর আঙুল ধরে রাখুন এবং পেস্ট নির্বাচন করুন।",
-"home.shareAppText":"বিনামূল্যে, অ্যাকাউন্ট ছাড়াই, যেকোনো ফোন বা কম্পিউটারে কাজ করে — DigitalValut Logos:\n\n",
+"home.shareAppText":"বিনামূল্যে, অ্যাকাউন্ট ছাড়াই, যেকোনো ফোন বা কম্পিউটারে কাজ করে, ছবি ও ফাইল আসল মানে পাঠায় — DigitalValut Logos:\n\n",
 "lock.title":"অতিরিক্ত সুরক্ষা",
 "lock.sub":"আপনি জোরে বলা একটি পাসফ্রেজ দিয়ে আমন্ত্রণ লক করে। কোডটি WhatsApp, ইমেল বা SMS-এর মাধ্যমে গেলে এটি চালু করা মূল্যবান।",
 "lock.passCap":"পাসফ্রেজ",
@@ -1955,7 +1966,8 @@ Object.assign(I18N.bn, {
 "home.alreadyTalking":"আপনি ইতিমধ্যে একটি কথোপকথনে আছেন। আরেকটি শুরু করতে আগে এটি বন্ধ করুন।","home.stillCalling":"আমি এখনও ডাকছি। সাড়ার জন্য অপেক্ষা করুন, বা ডাকটি বাতিল করুন।","home.busyReconnect":"আপনি এখন ব্যস্ত আছেন। আবার চেষ্টা করার আগে বর্তমান সংযোগটি শেষ করুন বা বন্ধ করুন।",
 "letter.missed":"আপনার সঙ্গে কথা বলতে চেয়েছিলেন।",
 "sas.blocked":"আগে তিনটি শব্দ মুখে বলে মিলিয়ে নিন: এই ব্যক্তি আর আগের জন নন।",
-"file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।","file.sendFailed":"পাঠানো বন্ধ হয়ে গেছে: সংযোগ মাঝপথে বন্ধ হয়ে গেছে।",
+"file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।","file.sendFailed":"পাঠানো বন্ধ হয়ে গেছে: সংযোগ মাঝপথে বন্ধ হয়ে গেছে।","file.progress":"{total}-এর মধ্যে {sent}",
+"share.pending":"{n}টি ফাইল পাঠানোর জন্য প্রস্তুত — সংযুক্ত হলেই চলে যাবে",
 "health.storage":"ফোনের মেমোরি",
 "health.storageFull":"পূর্ণ: কথোপকথন আর সংরক্ষিত হচ্ছে না। ফোনে জায়গা খালি করুন।",
 "addr.lifespan":"এই ঠিকানার মেয়াদ শেষ হয় না। অ্যাপের তথ্য এই ফোনে থাকা পর্যন্ত এটি বৈধ থাকে।",
@@ -2009,7 +2021,7 @@ Object.assign(I18N.id, {
 "start.pastePh":"Tempel balasan di sini…","btn.connect":"Masuk ke obrolan",
 "join.pastePh":"Tempel undangan di sini…","join.generate":"Buka undangan",
 "join.sendAnswer":"Kirim balasan",
-"chat.someone":"Seseorang","chat.connected":"tersambung","chat.typePh":"Tulis pesan…",
+"chat.someone":"Seseorang","chat.connected":"tersambung","chat.typePh":"Tulis pesan…","chat.dropHere":"Lepaskan di sini untuk mengirim",
 "call.hangup":"Akhiri","call.accept":"Jawab","call.decline":"Tolak",
 "menu.title":"Alat","menu.arm":"Penghancuran diri","menu.disarm":"Batal",
 "menu.clearHistory":"Hapus riwayat","menu.endChat":"Akhiri obrolan",
@@ -2053,7 +2065,7 @@ Object.assign(I18N.id, {
 "join.s2help":"Langkah terakhir: kirim ini kembali ke orang yang mengundang Anda, dan Anda pun tersambung.",
 "btn.paste":"Tempel","btn.showCode":"Tampilkan kode",
 "toast.clipboardEmpty":"Tidak ada yang bisa ditempel.","toast.pasteManually":"Tahan jari pada kotak dan pilih Tempel.",
-"home.shareAppText":"Gratis, tanpa akun, berfungsi di ponsel atau komputer mana pun — DigitalValut Logos:\n\n",
+"home.shareAppText":"Gratis, tanpa akun, berfungsi di ponsel atau komputer mana pun, mengirim foto dan berkas dalam kualitas asli — DigitalValut Logos:\n\n",
 "lock.title":"Perlindungan ekstra",
 "lock.sub":"Mengunci undangan dengan frasa sandi yang Anda ucapkan dengan suara keras. Berguna diaktifkan jika kode melewati WhatsApp, email, atau SMS.",
 "lock.passCap":"Frasa sandi",
@@ -2114,7 +2126,8 @@ Object.assign(I18N.id, {
 "home.alreadyTalking":"Anda sudah dalam percakapan. Untuk memulai yang lain, tutup dulu yang ini.","home.stillCalling":"Saya masih menelepon. Tunggu jawabannya, atau batalkan panggilan.","home.busyReconnect":"Anda sedang sibuk sekarang. Selesaikan atau tutup koneksi yang sedang berlangsung sebelum mencoba lagi.",
 "letter.missed":"Ingin bicara dengan Anda.",
 "sas.blocked":"Ucapkan dulu ketiga kata itu: orang ini bukan lagi orang yang sama.",
-"file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.","file.sendFailed":"Pengiriman terputus: koneksi tertutup di tengah jalan.",
+"file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.","file.sendFailed":"Pengiriman terputus: koneksi tertutup di tengah jalan.","file.progress":"{sent} dari {total}",
+"share.pending":"{n} berkas siap dikirim — akan terkirim begitu tersambung",
 "health.storage":"Penyimpanan ponsel",
 "health.storageFull":"Penuh: percakapan tidak lagi disimpan. Kosongkan ruang di ponsel.",
 "addr.lifespan":"Alamat ini tidak kedaluwarsa. Ia tetap berlaku selama data aplikasi masih ada di ponsel ini.",
@@ -2694,6 +2707,10 @@ function wireDataChannel(channel){
     const fp = await myFingerprintHex();
     const push = notifyPref() ? await ensurePushSubscription() : null;
     dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp, push }));
+    if (pendingSharedFiles.length){
+      const files = pendingSharedFiles; pendingSharedFiles = [];
+      sendFilesQueue(files);
+    }
   };
   /* Said inside the conversation, not only on statusA. statusA lives on the
      start screen, and somebody whose line drops mid-chat is looking at the
@@ -4976,7 +4993,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.50';
+const APP_VERSION = 'logos-modifica-3.51';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6065,6 +6082,55 @@ function renderMsg(bodyHtml, mine, persist){
   $('msgs').appendChild(row);
   $('msgs').scrollTop = $('msgs').scrollHeight;
   if (persist !== false) saveToHistory(peerNick, bodyHtml, mine);
+  return bub;   /* callers that only send text never look at this; a transfer
+                   in progress needs it, to keep updating the same bubble
+                   instead of one appearing per chunk */
+}
+/* A transfer bubble the caller can keep repainting as bytes move. Built from
+   real nodes kept in hand, deliberately not from a string handed to innerHTML
+   and re-found afterwards with an id or a selector — a bubble is exactly the
+   kind of thing this app already renders through innerHTML, so a second
+   element sharing an id with anything else on screen would silently become
+   ambiguous. Holding the actual nodes has no such failure mode. */
+function renderTransferBubble(name, size, mine){
+  const row = document.createElement('div'); row.className = 'row ' + (mine ? 'me' : 'them');
+  const bub = document.createElement('div'); bub.className = 'bub';
+  const head = document.createElement('div'); head.className = 'xferrow';
+  const icon = document.createElement('span'); icon.className = 'ic'; icon.innerHTML = svgIcon('attach','sm');
+  const nameEl = document.createElement('span'); nameEl.className = 'xfername'; nameEl.textContent = name;
+  head.appendChild(icon); head.appendChild(nameEl);
+  const track = document.createElement('div'); track.className = 'xferbar';
+  const bar = document.createElement('i'); bar.style.width = '0%';
+  track.appendChild(bar);
+  const meta = document.createElement('div'); meta.className = 'xfermeta';
+  const totalTxt = humanSize(size);
+  meta.textContent = fill(t('file.progress','{sent} di {total}'), { sent: humanSize(0), total: totalTxt });
+  bub.appendChild(head); bub.appendChild(track); bub.appendChild(meta);
+  row.appendChild(bub);
+  $('msgs').appendChild(row);
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+  let lastPaint = 0;
+  return {
+    bub,
+    fail(text){ bub.innerHTML = '<span class="faintlink">'+esc(text)+'</span>'; },
+    paint(sent, force){
+      const now = Date.now();
+      if (!force && now - lastPaint <= 120) return;
+      lastPaint = now;
+      bar.style.width = (size ? Math.floor(sent / size * 100) : 100) + '%';
+      meta.textContent = fill(t('file.progress','{sent} di {total}'), { sent: humanSize(sent), total: totalTxt });
+    },
+    finish(html){ bub.innerHTML = html; },
+  };
+}
+/* "1,3 MB", not "1372450 byte". Below 1 KB shown as plain bytes — a voice
+   note or a tiny file never needs a decimal to be readable. */
+function humanSize(n){
+  if (n < 1024) return n + ' B';
+  const units = ['KB','MB','GB'];
+  let v = n / 1024, i = 0;
+  while (v >= 1024 && i < units.length - 1){ v /= 1024; i++; }
+  return v.toFixed(v < 10 ? 1 : 0).replace('.', ',') + ' ' + units[i];
 }
 function sysLine(text){
   const d = document.createElement('div'); d.className = 'sysline'; d.textContent = text;
@@ -6124,6 +6190,12 @@ async function sendFile(file){
   if (!file || !dc || dc.readyState !== 'open') return;
   if (blockedBySafety()) return;
   const id = Math.random().toString(36).slice(2);
+  /* A transfer used to render nothing at all until it finished — a 500MB
+     video sat for two minutes with no sign of life on screen, indistinguishable
+     from having silently died. The bubble now appears immediately, with a bar
+     this same function keeps painting as chunks go out, and is only replaced
+     with the real preview once the last one has actually left. */
+  const xfer = renderTransferBubble(file.name, file.size, true);
   try{
     dc.send(JSON.stringify({ type: 'file-start', id, name: file.name, mime: file.type, size: file.size }));
     let off = 0;
@@ -6135,24 +6207,106 @@ async function sendFile(file){
       framed.set(new Uint8Array(buf), 16);
       await sendWithBackpressure(dc, framed);
       off = end;
+      /* repainting on every 16KB chunk would be thousands of DOM writes for a
+         large file; paint() throttles on its own, except on the very last
+         chunk (forced) so the bar actually reaches 100% instead of stopping
+         wherever the last throttled paint happened to land */
+      xfer.paint(off, off === file.size);
     }
     dc.send(JSON.stringify({ type: 'file-end', id }));
   }catch(e){
-    /* the bubble is only rendered after the loop finishes, so a channel that
-       closed mid-transfer used to leave nothing on screen at all — the file
-       the sender was watching simply never appeared, with no sign anything
-       had gone wrong */
-    toast(t('file.sendFailed','Invio interrotto: la connessione si è chiusa a metà.'));
+    /* left in the chat rather than only a toast, which vanishes and leaves no
+       trace of what happened to the file that was mid-transfer */
+    xfer.fail(t('file.sendFailed','Invio interrotto: la connessione si è chiusa a metà.'));
     return;
   }
   const url = keepObjectUrl(URL.createObjectURL(file));
   const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
   const preview = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
-                : isAud ? '<audio src="'+url+'" controls></audio>' : '<a href="'+url+'" download="'+esc(file.name)+'" class="filelink">📄 '+esc(file.name)+' ↓</a>';
-  renderMsg(preview + '<div class="meta">' + timeNow() + '</div>', true);
+                : isAud ? '<audio src="'+url+'" controls></audio>'
+                : '<a href="'+url+'" download="'+esc(file.name)+'" class="filelink">'+svgIcon('attach','sm')+esc(file.name)+' ↓</a>';
+  const finalHtml = preview + '<div class="meta">' + timeNow() + '</div>';
+  xfer.finish(finalHtml);
+  saveToHistory(peerNick, finalHtml, true);
 }
+/* Selecting or dropping thirty files used to mean pressing the same button
+   thirty times — the feature existed, but nobody would ever actually reach
+   for it that way, so in practice it went unused. One at a time, in the order
+   given: not because the channel couldn't take more at once, but because
+   parallel transfers would mean several progress bars updating out of sync
+   with none of them meaningfully readable, for no real gain — a single 16KB
+   chunk in flight either way. */
+async function sendFilesQueue(files){
+  for (const f of files) await sendFile(f);
+}
+
+/* ---------------- share target: arriving from another app's "share" ----------------
+   The service worker already pulled the real files out of the POST and left
+   them in a scratch Cache — this only ever reads that cache back out, never
+   the network request itself, so it works the same whether the share landed
+   moments ago or the app was slow to boot. If nobody is connected yet the
+   files just wait in memory; there is nowhere else for them to go without
+   inventing storage this app has deliberately never had. */
+let pendingSharedFiles = [];
+async function checkForSharedFiles(){
+  if (!/[?&]shared=1\b/.test(location.search)) return;
+  try{ history.replaceState(null, '', location.pathname + location.hash); }catch(e){}
+  if (!('caches' in window)) return;
+  try{
+    const cache = await caches.open('logos-modifica-share-temp');
+    const keys = await cache.keys();
+    for (const req of keys){
+      if (req.url.indexOf('/__shared/') === -1) continue;
+      const res = await cache.match(req);
+      if (!res) continue;
+      const blob = await res.blob();
+      const name = decodeURIComponent(req.url.split('/').pop());
+      const type = res.headers.get('Content-Type') || blob.type;
+      pendingSharedFiles.push(new File([blob], name, { type }));
+      await cache.delete(req);
+    }
+  }catch(e){}
+  if (!pendingSharedFiles.length) return;
+  if (dc && dc.readyState === 'open'){
+    const files = pendingSharedFiles; pendingSharedFiles = [];
+    sendFilesQueue(files);
+  }else{
+    toast(fill(t('share.pending','{n} file pronti da mandare — arrivano appena ti colleghi'), { n: pendingSharedFiles.length }));
+  }
+}
+checkForSharedFiles();
 $('btnAttach').addEventListener('click', () => $('fileInput').click());
-$('fileInput').addEventListener('change', () => { const f=$('fileInput').files[0]; $('fileInput').value=''; if (f) sendFile(f); });
+$('fileInput').addEventListener('change', () => {
+  const files = Array.from($('fileInput').files);
+  $('fileInput').value = '';
+  if (files.length) sendFilesQueue(files);
+});
+
+/* ---------------- drag and drop, desktop only in practice ----------------
+   A touch device raises no drag events at all, so this never has to ask
+   whether it is one — nothing here fires on a phone regardless. Counted
+   rather than toggled on enter/leave: the overlay is a sibling of #msgs, and
+   dragging across the messages beneath it fires leave-then-enter on every
+   pixel boundary between them, which without a counter flickers the overlay
+   on and off continuously instead of holding it steady for the whole drag. */
+let dragDepth = 0;
+$('chatArea').addEventListener('dragenter', ev => {
+  ev.preventDefault();
+  dragDepth++;
+  $('dropOverlay').classList.remove('hide');
+});
+$('chatArea').addEventListener('dragover', ev => ev.preventDefault());
+$('chatArea').addEventListener('dragleave', () => {
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (dragDepth === 0) $('dropOverlay').classList.add('hide');
+});
+$('chatArea').addEventListener('drop', ev => {
+  ev.preventDefault();
+  dragDepth = 0;
+  $('dropOverlay').classList.add('hide');
+  const files = Array.from(ev.dataTransfer.files || []);
+  if (files.length) sendFilesQueue(files);
+});
 
 /* voice messages */
 let mediaRecorder = null, recordedChunks = [];
@@ -6245,7 +6399,13 @@ function onDcMessage(ev){
       if (Object.keys(incoming).length >= MAX_OPEN_TRANSFERS) return;
       const declared = Number(msg.size);
       if (!(declared >= 0) || declared > MAX_INCOMING_BYTES) return;
-      incoming[msg.id] = { chunks: [], got: 0, meta: msg, cap: Math.min(declared, MAX_INCOMING_BYTES) };
+      /* Same reasoning as the sending side: nothing used to appear until the
+         whole thing had arrived, so a large incoming file looked identical to
+         nothing happening at all. */
+      const xfer = renderTransferBubble(msg.name || '', declared, false);
+      incoming[msg.id] = {
+        chunks: [], got: 0, meta: msg, cap: Math.min(declared, MAX_INCOMING_BYTES), xfer,
+      };
     } else if (msg.type === 'file-end'){
       const rec = incoming[msg.id]; if (!rec) return;
       const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
@@ -6253,8 +6413,11 @@ function onDcMessage(ev){
       const mime = rec.meta.mime || '';
       const isImg = mime.startsWith('image/'), isVid = mime.startsWith('video/'), isAud = mime.startsWith('audio/');
       let html = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
-               : isAud ? '<audio src="'+url+'" controls></audio>' : '<a href="'+url+'" download="'+esc(rec.meta.name)+'" class="filelink">📄 '+esc(rec.meta.name)+' ↓</a>';
-      renderMsg(html + '<div class="meta">' + timeNow() + '</div>', false);
+               : isAud ? '<audio src="'+url+'" controls></audio>'
+               : '<a href="'+url+'" download="'+esc(rec.meta.name)+'" class="filelink">'+svgIcon('attach','sm')+esc(rec.meta.name)+' ↓</a>';
+      const finalHtml = html + '<div class="meta">' + timeNow() + '</div>';
+      rec.xfer.finish(finalHtml);
+      saveToHistory(peerNick, finalHtml, false);
       delete incoming[msg.id];
     } else if (msg.type === 'wipe'){
       destroyNow(false);
@@ -6270,12 +6433,15 @@ function onDcMessage(ev){
     /* more than was promised: the transfer is abandoned rather than trusted,
        because whatever this is, it is not the file that was announced */
     if (rec.got + piece.byteLength > rec.cap){
+      /* the bubble stayed on screen forever, stuck mid-bar, if this was left
+         at only a system line — nothing tied the abandonment back to it */
+      rec.xfer.fail(t('file.tooBig','Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.'));
       delete incoming[id];
-      sysLine(t('file.tooBig','Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.'));
       return;
     }
     rec.got += piece.byteLength;
     rec.chunks.push(piece);
+    rec.xfer.paint(rec.got, rec.got === rec.cap);
   }
 }
 
