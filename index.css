@@ -92,15 +92,6 @@ h1{font-size:clamp(1.9rem, 6vw, 3rem);line-height:1.15;margin:22px auto 0;
   font-weight:800;font-size:0.8125rem}
 [dir="rtl"] .steps li{padding:15px 58px 15px 18px}
 
-/* --------------------------------------------------------------- honest -- */
-/* Given a green edge on purpose. Saying plainly what a tool cannot do is not a
-   disclaimer to be buried; here it is one of the reasons to trust it. */
-.honest{margin:52px 0 0;padding:24px;border-radius:var(--r);
-  border:1px solid var(--line);border-inline-start:3px solid var(--ok);
-  background:linear-gradient(180deg,rgba(61,220,151,.05),var(--bg2))}
-.honest p{margin:0;color:var(--dim);font-size:0.9375rem}
-.honest .why{margin-top:12px;color:var(--faint);font-size:0.875rem}
-
 .last{text-align:center;margin:52px 0 10px}
 
 /* --------------------------------------------------------------- footer -- */

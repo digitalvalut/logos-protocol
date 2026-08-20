@@ -47,9 +47,6 @@ T.it = {
   'how.1': "Apri l'app: non c'è niente da registrare.",
   'how.2': "Manda il tuo indirizzo, o un invito, come preferisci.",
   'how.3': "Quando l'altra persona lo tocca, siete collegati.",
-  'limits.title': "Cosa non fa",
-  'limits.body': "Serve che siate online tutti e due nello stesso momento, altrimenti non arriva niente. Chi parla con te vede il tuo indirizzo di rete (IP). Su reti molto filtrate le chiamate possono non collegarsi. E nessun sito al mondo può impedire a qualcuno di fare uno screenshot.",
-  'limits.why': "Lo scriviamo qui, in prima pagina, perché preferiamo dirtelo prima che dopo.",
   'foot.who': "Software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Utilizzabile gratis da chiunque, ovunque nel mondo.",
   'foot.code': "Il codice, in chiaro, per chiunque voglia controllarlo",
 };
@@ -69,9 +66,6 @@ T.en = {
   'how.1': "Open the app — there is nothing to sign up for.",
   'how.2': "Send your address, or an invite, however you like.",
   'how.3': "When the other person taps it, you're connected.",
-  'limits.title': "What it doesn't do",
-  'limits.body': "You both need to be online at the same time, otherwise nothing arrives. Whoever talks to you sees your network address (IP). On heavily filtered networks calls may not connect. And no website anywhere can stop somebody taking a screenshot.",
-  'limits.why': "We put this on the front page because we would rather tell you now than later.",
   'foot.who': "Free and open source software (Apache 2.0 licence), owned by DigitalValut, an Italian non-profit social promotion association. Free for anyone to use, anywhere in the world.",
   'foot.code': "The code, in the open, for anyone who wants to check it",
 };
@@ -91,9 +85,6 @@ T.fr = {
   'how.1': "Ouvrez l'application : il n'y a rien à créer.",
   'how.2': "Envoyez votre adresse, ou une invitation, comme vous voulez.",
   'how.3': "Quand l'autre personne y touche, vous êtes connectés.",
-  'limits.title': "Ce qu'elle ne fait pas",
-  'limits.body': "Il faut que vous soyez en ligne tous les deux en même temps, sinon rien n'arrive. La personne qui vous parle voit votre adresse réseau (IP). Sur les réseaux très filtrés, les appels peuvent ne pas aboutir. Et aucun site au monde ne peut empêcher quelqu'un de faire une capture d'écran.",
-  'limits.why': "Nous l'écrivons ici, en première page, parce que nous préférons vous le dire avant qu'après.",
   'foot.who': "Logiciel libre et open source (licence Apache 2.0), propriété de DigitalValut, association italienne de promotion sociale à but non lucratif. Utilisable gratuitement par tous, partout dans le monde.",
   'foot.code': "Le code, en clair, pour qui veut le vérifier",
 };
@@ -113,9 +104,6 @@ T.de = {
   'how.1': "Öffne die App — es gibt nichts anzumelden.",
   'how.2': "Schick deine Adresse oder eine Einladung, wie du magst.",
   'how.3': "Sobald die andere Person darauf tippt, seid ihr verbunden.",
-  'limits.title': "Was sie nicht kann",
-  'limits.body': "Ihr müsst beide gleichzeitig online sein, sonst kommt nichts an. Wer mit dir spricht, sieht deine Netzwerkadresse (IP). In stark gefilterten Netzen kommen Anrufe womöglich nicht zustande. Und keine Website der Welt kann jemanden am Bildschirmfoto hindern.",
-  'limits.why': "Wir schreiben das auf die Startseite, weil wir es dir lieber vorher sagen als hinterher.",
   'foot.who': "Freie und quelloffene Software (Apache 2.0-Lizenz), Eigentum von DigitalValut, einem italienischen gemeinnützigen Verein zur sozialen Förderung. Für alle kostenlos nutzbar, überall auf der Welt.",
   'foot.code': "Der Quelltext, offen, für alle die ihn prüfen wollen",
 };
@@ -135,9 +123,6 @@ T.es = {
   'how.1': "Abre la aplicación: no hay nada que registrar.",
   'how.2': "Envía tu dirección, o una invitación, como prefieras.",
   'how.3': "Cuando la otra persona la toca, estáis conectados.",
-  'limits.title': "Lo que no hace",
-  'limits.body': "Hace falta que estéis los dos en línea a la vez, si no, no llega nada. Quien habla contigo ve tu dirección de red (IP). En redes muy filtradas las llamadas pueden no conectarse. Y ninguna web del mundo puede impedir que alguien haga una captura de pantalla.",
-  'limits.why': "Lo escribimos aquí, en la portada, porque preferimos decírtelo antes que después.",
   'foot.who': "Software libre y de código abierto (licencia Apache 2.0), propiedad de DigitalValut, asociación italiana sin ánimo de lucro de promoción social. Gratis para cualquiera, en cualquier parte del mundo.",
   'foot.code': "El código, a la vista, para quien quiera comprobarlo",
 };
@@ -157,9 +142,6 @@ T.pt = {
   'how.1': "Abra a aplicação: não há nada para registar.",
   'how.2': "Envie o seu endereço, ou um convite, como preferir.",
   'how.3': "Quando a outra pessoa lhe tocar, estão ligados.",
-  'limits.title': "O que não faz",
-  'limits.body': "É preciso que estejam os dois online ao mesmo tempo, senão não chega nada. Quem fala consigo vê o seu endereço de rede (IP). Em redes muito filtradas as chamadas podem não ligar. E nenhum site do mundo pode impedir alguém de tirar uma captura de ecrã.",
-  'limits.why': "Escrevemos isto na primeira página porque preferimos dizer-lho antes do que depois.",
   'foot.who': "Software livre e de código aberto (licença Apache 2.0), propriedade da DigitalValut, associação italiana sem fins lucrativos de promoção social. Utilizável gratuitamente por qualquer pessoa, em qualquer parte do mundo.",
   'foot.code': "O código, à vista, para quem o quiser verificar",
 };
@@ -179,9 +161,6 @@ T.ru = {
   'how.1': "Откройте приложение — регистрироваться не нужно.",
   'how.2': "Отправьте свой адрес или приглашение, как вам удобно.",
   'how.3': "Как только другой человек нажмёт на него, вы соединены.",
-  'limits.title': "Чего оно не делает",
-  'limits.body': "Нужно, чтобы вы оба были в сети одновременно, иначе ничего не придёт. Тот, кто говорит с вами, видит ваш сетевой адрес (IP). В сильно фильтруемых сетях звонки могут не соединяться. И ни один сайт в мире не может помешать сделать снимок экрана.",
-  'limits.why': "Мы пишем это на первой странице, потому что предпочитаем сказать заранее, а не потом.",
   'foot.who': "Свободное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит DigitalValut — итальянской некоммерческой ассоциации социального содействия. Бесплатно для всех и везде.",
   'foot.code': "Исходный код, открытый для всех, кто захочет его проверить",
 };
@@ -201,9 +180,6 @@ T.zh = {
   'how.1': "打开应用：没有什么需要注册。",
   'how.2': "把你的地址或一个邀请，用你喜欢的方式发出去。",
   'how.3': "对方一点，你们就连上了。",
-  'limits.title': "它做不到什么",
-  'limits.body': "需要你们两个同时在线，否则什么都收不到。和你通话的人能看到你的网络地址（IP）。在过滤严格的网络上，通话可能连不上。而且世界上没有任何网站能阻止别人截屏。",
-  'limits.why': "我们把这些写在首页，因为我们宁愿事先告诉你，而不是事后。",
   'foot.who': "自由开源软件（Apache 2.0 许可证），归意大利非营利社会促进协会 DigitalValut 所有。世界上任何人都可以免费使用。",
   'foot.code': "公开的源代码，供任何想检查的人查看",
 };
@@ -223,9 +199,6 @@ T.ar = {
   'how.1': "افتح التطبيق: لا شيء للتسجيل فيه.",
   'how.2': "أرسل عنوانك، أو دعوة، بالطريقة التي تفضّلها.",
   'how.3': "ما إن يضغط عليها الطرف الآخر حتى تصبحا متصلين.",
-  'limits.title': "ما لا يفعله",
-  'limits.body': "يجب أن تكونا متصلين بالإنترنت في الوقت نفسه، وإلا لن يصل شيء. من يتحدث معك يرى عنوان شبكتك (IP). على الشبكات المُرشَّحة بشدة قد لا تنجح المكالمات. ولا يوجد موقع في العالم يستطيع منع أحد من التقاط صورة للشاشة.",
-  'limits.why': "نكتب هذا في الصفحة الأولى لأننا نفضّل إخبارك قبل، لا بعد.",
   'foot.who': "برمجية حرة ومفتوحة المصدر (رخصة Apache 2.0)، مملوكة لـ DigitalValut، وهي جمعية إيطالية غير ربحية للنهوض الاجتماعي. مجانية لأي شخص، في أي مكان في العالم.",
   'foot.code': "الشيفرة، مكشوفة، لكل من أراد التحقق منها",
 };
@@ -245,9 +218,6 @@ T.ur = {
   'how.1': "ایپ کھولیں: رجسٹر ہونے کو کچھ نہیں۔",
   'how.2': "اپنا پتہ، یا دعوت، جیسے چاہیں بھیج دیں۔",
   'how.3': "جیسے ہی دوسرا شخص اسے چھوئے، آپ جڑ جاتے ہیں۔",
-  'limits.title': "یہ کیا نہیں کرتا",
-  'limits.body': "ضروری ہے کہ آپ دونوں ایک ہی وقت میں آن لائن ہوں، ورنہ کچھ نہیں پہنچے گا۔ جو آپ سے بات کرتا ہے وہ آپ کا نیٹ ورک پتہ (IP) دیکھتا ہے۔ سخت فلٹر شدہ نیٹ ورکس پر کالیں نہیں جڑ سکتیں۔ اور دنیا کی کوئی ویب سائٹ کسی کو اسکرین شاٹ لینے سے نہیں روک سکتی۔",
-  'limits.why': "ہم یہ پہلے صفحے پر لکھ رہے ہیں کیونکہ ہم بعد میں بتانے کے بجائے پہلے بتانا بہتر سمجھتے ہیں۔",
   'foot.who': "آزاد اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو DigitalValut کی ملکیت ہے — ایک اطالوی غیر منافع بخش سماجی فروغ کی انجمن۔ دنیا میں کہیں بھی، ہر کسی کے لیے مفت۔",
   'foot.code': "کھلا ہوا کوڈ، ہر اُس شخص کے لیے جو اسے جانچنا چاہے",
 };
@@ -267,9 +237,6 @@ T.hi = {
   'how.1': "ऐप खोलें: रजिस्टर करने को कुछ नहीं है।",
   'how.2': "अपना पता, या एक निमंत्रण, जैसे चाहें भेज दें।",
   'how.3': "जैसे ही दूसरा व्यक्ति उसे छूता है, आप जुड़ जाते हैं।",
-  'limits.title': "यह क्या नहीं करता",
-  'limits.body': "ज़रूरी है कि आप दोनों एक ही समय ऑनलाइन हों, वरना कुछ नहीं पहुँचेगा। जो आपसे बात करता है वह आपका नेटवर्क पता (IP) देखता है। बहुत छने हुए नेटवर्क पर कॉल नहीं जुड़ सकतीं। और दुनिया की कोई वेबसाइट किसी को स्क्रीनशॉट लेने से नहीं रोक सकती।",
-  'limits.why': "हम यह पहले पन्ने पर लिख रहे हैं क्योंकि हमें बाद में बताने से पहले बताना बेहतर लगता है।",
   'foot.who': "मुफ़्त और ओपन सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), DigitalValut की संपत्ति — एक इतालवी ग़ैर-लाभकारी सामाजिक संवर्धन संस्था। दुनिया में कहीं भी, हर किसी के लिए मुफ़्त।",
   'foot.code': "खुला हुआ कोड, हर उस व्यक्ति के लिए जो इसे जाँचना चाहे",
 };
@@ -289,9 +256,6 @@ T.bn = {
   'how.1': "অ্যাপ খুলুন: নিবন্ধনের কিছু নেই।",
   'how.2': "আপনার ঠিকানা, বা একটি আমন্ত্রণ, যেভাবে খুশি পাঠান।",
   'how.3': "অন্য জন সেটিতে চাপ দিলেই আপনারা যুক্ত।",
-  'limits.title': "এটি যা করে না",
-  'limits.body': "আপনাদের দুজনকেই একই সময়ে অনলাইনে থাকতে হবে, নইলে কিছুই পৌঁছাবে না। যে আপনার সঙ্গে কথা বলে সে আপনার নেটওয়ার্ক ঠিকানা (IP) দেখতে পায়। খুব ছাঁকা নেটওয়ার্কে কল না-ও যুক্ত হতে পারে। আর পৃথিবীর কোনো ওয়েবসাইট কাউকে স্ক্রিনশট নেওয়া থেকে আটকাতে পারে না।",
-  'limits.why': "আমরা এটি প্রথম পাতাতেই লিখছি, কারণ পরে বলার চেয়ে আগে বলাই ভালো মনে করি।",
   'foot.who': "মুক্ত ও ওপেন সোর্স সফটওয়্যার (Apache 2.0 লাইসেন্স), মালিকানা DigitalValut-এর — একটি ইতালীয় অলাভজনক সামাজিক উন্নয়ন সমিতি। পৃথিবীর যেকোনো জায়গায়, সবার জন্য বিনামূল্যে।",
   'foot.code': "খোলা কোড, যে কেউ যাচাই করতে চাইলে",
 };
@@ -311,9 +275,6 @@ T.id = {
   'how.1': "Buka aplikasi: tidak ada yang perlu didaftarkan.",
   'how.2': "Kirim alamat Anda, atau sebuah undangan, sesuka Anda.",
   'how.3': "Begitu orang lain menyentuhnya, Anda sudah terhubung.",
-  'limits.title': "Yang tidak bisa dilakukannya",
-  'limits.body': "Kalian berdua harus daring pada saat yang sama, kalau tidak, tidak ada yang sampai. Orang yang berbicara dengan Anda melihat alamat jaringan (IP) Anda. Di jaringan yang disaring ketat, panggilan bisa gagal tersambung. Dan tidak ada situs mana pun di dunia yang bisa mencegah orang mengambil tangkapan layar.",
-  'limits.why': "Kami menulisnya di halaman depan karena kami lebih suka memberi tahu Anda sekarang daripada nanti.",
   'foot.who': "Perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), milik DigitalValut, sebuah asosiasi nirlaba Italia untuk promosi sosial. Gratis untuk siapa saja, di mana saja di dunia.",
   'foot.code': "Kodenya, terbuka, bagi siapa pun yang ingin memeriksanya",
 };

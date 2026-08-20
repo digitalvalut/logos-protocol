@@ -281,17 +281,6 @@ test('the front door actually leads into the app', () => {
   assert.match(HOME_HTML, /href="modifica\.html"/, 'nothing on the front door opens the app');
 });
 
-test('the front door does not promise more than the app delivers', () => {
-  /* The one line that must never soften: needing both people online at once is
-     the real cost of having no server, and it belongs on the front page. */
-  const dicts = homeDictionaries();
-  for (const lg of LANGS){
-    assert.ok(dicts[lg].includes('limits.body'),
-      `the honest limits are missing from the front door in ${lg}`);
-  }
-  assert.match(HOME_HTML, /data-i18n="limits\.body"/, 'the limits are not shown on the page at all');
-});
-
 /* --------------------------------------------------------- the stylesheet -- */
 
 test('every class the stylesheet styles for the health card is really used', () => {

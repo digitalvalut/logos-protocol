@@ -81,16 +81,6 @@ anyone — because there is no server handling your conversation at all.
   German, Hindi, Indonesian, Italian, Portuguese, Russian, Spanish and Urdu — detected
   automatically from your device, with proper right-to-left layout for Arabic and Urdu.
 
-## Said plainly, because it should be
-
-WebRTC reveals your network address (IP) to whoever you're directly connected to — that's
-how a peer-to-peer connection works, and no amount of application-layer encryption changes
-it. No website, this one included, can prevent someone from taking a screenshot. On heavily
-filtered networks, a direct connection may not be possible at all. Both of you need to be
-online at the same time for anything to arrive. These are stated up front, not buried,
-because a project whose whole pitch is trustworthiness only earns that by saying what it
-can't do, not just what it can.
-
 ## Install it — phone or computer
 
 - **iPhone / iPad** — open the page in Safari, tap **Share**, then **Add to Home Screen**.
@@ -183,11 +173,6 @@ inquadrare il codice sullo schermo di chi hai davanti è un canale che nessuno p
 intercettare, e l'app lo riconosce senza chiedervi altro. C'è una **modalità semplice** con
 due soli pulsanti giganti e le istruzioni lette ad alta voce, per chi non vede bene o non
 legge. E tutta l'app sta in **un unico file** che chiunque può caricare ovunque.
-
-**Detto chiaramente, perché va detto:** chi ti parla vede il tuo indirizzo di rete (IP) —
-è come funziona una connessione diretta, nessuna cifratura lo cambia. Serve che siate
-online tutti e due nello stesso momento. Nessun sito al mondo può impedire uno screenshot.
-Lo scriviamo qui perché preferiamo dirtelo prima che dopo.
 
 Ideato dal **Dott. Giuseppe Falsone**, Presidente di **DigitalValut**, realizzato con il
 Team DigitalValut.
