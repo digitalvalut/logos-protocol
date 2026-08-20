@@ -600,6 +600,67 @@ test.describe('what the audit found', () => {
     });
   });
 
+  test('the code stretch and the connection are built at the same time, not one after the other', () => {
+    /* Stretching a six-digit code is 100,000 rounds of PBKDF2 — a few hundred
+       milliseconds on a laptop, one to two seconds on a cheap phone — and
+       building the connection is a network round trip for relay credentials.
+       Neither needs anything from the other, but they used to run end to end,
+       and on this side the connection was only built *after* the offer had
+       been found, with the other phone already up and waiting.
+       Checked by order rather than by clock: both are kicked off before the
+       first await, so if they really overlap the connection has already
+       started while the stretch is still in flight. Run sequentially the
+       second entry simply never appears. */
+    const app = loadApp();
+    app.run(`
+      window.__order = [];
+      quickSecrets = function(){
+        window.__order.push('stretch-start');
+        return new Promise(r => setTimeout(() => {
+          window.__order.push('stretch-end');
+          r({ key: {}, seed: 'deadbeef' });
+        }, 50));
+      };
+      newPeerConnection = function(){
+        window.__order.push('conn-start');
+        return Promise.resolve(new RTCPeerConnection());
+      };
+      $('screenChat').classList.add('hide');   /* the harness builds elements bare, and a visible chat aborts early by design */
+      $('quickCodeIn').value = '123456';
+      tryQuickConnect();
+    `);
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(window.__order)')),
+      ['stretch-start', 'conn-start'],
+      'the connection is not under way while the code is still being stretched — the two delays still run end to end');
+    app.stop();
+  });
+
+  test('two connections starting together ask for relay credentials once, not twice', () => {
+    /* Relay credentials are the only thing on this Worker that costs real
+       money, and the route is metered far more tightly than the mailbox. The
+       cache only ever held the finished answer, so two callers arriving
+       together — which is now the normal case, with the screen warming this up
+       just before a connection asks for it — both found it empty and both
+       fired their own request. */
+    const app = loadApp();
+    app.sandbox.AbortController = AbortController;   /* the harness has no fetch to abort, so it carries no controller either */
+    app.run(`
+      window.__asked = 0;
+      fetch = function(){
+        window.__asked++;
+        return new Promise(r => setTimeout(() => r({
+          ok: true, json: () => Promise.resolve({ iceServers: [{ urls: 'turn:example' }] }),
+        }), 20));
+      };
+      window.__both = Promise.all([fetchIceServers(), fetchIceServers()]);
+    `);
+    return app.run('window.__both').then(() => {
+      assert.strictEqual(app.run('window.__asked'), 1,
+        'the credentials were fetched more than once for two callers that arrived together');
+      app.stop();
+    });
+  });
+
   test('the Worker meters writes, not only reads', () => {
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
     assert.ok(!/request\.method === 'GET' && overRateLimit/.test(worker),

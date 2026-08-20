@@ -2219,6 +2219,19 @@ let inboxTimer = null;
 function showScreen(id){
   ['screenHome','screenSettings','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
   window.scrollTo(0,0);
+  /* Warmed a few seconds early rather than at the moment of truth. Fetching the
+     relay credentials is a network round trip, it is kept for the rest of the
+     visit, and these two screens exist only because somebody is about to
+     connect — so by the time a code is typed the answer is usually already
+     here. Nothing waits on it: if it has not landed, building the connection
+     fetches it exactly as before.
+     Guarded on purpose. showScreen() can run the moment an invite link is
+     opened, before the rest of the file has finished initialising — see the
+     note above this function for what that cost the last time — so a warm-up
+     that cannot happen yet is skipped rather than allowed to throw. */
+  if (id === 'screenStart' || id === 'screenJoin'){
+    try{ fetchIceServers().catch(()=>{}); }catch(e){}
+  }
   /* Both ways in are re-armed on every screen change rather than tied to one
      screen: being reachable is not a property of which page someone happens to
      be looking at. Both are idempotent and both check for themselves whether
@@ -2422,21 +2435,31 @@ let cachedIceServers = null;
    back to STUN-only rather than blocking the connection on it: a call that
    only needed a direct path still works, and the honest cost is exactly the
    gap that existed before today for the calls that needed the relay. */
+let iceServersPromise = null;
 async function fetchIceServers(){
   if (cachedIceServers) return cachedIceServers;
-  try{
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 5000);
-    const res = await fetch(TURN_BROKER_URL, { signal: ctrl.signal });
-    clearTimeout(timer);
-    if (!res.ok) throw new Error('broker responded ' + res.status);
-    const data = await res.json();
-    if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
-    cachedIceServers = data.iceServers;
-  }catch(e){
-    cachedIceServers = ICE_STUN_ONLY.iceServers;
-  }
-  return cachedIceServers;
+  /* The promise is held, not just the result — the same fix, for the same
+     reason, as myIdentity() and myKeyPair() further down. Two callers arriving
+     together (the screen warming this up, and the connection that needs it a
+     moment later) both saw an empty cache and both fired their own request,
+     against the one budget on this Worker that costs real money. */
+  if (iceServersPromise) return iceServersPromise;
+  iceServersPromise = (async () => {
+    try{
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 5000);
+      const res = await fetch(TURN_BROKER_URL, { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('broker responded ' + res.status);
+      const data = await res.json();
+      if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
+      cachedIceServers = data.iceServers;
+    }catch(e){
+      cachedIceServers = ICE_STUN_ONLY.iceServers;
+    }
+    return cachedIceServers;
+  })();
+  return iceServersPromise;
 }
 
 let pc = null, dc = null;
@@ -4993,7 +5016,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.51';
+const APP_VERSION = 'logos-modifica-3.52';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -5788,6 +5811,16 @@ async function startQuickShare(existingCode, quiet){
   $('quickHelpA').textContent = t('quick.helpA');
   setStatus($('quickStatusA'), t('quick.waiting','In attesa che l\'altra persona digiti il codice…'));
 
+  /* Started here rather than where its result is first needed. Stretching the
+     code is 100,000 rounds of PBKDF2 — a few hundred milliseconds on a laptop,
+     one to two seconds on a cheap phone — and it needs nothing but the code
+     itself. Run in sequence it sat in front of building the connection, which
+     is a network round trip for the relay credentials and needs nothing from
+     the stretch either, so the person watching paid for both end to end. Now
+     they overlap and the pair costs whichever is slower. Identical work and
+     identical iterations: nothing is weakened to buy the time. */
+  const secReady = quickSecrets(code);
+  secReady.catch(()=>{});   /* awaited below; this only silences the unhandled-rejection warning if the setup throws first */
   pc = await newPeerConnection();
   /* Every operation below targets this, the connection this call actually
      made, never the bare global — the guards further down catch most of the
@@ -5803,7 +5836,7 @@ async function startQuickShare(existingCode, quiet){
      address down with it for the whole of them */
   quickSharePc = myPc;
   wireDataChannel(myPc.createDataChannel('logos-modifica'));
-  const sec = await quickSecrets(code);
+  const sec = await secReady;
   if (pc !== myPc) return;
   const pump = candidatePump(myPc, sec, 'a', 'b');
   quickPump = pump;
@@ -5966,8 +5999,23 @@ async function tryQuickConnect(){
   $('btnQuickConnect').disabled = true;
   setStatus($('quickStatusB'), t('lock.working','…'));
   showBigConnectingB();
+  /* Both started at once, before either is needed, for the same reason as on
+     the side showing the code — except here the pay-off is bigger. Stretching
+     the code blocked the first look at the mailbox, and building the
+     connection then happened *after* the offer had already been found, which
+     put a network round trip at the worst possible moment: the other phone is
+     up, waiting, and this one goes off to fetch relay credentials. Now the
+     connection is built and warm before it is asked for, and the stretch runs
+     alongside it instead of in front of it. */
+  const secReady = quickSecrets(code);
+  const pcReady = newPeerConnection();
+  secReady.catch(()=>{}); pcReady.catch(()=>{});
+  /* held until it is either handed over to `pc` or closed: a connection warmed
+     up for a code that turns out to be wrong must not be left open */
+  let warmPc = null;
   try{
-    const sec = await quickSecrets(code);
+    const sec = await secReady;
+    warmPc = await pcReady;
     const offerKey = await slotId(sec.seed, 'offer');
     const answerKey = await slotId(sec.seed, 'answer');
 
@@ -5978,11 +6026,20 @@ async function tryQuickConnect(){
        for a few seconds before saying so. */
     let msg = null;
     const lookUntil = Date.now() + 15000;
+    /* The first few looks come quickly, then settle back. The offer normally
+       appears within a second of the other phone finishing its own stretch, and
+       a flat one-second gap threw most of that second away doing nothing at
+       exactly the moment somebody is staring at the screen. This adds three
+       extra lookups against a budget of three hundred a minute, so it cannot
+       push a real connection into the rate limit it depends on. */
+    const FIRST_LOOKS = [250, 350, 500, 700];
+    let look = 0;
     for (;;){
       msg = await mailboxGetSealed(offerKey, sec);
       if (msg && msg.sdp) break;
       if (Date.now() >= lookUntil) break;
-      await new Promise(r => setTimeout(r, 1000));
+      const gap = look < FIRST_LOOKS.length ? FIRST_LOOKS[look++] : 1000;
+      await new Promise(r => setTimeout(r, gap));
     }
     /* Nobody is sitting on the invite screen — which, for an invite sent over
        WhatsApp and read three hours later, is the normal case rather than the
@@ -6035,7 +6092,13 @@ async function tryQuickConnect(){
     /* back to the ordinary wording for the handshake that is about to run */
     resetBigConnectingText('B');
     stopQuickPump();
-    pc = await newPeerConnection();
+    /* The handshake starts here, not when the button was tapped. Everything up
+       to this point was spent waiting for the other person to be there at all,
+       and counting that would report a three-minute wake-up as a three-minute
+       connection on the very card that says how fast it was. */
+    connectStartedAt = Date.now();
+    pc = warmPc;
+    warmPc = null;   /* handed over: the cleanup below must not close it now */
     /* used instead of the global from here on: the waits below give anything
        the person does time to replace it underneath */
     const myPc = pc;
@@ -6063,6 +6126,11 @@ async function tryQuickConnect(){
     $('btnQuickConnect').disabled = false;
     if (connectionWorking(pc)) return;
     hideBigConnectingB(true);
+  }finally{
+    /* Every way out of here that never got as far as handing the warmed-up
+       connection over — a wrong code, an expired one, a throw — closes it
+       rather than leaving it holding a relay allocation nobody will use. */
+    if (warmPc){ try{ warmPc.close(); }catch(e){} }
   }
 }
 $('btnQuickConnect').addEventListener('click', tryQuickConnect);
