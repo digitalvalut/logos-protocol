@@ -49,6 +49,16 @@ T.it = {
   'how.3': "Quando l'altra persona lo tocca, siete collegati.",
   'foot.who': "Software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Utilizzabile gratis da chiunque, ovunque nel mondo.",
   'foot.code': "Il codice, in chiaro, per chiunque voglia controllarlo",
+  'hero.qr': "Inquadralo dal telefono",
+  'hero.simple': "C'è anche una modalità con due soli pulsanti, per chi preferisce non pensarci.",
+  'compare.title': "In cosa è diversa",
+  'compare.row1': "Serve un numero di telefono o un account",
+  'compare.row2': "I messaggi passano da un server dell'azienda",
+  'compare.row3': "Foto e video vengono compressi",
+  'compare.row4': "Codice sorgente pubblico e verificabile",
+  'compare.yes': "Sì",
+  'compare.no': "No",
+  'compare.partial': "Parzialmente (Telegram) / No (WhatsApp)",
 };
 
 T.en = {
@@ -68,6 +78,16 @@ T.en = {
   'how.3': "When the other person taps it, you're connected.",
   'foot.who': "Free and open source software (Apache 2.0 licence), owned by DigitalValut, an Italian non-profit social promotion association. Free for anyone to use, anywhere in the world.",
   'foot.code': "The code, in the open, for anyone who wants to check it",
+  'hero.qr': "Scan it with your phone",
+  'hero.simple': "There's also a mode with just two big buttons, for anyone who'd rather not think about it.",
+  'compare.title': "How it's different",
+  'compare.row1': "Requires a phone number or an account",
+  'compare.row2': "Messages pass through a company server",
+  'compare.row3': "Photos and videos get compressed",
+  'compare.row4': "Public, checkable source code",
+  'compare.yes': "Yes",
+  'compare.no': "No",
+  'compare.partial': "Partly (Telegram) / No (WhatsApp)",
 };
 
 T.fr = {
@@ -87,6 +107,16 @@ T.fr = {
   'how.3': "Quand l'autre personne y touche, vous êtes connectés.",
   'foot.who': "Logiciel libre et open source (licence Apache 2.0), propriété de DigitalValut, association italienne de promotion sociale à but non lucratif. Utilisable gratuitement par tous, partout dans le monde.",
   'foot.code': "Le code, en clair, pour qui veut le vérifier",
+  'hero.qr': "Scannez-le avec votre téléphone",
+  'hero.simple': "Il existe aussi un mode à deux boutons seulement, pour qui préfère ne pas y réfléchir.",
+  'compare.title': "En quoi elle est différente",
+  'compare.row1': "Nécessite un numéro de téléphone ou un compte",
+  'compare.row2': "Les messages passent par un serveur de l'entreprise",
+  'compare.row3': "Les photos et vidéos sont compressées",
+  'compare.row4': "Code source public et vérifiable",
+  'compare.yes': "Oui",
+  'compare.no': "Non",
+  'compare.partial': "Partiellement (Telegram) / Non (WhatsApp)",
 };
 
 T.de = {
@@ -106,6 +136,16 @@ T.de = {
   'how.3': "Sobald die andere Person darauf tippt, seid ihr verbunden.",
   'foot.who': "Freie und quelloffene Software (Apache 2.0-Lizenz), Eigentum von DigitalValut, einem italienischen gemeinnützigen Verein zur sozialen Förderung. Für alle kostenlos nutzbar, überall auf der Welt.",
   'foot.code': "Der Quelltext, offen, für alle die ihn prüfen wollen",
+  'hero.qr': "Mit dem Handy scannen",
+  'hero.simple': "Es gibt auch einen Modus mit nur zwei großen Tasten, für alle, die sich nicht damit beschäftigen möchten.",
+  'compare.title': "Worin sie sich unterscheidet",
+  'compare.row1': "Erfordert eine Telefonnummer oder ein Konto",
+  'compare.row2': "Nachrichten laufen über einen Server des Unternehmens",
+  'compare.row3': "Fotos und Videos werden komprimiert",
+  'compare.row4': "Öffentlicher, überprüfbarer Quellcode",
+  'compare.yes': "Ja",
+  'compare.no': "Nein",
+  'compare.partial': "Teilweise (Telegram) / Nein (WhatsApp)",
 };
 
 T.es = {
@@ -125,6 +165,16 @@ T.es = {
   'how.3': "Cuando la otra persona la toca, estáis conectados.",
   'foot.who': "Software libre y de código abierto (licencia Apache 2.0), propiedad de DigitalValut, asociación italiana sin ánimo de lucro de promoción social. Gratis para cualquiera, en cualquier parte del mundo.",
   'foot.code': "El código, a la vista, para quien quiera comprobarlo",
+  'hero.qr': "Escanéalo con el teléfono",
+  'hero.simple': "También hay un modo con solo dos botones grandes, para quien prefiera no pensarlo.",
+  'compare.title': "En qué se diferencia",
+  'compare.row1': "Requiere un número de teléfono o una cuenta",
+  'compare.row2': "Los mensajes pasan por un servidor de la empresa",
+  'compare.row3': "Las fotos y los vídeos se comprimen",
+  'compare.row4': "Código fuente público y verificable",
+  'compare.yes': "Sí",
+  'compare.no': "No",
+  'compare.partial': "Parcialmente (Telegram) / No (WhatsApp)",
 };
 
 T.pt = {
@@ -144,6 +194,16 @@ T.pt = {
   'how.3': "Quando a outra pessoa lhe tocar, estão ligados.",
   'foot.who': "Software livre e de código aberto (licença Apache 2.0), propriedade da DigitalValut, associação italiana sem fins lucrativos de promoção social. Utilizável gratuitamente por qualquer pessoa, em qualquer parte do mundo.",
   'foot.code': "O código, à vista, para quem o quiser verificar",
+  'hero.qr': "Aponte a câmara do telemóvel",
+  'hero.simple': "Há também um modo com apenas dois botões grandes, para quem preferir não pensar nisso.",
+  'compare.title': "Em que é diferente",
+  'compare.row1': "Exige um número de telefone ou uma conta",
+  'compare.row2': "As mensagens passam por um servidor da empresa",
+  'compare.row3': "As fotos e vídeos são comprimidos",
+  'compare.row4': "Código-fonte público e verificável",
+  'compare.yes': "Sim",
+  'compare.no': "Não",
+  'compare.partial': "Parcialmente (Telegram) / Não (WhatsApp)",
 };
 
 T.ru = {
@@ -163,6 +223,16 @@ T.ru = {
   'how.3': "Как только другой человек нажмёт на него, вы соединены.",
   'foot.who': "Свободное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит DigitalValut — итальянской некоммерческой ассоциации социального содействия. Бесплатно для всех и везде.",
   'foot.code': "Исходный код, открытый для всех, кто захочет его проверить",
+  'hero.qr': "Отсканируйте телефоном",
+  'hero.simple': "Есть и режим всего с двумя большими кнопками — для тех, кто предпочитает не задумываться.",
+  'compare.title': "Чем оно отличается",
+  'compare.row1': "Нужен номер телефона или учётная запись",
+  'compare.row2': "Сообщения проходят через сервер компании",
+  'compare.row3': "Фото и видео сжимаются",
+  'compare.row4': "Открытый и проверяемый исходный код",
+  'compare.yes': "Да",
+  'compare.no': "Нет",
+  'compare.partial': "Частично (Telegram) / Нет (WhatsApp)",
 };
 
 T.zh = {
@@ -182,6 +252,16 @@ T.zh = {
   'how.3': "对方一点，你们就连上了。",
   'foot.who': "自由开源软件（Apache 2.0 许可证），归意大利非营利社会促进协会 DigitalValut 所有。世界上任何人都可以免费使用。",
   'foot.code': "公开的源代码，供任何想检查的人查看",
+  'hero.qr': "用手机扫一扫",
+  'hero.simple': "还有一种只有两个大按钮的简单模式，适合不想多想的人。",
+  'compare.title': "有何不同",
+  'compare.row1': "需要电话号码或账号",
+  'compare.row2': "消息经过公司的服务器",
+  'compare.row3': "照片和视频会被压缩",
+  'compare.row4': "公开且可验证的源代码",
+  'compare.yes': "是",
+  'compare.no': "否",
+  'compare.partial': "部分公开（Telegram）／否（WhatsApp）",
 };
 
 T.ar = {
@@ -201,6 +281,16 @@ T.ar = {
   'how.3': "ما إن يضغط عليها الطرف الآخر حتى تصبحا متصلين.",
   'foot.who': "برمجية حرة ومفتوحة المصدر (رخصة Apache 2.0)، مملوكة لـ DigitalValut، وهي جمعية إيطالية غير ربحية للنهوض الاجتماعي. مجانية لأي شخص، في أي مكان في العالم.",
   'foot.code': "الشيفرة، مكشوفة، لكل من أراد التحقق منها",
+  'hero.qr': "امسحه بكاميرا هاتفك",
+  'hero.simple': "توجد أيضًا وضعية بزرّين كبيرين فقط، لمن يفضّل ألا يفكر في الأمر.",
+  'compare.title': "بمَ يختلف",
+  'compare.row1': "يتطلب رقم هاتف أو حسابًا",
+  'compare.row2': "تمر الرسائل عبر خادم الشركة",
+  'compare.row3': "يتم ضغط الصور ومقاطع الفيديو",
+  'compare.row4': "شيفرة مصدرية عامة وقابلة للتحقق",
+  'compare.yes': "نعم",
+  'compare.no': "لا",
+  'compare.partial': "جزئيًا (Telegram) / لا (WhatsApp)",
 };
 
 T.ur = {
@@ -220,6 +310,16 @@ T.ur = {
   'how.3': "جیسے ہی دوسرا شخص اسے چھوئے، آپ جڑ جاتے ہیں۔",
   'foot.who': "آزاد اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو DigitalValut کی ملکیت ہے — ایک اطالوی غیر منافع بخش سماجی فروغ کی انجمن۔ دنیا میں کہیں بھی، ہر کسی کے لیے مفت۔",
   'foot.code': "کھلا ہوا کوڈ، ہر اُس شخص کے لیے جو اسے جانچنا چاہے",
+  'hero.qr': "اپنے فون سے اسکین کریں",
+  'hero.simple': "ایک ایسا موڈ بھی ہے جس میں صرف دو بڑے بٹن ہیں، اُن کے لیے جو اس بارے میں سوچنا نہیں چاہتے۔",
+  'compare.title': "یہ کن باتوں میں مختلف ہے",
+  'compare.row1': "فون نمبر یا اکاؤنٹ درکار ہے",
+  'compare.row2': "پیغامات کمپنی کے سرور سے گزرتے ہیں",
+  'compare.row3': "تصاویر اور ویڈیوز کمپریس ہو جاتی ہیں",
+  'compare.row4': "عوامی اور قابلِ تصدیق سورس کوڈ",
+  'compare.yes': "ہاں",
+  'compare.no': "نہیں",
+  'compare.partial': "جزوی طور پر (Telegram) / نہیں (WhatsApp)",
 };
 
 T.hi = {
@@ -239,6 +339,16 @@ T.hi = {
   'how.3': "जैसे ही दूसरा व्यक्ति उसे छूता है, आप जुड़ जाते हैं।",
   'foot.who': "मुफ़्त और ओपन सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), DigitalValut की संपत्ति — एक इतालवी ग़ैर-लाभकारी सामाजिक संवर्धन संस्था। दुनिया में कहीं भी, हर किसी के लिए मुफ़्त।",
   'foot.code': "खुला हुआ कोड, हर उस व्यक्ति के लिए जो इसे जाँचना चाहे",
+  'hero.qr': "अपने फ़ोन से स्कैन करें",
+  'hero.simple': "एक ऐसा तरीका भी है जिसमें सिर्फ़ दो बड़े बटन होते हैं, उनके लिए जो इसके बारे में सोचना नहीं चाहते।",
+  'compare.title': "यह किस तरह अलग है",
+  'compare.row1': "फ़ोन नंबर या खाता ज़रूरी है",
+  'compare.row2': "संदेश कंपनी के सर्वर से होकर जाते हैं",
+  'compare.row3': "फ़ोटो और वीडियो कंप्रेस हो जाते हैं",
+  'compare.row4': "सार्वजनिक और जाँचने योग्य सोर्स कोड",
+  'compare.yes': "हाँ",
+  'compare.no': "नहीं",
+  'compare.partial': "आंशिक रूप से (Telegram) / नहीं (WhatsApp)",
 };
 
 T.bn = {
@@ -258,6 +368,16 @@ T.bn = {
   'how.3': "অন্য জন সেটিতে চাপ দিলেই আপনারা যুক্ত।",
   'foot.who': "মুক্ত ও ওপেন সোর্স সফটওয়্যার (Apache 2.0 লাইসেন্স), মালিকানা DigitalValut-এর — একটি ইতালীয় অলাভজনক সামাজিক উন্নয়ন সমিতি। পৃথিবীর যেকোনো জায়গায়, সবার জন্য বিনামূল্যে।",
   'foot.code': "খোলা কোড, যে কেউ যাচাই করতে চাইলে",
+  'hero.qr': "আপনার ফোন দিয়ে স্ক্যান করুন",
+  'hero.simple': "শুধু দুটি বড় বোতামের একটি মোডও আছে, যারা এ নিয়ে ভাবতে চান না তাদের জন্য।",
+  'compare.title': "এটি কীভাবে আলাদা",
+  'compare.row1': "ফোন নম্বর বা অ্যাকাউন্ট প্রয়োজন",
+  'compare.row2': "বার্তাগুলি কোম্পানির সার্ভারের মধ্য দিয়ে যায়",
+  'compare.row3': "ছবি ও ভিডিও সংকুচিত হয়",
+  'compare.row4': "প্রকাশ্য ও যাচাইযোগ্য সোর্স কোড",
+  'compare.yes': "হ্যাঁ",
+  'compare.no': "না",
+  'compare.partial': "আংশিকভাবে (Telegram) / না (WhatsApp)",
 };
 
 T.id = {
@@ -277,6 +397,16 @@ T.id = {
   'how.3': "Begitu orang lain menyentuhnya, Anda sudah terhubung.",
   'foot.who': "Perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), milik DigitalValut, sebuah asosiasi nirlaba Italia untuk promosi sosial. Gratis untuk siapa saja, di mana saja di dunia.",
   'foot.code': "Kodenya, terbuka, bagi siapa pun yang ingin memeriksanya",
+  'hero.qr': "Pindai dengan ponsel Anda",
+  'hero.simple': "Ada juga mode dengan hanya dua tombol besar, untuk yang lebih suka tidak memikirkannya.",
+  'compare.title': "Apa yang membuatnya berbeda",
+  'compare.row1': "Memerlukan nomor telepon atau akun",
+  'compare.row2': "Pesan melewati server perusahaan",
+  'compare.row3': "Foto dan video dikompresi",
+  'compare.row4': "Kode sumber publik dan dapat diperiksa",
+  'compare.yes': "Ya",
+  'compare.no': "Tidak",
+  'compare.partial': "Sebagian (Telegram) / Tidak (WhatsApp)",
 };
 
 /* ------------------------------------------------------------------------ */
@@ -316,3 +446,272 @@ const start = preferred();
 sel.value = start;
 paint(start);
 sel.addEventListener('change', () => paint(sel.value));
+
+/* ============================== QR code ==============================
+   Copied verbatim from modifica.js rather than rewritten: it is the exact
+   same encoder, already checked there against a real QR decoder on 200
+   random links, and this page is bound by the same rule — nothing loaded
+   from anywhere else (see the Content-Security-Policy in index.html), so a
+   third-party QR library was never an option here either. */
+/* ---- Galois field GF(256) for Reed-Solomon, generator 0x11d ---- */
+const GF_EXP = new Uint8Array(512);
+const GF_LOG = new Uint8Array(256);
+(function initGF(){
+  let x = 1;
+  for (let i = 0; i < 255; i++){
+    GF_EXP[i] = x;
+    GF_LOG[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11d;
+  }
+  for (let i = 255; i < 512; i++) GF_EXP[i] = GF_EXP[i - 255];
+})();
+function gfMul(a, b){ return (a === 0 || b === 0) ? 0 : GF_EXP[GF_LOG[a] + GF_LOG[b]]; }
+
+/* generator polynomial for `degree` error-correction codewords */
+function rsGenerator(degree){
+  let poly = [1];
+  for (let i = 0; i < degree; i++){
+    const next = new Array(poly.length + 1).fill(0);
+    for (let j = 0; j < poly.length; j++){
+      next[j] ^= poly[j];
+      next[j + 1] ^= gfMul(poly[j], GF_EXP[i]);
+    }
+    poly = next;
+  }
+  return poly;
+}
+function rsRemainder(data, degree){
+  const gen = rsGenerator(degree);
+  const rem = new Array(degree).fill(0);
+  for (const b of data){
+    const factor = b ^ rem[0];
+    rem.shift();
+    rem.push(0);
+    for (let i = 0; i < degree; i++) rem[i] ^= gfMul(gen[i + 1], factor);
+  }
+  return rem;
+}
+
+/* ---- per-version tables (byte mode, error-correction level M) ----
+   [ total codewords, ec codewords per block, number of blocks ] */
+const VERSIONS_M = {
+  1: [26, 10, 1], 2: [44, 16, 1], 3: [70, 26, 1], 4: [100, 18, 2],
+  5: [134, 24, 2], 6: [172, 16, 4], 7: [196, 18, 4], 8: [242, 22, 4],
+  9: [292, 22, 5], 10: [346, 26, 5],
+};
+const ALIGN_POS = {
+  1: [], 2: [6,18], 3: [6,22], 4: [6,26], 5: [6,30],
+  6: [6,34], 7: [6,22,38], 8: [6,24,42], 9: [6,26,46], 10: [6,28,50],
+};
+
+function capacityBytes(version){
+  const [total, ecPerBlock, blocks] = VERSIONS_M[version];
+  const dataCodewords = total - ecPerBlock * blocks;
+  const headerBits = 4 + (version < 10 ? 8 : 16);
+  return Math.floor((dataCodewords * 8 - headerBits) / 8);
+}
+
+function buildCodewords(bytes, version){
+  const [total, ecPerBlock, blocks] = VERSIONS_M[version];
+  const dataCodewords = total - ecPerBlock * blocks;
+
+  /* bit stream: mode 0100 (byte), length, payload, terminator, padding */
+  const bits = [];
+  const push = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+  push(0b0100, 4);
+  push(bytes.length, version < 10 ? 8 : 16);
+  for (const b of bytes) push(b, 8);
+  for (let i = 0; i < 4 && bits.length < dataCodewords * 8; i++) bits.push(0);
+  while (bits.length % 8 !== 0) bits.push(0);
+  const data = [];
+  for (let i = 0; i < bits.length; i += 8){
+    let v = 0;
+    for (let j = 0; j < 8; j++) v = (v << 1) | bits[i + j];
+    data.push(v);
+  }
+  const PAD = [0xEC, 0x11];
+  for (let i = 0; data.length < dataCodewords; i++) data.push(PAD[i % 2]);
+
+  /* split into blocks, compute EC for each, then interleave */
+  const shortBlockLen = Math.floor(dataCodewords / blocks);
+  const longBlocks = dataCodewords % blocks;
+  const dataBlocks = [], ecBlocks = [];
+  let offset = 0;
+  for (let b = 0; b < blocks; b++){
+    const len = shortBlockLen + (b >= blocks - longBlocks ? 1 : 0);
+    const block = data.slice(offset, offset + len);
+    offset += len;
+    dataBlocks.push(block);
+    ecBlocks.push(rsRemainder(block, ecPerBlock));
+  }
+  const out = [];
+  const maxData = Math.max(...dataBlocks.map(b => b.length));
+  for (let i = 0; i < maxData; i++)
+    for (const b of dataBlocks) if (i < b.length) out.push(b[i]);
+  for (let i = 0; i < ecPerBlock; i++)
+    for (const b of ecBlocks) out.push(b[i]);
+  return out;
+}
+
+/* ---- module placement ---- */
+function makeMatrix(version, codewords, mask){
+  const size = version * 4 + 17;
+  const m = Array.from({ length: size }, () => new Array(size).fill(null));
+
+  const setFinder = (r, c) => {
+    for (let dr = -1; dr <= 7; dr++)
+      for (let dc = -1; dc <= 7; dc++){
+        const rr = r + dr, cc = c + dc;
+        if (rr < 0 || cc < 0 || rr >= size || cc >= size) continue;
+        const inner = dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6 &&
+          (dr === 0 || dr === 6 || dc === 0 || dc === 6 || (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4));
+        m[rr][cc] = inner ? 1 : 0;
+      }
+  };
+  setFinder(0, 0); setFinder(0, size - 7); setFinder(size - 7, 0);
+
+  /* timing patterns */
+  for (let i = 8; i < size - 8; i++){
+    if (m[6][i] === null) m[6][i] = i % 2 === 0 ? 1 : 0;
+    if (m[i][6] === null) m[i][6] = i % 2 === 0 ? 1 : 0;
+  }
+  /* alignment patterns */
+  const pos = ALIGN_POS[version];
+  for (const r of pos) for (const c of pos){
+    if ((r <= 7 && c <= 7) || (r <= 7 && c >= size - 8) || (r >= size - 8 && c <= 7)) continue;
+    for (let dr = -2; dr <= 2; dr++)
+      for (let dc = -2; dc <= 2; dc++)
+        m[r + dr][c + dc] = (Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0)) ? 1 : 0;
+  }
+  /* the always-dark module */
+  m[size - 8][8] = 1;
+
+  /* reserve format areas so data skips them */
+  const reserved = [];
+  for (let i = 0; i < 9; i++){ reserved.push([8, i], [i, 8]); }
+  for (let i = 0; i < 8; i++){ reserved.push([8, size - 1 - i], [size - 1 - i, 8]); }
+  for (const [r, c] of reserved) if (m[r][c] === null) m[r][c] = 0;
+
+  /* data, snaking up and down in two-column strips, skipping column 6 */
+  let bitIndex = 0;
+  const totalBits = codewords.length * 8;
+  for (let right = size - 1; right >= 1; right -= 2){
+    if (right === 6) right = 5;
+    for (let vert = 0; vert < size; vert++){
+      for (let j = 0; j < 2; j++){
+        const c = right - j;
+        const upward = ((right + 1) & 2) === 0;
+        const r = upward ? size - 1 - vert : vert;
+        if (m[r][c] !== null) continue;
+        let bit = 0;
+        if (bitIndex < totalBits){
+          bit = (codewords[bitIndex >> 3] >> (7 - (bitIndex & 7))) & 1;
+          bitIndex++;
+        }
+        m[r][c] = bit ^ (maskBit(mask, r, c) ? 1 : 0);
+      }
+    }
+  }
+  return m;
+}
+function maskBit(mask, r, c){
+  switch (mask){
+    case 0: return (r + c) % 2 === 0;
+    case 1: return r % 2 === 0;
+    case 2: return c % 3 === 0;
+    case 3: return (r + c) % 3 === 0;
+    case 4: return (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0;
+    case 5: return (r * c) % 2 + (r * c) % 3 === 0;
+    case 6: return ((r * c) % 2 + (r * c) % 3) % 2 === 0;
+    case 7: return ((r + c) % 2 + (r * c) % 3) % 2 === 0;
+  }
+}
+/* format information: level M (0b00) + mask, BCH(15,5) with the standard mask */
+function placeFormat(m, mask){
+  const size = m.length;
+  const data = (0b00 << 3) | mask;
+  let rem = data;
+  for (let i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >> 9) * 0x537);
+  const bits = ((data << 10) | rem) ^ 0x5412;
+  const get = i => (bits >> i) & 1; /* get(14) is the most significant bit */
+  /* first copy, wrapped around the top-left finder */
+  for (let i = 0; i <= 5; i++) m[8][i] = get(14 - i);
+  m[8][7] = get(8); m[8][8] = get(7); m[7][8] = get(6);
+  for (let i = 0; i < 6; i++) m[5 - i][8] = get(5 - i);
+  /* second copy: bits 14..8 climbing the bottom-left column, then 7..0 along
+     row 8 at the right. Seven, not eight, going up — the eighth position is the
+     module that is always dark and must stay that way. */
+  for (let i = 0; i < 7; i++) m[size - 1 - i][8] = get(14 - i);
+  for (let i = 0; i < 8; i++) m[8][size - 8 + i] = get(7 - i);
+  m[size - 8][8] = 1;
+}
+
+/* ---- penalty scoring, to pick the mask the way the spec says ---- */
+function penalty(m){
+  const size = m.length;
+  let score = 0;
+  const runScore = line => {
+    let s = 0, run = 1;
+    for (let i = 1; i < line.length; i++){
+      if (line[i] === line[i - 1]) run++;
+      else { if (run >= 5) s += run - 2; run = 1; }
+    }
+    if (run >= 5) s += run - 2;
+    return s;
+  };
+  for (let r = 0; r < size; r++) score += runScore(m[r]);
+  for (let c = 0; c < size; c++) score += runScore(m.map(row => row[c]));
+  for (let r = 0; r < size - 1; r++)
+    for (let c = 0; c < size - 1; c++)
+      if (m[r][c] === m[r][c+1] && m[r][c] === m[r+1][c] && m[r][c] === m[r+1][c+1]) score += 3;
+  const pat1 = [1,0,1,1,1,0,1,0,0,0,0], pat2 = [0,0,0,0,1,0,1,1,1,0,1];
+  const hasPat = (line, i, pat) => pat.every((v, k) => line[i + k] === v);
+  for (let r = 0; r < size; r++)
+    for (let c = 0; c + 11 <= size; c++)
+      if (hasPat(m[r], c, pat1) || hasPat(m[r], c, pat2)) score += 40;
+  for (let c = 0; c < size; c++){
+    const col = m.map(row => row[c]);
+    for (let r = 0; r + 11 <= size; r++)
+      if (hasPat(col, r, pat1) || hasPat(col, r, pat2)) score += 40;
+  }
+  let dark = 0;
+  for (const row of m) for (const v of row) dark += v;
+  score += Math.floor(Math.abs(dark * 100 / (size * size) - 50) / 5) * 10;
+  return score;
+}
+
+function qrMatrix(text){
+  const bytes = [...new TextEncoder().encode(text)];
+  let version = 0;
+  for (let v = 1; v <= 10; v++) if (capacityBytes(v) >= bytes.length){ version = v; break; }
+  if (!version) return null;
+  const codewords = buildCodewords(bytes, version);
+  let best = null, bestScore = Infinity;
+  for (let mask = 0; mask < 8; mask++){
+    const m = makeMatrix(version, codewords, mask);
+    placeFormat(m, mask);
+    const s = penalty(m);
+    if (s < bestScore){ bestScore = s; best = m; }
+  }
+  return best;
+}
+
+/* Points at the app itself, not at this landing page — scanning it should
+   put the app in your hand, not send you back to the page you are already
+   looking at. */
+function paintHeroQr(){
+  const cv = document.getElementById('heroQr');
+  if (!cv) return;
+  const m = qrMatrix('https://digitalvalut.github.io/logos-protocol/modifica.html');
+  if (!m) return;
+  const size = m.length, quiet = 4, scale = 4, total = size + quiet * 2;
+  cv.width = cv.height = total * scale;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.fillStyle = '#000';
+  for (let r = 0; r < size; r++)
+    for (let c = 0; c < size; c++)
+      if (m[r][c]) ctx.fillRect((c + quiet) * scale, (r + quiet) * scale, scale, scale);
+}
+paintHeroQr();

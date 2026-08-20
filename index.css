@@ -92,6 +92,31 @@ h1{font-size:clamp(1.9rem, 6vw, 3rem);line-height:1.15;margin:22px auto 0;
   font-weight:800;font-size:0.8125rem}
 [dir="rtl"] .steps li{padding:15px 58px 15px 18px}
 
+/* -------------------------------------------------------------- hero QR -- */
+/* Stays white even in dark mode, same rule as the app's own QR card: a
+   scanner needs that contrast, and a QR inverted to match a dark theme is
+   one most cameras refuse to read. */
+.heroqr{display:inline-flex;flex-direction:column;align-items:center;gap:8px;
+  margin:28px auto 0;padding:14px;background:#fff;border-radius:14px;
+  box-shadow:var(--shadow)}
+.heroqr canvas{display:block;width:112px;height:112px;image-rendering:pixelated}
+.heroqr span{color:#3a3f47;font-size:0.75rem;font-weight:700}
+
+/* -------------------------------------------------------------- compare -- */
+.compare{margin:52px 0 0}
+.compare table{width:100%;border-collapse:collapse;border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;font-size:0.9375rem}
+.compare th,.compare td{padding:13px 14px;text-align:start;border-bottom:1px solid var(--line)}
+.compare thead th{background:var(--bg2);color:var(--faint);font-size:0.75rem;
+  letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.compare thead th:nth-child(2){color:var(--accent2)}
+.compare tbody td{color:var(--dim);background:var(--panel)}
+.compare tbody td:first-child{color:var(--ink)}
+.compare tbody tr:last-child td{border-bottom:none}
+.compare tbody td:nth-child(2){color:var(--ok);font-weight:700}
+.compare table{table-layout:fixed}
+.compare th:not(:first-child),.compare td:not(:first-child){width:22%;text-align:center}
+
 .last{text-align:center;margin:52px 0 10px}
 
 /* --------------------------------------------------------------- footer -- */
