@@ -36,6 +36,7 @@ const ICONS = {
   check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
   xmark:'<path d="M6 6l12 12M18 6L6 18"/>',
   warning:'<path d="M12 3.5 21.5 20h-19z"/><path d="M12 9.5v5M12 17.5h.01"/>',
+  dots:'<circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/>',
 };
 function svgIcon(name, cls){
   return '<svg class="btnicon' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
@@ -4927,7 +4928,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.48';
+const APP_VERSION = 'logos-modifica-3.49';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6883,7 +6884,8 @@ applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || '
    HTML, so the markup and the icon set stay defined in exactly one place */
 setIcon('btnCallAudio','phone'); setIcon('btnCallVideo','video');
 setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video'); setIcon('btnFlipCam','flip');
-setIcon('btnAttach','attach'); setIcon('btnMic','mic');
+setIcon('btnAttach','attach'); setIcon('btnMic','mic'); setIcon('btnEmoji','smile'); setIcon('btnSend','send');
+setIcon('btnMenu','dots');
 
 initLang();
 renderContacts();

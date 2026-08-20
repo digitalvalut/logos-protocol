@@ -51,27 +51,6 @@
     border-radius:99px;font-weight:700;font-size:0.75rem;cursor:pointer}
   .banner .x{background:none;border:none;color:var(--faint);font-size:1.125rem;padding:2px 6px;cursor:pointer}
 
-  /* ---------------- the install card ----------------
-     Everywhere else a "banner" is a strip of warning text — the licence
-     notice, a blocked-microphone alert. Installing the app is not a warning,
-     it is an offer, and it was reading as one more system strip to dismiss.
-     This borrows the same visual language as the two big home buttons: a
-     real icon, a filled primary action, generous padding — something that
-     looks worth a tap rather than something to close. */
-  .installcard{position:relative;display:flex;gap:14px;align-items:center;
-    margin:18px 0;padding:20px 44px 20px 20px;border-radius:var(--r-lg);
-    background:linear-gradient(155deg,rgba(255,145,77,.14),var(--panel) 55%);
-    border:1px solid rgba(255,145,77,.30);box-shadow:var(--shadow)}
-  .installicon{flex:none;width:56px;height:56px;border-radius:16px;
-    box-shadow:0 6px 18px rgba(255,145,77,.30)}
-  .installbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
-  .installbody #installText{color:var(--dim);font-size:0.875rem;line-height:1.5}
-  .installbody #installText b{color:var(--ink);font-size:0.9688rem}
-  .installbody .btn{align-self:flex-start}
-  .installcard .shareicon{color:var(--accent2)}
-  .installcard > .x{position:absolute;top:10px;inset-inline-end:10px}
-  @media(min-width:460px){ .installcard{align-items:flex-start} }
-
   details.legal{margin:14px 0;font-size:0.75rem;color:var(--faint)}
   details.legal summary{cursor:pointer;color:var(--dim);list-style:none;display:flex;align-items:center;gap:6px}
   details.legal summary::-webkit-details-marker{display:none}
@@ -479,12 +458,19 @@
   .callctrl button .btnicon{width:20px;height:20px}
   #callBox.voice .callctrl button .btnicon{width:23px;height:23px}
   #composer .iconbtn .btnicon{width:22px;height:22px}
+  #btnSend .btnicon{width:21px;height:21px}
   .btn .ic svg.btnicon{width:18px;height:18px}
 
   #callBox{background:#000;border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px;box-shadow:var(--shadow)}
   #remoteVideo{width:100%;max-height:360px;display:block;background:#000}
   #remoteAudio{display:none}
-  #localVideo{width:26%;max-width:150px;position:absolute;bottom:12px;right:12px;border-radius:10px;
+  /* Top-right, not bottom-right. The call controls live bottom-left, and on a
+     phone-width video that row (mic, camera, flip, speaker, and the hangup
+     pill itself — never fewer than three, sometimes all five) can run past
+     the point where the self-view thumbnail started, putting *the button this
+     whole review exists to protect* underneath a video feed instead of on top
+     of it. Top-right is never in that row's path, on any width. */
+  #localVideo{width:26%;max-width:150px;position:absolute;top:12px;right:12px;border-radius:10px;
     border:2px solid rgba(255,255,255,.25);box-shadow:0 4px 16px rgba(0,0,0,.5)}
   #callStatus{position:absolute;top:12px;left:12px;color:#fff;font-size:0.75rem;background:rgba(0,0,0,.55);
     padding:5px 12px;border-radius:99px;backdrop-filter:blur(6px)}
@@ -534,8 +520,12 @@
   .sysline{align-self:center;color:var(--faint);font-size:0.7188rem;margin:8px 0;text-align:center}
 
   #composer{display:flex;align-items:flex-end;gap:6px;padding:9px;background:var(--panel2);border-top:1px solid var(--line);position:relative}
-  #composer .iconbtn{background:none;border:none;color:var(--dim);font-size:1.1875rem;padding:8px;cursor:pointer;
-    border-radius:50%;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
+  /* 44px, not the 38px a flat 8px padding gave the icon underneath: the same
+     minimum every other round button in the app already gets (the header's
+     circles are 46px, send is 46px) — a thumb never gets a smaller target here
+     than anywhere else in the same row. */
+  #composer .iconbtn{background:none;border:none;color:var(--dim);font-size:1.1875rem;cursor:pointer;
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
   #composer .iconbtn:hover{background:var(--panel);color:var(--ink)}
   #msgInput{flex:1;border-radius:22px;padding:12px 17px;font-family:var(--sans);font-size:1.0625rem;
     background:var(--bg2);border:1.5px solid var(--line)}

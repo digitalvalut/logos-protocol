@@ -124,7 +124,7 @@
          have seen it work is asking them to vouch for something they do not
          know yet. -->
     <div class="card viral hide" id="viralCard">
-      <button class="x" id="viralClose" aria-label="close">×</button>
+      <button class="x" id="viralClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <b data-i18n="viral.title">Ha funzionato.</b>
       <span data-i18n="viral.sub">Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.</span>
       <button class="btn primary mt12" id="btnViralShare">
@@ -166,19 +166,6 @@
 
 
 
-    <!-- Redrawn from a plain strip of text into something that looks like what
-         it is offering: a real app icon, a real title, one clear button — the
-         same visual language as the two big choices above, not a system alert
-         borrowed from elsewhere in the page. -->
-    <div class="installcard hide" id="installBar">
-      <button class="x" id="installClose" aria-label="close">×</button>
-      <img class="installicon" src="modifica-icon-512.png" alt="" width="56" height="56">
-      <div class="installbody">
-        <div id="installText"></div>
-        <button class="btn primary hide" id="installBtn" data-i18n="install.btn">Installa</button>
-      </div>
-    </div>
-
     <!-- Same shape and same width as the two above, so it is a real target for
          a real finger — but flat rather than raised, because it is not what
          anyone opened the app to do and it should not compete with the two
@@ -194,6 +181,21 @@
         </span>
         <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
       </button>
+    </div>
+
+    <!-- Quiet on purpose, and placed after the two real choices and the share
+         row rather than between them: the same strip used for every other
+         passing notice in the app (a blocked microphone, the licence line),
+         not a card built to compete with "Parla con qualcuno" for a first-time
+         visitor's thumb in the first few seconds. It earns a glance, not a
+         stare — someone who wants it will read it; someone who does not can
+         look straight past a single quiet line. -->
+    <div class="banner accent hide jsb" id="installBar">
+      <span class="f1" id="installText"></span>
+      <span class="inlinebtns">
+        <button class="btn mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
+        <button class="x" id="installClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </span>
     </div>
 
     <!-- Left while nobody was here. Collected once, then kept on this device
@@ -550,7 +552,7 @@
         · <button id="btnVerify" class="linkbtn">verifica</button></div>
       <button class="iconbtn" id="btnCallAudio" title="Chiamata"></button>
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata"></button>
-      <button class="iconbtn" id="btnMenu" title="Altro">⋯</button>
+      <button class="iconbtn" id="btnMenu" title="Altro"></button>
     </div>
 
     <div id="callBox" class="hide">
@@ -633,13 +635,13 @@
     <div id="chatArea">
       <div id="msgs"></div>
       <div id="composer">
-        <button class="iconbtn" id="btnEmoji" title="Emoji">😊</button>
+        <button class="iconbtn" id="btnEmoji" title="Emoji"></button>
         <div id="emojiPop" class="hide"></div>
         <button class="iconbtn" id="btnAttach" title="Allega"></button>
         <input type="file" id="fileInput" class="filehide" tabindex="-1" aria-hidden="true">
         <button class="iconbtn" id="btnMic" title="Vocale"></button>
         <input type="text" id="msgInput" spellcheck="true" autocapitalize="sentences" autocomplete="off" data-i18n-ph="chat.typePh" placeholder="Scrivi un messaggio…">
-        <button id="btnSend" title="Invia">➤</button>
+        <button id="btnSend" title="Invia"></button>
       </div>
     </div>
 
@@ -658,7 +660,7 @@
       </div>
       <div class="toolsrow">
         <button class="btn" id="btnClearHistory"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span><span data-i18n="menu.clearHistory">Svuota cronologia</span></button>
-        <button class="btn danger" id="btnNewSession"><span class="ic">✕</span><span data-i18n="menu.endChat">Termina chat</span></button>
+        <button class="btn danger" id="btnNewSession"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span data-i18n="menu.endChat">Termina chat</span></button>
       </div>
       <div class="lead mt12" data-i18n="menu.historyNote">La cronologia resta solo su questo dispositivo,
         legata al nome della persona con cui parli. Nessun server la conserva.</div>
