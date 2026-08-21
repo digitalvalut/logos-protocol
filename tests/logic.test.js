@@ -406,6 +406,43 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('a dropped connection offers a direct way back, not just a hidden menu', () => {
+    /* Before this, the only way out of a dead chat was finding "..." and then
+       "Termina chat" — two taps behind a menu nobody thinks to open while
+       staring at a conversation that stopped working. The fix puts the same
+       exit right in the system message itself. */
+    const app = loadApp();
+    app.run(`
+      $('screenChat').classList.remove('hide');
+      pc = { close(){}, ontrack: null };
+      window.__fakeChannel = { binaryType: '', send(){}, close(){}, addEventListener(){} };
+      wireDataChannel(__fakeChannel);
+    `);
+    app.run('__fakeChannel.onclose();');
+    const structure = JSON.parse(app.run(`
+      JSON.stringify((() => {
+        const line = $('msgs').children[$('msgs').children.length - 1];
+        const btn = line.children[1];
+        return { className: line.className, text: line.children[0].textContent,
+          btnText: btn ? btn.textContent : null, btnTag: btn ? btn.tagName : null };
+      })())
+    `));
+    assert.strictEqual(structure.className, 'sysline');
+    assert.ok(!/riapri l'app/.test(structure.text),
+      'should not tell people to reopen the app now that a real button does the job');
+    assert.strictEqual(structure.btnText, 'Torna alla home');
+    assert.strictEqual(structure.btnTag, 'BUTTON');
+    /* the button must actually work, not just look like it does */
+    app.run(`
+      $('msgs').children[$('msgs').children.length - 1].children[1].listeners.click[0]();
+    `);
+    assert.strictEqual(app.run("$('screenChat').classList.contains('hide')"), true,
+      'the button did not take the person back out of the dead chat');
+    assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), false,
+      'the button did not land on the home screen, where the next attempt actually starts');
+    app.stop();
+  });
+
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
     /* Used to render nothing at all until the whole loop finished, so a
        channel that threw partway left no error, no bubble, no sign anything

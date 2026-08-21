@@ -542,6 +542,10 @@
   .bub audio{margin-top:4px;max-width:220px}
   .bub .meta{font-size:0.5938rem;opacity:.55;margin-top:3px;text-align:right}
   .sysline{align-self:center;color:var(--faint);font-size:0.7188rem;margin:8px 0;text-align:center}
+  .sysline .syslineBtn{display:block;margin:8px auto 0;padding:9px 20px;border:none;border-radius:99px;
+    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:0.8125rem;
+    font-family:inherit;cursor:pointer;min-height:38px}
+  .sysline .syslineBtn:hover{background:var(--accent2)}
 
   #composer{display:flex;align-items:flex-end;gap:6px;padding:9px;background:var(--panel2);border-top:1px solid var(--line);position:relative}
   /* 44px, not the 38px a flat 8px padding gave the icon underneath: the same
