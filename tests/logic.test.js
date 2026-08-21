@@ -589,6 +589,79 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  function fakeVideoCallFixture(app){
+    /* Enough of an active video call for useVideoTrack() to have somewhere
+       real to swap a track into: a sender the connection would actually use,
+       and a MediaStream that tracks additions and removals the way a real
+       one does — not a mock that only records calls. */
+    app.run(`
+      callKind = 'video';
+      window.__camTrack = { kind: 'video', stopped: false, stop(){ this.stopped = true; }, enabled: true };
+      window.__tracks = [__camTrack];
+      localStream = {
+        getVideoTracks: function(){ return window.__tracks.slice(); },
+        getAudioTracks: function(){ return []; },
+        getTracks: function(){ return window.__tracks.slice(); },
+        addTrack: function(t){ window.__tracks.push(t); },
+        removeTrack: function(t){ const i = window.__tracks.indexOf(t); if (i >= 0) window.__tracks.splice(i, 1); },
+      };
+      window.__sender = { track: __camTrack, replaceTrack: function(t){ this.track = t; return Promise.resolve(); } };
+      pc = { getSenders: function(){ return [window.__sender]; } };
+    `);
+  }
+
+  test('screen sharing offers itself only when the browser can do it, and only on a video call', () => {
+    const app = loadApp();
+    assert.strictEqual(app.run('screenShareSupported()'), false,
+      'the fake browser has no getDisplayMedia, same as a browser that genuinely lacks it');
+    fakeVideoCallFixture(app);
+    app.run('initScreenShare();');
+    assert.strictEqual(app.run("$('btnScreenShare').classList.contains('hide')"), true,
+      'must not offer screen sharing on a browser that cannot do it');
+    app.run(`
+      navigator.mediaDevices.getDisplayMedia = function(){ return Promise.resolve({ getVideoTracks: function(){ return []; } }); };
+      initScreenShare();
+    `);
+    assert.strictEqual(app.run("$('btnScreenShare').classList.contains('hide')"), false,
+      'a video call on a browser that supports it should be offered the button');
+    app.run(`callKind = 'audio'; initScreenShare();`);
+    assert.strictEqual(app.run("$('btnScreenShare').classList.contains('hide')"), true,
+      'a voice call has no video track to swap, so the button has nothing to do there');
+    app.stop();
+  });
+
+  test('starting screen share swaps the video track without touching the call, and stopping it swaps back', () => {
+    const app = loadApp();
+    fakeVideoCallFixture(app);
+    app.run(`
+      window.__screenTrack = { kind: 'video', stop(){}, enabled: true, onended: null };
+      navigator.mediaDevices.getDisplayMedia = function(){ return Promise.resolve({ getVideoTracks: function(){ return [window.__screenTrack]; } }); };
+      initScreenShare();
+      window.__p1 = $('btnScreenShare').listeners.click[0]();
+    `);
+    return app.run('window.__p1').then(() => {
+      assert.strictEqual(app.run('window.__sender.track === window.__screenTrack'), true,
+        'the connection must actually be sending the screen once sharing starts');
+      assert.strictEqual(app.run('window.__camTrack.stopped'), true,
+        'the camera must be let go of, not left running unused behind the screen');
+      assert.strictEqual(app.run('screenSharing'), true);
+      assert.strictEqual(app.run("$('btnScreenShare').classList.contains('on')"), true);
+
+      app.run(`
+        window.__freshCam = { kind: 'video', stop(){}, enabled: true };
+        navigator.mediaDevices.getUserMedia = function(){ return Promise.resolve({ getVideoTracks: function(){ return [window.__freshCam]; } }); };
+        window.__p2 = $('btnScreenShare').listeners.click[0]();
+      `);
+      return app.run('window.__p2').then(() => {
+        assert.strictEqual(app.run('window.__sender.track === window.__freshCam'), true,
+          'stopping the share must hand the call a real camera track back, not just hide the button');
+        assert.strictEqual(app.run('screenSharing'), false);
+        assert.strictEqual(app.run("$('btnScreenShare').classList.contains('on')"), false);
+        app.stop();
+      });
+    });
+  });
+
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
     /* Used to render nothing at all until the whole loop finished, so a
        channel that threw partway left no error, no bubble, no sign anything

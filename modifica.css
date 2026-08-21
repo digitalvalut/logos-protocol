@@ -518,6 +518,8 @@
   /* on = loudspeaker active; off = whatever the phone's other output is (earpiece,
      if the browser exposes one — not guaranteed on every device, see the JS) */
   .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink)}
+  /* on = the screen, not the camera, is what the other side currently sees */
+  .callctrl button#btnScreenShare.on{background:var(--accent);color:var(--accent-ink)}
 
   #chatArea{display:flex;flex-direction:column;height:min(62vh,560px);border:1px solid var(--line);
     border-radius:var(--r);overflow:hidden;background:var(--panel);box-shadow:var(--shadow);position:relative}

@@ -52,6 +52,7 @@ const ICONS = {
   xmark:'<path d="M6 6l12 12M18 6L6 18"/>',
   warning:'<path d="M12 3.5 21.5 20h-19z"/><path d="M12 9.5v5M12 17.5h.01"/>',
   dots:'<circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/>',
+  screen:'<rect x="2.5" y="4.5" width="19" height="13" rx="1.8"/><path d="M8 20.5h8M12 17.5v3"/>',
 };
 function svgIcon(name, cls){
   return '<svg class="btnicon' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
@@ -5068,7 +5069,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.56';
+const APP_VERSION = 'logos-modifica-3.57';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6861,6 +6862,7 @@ $('btnAcceptCall').addEventListener('click', async () => {
   keepScreenAwake();
   initSpeakerToggle();
   initFlipCam();
+  initScreenShare();
   sig({ type: 'call-accept' });
 });
 $('btnDeclineCall').addEventListener('click', () => {
@@ -6876,6 +6878,7 @@ async function onCallAccepted(){
   keepScreenAwake();
   initSpeakerToggle();
   initFlipCam();
+  initScreenShare();
 }
 async function onCallOfferSdp(sdp){
   await pc.setRemoteDescription({ type: 'offer', sdp });
@@ -6892,6 +6895,7 @@ function endCall(tellPeer){
   $('remoteAudio').srcObject = null; $('remoteVideo').classList.remove('hide');
   $('callBox').classList.remove('voice');
   $('btnFlipCam').classList.add('hide'); facing = 'user';
+  $('btnScreenShare').classList.add('hide'); $('btnScreenShare').classList.remove('on'); screenSharing = false;
   callState = 'idle'; callKind = null; micOn = true; camOn = true;
   setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video');
   speakerOn = false; $('btnSpeakerCall').classList.add('hide'); $('btnSpeakerCall').classList.remove('on');
@@ -6968,6 +6972,52 @@ async function useVideoTrack(track){
   track.enabled = camOn;
   $('localVideo').srcObject = localStream;
 }
+
+/* ---------------- screen sharing ----------------
+   The same track-swap useVideoTrack() already does for flipping the camera
+   works just as well here: the connection, the encryption and the agreed
+   format never change, only which picture the video track carries. No new
+   media server, no new cost — WebRTC has carried a screen the same way it
+   carries a face since before this app existed, it was just never wired to
+   a button. Video-only on purpose: mixing the screen's own audio in with the
+   microphone track is a second, separate problem this does not need to
+   solve to be useful. */
+let screenSharing = false;
+function screenShareSupported(){
+  return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+}
+function initScreenShare(){
+  $('btnScreenShare').classList.toggle('hide', !(callKind === 'video' && screenShareSupported()));
+}
+async function stopScreenShare(){
+  if (!screenSharing) return;
+  screenSharing = false;
+  $('btnScreenShare').classList.remove('on');
+  if (!localStream || !pc) return;
+  /* back to whichever camera was facing before — same request flipCamera
+     itself makes, so a phone that was mid-flip when sharing started still
+     lands somewhere sensible rather than on a hardcoded default */
+  try{
+    const fresh = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing }, audio: false });
+    const track = fresh.getVideoTracks()[0];
+    if (track) await useVideoTrack(track);
+  }catch(e){ /* no camera to go back to; leave the last frame rather than crash the call */ }
+}
+$('btnScreenShare').addEventListener('click', async () => {
+  if (!localStream || !pc || callKind !== 'video') return;
+  if (screenSharing){ await stopScreenShare(); return; }
+  let disp;
+  try{ disp = await navigator.mediaDevices.getDisplayMedia({ video: true }); }
+  catch(e){ return; } /* the person closed the picker without choosing — nothing was ever swapped, nothing to undo */
+  const track = disp.getVideoTracks()[0];
+  if (!track) return;
+  /* the browser's own "stop sharing" bar, or the OS-level indicator, ends the
+     track directly — this is the only way that route is ever noticed */
+  track.onended = () => stopScreenShare();
+  await useVideoTrack(track);
+  screenSharing = true;
+  $('btnScreenShare').classList.add('on');
+});
 
 $('btnFlipCam').addEventListener('click', async () => {
   if (!localStream || !pc || callKind !== 'video') return;
@@ -7284,7 +7334,7 @@ applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || '
 /* static icons that never toggle — set once, here, rather than baked into the
    HTML, so the markup and the icon set stay defined in exactly one place */
 setIcon('btnCallAudio','phone'); setIcon('btnCallVideo','video');
-setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video'); setIcon('btnFlipCam','flip');
+setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video'); setIcon('btnFlipCam','flip'); setIcon('btnScreenShare','screen');
 setIcon('btnAttach','attach'); setIcon('btnMic','mic'); setIcon('btnEmoji','smile'); setIcon('btnSend','send');
 setIcon('btnMenu','dots');
 

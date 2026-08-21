@@ -608,6 +608,10 @@
         <!-- Only ever shown during a video call on a phone that actually has a
              second camera — asked of the device, not assumed. -->
         <button id="btnFlipCam" class="hide" title="Gira la fotocamera"></button>
+        <!-- Only where the browser actually offers getDisplayMedia — desktop
+             Chrome/Firefox/Safari and recent Android Chrome; not shown where
+             asking would just fail. -->
+        <button id="btnScreenShare" class="hide" title="Condividi schermo"></button>
         <button id="btnSpeakerCall" class="hide" title="Altoparlante"></button>
         <button class="hangup" id="btnHangup" data-i18n="call.hangup">Chiudi</button>
       </div>
