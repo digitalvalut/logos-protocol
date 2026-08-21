@@ -3584,7 +3584,7 @@ function loadContacts(){
   try{ return JSON.parse(localStorage.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
 }
 function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
-function touchContact(nick, fp, push){
+function touchContact(nick, fp, push, addr){
   if (!nick) return;
   let list = loadContacts();
   const prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
@@ -3595,8 +3595,15 @@ function touchContact(nick, fp, push){
      directly, the same as everything else this app trusts. undefined (not
      sent this message) keeps whatever was already on file; null clears it. */
   const keepPush = push !== undefined ? push : (prev && prev.push) || null;
+  /* Learned only when this exact connection was proven to belong to that
+     address (see the note by dialedAddrProven) — never typed in by hand and
+     taken on trust. Once known it stays on file, the same as the fingerprint:
+     it is what turns a name in this list into something you can call again
+     directly, instead of only being reachable while both of you happen to be
+     free to redo the invite dance. */
+  const keepAddr = addr || (prev && prev.addr) || null;
   list = list.filter(c => c.nick.toLowerCase() !== nick.toLowerCase());
-  list.unshift({ nick, lastSeen: Date.now(), fp: keepFp, push: keepPush });
+  list.unshift({ nick, lastSeen: Date.now(), fp: keepFp, push: keepPush, addr: keepAddr });
   if (list.length > 40) list = list.slice(0, 40);
   saveContacts(list);
   renderContacts();
@@ -3643,6 +3650,17 @@ $('contactsList').addEventListener('click', ev => {
   }
   const nick = row.getAttribute('data-nick');
   const contact = loadContacts().find(c => c.nick === nick);
+  /* A saved address reaches them even if the two of you never sat in the
+     same invite/reconnect window together — it rings their phone the same
+     way typing it in by hand does, just without having to go find it again.
+     Preferred over the fingerprint path below when both are on file, since
+     it works whether or not they currently have the app open. dialAddress
+     manages its own screen, so it returns before the fallback below touches
+     screenStart at all. */
+  if (contact && contact.addr){
+    dialAddress(contact.addr);
+    return;
+  }
   showScreen('screenStart');
   if (contact && contact.fp){
     /* a targeted reconnect to someone specific isn't the "get a shareable code"
@@ -5019,7 +5037,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.54';
+const APP_VERSION = 'logos-modifica-3.55';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6465,7 +6483,7 @@ function onDcMessage(ev){
         $('peerNameLbl').textContent = peerNick;
         $('peerAvatar').textContent = initials(peerNick);
         loadHistoryFor(peerNick);
-        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push));
+        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push), dialedAddress);
         sysLine(peerNick + ' ' + t('call.joined'));
         hadRealChat = true; /* someone is genuinely at the other end */
         /* the safety check follows the moment rather than fighting it for the

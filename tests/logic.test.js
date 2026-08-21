@@ -443,6 +443,79 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('calling a saved permanent address is remembered, so the next call is one tap', () => {
+    /* Before this, a contact record only ever held a fingerprint — useful for
+       reconnecting to someone you had already talked to, but useless for
+       calling a permanent address again unless it was still written down
+       somewhere else. dialedAddress is only ever non-null here because the
+       'hello' really did arrive over a connection dialAddress() itself
+       opened and proved (see the comment by dialedAddrProven) — nothing
+       about this test skips that proof, it just supplies its result. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection();
+      dialedAddress = 'DV-AAAA-BBBB-CCCC';
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Marco', fp: 'abc123' }) });
+    `);
+    const saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(saved.length, 1);
+    assert.strictEqual(saved[0].nick, 'Marco');
+    assert.strictEqual(saved[0].addr, 'DV-AAAA-BBBB-CCCC',
+      'the address that was actually dialled and proven was not kept on the contact');
+    /* that first call is over — same as hanging up — before trying the next
+       one, otherwise busyWithSomeone() sees the still-open connection from
+       above and refuses to start a second one, same as it would for real */
+    app.run('pc = null;');
+    /* tapping the saved contact afterwards must call that same address
+       directly, not fall back to the fingerprint-reconnect path — a stub
+       stands in for dialAddress so this checks what was called, not how the
+       real call behaves (that path already has its own coverage) */
+    app.run(`
+      window.__dialedWith = null;
+      dialAddress = function(a){ window.__dialedWith = a; };
+    `);
+    app.run(`
+      $('contactsList').listeners.click[0]({
+        target: { closest: sel => sel === '.contactrow' ? { getAttribute: () => 'Marco' } : null },
+      });
+    `);
+    assert.strictEqual(app.run('window.__dialedWith'), 'DV-AAAA-BBBB-CCCC',
+      'tapping a contact with a saved address must call that address, not start a fresh invite');
+    app.stop();
+  });
+
+  test('a contact known two ways keeps both, instead of the second overwriting the first', () => {
+    /* Someone reconnected to by invite (fingerprint only) and someone reached
+       by dialling their address are not different people the second time
+       they turn out to be the same nick — the record has to gain the address
+       without losing the fingerprint it already had. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection();
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Marco', fp: 'abc123' }) });
+      dialedAddress = 'DV-AAAA-BBBB-CCCC';
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Marco', fp: 'abc123' }) });
+    `);
+    const saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(saved.length, 1, 'the same person by nick must stay one contact, not become two');
+    assert.strictEqual(saved[0].fp, 'abc123', 'the fingerprint learned the first time must not be lost');
+    assert.strictEqual(saved[0].addr, 'DV-AAAA-BBBB-CCCC', 'the address learned the second time must be kept');
+    /* and the other order matters just as much: a later reconnect that
+       happens to arrive by invite rather than by dialling the address again
+       carries no address of its own (dialedAddress is only ever set inside
+       dialAddress()) — that must not read as "the address is gone now" and
+       silently erase what an earlier call already proved. */
+    app.run(`
+      dialedAddress = null;
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Marco', fp: 'abc123' }) });
+    `);
+    const savedAgain = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(savedAgain.length, 1);
+    assert.strictEqual(savedAgain[0].addr, 'DV-AAAA-BBBB-CCCC',
+      'a reconnect with no address of its own must not erase the address already on file');
+    app.stop();
+  });
+
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
     /* Used to render nothing at all until the whole loop finished, so a
        channel that threw partway left no error, no bubble, no sign anything
