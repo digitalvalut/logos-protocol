@@ -53,8 +53,15 @@ anyone — because there is no server handling your conversation at all.
 
 ## What you can do with it
 
-- Text messages, emoji, voice messages, photos, video and file sharing.
-- Audio and video calls, direct between the two browsers.
+- Text messages, emoji, voice messages, photos, video and file sharing — files up to
+  **512 MB, sent uncompressed** at original quality, several at once by picking or
+  dragging them in, each with its own progress bar.
+- Audio and video calls, direct between the two browsers, with **screen sharing** —
+  swaps the camera track for the screen mid-call, on any browser that supports it, no
+  new server and no extra cost involved.
+- **Share straight into it from any other app** (Android): pick "DigitalValut Logos" from
+  the system Share menu in Photos, Gmail, anywhere — the file arrives waiting to be sent,
+  even before you've connected to anyone.
 - **A permanent address** (`DV-XXXX-XXXX-XXXX`) to hand out instead of a phone number, plus
   up to **8 throwaway addresses** for a listing or a stranger — delete one and that person
   can no longer reach you, without touching anything else.
@@ -63,6 +70,9 @@ anyone — because there is no server handling your conversation at all.
 - **An invite that waits.** Send one and close the app. Whoever opens it — an hour later,
   a day later — makes your phone ring; you open the app and you're connected. Neither of
   you has to be sitting there waiting.
+- **A contacts list that remembers a real address, not just a name.** Once a call to
+  someone's permanent address has connected, calling them again is one tap — no invite to
+  redo, even if you never actually chatted before that first call.
 - **A letter for someone who doesn't answer.** Call an address and nobody's there? Leave a
   message, held for up to 7 days, sealed so only the address's owner can open it.
 - **A simple mode**: two very large buttons and nothing else on screen, with the
@@ -106,7 +116,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-60 automated tests, each verified by deliberately reintroducing the bug it guards against
+80 automated tests, each verified by deliberately reintroducing the bug it guards against
 and confirming it fails red before the fix — not just written to pass. They run in a
 ~150-line hand-written browser sandbox, not a framework, in keeping with the
 zero-runtime-dependency rule. `node --test` from the repository root.
@@ -161,8 +171,12 @@ connessione crittografica reale — dette a voce una volta, confermano che nessu
 in mezzo. La cronologia resta solo sul tuo dispositivo: nessun database, da nessuna parte,
 la conserva al posto tuo.
 
-Messaggi, foto, video, chiamate, un **indirizzo permanente** più fino a **8 indirizzi
-usa e getta**, autodistruzione dei messaggi, **pulizia automatica** opzionale (spenta di
+Messaggi, foto, video, chiamate — con **condivisione dello schermo** durante le
+videochiamate — file fino a **512 MB nella qualità originale**, mandabili più alla volta
+trascinandoli dentro, e su Android **condivisibili direttamente da un'altra app** (Foto,
+Gmail, ecc.) senza nemmeno aprire prima Logos. Un **indirizzo permanente** più fino a
+**8 indirizzi usa e getta**, una **rubrica** che richiama un indirizzo salvato con un
+tocco solo, autodistruzione dei messaggi, **pulizia automatica** opzionale (spenta di
 base), un "colpetto" push discreto per farsi sentire senza tenere l'app aperta, codice QR
 o link per collegarsi, e tutta l'interfaccia in **13 lingue**. Si installa su iPhone,
 Android, Windows, Mac e Linux senza alcun account né pagamento.

@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.45` — 16 agosto 2026*
+*Versione descritta: `logos-modifica-3.59` — 21 agosto 2026*
 
 ---
 
@@ -38,7 +38,7 @@ Due browser si collegano **direttamente** fra loro con **WebRTC**. Messaggi,
 file e chiamate viaggiano da un dispositivo all'altro senza attraversare nessun
 server intermedio.
 
-Esiste **un solo componente lato server**: un Cloudflare Worker (416 righe) che
+Esiste **un solo componente lato server**: un Cloudflare Worker (550 righe) che
 fa esclusivamente da "ufficio postale" per la fase di presentazione:
 
 | Rotta | A cosa serve | Quanto conserva |
@@ -56,11 +56,11 @@ può leggere nulla: vede solo hash a 64 caratteri e buste opache.
 
 | File | Righe | Cosa |
 |---|---|---|
-| `modifica.js` | 6.492 | Tutta la logica dell'app + 13 lingue |
-| `modifica.html` | 709 | Le schermate |
-| `modifica.css` | 647 | L'aspetto |
-| `turn-worker/worker.js` | 416 | Il Worker |
-| `index.html/js/css` | 555 | La pagina di presentazione pubblica |
+| `modifica.js` | 7.516 | Tutta la logica dell'app + 13 lingue |
+| `modifica.html` | 757 | Le schermate |
+| `modifica.css` | 683 | L'aspetto |
+| `turn-worker/worker.js` | 550 | Il Worker |
+| `index.html/js/css` | 989 | La pagina di presentazione pubblica |
 
 **Dipendenze esterne a runtime: ZERO.** Nessun CDN, nessun npm, nessuna
 libreria. Nessuna riga di codice scritta da altri viene caricata.
@@ -103,25 +103,51 @@ chiunque può dichiarare.
 - **Biglietto automatico**: una chiamata senza risposta lascia traccia da sola
 
 ### In chat
-Messaggi, emoji, **messaggi vocali**, foto, video, file di qualsiasi tipo,
-**chiamate audio e video**, cambio fotocamera, muto, vivavoce, autodistruzione
-a tempo, pulizia automatica opzionale, svuota cronologia.
+Messaggi, emoji, **messaggi vocali**, foto, video, file di qualsiasi tipo fino a
+**512 MB, mandati non compressi** (qualità originale — WhatsApp/Telegram li
+ricomprimono, questa app no), **più file alla volta** scelti o trascinati dentro,
+ciascuno con la propria barra di avanzamento. **Chiamate audio e video**, con
+**condivisione dello schermo** durante una videochiamata (sostituisce la traccia
+video della fotocamera con quella dello schermo sullo stesso collegamento già
+aperto — nessun server nuovo, nessun costo aggiuntivo). Cambio fotocamera, muto,
+vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronologia.
 
 ### Interfaccia e accessibilità
 - **13 lingue** complete (it, en, ar, bn, de, es, fr, hi, id, pt, ru, ur, zh),
   con RTL per arabo e urdu
-- **Modalità semplice**: due pulsanti giganti
+- **Modalità semplice**: due pulsanti giganti, ora offerta da sola alla prima
+  apertura invece di restare nascosta nelle impostazioni
 - **Lettura vocale** delle istruzioni
 - **Tre dimensioni di testo**
 - **Condivisione nativa** (Web Share API) in 6 punti ✅ *già esistente*
+- **Ricevere condivisioni da altre app** (Android): si può scegliere
+  "DigitalValut Logos" dal menu Condividi di Foto, Gmail, ecc. — il file arriva
+  pronto da mandare, anche prima di essersi collegati a qualcuno
 - Installabile come app (PWA), funziona offline
 - **Scheda "Come sta l'app"**: dice in parole semplici se sei raggiungibile e,
   se non lo sei, perché
+- **Puntino di avviso** sull'icona delle impostazioni se arriva un messaggio
+  mentre non si sta guardando la chat
+
+### Affidabilità del collegamento
+- **Controlli più rapidi nei primi 15 secondi** di ogni attesa (400ms invece di
+  1,2-1,5s) — le letture non hanno il limite stretto che hanno le scritture sul
+  piano gratuito, quindi costa zero
+- **Un intoppo di rete non disattiva più il ponte per tutta la sessione**: prima,
+  un solo fallimento nel prendere le credenziali del relay veniva salvato come se
+  fosse una risposta valida, e nessun tentativo successivo ne aveva più uno
+- **Rispetta un "rallenta" (429) del Worker** invece di continuare a insistere
+  allo stesso ritmo
+- **Un pulsante di uscita quando il collegamento vacilla**: se lo stato
+  `disconnected` non si risolve da solo entro qualche secondo (tipico di un
+  cambio rete a metà chiamata), offre subito la stessa via d'uscita già
+  costruita per una connessione davvero caduta, invece di aspettare passivamente
+  il timeout interno del browser (20+ secondi)
 
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **54 test automatici** a ogni pubblicazione, senza installare niente
+- **80 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -137,29 +163,54 @@ Altri limiti dichiarati apertamente nell'app stessa:
 - Nessun sito può impedire uno screenshot
 - **Se cambi telefono o cancelli i dati del browser, perdi indirizzo e rubrica**
   — nessun recupero (problema aperto e riconosciuto)
-- L'indirizzo "permanente" **si rinnova da solo una volta l'anno** (l'app
-  avvisa 60 giorni prima)
+- L'indirizzo permanente **non scade più** da quando P2 è stato completato
+  (v3.48, §6): non dipende dal certificato DTLS, quindi resta valido finché i
+  dati dell'app restano sul dispositivo. Quello che ruota ancora una volta
+  l'anno sono le *parole di sicurezza* (legate al certificato), non l'indirizzo
 
 ---
 
 ## 6. Problemi noti ancora aperti
 
-### P2 — l'indirizzo pubblico è anche la chiave di lettura (IL PIÙ IMPORTANTE)
+### P2 — RISOLTO (v3.48, 17 agosto 2026)
 
-La chiave che cifra le buste dirette a un indirizzo è ricavata **dalla sola
-stringa dell'indirizzo**, che è pubblica per definizione. Conseguenza: chi
-possiede un indirizzo può leggere i metadati delle chiamate dirette a
-quell'indirizzo (nome di chi chiama, motivo, suo IP) e le lettere lasciate lì.
+*Questa era la falla più importante del progetto, e per un po' questo stesso
+documento la descriveva come ancora aperta — se hai letto una copia di questo
+dossier con quella sezione, era una versione vecchia (v3.45).*
 
-**Correzione già progettata** (non ancora eseguita): l'indirizzo deve diventare
-**l'impronta di una chiave pubblica** invece della chiave stessa. Chi chiama
-scarica la chiave pubblica del destinatario, **verifica che il suo hash
-corrisponda all'indirizzo** (questo la autentica: una chiave sostituita darebbe
-un indirizzo diverso), poi cifra con ECDH verso di essa. Solo chi possiede la
-parte privata può aprire.
+Il problema era reale: la chiave che cifrava le buste dirette a un indirizzo
+era ricavata **dalla sola stringa dell'indirizzo**, che è pubblica per
+definizione — chi possedeva un indirizzo poteva leggere i metadati delle
+chiamate dirette a esso. **Corretto**: l'indirizzo è ora **l'impronta di una
+chiave pubblica ECDH** invece della chiave stessa. Chi chiama scarica la chiave
+pubblica del destinatario, **verifica che il suo hash corrisponda
+all'indirizzo** (una chiave sostituita darebbe un indirizzo diverso, e viene
+rifiutata), poi cifra con ECDH verso di essa — solo chi possiede la parte
+privata può aprire. La rotta `/key` nel Worker verifica in scrittura che solo
+il vero proprietario della chiave possa pubblicarla su quello slot. Conseguenza
+collaterale positiva: l'indirizzo non dipende più dal certificato DTLS e quindi
+**non scade più** (vedi §5).
 
-Comporta: **tutti gli indirizzi cambiano**, serve una rotta nuova nel Worker con
-scadenza lunga, vanno rifatte anche cassetta lettere e slot di risveglio.
+### Ancora da valutare
+
+- **Le letture del Worker (KV di Cloudflare) sono eventualmente coerenti, non
+  immediate** — un valore scritto da un lato può metterci qualche secondo a
+  essere visibile dall'altro, specialmente fra regioni diverse. È quasi
+  certamente la causa residua di collegamenti lenti nei casi peggiori.
+  **Soluzione individuata ma non eseguita**: Durable Objects di Cloudflare al
+  posto di KV, solo per la rotta `/mailbox` (le altre tre — `/wake`, `/key`,
+  `/letter` — non ne hanno bisogno, non sono in un ciclo di attesa stretto).
+  Costo vero da sapere: **richiede il piano Workers a pagamento, minimo 5
+  dollari al mese fissi** — non c'è un piano gratuito che lo includa. Non
+  eseguito finché questo costo non viene accettato consapevolmente
+  dall'associazione.
+- **Nessun riavvio ICE attivo quando la connessione si degrada.** Da v3.59
+  l'app offre un pulsante di uscita rapida se lo stato resta `disconnected`
+  oltre una pausa ragionevole (§4), ma non tenta un vero riavvio con
+  rinegoziazione. Scartato deliberatamente per ora: è un intervento ad alto
+  rischio sul protocollo di segnalazione, che potrebbe rompere connessioni
+  funzionanti per guadagnare un recupero spesso comunque impossibile (i
+  candidati della vecchia rete non esistono più dopo un cambio rete vero).
 
 ### Altri, minori
 - **iOS mai collaudato su dispositivo reale** (nessun iPhone disponibile)
@@ -211,6 +262,9 @@ scadenza lunga, vanno rifatte anche cassetta lettere e slot di risveglio.
 | **Consigliare una VPN agli utenti** | Risolve solo l'IP (1 problema su 5) e spingerebbe utenti non tecnici verso VPN gratuite, che spesso rivendono i dati: peggio di niente. |
 | **Gruppi (chat a più persone)** | Tecnicamente possibile fino a 4-5 persone, ma moltiplica i modi di rompersi. Rimandato dopo l'audit indipendente. |
 | **Modalità "ponte sempre attivo" con interruttore** | Un interruttore di sicurezza spento di base non protegge nessuno, e chiede all'utente di fare l'ingegnere. Meglio: attivarlo **da solo** quando si parla con sconosciuti. *(progettato, non ancora eseguito)* |
+| **Instradamento interno (Tor/VPN "scaricabile da dentro Logos"), presentato come "sistema militare"** | **Non è possibile tecnicamente**: una pagina web non può forzare il proprio traffico dentro Tor — è una decisione del browser/sistema operativo, non del sito. Anche solo il "camuffare" il traffico perché non sembri quello che è (elusione della censura) è un campo di ricerca a sé, su cui il progetto Tor lavora da vent'anni e sbaglia ancora. Costruirlo qui, chiamarlo "militare" davanti a chi ci scommette la sicurezza, e sbagliare, metterebbe in pericolo persone vere con falsa fiducia — peggio che non offrirlo affatto. |
+| **Posizionare Logos per giornalisti/attivisti in paesi senza libertà di stampa** | L'app non nasconde l'IP dal proprio contatto, non elude la censura di rete, e l'infrastruttura di segnalazione gira su servizi americani (Cloudflare, GitHub) — nessuno di questi fatti si concilia con quel tipo di promessa. Nessun audit di sicurezza indipendente l'ha mai verificata per quel livello di rischio. |
+| **Firma crittografica dei file per provarne l'autenticità (stile notarile)** | Idea valida — le chiavi ECDH per farlo esistono già — ma rimandata: l'app ha ancora pochissimi utenti, e aggiungere funzionalità nuove prima di consolidare quelle di base (soprattutto l'affidabilità del collegamento) sposta l'attenzione dal problema più urgente. Da riconsiderare quando ci sarà un uso reale da servire. |
 
 ---
 
@@ -239,13 +293,40 @@ test è validato **rimettendo dentro la falla originale** per verificare che
 diventi rosso. Due test sono stati riscritti perché passavano anche col codice
 sabotato.
 
+### Da allora (v3.45 → v3.59, 16-21 agosto 2026)
+
+Lo stesso metodo — sabotare ogni test per verificarlo davvero, verificare dal
+vivo nel browser, non solo leggere il codice — applicato a un altro giro di
+lavoro:
+
+- **Trasferimento file reso davvero usabile**: barra di avanzamento, più file
+  alla volta trascinabili, condivisione diretta da altre app su Android (§4)
+- **Condivisione dello schermo** nelle videochiamate — riusa il collegamento
+  già aperto, zero costo aggiuntivo
+- **Rubrica**: un indirizzo permanente chiamato con successo viene ricordato,
+  richiamarlo poi è un tocco solo
+- **Sito vetrina** (`index.html`) rifatto: QR per aprire l'app, tabella di
+  confronto onesta con WhatsApp/Telegram, la sezione "cosa non fa" tolta dalla
+  prima pagina su richiesta esplicita — resta invece intatta in questo dossier
+  e nell'app stessa, dove il pubblico è tecnico o ha già deciso di fidarsi
+- **Un audit dedicato all'affidabilità del collegamento** (§4, "Affidabilità
+  del collegamento"): tre cause reali di fallimenti silenziosi trovate e
+  corrette, non ipotizzate
+- **Due proposte fatte e respinte nella stessa sessione**, per iscritto qui in
+  §8: instradamento Tor/VPN interno "in stile militare", e il posizionamento
+  per giornalisti/attivisti in paesi senza libertà di stampa — entrambe
+  respinte per ragioni tecniche verificabili, non per eccesso di prudenza
+
 ---
 
 ## 10. Domande utili da fare a un'AI
 
 Se vuoi un parere davvero utile, chiedi cose come:
 
-- Come progettereste **P2** (§6) rispettando i vincoli §7?
+- Come progettereste la **migrazione a Durable Objects** (§6) rispettando i
+  vincoli §7, in particolare il costo?
+- Vale la pena un **riavvio ICE con rinegoziazione** (§6), o il pulsante di
+  uscita rapida già costruito è la scelta più sicura?
 - Come si risolve la **perdita di identità al cambio telefono** senza
   introdurre account né server?
 - Cosa manca perché un'associazione possa **basarci sopra un servizio reale**?
@@ -258,5 +339,6 @@ cose della §4 che esistono già.
 
 ---
 
-*Dossier generato il 16 agosto 2026 sulla versione `logos-modifica-3.45`.*
+*Dossier generato il 16 agosto 2026, aggiornato il 21 agosto 2026 sulla versione
+`logos-modifica-3.59`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*
