@@ -85,6 +85,13 @@
         <circle cx="12" cy="12" r="3.1"/>
         <path d="M19.2 14.4a1.6 1.6 0 0 0 .32 1.77l.06.06a1.94 1.94 0 1 1-2.75 2.75l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47v.17a1.94 1.94 0 1 1-3.88 0v-.09a1.6 1.6 0 0 0-1.05-1.47 1.6 1.6 0 0 0-1.77.32l-.06.06a1.94 1.94 0 1 1-2.75-2.75l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-.97h-.17a1.94 1.94 0 1 1 0-3.88h.09a1.6 1.6 0 0 0 1.47-1.05 1.6 1.6 0 0 0-.32-1.77l-.06-.06a1.94 1.94 0 1 1 2.75-2.75l.06.06a1.6 1.6 0 0 0 1.77.32h.08a1.6 1.6 0 0 0 .97-1.47v-.17a1.94 1.94 0 1 1 3.88 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a1.94 1.94 0 1 1 2.75 2.75l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97h.17a1.94 1.94 0 1 1 0 3.88h-.09a1.6 1.6 0 0 0-1.47.97z"/>
       </svg>
+      <!-- Lights up only while a message or file has arrived somewhere the
+           person is not currently looking at (they navigated to Impostazioni
+           mid-conversation) — the connection itself was already kept alive
+           across that trip, only the "something happened" part was silent
+           until now. Clears the moment they go back to the chat, same place
+           settingsCameFrom already knows to return them to. -->
+      <span class="notice hide" id="settingsNotice" aria-hidden="true"></span>
     </button>
   </div>
 
@@ -210,6 +217,19 @@
       <span class="inlinebtns">
         <button class="btn mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
         <button class="x" id="installClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </span>
+    </div>
+
+    <!-- Same quiet strip as the install banner just above, and shown one at a
+         time with it on purpose — two notices stacked here would be exactly
+         the stare this area was designed to avoid. Aimed at whoever the two
+         big buttons above were already too much for, without asking them to
+         find Impostazioni first to discover it exists. -->
+    <div class="banner accent hide jsb" id="easyHintBar">
+      <span class="f1" data-i18n="easyhint.text">C'è anche una modalità con due soli pulsanti, per chi preferisce non pensarci.</span>
+      <span class="inlinebtns">
+        <button class="btn mini" id="easyHintBtn" data-i18n="easyhint.btn">Attiva</button>
+        <button class="x" id="easyHintClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </span>
     </div>
 

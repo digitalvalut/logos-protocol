@@ -98,7 +98,7 @@ Object.assign(I18N.en, {
 "verify.lead":"Compare it with the other person — out loud, by phone, or on a channel different from the one you used to exchange the invite code. If the two codes don't match exactly, someone may have inserted themselves into the connection: don't trust that chat.",
 "verify.close":"Close","verify.unavailable":"Not ready yet — try again in a moment.",
 "contacts.title":"Recent contacts",
-"contacts.note":"One tap to see them again: what you said to each other stayed here. Each time needs a fresh invite, because no server keeps anyone connected for you.",
+"contacts.note":"One tap to see them again: what you said to each other stayed here. Anyone who also left their address is one tap away to call back — everyone else still needs a fresh invite.",
 "toast.sealCopied":"Code copied","toast.copyFail":"Copy failed — select and copy by hand","toast.copySelected":"Copy failed — code selected for you, just press Ctrl/Cmd+C",
 "call.busy":"didn't answer — busy on another call.","call.declinedBy":"declined the call.","call.connectFailed":"The call didn't connect. Try again.",
 "call.joined":"joined the chat.","call.videoInvite":"is video calling you","call.audioInvite":"is calling you",
@@ -184,7 +184,7 @@ Object.assign(I18N.en, {
 "wake.waitsNote":"You can close the app: I'll let you know when they open the invite.","wake.calling":"Letting {name} know…","wake.callingHint":"Their phone has been buzzed. The moment they open the app you're connected — you can wait here.","wake.noAnswer":"They've been alerted but haven't opened the app yet. Try again later.",
 "quick.helpAWaits":"Send it with the button below — the other person just taps it and they're in. Or read them the six digits out loud.",
 "verify.inPerson":"verified in person","verify.inPersonDone":"Verified in person: you scanned the code off this person's own screen, so nobody can have got in between. There is no need to read the three words.","sas.leadMismatch":"Careful: whoever answered is not the phone whose code you scanned. It may be a mistake, but it is also exactly what you would see if someone had got in between. Don't write anything until you have read the three words aloud to each other.",
-"easy.title":"Simple mode","easy.sub":"Just two big buttons and nothing else around them. For anyone who would rather not think about any of it — or for whoever is setting the phone up for them.","easy.voiceTitle":"Say it out loud","easy.voiceSub":"The app tells you what to do in your own language. For anyone who finds the screen hard to read.","easy.voiceOn":"All right. From now on I'll tell you what to do out loud.","easy.sayHome":"Tap the first button to start a chat. Tap the second one if someone sent you an invite.","easy.sayStart":"This is your code. Press the orange button to send it to whoever you like.","easy.sayJoin":"Type the six digits you were given.","easy.sayChat":"You're connected. You can talk now.",
+"easy.title":"Simple mode","easy.sub":"Just two big buttons and nothing else around them. For anyone who would rather not think about any of it — or for whoever is setting the phone up for them.","easy.voiceTitle":"Say it out loud","easy.voiceSub":"The app tells you what to do in your own language. For anyone who finds the screen hard to read.","easy.voiceOn":"All right. From now on I'll tell you what to do out loud.","easy.sayHome":"Tap the first button to start a chat. Tap the second one if someone sent you an invite.","easy.sayStart":"This is your code. Press the orange button to send it to whoever you like.","easy.sayJoin":"Type the six digits you were given.","easy.sayChat":"You're connected. You can talk now.","easyhint.text":"There's also a mode with just two big buttons, for anyone who'd rather not think about it.","easyhint.btn":"Turn on",
 "broker.down":"The service that helps you find each other isn't responding. The long code below still works: it goes through no server at all.",
 "flash.title":"Connected","flash.titleWith":"Connected with {name}","flash.direct":"A direct link between your two phones","flash.relay":"Linked through an encrypted bridge — your network wouldn't allow a direct one","flash.noserver":"No server can read what you say to each other","flash.time":"In {s} seconds, without signing up to anything",
 "viral.title":"That worked.","viral.sub":"If it was useful, pass it on: it's free, it asks for no account, and it keeps nothing about anyone.","viral.btn":"Tell someone about it",
@@ -247,7 +247,7 @@ Object.assign(I18N.it, {
 "home.legalSummary":"Come funziona, in tre righe tecniche",
 "home.legalBody":"Rivela il tuo indirizzo di rete (IP) a chi parli con te; serve che siate online insieme, altrimenti non arriva nulla, e su reti molto filtrate le chiamate possono non collegarsi; nessun sito web può impedire uno screenshot, a nessuno.",
 "contacts.title":"Contatti recenti",
-"contacts.note":"Un tocco per rivederli: quello che vi siete detti è rimasto qui. Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.",
+"contacts.note":"Un tocco per rivederli: quello che vi siete detti è rimasto qui. Chi ha anche lasciato il suo indirizzo si richiama con un tocco solo — agli altri serve un invito nuovo.",
 "verify.title":"Codice di sicurezza",
 "verify.lead":"Confrontalo con l'altra persona — a voce, per telefono, o su un altro canale che non sia quello con cui vi siete scambiati il codice d'invito. Se i due codici non combaciano esattamente, qualcuno potrebbe essersi inserito nella connessione: non fidarti di quella chat.",
 
@@ -351,7 +351,7 @@ Object.assign(I18N.it, {
 "wake.waitsNote":"Puoi chiudere l'app: quando aprono l'invito ti avviso io.","wake.calling":"Sto avvisando {name}…","wake.callingHint":"Ho fatto squillare il suo telefono. Appena apre l'app siete connessi — puoi aspettare qui.","wake.noAnswer":"L'ho avvisata ma non ha ancora aperto l'app. Riprova più tardi.",
 "quick.helpAWaits":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce.",
 "verify.inPerson":"verificato di persona","verify.inPersonDone":"Verificato di persona: hai inquadrato il codice sullo schermo di questa persona, quindi nessuno può essersi messo in mezzo. Non serve dirsi le tre parole.","sas.leadMismatch":"Attenzione: chi ha risposto non è il telefono del codice che hai inquadrato. Può essere un errore, ma è anche esattamente ciò che si vedrebbe se qualcuno si fosse messo in mezzo. Non scrivere nulla finché non vi siete detti le tre parole a voce.",
-"easy.title":"Modalità semplice","easy.sub":"Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.","easy.voiceTitle":"Dillo ad alta voce","easy.voiceSub":"L'app dice a voce cosa fare, nella tua lingua. Serve a chi fa fatica a leggere lo schermo.","easy.voiceOn":"Va bene. Da adesso ti dico a voce cosa fare.","easy.sayHome":"Tocca il primo pulsante per iniziare una chat. Tocca il secondo se ti hanno mandato un invito.","easy.sayStart":"Questo è il tuo codice. Premi il pulsante arancione per mandarlo a chi vuoi.","easy.sayJoin":"Scrivi le sei cifre che ti hanno dato.","easy.sayChat":"Siete connessi. Ora potete parlare.",
+"easy.title":"Modalità semplice","easy.sub":"Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.","easy.voiceTitle":"Dillo ad alta voce","easy.voiceSub":"L'app dice a voce cosa fare, nella tua lingua. Serve a chi fa fatica a leggere lo schermo.","easy.voiceOn":"Va bene. Da adesso ti dico a voce cosa fare.","easy.sayHome":"Tocca il primo pulsante per iniziare una chat. Tocca il secondo se ti hanno mandato un invito.","easy.sayStart":"Questo è il tuo codice. Premi il pulsante arancione per mandarlo a chi vuoi.","easy.sayJoin":"Scrivi le sei cifre che ti hanno dato.","easy.sayChat":"Siete connessi. Ora potete parlare.","easyhint.text":"C'è anche una modalità con due soli pulsanti, per chi preferisce non pensarci.","easyhint.btn":"Attiva",
 "broker.down":"Il servizio che vi fa incontrare non risponde. Il codice lungo qui sotto funziona lo stesso: non passa da nessun server.",
 "flash.title":"Connessi","flash.titleWith":"Connessi con {name}","flash.direct":"Collegamento diretto tra i vostri due telefoni","flash.relay":"Collegamento tramite ponte cifrato — la vostra rete non permetteva quello diretto","flash.noserver":"Nessun server può leggere quello che vi dite","flash.time":"In {s} secondi, senza registrarsi a niente",
 "viral.title":"Ha funzionato.","viral.sub":"Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.","viral.btn":"Fallo sapere a qualcuno",
@@ -434,7 +434,7 @@ Object.assign(I18N.fr, {
 "verify.lead":"Comparez-le avec l'autre personne — à voix haute, par téléphone, ou sur un canal différent de celui utilisé pour échanger le code d'invitation. Si les deux codes ne correspondent pas exactement, quelqu'un s'est peut-être inséré dans la connexion : ne faites pas confiance à cette discussion.",
 "verify.close":"Fermer","verify.unavailable":"Pas encore prêt — réessayez dans un instant.",
 "contacts.title":"Contacts récents",
-"contacts.note":"Un tap pour les revoir : ce que vous vous êtes dit est resté ici. Chaque fois, une nouvelle invitation est nécessaire, car aucun serveur ne garde personne connecté à votre place.",
+"contacts.note":"Un tap pour les revoir : ce que vous vous êtes dit est resté ici. Qui a aussi laissé son adresse se rappelle en un tap — pour les autres, une nouvelle invitation reste nécessaire.",
 "toast.sealCopied":"Code copié","toast.copyFail":"Échec de la copie — sélectionnez et copiez à la main","toast.copySelected":"Échec de la copie — le code a été sélectionné pour vous, appuyez juste sur Ctrl/Cmd+C",
 "call.busy":"n'a pas répondu — occupé sur un autre appel.","call.declinedBy":"a refusé l'appel.","call.connectFailed":"L'appel ne s'est pas connecté. Réessayez.",
 "call.joined":"a rejoint la discussion.","call.videoInvite":"vous appelle en visio","call.audioInvite":"vous appelle",
@@ -511,7 +511,7 @@ Object.assign(I18N.fr, {
 "wake.waitsNote":"Vous pouvez fermer l'application : je vous préviens quand l'invitation sera ouverte.","wake.calling":"J'préviens {name}…","wake.callingHint":"Son téléphone a sonné. Dès qu'elle ouvre l'application, vous êtes connectés — vous pouvez attendre ici.","wake.noAnswer":"Elle a été prévenue mais n'a pas encore ouvert l'application. Réessayez plus tard.",
 "quick.helpAWaits":"Envoyez-le avec le bouton ci-dessous — l'autre personne n'a qu'à le toucher et elle est connectée. Ou dictez-lui les six chiffres à voix haute.",
 "verify.inPerson":"vérifié en personne","verify.inPersonDone":"Vérifié en personne : vous avez scanné le code sur l'écran de cette personne, donc personne n'a pu s'interposer. Inutile de vous dire les trois mots.","sas.leadMismatch":"Attention : la personne qui a répondu n'est pas le téléphone dont vous avez scanné le code. Cela peut être une erreur, mais c'est aussi exactement ce que l'on verrait si quelqu'un s'était interposé. N'écrivez rien avant de vous être dit les trois mots à voix haute.",
-"easy.title":"Mode simple","easy.sub":"Deux grands boutons et rien d'autre autour. Pour qui préfère ne penser à rien — ou pour qui prépare le téléphone de quelqu'un d'autre.","easy.voiceTitle":"Dis-le à voix haute","easy.voiceSub":"L'application dit à voix haute quoi faire, dans votre langue. Pour qui a du mal à lire l'écran.","easy.voiceOn":"D'accord. À partir de maintenant je vous dis quoi faire à voix haute.","easy.sayHome":"Touchez le premier bouton pour commencer une discussion. Touchez le second si on vous a envoyé une invitation.","easy.sayStart":"Voici votre code. Appuyez sur le bouton orange pour l'envoyer à qui vous voulez.","easy.sayJoin":"Tapez les six chiffres qu'on vous a donnés.","easy.sayChat":"Vous êtes connectés. Vous pouvez parler.",
+"easy.title":"Mode simple","easy.sub":"Deux grands boutons et rien d'autre autour. Pour qui préfère ne penser à rien — ou pour qui prépare le téléphone de quelqu'un d'autre.","easy.voiceTitle":"Dis-le à voix haute","easy.voiceSub":"L'application dit à voix haute quoi faire, dans votre langue. Pour qui a du mal à lire l'écran.","easy.voiceOn":"D'accord. À partir de maintenant je vous dis quoi faire à voix haute.","easy.sayHome":"Touchez le premier bouton pour commencer une discussion. Touchez le second si on vous a envoyé une invitation.","easy.sayStart":"Voici votre code. Appuyez sur le bouton orange pour l'envoyer à qui vous voulez.","easy.sayJoin":"Tapez les six chiffres qu'on vous a donnés.","easy.sayChat":"Vous êtes connectés. Vous pouvez parler.","easyhint.text":"Il existe aussi un mode à deux boutons seulement, pour qui préfère ne pas y réfléchir.","easyhint.btn":"Activer",
 "broker.down":"Le service qui vous aide à vous trouver ne répond pas. Le code long ci-dessous fonctionne quand même : il ne passe par aucun serveur.",
 "flash.title":"Connectés","flash.titleWith":"Connectés avec {name}","flash.direct":"Une liaison directe entre vos deux téléphones","flash.relay":"Liaison via un pont chiffré — votre réseau n'autorisait pas la liaison directe","flash.noserver":"Aucun serveur ne peut lire ce que vous vous dites","flash.time":"En {s} secondes, sans inscription",
 "viral.title":"Ça a marché.","viral.sub":"Si ça vous a servi, faites passer : c'est gratuit, sans compte, et ça ne conserve rien sur personne.","viral.btn":"En parler à quelqu'un",
@@ -594,7 +594,7 @@ Object.assign(I18N.de, {
 "verify.lead":"Vergleiche ihn mit der anderen Person — laut, per Telefon, oder über einen anderen Kanal als den, über den ihr den Einladungscode ausgetauscht habt. Wenn die beiden Codes nicht genau übereinstimmen, hat sich möglicherweise jemand in die Verbindung eingeschaltet: vertraue diesem Chat nicht.",
 "verify.close":"Schließen","verify.unavailable":"Noch nicht bereit — versuche es gleich noch einmal.",
 "contacts.title":"Letzte Kontakte",
-"contacts.note":"Ein Tipp, um sie wiederzusehen: was ihr euch gesagt habt, ist hier geblieben. Jedes Mal braucht es eine neue Einladung, weil kein Server jemanden für dich verbunden hält.",
+"contacts.note":"Ein Tipp, um sie wiederzusehen: was ihr euch gesagt habt, ist hier geblieben. Wer auch seine Adresse hinterlassen hat, lässt sich mit einem Tipp zurückrufen — bei den anderen braucht es weiterhin eine neue Einladung.",
 "toast.sealCopied":"Code kopiert","toast.copyFail":"Kopieren fehlgeschlagen — von Hand auswählen und kopieren","toast.copySelected":"Kopieren fehlgeschlagen — Code für dich ausgewählt, drücke einfach Strg/Cmd+C",
 "call.busy":"hat nicht geantwortet — beschäftigt mit einem anderen Anruf.","call.declinedBy":"hat den Anruf abgelehnt.","call.connectFailed":"Der Anruf konnte nicht verbunden werden. Versuche es erneut.",
 "call.joined":"ist dem Chat beigetreten.","call.videoInvite":"ruft dich per Video an","call.audioInvite":"ruft dich an",
@@ -671,7 +671,7 @@ Object.assign(I18N.de, {
 "wake.waitsNote":"Du kannst die App schließen: Ich sage dir Bescheid, wenn die Einladung geöffnet wird.","wake.calling":"Ich benachrichtige {name}…","wake.callingHint":"Das Telefon hat gebrummt. Sobald die App geöffnet wird, seid ihr verbunden — du kannst hier warten.","wake.noAnswer":"Die Person wurde benachrichtigt, hat die App aber noch nicht geöffnet. Versuch es später noch einmal.",
 "quick.helpAWaits":"Schick ihn mit der Schaltfläche unten — die andere Person tippt einfach darauf und ist drin. Oder sag ihr die sechs Ziffern laut vor.",
 "verify.inPerson":"persönlich bestätigt","verify.inPersonDone":"Persönlich bestätigt: Du hast den Code vom Bildschirm dieser Person selbst gescannt, also kann sich niemand dazwischengeschoben haben. Die drei Wörter braucht ihr nicht.","sas.leadMismatch":"Achtung: Wer geantwortet hat, ist nicht das Telefon, dessen Code du gescannt hast. Das kann ein Versehen sein — es ist aber auch genau das, was man sähe, wenn sich jemand dazwischengeschoben hätte. Schreib nichts, bevor ihr euch die drei Wörter laut vorgelesen habt.",
-"easy.title":"Einfacher Modus","easy.sub":"Nur zwei große Schaltflächen und sonst nichts. Für alle, die über nichts nachdenken möchten — oder für die Person, die das Telefon für sie einrichtet.","easy.voiceTitle":"Laut vorlesen","easy.voiceSub":"Die App sagt dir in deiner Sprache, was zu tun ist. Für alle, denen das Lesen am Bildschirm schwerfällt.","easy.voiceOn":"In Ordnung. Ab jetzt sage ich dir laut, was zu tun ist.","easy.sayHome":"Tippe auf die erste Schaltfläche, um einen Chat zu beginnen. Auf die zweite, wenn dir jemand eine Einladung geschickt hat.","easy.sayStart":"Das ist dein Code. Drück die orange Schaltfläche, um ihn zu verschicken.","easy.sayJoin":"Tippe die sechs Ziffern ein, die man dir gegeben hat.","easy.sayChat":"Ihr seid verbunden. Jetzt könnt ihr reden.",
+"easy.title":"Einfacher Modus","easy.sub":"Nur zwei große Schaltflächen und sonst nichts. Für alle, die über nichts nachdenken möchten — oder für die Person, die das Telefon für sie einrichtet.","easy.voiceTitle":"Laut vorlesen","easy.voiceSub":"Die App sagt dir in deiner Sprache, was zu tun ist. Für alle, denen das Lesen am Bildschirm schwerfällt.","easy.voiceOn":"In Ordnung. Ab jetzt sage ich dir laut, was zu tun ist.","easy.sayHome":"Tippe auf die erste Schaltfläche, um einen Chat zu beginnen. Auf die zweite, wenn dir jemand eine Einladung geschickt hat.","easy.sayStart":"Das ist dein Code. Drück die orange Schaltfläche, um ihn zu verschicken.","easy.sayJoin":"Tippe die sechs Ziffern ein, die man dir gegeben hat.","easy.sayChat":"Ihr seid verbunden. Jetzt könnt ihr reden.","easyhint.text":"Es gibt auch einen Modus mit nur zwei großen Tasten, für alle, die sich nicht damit beschäftigen möchten.","easyhint.btn":"Aktivieren",
 "broker.down":"Der Dienst, über den ihr euch findet, antwortet nicht. Der lange Code unten funktioniert trotzdem: Er läuft über gar keinen Server.",
 "flash.title":"Verbunden","flash.titleWith":"Verbunden mit {name}","flash.direct":"Eine direkte Verbindung zwischen euren beiden Telefonen","flash.relay":"Verbunden über eine verschlüsselte Brücke — euer Netz ließ keine direkte zu","flash.noserver":"Kein Server kann mitlesen, was ihr euch schreibt","flash.time":"In {s} Sekunden, ganz ohne Anmeldung",
 "viral.title":"Es hat funktioniert.","viral.sub":"Wenn es nützlich war, gib es weiter: kostenlos, ohne Konto, und es behält nichts über niemanden.","viral.btn":"Jemandem davon erzählen",
@@ -754,7 +754,7 @@ Object.assign(I18N.es, {
 "verify.lead":"Compáralo con la otra persona — en voz alta, por teléfono, o en un canal distinto al que usasteis para intercambiar el código de invitación. Si los dos códigos no coinciden exactamente, alguien podría haberse insertado en la conexión: no confíes en ese chat.",
 "verify.close":"Cerrar","verify.unavailable":"Aún no está listo — inténtalo de nuevo en un momento.",
 "contacts.title":"Contactos recientes",
-"contacts.note":"Un toque para volver a verlos: lo que os dijisteis se quedó aquí. Cada vez hace falta una invitación nueva, porque ningún servidor mantiene a nadie conectado por vosotros.",
+"contacts.note":"Un toque para volver a verlos: lo que os dijisteis se quedó aquí. Quien también dejó su dirección se puede volver a llamar con un solo toque — para los demás sigue haciendo falta una invitación nueva.",
 "toast.sealCopied":"Código copiado","toast.copyFail":"Copia fallida — selecciona y copia a mano","toast.copySelected":"Copia fallida — código seleccionado para ti, solo pulsa Ctrl/Cmd+C",
 "call.busy":"no respondió — ocupado en otra llamada.","call.declinedBy":"rechazó la llamada.","call.connectFailed":"La llamada no se conectó. Inténtalo de nuevo.",
 "call.joined":"se unió al chat.","call.videoInvite":"te está haciendo una videollamada","call.audioInvite":"te está llamando",
@@ -831,7 +831,7 @@ Object.assign(I18N.es, {
 "wake.waitsNote":"Puedes cerrar la aplicación: te aviso cuando abran la invitación.","wake.calling":"Estoy avisando a {name}…","wake.callingHint":"Su teléfono ha sonado. En cuanto abra la aplicación estaréis conectados — puedes esperar aquí.","wake.noAnswer":"Le he avisado pero aún no ha abierto la aplicación. Inténtalo más tarde.",
 "quick.helpAWaits":"Envíalo con el botón de abajo — a la otra persona le basta con tocarlo y ya está dentro. O dile las seis cifras en voz alta.",
 "verify.inPerson":"verificado en persona","verify.inPersonDone":"Verificado en persona: has escaneado el código en la pantalla de esta persona, así que nadie ha podido meterse en medio. No hace falta deciros las tres palabras.","sas.leadMismatch":"Atención: quien ha respondido no es el teléfono cuyo código escaneaste. Puede ser un error, pero también es exactamente lo que se vería si alguien se hubiera metido en medio. No escribas nada hasta que os hayáis dicho las tres palabras en voz alta.",
-"easy.title":"Modo sencillo","easy.sub":"Solo dos botones grandes y nada más alrededor. Para quien prefiere no pensar en nada — o para quien le prepara el teléfono a otra persona.","easy.voiceTitle":"Dilo en voz alta","easy.voiceSub":"La aplicación te dice en voz alta qué hacer, en tu idioma. Para quien le cuesta leer la pantalla.","easy.voiceOn":"De acuerdo. A partir de ahora te digo en voz alta qué hacer.","easy.sayHome":"Toca el primer botón para empezar una conversación. Toca el segundo si te han mandado una invitación.","easy.sayStart":"Este es tu código. Pulsa el botón naranja para mandárselo a quien quieras.","easy.sayJoin":"Escribe las seis cifras que te han dado.","easy.sayChat":"Estáis conectados. Ya podéis hablar.",
+"easy.title":"Modo sencillo","easy.sub":"Solo dos botones grandes y nada más alrededor. Para quien prefiere no pensar en nada — o para quien le prepara el teléfono a otra persona.","easy.voiceTitle":"Dilo en voz alta","easy.voiceSub":"La aplicación te dice en voz alta qué hacer, en tu idioma. Para quien le cuesta leer la pantalla.","easy.voiceOn":"De acuerdo. A partir de ahora te digo en voz alta qué hacer.","easy.sayHome":"Toca el primer botón para empezar una conversación. Toca el segundo si te han mandado una invitación.","easy.sayStart":"Este es tu código. Pulsa el botón naranja para mandárselo a quien quieras.","easy.sayJoin":"Escribe las seis cifras que te han dado.","easy.sayChat":"Estáis conectados. Ya podéis hablar.","easyhint.text":"También hay un modo con solo dos botones grandes, para quien prefiera no pensarlo.","easyhint.btn":"Activar",
 "broker.down":"El servicio que os ayuda a encontraros no responde. El código largo de abajo funciona igualmente: no pasa por ningún servidor.",
 "flash.title":"Conectados","flash.titleWith":"Conectados con {name}","flash.direct":"Un enlace directo entre vuestros dos teléfonos","flash.relay":"Enlazados por un puente cifrado — vuestra red no permitía el directo","flash.noserver":"Ningún servidor puede leer lo que os decís","flash.time":"En {s} segundos, sin registrarse en nada",
 "viral.title":"Ha funcionado.","viral.sub":"Si te ha servido, pásalo: es gratis, no pide cuenta y no guarda nada de nadie.","viral.btn":"Contárselo a alguien",
@@ -914,7 +914,7 @@ Object.assign(I18N.pt, {
 "verify.lead":"Compare-o com a outra pessoa — em voz alta, por telefone, ou num canal diferente daquele que usaram para trocar o código de convite. Se os dois códigos não corresponderem exatamente, alguém pode ter-se inserido na ligação: não confie nessa conversa.",
 "verify.close":"Fechar","verify.unavailable":"Ainda não está pronto — tente novamente daqui a pouco.",
 "contacts.title":"Contactos recentes",
-"contacts.note":"Um toque para os rever: o que disseram um ao outro ficou aqui. Cada vez é preciso um convite novo, porque nenhum servidor mantém ninguém ligado por si.",
+"contacts.note":"Um toque para os rever: o que disseram um ao outro ficou aqui. Quem também deixou o seu endereço chama-se de novo com um único toque — para os outros continua a ser preciso um convite novo.",
 "toast.sealCopied":"Código copiado","toast.copyFail":"Falha ao copiar — selecione e copie manualmente","toast.copySelected":"Falha ao copiar — código selecionado para si, basta premir Ctrl/Cmd+C",
 "call.busy":"não atendeu — ocupado noutra chamada.","call.declinedBy":"recusou a chamada.","call.connectFailed":"A chamada não ligou. Tente novamente.",
 "call.joined":"entrou na conversa.","call.videoInvite":"está a fazer-lhe uma videochamada","call.audioInvite":"está a ligar-lhe",
@@ -991,7 +991,7 @@ Object.assign(I18N.pt, {
 "wake.waitsNote":"Pode fechar a aplicação: eu aviso-o quando abrirem o convite.","wake.calling":"A avisar {name}…","wake.callingHint":"O telemóvel tocou. Assim que abrir a aplicação ficam ligados — pode esperar aqui.","wake.noAnswer":"Já foi avisada mas ainda não abriu a aplicação. Tente mais tarde.",
 "quick.helpAWaits":"Envie-o com o botão abaixo — a outra pessoa só tem de tocar nele e está ligada. Ou diga-lhe os seis algarismos em voz alta.",
 "verify.inPerson":"verificado presencialmente","verify.inPersonDone":"Verificado presencialmente: leu o código no ecrã desta pessoa, portanto ninguém se pode ter metido pelo meio. Não é preciso dizerem as três palavras.","sas.leadMismatch":"Atenção: quem respondeu não é o telemóvel cujo código leu. Pode ser um engano, mas é também exatamente o que se veria se alguém se tivesse metido pelo meio. Não escreva nada enquanto não disserem as três palavras em voz alta.",
-"easy.title":"Modo simples","easy.sub":"Apenas dois botões grandes e mais nada à volta. Para quem prefere não pensar em nada — ou para quem prepara o telemóvel a outra pessoa.","easy.voiceTitle":"Diz em voz alta","easy.voiceSub":"A aplicação diz em voz alta o que fazer, na sua língua. Para quem tem dificuldade em ler o ecrã.","easy.voiceOn":"Muito bem. A partir de agora digo-lhe em voz alta o que fazer.","easy.sayHome":"Toque no primeiro botão para começar uma conversa. Toque no segundo se lhe enviaram um convite.","easy.sayStart":"Este é o seu código. Carregue no botão laranja para o enviar a quem quiser.","easy.sayJoin":"Escreva os seis algarismos que lhe deram.","easy.sayChat":"Estão ligados. Já podem falar.",
+"easy.title":"Modo simples","easy.sub":"Apenas dois botões grandes e mais nada à volta. Para quem prefere não pensar em nada — ou para quem prepara o telemóvel a outra pessoa.","easy.voiceTitle":"Diz em voz alta","easy.voiceSub":"A aplicação diz em voz alta o que fazer, na sua língua. Para quem tem dificuldade em ler o ecrã.","easy.voiceOn":"Muito bem. A partir de agora digo-lhe em voz alta o que fazer.","easy.sayHome":"Toque no primeiro botão para começar uma conversa. Toque no segundo se lhe enviaram um convite.","easy.sayStart":"Este é o seu código. Carregue no botão laranja para o enviar a quem quiser.","easy.sayJoin":"Escreva os seis algarismos que lhe deram.","easy.sayChat":"Estão ligados. Já podem falar.","easyhint.text":"Há também um modo com apenas dois botões grandes, para quem preferir não pensar nisso.","easyhint.btn":"Ativar",
 "broker.down":"O serviço que vos ajuda a encontrarem-se não responde. O código longo abaixo funciona na mesma: não passa por servidor nenhum.",
 "flash.title":"Ligados","flash.titleWith":"Ligados com {name}","flash.direct":"Uma ligação direta entre os vossos dois telemóveis","flash.relay":"Ligados através de uma ponte cifrada — a vossa rede não permitia a ligação direta","flash.noserver":"Nenhum servidor consegue ler o que dizem um ao outro","flash.time":"Em {s} segundos, sem se registar em nada",
 "viral.title":"Funcionou.","viral.sub":"Se foi útil, passe adiante: é grátis, não pede conta e não guarda nada de ninguém.","viral.btn":"Contar a alguém",
@@ -1074,7 +1074,7 @@ Object.assign(I18N.ru, {
 "verify.lead":"Сравните его с собеседником — вслух, по телефону, или по каналу, отличному от того, которым вы обменялись кодом приглашения. Если два кода не совпадают точно, возможно, кто-то вклинился в соединение: не доверяйте этому чату.",
 "verify.close":"Закрыть","verify.unavailable":"Ещё не готово — попробуйте снова через мгновение.",
 "contacts.title":"Недавние контакты",
-"contacts.note":"Одно касание, чтобы увидеть их снова: то, что вы сказали друг другу, осталось здесь. Каждый раз нужно новое приглашение, потому что ни один сервер не держит никого на связи за вас.",
+"contacts.note":"Одно касание, чтобы увидеть их снова: то, что вы сказали друг другу, осталось здесь. Тот, кто оставил ещё и свой адрес, перезванивается одним касанием — остальным по-прежнему нужно новое приглашение.",
 "toast.sealCopied":"Код скопирован","toast.copyFail":"Не удалось скопировать — выделите и скопируйте вручную","toast.copySelected":"Не удалось скопировать — код выделен за вас, просто нажмите Ctrl/Cmd+C",
 "call.busy":"не ответил(а) — занят(а) другим звонком.","call.declinedBy":"отклонил(а) звонок.","call.connectFailed":"Звонок не удалось установить. Попробуйте снова.",
 "call.joined":"присоединился(лась) к чату.","call.videoInvite":"видеозвонит вам","call.audioInvite":"звонит вам",
@@ -1151,7 +1151,7 @@ Object.assign(I18N.ru, {
 "wake.waitsNote":"Можно закрыть приложение: я сообщу, когда приглашение откроют.","wake.calling":"Сообщаю {name}…","wake.callingHint":"Телефон уже звонит. Как только приложение откроют, вы соединитесь — можно подождать здесь.","wake.noAnswer":"Я сообщил, но приложение ещё не открыли. Попробуйте позже.",
 "quick.helpAWaits":"Отправьте её кнопкой ниже — другому человеку достаточно нажать, и он внутри. Или продиктуйте шесть цифр вслух.",
 "verify.inPerson":"проверено лично","verify.inPersonDone":"Проверено лично: вы отсканировали код прямо с экрана этого человека, значит никто не мог вклиниться между вами. Три слова произносить не нужно.","sas.leadMismatch":"Внимание: ответил не тот телефон, чей код вы отсканировали. Возможно, это ошибка, но именно так выглядело бы и вклинивание постороннего. Ничего не пишите, пока не произнесёте друг другу три слова вслух.",
-"easy.title":"Простой режим","easy.sub":"Только две большие кнопки и больше ничего. Для тех, кто не хочет ни о чём думать — или для того, кто настраивает телефон другому.","easy.voiceTitle":"Говорить вслух","easy.voiceSub":"Приложение вслух подсказывает, что делать, на вашем языке. Для тех, кому трудно читать с экрана.","easy.voiceOn":"Хорошо. Теперь я буду говорить вслух, что делать.","easy.sayHome":"Нажмите первую кнопку, чтобы начать разговор. Вторую — если вам прислали приглашение.","easy.sayStart":"Это ваш код. Нажмите оранжевую кнопку, чтобы отправить его кому хотите.","easy.sayJoin":"Введите шесть цифр, которые вам дали.","easy.sayChat":"Вы соединены. Теперь можно говорить.",
+"easy.title":"Простой режим","easy.sub":"Только две большие кнопки и больше ничего. Для тех, кто не хочет ни о чём думать — или для того, кто настраивает телефон другому.","easy.voiceTitle":"Говорить вслух","easy.voiceSub":"Приложение вслух подсказывает, что делать, на вашем языке. Для тех, кому трудно читать с экрана.","easy.voiceOn":"Хорошо. Теперь я буду говорить вслух, что делать.","easy.sayHome":"Нажмите первую кнопку, чтобы начать разговор. Вторую — если вам прислали приглашение.","easy.sayStart":"Это ваш код. Нажмите оранжевую кнопку, чтобы отправить его кому хотите.","easy.sayJoin":"Введите шесть цифр, которые вам дали.","easy.sayChat":"Вы соединены. Теперь можно говорить.","easyhint.text":"Есть и режим всего с двумя большими кнопками — для тех, кто предпочитает не задумываться.","easyhint.btn":"Включить",
 "broker.down":"Служба, которая помогает вам найти друг друга, не отвечает. Длинный код ниже работает всё равно: он не проходит ни через какой сервер.",
 "flash.title":"Соединены","flash.titleWith":"Соединены с {name}","flash.direct":"Прямая связь между вашими телефонами","flash.relay":"Связь через зашифрованный мост — ваша сеть не допустила прямую","flash.noserver":"Ни один сервер не может прочитать то, что вы пишете","flash.time":"За {s} секунды, без всякой регистрации",
 "viral.title":"Получилось.","viral.sub":"Если пригодилось — передайте дальше: это бесплатно, без регистрации и ничего ни о ком не хранит.","viral.btn":"Рассказать кому-нибудь",
@@ -1234,7 +1234,7 @@ Object.assign(I18N.zh, {
 "verify.lead":"和对方核对——用语音、电话，或用一个不同于你们交换邀请码的渠道。如果两个代码不完全一致，可能有人插入了连接：不要信任这个聊天。",
 "verify.close":"关闭","verify.unavailable":"还没准备好——稍后再试。",
 "contacts.title":"最近联系人",
-"contacts.note":"轻触即可再次查看：你们说过的话保留在这里。每次都需要一个新邀请，因为没有服务器替你们保持连接。",
+"contacts.note":"轻触即可再次查看：你们说过的话保留在这里。留下过地址的人一触即可再次拨打——其他人仍然需要新的邀请。",
 "toast.sealCopied":"代码已复制","toast.copyFail":"复制失败——请手动选择并复制","toast.copySelected":"复制失败——已为你选中代码，按 Ctrl/Cmd+C 即可",
 "call.busy":"未接听——正在通话中。","call.declinedBy":"拒绝了通话。","call.connectFailed":"通话未能连接。请重试。",
 "call.joined":"加入了聊天。","call.videoInvite":"正在给你打视频电话","call.audioInvite":"正在给你打电话",
@@ -1311,7 +1311,7 @@ Object.assign(I18N.zh, {
 "wake.waitsNote":"你可以关闭应用：邀请被打开时我会通知你。","wake.calling":"正在通知 {name}…","wake.callingHint":"对方的手机已经响了。只要对方打开应用，你们就会连接上——可以在这里等待。","wake.noAnswer":"已经通知过了，但对方还没有打开应用。请稍后再试。",
 "quick.helpAWaits":"用下面的按钮发送——对方只要点一下就连上了。或者把这六位数字念给对方听。",
 "verify.inPerson":"已当面验证","verify.inPersonDone":"已当面验证：你是从对方本人的屏幕上扫的码，所以不可能有人插在中间。不需要再核对那三个词。","sas.leadMismatch":"注意：应答的并不是你扫码的那部手机。这可能是个误会，但如果真有人插在中间，看到的也正是这样。在你们当面核对完那三个词之前，不要写任何内容。",
-"easy.title":"简单模式","easy.sub":"只有两个大按钮，周围什么都没有。给不想操心的人——也给替别人设置手机的人。","easy.voiceTitle":"读出来","easy.voiceSub":"应用会用你的语言把该做的事读出来。适合看屏幕吃力的人。","easy.voiceOn":"好的。从现在起我会把该做的事读给你听。","easy.sayHome":"点第一个按钮开始聊天。如果别人给你发了邀请，就点第二个。","easy.sayStart":"这是你的号码。按橙色按钮把它发给你想发的人。","easy.sayJoin":"输入别人给你的六位数字。","easy.sayChat":"已经连上了。现在可以说话了。",
+"easy.title":"简单模式","easy.sub":"只有两个大按钮，周围什么都没有。给不想操心的人——也给替别人设置手机的人。","easy.voiceTitle":"读出来","easy.voiceSub":"应用会用你的语言把该做的事读出来。适合看屏幕吃力的人。","easy.voiceOn":"好的。从现在起我会把该做的事读给你听。","easy.sayHome":"点第一个按钮开始聊天。如果别人给你发了邀请，就点第二个。","easy.sayStart":"这是你的号码。按橙色按钮把它发给你想发的人。","easy.sayJoin":"输入别人给你的六位数字。","easy.sayChat":"已经连上了。现在可以说话了。","easyhint.text":"还有一种只有两个大按钮的简单模式，适合不想多想的人。","easyhint.btn":"开启",
 "broker.down":"帮你们互相找到对方的服务没有响应。下面的长号码照样能用：它完全不经过任何服务器。",
 "flash.title":"已连接","flash.titleWith":"已与 {name} 连接","flash.direct":"你们两台手机之间的直接连接","flash.relay":"通过加密中转连接——你们的网络不允许直接连接","flash.noserver":"没有任何服务器能读取你们的对话","flash.time":"用时 {s} 秒，无需注册任何账号",
 "viral.title":"成功了。","viral.sub":"如果觉得有用，就传给别人吧：免费、无需账号，也不保存任何人的任何信息。","viral.btn":"告诉别人",
@@ -1394,7 +1394,7 @@ Object.assign(I18N.ar, {
 "verify.lead":"قارنه مع الشخص الآخر — بصوت عالٍ، عبر الهاتف، أو عبر قناة مختلفة عن تلك التي تبادلتما بها رمز الدعوة. إذا لم يتطابق الرمزان تمامًا، فقد يكون شخص ما قد تدخّل في الاتصال: لا تثق بتلك المحادثة.",
 "verify.close":"إغلاق","verify.unavailable":"غير جاهز بعد — أعد المحاولة بعد لحظة.",
 "contacts.title":"جهات الاتصال الأخيرة",
-"contacts.note":"لمسة واحدة لرؤيتهم مجددًا: ما قلتماه لبعضكما بقي هنا. في كل مرة تحتاجان إلى دعوة جديدة، لأن لا خادم يبقي أحدًا متصلًا نيابة عنكما.",
+"contacts.note":"لمسة واحدة لرؤيتهم مجددًا: ما قلتماه لبعضكما بقي هنا. من ترك أيضًا عنوانه يمكن معاودة الاتصال به بلمسة واحدة — أما الآخرون فما زالوا بحاجة إلى دعوة جديدة.",
 "toast.sealCopied":"تم نسخ الرمز","toast.copyFail":"فشل النسخ — حدّد وانسخ يدويًا","toast.copySelected":"فشل النسخ — تم تحديد الرمز لك، فقط اضغط Ctrl/Cmd+C",
 "call.busy":"لم يرد — مشغول في مكالمة أخرى.","call.declinedBy":"رفض المكالمة.","call.connectFailed":"لم يتم توصيل المكالمة. حاول مرة أخرى.",
 "call.joined":"انضم إلى المحادثة.","call.videoInvite":"يتصل بك بالفيديو","call.audioInvite":"يتصل بك",
@@ -1471,7 +1471,7 @@ Object.assign(I18N.ar, {
 "wake.waitsNote":"يمكنك إغلاق التطبيق: سأخبرك عندما تُفتح الدعوة.","wake.calling":"أُبلغ {name}…","wake.callingHint":"لقد رنّ هاتفه. بمجرد فتح التطبيق ستكونان متصلين — يمكنك الانتظار هنا.","wake.noAnswer":"تم إبلاغه لكنه لم يفتح التطبيق بعد. حاول لاحقًا.",
 "quick.helpAWaits":"أرسله بالزر أدناه — يكفي أن يلمسه الشخص الآخر ليدخل. أو اقرأ له الأرقام الستة بصوت عالٍ.",
 "verify.inPerson":"تم التحقق شخصيًا","verify.inPersonDone":"تم التحقق شخصيًا: لقد مسحت الرمز من شاشة هذا الشخص نفسه، فلا يمكن لأحد أن يكون قد توسّط بينكما. لا حاجة لقول الكلمات الثلاث.","sas.leadMismatch":"انتبه: من ردّ ليس الهاتف الذي مسحت رمزه. قد يكون خطأً، لكنه أيضًا بالضبط ما كنت ستراه لو تدخّل أحد بينكما. لا تكتب شيئًا قبل أن تتبادلا الكلمات الثلاث بصوت مسموع.",
-"easy.title":"الوضع البسيط","easy.sub":"زرّان كبيران فقط ولا شيء آخر حولهما. لمن لا يريد التفكير في شيء — أو لمن يُعدّ الهاتف لشخص آخر.","easy.voiceTitle":"قُلها بصوت عالٍ","easy.voiceSub":"يقول لك التطبيق بصوت عالٍ ما عليك فعله، بلغتك. لمن يجد صعوبة في قراءة الشاشة.","easy.voiceOn":"حسنًا. من الآن سأقول لك بصوت عالٍ ما عليك فعله.","easy.sayHome":"المس الزر الأول لبدء محادثة. والمس الثاني إذا أرسل لك أحدهم دعوة.","easy.sayStart":"هذا هو رمزك. اضغط الزر البرتقالي لإرساله لمن تشاء.","easy.sayJoin":"اكتب الأرقام الستة التي أُعطيت لك.","easy.sayChat":"تم الاتصال. يمكنكما التحدث الآن.",
+"easy.title":"الوضع البسيط","easy.sub":"زرّان كبيران فقط ولا شيء آخر حولهما. لمن لا يريد التفكير في شيء — أو لمن يُعدّ الهاتف لشخص آخر.","easy.voiceTitle":"قُلها بصوت عالٍ","easy.voiceSub":"يقول لك التطبيق بصوت عالٍ ما عليك فعله، بلغتك. لمن يجد صعوبة في قراءة الشاشة.","easy.voiceOn":"حسنًا. من الآن سأقول لك بصوت عالٍ ما عليك فعله.","easy.sayHome":"المس الزر الأول لبدء محادثة. والمس الثاني إذا أرسل لك أحدهم دعوة.","easy.sayStart":"هذا هو رمزك. اضغط الزر البرتقالي لإرساله لمن تشاء.","easy.sayJoin":"اكتب الأرقام الستة التي أُعطيت لك.","easy.sayChat":"تم الاتصال. يمكنكما التحدث الآن.","easyhint.text":"توجد أيضًا وضعية بزرّين كبيرين فقط، لمن يفضّل ألا يفكر في الأمر.","easyhint.btn":"تفعيل",
 "broker.down":"الخدمة التي تساعدكما على إيجاد بعضكما لا تستجيب. الرمز الطويل بالأسفل يعمل رغم ذلك: فهو لا يمر عبر أي خادم إطلاقًا.",
 "flash.title":"تم الاتصال","flash.titleWith":"تم الاتصال بـ {name}","flash.direct":"اتصال مباشر بين هاتفيكما","flash.relay":"اتصال عبر جسر مشفَّر — شبكتكما لم تسمح بالاتصال المباشر","flash.noserver":"لا يستطيع أي خادم قراءة ما تتبادلانه","flash.time":"خلال {s} ثانية، دون التسجيل في أي شيء",
 "viral.title":"نجح الأمر.","viral.sub":"إن كان مفيدًا، مرّره لغيرك: مجاني، لا يطلب حسابًا، ولا يحتفظ بشيء عن أحد.","viral.btn":"أخبر شخصًا عنه",
@@ -1554,7 +1554,7 @@ Object.assign(I18N.ur, {
 "verify.lead":"اسے دوسرے شخص سے موازنہ کریں — بلند آواز میں، فون پر، یا کسی ایسے ذریعے پر جو دعوتی کوڈ کے تبادلے سے مختلف ہو۔ اگر دونوں کوڈز بالکل میل نہ کھائیں، تو ہو سکتا ہے کسی نے کنکشن میں مداخلت کی ہو: اس چیٹ پر بھروسہ نہ کریں۔",
 "verify.close":"بند کریں","verify.unavailable":"ابھی تیار نہیں — تھوڑی دیر میں دوبارہ کوشش کریں۔",
 "contacts.title":"حالیہ رابطے",
-"contacts.note":"دوبارہ دیکھنے کے لیے ایک ٹچ: جو کچھ آپ نے ایک دوسرے سے کہا وہ یہاں رہا۔ ہر بار ایک نئی دعوت درکار ہوتی ہے، کیونکہ کوئی سرور آپ کی جگہ کسی کو منسلک نہیں رکھتا۔",
+"contacts.note":"دوبارہ دیکھنے کے لیے ایک ٹچ: جو کچھ آپ نے ایک دوسرے سے کہا وہ یہاں رہا۔ جس نے اپنا پتہ بھی چھوڑا اسے ایک ٹچ سے دوبارہ کال کیا جا سکتا ہے — باقیوں کے لیے اب بھی ایک نئی دعوت درکار ہے۔",
 "toast.sealCopied":"کوڈ کاپی ہو گیا","toast.copyFail":"کاپی ناکام — دستی طور پر منتخب کریں اور کاپی کریں","toast.copySelected":"کاپی ناکام — کوڈ آپ کے لیے منتخب کر دیا گیا، بس Ctrl/Cmd+C دبائیں",
 "call.busy":"جواب نہیں دیا — کسی اور کال میں مصروف۔","call.declinedBy":"کال مسترد کر دی۔","call.connectFailed":"کال منسلک نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
 "call.joined":"چیٹ میں شامل ہو گیا۔","call.videoInvite":"آپ کو ویڈیو کال کر رہا ہے","call.audioInvite":"آپ کو کال کر رہا ہے",
@@ -1631,7 +1631,7 @@ Object.assign(I18N.ur, {
 "wake.waitsNote":"آپ ایپ بند کر سکتے ہیں: جب دعوت کھولی جائے گی تو میں آپ کو بتا دوں گا۔","wake.calling":"{name} کو اطلاع دی جا رہی ہے…","wake.callingHint":"ان کا فون بج چکا ہے۔ جیسے ہی وہ ایپ کھولیں گے آپ جڑ جائیں گے — آپ یہاں انتظار کر سکتے ہیں۔","wake.noAnswer":"انہیں اطلاع دے دی گئی ہے لیکن انہوں نے ابھی تک ایپ نہیں کھولی۔ بعد میں دوبارہ کوشش کریں۔",
 "quick.helpAWaits":"نیچے دیے گئے بٹن سے بھیجیں — دوسرے شخص کو بس اسے چھونا ہے اور وہ اندر ہے۔ یا انہیں چھ ہندسے بول کر بتا دیں۔",
 "verify.inPerson":"بالمشافہ تصدیق شدہ","verify.inPersonDone":"بالمشافہ تصدیق شدہ: آپ نے کوڈ اسی شخص کی اپنی اسکرین سے اسکین کیا ہے، لہٰذا کوئی درمیان میں نہیں آ سکتا۔ تین الفاظ کہنے کی ضرورت نہیں۔","sas.leadMismatch":"خبردار: جواب دینے والا وہ فون نہیں جس کا کوڈ آپ نے اسکین کیا تھا۔ یہ غلطی ہو سکتی ہے، لیکن اگر کوئی درمیان میں آ گیا ہوتا تو بھی بالکل ایسا ہی دکھائی دیتا۔ جب تک آپ ایک دوسرے کو تین الفاظ بول کر نہ بتا لیں، کچھ نہ لکھیں۔",
-"easy.title":"آسان موڈ","easy.sub":"صرف دو بڑے بٹن اور ان کے ارد گرد کچھ نہیں۔ اُن کے لیے جو کچھ سوچنا نہیں چاہتے — یا اُس کے لیے جو کسی اور کا فون تیار کر رہا ہے۔","easy.voiceTitle":"بول کر بتاؤ","easy.voiceSub":"ایپ آپ کی زبان میں بول کر بتاتی ہے کہ کیا کرنا ہے۔ اُن کے لیے جنہیں اسکرین پڑھنا مشکل لگتا ہے۔","easy.voiceOn":"ٹھیک ہے۔ اب سے میں بول کر بتاؤں گا کہ کیا کرنا ہے۔","easy.sayHome":"بات چیت شروع کرنے کے لیے پہلا بٹن دبائیں۔ اگر کسی نے آپ کو دعوت بھیجی ہے تو دوسرا دبائیں۔","easy.sayStart":"یہ آپ کا کوڈ ہے۔ جسے چاہیں بھیجنے کے لیے نارنجی بٹن دبائیں۔","easy.sayJoin":"جو چھ ہندسے آپ کو دیے گئے ہیں وہ لکھیں۔","easy.sayChat":"رابطہ ہو گیا۔ اب آپ بات کر سکتے ہیں۔",
+"easy.title":"آسان موڈ","easy.sub":"صرف دو بڑے بٹن اور ان کے ارد گرد کچھ نہیں۔ اُن کے لیے جو کچھ سوچنا نہیں چاہتے — یا اُس کے لیے جو کسی اور کا فون تیار کر رہا ہے۔","easy.voiceTitle":"بول کر بتاؤ","easy.voiceSub":"ایپ آپ کی زبان میں بول کر بتاتی ہے کہ کیا کرنا ہے۔ اُن کے لیے جنہیں اسکرین پڑھنا مشکل لگتا ہے۔","easy.voiceOn":"ٹھیک ہے۔ اب سے میں بول کر بتاؤں گا کہ کیا کرنا ہے۔","easy.sayHome":"بات چیت شروع کرنے کے لیے پہلا بٹن دبائیں۔ اگر کسی نے آپ کو دعوت بھیجی ہے تو دوسرا دبائیں۔","easy.sayStart":"یہ آپ کا کوڈ ہے۔ جسے چاہیں بھیجنے کے لیے نارنجی بٹن دبائیں۔","easy.sayJoin":"جو چھ ہندسے آپ کو دیے گئے ہیں وہ لکھیں۔","easy.sayChat":"رابطہ ہو گیا۔ اب آپ بات کر سکتے ہیں۔","easyhint.text":"ایک ایسا موڈ بھی ہے جس میں صرف دو بڑے بٹن ہیں، اُن کے لیے جو اس بارے میں سوچنا نہیں چاہتے۔","easyhint.btn":"فعال کریں",
 "broker.down":"وہ سروس جو آپ کو ایک دوسرے تک پہنچاتی ہے جواب نہیں دے رہی۔ نیچے دیا گیا لمبا کوڈ پھر بھی کام کرتا ہے: یہ کسی سرور سے نہیں گزرتا۔",
 "flash.title":"منسلک ہو گئے","flash.titleWith":"{name} سے منسلک ہو گئے","flash.direct":"آپ کے دونوں فونز کے درمیان براہِ راست رابطہ","flash.relay":"خفیہ پل کے ذریعے رابطہ — آپ کے نیٹ ورک نے براہِ راست رابطے کی اجازت نہیں دی","flash.noserver":"کوئی سرور آپ کی باتیں نہیں پڑھ سکتا","flash.time":"{s} سیکنڈ میں، کہیں رجسٹر ہوئے بغیر",
 "viral.title":"یہ کام کر گیا۔","viral.sub":"اگر مفید رہا تو آگے پہنچائیں: یہ مفت ہے، اکاؤنٹ نہیں مانگتا، اور کسی کا کچھ محفوظ نہیں رکھتا۔","viral.btn":"کسی کو بتائیں",
@@ -1714,7 +1714,7 @@ Object.assign(I18N.hi, {
 "verify.lead":"इसे दूसरे व्यक्ति से मिलाएं — ज़ोर से बोलकर, फ़ोन पर, या निमंत्रण कोड के आदान-प्रदान से अलग किसी माध्यम पर। अगर दोनों कोड बिल्कुल मेल नहीं खाते, तो हो सकता है किसी ने कनेक्शन में दखल दिया हो: उस चैट पर भरोसा न करें।",
 "verify.close":"बंद करें","verify.unavailable":"अभी तैयार नहीं — थोड़ी देर में फिर कोशिश करें।",
 "contacts.title":"हाल के संपर्क",
-"contacts.note":"उन्हें फिर से देखने के लिए एक टैप: आपने एक-दूसरे से जो कहा वह यहाँ रह गया। हर बार एक नए निमंत्रण की ज़रूरत होती है, क्योंकि कोई सर्वर आपकी जगह किसी को जुड़ा हुआ नहीं रखता।",
+"contacts.note":"उन्हें फिर से देखने के लिए एक टैप: आपने एक-दूसरे से जो कहा वह यहाँ रह गया। जिसने अपना पता भी छोड़ा है उसे एक टैप से वापस बुलाया जा सकता है — बाकियों के लिए अब भी एक नए निमंत्रण की ज़रूरत है।",
 "toast.sealCopied":"कोड कॉपी हो गया","toast.copyFail":"कॉपी विफल — हाथ से चुनें और कॉपी करें","toast.copySelected":"कॉपी विफल — कोड आपके लिए चुन दिया गया है, बस Ctrl/Cmd+C दबाएं",
 "call.busy":"जवाब नहीं दिया — किसी और कॉल में व्यस्त।","call.declinedBy":"कॉल अस्वीकार कर दी।","call.connectFailed":"कॉल कनेक्ट नहीं हो सकी। फिर से कोशिश करें।",
 "call.joined":"चैट में शामिल हुआ।","call.videoInvite":"आपको वीडियो कॉल कर रहा है","call.audioInvite":"आपको कॉल कर रहा है",
@@ -1791,7 +1791,7 @@ Object.assign(I18N.hi, {
 "wake.waitsNote":"आप ऐप बंद कर सकते हैं: जब वे निमंत्रण खोलेंगे तो मैं आपको बता दूंगा।","wake.calling":"{name} को बता रहा हूँ…","wake.callingHint":"उनका फ़ोन बज चुका है। जैसे ही वे ऐप खोलेंगे, आप जुड़ जाएंगे — आप यहाँ इंतज़ार कर सकते हैं।","wake.noAnswer":"उन्हें बता दिया गया है लेकिन उन्होंने अभी तक ऐप नहीं खोला। बाद में फिर कोशिश करें।",
 "quick.helpAWaits":"नीचे दिए बटन से भेजें — दूसरे व्यक्ति को बस उसे छूना है और वे अंदर हैं। या उन्हें छह अंक बोलकर बता दें।",
 "verify.inPerson":"आमने-सामने सत्यापित","verify.inPersonDone":"आमने-सामने सत्यापित: आपने कोड इसी व्यक्ति की स्क्रीन से स्कैन किया है, इसलिए कोई बीच में नहीं आ सकता। तीन शब्द बोलने की ज़रूरत नहीं।","sas.leadMismatch":"सावधान: जिसने जवाब दिया वह वह फ़ोन नहीं है जिसका कोड आपने स्कैन किया था। यह ग़लती हो सकती है, लेकिन अगर कोई बीच में आ गया होता तो भी ठीक ऐसा ही दिखता। जब तक आप एक-दूसरे को तीन शब्द बोलकर न बता लें, कुछ न लिखें।",
-"easy.title":"आसान मोड","easy.sub":"बस दो बड़े बटन और आसपास कुछ नहीं। उनके लिए जो कुछ सोचना नहीं चाहते — या जो किसी और का फ़ोन तैयार कर रहे हैं।","easy.voiceTitle":"बोलकर बताओ","easy.voiceSub":"ऐप आपकी भाषा में बोलकर बताता है कि क्या करना है। उनके लिए जिन्हें स्क्रीन पढ़ना मुश्किल लगता है।","easy.voiceOn":"ठीक है। अब से मैं बोलकर बताऊंगा कि क्या करना है।","easy.sayHome":"बातचीत शुरू करने के लिए पहला बटन दबाएं। अगर किसी ने आपको निमंत्रण भेजा है तो दूसरा दबाएं।","easy.sayStart":"यह आपका कोड है। जिसे चाहें भेजने के लिए नारंगी बटन दबाएं।","easy.sayJoin":"आपको दिए गए छह अंक लिखें।","easy.sayChat":"जुड़ गए। अब आप बात कर सकते हैं।",
+"easy.title":"आसान मोड","easy.sub":"बस दो बड़े बटन और आसपास कुछ नहीं। उनके लिए जो कुछ सोचना नहीं चाहते — या जो किसी और का फ़ोन तैयार कर रहे हैं।","easy.voiceTitle":"बोलकर बताओ","easy.voiceSub":"ऐप आपकी भाषा में बोलकर बताता है कि क्या करना है। उनके लिए जिन्हें स्क्रीन पढ़ना मुश्किल लगता है।","easy.voiceOn":"ठीक है। अब से मैं बोलकर बताऊंगा कि क्या करना है।","easy.sayHome":"बातचीत शुरू करने के लिए पहला बटन दबाएं। अगर किसी ने आपको निमंत्रण भेजा है तो दूसरा दबाएं।","easy.sayStart":"यह आपका कोड है। जिसे चाहें भेजने के लिए नारंगी बटन दबाएं।","easy.sayJoin":"आपको दिए गए छह अंक लिखें।","easy.sayChat":"जुड़ गए। अब आप बात कर सकते हैं।","easyhint.text":"एक ऐसा तरीका भी है जिसमें सिर्फ़ दो बड़े बटन होते हैं, उनके लिए जो इसके बारे में सोचना नहीं चाहते।","easyhint.btn":"चालू करें",
 "broker.down":"जो सेवा आपको एक-दूसरे तक पहुँचाती है वह जवाब नहीं दे रही। नीचे दिया लंबा कोड फिर भी काम करता है: यह किसी सर्वर से नहीं गुज़रता।",
 "flash.title":"जुड़ गए","flash.titleWith":"{name} से जुड़ गए","flash.direct":"आपके दोनों फ़ोन के बीच सीधा संपर्क","flash.relay":"एन्क्रिप्टेड पुल के ज़रिए जुड़े — आपके नेटवर्क ने सीधा संपर्क नहीं होने दिया","flash.noserver":"कोई सर्वर आपकी बातें नहीं पढ़ सकता","flash.time":"{s} सेकंड में, कहीं रजिस्टर हुए बिना",
 "viral.title":"यह काम कर गया।","viral.sub":"अगर काम आया हो तो आगे बढ़ाएं: यह मुफ़्त है, कोई खाता नहीं मांगता, और किसी का कुछ नहीं रखता।","viral.btn":"किसी को बताएं",
@@ -1874,7 +1874,7 @@ Object.assign(I18N.bn, {
 "verify.lead":"অন্য ব্যক্তির সাথে এটি মিলিয়ে দেখুন — জোরে বলে, ফোনে, অথবা আমন্ত্রণ কোড বিনিময়ের চেয়ে আলাদা কোনো মাধ্যমে। যদি দুটি কোড ঠিক না মেলে, তাহলে কেউ সংযোগে ঢুকে পড়তে পারে: সেই চ্যাটে বিশ্বাস করবেন না।",
 "verify.close":"বন্ধ করুন","verify.unavailable":"এখনও প্রস্তুত নয় — একটু পরে আবার চেষ্টা করুন।",
 "contacts.title":"সাম্প্রতিক পরিচিতি",
-"contacts.note":"তাদের আবার দেখতে একটি ট্যাপ: আপনারা একে অপরকে যা বলেছেন তা এখানে থেকে গেছে। প্রতিবার একটি নতুন আমন্ত্রণ প্রয়োজন, কারণ কোনো সার্ভার আপনার হয়ে কাউকে সংযুক্ত রাখে না।",
+"contacts.note":"তাদের আবার দেখতে একটি ট্যাপ: আপনারা একে অপরকে যা বলেছেন তা এখানে থেকে গেছে। যিনি নিজের ঠিকানাও রেখে গেছেন তাকে এক ট্যাপেই আবার কল করা যায় — বাকিদের জন্য এখনও একটি নতুন আমন্ত্রণ প্রয়োজন।",
 "toast.sealCopied":"কোড কপি হয়েছে","toast.copyFail":"কপি ব্যর্থ — হাতে নির্বাচন করে কপি করুন","toast.copySelected":"কপি ব্যর্থ — আপনার জন্য কোড নির্বাচিত হয়েছে, শুধু Ctrl/Cmd+C চাপুন",
 "call.busy":"উত্তর দেননি — অন্য কলে ব্যস্ত।","call.declinedBy":"কল প্রত্যাখ্যান করেছেন।","call.connectFailed":"কলটি সংযুক্ত হয়নি। আবার চেষ্টা করুন।",
 "call.joined":"চ্যাটে যোগ দিয়েছেন।","call.videoInvite":"আপনাকে ভিডিও কল করছেন","call.audioInvite":"আপনাকে কল করছেন",
@@ -1951,7 +1951,7 @@ Object.assign(I18N.bn, {
 "wake.waitsNote":"আপনি অ্যাপটি বন্ধ করতে পারেন: আমন্ত্রণ খোলা হলে আমি আপনাকে জানাব।","wake.calling":"{name}-কে জানানো হচ্ছে…","wake.callingHint":"তাঁর ফোন বেজে উঠেছে। তিনি অ্যাপ খোলামাত্র আপনারা যুক্ত হয়ে যাবেন — আপনি এখানে অপেক্ষা করতে পারেন।","wake.noAnswer":"তাঁকে জানানো হয়েছে কিন্তু তিনি এখনও অ্যাপ খোলেননি। পরে আবার চেষ্টা করুন।",
 "quick.helpAWaits":"নিচের বোতাম দিয়ে পাঠান — অন্য ব্যক্তিকে শুধু সেটিতে চাপ দিতে হবে, ব্যস। অথবা তাঁকে ছয়টি সংখ্যা মুখে বলে দিন।",
 "verify.inPerson":"সামনাসামনি যাচাই করা","verify.inPersonDone":"সামনাসামনি যাচাই করা: আপনি কোডটি এই ব্যক্তিরই স্ক্রিন থেকে স্ক্যান করেছেন, তাই কেউ মাঝখানে ঢুকতে পারেনি। তিনটি শব্দ বলার দরকার নেই।","sas.leadMismatch":"সাবধান: যে সাড়া দিয়েছে সেটি আপনার স্ক্যান করা কোডের ফোন নয়। এটি ভুল হতে পারে, কিন্তু কেউ মাঝখানে ঢুকে পড়লেও ঠিক এমনটাই দেখা যেত। একে অপরকে মুখে তিনটি শব্দ না বলা পর্যন্ত কিছু লিখবেন না।",
-"easy.title":"সহজ মোড","easy.sub":"শুধু দুটি বড় বোতাম, আশেপাশে আর কিছু নেই। যাঁরা কিছু ভাবতে চান না তাঁদের জন্য — বা যিনি অন্য কারও ফোন গুছিয়ে দিচ্ছেন তাঁর জন্য।","easy.voiceTitle":"জোরে বলে দাও","easy.voiceSub":"অ্যাপটি আপনার ভাষায় বলে দেয় কী করতে হবে। যাঁদের পর্দা পড়তে কষ্ট হয় তাঁদের জন্য।","easy.voiceOn":"ঠিক আছে। এখন থেকে আমি বলে দেব কী করতে হবে।","easy.sayHome":"কথা শুরু করতে প্রথম বোতামে চাপ দিন। কেউ আমন্ত্রণ পাঠিয়ে থাকলে দ্বিতীয়টিতে চাপ দিন।","easy.sayStart":"এটি আপনার কোড। যাকে চান পাঠাতে কমলা বোতামে চাপ দিন।","easy.sayJoin":"আপনাকে দেওয়া ছয়টি সংখ্যা লিখুন।","easy.sayChat":"যুক্ত হয়ে গেছে। এখন কথা বলতে পারেন।",
+"easy.title":"সহজ মোড","easy.sub":"শুধু দুটি বড় বোতাম, আশেপাশে আর কিছু নেই। যাঁরা কিছু ভাবতে চান না তাঁদের জন্য — বা যিনি অন্য কারও ফোন গুছিয়ে দিচ্ছেন তাঁর জন্য।","easy.voiceTitle":"জোরে বলে দাও","easy.voiceSub":"অ্যাপটি আপনার ভাষায় বলে দেয় কী করতে হবে। যাঁদের পর্দা পড়তে কষ্ট হয় তাঁদের জন্য।","easy.voiceOn":"ঠিক আছে। এখন থেকে আমি বলে দেব কী করতে হবে।","easy.sayHome":"কথা শুরু করতে প্রথম বোতামে চাপ দিন। কেউ আমন্ত্রণ পাঠিয়ে থাকলে দ্বিতীয়টিতে চাপ দিন।","easy.sayStart":"এটি আপনার কোড। যাকে চান পাঠাতে কমলা বোতামে চাপ দিন।","easy.sayJoin":"আপনাকে দেওয়া ছয়টি সংখ্যা লিখুন।","easy.sayChat":"যুক্ত হয়ে গেছে। এখন কথা বলতে পারেন।","easyhint.text":"শুধু দুটি বড় বোতামের একটি মোডও আছে, যারা এ নিয়ে ভাবতে চান না তাদের জন্য।","easyhint.btn":"চালু করুন",
 "broker.down":"যে পরিষেবা আপনাদের একে অপরকে খুঁজে পেতে সাহায্য করে সেটি সাড়া দিচ্ছে না। নিচের লম্বা কোডটি তবুও কাজ করে: এটি কোনো সার্ভারের মধ্য দিয়ে যায় না।",
 "flash.title":"সংযুক্ত","flash.titleWith":"{name}-এর সঙ্গে সংযুক্ত","flash.direct":"আপনাদের দুই ফোনের মধ্যে সরাসরি সংযোগ","flash.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে সংযুক্ত — আপনাদের নেটওয়ার্ক সরাসরি সংযোগ দেয়নি","flash.noserver":"কোনও সার্ভার আপনাদের কথা পড়তে পারে না","flash.time":"{s} সেকেন্ডে, কোথাও নিবন্ধন না করেই",
 "viral.title":"এটা কাজ করেছে।","viral.sub":"কাজে লেগে থাকলে অন্যকেও জানান: এটি বিনামূল্যে, কোনও অ্যাকাউন্ট চায় না, কারও কিছুই রাখে না।","viral.btn":"কাউকে জানান",
@@ -2034,7 +2034,7 @@ Object.assign(I18N.id, {
 "verify.lead":"Bandingkan dengan orang lain — dengan suara keras, lewat telepon, atau di saluran yang berbeda dari yang Anda gunakan untuk bertukar kode undangan. Jika kedua kode tidak cocok persis, seseorang mungkin telah menyisipkan diri ke dalam koneksi: jangan percaya obrolan itu.",
 "verify.close":"Tutup","verify.unavailable":"Belum siap — coba lagi sebentar lagi.",
 "contacts.title":"Kontak terbaru",
-"contacts.note":"Satu ketukan untuk melihat mereka lagi: apa yang kalian katakan satu sama lain tetap di sini. Setiap kali membutuhkan undangan baru, karena tidak ada server yang menjaga siapa pun tetap terhubung untuk Anda.",
+"contacts.note":"Satu ketukan untuk melihat mereka lagi: apa yang kalian katakan satu sama lain tetap di sini. Yang juga meninggalkan alamatnya bisa dihubungi lagi hanya dengan satu ketukan — yang lain masih memerlukan undangan baru.",
 "toast.sealCopied":"Kode disalin","toast.copyFail":"Gagal menyalin — pilih dan salin secara manual","toast.copySelected":"Gagal menyalin — kode telah dipilihkan untuk Anda, cukup tekan Ctrl/Cmd+C",
 "call.busy":"tidak menjawab — sedang sibuk di panggilan lain.","call.declinedBy":"menolak panggilan.","call.connectFailed":"Panggilan tidak tersambung. Coba lagi.",
 "call.joined":"bergabung ke obrolan.","call.videoInvite":"menelepon video Anda","call.audioInvite":"meneleponi Anda",
@@ -2111,7 +2111,7 @@ Object.assign(I18N.id, {
 "wake.waitsNote":"Anda boleh menutup aplikasi: saya akan memberi tahu saat undangan dibuka.","wake.calling":"Memberi tahu {name}…","wake.callingHint":"Ponselnya sudah berdering. Begitu aplikasi dibuka, Anda langsung terhubung — Anda bisa menunggu di sini.","wake.noAnswer":"Sudah diberi tahu tetapi aplikasinya belum dibuka. Coba lagi nanti.",
 "quick.helpAWaits":"Kirim dengan tombol di bawah — orang lain tinggal menyentuhnya dan langsung masuk. Atau bacakan enam angkanya dengan suara.",
 "verify.inPerson":"terverifikasi langsung","verify.inPersonDone":"Terverifikasi langsung: Anda memindai kode dari layar orang ini sendiri, jadi tidak ada yang bisa menyelip di tengah. Tidak perlu menyebutkan tiga kata itu.","sas.leadMismatch":"Hati-hati: yang menjawab bukan ponsel yang kodenya Anda pindai. Bisa jadi kekeliruan, tetapi itu juga persis yang akan terlihat jika ada yang menyelip di tengah. Jangan menulis apa pun sebelum kalian saling menyebutkan tiga kata itu dengan suara.",
-"easy.title":"Mode sederhana","easy.sub":"Hanya dua tombol besar dan tidak ada apa-apa lagi di sekelilingnya. Untuk siapa pun yang tidak ingin memikirkan apa pun — atau untuk yang menyiapkan ponsel bagi orang lain.","easy.voiceTitle":"Bacakan dengan suara","easy.voiceSub":"Aplikasi memberi tahu apa yang harus dilakukan dengan suara, dalam bahasa Anda. Untuk yang kesulitan membaca layar.","easy.voiceOn":"Baik. Mulai sekarang saya akan memberi tahu dengan suara apa yang harus dilakukan.","easy.sayHome":"Sentuh tombol pertama untuk memulai obrolan. Sentuh yang kedua jika ada yang mengirimi Anda undangan.","easy.sayStart":"Ini kode Anda. Tekan tombol oranye untuk mengirimkannya kepada siapa pun.","easy.sayJoin":"Ketik enam angka yang diberikan kepada Anda.","easy.sayChat":"Sudah terhubung. Sekarang Anda bisa bicara.",
+"easy.title":"Mode sederhana","easy.sub":"Hanya dua tombol besar dan tidak ada apa-apa lagi di sekelilingnya. Untuk siapa pun yang tidak ingin memikirkan apa pun — atau untuk yang menyiapkan ponsel bagi orang lain.","easy.voiceTitle":"Bacakan dengan suara","easy.voiceSub":"Aplikasi memberi tahu apa yang harus dilakukan dengan suara, dalam bahasa Anda. Untuk yang kesulitan membaca layar.","easy.voiceOn":"Baik. Mulai sekarang saya akan memberi tahu dengan suara apa yang harus dilakukan.","easy.sayHome":"Sentuh tombol pertama untuk memulai obrolan. Sentuh yang kedua jika ada yang mengirimi Anda undangan.","easy.sayStart":"Ini kode Anda. Tekan tombol oranye untuk mengirimkannya kepada siapa pun.","easy.sayJoin":"Ketik enam angka yang diberikan kepada Anda.","easy.sayChat":"Sudah terhubung. Sekarang Anda bisa bicara.","easyhint.text":"Ada juga mode dengan hanya dua tombol besar, untuk yang lebih suka tidak memikirkannya.","easyhint.btn":"Aktifkan",
 "broker.down":"Layanan yang membantu kalian saling menemukan tidak merespons. Kode panjang di bawah tetap berfungsi: ia tidak melewati server mana pun.",
 "flash.title":"Terhubung","flash.titleWith":"Terhubung dengan {name}","flash.direct":"Sambungan langsung antara kedua ponsel Anda","flash.relay":"Tersambung lewat jembatan terenkripsi — jaringan Anda tidak mengizinkan sambungan langsung","flash.noserver":"Tidak ada server yang bisa membaca percakapan Anda","flash.time":"Dalam {s} detik, tanpa mendaftar apa pun",
 "viral.title":"Berhasil.","viral.sub":"Kalau bermanfaat, teruskan ke orang lain: gratis, tanpa akun, dan tidak menyimpan apa pun tentang siapa pun.","viral.btn":"Beri tahu seseorang",
@@ -2218,6 +2218,8 @@ function applyLang(code){
 let inboxTimer = null;
 function showScreen(id){
   ['screenHome','screenSettings','screenStart','screenJoin','screenChat'].forEach(s => $(s).classList.toggle('hide', s !== id));
+  /* whatever arrived while this screen was somewhere else has now been seen */
+  if (id === 'screenChat') $('settingsNotice').classList.add('hide');
   window.scrollTo(0,0);
   /* Warmed a few seconds early rather than at the moment of truth. Fetching the
      relay credentials is a network round trip, it is kept for the rest of the
@@ -2389,6 +2391,11 @@ function showInstallBar(html, withButton){
   $('installText').innerHTML = html;
   $('installBtn').classList.toggle('hide', !withButton);
   $('installBar').classList.remove('hide');
+  /* beforeinstallprompt can fire well after the page has already decided to
+     show the simple-mode hint instead — the check the hint made at load time
+     is stale the moment that happens, so this is the side that has to notice
+     and yield the spot back, not the hint. */
+  $('easyHintBar').classList.add('hide');
 }
 window.addEventListener('beforeinstallprompt', ev => {
   ev.preventDefault(); deferredPrompt = ev;
@@ -2414,6 +2421,30 @@ if (isIOS && !isStandalone && location.protocol.startsWith('http')) showInstallB
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load', () => { navigator.serviceWorker.register('modifica-sw.js', { scope: './modifica.html' }).catch(()=>{}); });
 }
+
+/* ============================== easy-mode hint ==============================
+   The setting itself has existed for a while, sitting in Impostazioni where
+   only someone already comfortable enough to go looking would ever find it —
+   exactly backwards from who it is for. This offers it once, on the home
+   screen, to everyone who has not already turned it on or waved it away. */
+function maybeShowEasyHint(){
+  if (easyPref()) return;
+  let dismissed = false; try{ dismissed = localStorage.getItem('dvlogos-easyhint-dismissed') === '1'; }catch(e){}
+  if (dismissed) return;
+  if (!$('installBar').classList.contains('hide')) return;   /* one quiet notice at a time here, not two */
+  $('easyHintBar').classList.remove('hide');
+}
+maybeShowEasyHint();
+$('easyHintBtn').addEventListener('click', () => {
+  try{ localStorage.setItem('dvlogos-easy', '1'); }catch(e){}
+  applyEasy(true);
+  $('easyHintBar').classList.add('hide');
+  try{ localStorage.setItem('dvlogos-easyhint-dismissed', '1'); }catch(e){}
+});
+$('easyHintClose').addEventListener('click', () => {
+  $('easyHintBar').classList.add('hide');
+  try{ localStorage.setItem('dvlogos-easyhint-dismissed', '1'); }catch(e){}
+});
 
 /* ============================== WebRTC core ==============================
    STUN alone finds a direct path only when both sides sit behind NAT that
@@ -5037,7 +5068,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.55';
+const APP_VERSION = 'logos-modifica-3.56';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6465,6 +6496,14 @@ function onDcMessage(ev){
        untrusted: anything without a proper type is dropped rather than trusted
        to have the shape the branches below expect */
     if (!msg || typeof msg.type !== 'string') return;
+    /* The connection itself was already kept alive across a trip to
+       Impostazioni mid-conversation — only the fact that something arrived
+       there was silent until now. 'hello' is excluded: that is the moment a
+       call first connects, before there was ever a chat to have wandered
+       away from. */
+    if (['text','file-start','file-end'].indexOf(msg.type) !== -1 && $('screenChat').classList.contains('hide')){
+      $('settingsNotice').classList.remove('hide');
+    }
     if (msg.type === 'hello'){
       /* Someone turned away at the public address stays turned away. Checked
          against the fingerprint the handshake itself proved, not the name or

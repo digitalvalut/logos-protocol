@@ -262,10 +262,12 @@
   .bigchoice.quiet .t{font-size:1.0625rem;font-weight:700;color:var(--ok)}
   .bigchoice.quiet:hover{border-color:var(--ok)}
   .gear{background:none;border:1px solid var(--line);border-radius:50%;color:var(--dim);
-    width:38px;height:38px;padding:0;cursor:pointer;flex:none;
+    width:38px;height:38px;padding:0;cursor:pointer;flex:none;position:relative;
     display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
   .gear svg{width:18px;height:18px;display:block}
   .gear:hover{color:var(--ink);border-color:var(--dim)}
+  .gear .notice{position:absolute;top:1px;right:1px;width:10px;height:10px;
+    border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
 
   /* ---------------- simple mode ----------------
      Everything that is not "start a chat" or "open the one I was sent" gets out

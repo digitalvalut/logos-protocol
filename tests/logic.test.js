@@ -516,6 +516,79 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('the simple-mode hint offers to turn it on right there, not just in settings', () => {
+    /* The setting has existed for a while inside Impostazioni, reachable only
+       by someone already comfortable enough to go looking for it — backwards
+       from who it is actually for. This checks the home-screen offer exists
+       by default, and that accepting it both turns the setting on for real
+       and never asks again. */
+    const app = loadApp();
+    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), false,
+      'a fresh install with simple mode off should be offered the hint');
+    app.run("$('easyHintBtn').listeners.click[0]();");
+    assert.strictEqual(app.run('easyPref()'), true,
+      'accepting the hint must actually turn simple mode on, not just hide the banner');
+    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), true);
+    assert.strictEqual(app.run("$('easyRow').classList.contains('on')"), true,
+      'the settings toggle itself must reflect it too, not just localStorage');
+    app.stop();
+  });
+
+  test('closing the simple-mode hint without accepting it does not turn simple mode on', () => {
+    const app = loadApp();
+    app.run("$('easyHintClose').listeners.click[0]();");
+    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), true);
+    assert.strictEqual(app.run('easyPref()'), false,
+      'dismissing the hint must not be mistaken for accepting it');
+    app.stop();
+  });
+
+  test('the simple-mode hint does not pile up on top of the install banner', () => {
+    /* Both live in the same quiet strip on the home screen, on purpose — two
+       notices stacked there at once would be exactly the stare that strip
+       was designed to avoid (see the comment above it in modifica.html).
+       The install banner can legitimately show up *after* the hint already
+       has — beforeinstallprompt is an event that can fire well after the
+       page finished loading — so the hint being first is not enough on its
+       own; the install banner has to actively yield the spot back too. */
+    const app = loadApp();
+    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), false,
+      'sanity check: the hint should already be showing at this point, same as any fresh load');
+    app.run("showInstallBar('test', false);");
+    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), true,
+      'the install banner arriving later must take back the spot from the simple-mode hint');
+    app.stop();
+  });
+
+  test('a message that arrives while looking at settings lights up a notice', () => {
+    /* The connection already survives a trip to Impostazioni mid-conversation
+       (settingsCameFrom exists for exactly that) — what was missing was any
+       sign that something had actually happened there while away. */
+    const app = loadApp();
+    app.run(`
+      $('screenChat').classList.add('hide');
+      $('screenSettings').classList.remove('hide');
+      onDcMessage({ data: JSON.stringify({ type: 'text', text: 'ciao' }) });
+    `);
+    assert.strictEqual(app.run("$('settingsNotice').classList.contains('hide')"), false,
+      'a message arriving while the chat is not on screen should light up the notice');
+    app.run("showScreen('screenChat');");
+    assert.strictEqual(app.run("$('settingsNotice').classList.contains('hide')"), true,
+      'going back to the chat must clear the notice, not leave it lit forever');
+    app.stop();
+  });
+
+  test('a message that arrives while already looking at the chat does not light up the notice', () => {
+    const app = loadApp();
+    app.run(`
+      $('screenChat').classList.remove('hide');
+      onDcMessage({ data: JSON.stringify({ type: 'text', text: 'ciao' }) });
+    `);
+    assert.strictEqual(app.run("$('settingsNotice').classList.contains('hide')"), true,
+      'the notice exists to say "something happened while you were elsewhere" — it must stay off when you were already looking');
+    app.stop();
+  });
+
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
     /* Used to render nothing at all until the whole loop finished, so a
        channel that threw partway left no error, no bubble, no sign anything
