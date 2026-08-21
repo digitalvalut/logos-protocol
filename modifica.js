@@ -4695,7 +4695,7 @@ async function dialAddress(raw){
       pump.stop();
       hideBigConnectingB(true);
       showScreen('screenHome');
-      setStatus($('addrDialStatus'), t('addr.noAnswer','Non ha risposto. L\'ho avvisata: riprova più tardi.'), 'bad');
+      setStatus($('addrDialStatus'), t('addr.noAnswer','Non ha risposto. L\'ho avvisata: riprova più tardi.'), 'warn');
       /* Left automatically, with whatever was already typed on the way in —
          so a call that nobody happened to answer within three minutes still
          leaves a trace, instead of vanishing the moment somebody closes this
@@ -5016,7 +5016,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.52';
+const APP_VERSION = 'logos-modifica-3.53';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -5270,7 +5270,7 @@ async function tryAutoReconnect(contact){
      finished, so the description carries every address it ever found. */
   pump.stop();
   if (pc !== myPc || myPc.signalingState === 'closed') return;
-  setStatus($('statusA'), fill(t('reconnect.offline','{n} non sembra online in questo momento. Ecco il codice da mandare a mano.'), { n: contact.nick }), 'bad');
+  setStatus($('statusA'), fill(t('reconnect.offline','{n} non sembra online in questo momento. Ecco il codice da mandare a mano.'), { n: contact.nick }), 'warn');
   const code = await sealOrEncodeOffer(myPc);
   revealInviteCode(code);
   if (await robustCopy(code)) toast(t('toast.sealCopied'));

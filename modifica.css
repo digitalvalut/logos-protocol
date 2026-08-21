@@ -325,7 +325,7 @@
     clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   .status{font-size:0.9062rem;color:var(--dim);margin-top:12px;line-height:1.6}
-  .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
+  .status.ok{color:var(--ok)} .status.bad{color:var(--bad)} .status.warn{color:var(--warn)}
   /* technical detail during a stuck handshake — small on purpose, but visible
      and copyable, so a failure can be photographed or read out loud instead of
      staying an unexplained blank screen */
