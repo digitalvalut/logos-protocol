@@ -69,7 +69,7 @@ h1{font-size:clamp(1.9rem, 6vw, 3rem);line-height:1.15;margin:22px auto 0;
 
 /* ---------------------------------------------------------------- cards -- */
 .cards{display:grid;gap:16px;margin:46px 0 0}
-@media(min-width:760px){ .cards{grid-template-columns:repeat(3,1fr)} }
+@media(min-width:760px){ .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))} }
 .card{background:linear-gradient(180deg,var(--panel),var(--bg2));
   border:1px solid var(--line);border-radius:var(--r);padding:22px;
   box-shadow:var(--shadow)}
