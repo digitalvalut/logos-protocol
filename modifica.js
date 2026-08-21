@@ -5153,7 +5153,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.59';
+const APP_VERSION = 'logos-modifica-3.60';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6684,6 +6684,32 @@ let micOn = true, camOn = true;
 function sig(msg){ if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
 function setCallStatus(text){ $('callStatus').textContent = text; }
 
+/* The badge said "In videochiamata" for the whole call and never changed —
+   true the instant it appeared, and stale for everything after. Replaced
+   once the call is genuinely active by a running clock in the same spot,
+   the way every phone's own dialler already does it. */
+let callTimerInterval = null, callStartedAt = 0;
+function formatCallDuration(totalSecs){
+  const h = Math.floor(totalSecs / 3600);
+  const m = Math.floor((totalSecs % 3600) / 60);
+  const s = totalSecs % 60;
+  const mm = String(m).padStart(2, '0'), ss = String(s).padStart(2, '0');
+  return h > 0 ? h + ':' + mm + ':' + ss : mm + ':' + ss;
+}
+function tickCallTimer(){
+  setCallStatus(formatCallDuration(Math.floor((Date.now() - callStartedAt) / 1000)));
+}
+function startCallTimer(){
+  callStartedAt = Date.now();
+  clearInterval(callTimerInterval);
+  tickCallTimer();
+  callTimerInterval = setInterval(tickCallTimer, 1000);
+}
+function stopCallTimer(){
+  clearInterval(callTimerInterval);
+  callTimerInterval = null;
+}
+
 /* "Permission denied" was covering three different problems with one message:
    no camera/mic ever found, one that's busy in another app right now, and one
    actually blocked by the browser. Each needs a different action from the
@@ -6947,6 +6973,7 @@ $('btnAcceptCall').addEventListener('click', async () => {
   $('localVideo').srcObject = localStream;
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
+  startCallTimer();
   keepScreenAwake();
   initSpeakerToggle();
   initFlipCam();
@@ -6963,6 +6990,7 @@ async function onCallAccepted(){
   sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
+  startCallTimer();
   keepScreenAwake();
   initSpeakerToggle();
   initFlipCam();
@@ -6975,6 +7003,7 @@ async function onCallOfferSdp(sdp){
 }
 function endCall(tellPeer){
   stopRing(); disarmCallTimeout();
+  stopCallTimer();
   letScreenSleep();
   if (tellPeer) sig({ type: 'call-end' });
   if (localStream){ localStream.getTracks().forEach(tr => tr.stop()); localStream = null; }

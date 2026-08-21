@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.59` — 21 agosto 2026*
+*Versione descritta: `logos-modifica-3.60` — 21 agosto 2026*
 
 ---
 
@@ -147,7 +147,7 @@ vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronolog
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **80 test automatici** a ogni pubblicazione, senza installare niente
+- **82 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -293,7 +293,7 @@ test è validato **rimettendo dentro la falla originale** per verificare che
 diventi rosso. Due test sono stati riscritti perché passavano anche col codice
 sabotato.
 
-### Da allora (v3.45 → v3.59, 16-21 agosto 2026)
+### Da allora (v3.45 → v3.60, 16-21 agosto 2026)
 
 Lo stesso metodo — sabotare ogni test per verificarlo davvero, verificare dal
 vivo nel browser, non solo leggere il codice — applicato a un altro giro di
@@ -305,6 +305,10 @@ lavoro:
   già aperto, zero costo aggiuntivo
 - **Rubrica**: un indirizzo permanente chiamato con successo viene ricordato,
   richiamarlo poi è un tocco solo
+- **Durata della chiamata**: il testo fisso "In videochiamata" diventa un
+  cronometro che scorre (`MM:SS`, `H:MM:SS` oltre l'ora), calcolato ogni tick
+  dalla differenza con l'istante di inizio — resta preciso anche se il
+  browser rallenta i timer di una scheda in background
 - **Sito vetrina** (`index.html`) rifatto: QR per aprire l'app, tabella di
   confronto onesta con WhatsApp/Telegram, la sezione "cosa non fa" tolta dalla
   prima pagina su richiesta esplicita — resta invece intatta in questo dossier
@@ -340,5 +344,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 21 agosto 2026 sulla versione
-`logos-modifica-3.59`.*
+`logos-modifica-3.60`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

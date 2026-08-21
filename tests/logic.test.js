@@ -662,6 +662,35 @@ test.describe('what the audit found', () => {
     });
   });
 
+  test('the call clock formats as mm:ss, and grows a leading hour once a call runs that long', () => {
+    const app = loadApp();
+    assert.strictEqual(app.run('formatCallDuration(5)'), '00:05');
+    assert.strictEqual(app.run('formatCallDuration(65)'), '01:05');
+    assert.strictEqual(app.run('formatCallDuration(3661)'), '1:01:01',
+      'past an hour it must grow a third field rather than overflow the minutes');
+    app.stop();
+  });
+
+  test('accepting a call starts a running clock in place of the static status text, and hanging up stops it', () => {
+    /* The badge used to say "In videochiamata" for the whole call, true only
+       for the instant it appeared. startCallTimer() overwrites it with a
+       ticking clock; stopCallTimer() must leave nothing still running once
+       the call has actually ended, or a stale interval would keep poking a
+       DOM node from a call that is already over. */
+    const app = loadApp();
+    fakeVideoCallFixture(app);
+    app.run('startCallTimer();');
+    assert.strictEqual(app.run("$('callStatus').textContent"), '00:00',
+      'the clock must replace the static text the instant the call goes active');
+    app.run('callStartedAt = Date.now() - 65000; tickCallTimer();');
+    assert.strictEqual(app.run("$('callStatus').textContent"), '01:05',
+      'ticking must read elapsed time from callStartedAt, not just count up from zero on its own');
+    app.run('stopCallTimer();');
+    assert.strictEqual(app.run('callTimerInterval'), null,
+      'stopping must actually clear the interval, not just stop caring about it');
+    app.stop();
+  });
+
   test('waiting loops check back fast at first, then settle to their normal pace', () => {
     /* v3.52 hand-tuned this once for a single wait; this is the shared helper
        that now gives every other wait the same fast start. Reads cost
