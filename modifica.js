@@ -3986,6 +3986,21 @@ async function mailboxGetSealed(key, sec){
   return openFrom(sec.key, env);
 }
 
+/* ---------------- how often to check back while waiting ----------------
+   Reads cost nothing extra on the free Cloudflare plan — the tight quota is
+   on writes, one thousand a day (see the comment by RL_MAX_LOOKUPS in the
+   Worker) — so there is no reason to be stingy with lookups during the
+   stretch that matters most: the first moments of an attempt, while someone
+   is watching the screen and deciding whether this is working or not.
+   v3.52 already proved the idea once, hand-tuned for a single wait
+   (tryQuickConnect's first look at an incoming code); this gives every other
+   wait in the app the same fast start instead of leaving it a one-off. */
+const FAST_POLL_MS = 400;
+const FAST_POLL_WINDOW_MS = 15000;
+function pollGap(startedAt, normalMs){
+  return (Date.now() - startedAt) < FAST_POLL_WINDOW_MS ? FAST_POLL_MS : normalMs;
+}
+
 /* ============ ECIES: encrypting to an address instead of with it ============
    Three functions and one rule. The rule: the slot an envelope sits in is
    derived from the address, and the key it is sealed with is not.
@@ -4718,7 +4733,8 @@ async function dialAddress(raw){
 
     const answerKey = await slotId(sec.seed, 'addr-answer-' + rid);
     const offerKey = await slotId(sec.seed, 'addr-offer');
-    const until = Date.now() + 180000;
+    const dialStarted = Date.now();
+    const until = dialStarted + 180000;
     /* The mailbox holds anything for two minutes, and someone whose phone was
        just buzzed takes longer than that to fish it out of a pocket. Without
        this the offer would quietly rot at the two-minute mark while the caller
@@ -4741,7 +4757,7 @@ async function dialAddress(raw){
           { sdp: myPc.localDescription.sdp, nick: myNick(), rid, fp: await myFingerprintHex(), intro: outgoingIntro });
         nextRefresh = Date.now() + 80000;
       }
-      await new Promise(r => setTimeout(r, 1500));
+      await new Promise(r => setTimeout(r, pollGap(dialStarted, 1500)));
     }
     if (!got || !got.sdp){
       dialedAddress = null; dialedSlot = 0;
@@ -5069,7 +5085,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.57';
+const APP_VERSION = 'logos-modifica-3.58';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -5293,7 +5309,8 @@ async function tryAutoReconnect(contact){
        notice this, answer it, and get that answer back here — so this waits
        well past the handshake itself before deciding nobody is there. The
        mailbox holds a message for two minutes, comfortably longer. */
-    const deadline = Date.now() + 45000;
+    const reconnectStarted = Date.now();
+    const deadline = reconnectStarted + 45000;
     while (Date.now() < deadline){
       /* both conditions: the connection closing, and something else having
          taken the global over — the second is invisible to the first */
@@ -5314,7 +5331,7 @@ async function tryAutoReconnect(contact){
         });
         return;
       }
-      await new Promise(r => setTimeout(r, 1200));
+      await new Promise(r => setTimeout(r, pollGap(reconnectStarted, 1200)));
     }
   }
 
@@ -5814,6 +5831,7 @@ function candidatePump(pcObj, sec, mine, theirs){
       await pcObj.addIceCandidate(c);
     }catch(e){}
   };
+  const pumpStarted = Date.now();
   (async () => {
     while (!stopped){
       const key = await slotId(sec.seed, 'trickle-' + theirs + '-' + inN);
@@ -5823,7 +5841,7 @@ function candidatePump(pcObj, sec, mine, theirs){
         for (const c of msg.c){ if (remoteSet) await add(c); else held.push(c); }
         continue; /* a batch was waiting, the next one may be too */
       }
-      await new Promise(r => setTimeout(r, 700));
+      await new Promise(r => setTimeout(r, pollGap(pumpStarted, 700)));
     }
   })();
 
@@ -5929,7 +5947,8 @@ async function startQuickShare(existingCode, quiet){
      sent still works. Nothing is kept anywhere longer than those two minutes —
      what changes is that the person offering stays willing, not that the
      mailbox remembers. */
-  const deadline = Date.now() + 15 * 60 * 1000;
+  const shareStarted = Date.now();
+  const deadline = shareStarted + 15 * 60 * 1000;
   let nextRefresh = Date.now() + 80000;
   while (Date.now() < deadline){
     if (pc !== myPc){ pump.stop(); return; }
@@ -5956,7 +5975,7 @@ async function startQuickShare(existingCode, quiet){
       await mailboxPutSealed(offerKey, sec, { sdp: myPc.localDescription.sdp, nick: myNick() });
       nextRefresh = Date.now() + 80000;
     }
-    await new Promise(r => setTimeout(r, 1200));
+    await new Promise(r => setTimeout(r, pollGap(shareStarted, 1200)));
   }
   pump.stop();
   if (pc !== myPc) return;
@@ -6108,9 +6127,10 @@ async function tryQuickConnect(){
         setBigConnectingText('B',
           fill(t('wake.calling','Sto avvisando {name}…'), { name: wake.nick || t('chat.someone','Qualcuno') }),
           t('wake.callingHint','Ho fatto squillare il suo telefono. Appena apre l\'app siete connessi — puoi aspettare qui.'));
-        const waitUntil = Date.now() + 180000;
+        const knockStarted = Date.now();
+        const waitUntil = knockStarted + 180000;
         while (Date.now() < waitUntil){
-          await new Promise(r => setTimeout(r, 1500));
+          await new Promise(r => setTimeout(r, pollGap(knockStarted, 1500)));
           if (!$('screenChat').classList.contains('hide')){
             /* something else got there first — but leaving the flag set would
                disable the button until the page was reloaded */

@@ -662,6 +662,23 @@ test.describe('what the audit found', () => {
     });
   });
 
+  test('waiting loops check back fast at first, then settle to their normal pace', () => {
+    /* v3.52 hand-tuned this once for a single wait; this is the shared helper
+       that now gives every other wait the same fast start. Reads cost
+       nothing extra on the free plan (the tight quota is on writes), so
+       there is no reason the other waits should have missed out on it. */
+    const app = loadApp();
+    assert.strictEqual(app.run('pollGap(Date.now(), 1500)'), 400,
+      'right at the start of a wait, the fast pace should apply');
+    assert.strictEqual(app.run('pollGap(Date.now() - 5000, 1200)'), 400,
+      'five seconds in is still inside the fast window');
+    assert.strictEqual(app.run('pollGap(Date.now() - 20000, 1500)'), 1500,
+      'once the fast window has passed, it must fall back to the normal pace given to it — not stay fast forever and spend requests for nothing');
+    assert.strictEqual(app.run('pollGap(Date.now() - 20000, 700)'), 700,
+      'the fallback is whatever pace that particular wait normally uses, not a fixed number');
+    app.stop();
+  });
+
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
     /* Used to render nothing at all until the whole loop finished, so a
        channel that threw partway left no error, no bubble, no sign anything
