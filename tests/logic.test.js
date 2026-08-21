@@ -679,6 +679,103 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('being told to slow down overrides the fast start, and eases off harder than the normal pace', () => {
+    /* Before this, a 429 from the mailbox looked identical to an empty slot:
+       brokerReachable stayed true and the loop kept polling at whatever pace
+       it already had, fast window included — the one moment the app was
+       told to back off was the one moment it structurally could not. */
+    const app = loadApp();
+    app.run('mailboxThrottled = true;');
+    assert.strictEqual(app.run('pollGap(Date.now(), 1500)'), 4000,
+      'a throttled response must not be answered with the fast pace, even right at the start of a wait');
+    assert.strictEqual(app.run('pollGap(Date.now(), 700)'), 4000,
+      'the backoff floor applies even to waits whose own normal pace is already slower than it');
+    app.run('mailboxThrottled = false;');
+    assert.strictEqual(app.run('pollGap(Date.now(), 1500)'), 400,
+      'once no longer throttled, the fast start must work again — this must not get stuck on');
+    app.stop();
+  });
+
+  test('a failed attempt to fetch relay credentials does not disable the relay for the rest of the visit', () => {
+    /* The fake browser's fetch always rejects, so the first call falls back
+       to STUN-only exactly like a real network blip would — the point being
+       tested is what happens on the *next* call, not this one. */
+    const app = loadApp();
+    return app.run('fetchIceServers()').then(first => {
+      const stunOnly = JSON.parse(app.run('JSON.stringify(ICE_STUN_ONLY.iceServers)'));
+      assert.deepStrictEqual(JSON.parse(JSON.stringify(first)), stunOnly);
+      assert.strictEqual(app.run('cachedIceServers'), null,
+        'a failure must not be written into the cache as if it were a real answer — the very next attempt deserves a genuine second try');
+      /* now let the connection genuinely succeed, as it would once whatever
+         failed a moment ago has recovered */
+      app.run(`
+        window.__realServers = [{ urls: 'turn:example.test', username: 'u', credential: 'p' }];
+        fetch = function(){ return Promise.resolve({ ok: true, json: function(){ return Promise.resolve({ iceServers: window.__realServers }); } }); };
+      `);
+      return app.run('fetchIceServers()').then(second => {
+        const realServers = JSON.parse(app.run('JSON.stringify(window.__realServers)'));
+        assert.deepStrictEqual(JSON.parse(JSON.stringify(second)), realServers,
+          'a later attempt must get real credentials, not be stuck repeating the earlier failure forever');
+        app.stop();
+      });
+    });
+  });
+
+  test('a connection that wobbles and does not come back offers a way out, instead of an indefinite silent wait', () => {
+    /* 'disconnected' used to say "sto riprendendo" without anything actually
+       trying to — this calls the real onConnectionStateChange/
+       stillDisconnected functions directly (the fake RTCPeerConnection's
+       addEventListener does not store listeners, so going through a real
+       event never reaches them) and checks that after the grace period, the
+       same recovery banner v3.53 already built for a fully dropped
+       connection shows up here too — well before the browser's own much
+       longer internal timeout would have said anything at all. */
+    const app = loadApp();
+    app.run(`
+      $('screenChat').classList.remove('hide');
+      window.__fakeConn = { connectionState: 'disconnected' };
+      pc = window.__fakeConn;
+      onConnectionStateChange(window.__fakeConn);
+    `);
+    assert.strictEqual(app.run("$('msgs').children.length"), 0,
+      'nothing should be said the instant it wobbles — a brief blip deserves a real chance to recover quietly first');
+    assert.strictEqual(app.run('!!window.__fakeConn.__disconnectTimer'), true,
+      'a grace-period timer must actually be armed, not just a promise to check back never kept');
+    /* fires the grace-period callback directly rather than waiting 8 real
+       seconds — same reasoning as everywhere else this session that a timer
+       fire is invoked, not slept through */
+    app.run(`
+      clearTimeout(window.__fakeConn.__disconnectTimer);
+      stillDisconnected(window.__fakeConn);
+    `);
+    const line = JSON.parse(app.run(`
+      JSON.stringify((() => {
+        const l = $('msgs').children[$('msgs').children.length - 1];
+        return { text: l.children[0].textContent, btnText: l.children[1].textContent };
+      })())
+    `));
+    assert.strictEqual(line.btnText, 'Torna alla home');
+    assert.ok(line.text.length > 0);
+    app.stop();
+  });
+
+  test('a connection that recovers on its own before the grace period cancels the timer, and says nothing', () => {
+    const app = loadApp();
+    app.run(`
+      $('screenChat').classList.remove('hide');
+      window.__fakeConn = { connectionState: 'disconnected' };
+      pc = window.__fakeConn;
+      onConnectionStateChange(window.__fakeConn);
+      window.__fakeConn.connectionState = 'connected';
+      onConnectionStateChange(window.__fakeConn);
+    `);
+    assert.strictEqual(app.run('window.__fakeConn.__disconnectTimer'), null,
+      'recovering must cancel the pending grace-period check, not leave it armed against a connection that is fine now');
+    assert.strictEqual(app.run("$('msgs').children.length"), 0,
+      'a connection that recovered on its own has nothing to announce');
+    app.stop();
+  });
+
   test('a file send that fails mid-transfer tells the sender, instead of vanishing silently', () => {
     /* Used to render nothing at all until the whole loop finished, so a
        channel that threw partway left no error, no bubble, no sign anything

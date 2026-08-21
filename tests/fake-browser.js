@@ -200,6 +200,7 @@ function buildSandbox(options = {}){
     Blob: class { constructor(){ this.size = 0; } },
     FileReader: class { readAsDataURL(){} },
     URL: globalThis.URL,
+    AbortController: globalThis.AbortController,
     btoa: s => Buffer.from(s, 'binary').toString('base64'),
     atob: s => Buffer.from(s, 'base64').toString('binary'),
     performance: globalThis.performance,
