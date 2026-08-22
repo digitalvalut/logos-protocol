@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.60` — 21 agosto 2026*
+*Versione descritta: `logos-modifica-3.61` — 22 agosto 2026*
 
 ---
 
@@ -293,7 +293,7 @@ test è validato **rimettendo dentro la falla originale** per verificare che
 diventi rosso. Due test sono stati riscritti perché passavano anche col codice
 sabotato.
 
-### Da allora (v3.45 → v3.60, 16-21 agosto 2026)
+### Da allora (v3.45 → v3.61, 16-22 agosto 2026)
 
 Lo stesso metodo — sabotare ogni test per verificarlo davvero, verificare dal
 vivo nel browser, non solo leggere il codice — applicato a un altro giro di
@@ -343,6 +343,6 @@ cose della §4 che esistono già.
 
 ---
 
-*Dossier generato il 16 agosto 2026, aggiornato il 21 agosto 2026 sulla versione
-`logos-modifica-3.60`.*
+*Dossier generato il 16 agosto 2026, aggiornato il 22 agosto 2026 sulla versione
+`logos-modifica-3.61`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*
