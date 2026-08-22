@@ -109,6 +109,7 @@ Object.assign(I18N.en, {
 "call.micFailBusy":"Your microphone or camera is already being used by another app (Zoom, Teams, another tab…). Close it and try again.",
 "call.micFailDenied":"The browser has blocked the microphone and camera for this site. Follow the steps below, then reload the page.",
 "reconnect.trying":"Trying to reconnect to {n}…",
+"reconnect.failed":"I could not reconnect. Try a fresh invite.",
 "reconnect.offline":"{n} doesn't seem to be online right now. Here's the code to send by hand.",
 "call.noSpeakerFound":"Can't find a separate speaker on this phone.",
 "call.speakerFail":"Can't switch the speaker on this phone.",
@@ -191,6 +192,7 @@ Object.assign(I18N.en, {
 "viral.title":"That worked.","viral.sub":"If it was useful, pass it on: it's free, it asks for no account, and it keeps nothing about anyone.","viral.btn":"Tell someone about it",
 "media.title":"Microphone and camera","media.warnDenied":"This browser is blocking the microphone: you won't be able to make or take calls.","media.warnFix":"How to fix it","media.retry":"Try again","media.close":"Close","media.nowOk":"Microphone is on. You can call now.","media.peerNoMic":"{name} answered, but their browser won't let them turn the microphone on. They did not refuse you.","media.peerNoCam":"{name} answered, but their browser won't let them turn the camera and microphone on. Try an audio-only call, or ask them to unblock them.","media.stepsIos":"Open <b>Settings</b> on your iPhone|Scroll down and tap <b>Safari</b>|Tap <b>Microphone</b>, then <b>Camera</b>: set them to <b>Ask</b> or <b>Allow</b>|Come back here and reload the page","media.stepsAndroid":"Tap the <b>padlock</b> next to the address at the top|Tap <b>Permissions</b>|Turn on <b>Microphone</b> and <b>Camera</b>|Reload the page","media.stepsChrome":"Click the <b>padlock</b> to the left of the address|Turn on <b>Microphone</b> and <b>Camera</b>|Reload the page","media.stepsSafariMac":"In the menu bar open <b>Safari</b> › <b>Settings for This Website</b>|Set <b>Microphone</b> and <b>Camera</b> to <b>Allow</b>|Reload the page","media.stepsFirefox":"Click the <b>padlock</b> to the left of the address|Clear the block next to <b>Use the Microphone</b> and <b>Use the Camera</b>|Reload the page","media.stepsOther":"Open your browser's settings for this site|Allow <b>Microphone</b> and <b>Camera</b>|Reload the page",
 "addr.title":"Your permanent address","addr.sub":"Give this out instead of a phone number. Anyone holding it can reach you whenever they like, without knowing your name or your number. Off by default.","addr.qrHint":"Scanning it calls you directly","addr.share":"Send your address","addr.showQr":"Show the QR","addr.reachNote":"So people can reach you with the app closed too, turn on notifications below.","addr.dialLabel":"Got someone's address?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Call it","addr.badFormat":"That address isn't written right. It's 12 characters, like DV-K7M2-9QRT-X4WP.","addr.itsYou":"That's your own address.","addr.callingTitle":"Calling…","addr.callingHint":"If their app is closed I'll ring their phone. It can take a moment.","addr.noAnswer":"No answer. They've been alerted — try again later.","addr.dialFailed":"I couldn't call that address.","addr.noKey":"That address doesn't seem to be active any more. Ask the person to reopen the app and send it to you again: addresses changed with the latest update.","addr.noBroker":"I couldn't even start the call: the service that puts you in touch didn't answer. If you're using a copy of the app at a different address, open the official one.","addr.incomingTitle":"Someone is looking for you","addr.incomingSub":"The name and the reason were written by whoever is calling: until you accept, nobody can prove they really are that person.","addr.incomingToast":"Someone is calling your address.","addr.accept":"Accept","addr.ignore":"Ignore","addr.verified":"Verified: whoever answered really does own the address {a}. Nobody can have got in between.","addr.blockedIn":"A call from someone you turned away: ignored.","addr.shareText":"You can reach me here, without my phone number. My DigitalValut Logos address is {a}\n\nTap to call me:",
+"addr.provenNotWho":"Whoever answered really does own the address {a} — but that address came to you in a letter, and whoever wrote it could put any name on it. If you are not sure who they are, say the three words to each other.",
 "addr.incomingAt":"through “{name}”","burn.title":"Throwaway addresses","burn.help":"One per listing, one per stranger. Delete it when you're done and that person can't reach you any more — they never had your real one.","burn.namePh":"What for? e.g. Second-hand sofa","burn.add":"Create","burn.send":"Send this address","burn.delete":"Delete","burn.deleted":"“{name}” deleted. That address no longer answers.","burn.made":"“{name}” created. You can hand it out now.","burn.needName":"Give it a name, so you know who you gave it to.","burn.full":"You can have {n} at a time. Delete one to make another.","burn.untitled":"Unnamed",
 "knock.title":"You are contacting","knock.nameLabel":"What's your name?","knock.namePh":"Your name","knock.msgLabel":"What do you need? (optional)","knock.msgPh":"e.g. Do you have size 42 shoes?","knock.go":"Call","knock.note":"Your name and this line are seen only by the person you're calling. No server can read them.",
 "letter.title":"Messages left for you","letter.noneTitle":"Nobody is answering right now.","letter.noneSub":"I've already let them know you tried to reach them. If you want to say more, write it here.","letter.ph":"Write your message here","letter.leave":"Leave the message","letter.cancel":"Never mind","letter.needText":"Write a line or two, so they know what you wanted.","letter.left":"Message left. They'll find it when they open the app.","letter.failed":"I couldn't leave the message. Try again.","letter.callBack":"Call back","letter.dismiss":"Done",
@@ -201,6 +203,8 @@ Object.assign(I18N.en, {
 "letter.missed":"Wanted to talk to you.",
 "sas.blocked":"Say the three words out loud first: this person is no longer the same one.",
 "file.tooBig":"An incoming file was stopped: it did not match what was declared.","file.sendFailed":"Send interrupted: the connection closed partway through.","file.progress":"{sent} of {total}",
+"file.stalled":"An incoming file stalled halfway and was let go.",
+"file.tooBigToSend":"“{n}” is too big to send: the limit is 512 MB per file.",
 "share.pending":"{n} file ready to send — they'll go the moment you connect",
 "health.storage":"Phone storage",
 "health.storageFull":"Full: conversations are no longer being saved. Free up space on the phone.",
@@ -316,6 +320,7 @@ Object.assign(I18N.it, {
 "call.micFailBusy":"Il microfono o la fotocamera sono già in uso da un'altra app (Zoom, Teams, un'altra scheda…). Chiudila e riprova.",
 "call.micFailDenied":"Il browser ha bloccato microfono e fotocamera per questo sito. Segui i passaggi qui sotto, poi ricarica la pagina.",
 "reconnect.trying":"Provo a ricollegarmi a {n}…",
+"reconnect.failed":"Non sono riuscito a ricollegarmi. Prova con un invito nuovo.",
 "reconnect.offline":"{n} non sembra online in questo momento. Ecco il codice da mandare a mano.",
 "call.noSpeakerFound":"Non trovo un altoparlante separato su questo telefono.",
 "call.speakerFail":"Non riesco a cambiare l'altoparlante su questo telefono.",
@@ -358,6 +363,7 @@ Object.assign(I18N.it, {
 "viral.title":"Ha funzionato.","viral.sub":"Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.","viral.btn":"Fallo sapere a qualcuno",
 "media.title":"Microfono e fotocamera","media.warnDenied":"Microfono bloccato da questo browser: non potrai fare né ricevere chiamate.","media.warnFix":"Come si sistema","media.retry":"Riprova","media.close":"Chiudi","media.nowOk":"Microfono attivo. Ora puoi chiamare.","media.peerNoMic":"{name} ha risposto, ma il suo browser blocca il microfono: non è un rifiuto.","media.peerNoCam":"{name} ha risposto, ma il suo browser blocca fotocamera e microfono: non è un rifiuto. Provate con una chiamata solo audio.","media.stepsIos":"Apri <b>Impostazioni</b> sull'iPhone|Scendi e tocca <b>Safari</b>|Tocca <b>Microfono</b> e poi <b>Fotocamera</b>: metti <b>Chiedi</b> o <b>Consenti</b>|Torna qui e ricarica la pagina","media.stepsAndroid":"Tocca il <b>lucchetto</b> vicino all'indirizzo, in alto|Tocca <b>Autorizzazioni</b>|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina","media.stepsChrome":"Clicca il <b>lucchetto</b> a sinistra dell'indirizzo|Attiva <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina","media.stepsSafariMac":"Nella barra in alto apri <b>Safari</b> › <b>Impostazioni per questo sito web</b>|Metti <b>Microfono</b> e <b>Fotocamera</b> su <b>Consenti</b>|Ricarica la pagina","media.stepsFirefox":"Clicca il <b>lucchetto</b> a sinistra dell'indirizzo|Togli il blocco accanto a <b>Usa il microfono</b> e <b>Usa la fotocamera</b>|Ricarica la pagina","media.stepsOther":"Apri le impostazioni del browser per questo sito|Consenti <b>Microfono</b> e <b>Fotocamera</b>|Ricarica la pagina",
 "addr.title":"Il tuo indirizzo permanente","addr.sub":"Da dare al posto del numero di telefono. Chi ce l'ha può cercarti quando vuole, senza sapere il tuo nome né il tuo numero. Spento di base.","addr.qrHint":"Chi lo inquadra ti chiama direttamente","addr.share":"Manda il tuo indirizzo","addr.showQr":"Mostra il QR","addr.reachNote":"Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.","addr.dialLabel":"Hai l'indirizzo di qualcuno?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Chiamalo","addr.badFormat":"Questo indirizzo non è scritto bene. Sono 12 caratteri, tipo DV-K7M2-9QRT-X4WP.","addr.itsYou":"Questo è il tuo indirizzo.","addr.callingTitle":"Sto chiamando…","addr.callingHint":"Se la persona ha l'app chiusa le faccio squillare il telefono. Può volerci qualche istante.","addr.noAnswer":"Non ha risposto. L'ho avvisata: riprova più tardi.","addr.dialFailed":"Non sono riuscito a chiamare questo indirizzo.","addr.noKey":"Questo indirizzo non risulta più attivo. Chiedi alla persona di riaprire l'app e di rimandartelo: gli indirizzi sono cambiati con l'ultimo aggiornamento.","addr.noBroker":"Non sono riuscito nemmeno a far partire la chiamata: il servizio che vi fa incontrare non ha risposto. Se stai usando una copia dell'app su un altro indirizzo, apri quella ufficiale.","addr.incomingTitle":"Qualcuno ti sta cercando","addr.incomingSub":"Il nome e il motivo li ha scritti chi ti cerca: finché non accetti, nessuno può dimostrare di essere davvero quella persona.","addr.incomingToast":"Qualcuno ti sta cercando al tuo indirizzo.","addr.accept":"Accetta","addr.ignore":"Ignora","addr.verified":"Verificato: chi ha risposto possiede davvero l'indirizzo {a}. Nessuno può essersi messo in mezzo.","addr.blockedIn":"Chiamata da un contatto che avevi rifiutato: ignorata.","addr.shareText":"Puoi cercarmi qui, senza il mio numero di telefono. Il mio indirizzo su DigitalValut Logos è {a}\n\nTocca per chiamarmi:",
+"addr.provenNotWho":"Chi ha risposto possiede davvero l'indirizzo {a} — ma quell'indirizzo te l'ha lasciato una lettera, e chi l'ha scritta può aver messo qualunque nome. Se non sei sicuro di chi sia, ditevi le tre parole.",
 "addr.incomingAt":"tramite «{name}»","burn.title":"Indirizzi usa e getta","burn.help":"Uno per ogni annuncio o sconosciuto. Quando hai finito lo cancelli e quella persona non ti trova più — il tuo indirizzo vero non l'ha mai avuto.","burn.namePh":"Per cosa? es. Divano usato","burn.add":"Crea","burn.send":"Manda questo indirizzo","burn.delete":"Cancella","burn.deleted":"«{name}» cancellato. Quell'indirizzo non risponde più.","burn.made":"«{name}» creato. Ora puoi darlo a chi vuoi.","burn.needName":"Dagli un nome, così sai a chi l'hai dato.","burn.full":"Puoi averne al massimo {n} insieme. Cancellane uno per farne un altro.","burn.untitled":"Senza nome",
 "knock.title":"Stai contattando","knock.nameLabel":"Come ti chiami?","knock.namePh":"Il tuo nome","knock.msgLabel":"Cosa ti serve? (se vuoi)","knock.msgPh":"es. Avete le scarpe numero 42?","knock.go":"Chiama","knock.note":"Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.",
 "letter.title":"Messaggi lasciati per te","letter.noneTitle":"Non risponde nessuno adesso.","letter.noneSub":"Le ho già segnato che l'hai cercata. Se vuoi dirle qualcosa in più, scrivilo qui.","letter.ph":"Scrivi qui il tuo messaggio","letter.leave":"Lascia il messaggio","letter.cancel":"Lascia perdere","letter.needText":"Scrivi due parole, così sa cosa volevi.","letter.left":"Messaggio lasciato. Lo troverà appena apre l'app.","letter.failed":"Non sono riuscito a lasciare il messaggio. Riprova.","letter.callBack":"Richiama","letter.dismiss":"Fatto",
@@ -368,6 +374,8 @@ Object.assign(I18N.it, {
 "letter.missed":"Voleva parlarti.",
 "sas.blocked":"Prima dite le tre parole a voce: questa persona non risulta più la stessa.",
 "file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.","file.sendFailed":"Invio interrotto: la connessione si è chiusa a metà.","file.progress":"{sent} di {total}",
+"file.stalled":"Un file in arrivo si è fermato a metà ed è stato lasciato andare.",
+"file.tooBigToSend":"«{n}» è troppo grande da mandare: il limite è 512 MB per file.",
 "share.pending":"{n} file pronti da mandare — arrivano appena ti colleghi",
 "health.storage":"Memoria del telefono",
 "health.storageFull":"Piena: le conversazioni non vengono più salvate. Libera spazio sul telefono.",
@@ -445,6 +453,7 @@ Object.assign(I18N.fr, {
 "call.micFailBusy":"Votre microphone ou caméra est déjà utilisé par une autre application (Zoom, Teams, un autre onglet…). Fermez-la et réessayez.",
 "call.micFailDenied":"Le navigateur a bloqué le microphone et la caméra pour ce site. Suivez les étapes ci-dessous, puis rechargez la page.",
 "reconnect.trying":"Tentative de reconnexion à {n}…",
+"reconnect.failed":"Je n'ai pas réussi à me reconnecter. Essayez avec une nouvelle invitation.",
 "reconnect.offline":"{n} ne semble pas en ligne pour le moment. Voici le code à envoyer à la main.",
 "call.noSpeakerFound":"Impossible de trouver un haut-parleur séparé sur ce téléphone.",
 "call.speakerFail":"Impossible de changer de haut-parleur sur ce téléphone.",
@@ -518,6 +527,7 @@ Object.assign(I18N.fr, {
 "viral.title":"Ça a marché.","viral.sub":"Si ça vous a servi, faites passer : c'est gratuit, sans compte, et ça ne conserve rien sur personne.","viral.btn":"En parler à quelqu'un",
 "media.title":"Microphone et caméra","media.warnDenied":"Ce navigateur bloque le microphone : vous ne pourrez ni passer ni recevoir d'appels.","media.warnFix":"Comment corriger","media.retry":"Réessayer","media.close":"Fermer","media.nowOk":"Microphone activé. Vous pouvez appeler.","media.peerNoMic":"{name} a répondu, mais son navigateur bloque le microphone : ce n'est pas un refus.","media.peerNoCam":"{name} a répondu, mais son navigateur bloque la caméra et le microphone : ce n'est pas un refus. Essayez un appel audio.","media.stepsIos":"Ouvrez <b>Réglages</b> sur l'iPhone|Descendez et touchez <b>Safari</b>|Touchez <b>Microphone</b> puis <b>Appareil photo</b> : mettez <b>Demander</b> ou <b>Autoriser</b>|Revenez ici et rechargez la page","media.stepsAndroid":"Touchez le <b>cadenas</b> près de l'adresse, en haut|Touchez <b>Autorisations</b>|Activez <b>Microphone</b> et <b>Caméra</b>|Rechargez la page","media.stepsChrome":"Cliquez sur le <b>cadenas</b> à gauche de l'adresse|Activez <b>Microphone</b> et <b>Caméra</b>|Rechargez la page","media.stepsSafariMac":"Dans la barre de menus ouvrez <b>Safari</b> › <b>Réglages pour ce site web</b>|Mettez <b>Microphone</b> et <b>Caméra</b> sur <b>Autoriser</b>|Rechargez la page","media.stepsFirefox":"Cliquez sur le <b>cadenas</b> à gauche de l'adresse|Retirez le blocage à côté de <b>Utiliser le microphone</b> et <b>Utiliser la caméra</b>|Rechargez la page","media.stepsOther":"Ouvrez les réglages du navigateur pour ce site|Autorisez <b>Microphone</b> et <b>Caméra</b>|Rechargez la page",
 "addr.title":"Votre adresse permanente","addr.sub":"À donner à la place du numéro de téléphone. Qui la possède peut vous joindre quand il veut, sans connaître ni votre nom ni votre numéro. Désactivée par défaut.","addr.qrHint":"La scanner vous appelle directement","addr.share":"Envoyer votre adresse","addr.showQr":"Afficher le QR","addr.reachNote":"Pour qu'on puisse vous joindre même l'application fermée, activez les notifications ci-dessous.","addr.dialLabel":"Vous avez l'adresse de quelqu'un ?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"L'appeler","addr.badFormat":"Cette adresse est mal écrite. Ce sont 12 caractères, comme DV-K7M2-9QRT-X4WP.","addr.itsYou":"C'est votre propre adresse.","addr.callingTitle":"J'appelle…","addr.callingHint":"Si son application est fermée, je fais sonner son téléphone. Cela peut prendre un instant.","addr.noAnswer":"Pas de réponse. La personne a été prévenue : réessayez plus tard.","addr.dialFailed":"Je n'ai pas pu appeler cette adresse.","addr.noKey":"Cette adresse ne semble plus active. Demandez à la personne de rouvrir l'application et de vous la renvoyer : les adresses ont changé avec la dernière mise à jour.","addr.noBroker":"Je n'ai même pas pu lancer l'appel : le service qui vous met en relation n'a pas répondu. Si vous utilisez une copie de l'application à une autre adresse, ouvrez l'officielle.","addr.incomingTitle":"Quelqu'un vous cherche","addr.incomingSub":"Le nom et le motif ont été écrits par la personne qui appelle : tant que vous n'acceptez pas, rien ne prouve qu'elle soit vraiment celle-là.","addr.incomingToast":"Quelqu'un appelle votre adresse.","addr.accept":"Accepter","addr.ignore":"Ignorer","addr.verified":"Vérifié : la personne qui a répondu possède bien l'adresse {a}. Personne n'a pu s'interposer.","addr.blockedIn":"Appel d'une personne que vous aviez écartée : ignoré.","addr.shareText":"Vous pouvez me joindre ici, sans mon numéro de téléphone. Mon adresse DigitalValut Logos est {a}\n\nTouchez pour m'appeler :",
+"addr.provenNotWho":"La personne qui a répondu possède bien l'adresse {a} — mais cette adresse vous est arrivée par une lettre, et son auteur a pu y mettre n'importe quel nom. Si vous n'êtes pas sûr, dites-vous les trois mots.",
 "addr.incomingAt":"via « {name} »","burn.title":"Adresses jetables","burn.help":"Une par annonce, une par inconnu. Supprimez-la une fois terminé et cette personne ne peut plus vous joindre — elle n'a jamais eu la vraie.","burn.namePh":"Pour quoi ? ex. Canapé d'occasion","burn.add":"Créer","burn.send":"Envoyer cette adresse","burn.delete":"Supprimer","burn.deleted":"« {name} » supprimée. Cette adresse ne répond plus.","burn.made":"« {name} » créée. Vous pouvez la donner.","burn.needName":"Donnez-lui un nom, pour savoir à qui vous l'avez donnée.","burn.full":"Vous pouvez en avoir {n} à la fois. Supprimez-en une pour en créer une autre.","burn.untitled":"Sans nom",
 "knock.title":"Vous contactez","knock.nameLabel":"Comment vous appelez-vous ?","knock.namePh":"Votre nom","knock.msgLabel":"Que vous faut-il ? (facultatif)","knock.msgPh":"ex. Avez-vous des chaussures en 42 ?","knock.go":"Appeler","knock.note":"Votre nom et cette phrase ne sont vus que par la personne appelée. Aucun serveur ne peut les lire.",
 "letter.title":"Messages laissés pour vous","letter.noneTitle":"Personne ne répond pour le moment.","letter.noneSub":"Je lui ai déjà fait savoir que vous avez essayé de la joindre. Si vous voulez en dire plus, écrivez-le ici.","letter.ph":"Écrivez votre message ici","letter.leave":"Laisser le message","letter.cancel":"Laisser tomber","letter.needText":"Écrivez deux mots, qu'elle sache ce que vous vouliez.","letter.left":"Message laissé. La personne le trouvera en ouvrant l'application.","letter.failed":"Je n'ai pas pu laisser le message. Réessayez.","letter.callBack":"Rappeler","letter.dismiss":"Terminé",
@@ -528,6 +538,8 @@ Object.assign(I18N.fr, {
 "letter.missed":"Voulait vous parler.",
 "sas.blocked":"Dites d'abord les trois mots à voix haute : cette personne n'est plus la même.",
 "file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.","file.sendFailed":"Envoi interrompu : la connexion s'est fermée en cours de route.","file.progress":"{sent} sur {total}",
+"file.stalled":"Un fichier entrant s'est arrêté à mi-chemin et a été abandonné.",
+"file.tooBigToSend":"« {n} » est trop volumineux : la limite est de 512 Mo par fichier.",
 "share.pending":"{n} fichier(s) prêt(s) à envoyer — ils partent dès que vous êtes connectés",
 "health.storage":"Mémoire du téléphone",
 "health.storageFull":"Pleine : les conversations ne sont plus enregistrées. Libérez de l'espace sur le téléphone.",
@@ -605,6 +617,7 @@ Object.assign(I18N.de, {
 "call.micFailBusy":"Dein Mikrofon oder deine Kamera wird bereits von einer anderen App verwendet (Zoom, Teams, ein anderer Tab…). Schließe sie und versuche es erneut.",
 "call.micFailDenied":"Der Browser hat Mikrofon und Kamera für diese Seite blockiert. Folge den Schritten unten, lade dann die Seite neu.",
 "reconnect.trying":"Verbinde erneut mit {n}…",
+"reconnect.failed":"Die Neuverbindung hat nicht geklappt. Versuch es mit einer neuen Einladung.",
 "reconnect.offline":"{n} scheint gerade nicht online zu sein. Hier ist der Code zum manuellen Versenden.",
 "call.noSpeakerFound":"Kein separater Lautsprecher auf diesem Telefon gefunden.",
 "call.speakerFail":"Lautsprecher auf diesem Telefon kann nicht gewechselt werden.",
@@ -678,6 +691,7 @@ Object.assign(I18N.de, {
 "viral.title":"Es hat funktioniert.","viral.sub":"Wenn es nützlich war, gib es weiter: kostenlos, ohne Konto, und es behält nichts über niemanden.","viral.btn":"Jemandem davon erzählen",
 "media.title":"Mikrofon und Kamera","media.warnDenied":"Dieser Browser blockiert das Mikrofon: Du kannst weder anrufen noch Anrufe annehmen.","media.warnFix":"So geht's","media.retry":"Erneut versuchen","media.close":"Schließen","media.nowOk":"Mikrofon ist an. Du kannst jetzt anrufen.","media.peerNoMic":"{name} hat abgenommen, aber der Browser lässt das Mikrofon nicht zu. Die Person hat dich nicht abgewiesen.","media.peerNoCam":"{name} hat abgenommen, aber der Browser lässt Kamera und Mikrofon nicht zu. Versucht es mit einem reinen Audioanruf, oder bittet sie, die Sperre aufzuheben.","media.stepsIos":"Öffne <b>Einstellungen</b> auf dem iPhone|Scrolle nach unten und tippe auf <b>Safari</b>|Tippe auf <b>Mikrofon</b> und dann <b>Kamera</b>: stelle auf <b>Fragen</b> oder <b>Erlauben</b>|Komm hierher zurück und lade die Seite neu","media.stepsAndroid":"Tippe oben auf das <b>Schloss</b> neben der Adresse|Tippe auf <b>Berechtigungen</b>|Schalte <b>Mikrofon</b> und <b>Kamera</b> ein|Lade die Seite neu","media.stepsChrome":"Klicke auf das <b>Schloss</b> links neben der Adresse|Schalte <b>Mikrofon</b> und <b>Kamera</b> ein|Lade die Seite neu","media.stepsSafariMac":"Öffne in der Menüleiste <b>Safari</b> › <b>Einstellungen für diese Website</b>|Stelle <b>Mikrofon</b> und <b>Kamera</b> auf <b>Erlauben</b>|Lade die Seite neu","media.stepsFirefox":"Klicke auf das <b>Schloss</b> links neben der Adresse|Entferne die Sperre neben <b>Mikrofon verwenden</b> und <b>Kamera verwenden</b>|Lade die Seite neu","media.stepsOther":"Öffne die Browsereinstellungen für diese Seite|Erlaube <b>Mikrofon</b> und <b>Kamera</b>|Lade die Seite neu",
 "addr.title":"Deine dauerhafte Adresse","addr.sub":"Gib sie statt einer Telefonnummer weiter. Wer sie hat, erreicht dich jederzeit, ohne deinen Namen oder deine Nummer zu kennen. Standardmäßig aus.","addr.qrHint":"Wer ihn scannt, ruft dich direkt an","addr.share":"Adresse senden","addr.showQr":"QR anzeigen","addr.reachNote":"Damit man dich auch bei geschlossener App erreicht, schalte unten die Hinweise ein.","addr.dialLabel":"Hast du die Adresse von jemandem?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Anrufen","addr.badFormat":"Diese Adresse ist falsch geschrieben. Es sind 12 Zeichen, etwa DV-K7M2-9QRT-X4WP.","addr.itsYou":"Das ist deine eigene Adresse.","addr.callingTitle":"Ich rufe an…","addr.callingHint":"Ist die App dort geschlossen, lasse ich das Telefon klingeln. Das kann einen Moment dauern.","addr.noAnswer":"Keine Antwort. Die Person wurde benachrichtigt — versuch es später.","addr.dialFailed":"Ich konnte diese Adresse nicht anrufen.","addr.noKey":"Diese Adresse scheint nicht mehr aktiv zu sein. Bitte die Person, die App neu zu öffnen und sie dir noch einmal zu schicken: die Adressen haben sich mit dem letzten Update geändert.","addr.noBroker":"Ich konnte den Anruf nicht einmal starten: der Dienst, der euch zusammenbringt, hat nicht geantwortet. Wenn du eine Kopie der App unter einer anderen Adresse benutzt, öffne die offizielle.","addr.incomingTitle":"Jemand sucht dich","addr.incomingSub":"Name und Grund hat die anrufende Person selbst geschrieben: bis du annimmst, kann niemand beweisen, dass sie das wirklich ist.","addr.incomingToast":"Jemand ruft deine Adresse an.","addr.accept":"Annehmen","addr.ignore":"Ignorieren","addr.verified":"Bestätigt: wer geantwortet hat, besitzt die Adresse {a} wirklich. Niemand kann sich dazwischengeschoben haben.","addr.blockedIn":"Anruf von jemandem, den du abgewiesen hattest: ignoriert.","addr.shareText":"Hier erreichst du mich, ganz ohne meine Telefonnummer. Meine DigitalValut-Logos-Adresse ist {a}\n\nZum Anrufen tippen:",
+"addr.provenNotWho":"Wer geantwortet hat, besitzt die Adresse {a} wirklich — aber diese Adresse kam per Brief, und wer ihn schrieb, konnte jeden Namen daraufsetzen. Wenn du unsicher bist, sagt euch die drei Wörter.",
 "addr.incomingAt":"über „{name}“","burn.title":"Wegwerf-Adressen","burn.help":"Eine pro Anzeige, eine pro Fremdem. Löschst du sie, kommt diese Person nicht mehr an dich heran — deine echte hatte sie nie.","burn.namePh":"Wofür? z. B. Gebrauchtes Sofa","burn.add":"Anlegen","burn.send":"Diese Adresse senden","burn.delete":"Löschen","burn.deleted":"„{name}“ gelöscht. Diese Adresse antwortet nicht mehr.","burn.made":"„{name}“ angelegt. Du kannst sie jetzt weitergeben.","burn.needName":"Gib ihr einen Namen, damit du weißt, wem du sie gegeben hast.","burn.full":"Du kannst {n} gleichzeitig haben. Lösche eine, um eine neue anzulegen.","burn.untitled":"Ohne Namen",
 "knock.title":"Du kontaktierst","knock.nameLabel":"Wie heißt du?","knock.namePh":"Dein Name","knock.msgLabel":"Was brauchst du? (optional)","knock.msgPh":"z. B. Habt ihr Schuhe in Größe 42?","knock.go":"Anrufen","knock.note":"Deinen Namen und diesen Satz sieht nur die angerufene Person. Kein Server kann sie lesen.",
 "letter.title":"Nachrichten für dich","letter.noneTitle":"Gerade antwortet niemand.","letter.noneSub":"Ich habe ihr schon mitgeteilt, dass du sie erreichen wolltest. Wenn du mehr sagen willst, schreib es hier.","letter.ph":"Schreib deine Nachricht hier","letter.leave":"Nachricht hinterlassen","letter.cancel":"Doch nicht","letter.needText":"Schreib zwei Zeilen, damit sie weiß, worum es ging.","letter.left":"Nachricht hinterlassen. Sie wird sie beim Öffnen der App finden.","letter.failed":"Ich konnte die Nachricht nicht hinterlassen. Versuch es nochmal.","letter.callBack":"Zurückrufen","letter.dismiss":"Erledigt",
@@ -688,6 +702,8 @@ Object.assign(I18N.de, {
 "letter.missed":"Wollte mit dir sprechen.",
 "sas.blocked":"Sagt euch zuerst die drei Wörter laut: diese Person ist nicht mehr dieselbe.",
 "file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.","file.sendFailed":"Senden unterbrochen: die Verbindung wurde mittendrin geschlossen.","file.progress":"{sent} von {total}",
+"file.stalled":"Eine eingehende Datei blieb auf halbem Weg stehen und wurde losgelassen.",
+"file.tooBigToSend":"„{n}“ ist zu groß zum Senden: das Limit liegt bei 512 MB pro Datei.",
 "share.pending":"{n} Datei(en) bereit zum Senden — sie gehen raus, sobald ihr verbunden seid",
 "health.storage":"Speicher des Telefons",
 "health.storageFull":"Voll: Unterhaltungen werden nicht mehr gespeichert. Schaff Platz auf dem Telefon.",
@@ -765,6 +781,7 @@ Object.assign(I18N.es, {
 "call.micFailBusy":"Tu micrófono o cámara ya están siendo usados por otra aplicación (Zoom, Teams, otra pestaña…). Ciérrala e inténtalo de nuevo.",
 "call.micFailDenied":"El navegador ha bloqueado el micrófono y la cámara para este sitio. Sigue los pasos de abajo y luego recarga la página.",
 "reconnect.trying":"Intentando reconectar con {n}…",
+"reconnect.failed":"No he podido reconectar. Prueba con una invitación nueva.",
 "reconnect.offline":"{n} no parece estar en línea ahora mismo. Aquí tienes el código para enviarlo a mano.",
 "call.noSpeakerFound":"No se encuentra un altavoz independiente en este teléfono.",
 "call.speakerFail":"No se puede cambiar el altavoz en este teléfono.",
@@ -838,6 +855,7 @@ Object.assign(I18N.es, {
 "viral.title":"Ha funcionado.","viral.sub":"Si te ha servido, pásalo: es gratis, no pide cuenta y no guarda nada de nadie.","viral.btn":"Contárselo a alguien",
 "media.title":"Micrófono y cámara","media.warnDenied":"Este navegador está bloqueando el micrófono: no podrás hacer ni recibir llamadas.","media.warnFix":"Cómo arreglarlo","media.retry":"Reintentar","media.close":"Cerrar","media.nowOk":"Micrófono activado. Ya puedes llamar.","media.peerNoMic":"{name} ha contestado, pero su navegador no le deja activar el micrófono. No es que te haya rechazado.","media.peerNoCam":"{name} ha contestado, pero su navegador no le deja activar la cámara y el micrófono. Probad con una llamada solo de audio, o pedidle que los desbloquee.","media.stepsIos":"Abre <b>Ajustes</b> en el iPhone|Baja y toca <b>Safari</b>|Toca <b>Micrófono</b> y luego <b>Cámara</b>: ponlos en <b>Preguntar</b> o <b>Permitir</b>|Vuelve aquí y recarga la página","media.stepsAndroid":"Toca el <b>candado</b> junto a la dirección, arriba|Toca <b>Permisos</b>|Activa <b>Micrófono</b> y <b>Cámara</b>|Recarga la página","media.stepsChrome":"Haz clic en el <b>candado</b> a la izquierda de la dirección|Activa <b>Micrófono</b> y <b>Cámara</b>|Recarga la página","media.stepsSafariMac":"En la barra de menús abre <b>Safari</b> › <b>Ajustes para esta web</b>|Pon <b>Micrófono</b> y <b>Cámara</b> en <b>Permitir</b>|Recarga la página","media.stepsFirefox":"Haz clic en el <b>candado</b> a la izquierda de la dirección|Quita el bloqueo junto a <b>Usar el micrófono</b> y <b>Usar la cámara</b>|Recarga la página","media.stepsOther":"Abre los ajustes del navegador para este sitio|Permite <b>Micrófono</b> y <b>Cámara</b>|Recarga la página",
 "addr.title":"Tu dirección permanente","addr.sub":"Dala en lugar del número de teléfono. Quien la tenga puede buscarte cuando quiera, sin saber tu nombre ni tu número. Desactivada por defecto.","addr.qrHint":"Quien lo escanea te llama directamente","addr.share":"Enviar tu dirección","addr.showQr":"Mostrar el QR","addr.reachNote":"Para que puedan localizarte también con la aplicación cerrada, activa los avisos aquí abajo.","addr.dialLabel":"¿Tienes la dirección de alguien?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Llamarla","addr.badFormat":"Esa dirección está mal escrita. Son 12 caracteres, como DV-K7M2-9QRT-X4WP.","addr.itsYou":"Esa es tu propia dirección.","addr.callingTitle":"Llamando…","addr.callingHint":"Si tiene la aplicación cerrada, le hago sonar el teléfono. Puede tardar un momento.","addr.noAnswer":"No ha contestado. Ya se le ha avisado: inténtalo más tarde.","addr.dialFailed":"No he podido llamar a esa dirección.","addr.noKey":"Esa dirección ya no parece activa. Pídele a la persona que vuelva a abrir la aplicación y te la envíe otra vez: las direcciones han cambiado con la última actualización.","addr.noBroker":"No he podido ni iniciar la llamada: el servicio que os pone en contacto no ha respondido. Si estás usando una copia de la aplicación en otra dirección, abre la oficial.","addr.incomingTitle":"Alguien te está buscando","addr.incomingSub":"El nombre y el motivo los ha escrito quien llama: hasta que no aceptes, nadie puede demostrar que sea esa persona de verdad.","addr.incomingToast":"Alguien está llamando a tu dirección.","addr.accept":"Aceptar","addr.ignore":"Ignorar","addr.verified":"Verificado: quien ha respondido posee de verdad la dirección {a}. Nadie ha podido meterse en medio.","addr.blockedIn":"Llamada de alguien a quien habías rechazado: ignorada.","addr.shareText":"Puedes buscarme aquí, sin mi número de teléfono. Mi dirección en DigitalValut Logos es {a}\n\nToca para llamarme:",
+"addr.provenNotWho":"Quien ha respondido posee de verdad la dirección {a} — pero esa dirección te llegó en una carta, y quien la escribió pudo poner cualquier nombre. Si no estás seguro, decíos las tres palabras.",
 "addr.incomingAt":"a través de «{name}»","burn.title":"Direcciones de usar y tirar","burn.help":"Una por anuncio, una por desconocido. Cuando termines la borras y esa persona ya no puede localizarte — nunca tuvo la de verdad.","burn.namePh":"¿Para qué? p. ej. Sofá de segunda mano","burn.add":"Crear","burn.send":"Enviar esta dirección","burn.delete":"Borrar","burn.deleted":"«{name}» borrada. Esa dirección ya no responde.","burn.made":"«{name}» creada. Ya puedes darla.","burn.needName":"Ponle un nombre, así sabes a quién se la diste.","burn.full":"Puedes tener {n} a la vez. Borra una para crear otra.","burn.untitled":"Sin nombre",
 "knock.title":"Estás contactando con","knock.nameLabel":"¿Cómo te llamas?","knock.namePh":"Tu nombre","knock.msgLabel":"¿Qué necesitas? (opcional)","knock.msgPh":"p. ej. ¿Tenéis zapatos del 42?","knock.go":"Llamar","knock.note":"Tu nombre y esta frase solo los ve la persona a la que llamas. Ningún servidor puede leerlos.",
 "letter.title":"Mensajes que te han dejado","letter.noneTitle":"Ahora mismo no contesta nadie.","letter.noneSub":"Ya le he avisado de que has intentado localizarla. Si quieres decirle algo más, escríbelo aquí.","letter.ph":"Escribe aquí tu mensaje","letter.leave":"Dejar el mensaje","letter.cancel":"Déjalo","letter.needText":"Escribe dos palabras, así sabrá qué querías.","letter.left":"Mensaje dejado. Lo encontrará al abrir la aplicación.","letter.failed":"No he podido dejar el mensaje. Inténtalo otra vez.","letter.callBack":"Devolver la llamada","letter.dismiss":"Hecho",
@@ -848,6 +866,8 @@ Object.assign(I18N.es, {
 "letter.missed":"Quería hablar contigo.",
 "sas.blocked":"Decíos antes las tres palabras en voz alta: esta persona ya no es la misma.",
 "file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.","file.sendFailed":"Envío interrumpido: la conexión se cerró a mitad de camino.","file.progress":"{sent} de {total}",
+"file.stalled":"Un archivo entrante se detuvo a medias y se ha soltado.",
+"file.tooBigToSend":"«{n}» es demasiado grande para enviarlo: el límite es 512 MB por archivo.",
 "share.pending":"{n} archivo(s) listos para enviar — se envían en cuanto os conectéis",
 "health.storage":"Memoria del teléfono",
 "health.storageFull":"Llena: las conversaciones ya no se guardan. Libera espacio en el teléfono.",
@@ -925,6 +945,7 @@ Object.assign(I18N.pt, {
 "call.micFailBusy":"O seu microfone ou câmara já estão a ser usados por outra aplicação (Zoom, Teams, outro separador…). Feche-a e tente novamente.",
 "call.micFailDenied":"O navegador bloqueou o microfone e a câmara para este site. Siga os passos abaixo e depois recarregue a página.",
 "reconnect.trying":"A tentar reconectar a {n}…",
+"reconnect.failed":"Não consegui reconectar. Tente com um convite novo.",
 "reconnect.offline":"{n} não parece estar online neste momento. Aqui está o código para enviar manualmente.",
 "call.noSpeakerFound":"Não foi encontrado um altifalante separado neste telemóvel.",
 "call.speakerFail":"Não é possível mudar o altifalante neste telemóvel.",
@@ -998,6 +1019,7 @@ Object.assign(I18N.pt, {
 "viral.title":"Funcionou.","viral.sub":"Se foi útil, passe adiante: é grátis, não pede conta e não guarda nada de ninguém.","viral.btn":"Contar a alguém",
 "media.title":"Microfone e câmara","media.warnDenied":"Este navegador está a bloquear o microfone: não vai conseguir fazer nem receber chamadas.","media.warnFix":"Como resolver","media.retry":"Tentar de novo","media.close":"Fechar","media.nowOk":"Microfone ativo. Já pode ligar.","media.peerNoMic":"{name} atendeu, mas o navegador está a bloquear o microfone: não é uma recusa.","media.peerNoCam":"{name} atendeu, mas o navegador está a bloquear a câmara e o microfone: não é uma recusa. Tentem uma chamada só de áudio.","media.stepsIos":"Abra <b>Definições</b> no iPhone|Desça e toque em <b>Safari</b>|Toque em <b>Microfone</b> e depois <b>Câmara</b>: ponha <b>Perguntar</b> ou <b>Permitir</b>|Volte aqui e recarregue a página","media.stepsAndroid":"Toque no <b>cadeado</b> ao lado do endereço, em cima|Toque em <b>Permissões</b>|Ative <b>Microfone</b> e <b>Câmara</b>|Recarregue a página","media.stepsChrome":"Clique no <b>cadeado</b> à esquerda do endereço|Ative <b>Microfone</b> e <b>Câmara</b>|Recarregue a página","media.stepsSafariMac":"Na barra de menus abra <b>Safari</b> › <b>Definições para este site</b>|Ponha <b>Microfone</b> e <b>Câmara</b> em <b>Permitir</b>|Recarregue a página","media.stepsFirefox":"Clique no <b>cadeado</b> à esquerda do endereço|Retire o bloqueio ao lado de <b>Usar o microfone</b> e <b>Usar a câmara</b>|Recarregue a página","media.stepsOther":"Abra as definições do navegador para este site|Permita <b>Microfone</b> e <b>Câmara</b>|Recarregue a página",
 "addr.title":"O seu endereço permanente","addr.sub":"Dê este em vez do número de telefone. Quem o tiver pode procurá-lo quando quiser, sem saber o seu nome nem o seu número. Desativado por predefinição.","addr.qrHint":"Quem o ler chama-o diretamente","addr.share":"Enviar o seu endereço","addr.showQr":"Mostrar o QR","addr.reachNote":"Para que o possam alcançar mesmo com a aplicação fechada, ative os avisos aqui em baixo.","addr.dialLabel":"Tem o endereço de alguém?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Ligar","addr.badFormat":"Esse endereço está mal escrito. São 12 caracteres, como DV-K7M2-9QRT-X4WP.","addr.itsYou":"Esse é o seu próprio endereço.","addr.callingTitle":"A ligar…","addr.callingHint":"Se tiver a aplicação fechada, faço tocar o telemóvel. Pode demorar um instante.","addr.noAnswer":"Não atendeu. Já foi avisada: tente mais tarde.","addr.dialFailed":"Não consegui ligar para esse endereço.","addr.noKey":"Esse endereço já não parece ativo. Peça à pessoa para reabrir a aplicação e enviá-lo de novo: os endereços mudaram com a última atualização.","addr.noBroker":"Não consegui sequer iniciar a chamada: o serviço que vos põe em contacto não respondeu. Se está a usar uma cópia da aplicação noutro endereço, abra a oficial.","addr.incomingTitle":"Alguém está à sua procura","addr.incomingSub":"O nome e o motivo foram escritos por quem liga: enquanto não aceitar, ninguém pode provar que é mesmo essa pessoa.","addr.incomingToast":"Alguém está a ligar para o seu endereço.","addr.accept":"Aceitar","addr.ignore":"Ignorar","addr.verified":"Verificado: quem respondeu possui mesmo o endereço {a}. Ninguém se pode ter metido pelo meio.","addr.blockedIn":"Chamada de alguém que tinha recusado: ignorada.","addr.shareText":"Pode encontrar-me aqui, sem o meu número de telefone. O meu endereço no DigitalValut Logos é {a}\n\nToque para me ligar:",
+"addr.provenNotWho":"Quem respondeu possui mesmo o endereço {a} — mas esse endereço chegou numa carta, e quem a escreveu podia pôr qualquer nome. Se não tem a certeza, digam as três palavras.",
 "addr.incomingAt":"através de «{name}»","burn.title":"Endereços descartáveis","burn.help":"Um por anúncio, um por desconhecido. Quando acabar, apaga-o e essa pessoa deixa de o encontrar — nunca teve o verdadeiro.","burn.namePh":"Para quê? ex. Sofá usado","burn.add":"Criar","burn.send":"Enviar este endereço","burn.delete":"Apagar","burn.deleted":"«{name}» apagado. Esse endereço já não responde.","burn.made":"«{name}» criado. Já o pode dar.","burn.needName":"Dê-lhe um nome, para saber a quem o deu.","burn.full":"Pode ter {n} ao mesmo tempo. Apague um para criar outro.","burn.untitled":"Sem nome",
 "knock.title":"Está a contactar","knock.nameLabel":"Como se chama?","knock.namePh":"O seu nome","knock.msgLabel":"Do que precisa? (opcional)","knock.msgPh":"ex. Têm sapatos do 42?","knock.go":"Ligar","knock.note":"O seu nome e esta frase só são vistos pela pessoa a quem liga. Nenhum servidor os consegue ler.",
 "letter.title":"Mensagens deixadas para si","letter.noneTitle":"Ninguém está a responder agora.","letter.noneSub":"Já lhe avisei de que tentou contactá-la. Se quiser dizer mais alguma coisa, escreva aqui.","letter.ph":"Escreva aqui a sua mensagem","letter.leave":"Deixar a mensagem","letter.cancel":"Deixe estar","letter.needText":"Escreva duas palavras, para saber o que queria.","letter.left":"Mensagem deixada. Vai encontrá-la ao abrir a aplicação.","letter.failed":"Não consegui deixar a mensagem. Tente de novo.","letter.callBack":"Ligar de volta","letter.dismiss":"Feito",
@@ -1008,6 +1030,8 @@ Object.assign(I18N.pt, {
 "letter.missed":"Queria falar consigo.",
 "sas.blocked":"Digam primeiro as três palavras em voz alta: esta pessoa já não é a mesma.",
 "file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.","file.sendFailed":"Envio interrompido: a ligação fechou a meio.","file.progress":"{sent} de {total}",
+"file.stalled":"Um ficheiro recebido parou a meio e foi largado.",
+"file.tooBigToSend":"«{n}» é grande demais para enviar: o limite é 512 MB por ficheiro.",
 "share.pending":"{n} ficheiro(s) prontos para enviar — partem assim que se ligarem",
 "health.storage":"Memória do telemóvel",
 "health.storageFull":"Cheia: as conversas já não são guardadas. Liberte espaço no telemóvel.",
@@ -1085,6 +1109,7 @@ Object.assign(I18N.ru, {
 "call.micFailBusy":"Ваш микрофон или камера уже используются другим приложением (Zoom, Teams, другая вкладка…). Закройте его и попробуйте снова.",
 "call.micFailDenied":"Браузер заблокировал микрофон и камеру для этого сайта. Выполните шаги ниже, затем перезагрузите страницу.",
 "reconnect.trying":"Пытаемся снова соединиться с {n}…",
+"reconnect.failed":"Не удалось переподключиться. Попробуйте новое приглашение.",
 "reconnect.offline":"{n}, похоже, сейчас не в сети. Вот код, чтобы отправить вручную.",
 "call.noSpeakerFound":"Не удаётся найти отдельный динамик на этом телефоне.",
 "call.speakerFail":"Не удаётся переключить динамик на этом телефоне.",
@@ -1158,6 +1183,7 @@ Object.assign(I18N.ru, {
 "viral.title":"Получилось.","viral.sub":"Если пригодилось — передайте дальше: это бесплатно, без регистрации и ничего ни о ком не хранит.","viral.btn":"Рассказать кому-нибудь",
 "media.title":"Микрофон и камера","media.warnDenied":"Этот браузер блокирует микрофон: вы не сможете ни звонить, ни принимать звонки.","media.warnFix":"Как исправить","media.retry":"Ещё раз","media.close":"Закрыть","media.nowOk":"Микрофон включён. Теперь можно звонить.","media.peerNoMic":"{name}: звонок принят, но браузер не даёт включить микрофон. Это не отказ.","media.peerNoCam":"{name}: звонок принят, но браузер не даёт включить камеру и микрофон. Это не отказ — попробуйте только голосовой звонок.","media.stepsIos":"Откройте <b>Настройки</b> на iPhone|Прокрутите вниз и нажмите <b>Safari</b>|Нажмите <b>Микрофон</b>, затем <b>Камера</b>: поставьте <b>Спрашивать</b> или <b>Разрешить</b>|Вернитесь сюда и перезагрузите страницу","media.stepsAndroid":"Нажмите на <b>замок</b> рядом с адресом вверху|Нажмите <b>Разрешения</b>|Включите <b>Микрофон</b> и <b>Камеру</b>|Перезагрузите страницу","media.stepsChrome":"Нажмите на <b>замок</b> слева от адреса|Включите <b>Микрофон</b> и <b>Камеру</b>|Перезагрузите страницу","media.stepsSafariMac":"В строке меню откройте <b>Safari</b> › <b>Настройки для этого сайта</b>|Поставьте <b>Микрофон</b> и <b>Камеру</b> на <b>Разрешить</b>|Перезагрузите страницу","media.stepsFirefox":"Нажмите на <b>замок</b> слева от адреса|Снимите блокировку рядом с <b>Использовать микрофон</b> и <b>Использовать камеру</b>|Перезагрузите страницу","media.stepsOther":"Откройте настройки браузера для этого сайта|Разрешите <b>Микрофон</b> и <b>Камеру</b>|Перезагрузите страницу",
 "addr.title":"Ваш постоянный адрес","addr.sub":"Давайте его вместо номера телефона. Тот, у кого он есть, сможет связаться с вами в любой момент, не зная ни вашего имени, ни номера. По умолчанию выключено.","addr.qrHint":"Кто его отсканирует, сразу позвонит вам","addr.share":"Отправить адрес","addr.showQr":"Показать QR","addr.reachNote":"Чтобы вас могли застать и при закрытом приложении, включите уведомления ниже.","addr.dialLabel":"Есть чей-то адрес?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Позвонить","addr.badFormat":"Адрес записан неверно. Это 12 символов, например DV-K7M2-9QRT-X4WP.","addr.itsYou":"Это ваш собственный адрес.","addr.callingTitle":"Звоню…","addr.callingHint":"Если приложение закрыто, я заставлю телефон зазвонить. Это может занять момент.","addr.noAnswer":"Ответа нет. Я предупредил — попробуйте позже.","addr.dialFailed":"Не удалось позвонить на этот адрес.","addr.noKey":"Похоже, этот адрес больше не активен. Попросите человека заново открыть приложение и прислать адрес ещё раз: адреса изменились с последним обновлением.","addr.noBroker":"Я даже не смог начать звонок: служба, которая вас соединяет, не ответила. Если вы используете копию приложения по другому адресу, откройте официальную.","addr.incomingTitle":"Вас ищут","addr.incomingSub":"Имя и причину написал тот, кто звонит: пока вы не примете, никто не может доказать, что это действительно он.","addr.incomingToast":"Кто-то звонит на ваш адрес.","addr.accept":"Принять","addr.ignore":"Пропустить","addr.verified":"Проверено: ответивший действительно владеет адресом {a}. Никто не мог вклиниться.","addr.blockedIn":"Звонок от того, кому вы уже отказали: пропущен.","addr.shareText":"Со мной можно связаться здесь, без номера телефона. Мой адрес в DigitalValut Logos — {a}\n\nНажмите, чтобы позвонить:",
+"addr.provenNotWho":"Ответивший действительно владеет адресом {a} — но этот адрес пришёл к вам в письме, а написавший мог указать любое имя. Если не уверены, произнесите друг другу три слова.",
 "addr.incomingAt":"через «{name}»","burn.title":"Одноразовые адреса","burn.help":"По одному на объявление, по одному на незнакомца. Удалите — и этот человек больше вас не найдёт: настоящего у него никогда не было.","burn.namePh":"Для чего? напр. Диван б/у","burn.add":"Создать","burn.send":"Отправить этот адрес","burn.delete":"Удалить","burn.deleted":"«{name}» удалён. Этот адрес больше не отвечает.","burn.made":"«{name}» создан. Можно раздавать.","burn.needName":"Дайте ему имя, чтобы помнить, кому отдали.","burn.full":"Одновременно можно иметь {n}. Удалите один, чтобы создать новый.","burn.untitled":"Без имени",
 "knock.title":"Вы связываетесь с","knock.nameLabel":"Как вас зовут?","knock.namePh":"Ваше имя","knock.msgLabel":"Что вам нужно? (не обязательно)","knock.msgPh":"напр. Есть обувь 42 размера?","knock.go":"Позвонить","knock.note":"Ваше имя и эту фразу видит только тот, кому вы звоните. Ни один сервер их не прочтёт.",
 "letter.title":"Оставленные вам сообщения","letter.noneTitle":"Сейчас никто не отвечает.","letter.noneSub":"Я уже сообщил ей, что вы пытались до неё дозвониться. Если хотите сказать больше, напишите здесь.","letter.ph":"Напишите сообщение здесь","letter.leave":"Оставить сообщение","letter.cancel":"Не надо","letter.needText":"Напишите пару слов, чтобы было понятно, зачем вы звонили.","letter.left":"Сообщение оставлено. Его увидят при открытии приложения.","letter.failed":"Не удалось оставить сообщение. Попробуйте ещё раз.","letter.callBack":"Перезвонить","letter.dismiss":"Готово",
@@ -1168,6 +1194,8 @@ Object.assign(I18N.ru, {
 "letter.missed":"Хотел(а) с вами поговорить.",
 "sas.blocked":"Сначала произнесите три слова вслух: это уже не тот же человек.",
 "file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.","file.sendFailed":"Отправка прервана: соединение закрылось на середине.","file.progress":"{sent} из {total}",
+"file.stalled":"Входящий файл остановился на полпути и был отпущен.",
+"file.tooBigToSend":"«{n}» слишком велик для отправки: предел — 512 МБ на файл.",
 "share.pending":"Готово к отправке: {n} файл(ов) — уйдут, как только соединитесь",
 "health.storage":"Память телефона",
 "health.storageFull":"Заполнена: разговоры больше не сохраняются. Освободите место на телефоне.",
@@ -1245,6 +1273,7 @@ Object.assign(I18N.zh, {
 "call.micFailBusy":"你的麦克风或摄像头已被另一个应用占用（Zoom、Teams、另一个标签页……）。请关闭它后重试。",
 "call.micFailDenied":"浏览器已阻止此网站使用麦克风和摄像头。请按以下步骤操作，然后重新加载页面。",
 "reconnect.trying":"正在尝试重新连接 {n}…",
+"reconnect.failed":"重新连接失败。请用新的邀请再试。",
 "reconnect.offline":"{n} 目前似乎不在线。这是可以手动发送的代码。",
 "call.noSpeakerFound":"在此手机上找不到独立扬声器。",
 "call.speakerFail":"无法在此手机上切换扬声器。",
@@ -1318,6 +1347,7 @@ Object.assign(I18N.zh, {
 "viral.title":"成功了。","viral.sub":"如果觉得有用，就传给别人吧：免费、无需账号，也不保存任何人的任何信息。","viral.btn":"告诉别人",
 "media.title":"麦克风和摄像头","media.warnDenied":"此浏览器阻止了麦克风：你将无法拨打或接听通话。","media.warnFix":"如何解决","media.retry":"重试","media.close":"关闭","media.nowOk":"麦克风已开启，现在可以通话了。","media.peerNoMic":"{name} 已经接听了，但对方的浏览器不允许开启麦克风。不是对方拒绝了你。","media.peerNoCam":"{name} 已经接听了，但对方的浏览器不允许开启摄像头和麦克风。可以改用语音通话，或者请对方解除限制。","media.stepsIos":"在 iPhone 上打开<b>设置</b>|向下滑动并点按 <b>Safari 浏览器</b>|点按<b>麦克风</b>，再点按<b>相机</b>：设为<b>询问</b>或<b>允许</b>|回到这里并重新加载页面","media.stepsAndroid":"点按地址栏旁边顶部的<b>锁形图标</b>|点按<b>权限</b>|开启<b>麦克风</b>和<b>相机</b>|重新加载页面","media.stepsChrome":"点击地址左侧的<b>锁形图标</b>|开启<b>麦克风</b>和<b>摄像头</b>|重新加载页面","media.stepsSafariMac":"在菜单栏打开 <b>Safari 浏览器</b> › <b>此网站的设置</b>|将<b>麦克风</b>和<b>摄像头</b>设为<b>允许</b>|重新加载页面","media.stepsFirefox":"点击地址左侧的<b>锁形图标</b>|清除<b>使用麦克风</b>和<b>使用摄像头</b>旁边的阻止|重新加载页面","media.stepsOther":"打开浏览器中此网站的设置|允许<b>麦克风</b>和<b>摄像头</b>|重新加载页面",
 "addr.title":"你的永久地址","addr.sub":"把它给别人，代替电话号码。拿到它的人随时都能找到你，而不必知道你的名字或号码。默认关闭。","addr.qrHint":"扫一下就能直接呼叫你","addr.share":"发送你的地址","addr.showQr":"显示二维码","addr.reachNote":"想让别人在应用关闭时也能找到你，请打开下面的通知。","addr.dialLabel":"有别人的地址吗？","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"呼叫","addr.badFormat":"这个地址写得不对。它是 12 个字符，例如 DV-K7M2-9QRT-X4WP。","addr.itsYou":"这是你自己的地址。","addr.callingTitle":"正在呼叫…","addr.callingHint":"如果对方的应用关着，我会让手机响起来。可能需要一点时间。","addr.noAnswer":"没有回应。已经通知过对方了，稍后再试。","addr.dialFailed":"无法呼叫这个地址。","addr.noKey":"这个地址似乎已经失效。请让对方重新打开应用并再发一次：地址在最近一次更新中变了。","addr.noBroker":"我连呼叫都没能发出：帮你们牵线的服务没有回应。如果你用的是放在别处的应用副本，请打开官方的那个。","addr.incomingTitle":"有人在找你","addr.incomingSub":"名字和理由是呼叫方自己写的：在你接受之前，没有人能证明他确实是那个人。","addr.incomingToast":"有人正在呼叫你的地址。","addr.accept":"接受","addr.ignore":"忽略","addr.verified":"已验证：应答的一方确实拥有地址 {a}。不可能有人插在中间。","addr.blockedIn":"来自你已拒绝过的人的呼叫：已忽略。","addr.shareText":"你可以在这里找到我，不需要我的电话号码。我的 DigitalValut Logos 地址是 {a}\n\n点一下就能呼叫我：",
+"addr.provenNotWho":"应答的人确实拥有地址 {a} —— 但这个地址是通过一封信到你手里的，写信的人可以署任何名字。如果不确定对方是谁，请互相说出那三个词。",
 "addr.incomingAt":"通过“{name}”","burn.title":"一次性地址","burn.help":"每条广告一个，每个陌生人一个。用完删掉，那个人就再也找不到你——他从来没拿到过你真正的地址。","burn.namePh":"用来做什么？例如：二手沙发","burn.add":"创建","burn.send":"发送这个地址","burn.delete":"删除","burn.deleted":"“{name}”已删除。该地址不再应答。","burn.made":"“{name}”已创建，可以发给别人了。","burn.needName":"给它起个名字，这样你知道给了谁。","burn.full":"最多同时保留 {n} 个。删掉一个才能再建。","burn.untitled":"未命名",
 "knock.title":"你正在联系","knock.nameLabel":"你叫什么名字？","knock.namePh":"你的名字","knock.msgLabel":"你需要什么？（可不填）","knock.msgPh":"例如：有42码的鞋吗？","knock.go":"呼叫","knock.note":"你的名字和这句话只有被叫的人能看到。任何服务器都读不到。",
 "letter.title":"留给你的消息","letter.noneTitle":"现在没有人接听。","letter.noneSub":"我已经告诉对方你找过她了。如果你想多说几句，可以写在这里。","letter.ph":"在这里写下你的消息","letter.leave":"留下消息","letter.cancel":"算了","letter.needText":"写上一两句，让对方知道你想说什么。","letter.left":"消息已留下。对方打开应用就会看到。","letter.failed":"没能留下消息，请再试一次。","letter.callBack":"回拨","letter.dismiss":"完成",
@@ -1328,6 +1358,8 @@ Object.assign(I18N.zh, {
 "letter.missed":"想跟你说说话。",
 "sas.blocked":"请先把三个词念出来核对：这个人已经不是原来那位了。",
 "file.tooBig":"一个接收中的文件已被中止：它与声明的不符。","file.sendFailed":"发送中断：连接在传输过程中关闭了。","file.progress":"{sent} / {total}",
+"file.stalled":"一个接收中的文件中途停住，已被放弃。",
+"file.tooBigToSend":"“{n}”太大，无法发送：每个文件上限为 512 MB。",
 "share.pending":"{n} 个文件已准备好发送——一连接就会发送",
 "health.storage":"手机存储",
 "health.storageFull":"已满：对话不再被保存。请清理手机空间。",
@@ -1405,6 +1437,7 @@ Object.assign(I18N.ar, {
 "call.micFailBusy":"الميكروفون أو الكاميرا قيد الاستخدام بالفعل من تطبيق آخر (Zoom، Teams، تبويب آخر…). أغلقه وأعد المحاولة.",
 "call.micFailDenied":"حظر المتصفح الميكروفون والكاميرا لهذا الموقع. اتبع الخطوات أدناه، ثم أعد تحميل الصفحة.",
 "reconnect.trying":"جارٍ محاولة إعادة الاتصال بـ {n}…",
+"reconnect.failed":"تعذّرت إعادة الاتصال. جرّب دعوة جديدة.",
 "reconnect.offline":"{n} لا يبدو متصلًا الآن. إليك الرمز لإرساله يدويًا.",
 "call.noSpeakerFound":"تعذّر العثور على مكبر صوت منفصل على هذا الهاتف.",
 "call.speakerFail":"تعذّر تبديل مكبر الصوت على هذا الهاتف.",
@@ -1478,6 +1511,7 @@ Object.assign(I18N.ar, {
 "viral.title":"نجح الأمر.","viral.sub":"إن كان مفيدًا، مرّره لغيرك: مجاني، لا يطلب حسابًا، ولا يحتفظ بشيء عن أحد.","viral.btn":"أخبر شخصًا عنه",
 "media.title":"الميكروفون والكاميرا","media.warnDenied":"هذا المتصفح يحجب الميكروفون: لن تتمكن من إجراء المكالمات أو استقبالها.","media.warnFix":"كيف تُصلحها","media.retry":"أعد المحاولة","media.close":"إغلاق","media.nowOk":"الميكروفون يعمل. يمكنك الاتصال الآن.","media.peerNoMic":"{name}: تم الرد، لكن المتصفح يمنع تشغيل الميكروفون. ليس رفضًا.","media.peerNoCam":"{name}: تم الرد، لكن المتصفح يمنع تشغيل الكاميرا والميكروفون. ليس رفضًا — جرّبا مكالمة صوتية فقط.","media.stepsIos":"افتح <b>الإعدادات</b> على الآيفون|انزل واضغط <b>Safari</b>|اضغط <b>الميكروفون</b> ثم <b>الكاميرا</b>: اجعلهما <b>اسأل</b> أو <b>اسمح</b>|عُد إلى هنا وأعد تحميل الصفحة","media.stepsAndroid":"اضغط على <b>القفل</b> بجوار العنوان في الأعلى|اضغط <b>الأذونات</b>|فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد تحميل الصفحة","media.stepsChrome":"اضغط على <b>القفل</b> يسار العنوان|فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد تحميل الصفحة","media.stepsSafariMac":"من شريط القوائم افتح <b>Safari</b> › <b>إعدادات هذا الموقع</b>|اجعل <b>الميكروفون</b> و<b>الكاميرا</b> على <b>السماح</b>|أعد تحميل الصفحة","media.stepsFirefox":"اضغط على <b>القفل</b> يسار العنوان|أزل الحجب بجوار <b>استخدام الميكروفون</b> و<b>استخدام الكاميرا</b>|أعد تحميل الصفحة","media.stepsOther":"افتح إعدادات المتصفح لهذا الموقع|اسمح بـ<b>الميكروفون</b> و<b>الكاميرا</b>|أعد تحميل الصفحة",
 "addr.title":"عنوانك الدائم","addr.sub":"أعطِه بدلًا من رقم هاتفك. من يملكه يستطيع الوصول إليك متى شاء، دون معرفة اسمك ولا رقمك. متوقف افتراضيًا.","addr.qrHint":"من يمسحه يتصل بك مباشرة","addr.share":"أرسل عنوانك","addr.showQr":"أظهر رمز QR","addr.reachNote":"لكي يصلوا إليك حتى والتطبيق مغلق، فعّل التنبيهات في الأسفل.","addr.dialLabel":"هل لديك عنوان أحدهم؟","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"اتصل به","addr.badFormat":"هذا العنوان مكتوب بشكل خاطئ. إنه 12 حرفًا، مثل DV-K7M2-9QRT-X4WP.","addr.itsYou":"هذا عنوانك أنت.","addr.callingTitle":"جارٍ الاتصال…","addr.callingHint":"إن كان تطبيقه مغلقًا سأجعل هاتفه يرن. قد يستغرق الأمر لحظة.","addr.noAnswer":"لم يردّ. لقد نبّهته: حاول لاحقًا.","addr.dialFailed":"لم أتمكن من الاتصال بهذا العنوان.","addr.noKey":"لا يبدو أن هذا العنوان لا يزال نشطًا. اطلب من الشخص أن يعيد فتح التطبيق ويرسله إليك مرة أخرى: تغيّرت العناوين مع التحديث الأخير.","addr.noBroker":"لم أتمكن حتى من بدء الاتصال: الخدمة التي تجمعكما لم تُجب. إذا كنت تستخدم نسخة من التطبيق على عنوان آخر، فافتح النسخة الرسمية.","addr.incomingTitle":"أحدهم يبحث عنك","addr.incomingSub":"الاسم والسبب كتبهما من يتصل بك: إلى أن تقبل، لا أحد يستطيع إثبات أنه فعلًا ذلك الشخص.","addr.incomingToast":"أحدهم يتصل بعنوانك.","addr.accept":"اقبل","addr.ignore":"تجاهل","addr.verified":"تم التحقق: من ردّ يملك فعلًا العنوان {a}. لا يمكن لأحد أن يكون قد توسّط.","addr.blockedIn":"اتصال من شخص سبق أن رفضته: تم تجاهله.","addr.shareText":"يمكنك الوصول إليّ هنا، دون رقم هاتفي. عنواني على DigitalValut Logos هو {a}\n\nاضغط للاتصال بي:",
+"addr.provenNotWho":"من ردّ يملك فعلًا العنوان {a} — لكن هذا العنوان وصلك في رسالة، ومن كتبها كان بإمكانه وضع أي اسم. إن لم تكن متأكدًا، فتبادلا الكلمات الثلاث.",
 "addr.incomingAt":"عبر «{name}»","burn.title":"عناوين للاستعمال مرة واحدة","burn.help":"واحد لكل إعلان، وواحد لكل غريب. احذفه عند الانتهاء فلا يعود ذلك الشخص يصل إليك — لم يحصل على عنوانك الحقيقي أصلًا.","burn.namePh":"لماذا؟ مثلًا: أريكة مستعملة","burn.add":"إنشاء","burn.send":"أرسل هذا العنوان","burn.delete":"احذف","burn.deleted":"تم حذف «{name}». هذا العنوان لم يعد يردّ.","burn.made":"تم إنشاء «{name}». يمكنك إعطاؤه الآن.","burn.needName":"أعطه اسمًا لتعرف لمن أعطيته.","burn.full":"يمكنك الاحتفاظ بـ {n} في وقت واحد. احذف واحدًا لإنشاء آخر.","burn.untitled":"بلا اسم",
 "knock.title":"أنت تتواصل مع","knock.nameLabel":"ما اسمك؟","knock.namePh":"اسمك","knock.msgLabel":"ماذا تحتاج؟ (اختياري)","knock.msgPh":"مثلًا: هل لديكم حذاء مقاس 42؟","knock.go":"اتصل","knock.note":"اسمك وهذه الجملة لا يراهما إلا الشخص الذي تتصل به. لا يستطيع أي خادم قراءتهما.",
 "letter.title":"رسائل تُركت لك","letter.noneTitle":"لا أحد يردّ الآن.","letter.noneSub":"أخبرتها بالفعل أنك حاولت الوصول إليها. إذا أردت أن تقول المزيد، اكتبه هنا.","letter.ph":"اكتب رسالتك هنا","letter.leave":"اترك الرسالة","letter.cancel":"لا بأس","letter.needText":"اكتب كلمتين ليعرف ماذا أردت.","letter.left":"تُركت الرسالة. سيجدها عند فتح التطبيق.","letter.failed":"لم أتمكن من ترك الرسالة. حاول مرة أخرى.","letter.callBack":"عاود الاتصال","letter.dismiss":"تم",
@@ -1488,6 +1522,8 @@ Object.assign(I18N.ar, {
 "letter.missed":"أراد التحدث إليك.",
 "sas.blocked":"قولا الكلمات الثلاث بصوت عالٍ أولًا: هذا الشخص لم يعد نفسه.",
 "file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.","file.sendFailed":"توقف الإرسال: أُغلق الاتصال في المنتصف.","file.progress":"{sent} من {total}",
+"file.stalled":"توقّف ملف وارد في منتصف الطريق وتم التخلّي عنه.",
+"file.tooBigToSend":"«{n}» أكبر من أن يُرسل: الحد هو 512 ميغابايت لكل ملف.",
 "share.pending":"{n} ملف جاهز للإرسال — سُيرسل بمجرد الاتصال",
 "health.storage":"ذاكرة الهاتف",
 "health.storageFull":"ممتلئة: لم تعد المحادثات تُحفظ. أفرغ بعض المساحة في الهاتف.",
@@ -1565,6 +1601,7 @@ Object.assign(I18N.ur, {
 "call.micFailBusy":"آپ کا مائیکروفون یا کیمرا پہلے سے کسی اور ایپ کے زیر استعمال ہے (Zoom، Teams، ایک اور ٹیب…)۔ اسے بند کریں اور دوبارہ کوشش کریں۔",
 "call.micFailDenied":"براؤزر نے اس سائٹ کے لیے مائیکروفون اور کیمرا بلاک کر دیا ہے۔ نیچے دیے گئے مراحل پر عمل کریں، پھر صفحہ دوبارہ لوڈ کریں۔",
 "reconnect.trying":"{n} سے دوبارہ رابطہ کرنے کی کوشش ہو رہی ہے…",
+"reconnect.failed":"دوبارہ رابطہ نہیں ہو سکا۔ نئی دعوت کے ساتھ کوشش کریں۔",
 "reconnect.offline":"{n} ابھی آن لائن نظر نہیں آتا۔ یہ ہے دستی طور پر بھیجنے کے لیے کوڈ۔",
 "call.noSpeakerFound":"اس فون پر الگ اسپیکر نہیں مل سکا۔",
 "call.speakerFail":"اس فون پر اسپیکر تبدیل نہیں ہو سکتا۔",
@@ -1638,6 +1675,7 @@ Object.assign(I18N.ur, {
 "viral.title":"یہ کام کر گیا۔","viral.sub":"اگر مفید رہا تو آگے پہنچائیں: یہ مفت ہے، اکاؤنٹ نہیں مانگتا، اور کسی کا کچھ محفوظ نہیں رکھتا۔","viral.btn":"کسی کو بتائیں",
 "media.title":"مائیکروفون اور کیمرہ","media.warnDenied":"یہ براؤزر مائیکروفون کو روک رہا ہے: آپ نہ کال کر سکیں گے نہ وصول۔","media.warnFix":"کیسے ٹھیک کریں","media.retry":"دوبارہ کوشش کریں","media.close":"بند کریں","media.nowOk":"مائیکروفون چل رہا ہے۔ اب آپ کال کر سکتے ہیں۔","media.peerNoMic":"{name} نے جواب دیا، لیکن ان کا براؤزر مائیکروفون آن نہیں کرنے دیتا۔ انہوں نے آپ کو انکار نہیں کیا۔","media.peerNoCam":"{name} نے جواب دیا، لیکن ان کا براؤزر کیمرہ اور مائیکروفون آن نہیں کرنے دیتا۔ صرف آواز والی کال آزمائیں، یا ان سے کہیں کہ پابندی ہٹا دیں۔","media.stepsIos":"آئی فون پر <b>ترتیبات</b> کھولیں|نیچے جا کر <b>Safari</b> پر ٹیپ کریں|<b>مائیکروفون</b> پھر <b>کیمرہ</b> پر ٹیپ کریں: <b>پوچھیں</b> یا <b>اجازت دیں</b> پر رکھیں|یہاں واپس آ کر صفحہ دوبارہ لوڈ کریں","media.stepsAndroid":"اوپر پتے کے پاس <b>تالے</b> پر ٹیپ کریں|<b>اجازتیں</b> پر ٹیپ کریں|<b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|صفحہ دوبارہ لوڈ کریں","media.stepsChrome":"پتے کے بائیں طرف <b>تالے</b> پر کلک کریں|<b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|صفحہ دوبارہ لوڈ کریں","media.stepsSafariMac":"مینو بار میں <b>Safari</b> › <b>اس ویب سائٹ کی ترتیبات</b> کھولیں|<b>مائیکروفون</b> اور <b>کیمرہ</b> کو <b>اجازت دیں</b> پر رکھیں|صفحہ دوبارہ لوڈ کریں","media.stepsFirefox":"پتے کے بائیں طرف <b>تالے</b> پر کلک کریں|<b>مائیکروفون استعمال کریں</b> اور <b>کیمرہ استعمال کریں</b> کے ساتھ پابندی ہٹائیں|صفحہ دوبارہ لوڈ کریں","media.stepsOther":"اس سائٹ کے لیے براؤزر کی ترتیبات کھولیں|<b>مائیکروفون</b> اور <b>کیمرہ</b> کی اجازت دیں|صفحہ دوبارہ لوڈ کریں",
 "addr.title":"آپ کا مستقل پتہ","addr.sub":"فون نمبر کے بجائے یہ دیں۔ جس کے پاس یہ ہو وہ جب چاہے آپ تک پہنچ سکتا ہے، آپ کا نام یا نمبر جانے بغیر۔ بطور ڈیفالٹ بند۔","addr.qrHint":"جو اسے اسکین کرے سیدھا آپ کو کال کرے گا","addr.share":"اپنا پتہ بھیجیں","addr.showQr":"QR دکھائیں","addr.reachNote":"تاکہ ایپ بند ہونے پر بھی لوگ آپ تک پہنچ سکیں، نیچے اطلاعات آن کریں۔","addr.dialLabel":"کیا آپ کے پاس کسی کا پتہ ہے؟","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"کال کریں","addr.badFormat":"یہ پتہ صحیح نہیں لکھا۔ یہ 12 حروف کا ہوتا ہے، جیسے DV-K7M2-9QRT-X4WP۔","addr.itsYou":"یہ تو آپ کا اپنا پتہ ہے۔","addr.callingTitle":"کال کی جا رہی ہے…","addr.callingHint":"اگر ان کی ایپ بند ہو تو میں ان کا فون بجا دوں گا۔ اس میں کچھ لمحے لگ سکتے ہیں۔","addr.noAnswer":"کوئی جواب نہیں۔ میں نے اطلاع دے دی ہے: بعد میں کوشش کریں۔","addr.dialFailed":"میں اس پتے پر کال نہیں کر سکا۔","addr.noKey":"یہ پتہ اب فعال نہیں لگتا۔ اس شخص سے کہیں کہ ایپ دوبارہ کھولے اور یہ دوبارہ بھیجے: تازہ اپ ڈیٹ کے ساتھ پتے بدل گئے ہیں۔","addr.noBroker":"میں کال شروع تک نہ کر سکا: جو سروس آپ کو ملاتی ہے اس نے جواب نہیں دیا۔ اگر آپ ایپ کی کوئی نقل کسی اور پتے پر استعمال کر رہے ہیں تو سرکاری والی کھولیں۔","addr.incomingTitle":"کوئی آپ کو ڈھونڈ رہا ہے","addr.incomingSub":"نام اور وجہ کال کرنے والے نے خود لکھی ہے: جب تک آپ قبول نہ کریں، کوئی ثابت نہیں کر سکتا کہ وہ واقعی وہی شخص ہے۔","addr.incomingToast":"کوئی آپ کے پتے پر کال کر رہا ہے۔","addr.accept":"قبول کریں","addr.ignore":"نظرانداز کریں","addr.verified":"تصدیق ہو گئی: جواب دینے والا واقعی پتے {a} کا مالک ہے۔ کوئی درمیان میں نہیں آ سکتا تھا۔","addr.blockedIn":"اس شخص کی کال جسے آپ پہلے رد کر چکے تھے: نظرانداز کر دی گئی۔","addr.shareText":"آپ مجھ تک یہاں پہنچ سکتے ہیں، میرے فون نمبر کے بغیر۔ DigitalValut Logos پر میرا پتہ {a} ہے\n\nمجھے کال کرنے کے لیے ٹیپ کریں:",
+"addr.provenNotWho":"جس نے جواب دیا وہ واقعی پتہ {a} کا مالک ہے — لیکن یہ پتہ آپ کو ایک خط میں ملا تھا، اور لکھنے والا کوئی بھی نام ڈال سکتا تھا۔ اگر یقین نہ ہو تو تین الفاظ ایک دوسرے کو بتائیں۔",
 "addr.incomingAt":"«{name}» کے ذریعے","burn.title":"ایک بار استعمال ہونے والے پتے","burn.help":"ہر اشتہار کے لیے ایک، ہر اجنبی کے لیے ایک۔ کام ختم ہو تو حذف کر دیں، وہ شخص پھر آپ تک نہیں پہنچ سکتا — اصل پتہ تو اُس کے پاس تھا ہی نہیں۔","burn.namePh":"کس لیے؟ مثلاً: پرانا صوفہ","burn.add":"بنائیں","burn.send":"یہ پتہ بھیجیں","burn.delete":"حذف کریں","burn.deleted":"«{name}» حذف ہو گیا۔ وہ پتہ اب جواب نہیں دیتا۔","burn.made":"«{name}» بن گیا۔ اب آپ اسے دے سکتے ہیں۔","burn.needName":"اسے نام دیں تاکہ یاد رہے کسے دیا تھا۔","burn.full":"ایک وقت میں زیادہ سے زیادہ {n} رکھ سکتے ہیں۔ نیا بنانے کے لیے ایک حذف کریں۔","burn.untitled":"بے نام",
 "knock.title":"آپ رابطہ کر رہے ہیں","knock.nameLabel":"آپ کا نام کیا ہے؟","knock.namePh":"آپ کا نام","knock.msgLabel":"آپ کو کیا چاہیے؟ (اختیاری)","knock.msgPh":"مثلاً: کیا آپ کے پاس 42 نمبر کے جوتے ہیں؟","knock.go":"کال کریں","knock.note":"آپ کا نام اور یہ جملہ صرف وہی شخص دیکھتا ہے جسے آپ کال کر رہے ہیں۔ کوئی سرور انہیں نہیں پڑھ سکتا۔",
 "letter.title":"آپ کے لیے چھوڑے گئے پیغامات","letter.noneTitle":"ابھی کوئی جواب نہیں دے رہا۔","letter.noneSub":"میں انہیں پہلے ہی بتا چکا ہوں کہ آپ نے رابطہ کرنے کی کوشش کی۔ اگر مزید کچھ کہنا ہے تو یہاں لکھیں۔","letter.ph":"اپنا پیغام یہاں لکھیں","letter.leave":"پیغام چھوڑیں","letter.cancel":"رہنے دیں","letter.needText":"دو لفظ لکھ دیں تاکہ انہیں معلوم ہو آپ کیا چاہتے تھے۔","letter.left":"پیغام چھوڑ دیا گیا۔ ایپ کھولتے ہی مل جائے گا۔","letter.failed":"میں پیغام نہیں چھوڑ سکا۔ دوبارہ کوشش کریں۔","letter.callBack":"واپس کال کریں","letter.dismiss":"ہو گیا",
@@ -1648,6 +1686,8 @@ Object.assign(I18N.ur, {
 "letter.missed":"آپ سے بات کرنا چاہتا تھا۔",
 "sas.blocked":"پہلے تینوں الفاظ بول کر ملائیں: یہ شخص اب وہی نہیں رہا۔",
 "file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔","file.sendFailed":"بھیجنا رک گیا: کنکشن درمیان میں بند ہو گیا۔","file.progress":"{sent} از {total}",
+"file.stalled":"ایک آنے والی فائل آدھے راستے رک گئی اور چھوڑ دی گئی۔",
+"file.tooBigToSend":"«{n}» بھیجنے کے لیے بہت بڑی ہے: حد فی فائل 512 MB ہے۔",
 "share.pending":"{n} فائل بھیجنے کے لیے تیار ہیں — جیسے ہی رابطہ ہو، چلی جائیں گی",
 "health.storage":"فون کی میموری",
 "health.storageFull":"بھری ہوئی ہے: گفتگو اب محفوظ نہیں ہو رہی۔ فون میں جگہ خالی کریں۔",
@@ -1725,6 +1765,7 @@ Object.assign(I18N.hi, {
 "call.micFailBusy":"आपका माइक्रोफ़ोन या कैमरा पहले से किसी और ऐप द्वारा उपयोग में है (Zoom, Teams, कोई और टैब…)। इसे बंद करें और फिर कोशिश करें।",
 "call.micFailDenied":"ब्राउज़र ने इस साइट के लिए माइक्रोफ़ोन और कैमरा ब्लॉक कर दिया है। नीचे दिए स्टेप्स फ़ॉलो करें, फिर पेज रीलोड करें।",
 "reconnect.trying":"{n} से फिर से जुड़ने की कोशिश हो रही है…",
+"reconnect.failed":"फिर से नहीं जुड़ पाया। नए निमंत्रण के साथ कोशिश करें।",
 "reconnect.offline":"{n} अभी ऑनलाइन नहीं लग रहा। यह रहा हाथ से भेजने के लिए कोड।",
 "call.noSpeakerFound":"इस फ़ोन पर अलग स्पीकर नहीं मिल सका।",
 "call.speakerFail":"इस फ़ोन पर स्पीकर बदला नहीं जा सकता।",
@@ -1798,6 +1839,7 @@ Object.assign(I18N.hi, {
 "viral.title":"यह काम कर गया।","viral.sub":"अगर काम आया हो तो आगे बढ़ाएं: यह मुफ़्त है, कोई खाता नहीं मांगता, और किसी का कुछ नहीं रखता।","viral.btn":"किसी को बताएं",
 "media.title":"माइक्रोफ़ोन और कैमरा","media.warnDenied":"यह ब्राउज़र माइक्रोफ़ोन रोक रहा है: आप न कॉल कर पाएंगे, न कॉल ले पाएंगे।","media.warnFix":"इसे कैसे ठीक करें","media.retry":"फिर कोशिश करें","media.close":"बंद करें","media.nowOk":"माइक्रोफ़ोन चालू है। अब आप कॉल कर सकते हैं।","media.peerNoMic":"{name} ने उठाया, लेकिन उनका ब्राउज़र माइक्रोफ़ोन चालू नहीं करने देता। उन्होंने मना नहीं किया है।","media.peerNoCam":"{name} ने उठाया, लेकिन उनका ब्राउज़र कैमरा और माइक्रोफ़ोन चालू नहीं करने देता। सिर्फ़ आवाज़ वाली कॉल आज़माएं, या उनसे रोक हटाने को कहें।","media.stepsIos":"iPhone पर <b>सेटिंग्स</b> खोलें|नीचे जाकर <b>Safari</b> पर टैप करें|<b>माइक्रोफ़ोन</b> फिर <b>कैमरा</b> पर टैप करें: <b>पूछें</b> या <b>अनुमति दें</b> पर रखें|यहाँ लौटकर पेज फिर से लोड करें","media.stepsAndroid":"ऊपर पते के पास <b>ताले</b> पर टैप करें|<b>अनुमतियाँ</b> पर टैप करें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|पेज फिर से लोड करें","media.stepsChrome":"पते के बाईं ओर <b>ताले</b> पर क्लिक करें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|पेज फिर से लोड करें","media.stepsSafariMac":"मेनू बार में <b>Safari</b> › <b>इस वेबसाइट के लिए सेटिंग्स</b> खोलें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> को <b>अनुमति दें</b> पर रखें|पेज फिर से लोड करें","media.stepsFirefox":"पते के बाईं ओर <b>ताले</b> पर क्लिक करें|<b>माइक्रोफ़ोन इस्तेमाल करें</b> और <b>कैमरा इस्तेमाल करें</b> के आगे की रोक हटाएं|पेज फिर से लोड करें","media.stepsOther":"इस साइट के लिए ब्राउज़र सेटिंग्स खोलें|<b>माइक्रोफ़ोन</b> और <b>कैमरा</b> की अनुमति दें|पेज फिर से लोड करें",
 "addr.title":"आपका स्थायी पता","addr.sub":"फ़ोन नंबर की जगह यह दें। जिसके पास यह हो वह जब चाहे आप तक पहुँच सकता है, आपका नाम या नंबर जाने बिना। डिफ़ॉल्ट रूप से बंद।","addr.qrHint":"जो इसे स्कैन करे सीधे आपको कॉल करेगा","addr.share":"अपना पता भेजें","addr.showQr":"QR दिखाएं","addr.reachNote":"ताकि ऐप बंद होने पर भी लोग आप तक पहुँच सकें, नीचे सूचनाएं चालू करें।","addr.dialLabel":"किसी का पता है आपके पास?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"कॉल करें","addr.badFormat":"यह पता ठीक से नहीं लिखा है। यह 12 अक्षरों का होता है, जैसे DV-K7M2-9QRT-X4WP।","addr.itsYou":"यह तो आपका अपना पता है।","addr.callingTitle":"कॉल किया जा रहा है…","addr.callingHint":"अगर उनका ऐप बंद है तो मैं उनका फ़ोन बजा दूंगा। इसमें थोड़ा समय लग सकता है।","addr.noAnswer":"कोई जवाब नहीं। मैंने बता दिया है: बाद में कोशिश करें।","addr.dialFailed":"मैं इस पते पर कॉल नहीं कर सका।","addr.noKey":"यह पता अब सक्रिय नहीं लगता। उस व्यक्ति से कहें कि ऐप दोबारा खोलें और इसे फिर भेजें: पिछले अपडेट के साथ पते बदल गए हैं।","addr.noBroker":"मैं कॉल शुरू तक नहीं कर सका: जो सेवा आपको मिलाती है उसने जवाब नहीं दिया। अगर आप ऐप की कोई नकल किसी और पते पर इस्तेमाल कर रहे हैं, तो आधिकारिक वाली खोलें।","addr.incomingTitle":"कोई आपको ढूंढ रहा है","addr.incomingSub":"नाम और कारण कॉल करने वाले ने खुद लिखे हैं: जब तक आप स्वीकार न करें, कोई साबित नहीं कर सकता कि वह सचमुच वही व्यक्ति है।","addr.incomingToast":"कोई आपके पते पर कॉल कर रहा है।","addr.accept":"स्वीकार करें","addr.ignore":"अनदेखा करें","addr.verified":"सत्यापित: जिसने जवाब दिया वह सचमुच पते {a} का मालिक है। कोई बीच में नहीं आ सकता था।","addr.blockedIn":"उस व्यक्ति की कॉल जिसे आपने पहले मना कर दिया था: अनदेखी की गई।","addr.shareText":"आप मुझ तक यहाँ पहुँच सकते हैं, मेरे फ़ोन नंबर के बिना। DigitalValut Logos पर मेरा पता {a} है\n\nमुझे कॉल करने के लिए टैप करें:",
+"addr.provenNotWho":"जिसने जवाब दिया वह वाकई पता {a} का मालिक है — पर वह पता आपको एक चिट्ठी में मिला था, और लिखने वाला कोई भी नाम डाल सकता था। यकीन न हो तो एक-दूसरे को तीन शब्द बताएं।",
 "addr.incomingAt":"«{name}» के ज़रिए","burn.title":"इस्तेमाल करके फेंकने वाले पते","burn.help":"हर विज्ञापन के लिए एक, हर अजनबी के लिए एक। काम पूरा हो तो मिटा दें और वह व्यक्ति आप तक नहीं पहुँच सकता — असली पता उसके पास कभी था ही नहीं।","burn.namePh":"किस लिए? जैसे: पुराना सोफ़ा","burn.add":"बनाएं","burn.send":"यह पता भेजें","burn.delete":"मिटाएं","burn.deleted":"«{name}» मिटा दिया। वह पता अब जवाब नहीं देता।","burn.made":"«{name}» बन गया। अब आप इसे दे सकते हैं।","burn.needName":"इसे नाम दें, ताकि पता रहे किसे दिया था।","burn.full":"एक साथ ज़्यादा से ज़्यादा {n} रख सकते हैं। नया बनाने के लिए एक मिटाएं।","burn.untitled":"बिना नाम",
 "knock.title":"आप संपर्क कर रहे हैं","knock.nameLabel":"आपका नाम क्या है?","knock.namePh":"आपका नाम","knock.msgLabel":"आपको क्या चाहिए? (वैकल्पिक)","knock.msgPh":"जैसे: क्या 42 नंबर के जूते हैं?","knock.go":"कॉल करें","knock.note":"आपका नाम और यह वाक्य सिर्फ़ वही व्यक्ति देखता है जिसे आप कॉल कर रहे हैं। कोई सर्वर इन्हें नहीं पढ़ सकता।",
 "letter.title":"आपके लिए छोड़े गए संदेश","letter.noneTitle":"अभी कोई जवाब नहीं दे रहा।","letter.noneSub":"मैं उसे पहले ही बता चुका हूँ कि आपने संपर्क करने की कोशिश की। अगर कुछ और कहना है तो यहाँ लिखें।","letter.ph":"अपना संदेश यहाँ लिखें","letter.leave":"संदेश छोड़ें","letter.cancel":"रहने दें","letter.needText":"दो शब्द लिख दें, ताकि उन्हें पता चले आप क्या चाहते थे।","letter.left":"संदेश छोड़ दिया। ऐप खोलते ही उन्हें मिल जाएगा।","letter.failed":"मैं संदेश नहीं छोड़ सका। फिर कोशिश करें।","letter.callBack":"वापस कॉल करें","letter.dismiss":"हो गया",
@@ -1808,6 +1850,8 @@ Object.assign(I18N.hi, {
 "letter.missed":"आपसे बात करना चाहता था।",
 "sas.blocked":"पहले तीनों शब्द बोलकर मिलाएँ: यह व्यक्ति अब वही नहीं रहा।",
 "file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।","file.sendFailed":"भेजना बीच में रुक गया: कनेक्शन बीच में बंद हो गया।","file.progress":"{sent} में से {total}",
+"file.stalled":"एक आती हुई फ़ाइल बीच में रुक गई और छोड़ दी गई।",
+"file.tooBigToSend":"«{n}» भेजने के लिए बहुत बड़ी है: सीमा 512 MB प्रति फ़ाइल है।",
 "share.pending":"{n} फ़ाइलें भेजने के लिए तैयार — जुड़ते ही चली जाएंगी",
 "health.storage":"फ़ोन की मेमोरी",
 "health.storageFull":"भरी हुई है: बातचीत अब सहेजी नहीं जा रही। फ़ोन में जगह खाली करें।",
@@ -1885,6 +1929,7 @@ Object.assign(I18N.bn, {
 "call.micFailBusy":"আপনার মাইক্রোফোন বা ক্যামেরা ইতিমধ্যে অন্য একটি অ্যাপ ব্যবহার করছে (Zoom, Teams, অন্য একটি ট্যাব…)। এটি বন্ধ করে আবার চেষ্টা করুন।",
 "call.micFailDenied":"ব্রাউজার এই সাইটের জন্য মাইক্রোফোন এবং ক্যামেরা ব্লক করেছে। নিচের ধাপগুলো অনুসরণ করুন, তারপর পৃষ্ঠাটি পুনরায় লোড করুন।",
 "reconnect.trying":"{n}-এর সাথে আবার সংযোগের চেষ্টা হচ্ছে…",
+"reconnect.failed":"আবার সংযোগ করা গেল না। নতুন আমন্ত্রণ দিয়ে চেষ্টা করুন।",
 "reconnect.offline":"{n} এখন অনলাইনে আছেন বলে মনে হচ্ছে না। হাতে পাঠানোর জন্য এই কোডটি রইল।",
 "call.noSpeakerFound":"এই ফোনে আলাদা স্পিকার পাওয়া যাচ্ছে না।",
 "call.speakerFail":"এই ফোনে স্পিকার পরিবর্তন করা যাচ্ছে না।",
@@ -1958,6 +2003,7 @@ Object.assign(I18N.bn, {
 "viral.title":"এটা কাজ করেছে।","viral.sub":"কাজে লেগে থাকলে অন্যকেও জানান: এটি বিনামূল্যে, কোনও অ্যাকাউন্ট চায় না, কারও কিছুই রাখে না।","viral.btn":"কাউকে জানান",
 "media.title":"মাইক্রোফোন ও ক্যামেরা","media.warnDenied":"এই ব্রাউজার মাইক্রোফোন আটকে রেখেছে: আপনি কল করতে বা ধরতে পারবেন না।","media.warnFix":"কীভাবে ঠিক করবেন","media.retry":"আবার চেষ্টা করুন","media.close":"বন্ধ করুন","media.nowOk":"মাইক্রোফোন চালু। এখন কল করতে পারেন।","media.peerNoMic":"{name} ধরেছেন, কিন্তু তাঁর ব্রাউজার মাইক্রোফোন চালু করতে দিচ্ছে না। তিনি আপনাকে ফিরিয়ে দেননি।","media.peerNoCam":"{name} ধরেছেন, কিন্তু তাঁর ব্রাউজার ক্যামেরা ও মাইক্রোফোন চালু করতে দিচ্ছে না। শুধু অডিও কল চেষ্টা করুন, বা তাঁকে বাধা সরাতে বলুন।","media.stepsIos":"আইফোনে <b>সেটিংস</b> খুলুন|নিচে নেমে <b>Safari</b> ট্যাপ করুন|<b>মাইক্রোফোন</b> তারপর <b>ক্যামেরা</b> ট্যাপ করুন: <b>জিজ্ঞাসা করুন</b> বা <b>অনুমতি দিন</b> রাখুন|এখানে ফিরে এসে পাতাটি আবার লোড করুন","media.stepsAndroid":"উপরে ঠিকানার পাশে <b>তালা</b> ট্যাপ করুন|<b>অনুমতি</b> ট্যাপ করুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|পাতাটি আবার লোড করুন","media.stepsChrome":"ঠিকানার বাঁ পাশে <b>তালায়</b> ক্লিক করুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|পাতাটি আবার লোড করুন","media.stepsSafariMac":"মেনু বারে <b>Safari</b> › <b>এই ওয়েবসাইটের সেটিংস</b> খুলুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> <b>অনুমতি দিন</b>-এ রাখুন|পাতাটি আবার লোড করুন","media.stepsFirefox":"ঠিকানার বাঁ পাশে <b>তালায়</b> ক্লিক করুন|<b>মাইক্রোফোন ব্যবহার</b> ও <b>ক্যামেরা ব্যবহার</b>-এর পাশের বাধা সরান|পাতাটি আবার লোড করুন","media.stepsOther":"এই সাইটের জন্য ব্রাউজারের সেটিংস খুলুন|<b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> অনুমতি দিন|পাতাটি আবার লোড করুন",
 "addr.title":"আপনার স্থায়ী ঠিকানা","addr.sub":"ফোন নম্বরের বদলে এটি দিন। যার কাছে এটি আছে সে যখন খুশি আপনার সঙ্গে যোগাযোগ করতে পারবে, আপনার নাম বা নম্বর না জেনেই। ডিফল্টভাবে বন্ধ।","addr.qrHint":"যে এটি স্ক্যান করবে সরাসরি আপনাকে ডাকবে","addr.share":"আপনার ঠিকানা পাঠান","addr.showQr":"QR দেখান","addr.reachNote":"অ্যাপ বন্ধ থাকলেও যাতে আপনাকে পাওয়া যায়, নিচের বিজ্ঞপ্তি চালু করুন।","addr.dialLabel":"কারও ঠিকানা আছে?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"ডাকুন","addr.badFormat":"এই ঠিকানাটি ঠিকভাবে লেখা হয়নি। এটি ১২টি অক্ষরের, যেমন DV-K7M2-9QRT-X4WP।","addr.itsYou":"এটি তো আপনার নিজের ঠিকানা।","addr.callingTitle":"ডাকা হচ্ছে…","addr.callingHint":"তাঁর অ্যাপ বন্ধ থাকলে আমি ফোন বাজিয়ে দেব। একটু সময় লাগতে পারে।","addr.noAnswer":"সাড়া নেই। জানিয়ে দিয়েছি: পরে চেষ্টা করুন।","addr.dialFailed":"এই ঠিকানায় ডাকতে পারিনি।","addr.noKey":"এই ঠিকানাটি আর সক্রিয় বলে মনে হচ্ছে না। ওই ব্যক্তিকে অ্যাপটি আবার খুলে ঠিকানাটি আবার পাঠাতে বলুন: সর্বশেষ হালনাগাদে ঠিকানা বদলে গেছে।","addr.noBroker":"আমি কলটা শুরুই করতে পারিনি: যে সেবা আপনাদের যোগাযোগ করিয়ে দেয় সেটি সাড়া দেয়নি। আপনি যদি অ্যাপের কোনো কপি অন্য ঠিকানায় ব্যবহার করেন, তবে আসলটি খুলুন।","addr.incomingTitle":"কেউ আপনাকে খুঁজছে","addr.incomingSub":"নাম আর কারণ যিনি ডাকছেন তিনিই লিখেছেন: আপনি গ্রহণ না করা পর্যন্ত কেউ প্রমাণ করতে পারে না যে তিনি সত্যিই সেই ব্যক্তি।","addr.incomingToast":"কেউ আপনার ঠিকানায় ডাকছে।","addr.accept":"গ্রহণ করুন","addr.ignore":"উপেক্ষা করুন","addr.verified":"যাচাই হয়েছে: যিনি সাড়া দিয়েছেন তিনি সত্যিই {a} ঠিকানার মালিক। কেউ মাঝখানে ঢুকতে পারেনি।","addr.blockedIn":"আপনি আগে ফিরিয়ে দিয়েছেন এমন কারও ডাক: উপেক্ষা করা হয়েছে।","addr.shareText":"আমাকে এখানে পাওয়া যাবে, আমার ফোন নম্বর ছাড়াই। DigitalValut Logos-এ আমার ঠিকানা {a}\n\nআমাকে ডাকতে ট্যাপ করুন:",
+"addr.provenNotWho":"যে উত্তর দিয়েছে সে সত্যিই {a} ঠিকানার মালিক — কিন্তু ওই ঠিকানা আপনার কাছে একটি চিঠিতে এসেছিল, আর যে লিখেছে সে যেকোনো নাম বসাতে পারত। নিশ্চিত না হলে একে অপরকে তিনটি শব্দ বলুন।",
 "addr.incomingAt":"«{name}»-এর মাধ্যমে","burn.title":"একবার ব্যবহারের ঠিকানা","burn.help":"প্রতিটি বিজ্ঞাপনের জন্য একটি, প্রতিটি অপরিচিতের জন্য একটি। কাজ শেষে মুছে দিন, সেই ব্যক্তি আর আপনাকে পাবে না — আসলটি তার কাছে কখনও ছিলই না।","burn.namePh":"কীসের জন্য? যেমন: পুরনো সোফা","burn.add":"তৈরি করুন","burn.send":"এই ঠিকানা পাঠান","burn.delete":"মুছুন","burn.deleted":"«{name}» মোছা হয়েছে। ওই ঠিকানা আর সাড়া দেয় না।","burn.made":"«{name}» তৈরি হয়েছে। এখন দিতে পারেন।","burn.needName":"একটি নাম দিন, যাতে মনে থাকে কাকে দিয়েছেন।","burn.full":"একসঙ্গে সর্বোচ্চ {n}টি রাখতে পারেন। নতুন বানাতে একটি মুছুন।","burn.untitled":"নামহীন",
 "knock.title":"আপনি যোগাযোগ করছেন","knock.nameLabel":"আপনার নাম কী?","knock.namePh":"আপনার নাম","knock.msgLabel":"আপনার কী দরকার? (ইচ্ছা হলে)","knock.msgPh":"যেমন: ৪২ সাইজের জুতো আছে?","knock.go":"ডাকুন","knock.note":"আপনার নাম আর এই বাক্যটি কেবল যাকে ডাকছেন তিনিই দেখেন। কোনও সার্ভার সেগুলি পড়তে পারে না।",
 "letter.title":"আপনার জন্য রাখা বার্তা","letter.noneTitle":"এখন কেউ সাড়া দিচ্ছে না।","letter.noneSub":"আমি তাকে আগেই জানিয়ে দিয়েছি যে আপনি তার সঙ্গে যোগাযোগের চেষ্টা করেছেন। আরও কিছু বলতে চাইলে এখানে লিখুন।","letter.ph":"আপনার বার্তা এখানে লিখুন","letter.leave":"বার্তা রাখুন","letter.cancel":"থাক","letter.needText":"দু-এক কথা লিখুন, যাতে বোঝেন আপনি কী চেয়েছিলেন।","letter.left":"বার্তা রাখা হয়েছে। অ্যাপ খুললেই দেখতে পাবেন।","letter.failed":"বার্তা রাখতে পারিনি। আবার চেষ্টা করুন।","letter.callBack":"ফিরে ডাকুন","letter.dismiss":"হয়েছে",
@@ -1968,6 +2014,8 @@ Object.assign(I18N.bn, {
 "letter.missed":"আপনার সঙ্গে কথা বলতে চেয়েছিলেন।",
 "sas.blocked":"আগে তিনটি শব্দ মুখে বলে মিলিয়ে নিন: এই ব্যক্তি আর আগের জন নন।",
 "file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।","file.sendFailed":"পাঠানো বন্ধ হয়ে গেছে: সংযোগ মাঝপথে বন্ধ হয়ে গেছে।","file.progress":"{total}-এর মধ্যে {sent}",
+"file.stalled":"একটি আসন্ন ফাইল মাঝপথে থেমে গেছে এবং ছেড়ে দেওয়া হয়েছে।",
+"file.tooBigToSend":"«{n}» পাঠানোর জন্য খুব বড়: সীমা প্রতি ফাইলে ৫১২ MB।",
 "share.pending":"{n}টি ফাইল পাঠানোর জন্য প্রস্তুত — সংযুক্ত হলেই চলে যাবে",
 "health.storage":"ফোনের মেমোরি",
 "health.storageFull":"পূর্ণ: কথোপকথন আর সংরক্ষিত হচ্ছে না। ফোনে জায়গা খালি করুন।",
@@ -2045,6 +2093,7 @@ Object.assign(I18N.id, {
 "call.micFailBusy":"Mikrofon atau kamera Anda sudah digunakan oleh aplikasi lain (Zoom, Teams, tab lain…). Tutup aplikasi itu dan coba lagi.",
 "call.micFailDenied":"Peramban telah memblokir mikrofon dan kamera untuk situs ini. Ikuti langkah di bawah, lalu muat ulang halaman.",
 "reconnect.trying":"Mencoba menyambung kembali ke {n}…",
+"reconnect.failed":"Tidak berhasil menyambung ulang. Coba dengan undangan baru.",
 "reconnect.offline":"{n} sepertinya sedang tidak online. Ini kodenya untuk dikirim secara manual.",
 "call.noSpeakerFound":"Tidak dapat menemukan speaker terpisah di ponsel ini.",
 "call.speakerFail":"Tidak dapat mengganti speaker di ponsel ini.",
@@ -2118,6 +2167,7 @@ Object.assign(I18N.id, {
 "viral.title":"Berhasil.","viral.sub":"Kalau bermanfaat, teruskan ke orang lain: gratis, tanpa akun, dan tidak menyimpan apa pun tentang siapa pun.","viral.btn":"Beri tahu seseorang",
 "media.title":"Mikrofon dan kamera","media.warnDenied":"Peramban ini memblokir mikrofon: Anda tidak bisa menelepon maupun menerima panggilan.","media.warnFix":"Cara memperbaikinya","media.retry":"Coba lagi","media.close":"Tutup","media.nowOk":"Mikrofon aktif. Sekarang Anda bisa menelepon.","media.peerNoMic":"{name} sudah menjawab, tetapi perambannya tidak mengizinkan mikrofon menyala. Bukan dia yang menolak.","media.peerNoCam":"{name} sudah menjawab, tetapi perambannya tidak mengizinkan kamera dan mikrofon menyala. Coba panggilan suara saja, atau minta dia membuka blokirnya.","media.stepsIos":"Buka <b>Pengaturan</b> di iPhone|Gulir ke bawah dan ketuk <b>Safari</b>|Ketuk <b>Mikrofon</b> lalu <b>Kamera</b>: setel ke <b>Tanya</b> atau <b>Izinkan</b>|Kembali ke sini dan muat ulang halaman","media.stepsAndroid":"Ketuk <b>gembok</b> di sebelah alamat, di atas|Ketuk <b>Izin</b>|Aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Muat ulang halaman","media.stepsChrome":"Klik <b>gembok</b> di kiri alamat|Aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Muat ulang halaman","media.stepsSafariMac":"Di bilah menu buka <b>Safari</b> › <b>Pengaturan untuk Situs Web Ini</b>|Setel <b>Mikrofon</b> dan <b>Kamera</b> ke <b>Izinkan</b>|Muat ulang halaman","media.stepsFirefox":"Klik <b>gembok</b> di kiri alamat|Hapus blokir di sebelah <b>Gunakan Mikrofon</b> dan <b>Gunakan Kamera</b>|Muat ulang halaman","media.stepsOther":"Buka pengaturan peramban untuk situs ini|Izinkan <b>Mikrofon</b> dan <b>Kamera</b>|Muat ulang halaman",
 "addr.title":"Alamat permanen Anda","addr.sub":"Berikan ini sebagai ganti nomor telepon. Siapa pun yang memilikinya bisa menghubungi Anda kapan saja, tanpa tahu nama maupun nomor Anda. Nonaktif secara default.","addr.qrHint":"Yang memindainya langsung menelepon Anda","addr.share":"Kirim alamat Anda","addr.showQr":"Tampilkan QR","addr.reachNote":"Agar orang bisa menghubungi Anda meski aplikasi tertutup, aktifkan pemberitahuan di bawah.","addr.dialLabel":"Punya alamat seseorang?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Telepon","addr.badFormat":"Alamat itu salah tulis. Panjangnya 12 karakter, seperti DV-K7M2-9QRT-X4WP.","addr.itsYou":"Itu alamat Anda sendiri.","addr.callingTitle":"Menelepon…","addr.callingHint":"Kalau aplikasinya tertutup, saya akan membunyikan ponselnya. Bisa perlu sejenak.","addr.noAnswer":"Tidak ada jawaban. Sudah diberi tahu: coba lagi nanti.","addr.dialFailed":"Saya tidak bisa menelepon alamat itu.","addr.noKey":"Alamat itu sepertinya sudah tidak aktif. Minta orangnya membuka aplikasi lagi dan mengirimkannya kembali: alamat berubah pada pembaruan terakhir.","addr.noBroker":"Saya bahkan tidak bisa memulai panggilan: layanan yang mempertemukan Anda tidak menjawab. Kalau Anda memakai salinan aplikasi di alamat lain, buka yang resmi.","addr.incomingTitle":"Ada yang mencari Anda","addr.incomingSub":"Nama dan alasannya ditulis sendiri oleh si penelepon: sampai Anda menerima, tidak ada yang bisa membuktikan dia memang orang itu.","addr.incomingToast":"Ada yang menelepon alamat Anda.","addr.accept":"Terima","addr.ignore":"Abaikan","addr.verified":"Terverifikasi: yang menjawab benar-benar pemilik alamat {a}. Tidak mungkin ada yang menyusup di tengah.","addr.blockedIn":"Panggilan dari orang yang pernah Anda tolak: diabaikan.","addr.shareText":"Anda bisa menghubungi saya di sini, tanpa nomor telepon saya. Alamat DigitalValut Logos saya adalah {a}\n\nKetuk untuk menelepon saya:",
+"addr.provenNotWho":"Yang menjawab memang pemilik alamat {a} — tetapi alamat itu sampai kepada Anda lewat sebuah surat, dan penulisnya bisa memakai nama apa pun. Kalau belum yakin, ucapkan tiga kata itu satu sama lain.",
 "addr.incomingAt":"lewat “{name}”","burn.title":"Alamat sekali pakai","burn.help":"Satu untuk tiap iklan, satu untuk tiap orang asing. Hapus kalau sudah selesai, dan orang itu tak bisa menghubungi Anda lagi — alamat asli Anda tak pernah dia pegang.","burn.namePh":"Untuk apa? mis. Sofa bekas","burn.add":"Buat","burn.send":"Kirim alamat ini","burn.delete":"Hapus","burn.deleted":"“{name}” dihapus. Alamat itu tidak menjawab lagi.","burn.made":"“{name}” dibuat. Sekarang bisa Anda berikan.","burn.needName":"Beri nama, supaya Anda ingat sudah memberikannya ke siapa.","burn.full":"Maksimal {n} sekaligus. Hapus satu untuk membuat yang baru.","burn.untitled":"Tanpa nama",
 "knock.title":"Anda menghubungi","knock.nameLabel":"Siapa nama Anda?","knock.namePh":"Nama Anda","knock.msgLabel":"Anda perlu apa? (boleh kosong)","knock.msgPh":"mis. Ada sepatu ukuran 42?","knock.go":"Telepon","knock.note":"Nama Anda dan kalimat ini hanya dilihat oleh orang yang Anda telepon. Tidak ada server yang bisa membacanya.",
 "letter.title":"Pesan yang ditinggalkan untuk Anda","letter.noneTitle":"Sekarang tidak ada yang menjawab.","letter.noneSub":"Saya sudah memberi tahu dia bahwa Anda mencoba menghubunginya. Kalau mau bilang lebih banyak, tulis di sini.","letter.ph":"Tulis pesan Anda di sini","letter.leave":"Tinggalkan pesan","letter.cancel":"Tidak jadi","letter.needText":"Tulis satu dua kalimat, supaya dia tahu apa yang Anda mau.","letter.left":"Pesan ditinggalkan. Dia akan menemukannya saat membuka aplikasi.","letter.failed":"Saya tidak bisa meninggalkan pesan. Coba lagi.","letter.callBack":"Telepon balik","letter.dismiss":"Selesai",
@@ -2128,6 +2178,8 @@ Object.assign(I18N.id, {
 "letter.missed":"Ingin bicara dengan Anda.",
 "sas.blocked":"Ucapkan dulu ketiga kata itu: orang ini bukan lagi orang yang sama.",
 "file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.","file.sendFailed":"Pengiriman terputus: koneksi tertutup di tengah jalan.","file.progress":"{sent} dari {total}",
+"file.stalled":"Sebuah berkas masuk berhenti di tengah jalan dan dilepaskan.",
+"file.tooBigToSend":"“{n}” terlalu besar untuk dikirim: batasnya 512 MB per berkas.",
 "share.pending":"{n} berkas siap dikirim — akan terkirim begitu tersambung",
 "health.storage":"Penyimpanan ponsel",
 "health.storageFull":"Penuh: percakapan tidak lagi disimpan. Kosongkan ruang di ponsel.",
@@ -3197,10 +3249,34 @@ async function checkSafetyFor(nick){
   if (dialedAddress){
     const expected = dialedAddress;
     const proven = dialedAddrProven;
-    dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
+    const unvouched = dialedAddrUnvouched;
+    dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; dialedAddrUnvouched = false;
     if (proven){
+      /* What this proves, stated exactly: the phone that answered holds the
+         private key behind this address. That is real and it is strong — no
+         one can sit in the middle of it.
+
+         What it does not prove is who they are, and the difference stops being
+         academic the moment the address did not come from them. Anyone who
+         knows your public address can leave a letter signed "Mamma" carrying
+         their own address; tapping "Richiama" then reaches somebody who does
+         own that address, and the app used to answer with a green badge
+         reading "verified in person". The proof was sound and the conclusion
+         was false, because the question was never who owns the address — it
+         was who gave it to you.
+
+         So an address this device was handed by a stranger gets the ordinary
+         three words instead, and only an address that arrived some other way
+         is trusted on the strength of the proof alone. */
+      if (unvouched){
+        paintVerifyBadge('new');
+        sysLine(fill(t('addr.provenNotWho','Chi ha risposto possiede davvero l\'indirizzo {a} — ma quell\'indirizzo te l\'ha lasciato una lettera, e chi l\'ha scritta può aver messo qualunque nome. Se non sei sicuro di chi sia, ditevi le tre parole.'),
+                     { a: formatAddress(expected) }));
+        await showSasPanel('new');
+        return;
+      }
       writeSafetyRec(key, code);
-      paintVerifyBadge('inperson');
+      paintVerifyBadge('ok');
       sysLine(fill(t('addr.verified','Verificato: chi ha risposto possiede davvero l\'indirizzo {a}. Nessuno può essersi messo in mezzo.'),
                    { a: formatAddress(expected) }));
       return;
@@ -3210,21 +3286,35 @@ async function checkSafetyFor(nick){
     return;
   }
 
-  /* The QR said which phone would answer. Check what actually did. */
+  /* The link said which phone would answer. Check what actually did.
+
+     What this can and cannot conclude was got badly wrong here, and the
+     comment above paintQr had already written down why: "anyone able to tamper
+     with the link could put their own fingerprint in it just as easily —
+     auto-verifying that would turn a real check into a rubber stamp". Then
+     this did exactly that. The `v=` value was treated as proof the QR had been
+     held out in person, but a QR and a tapped link arrive here as the same
+     URL, indistinguishable — so anyone could write `#q=…&v=<their own
+     fingerprint>` by hand, send it over WhatsApp, and have the app tell the
+     person they had verified an impostor face to face. A check an attacker can
+     satisfy about themselves is worse than no check: it prints a guarantee
+     that is false.
+
+     What survives is the half that is still sound. A mismatch means the phone
+     that answered is not the one the link named, and that is worth saying
+     loudly. A match means only that whoever wrote the link also answered it —
+     nothing about who they are. So a match no longer verifies anything: it
+     falls through to the ordinary three words, like any other first contact. */
   if (scannedFp){
     const expected = scannedFp;
     scannedFp = null; /* answers for this connection only */
-    if (fpHex.slice(0, expected.length) === expected){
-      writeSafetyRec(key, code);
-      paintVerifyBadge('inperson');
-      sysLine(t('verify.inPersonDone','Verificato di persona: hai inquadrato il codice sullo schermo di questa persona, quindi nessuno può essersi messo in mezzo. Non serve dirsi le tre parole.'));
+    if (fpHex.slice(0, expected.length) !== expected){
+      /* Not who the link promised. Nothing here is trusted, and this is said
+         as plainly as it deserves. */
+      paintVerifyBadge('changed');
+      await showSasPanel('mismatch');
       return;
     }
-    /* Not who the QR promised. Nothing here is trusted, and this is said as
-       plainly as it deserves. */
-    paintVerifyBadge('changed');
-    await showSasPanel('mismatch');
-    return;
   }
 
 
@@ -3667,10 +3757,29 @@ function loadContacts(){
   try{ return JSON.parse(localStorage.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
 }
 function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
+/* A name is a claim, and this list was the last place still treating one as an
+   identity. The safety records and the history had both already been moved
+   onto the fingerprint — the thing the handshake actually proves — precisely
+   because anybody can call themselves anything; the address book was left
+   behind. It mattered more here than in either of those: a stranger announcing
+   themselves as "Mamma" did not merely get filed under her name, they
+   overwrote her entry, and her fingerprint, her wake-up subscription and her
+   callable address went with it. The real Mamma became unreachable and the
+   impostor became one tap away, permanently.
+
+   Two different fingerprints are two different people, whatever they call
+   themselves. The newcomer is filed under a name that says so, and the record
+   already on file is left exactly as it was. */
 function touchContact(nick, fp, push, addr){
   if (!nick) return;
   let list = loadContacts();
-  const prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
+  let prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
+  if (prev && prev.fp && fp && prev.fp !== fp){
+    let n = 2;
+    while (list.some(c => c.nick.toLowerCase() === (nick + ' (' + n + ')').toLowerCase() && c.fp !== fp)) n++;
+    nick = nick + ' (' + n + ')';
+    prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
+  }
   const keepFp = fp || (prev && prev.fp) || null;
   /* `push` arrives fresh on every 'hello', which is exactly right: if someone
      reinstalled the app or switched devices their old subscription is dead
@@ -4144,10 +4253,25 @@ async function fetchAddrKey(addr){
 }
 
 /* Caller side. A one-time key pair per call, so two calls to the same address
-   share nothing: whoever recorded the first cannot read the second even if the
-   address's own key were later lost. Returns null when the address published
-   no key, or published one that does not match it — the caller must say so
-   rather than press on and hang. */
+   share no key material with each other.
+
+   What that does NOT buy, corrected here because the note that stood in this
+   place claimed it did: this is not forward secrecy. The ephemeral half is the
+   caller's, and its public part rides in the clear inside every envelope — so
+   the receiver's long-lived private key is on its own enough to open every
+   envelope ever addressed to it, including ones recorded months earlier. If
+   that key is lost later, everything captured up to then opens with it. That is
+   inherent to ECIES against a static recipient and it is an accepted trade-off:
+   an address has to be reachable by people who have never spoken to you, which
+   rules out a key both sides agree fresh. It matters most for letters, which
+   sit on the Worker for up to a week by design.
+
+   Written out at this length because the previous note asserted the opposite,
+   and a false guarantee in a comment is worse than none — the next person to
+   build on this would have designed against a property that was never there.
+
+   Returns null when the address published no key, or published one that does
+   not match it — the caller must say so rather than press on and hang. */
 async function addrDialSecrets(addr){
   const found = await fetchAddrKey(addr);
   if (!found) return null;
@@ -4664,7 +4788,7 @@ async function acceptAddrCall(){
     quickSharePc = null;   /* answering supersedes any invite that was on hold */
     myPc.ondatachannel = ev => wireDataChannel(ev.channel);
     const pump = candidatePump(myPc, sec, 'ab', 'ac');
-    quickPump = pump;
+    quickPump = pump; quickPumpOwner = myPc;
     await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
     const answer = await myPc.createAnswer();
@@ -4682,7 +4806,30 @@ async function acceptAddrCall(){
     watchHandshakeProgress(myPc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
       if (!ok) hideBigConnectingA(true);
     });
-  }catch(e){ hideBigConnectingA(true); }
+  }catch(e){ hideBigConnectingA(true); stopStrayPump(myPc); }
+}
+
+/* Every connection path below builds a candidate pump inside its `try`, which
+   put it out of reach of the `catch` that follows — so an exception anywhere
+   in the handshake left the pump alive, polling the mailbox two or three times
+   a second, forever. That is not a slow leak: one stuck pump eats a third of
+   this address's whole lookup budget, and a peer could cause it on purpose by
+   answering with an SDP that will not parse. The budget then runs out for
+   everybody honest on the same network.
+
+   Stopping it needs care in the other direction too: by the time a catch runs,
+   a newer attempt may already have replaced the pump, and tearing *that* one
+   down would break a connection that is doing nothing wrong. So the connection
+   each pump serves is recorded when the pump is set (quickPumpOwner), and a
+   stray is only ever stopped by the attempt that owns it. */
+function stopStrayPump(ownerPc){
+  if (!quickPump) return;
+  if (ownerPc && quickPumpOwner !== ownerPc) return;   /* a newer attempt owns it now */
+  /* No owner to name — the reconnect wrapper, which cannot see the connection
+     its inner half built. Falling back to the safe half of the same question:
+     never stop a pump whose connection is actually working. */
+  if (!ownerPc && quickPumpOwner && connectionWorking(quickPumpOwner)) return;
+  stopQuickPump();
 }
 
 /* ---------------- saying who you are before you ring ----------------
@@ -4691,9 +4838,18 @@ async function acceptAddrCall(){
    and no way to judge whether to answer. One screen fixes it, and the name and
    the line of text ride inside the same sealed envelope as everything else —
    the Worker carries them without ever being able to read them. */
-let knockTarget = null, outgoingIntro = '';
+let knockTarget = null, outgoingIntro = '', knockUnvouched = false;
 
-function showKnockCard(addr){
+/* `unvouched` marks an address this device was handed by somebody it has no
+   reason to trust yet — today that means a letter, which anybody who knows
+   your public address can leave, under any name they like. Proving the phone
+   that answers owns that address is still real proof, but proof of nothing
+   useful when the address itself came from a stranger claiming to be your
+   daughter: they own their own address, and the app would have said
+   "verified". Carried through the dial so the check at the far end knows
+   whether ownership is worth anything here. */
+function showKnockCard(addr, unvouched){
+  knockUnvouched = !!unvouched;
   knockTarget = addr;
   $('knockWho').textContent = formatAddress(addr);
   $('knockName').value = $('nickInput').value.trim();
@@ -4702,7 +4858,7 @@ function showKnockCard(addr){
   $('knockCard').scrollIntoView({ block: 'center', behavior: 'smooth' });
   setTimeout(() => { if (!$('knockName').value) $('knockName').focus(); }, 350);
 }
-function hideKnockCard(){ $('knockCard').classList.add('hide'); knockTarget = null; }
+function hideKnockCard(){ $('knockCard').classList.add('hide'); knockTarget = null; knockUnvouched = false; }
 
 $('btnKnockGo').addEventListener('click', () => {
   const addr = knockTarget;
@@ -4710,21 +4866,22 @@ $('btnKnockGo').addEventListener('click', () => {
   const name = $('knockName').value.trim();
   if (name) $('nickInput').value = name;   /* one name, used everywhere from here on */
   outgoingIntro = $('knockMsg').value.trim().slice(0, 140);
+  const unvouched = knockUnvouched;
   hideKnockCard();
-  dialAddress(addr);
+  dialAddress(addr, unvouched);
 });
 $('knockMsg').addEventListener('keydown', e => {
   if (e.key === 'Enter'){ e.preventDefault(); $('btnKnockGo').click(); }
 });
 
 /* ---------------- calling an address ---------------- */
-let dialedAddress = null, dialedSlot = 0;
+let dialedAddress = null, dialedSlot = 0, dialedAddrUnvouched = false;
 /* Set only when a reply from the dialled address actually opened under the
    ECDH-derived secret — see the note in checkSafetyFor. Never set from
    anything the caller could have produced by itself. */
 let dialedAddrProven = false;
 
-async function dialAddress(raw){
+async function dialAddress(raw, unvouched){
   const addr = parseAddress(raw);
   if (!addr){
     setStatus($('addrDialStatus'), t('addr.badFormat','Questo indirizzo non è scritto bene. Sono 12 caratteri, tipo DV-K7M2-9QRT-X4WP.'), 'bad');
@@ -4766,7 +4923,7 @@ async function dialAddress(raw){
     quickSharePc = null;   /* whatever invite was on hold, this call supersedes it */
     wireDataChannel(myPc.createDataChannel('logos-modifica'));
     const pump = candidatePump(myPc, sec, 'ac', 'ab');
-    quickPump = pump;
+    quickPump = pump; quickPumpOwner = myPc;
     const offer = await myPc.createOffer();
     await myPc.setLocalDescription(offer);
     if (pc !== myPc){ pump.stop(); return; }   /* superseded during the awaits above */
@@ -4798,6 +4955,7 @@ async function dialAddress(raw){
     /* proven further down, the moment a reply actually opens under the secret
        only this address's private half could derive */
     dialedAddress = addr;
+    dialedAddrUnvouched = !!unvouched;
 
     const answerKey = await slotId(sec.seed, 'addr-answer-' + rid);
     const offerKey = await slotId(sec.seed, 'addr-offer');
@@ -4811,15 +4969,25 @@ async function dialAddress(raw){
        this side is still waiting. */
     let nextRefresh = Date.now() + 80000;
     let got = null;
+    /* Every way out of this loop clears dialedAddress, and that matters more
+       than it reads. The flag is what checkSafetyFor uses to decide whether
+       the phone that answered proved it owns the address — left set after
+       *this* call was abandoned, the next connection to arrive (an incoming
+       call accepted, an invite completed) inherited it, found no proof
+       attached, and was shown the red "chi ha risposto non è il telefono del
+       codice" panel. A false accusation of eavesdropping, raised by an
+       ordinary tap. Nothing teaches people to ignore a security warning
+       faster than one that cries wolf. */
+    const giveUpDial = () => { dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; pump.stop(); };
     while (Date.now() < until){
-      if (!$('screenChat').classList.contains('hide')) return;
+      if (!$('screenChat').classList.contains('hide')){ giveUpDial(); return; }
       /* something else took the connection over — accepting an incoming call,
          or a new invite started from the home screen. Carrying on would set
          this call's answer onto *their* connection and break both. */
-      if (pc !== myPc){ pump.stop(); return; }
+      if (pc !== myPc){ giveUpDial(); return; }
       got = await mailboxGetSealed(answerKey, sec);
       if (got && got.sdp) break;
-      if (pc !== myPc){ pump.stop(); return; }   /* superseded while waiting on the mailbox */
+      if (pc !== myPc){ giveUpDial(); return; }   /* superseded while waiting on the mailbox */
       if (Date.now() >= nextRefresh){
         await mailboxPutSealed(offerKey, sec,
           { sdp: myPc.localDescription.sdp, nick: myNick(), rid, fp: await myFingerprintHex(), intro: outgoingIntro });
@@ -4854,12 +5022,13 @@ async function dialAddress(raw){
     dialedSlot = sec.slot | 0;   /* known from the verified record, not taken on trust from the reply */
     await myPc.setRemoteDescription({ type:'answer', sdp: got.sdp });
     await pump.remoteReady();
-    if (pc !== myPc) return;   /* superseded during the awaits just above */
+    if (pc !== myPc){ giveUpDial(); return; }   /* superseded during the awaits just above */
     watchHandshakeProgress(myPc, $('quickStatusB'), $('diagQuickB'), pump, ok => {
       if (!ok){ dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; hideBigConnectingB(true); }
     });
   }catch(e){
     dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
+    stopStrayPump(myPc);
     hideBigConnectingB(true);
     showScreen('screenHome');
     setStatus($('addrDialStatus'), t('addr.dialFailed','Non sono riuscito a chiamare questo indirizzo.'), 'bad');
@@ -4920,7 +5089,7 @@ function renderLetters(){
       const back = document.createElement('button');
       back.className = 'go';
       back.textContent = t('letter.callBack','Richiama');
-      back.addEventListener('click', () => { dropLetter(l.id); renderLetters(); showKnockCard(l.from); });
+      back.addEventListener('click', () => { dropLetter(l.id); renderLetters(); showKnockCard(l.from, true); });
       acts.appendChild(back);
     }
     const del = document.createElement('button');
@@ -5153,7 +5322,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.61';
+const APP_VERSION = 'logos-modifica-3.62';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -5337,7 +5506,23 @@ function revealInviteCode(code){
   $('pasteAnswerCard').classList.remove('hide');
 }
 
+/* The only one of these paths with no catch of its own. An exception anywhere
+   below became an unhandled rejection that left three things behind at once:
+   a pump still polling the mailbox, the "Crea invito" button disabled for the
+   rest of the visit, and a status line frozen on "Provo a ricollegarmi…" that
+   would never resolve either way. Wrapped rather than restructured, so the
+   body below stays exactly the code that was reviewed. */
 async function tryAutoReconnect(contact){
+  try{
+    await tryAutoReconnectInner(contact);
+  }catch(e){
+    stopStrayPump();
+    $('btnCreate').disabled = false;
+    if (!connectionWorking(pc))
+      setStatus($('statusA'), t('reconnect.failed','Non sono riuscito a ricollegarmi. Prova con un invito nuovo.'), 'bad');
+  }
+}
+async function tryAutoReconnectInner(contact){
   const myFp = await myFingerprintHex();
   if (!myFp || !contact.fp) return;
 
@@ -5357,7 +5542,7 @@ async function tryAutoReconnect(contact){
      path is encrypted too — the relay never sees these addresses either. */
   const sec = await pairSecrets(myFp + ':' + contact.fp);
   const pump = candidatePump(myPc, sec, 'a', 'b');
-  quickPump = pump;
+  quickPump = pump; quickPumpOwner = myPc;
   const offer = await myPc.createOffer();
   await myPc.setLocalDescription(offer);
   if (pc !== myPc){ pump.stop(); return; }   /* superseded while we waited */
@@ -5464,7 +5649,7 @@ async function acceptIncomingAutoOffer(contact, msg, sec){
     /* the key both sides derive independently from the caller's fingerprint then
        the callee's — here `contact.fp` is the caller and `myFp` is us */
     const pump = candidatePump(myPc, sec, 'b', 'a');
-    quickPump = pump;
+    quickPump = pump; quickPumpOwner = myPc;
     await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
     const answer = await myPc.createAnswer();
@@ -5487,6 +5672,7 @@ async function acceptIncomingAutoOffer(contact, msg, sec){
   }catch(e){
     /* a half-built connection left in the global would read as "busy" forever
        and close this device off to everyone */
+    stopStrayPump(myPc);
     if (pc === myPc){ try{ pc.close(); }catch(_){} pc = null; }
   } finally { autoAccepting = false; }
 }
@@ -5921,8 +6107,8 @@ function candidatePump(pcObj, sec, mine, theirs){
   };
 }
 
-let quickPump = null;
-function stopQuickPump(){ if (quickPump){ quickPump.stop(); quickPump = null; } }
+let quickPump = null, quickPumpOwner = null;
+function stopQuickPump(){ if (quickPump){ quickPump.stop(); quickPump = null; quickPumpOwner = null; } }
 
 /* `existingCode` puts a specific invite back on the air instead of minting a new
    one — used when someone has been rung about an invite they left out there, and
@@ -5978,7 +6164,7 @@ async function startQuickShare(existingCode, quiet){
   const sec = await secReady;
   if (pc !== myPc) return;
   const pump = candidatePump(myPc, sec, 'a', 'b');
-  quickPump = pump;
+  quickPump = pump; quickPumpOwner = myPc;
 
   const offer = await myPc.createOffer();
   await myPc.setLocalDescription(offer);
@@ -6245,7 +6431,7 @@ async function tryQuickConnect(){
     const myPc = pc;
     myPc.ondatachannel = ev => wireDataChannel(ev.channel);
     const pump = candidatePump(myPc, sec, 'b', 'a');
-    quickPump = pump;
+    quickPump = pump; quickPumpOwner = myPc;
     await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
     await pump.remoteReady();
     const answer = await myPc.createAnswer();
@@ -6266,6 +6452,7 @@ async function tryQuickConnect(){
     quickConnecting = false;
     $('btnQuickConnect').disabled = false;
     if (connectionWorking(pc)) return;
+    stopStrayPump(myPc);
     hideBigConnectingB(true);
   }finally{
     /* Every way out of here that never got as far as handing the warmed-up
@@ -6414,6 +6601,17 @@ function blockedBySafety(){
 async function sendFile(file){
   if (!file || !dc || dc.readyState !== 'open') return;
   if (blockedBySafety()) return;
+  /* The receiving side has refused anything over this since the August audit,
+     and it refuses it in silence — there is no reply channel for "no". This
+     side never checked, so a file too large was pushed in full, every byte of
+     it, the bar climbed calmly to 100%, and the preview appeared as though it
+     had arrived. Nobody on either end was ever told otherwise. Of all the ways
+     a transfer can fail, silent loss confirmed by a success screen is the
+     worst, and it was the one nothing guarded against. */
+  if (file.size > MAX_INCOMING_BYTES){
+    sysLine(fill(t('file.tooBigToSend','«{n}» è troppo grande da mandare: il limite è 512 MB per file.'), { n: file.name }));
+    return;
+  }
   const id = Math.random().toString(36).slice(2);
   /* A transfer used to render nothing at all until it finished — a 500MB
      video sat for two minutes with no sign of life on screen, indistinguishable
@@ -6577,6 +6775,51 @@ const incoming = {};
    takes to exhaust a phone's memory. A real transfer never approaches either. */
 const MAX_INCOMING_BYTES = 512 * 1024 * 1024;
 const MAX_OPEN_TRANSFERS = 20;
+/* The per-transfer cap above was the whole defence, and multiplication went
+   straight through it: twenty transfers of 512 MB each, all filled for real,
+   is ten gigabytes of chunks held in memory on a phone. Not an error anybody
+   could handle — the tab is simply killed. What has to be bounded is the
+   total, so that is what this bounds. */
+const MAX_INCOMING_TOTAL = 768 * 1024 * 1024;
+/* A transfer only ever left `incoming` by finishing or by overflowing its cap.
+   A peer that opened twenty and then sent nothing at all filled the table with
+   records that would never do either, and every later file-start was dropped
+   in silence — file receiving dead for the rest of the visit, with nothing on
+   screen to say why. Anything that has not been fed for this long was not a
+   file being sent. */
+const TRANSFER_IDLE_MS = 90000;
+function heldIncomingBytes(){
+  let n = 0;
+  for (const k in incoming) n += incoming[k].got;
+  return n;
+}
+/* What every open transfer has been *promised* it may hold, as opposed to what
+   it is holding so far. Admission has to be judged on this: judging on bytes
+   already received let twenty transfers of half a gigabyte each be waved
+   through, since all twenty were holding nothing at the moment they asked. */
+function pledgedIncomingBytes(){
+  let n = 0;
+  for (const k in incoming) n += incoming[k].cap;
+  return n;
+}
+function dropStaleTransfers(){
+  const now = Date.now();
+  for (const k in incoming){
+    if (now - incoming[k].lastAt <= TRANSFER_IDLE_MS) continue;
+    try{ incoming[k].xfer.fail(t('file.stalled','Un file in arrivo si è fermato a metà ed è stato lasciato andare.')); }catch(e){}
+    delete incoming[k];
+  }
+}
+/* Chunks live for as long as the page does unless something lets them go, and
+   nothing did: a 300 MB transfer cut off by closing the chat stayed in memory
+   through every session after it, invisible to the person and to the health
+   card alike. Both ways out of a conversation now clear the table. */
+function forgetIncoming(){
+  for (const k in incoming){
+    try{ incoming[k].xfer.fail(t('file.stalled','Un file in arrivo si è fermato a metà ed è stato lasciato andare.')); }catch(e){}
+    delete incoming[k];
+  }
+}
 
 function onDcMessage(ev){
   if (typeof ev.data === 'string'){
@@ -6605,7 +6848,15 @@ function onDcMessage(ev){
         toast(t('addr.blockedIn','Chiamata da un contatto che avevi rifiutato: ignorata.'));
         return;
       }
-      peerNick = (msg.nick || '').trim();
+      /* Typed and capped like everything else that arrives from the other
+         side. It was the one field that was not, and it cost more than it
+         looks: `{}.trim()` threw, the throw took the rest of this branch with
+         it, and the safety check at the bottom is *in* that branch — so a peer
+         could make the three-word panel never appear simply by sending a nick
+         that was not a string. A cap as well, because this is written to
+         localStorage: a nick of a few megabytes filled the quota and every
+         later save — history, contacts — failed silently. */
+      peerNick = (typeof msg.nick === 'string' ? msg.nick : '').trim().slice(0, 60);
       if (peerNick){
         paintConnDot();
         $('peerNameLbl').textContent = peerNick;
@@ -6613,12 +6864,13 @@ function onDcMessage(ev){
         loadHistoryFor(peerNick);
         touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push), dialedAddress);
         sysLine(peerNick + ' ' + t('call.joined'));
-        hadRealChat = true; /* someone is genuinely at the other end */
-        /* the safety check follows the moment rather than fighting it for the
-           screen — it is the more important of the two and deserves an
-           uncluttered one */
-        showConnectedFlash(peerNick).then(() => checkSafetyFor(peerNick));
       }
+      hadRealChat = true; /* someone is genuinely at the other end */
+      /* Outside the `if` on purpose. Verification is the one thing here that
+         must not depend on what the other side chose to send: leaving it in
+         the branch meant a peer who simply omitted their name was never
+         checked at all, which is the easier half of the same bypass. */
+      showConnectedFlash(peerNick).then(() => checkSafetyFor(peerNick));
     } else if (msg.type === 'text'){
       const label = peerNick ? '<span class="who">'+esc(peerNick)+'</span>' : '';
       renderMsg(label + esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
@@ -6629,15 +6881,22 @@ function onDcMessage(ev){
          transfers and finish none, until the phone ran out of memory. Both are
          now bounded — and a peer that does either is not sending you a file. */
       if (typeof msg.id !== 'string' || !msg.id) return;
+      /* Reusing the id of a transfer already in flight replaced its record and
+         orphaned everything received so far — the bubble on screen kept its
+         bar, and the bytes went to a record nobody would ever finish. */
+      if (incoming[msg.id]) return;
+      dropStaleTransfers();
       if (Object.keys(incoming).length >= MAX_OPEN_TRANSFERS) return;
       const declared = Number(msg.size);
       if (!(declared >= 0) || declared > MAX_INCOMING_BYTES) return;
+      if (pledgedIncomingBytes() + Math.min(declared, MAX_INCOMING_BYTES) > MAX_INCOMING_TOTAL) return;
       /* Same reasoning as the sending side: nothing used to appear until the
          whole thing had arrived, so a large incoming file looked identical to
          nothing happening at all. */
       const xfer = renderTransferBubble(msg.name || '', declared, false);
       incoming[msg.id] = {
         chunks: [], got: 0, meta: msg, cap: Math.min(declared, MAX_INCOMING_BYTES), xfer,
+        lastAt: Date.now(),
       };
     } else if (msg.type === 'file-end'){
       const rec = incoming[msg.id]; if (!rec) return;
@@ -6672,7 +6931,16 @@ function onDcMessage(ev){
       delete incoming[id];
       return;
     }
+    /* Checked here and not only at file-start, because the start-time check
+       can be walked straight past: twenty transfers each declaring one byte
+       pass it trivially, and what matters is what actually arrives. */
+    if (heldIncomingBytes() + piece.byteLength > MAX_INCOMING_TOTAL){
+      rec.xfer.fail(t('file.tooBig','Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.'));
+      delete incoming[id];
+      return;
+    }
     rec.got += piece.byteLength;
+    rec.lastAt = Date.now();
     rec.chunks.push(piece);
     rec.xfer.paint(rec.got, rec.got === rec.cap);
   }
@@ -6985,9 +7253,18 @@ $('btnDeclineCall').addEventListener('click', () => {
   $('incomingCall').classList.add('hide'); sig({ type: 'call-decline' }); callState = 'idle'; callKind = null;
 });
 async function onCallAccepted(){
-  localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
-  const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
-  sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
+  /* Same reason as onCallOfferSdp below: everything after this point tells the
+     person the call is up. If building the offer throws, saying so beats
+     leaving a clock ticking over a call that never existed. */
+  try{
+    localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
+    const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
+    sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
+  }catch(e){
+    endCall(true);
+    sysLine(t('call.connectFailed','La chiamata non si è collegata. Riprova.'));
+    return;
+  }
   setCallStatus(callKind === 'video' ? t('call.inVideo') : t('call.inAudio'));
   callState = 'active';
   startCallTimer();
@@ -6996,10 +7273,20 @@ async function onCallAccepted(){
   initFlipCam();
   initScreenShare();
 }
+/* The mirror of the 'call-answer-sdp' branch, which has had this guard for a
+   while — this half was left without one, and it is the same failure seen from
+   the other side: the call is already showing as active with a clock running,
+   so a description that will not apply left both people watching a live-looking
+   call that could never carry sound. Half a fix is what this was. */
 async function onCallOfferSdp(sdp){
-  await pc.setRemoteDescription({ type: 'offer', sdp });
-  const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
-  sig({ type: 'call-answer-sdp', sdp: pc.localDescription.sdp });
+  try{
+    await pc.setRemoteDescription({ type: 'offer', sdp });
+    const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
+    sig({ type: 'call-answer-sdp', sdp: pc.localDescription.sdp });
+  }catch(e){
+    endCall(true);
+    sysLine(t('call.connectFailed','La chiamata non si è collegata. Riprova.'));
+  }
 }
 function endCall(tellPeer){
   stopRing(); disarmCallTimeout();
@@ -7284,6 +7571,7 @@ function destroyNow(tellPeer){
      it: keeping them alive would be its own quiet contradiction of the word
      "destroyed" */
   releaseObjectUrls();
+  forgetIncoming();   /* including any that never finished arriving */
   sysLine(t('destruct.done'));
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
@@ -7334,6 +7622,7 @@ function endSession(){
   pc = null; dc = null; peerNick = '';
   $('msgs').innerHTML = '';
   releaseObjectUrls();
+  forgetIncoming();   /* a half-arrived file would otherwise sit in memory for the rest of the visit */
   $('offerBlock').classList.add('hide'); $('offerOut').textContent = '';
   $('answerBlock').classList.add('hide'); $('answerOut').textContent = '';
   $('pasteAnswerCard').classList.add('hide');

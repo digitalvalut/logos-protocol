@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.61` — 22 agosto 2026*
+*Versione descritta: `logos-modifica-3.62` — 23 agosto 2026*
 
 ---
 
@@ -147,7 +147,7 @@ vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronolog
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **82 test automatici** a ogni pubblicazione, senza installare niente
+- **94 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -343,6 +343,6 @@ cose della §4 che esistono già.
 
 ---
 
-*Dossier generato il 16 agosto 2026, aggiornato il 22 agosto 2026 sulla versione
-`logos-modifica-3.61`.*
+*Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
+`logos-modifica-3.62`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

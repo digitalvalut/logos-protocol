@@ -116,7 +116,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-82 automated tests, each verified by deliberately reintroducing the bug it guards against
+94 automated tests, each verified by deliberately reintroducing the bug it guards against
 and confirming it fails red before the fix — not just written to pass. They run in a
 ~150-line hand-written browser sandbox, not a framework, in keeping with the
 zero-runtime-dependency rule. `node --test` from the repository root.

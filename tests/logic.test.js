@@ -516,6 +516,234 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  /* ------------------------------------------------------------------
+     The findings of the external review of 22 August 2026, each one turned
+     into the test that would have caught it. Every one of these was verified
+     by putting the original flaw back and watching it go red.
+     ------------------------------------------------------------------ */
+
+  test('a peer cannot make the three-word check disappear by sending a strange name', () => {
+    /* msg.nick was the one field arriving from the other side that was never
+       type-checked. `{}.trim()` threw, the throw took the rest of the 'hello'
+       branch with it, and the safety check lives at the bottom of that branch
+       — so a peer could skip verification entirely by sending a name that was
+       not a string. Sending no name at all did the same thing more simply:
+       the branch was guarded by `if (peerNick)`. */
+    const app = loadApp();
+    app.run(`
+      window.__checked = 0;
+      checkSafetyFor = function(){ window.__checked++; return Promise.resolve(); };
+      showConnectedFlash = function(){ return Promise.resolve(); };
+      pc = new RTCPeerConnection();
+    `);
+    app.run(`onDcMessage({ data: JSON.stringify({ type: 'hello', nick: {} }) });`);
+    app.run(`onDcMessage({ data: JSON.stringify({ type: 'hello' }) });`);
+    return new Promise(r => setTimeout(r, 0)).then(() => {
+      assert.strictEqual(app.run('window.__checked'), 2,
+        'verification must run whatever the other side calls itself — including when it sends no name, or a name that is not text');
+      app.stop();
+    });
+  });
+
+  test('a name arriving from the other side cannot be long enough to fill the phone', () => {
+    const app = loadApp();
+    app.run(`
+      checkSafetyFor = function(){ return Promise.resolve(); };
+      showConnectedFlash = function(){ return Promise.resolve(); };
+      pc = new RTCPeerConnection();
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'x'.repeat(500000), fp: 'aa' }) });
+    `);
+    assert.ok(app.run('peerNick.length') <= 60,
+      'an unbounded nick is written to localStorage and fills its quota, after which history and contacts fail to save in silence');
+    app.stop();
+  });
+
+  test('a stranger claiming a name already in the address book does not take it over', () => {
+    /* The safety records and the history were both moved off names and onto
+       fingerprints long ago, for exactly this reason. The address book was
+       left behind, and it was the worst place to leave it: overwriting the
+       entry replaced the real person's fingerprint, wake-up subscription and
+       callable address with the impostor's. */
+    const app = loadApp();
+    app.run(`touchContact('Mamma', 'fp-real', null, 'DV-AAAA-BBBB-CCCC');`);
+    app.run(`touchContact('Mamma', 'fp-impostor', null, 'DV-ZZZZ-ZZZZ-ZZZZ');`);
+    const saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    const real = saved.filter(c => c.fp === 'fp-real');
+    assert.strictEqual(real.length, 1, 'the real contact must survive');
+    assert.strictEqual(real[0].nick, 'Mamma', 'the real contact must keep her own name');
+    assert.strictEqual(real[0].addr, 'DV-AAAA-BBBB-CCCC',
+      'her callable address must not have been replaced by the impostor\'s');
+    assert.strictEqual(saved.length, 2, 'the newcomer belongs in the list too, under a name that says they are someone else');
+    app.stop();
+  });
+
+  test('the same person reconnecting still updates their own entry rather than piling up copies', () => {
+    const app = loadApp();
+    app.run(`touchContact('Marco', 'fp-1', null, null);`);
+    app.run(`touchContact('Marco', 'fp-1', null, 'DV-AAAA-BBBB-CCCC');`);
+    const saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(saved.length, 1, 'one fingerprint is one person, however many times they call');
+    assert.strictEqual(saved[0].addr, 'DV-AAAA-BBBB-CCCC');
+    app.stop();
+  });
+
+  test('a file bigger than the other side will accept is refused here, not pushed into the void', () => {
+    /* The receiving side has refused these in silence since August; this side
+       never checked, so every byte went out, the bar reached 100%, and the
+       preview appeared as if it had arrived. */
+    const app = loadApp();
+    app.run(`
+      window.__sent = 0;
+      dc = { readyState: 'open', send: function(){ window.__sent++; } };
+      window.__p = sendFile({ name: 'enorme.mp4', size: MAX_INCOMING_BYTES + 1, type: 'video/mp4' });
+    `);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('window.__sent'), 0,
+        'nothing at all should go on the wire for a file the far end is guaranteed to drop');
+      app.stop();
+    });
+  });
+
+  test('twenty transfers cannot add up to more memory than the phone has', () => {
+    /* The per-transfer cap was the whole defence and multiplication went
+       straight through it: twenty transfers of 512 MB each is ten gigabytes
+       of chunks held in memory, which is not an error anyone can handle — the
+       tab is simply killed. */
+    const app = loadApp();
+    app.run(`
+      checkSafetyFor = function(){ return Promise.resolve(); };
+      showConnectedFlash = function(){ return Promise.resolve(); };
+      for (let i = 0; i < MAX_OPEN_TRANSFERS; i++){
+        onDcMessage({ data: JSON.stringify({ type: 'file-start', id: 'id' + i, name: 'f' + i, size: MAX_INCOMING_BYTES }) });
+      }
+    `);
+    const held = app.run(`(function(){ let n = 0; for (const k in incoming) n += incoming[k].cap; return n; })()`);
+    assert.ok(held <= app.run('MAX_INCOMING_TOTAL'),
+      'the sum of what all open transfers may hold must stay under one bound, not twenty separate ones');
+    app.stop();
+  });
+
+  test('transfers that stall forever do not leave file receiving dead', () => {
+    /* A record left `incoming` only by finishing or by overflowing. A peer
+       that opened the maximum and then sent nothing made every later
+       file-start be dropped in silence — receiving was over for the visit,
+       with nothing on screen to say so. */
+    const app = loadApp();
+    app.run(`
+      for (let i = 0; i < MAX_OPEN_TRANSFERS; i++){
+        onDcMessage({ data: JSON.stringify({ type: 'file-start', id: 'z' + i, name: 'f', size: 10 }) });
+      }
+      for (const k in incoming) incoming[k].lastAt = Date.now() - (TRANSFER_IDLE_MS + 1000);
+      onDcMessage({ data: JSON.stringify({ type: 'file-start', id: 'fresh', name: 'vero.jpg', size: 10 }) });
+    `);
+    assert.strictEqual(app.run("!!incoming['fresh']"), true,
+      'a real file arriving after a peer wedged the table open must still be accepted');
+    app.stop();
+  });
+
+  test('a half-arrived file is let go of when the conversation ends', () => {
+    const app = loadApp();
+    app.run(`
+      onDcMessage({ data: JSON.stringify({ type: 'file-start', id: 'half', name: 'grande.mp4', size: 300000000 }) });
+      endSession();
+    `);
+    assert.strictEqual(app.run('Object.keys(incoming).length'), 0,
+      'chunks from an interrupted transfer stayed in memory for the rest of the visit, across every session after it');
+    app.stop();
+  });
+
+  test('a link that vouches for itself no longer counts as having met in person', () => {
+    /* The QR carried the sender's own fingerprint so the app could confirm the
+       phone that answered was the one on the screen. But a QR and a tapped
+       link arrive as the same URL — so anyone could write that parameter by
+       hand, send it over WhatsApp, and have the app tell the person they had
+       verified an impostor face to face. A check the attacker can satisfy
+       about themselves prints a guarantee that is false. */
+    const app = loadApp();
+    app.run(`
+      window.__sas = 0;
+      showSasPanel = function(){ window.__sas++; return Promise.resolve(); };
+      computeSafetyCode = function(){ return Promise.resolve('11111 22222'); };
+      remoteFpHex = function(){ return 'abcdef0123456789'; };
+      scannedFp = 'abcdef01';
+      window.__p = checkSafetyFor('Marco');
+    `);
+    return app.run('window.__p').then(() => {
+      assert.notStrictEqual(app.run('safetyState'), 'inperson',
+        'a fingerprint that merely matches what the link itself claimed proves nothing about who is on the other end');
+      assert.strictEqual(app.run('window.__sas'), 1,
+        'it must fall through to the ordinary three words, like any other first contact');
+      app.stop();
+    });
+  });
+
+  test('a link naming a phone that does not answer is still called out', () => {
+    /* The half of that check which remains sound: a mismatch means the phone
+       that answered is not the one the link named, and that is worth saying. */
+    const app = loadApp();
+    app.run(`
+      window.__kind = null;
+      showSasPanel = function(k){ window.__kind = k; return Promise.resolve(); };
+      computeSafetyCode = function(){ return Promise.resolve('11111 22222'); };
+      remoteFpHex = function(){ return 'ffffffffffffffff'; };
+      scannedFp = 'abcdef01';
+      window.__p = checkSafetyFor('Marco');
+    `);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('safetyState'), 'changed');
+      assert.strictEqual(app.run('window.__kind'), 'mismatch');
+      app.stop();
+    });
+  });
+
+  test('an address handed over by a stranger is not treated as a verified identity', () => {
+    /* Anyone who knows your public address can leave a letter signed "Mamma"
+       carrying their own address. Tapping "Richiama" reaches somebody who
+       genuinely does own that address — the proof is sound — and the app used
+       to answer with a badge reading "verified in person". The question was
+       never who owns the address; it was who gave it to you. */
+    const app = loadApp();
+    app.run(`
+      window.__sas = 0;
+      showSasPanel = function(){ window.__sas++; return Promise.resolve(); };
+      computeSafetyCode = function(){ return Promise.resolve('11111 22222'); };
+      remoteFpHex = function(){ return 'abcdef0123456789'; };
+      dialedAddress = 'DV-AAAA-BBBB-CCCC';
+      dialedAddrProven = true;
+      dialedAddrUnvouched = true;
+      window.__p = checkSafetyFor('Mamma');
+    `);
+    return app.run('window.__p').then(() => {
+      assert.notStrictEqual(app.run('safetyState'), 'inperson',
+        'owning an address a stranger gave you says nothing about being the person they claimed to be');
+      assert.strictEqual(app.run('window.__sas'), 1,
+        'the three words are exactly what is left to tell them apart, so they must be offered');
+      app.stop();
+    });
+  });
+
+  test('an address the person got for themselves is still verified by the proof alone', () => {
+    /* The other half: this path is what makes calling a permanent address
+       worth having, and it must not be thrown away with the fix above. */
+    const app = loadApp();
+    app.run(`
+      window.__sas = 0;
+      showSasPanel = function(){ window.__sas++; return Promise.resolve(); };
+      computeSafetyCode = function(){ return Promise.resolve('11111 22222'); };
+      remoteFpHex = function(){ return 'abcdef0123456789'; };
+      dialedAddress = 'DV-AAAA-BBBB-CCCC';
+      dialedAddrProven = true;
+      dialedAddrUnvouched = false;
+      window.__p = checkSafetyFor('Marco');
+    `);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('safetyState'), 'ok');
+      assert.strictEqual(app.run('window.__sas'), 0,
+        'nobody can sit in the middle of this one, so asking for the words would be noise');
+      app.stop();
+    });
+  });
+
   test('the simple-mode hint offers to turn it on right there, not just in settings', () => {
     /* The setting has existed for a while inside Impostazioni, reachable only
        by someone already comfortable enough to go looking for it — backwards
@@ -1086,7 +1314,11 @@ test.describe('what the audit found', () => {
        answering a second call) replaced that global underneath, so the answer
        for one attempt was built from a different connection and broke both.
        Only two of the eight guarded against it. */
-    for (const fn of ['acceptAddrCall', 'tryAutoReconnect', 'acceptIncomingAutoOffer',
+    /* tryAutoReconnectInner, not tryAutoReconnect: the outer half is only the
+       try/catch wrapper added when it turned out an exception there left a
+       mailbox pump polling forever. The connection is still built in the
+       inner half, which is what this has to look at. */
+    for (const fn of ['acceptAddrCall', 'tryAutoReconnectInner', 'acceptIncomingAutoOffer',
                       'tryQuickConnect', 'dialAddress', 'startQuickShare']){
       const start = SOURCE.indexOf(`async function ${fn}(`);
       assert.ok(start > 0, `${fn} not found`);
