@@ -744,6 +744,43 @@ test.describe('what the audit found', () => {
     });
   });
 
+  test('a photo does not come back as a broken icon the next time the chat is opened', () => {
+    /* The URL a photo is shown through is a handle to bytes the browser is
+       holding right now, and it dies with the page. Saved into the history as
+       it stood, a conversation reopened the next day was a row of broken
+       images — the history looked corrupted when nothing was. */
+    const app = loadApp();
+    app.run(`
+      peerNick = 'Marco';
+      saveToHistory('Marco', '<img src="blob:http://x/abc-123"><div class="meta">10:30</div>', false);
+      saveToHistory('Marco', '<a href="blob:http://x/def" download="conto.pdf" class="filelink">conto.pdf ↓</a><div class="meta">10:31</div>', true);
+      saveToHistory('Marco', 'ciao come stai<div class="meta">10:32</div>', true);
+    `);
+    const kept = JSON.parse(app.run("localStorage.getItem(historyKeyNow('Marco'))"));
+    assert.ok(kept.every(m => m.html.indexOf('blob:') === -1),
+      'a handle that will not survive the page must never be what the history keeps');
+    assert.match(kept[1].html, /conto\.pdf/,
+      'the name of the file is what makes the line worth keeping — it must survive even though the file does not');
+    assert.match(kept[0].html, /10:30/, 'the time the message arrived belongs to the message, not to the photo');
+    assert.strictEqual(kept[2].html, 'ciao come stai<div class="meta">10:32</div>',
+      'an ordinary message must be stored exactly as it was — this only ever touches what points at dead bytes');
+    app.stop();
+  });
+
+  test('the storage warning goes away once storage works again', () => {
+    /* One failed write left the health card red for the whole visit, long
+       after the phone had room again: a warning about a problem that had
+       already gone is its own kind of wrong answer. */
+    const app = loadApp();
+    app.run(`
+      historyBroken = true;
+      saveToHistory('Marco', 'ciao<div class="meta">10:00</div>', true);
+    `);
+    assert.strictEqual(app.run('historyBroken'), false,
+      'a write that succeeded is the proof the problem is over, and nothing else was ever going to clear it');
+    app.stop();
+  });
+
   test('the simple-mode hint offers to turn it on right there, not just in settings', () => {
     /* The setting has existed for a while inside Impostazioni, reachable only
        by someone already comfortable enough to go looking for it — backwards

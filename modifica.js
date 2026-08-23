@@ -204,6 +204,7 @@ Object.assign(I18N.en, {
 "sas.blocked":"Say the three words out loud first: this person is no longer the same one.",
 "file.tooBig":"An incoming file was stopped: it did not match what was declared.","file.sendFailed":"Send interrupted: the connection closed partway through.","file.progress":"{sent} of {total}",
 "file.stalled":"An incoming file stalled halfway and was let go.",
+"history.photo":"Photo","history.video":"Video","history.audio":"Voice message","history.file":"File","history.gone":"{n} — not here any more once the app was closed",
 "file.tooBigToSend":"“{n}” is too big to send: the limit is 512 MB per file.",
 "share.pending":"{n} file ready to send — they'll go the moment you connect",
 "health.storage":"Phone storage",
@@ -375,6 +376,7 @@ Object.assign(I18N.it, {
 "sas.blocked":"Prima dite le tre parole a voce: questa persona non risulta più la stessa.",
 "file.tooBig":"Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.","file.sendFailed":"Invio interrotto: la connessione si è chiusa a metà.","file.progress":"{sent} di {total}",
 "file.stalled":"Un file in arrivo si è fermato a metà ed è stato lasciato andare.",
+"history.photo":"Foto","history.video":"Video","history.audio":"Messaggio vocale","history.file":"File","history.gone":"{n} — non più qui dopo la chiusura dell'app",
 "file.tooBigToSend":"«{n}» è troppo grande da mandare: il limite è 512 MB per file.",
 "share.pending":"{n} file pronti da mandare — arrivano appena ti colleghi",
 "health.storage":"Memoria del telefono",
@@ -539,6 +541,7 @@ Object.assign(I18N.fr, {
 "sas.blocked":"Dites d'abord les trois mots à voix haute : cette personne n'est plus la même.",
 "file.tooBig":"Un fichier entrant a été interrompu : il ne correspondait pas à ce qui était annoncé.","file.sendFailed":"Envoi interrompu : la connexion s'est fermée en cours de route.","file.progress":"{sent} sur {total}",
 "file.stalled":"Un fichier entrant s'est arrêté à mi-chemin et a été abandonné.",
+"history.photo":"Photo","history.video":"Vidéo","history.audio":"Message vocal","history.file":"Fichier","history.gone":"{n} — plus là après la fermeture de l'app",
 "file.tooBigToSend":"« {n} » est trop volumineux : la limite est de 512 Mo par fichier.",
 "share.pending":"{n} fichier(s) prêt(s) à envoyer — ils partent dès que vous êtes connectés",
 "health.storage":"Mémoire du téléphone",
@@ -703,6 +706,7 @@ Object.assign(I18N.de, {
 "sas.blocked":"Sagt euch zuerst die drei Wörter laut: diese Person ist nicht mehr dieselbe.",
 "file.tooBig":"Eine eingehende Datei wurde gestoppt: sie stimmte nicht mit dem Angekündigten überein.","file.sendFailed":"Senden unterbrochen: die Verbindung wurde mittendrin geschlossen.","file.progress":"{sent} von {total}",
 "file.stalled":"Eine eingehende Datei blieb auf halbem Weg stehen und wurde losgelassen.",
+"history.photo":"Foto","history.video":"Video","history.audio":"Sprachnachricht","history.file":"Datei","history.gone":"{n} — nach dem Schließen der App nicht mehr da",
 "file.tooBigToSend":"„{n}“ ist zu groß zum Senden: das Limit liegt bei 512 MB pro Datei.",
 "share.pending":"{n} Datei(en) bereit zum Senden — sie gehen raus, sobald ihr verbunden seid",
 "health.storage":"Speicher des Telefons",
@@ -867,6 +871,7 @@ Object.assign(I18N.es, {
 "sas.blocked":"Decíos antes las tres palabras en voz alta: esta persona ya no es la misma.",
 "file.tooBig":"Se ha detenido un archivo entrante: no coincidía con lo declarado.","file.sendFailed":"Envío interrumpido: la conexión se cerró a mitad de camino.","file.progress":"{sent} de {total}",
 "file.stalled":"Un archivo entrante se detuvo a medias y se ha soltado.",
+"history.photo":"Foto","history.video":"Vídeo","history.audio":"Mensaje de voz","history.file":"Archivo","history.gone":"{n} — ya no está tras cerrar la app",
 "file.tooBigToSend":"«{n}» es demasiado grande para enviarlo: el límite es 512 MB por archivo.",
 "share.pending":"{n} archivo(s) listos para enviar — se envían en cuanto os conectéis",
 "health.storage":"Memoria del teléfono",
@@ -1031,6 +1036,7 @@ Object.assign(I18N.pt, {
 "sas.blocked":"Digam primeiro as três palavras em voz alta: esta pessoa já não é a mesma.",
 "file.tooBig":"Um ficheiro recebido foi interrompido: não correspondia ao que foi declarado.","file.sendFailed":"Envio interrompido: a ligação fechou a meio.","file.progress":"{sent} de {total}",
 "file.stalled":"Um ficheiro recebido parou a meio e foi largado.",
+"history.photo":"Foto","history.video":"Vídeo","history.audio":"Mensagem de voz","history.file":"Ficheiro","history.gone":"{n} — já não está aqui depois de fechar a app",
 "file.tooBigToSend":"«{n}» é grande demais para enviar: o limite é 512 MB por ficheiro.",
 "share.pending":"{n} ficheiro(s) prontos para enviar — partem assim que se ligarem",
 "health.storage":"Memória do telemóvel",
@@ -1195,6 +1201,7 @@ Object.assign(I18N.ru, {
 "sas.blocked":"Сначала произнесите три слова вслух: это уже не тот же человек.",
 "file.tooBig":"Входящий файл остановлен: он не соответствовал заявленному.","file.sendFailed":"Отправка прервана: соединение закрылось на середине.","file.progress":"{sent} из {total}",
 "file.stalled":"Входящий файл остановился на полпути и был отпущен.",
+"history.photo":"Фото","history.video":"Видео","history.audio":"Голосовое сообщение","history.file":"Файл","history.gone":"{n} — больше нет после закрытия приложения",
 "file.tooBigToSend":"«{n}» слишком велик для отправки: предел — 512 МБ на файл.",
 "share.pending":"Готово к отправке: {n} файл(ов) — уйдут, как только соединитесь",
 "health.storage":"Память телефона",
@@ -1359,6 +1366,7 @@ Object.assign(I18N.zh, {
 "sas.blocked":"请先把三个词念出来核对：这个人已经不是原来那位了。",
 "file.tooBig":"一个接收中的文件已被中止：它与声明的不符。","file.sendFailed":"发送中断：连接在传输过程中关闭了。","file.progress":"{sent} / {total}",
 "file.stalled":"一个接收中的文件中途停住，已被放弃。",
+"history.photo":"照片","history.video":"视频","history.audio":"语音消息","history.file":"文件","history.gone":"{n} —— 关闭应用后已不在这里",
 "file.tooBigToSend":"“{n}”太大，无法发送：每个文件上限为 512 MB。",
 "share.pending":"{n} 个文件已准备好发送——一连接就会发送",
 "health.storage":"手机存储",
@@ -1523,6 +1531,7 @@ Object.assign(I18N.ar, {
 "sas.blocked":"قولا الكلمات الثلاث بصوت عالٍ أولًا: هذا الشخص لم يعد نفسه.",
 "file.tooBig":"تم إيقاف ملف وارد: لم يطابق ما تم الإعلان عنه.","file.sendFailed":"توقف الإرسال: أُغلق الاتصال في المنتصف.","file.progress":"{sent} من {total}",
 "file.stalled":"توقّف ملف وارد في منتصف الطريق وتم التخلّي عنه.",
+"history.photo":"صورة","history.video":"فيديو","history.audio":"رسالة صوتية","history.file":"ملف","history.gone":"{n} — لم يعد موجودًا بعد إغلاق التطبيق",
 "file.tooBigToSend":"«{n}» أكبر من أن يُرسل: الحد هو 512 ميغابايت لكل ملف.",
 "share.pending":"{n} ملف جاهز للإرسال — سُيرسل بمجرد الاتصال",
 "health.storage":"ذاكرة الهاتف",
@@ -1687,6 +1696,7 @@ Object.assign(I18N.ur, {
 "sas.blocked":"پہلے تینوں الفاظ بول کر ملائیں: یہ شخص اب وہی نہیں رہا۔",
 "file.tooBig":"ایک آنے والی فائل روک دی گئی: یہ اعلان کردہ سے مطابقت نہیں رکھتی تھی۔","file.sendFailed":"بھیجنا رک گیا: کنکشن درمیان میں بند ہو گیا۔","file.progress":"{sent} از {total}",
 "file.stalled":"ایک آنے والی فائل آدھے راستے رک گئی اور چھوڑ دی گئی۔",
+"history.photo":"تصویر","history.video":"ویڈیو","history.audio":"صوتی پیغام","history.file":"فائل","history.gone":"{n} — ایپ بند ہونے کے بعد یہاں نہیں رہی",
 "file.tooBigToSend":"«{n}» بھیجنے کے لیے بہت بڑی ہے: حد فی فائل 512 MB ہے۔",
 "share.pending":"{n} فائل بھیجنے کے لیے تیار ہیں — جیسے ہی رابطہ ہو، چلی جائیں گی",
 "health.storage":"فون کی میموری",
@@ -1851,6 +1861,7 @@ Object.assign(I18N.hi, {
 "sas.blocked":"पहले तीनों शब्द बोलकर मिलाएँ: यह व्यक्ति अब वही नहीं रहा।",
 "file.tooBig":"एक आती हुई फ़ाइल रोक दी गई: वह घोषित के अनुरूप नहीं थी।","file.sendFailed":"भेजना बीच में रुक गया: कनेक्शन बीच में बंद हो गया।","file.progress":"{sent} में से {total}",
 "file.stalled":"एक आती हुई फ़ाइल बीच में रुक गई और छोड़ दी गई।",
+"history.photo":"फ़ोटो","history.video":"वीडियो","history.audio":"आवाज़ का संदेश","history.file":"फ़ाइल","history.gone":"{n} — ऐप बंद होने के बाद यहाँ नहीं रही",
 "file.tooBigToSend":"«{n}» भेजने के लिए बहुत बड़ी है: सीमा 512 MB प्रति फ़ाइल है।",
 "share.pending":"{n} फ़ाइलें भेजने के लिए तैयार — जुड़ते ही चली जाएंगी",
 "health.storage":"फ़ोन की मेमोरी",
@@ -2015,6 +2026,7 @@ Object.assign(I18N.bn, {
 "sas.blocked":"আগে তিনটি শব্দ মুখে বলে মিলিয়ে নিন: এই ব্যক্তি আর আগের জন নন।",
 "file.tooBig":"একটি আসন্ন ফাইল থামানো হয়েছে: এটি ঘোষিত তথ্যের সঙ্গে মেলেনি।","file.sendFailed":"পাঠানো বন্ধ হয়ে গেছে: সংযোগ মাঝপথে বন্ধ হয়ে গেছে।","file.progress":"{total}-এর মধ্যে {sent}",
 "file.stalled":"একটি আসন্ন ফাইল মাঝপথে থেমে গেছে এবং ছেড়ে দেওয়া হয়েছে।",
+"history.photo":"ছবি","history.video":"ভিডিও","history.audio":"ভয়েস বার্তা","history.file":"ফাইল","history.gone":"{n} — অ্যাপ বন্ধ হওয়ার পরে আর এখানে নেই",
 "file.tooBigToSend":"«{n}» পাঠানোর জন্য খুব বড়: সীমা প্রতি ফাইলে ৫১২ MB।",
 "share.pending":"{n}টি ফাইল পাঠানোর জন্য প্রস্তুত — সংযুক্ত হলেই চলে যাবে",
 "health.storage":"ফোনের মেমোরি",
@@ -2179,6 +2191,7 @@ Object.assign(I18N.id, {
 "sas.blocked":"Ucapkan dulu ketiga kata itu: orang ini bukan lagi orang yang sama.",
 "file.tooBig":"Sebuah berkas masuk dihentikan: isinya tidak sesuai dengan yang dinyatakan.","file.sendFailed":"Pengiriman terputus: koneksi tertutup di tengah jalan.","file.progress":"{sent} dari {total}",
 "file.stalled":"Sebuah berkas masuk berhenti di tengah jalan dan dilepaskan.",
+"history.photo":"Foto","history.video":"Video","history.audio":"Pesan suara","history.file":"Berkas","history.gone":"{n} — tidak ada lagi setelah aplikasi ditutup",
 "file.tooBigToSend":"“{n}” terlalu besar untuk dikirim: batasnya 512 MB per berkas.",
 "share.pending":"{n} berkas siap dikirim — akan terkirim begitu tersambung",
 "health.storage":"Penyimpanan ponsel",
@@ -3654,6 +3667,37 @@ function loadHistoryFor(nick){
   }
   list.forEach(m => renderMsg(m.html, m.mine, false));
 }
+/* A photo, a video, a voice note and a file are all shown on screen through a
+   blob: URL — a handle the browser hands out for bytes it is holding in memory
+   right now, and drops the moment the page closes. Saving that handle into the
+   history saved a pointer to something that would not exist next time, so a
+   conversation reopened tomorrow showed a row of broken-image icons where the
+   photos had been. The history looked corrupted; nothing was corrupted, it was
+   simply pointing at nothing.
+
+   The bytes themselves are not written to disk, and that is deliberate rather
+   than a shortcut: this app has never put a photo on the phone's storage by
+   itself, and starting to would mean every place that promises deletion — the
+   self-destruct, "svuota cronologia", the automatic cleanup — has to reach the
+   new copy too. Getting that wrong is exactly the failure this project has
+   already had once, where a self-destruct destroyed only what was on screen.
+   So the history keeps an honest line saying what came through, instead of a
+   picture it cannot bring back. */
+function stripDeadMedia(html){
+  if (html.indexOf('blob:') === -1) return html;
+  const metaAt = html.indexOf('<div class="meta">');
+  const meta = metaAt === -1 ? '' : html.slice(metaAt);
+  let what;
+  const named = html.match(/download="([^"]*)"/);
+  if (named) what = named[1];
+  else if (html.indexOf('<img') !== -1) what = t('history.photo','Foto');
+  else if (html.indexOf('<video') !== -1) what = t('history.video','Video');
+  else if (html.indexOf('<audio') !== -1) what = t('history.audio','Messaggio vocale');
+  else what = t('history.file','File');
+  return '<span class="faintlink">' +
+         esc(fill(t('history.gone','{n} — non più qui dopo la chiusura dell\'app'), { n: what })) +
+         '</span>' + meta;
+}
 function saveToHistory(nick, html, mine){
   if (!nick) return;
   /* A conversation with a timer on it is one somebody wants gone. Writing it to
@@ -3665,9 +3709,16 @@ function saveToHistory(nick, html, mine){
   const key = historyKeyNow(nick);
   let list = [];
   try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
-  list.push({ html, mine, t: Date.now() });
+  list.push({ html: stripDeadMedia(html), mine, t: Date.now() });
   if (list.length > 300) list = list.slice(-300);
-  try{ localStorage.setItem(key, JSON.stringify(list)); }
+  try{
+    localStorage.setItem(key, JSON.stringify(list));
+    /* Cleared on the way out, not only set on the way in. Once a single write
+       had failed the health card stayed red for the rest of the visit, long
+       after the phone had room again — reporting a problem that had already
+       gone, which is its own way of being wrong. */
+    historyBroken = false;
+  }
   catch(e){
     /* the phone is full, or storage is refused. Saying nothing meant the
        history quietly stopped being kept and the only way to find out was to
@@ -5322,7 +5373,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.62';
+const APP_VERSION = 'logos-modifica-3.63';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
