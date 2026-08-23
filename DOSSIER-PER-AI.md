@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.63` — 23 agosto 2026*
+*Versione descritta: `logos-modifica-3.64` — 23 agosto 2026*
 
 ---
 
@@ -147,7 +147,7 @@ vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronolog
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **96 test automatici** a ogni pubblicazione, senza installare niente
+- **97 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -293,7 +293,7 @@ test è validato **rimettendo dentro la falla originale** per verificare che
 diventi rosso. Due test sono stati riscritti perché passavano anche col codice
 sabotato.
 
-### Da allora (v3.45 → v3.61, 16-22 agosto 2026)
+### Da allora (v3.45 → v3.64, 16-23 agosto 2026)
 
 Lo stesso metodo — sabotare ogni test per verificarlo davvero, verificare dal
 vivo nel browser, non solo leggere il codice — applicato a un altro giro di
@@ -321,6 +321,43 @@ lavoro:
   per giornalisti/attivisti in paesi senza libertà di stampa — entrambe
   respinte per ragioni tecniche verificabili, non per eccesso di prudenza
 
+### La revisione esterna del 22 agosto 2026 (v3.62 → v3.64)
+
+Revisione indipendente commissionata dall'autore a un modello di un altro
+fornitore. Otto rilievi su nove confermati leggendo il codice, e corretti.
+
+Il più importante non era un errore di crittografia ma di **conclusione**: il
+bollino "verificato di persona" veniva scritto in base ad affermazioni che
+l'app non può autenticare. Il `v=` nel QR arriva identico se il link è stato
+inquadrato o toccato in una chat, quindi chiunque poteva scriverselo da sé; e
+una lettera firmata "Mamma" con dentro l'indirizzo di chi la scrive porta a una
+connessione **senza intermediari verso la persona sbagliata** — che è ciò che
+il phishing produce.
+
+Prima correzione: fiducia negata solo al percorso delle lettere. Sbagliata —
+quattro percorsi su cinque restavano dalla parte fidata, il link toccato fra
+questi. **Regola finale, adottata su decisione dell'autore**: nessun record di
+fiducia viene scritto senza la conferma umana delle tre parole, su nessun
+percorso. La prova ECDH resta e viene *detta*, non *scritta come fiducia*. È il
+modello di Signal: un safety number non si certifica da solo.
+
+Corretti inoltre: memoria non limitata in aggregato (20 trasferimenti × 512 MB),
+pump della casella che non morivano nei catch (fino a metà della quota di
+lookup bruciata da un solo caso, provocabile da un peer ostile), `hello` con
+nick non-stringa che faceva sparire la verifica, rubrica dirottabile per nome,
+`call-offer-sdp` senza guardia, falsi allarmi MITM, file oltre il limite
+spediti nel vuoto, foto rotte nella cronologia. Corretto anche un commento che
+affermava una forward secrecy inesistente.
+
+Le tre cose che la revisione ha classificato "vere ma non dichiarate" sono ora
+scritte nella scheda dei limiti dentro l'app, in tutte le 13 lingue: il grafo
+sociale visibile a chi gestisce il Worker, la debolezza intrinseca del codice a
+sei cifre, e l'invito lungo in chiaro senza il lucchetto opzionale.
+
+Verificata anche l'**interoperabilità 3.61 ↔ 3.64** dal vivo, due origini
+separate, invito lungo in entrambe le direzioni: messaggi, file piccolo, file
+da 600 MB, e le tre parole identiche sulle due versioni.
+
 ---
 
 ## 10. Domande utili da fare a un'AI
@@ -344,5 +381,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
-`logos-modifica-3.63`.*
+`logos-modifica-3.64`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

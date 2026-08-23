@@ -722,24 +722,67 @@ test.describe('what the audit found', () => {
     });
   });
 
-  test('an address the person got for themselves is still verified by the proof alone', () => {
-    /* The other half: this path is what makes calling a permanent address
-       worth having, and it must not be thrown away with the fix above. */
+  test('proving an address is reported, but never written down as trust on its own', () => {
+    /* The proof is real: whoever answered holds the private key behind that
+       address, and nobody can be in the middle of it. What it cannot show is
+       that they are the person you meant to reach — owning an address says
+       nothing about how the address got to you. "Sono Marco, chiamami qui"
+       with a stranger's address in it produces a connection with no
+       eavesdropper on it at all, straight to the wrong person.
+
+       An earlier attempt drew the line at letters, on the reasoning that only
+       a letter comes from a stranger. Four of the five routes here — a tapped
+       link among them, which is how that message would actually arrive — sat
+       on the trusting side of it. So there is no line: the proof is said out
+       loud, and then the three words are asked for like anywhere else. */
+    const app = loadApp();
+    app.run(`
+      window.__sas = 0; window.__lines = [];
+      showSasPanel = function(k){ window.__sas++; window.__kind = k; return Promise.resolve(); };
+      computeSafetyCode = function(){ return Promise.resolve('11111 22222'); };
+      remoteFpHex = function(){ return 'abcdef0123456789'; };
+      sysLine = function(txt){ window.__lines.push(txt); };
+      /* the raw twelve characters parseAddress() yields, not the dashed form
+         shown on screen — formatAddress() is what puts the dashes in, and
+         feeding it an already-dashed string is not something the app does */
+      dialedAddress = 'AAAABBBBCCCC';
+      dialedAddrProven = true;
+      dialedAddrUnvouched = false;
+      window.__p = checkSafetyFor('Marco');
+    `);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('window.__sas'), 1,
+        'a first contact must be asked for the three words whatever route it arrived by — the proof is not a substitute for a person');
+      assert.strictEqual(app.run('window.__kind'), 'new');
+      assert.strictEqual(app.run('safetyState'), 'new');
+      assert.strictEqual(app.run("readSafetyRec(safetyKeyFp('abcdef0123456789'))"), null,
+        'nothing may be written as trusted until two people have actually confirmed it');
+      assert.ok(JSON.parse(app.run('JSON.stringify(window.__lines)')).some(l => l.indexOf('DV-AAAA-BBBB-CCCC') !== -1),
+        'the proof still has to be told to the person — it is true, and it is the reason the connection is worth having');
+      app.stop();
+    });
+  });
+
+  test('a confirmation already given is still remembered, so the words are asked once and not every time', () => {
+    /* The other half of the same rule: not writing trust automatically must
+       not turn into asking forever. A record written by a real confirmation
+       stays good. */
     const app = loadApp();
     app.run(`
       window.__sas = 0;
       showSasPanel = function(){ window.__sas++; return Promise.resolve(); };
       computeSafetyCode = function(){ return Promise.resolve('11111 22222'); };
       remoteFpHex = function(){ return 'abcdef0123456789'; };
-      dialedAddress = 'DV-AAAA-BBBB-CCCC';
+      sysLine = function(){};
+      writeSafetyRec(safetyKeyFp('abcdef0123456789'), '11111 22222');
+      dialedAddress = 'AAAABBBBCCCC';
       dialedAddrProven = true;
-      dialedAddrUnvouched = false;
       window.__p = checkSafetyFor('Marco');
     `);
     return app.run('window.__p').then(() => {
       assert.strictEqual(app.run('safetyState'), 'ok');
       assert.strictEqual(app.run('window.__sas'), 0,
-        'nobody can sit in the middle of this one, so asking for the words would be noise');
+        'once two people have confirmed each other, asking again on every call would train them to tap past it');
       app.stop();
     });
   });
