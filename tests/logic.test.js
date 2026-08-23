@@ -117,10 +117,19 @@ test.describe('being reachable', () => {
   test('both ways in ask the same question', () => {
     /* The fault existed twice because the rule was written out twice. If these
        two ever stop sharing one answer, it can happen a third time. */
-    assert.ok(/async function addrCheckOnce\(\)\{\s*\n\s*if \(busyWithSomeone\(\)\) return;/.test(SOURCE),
-      'the address check no longer asks busyWithSomeone()');
-    assert.ok(/async function checkInboxOnce\(\)\{\s*\n\s*if \(busyWithSomeone\(\)\) return;/.test(SOURCE),
-      'the contact check no longer asks busyWithSomeone()');
+    /* La domanda dev'essere fatta SUBITO, non da qualche parte più in basso —
+       ma "subito" non vuol dire "prima riga": checkInboxOnce ha acquisito una
+       guardia di rientro che deve venire prima, altrimenti due passate
+       sovrapposte chiedono entrambe e proseguono entrambe. Il vincolo che
+       conta è che nessuna richiesta parta prima della domanda, quindi si
+       guardano le prime righe invece di una sola. */
+    for (const fn of ['addrCheckOnce', 'checkInboxOnce']){
+      const at = SOURCE.indexOf(`async function ${fn}()`);
+      assert.ok(at > 0, `${fn} non trovata`);
+      const primeRighe = SOURCE.slice(at).split('\n').slice(1, 5).join('\n');
+      assert.match(primeRighe, /if \(busyWithSomeone\(\)\) return;/,
+        `${fn} non chiede più busyWithSomeone() fra le prime righe`);
+    }
   });
 });
 
@@ -946,6 +955,173 @@ test.describe('what the audit found', () => {
     `);
     assert.strictEqual(app.run('historyBroken'), false,
       'a write that succeeded is the proof the problem is over, and nothing else was ever going to clear it');
+    app.stop();
+  });
+
+  /* ------------------------------------------------------------------
+     v3.66 — i cinque difetti dell'audit ostile del 23 agosto che pesano su
+     un'app gratuita: quelli che consumano la quota del piano su cui gira, e
+     quello che rendeva falsa una promessa di sicurezza.
+     ------------------------------------------------------------------ */
+
+  test('every catch that cleans up a connection can actually see what it cleans', () => {
+    /* Il difetto che ha motivato tutto il gruppo, e la ragione per cui i test
+       non l'avevano visto. In acceptAddrCall e tryQuickConnect `myPc` era
+       dichiarato con `const` DENTRO il try, e il catch faceva
+       stopStrayPump(myPc): nel catch quel nome non esisteva, il gestore
+       d'errore sollevava un ReferenceError proprio, inghiottiva l'errore vero
+       e lasciava il pump acceso — cioè annullava esattamente la correzione che
+       quella riga era.
+       Controllato sul sorgente e non a runtime perché è una proprietà di
+       AMBITO: vale per ogni ramo catch, compresi quelli che nessun test
+       raggiunge. Il sabotaggio scritto a suo tempo provava stopStrayPump sul
+       percorso felice, dove myPc è in ambito, e per costruzione non poteva
+       vedere niente. */
+    for (const fn of ['acceptAddrCall', 'tryQuickConnect', 'startQuickShare',
+                      'dialAddress', 'acceptIncomingAutoOffer']){
+      const start = SOURCE.indexOf(`async function ${fn}(`);
+      assert.ok(start > 0, `${fn} non trovata`);
+      const corpo = SOURCE.slice(start, SOURCE.indexOf('\n}\n', start));
+      if (!/stopStrayPump\(myPc\)/.test(corpo)) continue;   /* non lo usa: niente da dire */
+      const tryAt = corpo.indexOf('try{');
+      const declAt = corpo.search(/\b(let|const)\s+myPc\b/);
+      assert.ok(declAt > 0, `${fn}: usa myPc nel catch senza dichiararlo`);
+      assert.ok(declAt < tryAt,
+        `${fn}: myPc è dichiarato dentro il try ma letto nel catch — il gestore d'errore solleverà ReferenceError invece di ripulire`);
+    }
+  });
+
+  test('a failure deep inside accepting an address call does not leave the mailbox being polled', () => {
+    /* La stessa proprietà provata dal vivo, perché il controllo sul sorgente
+       da solo direbbe solo che la riga è nel posto giusto. */
+    const app = loadApp();
+    app.run(`
+      addrPending = { msg: { sdp: 'v=0', rid: 'r1' }, sec: { key:{}, seed:'s' }, slot: 0 };
+      window.__err = null;
+      sealWith = function(){ throw new Error('guasto dopo la creazione del pump'); };
+      window.__p = acceptAddrCall().catch(function(e){ window.__err = String(e && e.message || e); });
+    `);
+    return app.run('window.__p').then(() => new Promise(r => setTimeout(r, 20))).then(() => {
+      assert.strictEqual(app.run('window.__err'), null,
+        'il catch stesso non deve sollevare: se solleva, inghiotte l\'errore vero e non ripulisce niente');
+      assert.strictEqual(app.run('quickPump === null'), true,
+        'un pump abbandonato interroga la cassetta due o tre volte al secondo per sempre, e la quota del piano gratuito è di tutti');
+      app.stop();
+    });
+  });
+
+  test('checking the inbox twice at once does not double the requests', () => {
+    /* Senza guardia di rientro, una passata più lenta dei quattro secondi del
+       timer si sovrappone alla successiva e ogni sovrapposizione aggiunge una
+       scansione intera: misurato, N passate contemporanee facevano esattamente
+       N volte le letture. Una spirale che si autoalimenta fino al 429. */
+    const app = loadApp();
+    app.run(`
+      window.__letture = 0;
+      mailboxGet = function(){ window.__letture++; return Promise.resolve(null); };
+      let l = [];
+      for (let i = 0; i < 10; i++) l.push({ nick:'C'+i, fp:'fp'+i, lastSeen: Date.now(), push:null, addr:null });
+      saveContacts(l);
+      window.__p = Promise.all([checkInboxOnce(), checkInboxOnce(), checkInboxOnce()]);
+    `);
+    return app.run('window.__p').then(() => new Promise(r => setTimeout(r, 30))).then(() => {
+      const letture = app.run('window.__letture');
+      const perGiro = app.run('INBOX_PER_GIRO');
+      assert.ok(letture <= perGiro,
+        `tre passate contemporanee hanno prodotto ${letture} letture, il tetto di un giro solo è ${perGiro}: la guardia di rientro non tiene`);
+      app.stop();
+    });
+  });
+
+  test('a full address book does not spend the whole minute\'s budget in one sweep', () => {
+    /* Il tetto della rubrica è quaranta contatti, e a riempirla è il peer
+       stesso mandando 'hello'. Una lookup per contatto ogni quattro secondi
+       fa seicento letture al minuto contro un budget di trecento: nessun
+       difetto, solo uso — e quando la quota finisce non si collega più
+       nessuno. */
+    const app = loadApp();
+    app.run(`
+      window.__letture = 0;
+      mailboxGet = function(){ window.__letture++; return Promise.resolve(null); };
+      let l = [];
+      for (let i = 0; i < 40; i++) l.push({ nick:'C'+i, fp:'fp'+i, lastSeen: Date.now(), push:null, addr:null });
+      saveContacts(l);
+      window.__p = checkInboxOnce();
+    `);
+    return app.run('window.__p').then(() => new Promise(r => setTimeout(r, 30))).then(() => {
+      const perGiro = app.run('window.__letture');
+      const alMinuto = perGiro * 15;   /* il timer batte ogni 4 secondi */
+      assert.ok(alMinuto <= 300,
+        `${perGiro} letture per giro = ${alMinuto} al minuto, contro un budget di 300 per indirizzo IP`);
+      app.stop();
+    });
+  });
+
+  test('a full address book is still checked in full, just spread over several sweeps', () => {
+    /* L'altra metà: girare a turno non deve significare dimenticare qualcuno.
+       Senza questo, "consuma meno quota" si otterrebbe banalmente non
+       guardando mai i contatti in fondo alla lista. */
+    const app = loadApp();
+    app.run(`
+      window.__viste = {};
+      pairKey = function(a, b){ window.__viste[a] = true; return Promise.resolve('k' + a); };
+      mailboxGet = function(){ return Promise.resolve(null); };
+      let l = [];
+      for (let i = 0; i < 40; i++) l.push({ nick:'C'+i, fp:'fp'+i, lastSeen: Date.now(), push:null, addr:null });
+      saveContacts(l);
+    `);
+    let p = Promise.resolve();
+    for (let giro = 0; giro < 10; giro++){
+      p = p.then(() => { app.run('window.__g = checkInboxOnce();'); return app.run('window.__g'); })
+           .then(() => new Promise(r => setTimeout(r, 5)));
+    }
+    return p.then(() => {
+      const viste = Object.keys(JSON.parse(app.run('JSON.stringify(window.__viste)'))).length;
+      assert.strictEqual(viste, 40,
+        `dopo dieci giri sono stati guardati solo ${viste} contatti su 40: girando a turno non si deve perdere nessuno`);
+      app.stop();
+    });
+  });
+
+  test('an armed self-destruct keeps photos off the disk too, not just words', () => {
+    /* saveToHistory dichiara "an armed session never touches the disk at all".
+       Da quando i media persistono quella frase era falsa: persistMedia è
+       chiamata PRIMA di saveToHistory, e il cancello stava solo in
+       quest'ultima. Chi arma l'autodistruzione lo fa perché di quella frase
+       si fida. */
+    const app = loadApp();
+    app.run(`
+      checkSafetyFor = function(){ return Promise.resolve(); };
+      showConnectedFlash = function(){ return Promise.resolve(); };
+      window.__put = 0;
+      mediaPut = function(){ window.__put++; return Promise.resolve(); };
+      peerNick = 'Marco';
+      destructArmed = true;
+      onDcMessage({ data: JSON.stringify({ type:'file-start', id:'p1', name:'f.jpg', mime:'image/jpeg', size:3 }) });
+      const b = new Uint8Array(19);
+      new TextEncoder().encode('p1'.padEnd(16,' ')).forEach(function(x,i){ b[i] = x; });
+      onDcMessage({ data: b.buffer });
+      onDcMessage({ data: JSON.stringify({ type:'file-end', id:'p1' }) });
+    `);
+    assert.strictEqual(app.run("localStorage.getItem(historyKeyNow('Marco'))"), null,
+      'il testo non deve toccare il disco con il timer armato — questo funzionava già');
+    assert.strictEqual(app.run('window.__put'), 0,
+      'e nemmeno la foto: il cancello deve stare dentro persistMedia, non solo in saveToHistory');
+    app.stop();
+  });
+
+  test('disarming the self-destruct lets media be kept again', () => {
+    /* L'altra metà del cancello: spegnerlo deve riaprire la porta, o
+       "autodistruzione" diventerebbe "non salvo più niente, mai". */
+    const app = loadApp();
+    app.run(`
+      window.__put = 0;
+      mediaPut = function(){ window.__put++; return Promise.resolve(); };
+      peerNick = 'Marco';
+      destructArmed = false;
+      persistMedia('Marco', 'x1', {});
+    `);
+    assert.strictEqual(app.run('window.__put'), 1);
     app.stop();
   });
 

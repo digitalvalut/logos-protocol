@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.65` — 23 agosto 2026*
+*Versione descritta: `logos-modifica-3.66` — 23 agosto 2026*
 
 ---
 
@@ -147,7 +147,7 @@ vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronolog
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **103 test automatici** a ogni pubblicazione, senza installare niente
+- **110 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -358,6 +358,42 @@ Verificata anche l'**interoperabilità 3.61 ↔ 3.64** dal vivo, due origini
 separate, invito lungo in entrambe le direzioni: messaggi, file piccolo, file
 da 600 MB, e le tre parole identiche sulle due versioni.
 
+### L'audit ostile del 23 agosto e le prime correzioni (v3.66)
+
+Un audit condotto come attacco, non come lettura: peer ostile programmabile,
+150.000 messaggi di fuzzing con generatore seedato, rottura deterministica di
+ogni singola attesa delle sei procedure di connessione, il Worker interrogato
+su una replica locale, e diciassette difetti storici rimessi dentro apposta per
+misurare se l'attrezzatura sapesse ancora vederli (**uccisi 17 su 17**).
+
+Dodici rilievi. **Il più grave era una regressione della correzione stessa**: in
+`acceptAddrCall` e `tryQuickConnect` la variabile che il gestore d'errore doveva
+leggere era dichiarata dentro il `try`, quindi il gestore sollevava un errore
+proprio invece di ripulire — inghiottendo l'errore vero e lasciando acceso
+esattamente il ciclo che doveva spegnere. I test non l'avevano vista perché il
+sabotaggio era stato fatto sul percorso felice invece che sul ramo `catch`.
+
+Corretti subito i cinque che pesano su un'app **gratuita**, cioè quelli che
+consumano il piano su cui gira o rendono falsa una promessa:
+
+- la variabile fuori dal `try` in entrambe le funzioni, e la stessa correzione
+  applicata a `startQuickShare`, la sesta procedura che non l'aveva mai ricevuta
+- **guardia di rientro** su `checkInboxOnce`: passate sovrapposte moltiplicavano
+  le letture (misurato: N passate = N volte le richieste)
+- **rubrica a turno**: scorrere quaranta contatti ogni quattro secondi faceva
+  seicento letture al minuto contro un budget di trecento — nessun difetto, solo
+  uso, e la rubrica la riempie il peer. Ora otto per giro, 120/min, e in sei giri
+  la rubrica è coperta tutta
+- il **cancello dell'autodistruzione** spostato dentro `persistMedia`: con il
+  timer armato il testo non toccava il disco e la foto sì, mentre il codice
+  dichiarava il contrario
+
+Rimandati per scelta, non per svista: gli **omoglifi** in rubrica (gravità alta,
+ma richiede un attaccante mirato e costa due giorni in tredici lingue) e la
+**sordità dopo un'eccezione**, dove esistono due strade e va scelta, non
+improvvisata. Il report completo resta privato: elenca difetti non ancora
+corretti con le sequenze per riprodurli.
+
 ### Foto e video persistenti, per decisione dell'autore (v3.65)
 
 Fino alla v3.64 una foto o un video ricevuti vivevano solo per la durata della
@@ -412,5 +448,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
-`logos-modifica-3.65`.*
+`logos-modifica-3.66`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

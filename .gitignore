@@ -26,3 +26,15 @@ PRESENTATION.md
 # download a stale copy of the app believing it is the current one.
 digitalvalut-logos.html
 AUDIT-PRIVATO-*.md
+
+# Audit ostile di agosto 2026. Il report elenca difetti NON corretti con le
+# sequenze esatte per riprodurli, e mutanti/ contiene diciassette copie
+# dell'app con altrettante falle rimesse dentro apposta. Pubblicarli sarebbe
+# consegnare a chiunque sia la mappa sia gli attrezzi. Stessa regola di
+# AUDIT-PRIVATO-*.md, e per lo stesso motivo.
+REPORT-AUDIT.md
+mutanti/
+# Anche gli invarianti: la sezione "come lo violerei" di ognuno descrive il
+# vettore d'attacco, e diversi di quei vettori sono ancora aperti. Un elenco
+# ordinato per promettenza è una mappa, non una nota di metodo.
+INVARIANTI.md

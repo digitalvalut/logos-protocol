@@ -3817,7 +3817,20 @@ function mediaMigrateConv(oldConvKey, newConvKey){
     tx.oncomplete = resolve; tx.onerror = resolve;
   })).catch(() => {});
 }
-function persistMedia(nick, id, blob){ mediaPut(historyKeyNow(nick), id, blob, Date.now()); }
+/* Il cancello dell'autodistruzione sta QUI, non nel solo saveToHistory.
+   Stava soltanto là, e le due chiamate a persistMedia — in sendFile e nel ramo
+   file-end — avvengono PRIMA di saveToHistory: con il timer armato il testo
+   non toccava il disco e la foto sì. Il commento in saveToHistory afferma "an
+   armed session never touches the disk at all", e da quando i media
+   persistono quella frase era diventata falsa. Una promessa di sicurezza
+   scritta nell'app vale meno di zero quando è falsa: chi arma
+   l'autodistruzione lo fa perché di quella frase si fida.
+   Al cancello, non al chiamante: i chiamanti sono due oggi e nessuno
+   garantisce che restino due. */
+function persistMedia(nick, id, blob){
+  if (destructArmed) return;
+  mediaPut(historyKeyNow(nick), id, blob, Date.now());
+}
 
 /* What a tag says about itself when the bytes behind it turn out not to be
    there any more — evicted by the browser under real storage pressure, or
@@ -4993,6 +5006,16 @@ async function acceptAddrCall(){
   $('addrIncoming').classList.add('hide');
   showScreen('screenStart');
   showBigConnectingA();
+  /* Dichiarato PRIMA del try, e non è pedanteria: il catch in fondo chiama
+     stopStrayPump(myPc), e con `const` dentro il blocco quel nome nel catch
+     non esiste. Il gestore d'errore sollevava un ReferenceError proprio —
+     inghiottendo l'errore vero, lasciando il pump acceso, cioè annullando la
+     correzione che quella riga doveva essere, e trasformando un errore
+     gestito in una rejection che nessuno raccoglieva. Trovato iniettando
+     un'eccezione a ogni singola attesa di questa funzione: il sabotaggio
+     scritto a suo tempo provava stopStrayPump sul percorso felice, dove myPc
+     è in ambito, e quindi non poteva vederlo. */
+  let myPc = null;
   try{
     stopQuickPump();
     pc = await newPeerConnection();
@@ -5002,7 +5025,7 @@ async function acceptAddrCall(){
        second call) replaces the global underneath. Reading it afterwards
        published this call's answer built from a different connection, which
        broke both of them. */
-    const myPc = pc;
+    myPc = pc;
     quickSharePc = null;   /* answering supersedes any invite that was on hold */
     myPc.ondatachannel = ev => wireDataChannel(ev.channel);
     const pump = candidatePump(myPc, sec, 'ab', 'ac');
@@ -5540,7 +5563,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.65';
+const APP_VERSION = 'logos-modifica-3.66';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -5825,16 +5848,57 @@ async function tryAutoReconnectInner(contact){
    looking at their own settings, with an invite quietly resumed in the
    background, and be unreachable by every route at once while the screen said
    nothing at all. Same question as the address, asked in the same place. */
+/* Quante caselle guardare per giro. Il ciclo scorreva l'intera rubrica ogni
+   quattro secondi: con quaranta contatti — il tetto della rubrica, e a
+   riempirla è il peer stesso mandando 'hello' — sono seicento letture al
+   minuto contro un budget di trecento per indirizzo IP. Nessun difetto, solo
+   uso: bastava avere molti contatti perché l'app esaurisse da sola il piano
+   gratuito su cui gira, e quando quello si esaurisce non si collega più
+   nessuno. Girando a turno, il costo per giro non dipende più da quanti
+   contatti hai; il prezzo è che un contatto viene guardato ogni pochi giri
+   invece che ogni giro, il che sposta la peggiore attesa di qualche secondo
+   su una cosa che comunque richiede che l'altra persona apra l'app. */
+const INBOX_PER_GIRO = 8;
+let inboxCursore = 0;
+/* Il ciclo non era protetto dal rientro, a differenza di acceptIncomingAutoOffer
+   (autoAccepting) e tryQuickConnect (quickConnecting) che lo sono da tempo. Una
+   passata che dura più dei quattro secondi del timer — quaranta contatti su una
+   rete vera ci arrivano senza sforzo — si sovrappone alla successiva, e ogni
+   sovrapposizione aggiunge una scansione intera: misurato, N passate contemporanee
+   fanno esattamente N volte le letture. Una spirale che si autoalimenta fino al
+   429. Peggiorata dal fatto che showScreen riavvia il polling a ogni cambio di
+   schermo senza attenderne l'esito, quindi le occasioni di sovrapporsi sono molte
+   più di quante sembrino leggendo il timer. */
+let inboxScanning = false;
 async function checkInboxOnce(){
+  if (inboxScanning) return;
   if (busyWithSomeone()) return;
-  const myFp = await myFingerprintHex();
-  if (!myFp) return;
-  const contacts = loadContacts().filter(c => c.fp);
-  for (const c of contacts){
-    const key = await pairKey(c.fp, myFp);
-    const sec = await pairSecrets(c.fp + ':' + myFp);
-    const msg = await mailboxGetSealed(key, sec);
-    if (msg && msg.sdp){ await acceptIncomingAutoOffer(c, msg, sec); return; }
+  inboxScanning = true;
+  try{
+    const myFp = await myFingerprintHex();
+    if (!myFp) return;
+    const contacts = loadContacts().filter(c => c.fp);
+    if (!contacts.length) return;
+    /* a turno, ripartendo da dove il giro precedente si era fermato */
+    const quanti = Math.min(INBOX_PER_GIRO, contacts.length);
+    for (let i = 0; i < quanti; i++){
+      const c = contacts[(inboxCursore + i) % contacts.length];
+      const key = await pairKey(c.fp, myFp);
+      const sec = await pairSecrets(c.fp + ':' + myFp);
+      const msg = await mailboxGetSealed(key, sec);
+      if (msg && msg.sdp){
+        inboxCursore = (inboxCursore + i + 1) % contacts.length;
+        await acceptIncomingAutoOffer(c, msg, sec);
+        return;
+      }
+    }
+    inboxCursore = (inboxCursore + quanti) % contacts.length;
+  } finally {
+    /* in un finally e non alla fine del corpo: ogni uscita, compresa quella
+       per eccezione, deve riaprire la porta — un flag rimasto acceso qui
+       renderebbe il dispositivo sordo per sempre, che è esattamente la classe
+       di difetto che questo ciclo esiste per evitare */
+    inboxScanning = false;
   }
 }
 function startInboxPolling(){
@@ -6342,6 +6406,12 @@ async function startQuickShare(existingCode, quiet){
      prevent, and impossible to debug from the outside if it happens. */
   if (sharing && !existingCode) return;
   sharing = true;
+  /* fuori dal try perché il finally lo legge — stessa ragione di
+     acceptAddrCall e tryQuickConnect. Senza la dichiarazione l'assegnamento
+     più sotto creava una globale implicita: funzionava per caso, e
+     "funziona per caso" in una funzione che tiene aperta una connessione
+     è solo un difetto che non è ancora capitato. */
+  let myPc = null;
   try{
   stopQuickPump();
   const code = existingCode || makeQuickCode();
@@ -6373,7 +6443,7 @@ async function startQuickShare(existingCode, quiet){
      throughout means even a missed guard cannot mix two attempts together;
      at worst this attempt keeps talking to its own, now-abandoned
      connection, rather than silently completing someone else's. */
-  const myPc = pc;
+  myPc = pc;
   /* marked as "an invite on hold" so being reachable at the address carries on
      regardless: this one waits fifteen minutes, and it used to take the
      address down with it for the whole of them */
@@ -6458,7 +6528,18 @@ async function startQuickShare(existingCode, quiet){
   if (connectionWorking(myPc)) return;   /* somebody did answer after all */
   setStatus($('quickStatusA'), t('quick.expired','Il codice è scaduto senza risposta. Generane uno nuovo.'), 'bad');
   $('btnRetryQuickA').classList.remove('hide');
-  } finally { sharing = false; }
+  } finally {
+    sharing = false;
+    /* La sesta procedura di connessione, e l'unica a cui la correzione dei
+       pump non era mai stata applicata: la via normale ferma il pump alla
+       scadenza del codice, quella per eccezione no, e un pump abbandonato
+       interroga la cassetta due o tre volte al secondo per sempre — su un
+       piano gratuito è il modo più rapido di spegnere il servizio a tutti.
+       Nel finally e non in un catch, così copre anche i ritorni anticipati;
+       e solo se la connessione non sta funzionando, perché su una riuscita
+       il pump deve restare vivo mentre l'handshake sale. */
+    if (myPc && !connectionWorking(myPc)) stopStrayPump(myPc);
+  }
 }
 function quickLink(code){ return location.origin + location.pathname + '#q=' + code; }
 
@@ -6534,6 +6615,8 @@ function normalizeDigits(s){
 
 let quickConnecting = false;
 async function tryQuickConnect(){
+  /* fuori dal try, perché il catch in fondo lo legge: vedi acceptAddrCall */
+  let myPc = null;
   const code = normalizeDigits($('quickCodeIn').value).replace(/\D/g,'').slice(0,6);
   if (code.length !== 6 || quickConnecting) return;
   /* a code is good for exactly one use — re-submitting the same one would only
@@ -6645,8 +6728,11 @@ async function tryQuickConnect(){
     pc = warmPc;
     warmPc = null;   /* handed over: the cleanup below must not close it now */
     /* used instead of the global from here on: the waits below give anything
-       the person does time to replace it underneath */
-    const myPc = pc;
+       the person does time to replace it underneath.
+       Assegnato qui ma dichiarato fuori dal try — stesso motivo di
+       acceptAddrCall: il catch lo usa, e `const` dentro il blocco lo rendeva
+       invisibile proprio a chi doveva leggerlo. */
+    myPc = pc;
     myPc.ondatachannel = ev => wireDataChannel(ev.channel);
     const pump = candidatePump(myPc, sec, 'b', 'a');
     quickPump = pump; quickPumpOwner = myPc;
