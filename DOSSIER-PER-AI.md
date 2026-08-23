@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.67` — 23 agosto 2026*
+*Versione descritta: `logos-modifica-3.68` — 23 agosto 2026*
 
 ---
 
@@ -453,5 +453,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
-`logos-modifica-3.67`.*
+`logos-modifica-3.68`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*
