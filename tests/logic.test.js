@@ -787,26 +787,151 @@ test.describe('what the audit found', () => {
     });
   });
 
-  test('a photo does not come back as a broken icon the next time the chat is opened', () => {
-    /* The URL a photo is shown through is a handle to bytes the browser is
-       holding right now, and it dies with the page. Saved into the history as
-       it stood, a conversation reopened the next day was a row of broken
-       images — the history looked corrupted when nothing was. */
+  /* ------------------------------------------------------------------
+     v3.65 — media persists across reopening the same conversation, by
+     decision of the app's owner: fewer choices to make beats a technically
+     purer "download it or lose it" flow, as long as every place that already
+     promises deletion actually reaches the photos too. These tests are what
+     make that promise checkable instead of just asserted.
+     ------------------------------------------------------------------ */
+
+  test('receiving a file persists it and tags the bubble with its id, not a URL that will die', () => {
+    const app = loadApp();
+    app.run(`
+      window.__puts = [];
+      mediaPut = function(convKey, id, blob, t){ window.__puts.push({ convKey, id }); return Promise.resolve(); };
+      peerNick = 'Marco';
+      onDcMessage({ data: JSON.stringify({ type: 'file-start', id: 'ph1', name: 'gatto.jpg', mime: 'image/jpeg', size: 3 }) });
+      const bytes = new Uint8Array(19);
+      new TextEncoder().encode('ph1'.padEnd(16,' ')).forEach((b,i) => bytes[i] = b);
+      bytes[16]=1; bytes[17]=2; bytes[18]=3;
+      onDcMessage({ data: bytes.buffer });
+      onDcMessage({ data: JSON.stringify({ type: 'file-end', id: 'ph1' }) });
+    `);
+    assert.strictEqual(app.run('window.__puts.length'), 1,
+      'a received photo must be handed to the media store, not left to live only as long as the tab does');
+    assert.strictEqual(app.run('window.__puts[0].id'), 'ph1');
+    /* the fake DOM stores innerHTML only as a string — see the note by the
+       screen-share progress-bar test above — so the id is read the same way
+       every other bubble content is read here: out of that string */
+    const bubbleHtml = app.run("$('msgs').children[$('msgs').children.length - 1].children[0].innerHTML");
+    assert.match(bubbleHtml, /data-media-id="ph1"/,
+      'the bubble must carry the id that will find the bytes again later, not just a URL good for this session only');
+    app.stop();
+  });
+
+  test('sending a file persists it too, under the sender\'s own copy of the same conversation key', () => {
+    const app = loadApp();
+    app.run(`
+      window.__puts = [];
+      mediaPut = function(convKey, id, blob, t){ window.__puts.push({ convKey, id }); return Promise.resolve(); };
+      peerNick = 'Marco';
+      dc = { readyState: 'open', send: function(){} };
+      window.__p = sendFile(new File([new Uint8Array([9,9,9])], 'foto.jpg', { type: 'image/jpeg' }));
+    `);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('window.__puts.length'), 1,
+        'a file you send is exactly as much yours to lose as one you receive, and the sender needed no less protection than the receiver got');
+      const bubbleHtml = app.run("$('msgs').children[$('msgs').children.length - 1].children[0].innerHTML");
+      assert.match(bubbleHtml, /data-media-id="[^"]+"/);
+      app.stop();
+    });
+  });
+
+  test('rehydrateMedia replaces a stale URL with a fresh one built from the bytes actually on file', () => {
+    /* loadHistoryFor's own round trip through localStorage cannot be driven
+       from here — the fake DOM never parses innerHTML strings into real
+       elements, on purpose, to stay the hundred-and-fifty lines its own
+       header describes. That parsing, and this function's behaviour on the
+       far side of it, is exactly what the live-browser check covers instead.
+       What is tested here is rehydrateMedia's own logic in isolation, given
+       real elements built the way renderMsg's callers actually build them:
+       with document.createElement, not a parsed string. */
+    const app = loadApp();
+    app.run(`
+      window.__fakeBlob = { fake: true };
+      mediaGet = function(convKey, id){ return Promise.resolve(id === 'ph1' ? { blob: window.__fakeBlob } : null); };
+      URL.createObjectURL = function(b){ return 'blob:fresh/' + (b === window.__fakeBlob ? 'match' : 'other'); };
+      peerNick = 'Marco';
+      window.__img = document.createElement('img');
+      window.__img.setAttribute('data-media-id', 'ph1');
+      window.__img.src = 'blob:stale/dead';
+      $('msgs').appendChild(window.__img);
+      window.__p = rehydrateMedia($('msgs'));
+    `);
+    return app.run('window.__p').then(() => {
+      assert.strictEqual(app.run('window.__img.src'), 'blob:fresh/match',
+        'a URL saved months ago is guaranteed dead — it must be overwritten with one built from the real bytes, never trusted as is');
+      assert.strictEqual(app.run("window.__img.hasAttribute('data-media-id')"), false,
+        'once rehydrated there is nothing left to look up again');
+      app.stop();
+    });
+  });
+
+  test('rehydrateMedia is honest when the bytes behind an id are genuinely gone', () => {
+    /* Evicted by the browser under real storage pressure, or left over from
+       before this device could keep media at all — either way, a broken
+       image is worse than a plain sentence saying so. */
+    const app = loadApp();
+    app.run(`
+      mediaGet = function(){ return Promise.resolve(null); };
+      peerNick = 'Marco';
+      window.__img = document.createElement('img');
+      window.__img.setAttribute('data-media-id', 'gone1');
+      $('msgs').appendChild(window.__img);
+      window.__p = rehydrateMedia($('msgs'));
+    `);
+    return app.run('window.__p').then(() => {
+      const kids = app.run("$('msgs').children.map(c => ({ tag: c.tagName, text: c.textContent }))");
+      assert.strictEqual(kids.length, 1, 'the dead image must be replaced in place, not left alongside a message saying it is gone');
+      assert.notStrictEqual(kids[0].tag, 'IMG', 'a dead image must not be left on screen pointing at nothing');
+      assert.match(kids[0].text, /Foto/, 'what it was must still be legible, even though it is gone');
+      app.stop();
+    });
+  });
+
+
+  test('clearing or self-destructing a conversation deletes its media, not just its text', () => {
+    const app = loadApp();
+    app.run(`
+      window.__deleted = [];
+      mediaDeleteByConv = function(convKey){ window.__deleted.push(convKey); return Promise.resolve(); };
+      forgetHistoryFor('Marco');
+    `);
+    assert.ok(app.run("window.__deleted.indexOf(historyKeyNow('Marco')) !== -1"),
+      'the same call that erases the words must erase the photos, or "distrutto" is only half true');
+    app.stop();
+  });
+
+  test('automatic cleanup by age reaches old media as well as old text', () => {
+    const app = loadApp();
+    app.run(`
+      window.__cutoff = null;
+      mediaDeleteOlderThan = function(cutoff){ window.__cutoff = cutoff; return Promise.resolve(); };
+      setAutocleanPref(true);
+      setAutocleanDays(7);
+      runAutoclean();
+    `);
+    const cutoff = app.run('window.__cutoff');
+    const expected = Date.now() - 7 * 24 * 3600 * 1000;
+    assert.ok(cutoff !== null && Math.abs(cutoff - expected) < 5000,
+      'media older than the same cutoff already applied to text must be reached by the same housekeeping pass');
+    app.stop();
+  });
+
+  test('the time a message arrived belongs to the message, and an ordinary text message is untouched', () => {
     const app = loadApp();
     app.run(`
       peerNick = 'Marco';
-      saveToHistory('Marco', '<img src="blob:http://x/abc-123"><div class="meta">10:30</div>', false);
-      saveToHistory('Marco', '<a href="blob:http://x/def" download="conto.pdf" class="filelink">conto.pdf ↓</a><div class="meta">10:31</div>', true);
+      saveToHistory('Marco', '<img data-media-id="x" src="blob:http://x/abc"><div class="meta">10:30</div>', false);
       saveToHistory('Marco', 'ciao come stai<div class="meta">10:32</div>', true);
     `);
     const kept = JSON.parse(app.run("localStorage.getItem(historyKeyNow('Marco'))"));
-    assert.ok(kept.every(m => m.html.indexOf('blob:') === -1),
-      'a handle that will not survive the page must never be what the history keeps');
-    assert.match(kept[1].html, /conto\.pdf/,
-      'the name of the file is what makes the line worth keeping — it must survive even though the file does not');
-    assert.match(kept[0].html, /10:30/, 'the time the message arrived belongs to the message, not to the photo');
-    assert.strictEqual(kept[2].html, 'ciao come stai<div class="meta">10:32</div>',
-      'an ordinary message must be stored exactly as it was — this only ever touches what points at dead bytes');
+    assert.match(kept[0].html, /10:30/);
+    assert.match(kept[0].html, /data-media-id="x"/,
+      'the id is what lets this photo be found again — it must survive being written to disk, not just the message around it');
+    assert.strictEqual(kept[1].html, 'ciao come stai<div class="meta">10:32</div>',
+      'a message with nothing to persist must be stored exactly as it was');
     app.stop();
   });
 

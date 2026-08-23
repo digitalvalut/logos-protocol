@@ -3702,6 +3702,7 @@ function loadHistoryFor(nick){
         list = old;
         localStorage.setItem(key, JSON.stringify(old));
         localStorage.removeItem(historyKey(nick));
+        mediaMigrateConv(historyKey(nick), key);
       }
     }catch(e){}
   }
@@ -3711,37 +3712,147 @@ function loadHistoryFor(nick){
     $('msgs').appendChild(d);
   }
   list.forEach(m => renderMsg(m.html, m.mine, false));
+  rehydrateMedia($('msgs'));
 }
-/* A photo, a video, a voice note and a file are all shown on screen through a
-   blob: URL — a handle the browser hands out for bytes it is holding in memory
-   right now, and drops the moment the page closes. Saving that handle into the
-   history saved a pointer to something that would not exist next time, so a
-   conversation reopened tomorrow showed a row of broken-image icons where the
-   photos had been. The history looked corrupted; nothing was corrupted, it was
-   simply pointing at nothing.
+/* A photo, a video, a voice note and a file are shown through a blob: URL — a
+   handle the browser hands out for bytes it is holding in memory right now,
+   good only until the page closes. What makes them last past that is a second
+   copy of the actual bytes kept in IndexedDB, one per file, named by the same
+   id the transfer already carries. The message history in localStorage never
+   holds more than a tag with that id on it (`data-media-id`) — the URL written
+   into the tag is left in too, stale as it is, simply because rehydrateMedia()
+   overwrites it unconditionally on every load and nothing ever reads it before
+   that happens.
 
-   The bytes themselves are not written to disk, and that is deliberate rather
-   than a shortcut: this app has never put a photo on the phone's storage by
-   itself, and starting to would mean every place that promises deletion — the
-   self-destruct, "svuota cronologia", the automatic cleanup — has to reach the
-   new copy too. Getting that wrong is exactly the failure this project has
-   already had once, where a self-destruct destroyed only what was on screen.
-   So the history keeps an honest line saying what came through, instead of a
-   picture it cannot bring back. */
-function stripDeadMedia(html){
-  if (html.indexOf('blob:') === -1) return html;
-  const metaAt = html.indexOf('<div class="meta">');
-  const meta = metaAt === -1 ? '' : html.slice(metaAt);
-  let what;
-  const named = html.match(/download="([^"]*)"/);
-  if (named) what = named[1];
-  else if (html.indexOf('<img') !== -1) what = t('history.photo','Foto');
-  else if (html.indexOf('<video') !== -1) what = t('history.video','Video');
-  else if (html.indexOf('<audio') !== -1) what = t('history.audio','Messaggio vocale');
-  else what = t('history.file','File');
-  return '<span class="faintlink">' +
-         esc(fill(t('history.gone','{n} — non più qui dopo la chiusura dell\'app'), { n: what })) +
-         '</span>' + meta;
+   Kept apart from the text history on purpose, not merged into one bigger
+   record: a photo can be many megabytes and a conversation can hold hundreds
+   of messages, and localStorage's few-megabyte quota would not survive both
+   sharing it. IndexedDB has no such quota — the browser manages its space on
+   its own and evicts under real pressure, which is the one honest limit this
+   was always going to have.
+
+   The part that decided whether this was worth doing at all: every place that
+   already promises deletion — self-destruct, "svuota cronologia", the
+   automatic cleanup — has to reach this store too, or "distrutto" becomes a
+   word the app says without meaning. So nothing here introduces a new way to
+   delete anything; mediaDeleteByConv and mediaDeleteOlderThan are called from
+   exactly the same three places already responsible for the text, immediately
+   below, and from nowhere else. */
+const MEDIA_DB = 'dvlogos-media', MEDIA_STORE = 'blobs';
+function openMediaDB(){
+  return new Promise((resolve, reject) => {
+    let req;
+    try{ req = indexedDB.open(MEDIA_DB, 1); }catch(e){ return reject(e); }
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(MEDIA_STORE)){
+        db.createObjectStore(MEDIA_STORE, { keyPath: 'key' }).createIndex('convKey', 'convKey', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+/* Namespaced to the conversation, not just the transfer id: the id is a short
+   random string minted independently by whichever device is sending, so two
+   different people could in principle mint the same one. Nothing bad would
+   come of the collision itself — a bystander cannot open the wrong blob, they
+   are simply not looking at that conversation — but overwriting or deleting
+   the wrong record on a coincidence is worth ruling out rather than trusting
+   to be rare enough. */
+function mediaDbKey(convKey, id){ return convKey + '::' + id; }
+function mediaPut(convKey, id, blob, tms){
+  return openMediaDB().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction(MEDIA_STORE, 'readwrite');
+    tx.objectStore(MEDIA_STORE).put({ key: mediaDbKey(convKey, id), convKey, blob, t: tms });
+    tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
+  })).catch(() => {});   /* best effort: a failed write only means this one file will not survive a reload */
+}
+function mediaGet(convKey, id){
+  return openMediaDB().then(db => new Promise(resolve => {
+    const rq = db.transaction(MEDIA_STORE, 'readonly').objectStore(MEDIA_STORE).get(mediaDbKey(convKey, id));
+    rq.onsuccess = () => resolve(rq.result || null);
+    rq.onerror = () => resolve(null);
+  })).catch(() => null);
+}
+function mediaDeleteByConv(convKey){
+  return openMediaDB().then(db => new Promise(resolve => {
+    const tx = db.transaction(MEDIA_STORE, 'readwrite');
+    const rq = tx.objectStore(MEDIA_STORE).index('convKey').openCursor(IDBKeyRange.only(convKey));
+    rq.onsuccess = () => { const cur = rq.result; if (cur){ cur.delete(); cur.continue(); } };
+    tx.oncomplete = resolve; tx.onerror = resolve;
+  })).catch(() => {});
+}
+function mediaDeleteOlderThan(cutoff){
+  return openMediaDB().then(db => new Promise(resolve => {
+    const tx = db.transaction(MEDIA_STORE, 'readwrite');
+    const rq = tx.objectStore(MEDIA_STORE).openCursor();
+    rq.onsuccess = () => { const cur = rq.result; if (cur){ if (cur.value.t < cutoff) cur.delete(); cur.continue(); } };
+    tx.oncomplete = resolve; tx.onerror = resolve;
+  })).catch(() => {});
+}
+/* The text history has always had this one-time carry-over, from the old
+   name-keyed form to the fingerprint-keyed one, the moment a contact is first
+   verified — see the comment in loadHistoryFor. Media saved before that
+   moment was written under the old key too, and without this it would simply
+   stop being found: still sitting in IndexedDB, orphaned under a convKey
+   nothing looks up any more, indistinguishable from actually gone. Moved
+   record by record rather than reusing the key, since the id already carries
+   the old convKey baked into it. */
+function mediaMigrateConv(oldConvKey, newConvKey){
+  return openMediaDB().then(db => new Promise(resolve => {
+    const tx = db.transaction(MEDIA_STORE, 'readwrite');
+    const store = tx.objectStore(MEDIA_STORE);
+    const rq = store.index('convKey').openCursor(IDBKeyRange.only(oldConvKey));
+    rq.onsuccess = () => {
+      const cur = rq.result;
+      if (cur){
+        const rec = cur.value;
+        const id = rec.key.slice(oldConvKey.length + 2);   /* strip 'oldConvKey::' */
+        store.put({ key: mediaDbKey(newConvKey, id), convKey: newConvKey, blob: rec.blob, t: rec.t });
+        cur.delete();
+        cur.continue();
+      }
+    };
+    tx.oncomplete = resolve; tx.onerror = resolve;
+  })).catch(() => {});
+}
+function persistMedia(nick, id, blob){ mediaPut(historyKeyNow(nick), id, blob, Date.now()); }
+
+/* What a tag says about itself when the bytes behind it turn out not to be
+   there any more — evicted by the browser under real storage pressure, or
+   left over from a conversation saved before this device could keep media at
+   all. Genuine loss should say so plainly, the same honest line this carried
+   before media persisted by default. */
+function guessMediaLabel(el){
+  if (el.tagName === 'A') return el.getAttribute('download') || t('history.file','File');
+  if (el.tagName === 'IMG') return t('history.photo','Foto');
+  if (el.tagName === 'VIDEO') return t('history.video','Video');
+  if (el.tagName === 'AUDIO') return t('history.audio','Messaggio vocale');
+  return t('history.file','File');
+}
+/* Called once after a conversation's history is painted back onto the screen.
+   Every tag still carries a stale blob: URL from whenever it was written —
+   dead the moment that page closed — so it is overwritten here unconditionally,
+   never trusted. Async and fire-and-forget per tag: an image resolving a beat
+   after the text around it is a normal loading moment, not a bug worth making
+   the whole screen wait on. */
+function rehydrateMedia(container){
+  const convKey = historyKeyNow(peerNick);
+  return Promise.all([...container.querySelectorAll('[data-media-id]')].map(async el => {
+    const id = el.getAttribute('data-media-id');
+    const rec = await mediaGet(convKey, id);
+    if (rec && rec.blob){
+      const url = keepObjectUrl(URL.createObjectURL(rec.blob));
+      if (el.tagName === 'A') el.href = url; else el.src = url;
+      el.removeAttribute('data-media-id');
+    } else {
+      const span = document.createElement('span');
+      span.className = 'faintlink';
+      span.textContent = fill(t('history.gone','{n} — non più qui'), { n: guessMediaLabel(el) });
+      el.replaceWith(span);
+    }
+  }));
 }
 function saveToHistory(nick, html, mine){
   if (!nick) return;
@@ -3754,7 +3865,7 @@ function saveToHistory(nick, html, mine){
   const key = historyKeyNow(nick);
   let list = [];
   try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
-  list.push({ html: stripDeadMedia(html), mine, t: Date.now() });
+  list.push({ html, mine, t: Date.now() });
   if (list.length > 300) list = list.slice(-300);
   try{
     localStorage.setItem(key, JSON.stringify(list));
@@ -3782,9 +3893,16 @@ let historyBroken = false, destructArmed = false;
    back the next time the same person connected. */
 function forgetHistoryFor(nick){
   /* both forms: the one in use now and the older name-keyed one, so a
-     conversation cannot survive the destruction by hiding under the other */
-  try{ localStorage.removeItem(historyKeyNow(nick)); }catch(e){}
-  if (nick) try{ localStorage.removeItem(historyKey(nick)); }catch(e){}
+     conversation cannot survive the destruction by hiding under the other —
+     and now the media that went with it under either form too, or
+     "distrutto" would be true for the words and false for the photos */
+  const keyNow = historyKeyNow(nick);
+  try{ localStorage.removeItem(keyNow); }catch(e){}
+  mediaDeleteByConv(keyNow);
+  if (nick){
+    try{ localStorage.removeItem(historyKey(nick)); }catch(e){}
+    mediaDeleteByConv(historyKey(nick));
+  }
 }
 $('btnClearHistory').addEventListener('click', () => {
   forgetHistoryFor(peerNick);
@@ -3820,6 +3938,10 @@ function runAutoclean(){
       else localStorage.removeItem(key); /* nothing left worth keeping the key for */
     }catch(e){}
   }
+  /* One pass over the whole media store, not one per conversation key: every
+     record already carries its own timestamp and the same cutoff applies to
+     all of them, so there is nothing a per-conversation loop would buy here. */
+  mediaDeleteOlderThan(cutoff);
 }
 
 function paintAutocleanToggle(on){
@@ -5418,7 +5540,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.64';
+const APP_VERSION = 'logos-modifica-3.65';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6739,11 +6861,13 @@ async function sendFile(file){
     xfer.fail(t('file.sendFailed','Invio interrotto: la connessione si è chiusa a metà.'));
     return;
   }
+  persistMedia(peerNick, id, file);
   const url = keepObjectUrl(URL.createObjectURL(file));
   const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
-  const preview = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
-                : isAud ? '<audio src="'+url+'" controls></audio>'
-                : '<a href="'+url+'" download="'+esc(file.name)+'" class="filelink">'+svgIcon('attach','sm')+esc(file.name)+' ↓</a>';
+  const mid = esc(id);
+  const preview = isImg ? '<img data-media-id="'+mid+'" src="'+url+'">' : isVid ? '<video data-media-id="'+mid+'" src="'+url+'" controls></video>'
+                : isAud ? '<audio data-media-id="'+mid+'" src="'+url+'" controls></audio>'
+                : '<a data-media-id="'+mid+'" href="'+url+'" download="'+esc(file.name)+'" class="filelink">'+svgIcon('attach','sm')+esc(file.name)+' ↓</a>';
   const finalHtml = preview + '<div class="meta">' + timeNow() + '</div>';
   xfer.finish(finalHtml);
   saveToHistory(peerNick, finalHtml, true);
@@ -6998,11 +7122,13 @@ function onDcMessage(ev){
       const rec = incoming[msg.id]; if (!rec) return;
       const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
       const url = keepObjectUrl(URL.createObjectURL(blob));
+      persistMedia(peerNick, msg.id, blob);
       const mime = rec.meta.mime || '';
       const isImg = mime.startsWith('image/'), isVid = mime.startsWith('video/'), isAud = mime.startsWith('audio/');
-      let html = isImg ? '<img src="'+url+'">' : isVid ? '<video src="'+url+'" controls></video>'
-               : isAud ? '<audio src="'+url+'" controls></audio>'
-               : '<a href="'+url+'" download="'+esc(rec.meta.name)+'" class="filelink">'+svgIcon('attach','sm')+esc(rec.meta.name)+' ↓</a>';
+      const mid = esc(msg.id);
+      let html = isImg ? '<img data-media-id="'+mid+'" src="'+url+'">' : isVid ? '<video data-media-id="'+mid+'" src="'+url+'" controls></video>'
+               : isAud ? '<audio data-media-id="'+mid+'" src="'+url+'" controls></audio>'
+               : '<a data-media-id="'+mid+'" href="'+url+'" download="'+esc(rec.meta.name)+'" class="filelink">'+svgIcon('attach','sm')+esc(rec.meta.name)+' ↓</a>';
       const finalHtml = html + '<div class="meta">' + timeNow() + '</div>';
       rec.xfer.finish(finalHtml);
       saveToHistory(peerNick, finalHtml, false);

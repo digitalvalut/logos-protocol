@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.64` — 23 agosto 2026*
+*Versione descritta: `logos-modifica-3.65` — 23 agosto 2026*
 
 ---
 
@@ -147,7 +147,7 @@ vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronolog
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **97 test automatici** a ogni pubblicazione, senza installare niente
+- **103 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -358,6 +358,37 @@ Verificata anche l'**interoperabilità 3.61 ↔ 3.64** dal vivo, due origini
 separate, invito lungo in entrambe le direzioni: messaggi, file piccolo, file
 da 600 MB, e le tre parole identiche sulle due versioni.
 
+### Foto e video persistenti, per decisione dell'autore (v3.65)
+
+Fino alla v3.64 una foto o un video ricevuti vivevano solo per la durata della
+pagina: riaperta la chat il giorno dopo, restava un'icona rotta (poi una
+scritta onesta, dalla v3.63). Decisione esplicita dell'autore, dopo aver
+valutato l'alternativa più semplice ("scarica o si perde"): **i media restano
+sul dispositivo, dentro la stessa conversazione, senza nessun pulsante o
+scelta in più da fare** — la priorità dichiarata è non confondere un pubblico
+non tecnico con troppe opzioni.
+
+Tenuti in IndexedDB, separati dal testo (che resta in localStorage): un file
+può pesare centinaia di megabyte, e la quota di localStorage non lo reggerebbe.
+La condizione posta fin dall'inizio della discussione: **ogni funzione che già
+promette cancellazione — autodistruzione, "svuota cronologia", pulizia
+automatica per data — doveva raggiungere anche i media, senza eccezioni**,
+proprio perché uno scarto fra "distrutto" detto e "distrutto" fatto è già
+successo una volta in questo progetto. Le tre funzioni riusano la stessa
+chiamata (`mediaDeleteByConv`/`mediaDeleteOlderThan`) già agganciata dove
+cancellavano il testo — nessuna delle tre è stata duplicata.
+
+Verificato dal vivo, non solo nei test: una foto vera inviata, la chat svuotata
+e ricaricata, la foto tornata identica (stesse dimensioni); "svuota cronologia"
+cliccato per davvero e la foto sparita anche dal database, non solo dallo
+schermo; la pulizia automatica che cancella un media vecchio e lascia intatto
+uno recente.
+
+Un limite dichiarato, non nascosto: il browser può evacuare questo spazio da
+solo sotto pressione di memoria (specialmente Safari/iOS) — l'app mostra la
+scritta onesta anche in quel caso, la stessa già usata per un media
+genuinamente perso.
+
 ---
 
 ## 10. Domande utili da fare a un'AI
@@ -381,5 +412,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
-`logos-modifica-3.64`.*
+`logos-modifica-3.65`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

@@ -66,6 +66,7 @@ class FakeElement {
     this.disabled = false;
     this.listeners = {};
     this.options = [];
+    this.parentNode = null;
   }
   get className(){ return this.classList.value; }
   set className(v){ this.classList = new FakeClassList(); String(v).split(/\s+/).forEach(c => c && this.classList.add(c)); }
@@ -73,12 +74,20 @@ class FakeElement {
   getAttribute(k){ return k in this.attributes ? this.attributes[k] : null; }
   removeAttribute(k){ delete this.attributes[k]; }
   hasAttribute(k){ return k in this.attributes; }
-  appendChild(c){ this.children.push(c); return c; }
-  append(...c){ this.children.push(...c); }
-  prepend(...c){ this.children.unshift(...c); }
-  removeChild(c){ this.children = this.children.filter(x => x !== c); return c; }
-  remove(){}
-  insertBefore(c){ this.children.unshift(c); return c; }
+  appendChild(c){ c.parentNode = this; this.children.push(c); return c; }
+  append(...c){ c.forEach(x => { x.parentNode = this; }); this.children.push(...c); }
+  prepend(...c){ c.forEach(x => { x.parentNode = this; }); this.children.unshift(...c); }
+  removeChild(c){ this.children = this.children.filter(x => x !== c); c.parentNode = null; return c; }
+  /* Real replaceWith needs to find itself in a parent's own child list, which
+     is why parentNode above is tracked at all — nothing else here reads it. */
+  replaceWith(node){
+    if (!this.parentNode) return;
+    const i = this.parentNode.children.indexOf(this);
+    if (i !== -1){ this.parentNode.children[i] = node; node.parentNode = this.parentNode; }
+    this.parentNode = null;
+  }
+  remove(){ if (this.parentNode) this.parentNode.removeChild(this); }
+  insertBefore(c){ c.parentNode = this; this.children.unshift(c); return c; }
   addEventListener(type, fn){ (this.listeners[type] = this.listeners[type] || []).push(fn); }
   removeEventListener(type, fn){
     if (this.listeners[type]) this.listeners[type] = this.listeners[type].filter(f => f !== fn);
@@ -87,8 +96,21 @@ class FakeElement {
   dispatchEvent(ev){ (this.listeners[ev && ev.type] || []).forEach(fn => fn.call(this, ev)); return true; }
   click(){ this.dispatchEvent({ type: 'click', preventDefault(){}, stopPropagation(){} }); }
   focus(){} blur(){} scrollIntoView(){} select(){} play(){ return Promise.resolve(); } pause(){}
-  querySelector(){ return null; }
-  querySelectorAll(){ return []; }
+  /* Only the one form anything here has ever needed: "does this element carry
+     this attribute". A real querySelector parses arbitrary CSS; this recognises
+     exactly `[attr]` and nothing else, which is honest about how little of it
+     exists rather than pretending to a generality nothing exercises. Walks
+     `.children`, which is real and populated by appendChild/append — unlike
+     `innerHTML`, which this fake DOM only ever stores as a string. */
+  querySelectorAll(sel){
+    const m = /^\[([a-zA-Z0-9_-]+)\]$/.exec(sel);
+    if (!m) return [];
+    const attr = m[1], out = [];
+    const walk = node => { for (const c of node.children){ if (c.hasAttribute(attr)) out.push(c); walk(c); } };
+    walk(this);
+    return out;
+  }
+  querySelector(sel){ return this.querySelectorAll(sel)[0] || null; }
   closest(){ return null; }
   getBoundingClientRect(){ return { top:0, left:0, right:0, bottom:0, width:100, height:100 }; }
   getContext(){
@@ -197,7 +219,13 @@ function buildSandbox(options = {}){
     Notification: undefined,
     speechSynthesis: undefined,
     Image: FakeElement,
-    Blob: class { constructor(){ this.size = 0; } },
+    /* The real things, not stand-ins: URL.createObjectURL rejects anything
+       that is not an actual Blob, and nothing exercised a real file receipt
+       through onDcMessage — the code that builds a Blob from received chunks
+       runs inside this sandbox, so it needs a Blob that URL recognises as
+       one — until media persistence needed to test that path end to end. */
+    Blob: globalThis.Blob,
+    File: globalThis.File,
     FileReader: class { readAsDataURL(){} },
     URL: globalThis.URL,
     AbortController: globalThis.AbortController,
