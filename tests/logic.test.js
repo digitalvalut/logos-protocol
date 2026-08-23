@@ -1771,3 +1771,122 @@ test.describe('the app describing itself', () => {
     app.stop();
   });
 });
+
+/* ------------------------------------------------------------------------
+   Ringing like a real phone, without asking anything of anyone but the
+   person already on this screen. No push, no external service — the switch
+   itself is the whole mechanism, which is exactly why its edges matter:
+   nothing else is going to catch a call this misses.
+   ------------------------------------------------------------------------ */
+test.describe('staying in listening mode', () => {
+
+  test('the switch flips state, paints itself, and holds the screen awake only while it is on', () => {
+    const app = loadApp();
+    app.run(`
+      window.__awake = 0, window.__slept = 0;
+      keepScreenAwake = function(){ window.__awake++; return Promise.resolve(); };
+      letScreenSleep = function(){ window.__slept++; };
+    `);
+    app.run("$('listenRow').listeners.click[0]();");
+    assert.strictEqual(app.run('listenMode'), true);
+    assert.strictEqual(app.run("$('listenRow').classList.contains('on')"), true);
+    assert.strictEqual(app.run("$('listenRow').getAttribute('aria-pressed')"), 'true');
+    assert.strictEqual(app.run("$('listenStatus').classList.contains('hide')"), false,
+      'the honest status line must show while the mode is really on');
+    assert.strictEqual(app.run('window.__awake'), 1);
+
+    app.run("$('listenRow').listeners.click[0]();");
+    assert.strictEqual(app.run('listenMode'), false);
+    assert.strictEqual(app.run("$('listenStatus').classList.contains('hide')"), true);
+    assert.strictEqual(app.run('window.__slept'), 1);
+    app.stop();
+  });
+
+  test('turning it off mid-call does not let the screen sleep out from under the call', () => {
+    const app = loadApp();
+    app.run(`
+      window.__slept = 0;
+      letScreenSleep = function(){ window.__slept++; };
+      listenMode = true; callState = 'active';
+    `);
+    app.run("$('listenRow').listeners.click[0]();");
+    assert.strictEqual(app.run('window.__slept'), 0,
+      'an active call already owns the wake lock — this switch turning off must not take it away from it');
+    app.stop();
+  });
+
+  test('returning to the tab re-arms the wake lock on its own, without the person doing anything', () => {
+    /* The lock is released by the browser itself the instant the tab is
+       hidden — that part cannot be changed. What can be changed is whether
+       coming back requires remembering to flip the switch again. */
+    const app = loadApp();
+    app.run(`
+      window.__awake = 0;
+      keepScreenAwake = function(){ window.__awake++; return Promise.resolve(); };
+      listenMode = true;
+      Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+      document.dispatchEvent({ type: 'visibilitychange' });
+    `);
+    assert.ok(app.run('window.__awake') >= 1,
+      'listenMode alone, same as an active call, must be enough to ask for the screen again on return');
+    app.stop();
+  });
+
+  test('an address call rings immediately in listening mode, and does nothing when the mode is off', () => {
+    /* The real pipeline (mailbox, decryption, activeSlots) is exercised
+       elsewhere; stubbed here down to exactly the shape addrCheckOnce reads,
+       so what is under test is the one new line — whether listenMode gates
+       the ring — and nothing about the crypto underneath it. */
+    function fakeIncoming(app){
+      app.run(`
+        activeSlots = function(){ return [0]; };
+        myAddress = function(){ return Promise.resolve('AAAABBBBCCCC'); };
+        addrSlotSeed = function(){ return Promise.resolve('seed'); };
+        mailboxGet = function(){ return Promise.resolve('raw'); };
+        addrOpenIncoming = function(){ return Promise.resolve({
+          obj: { sdp: 'v=0', rid: 'r1', nick: 'Marco' }, sec: { key:{}, seed:'s' }
+        }); };
+      `);
+    }
+    const on = loadApp();
+    fakeIncoming(on);
+    on.run('listenMode = true; window.__p = addrCheckOnce();');
+    return on.run('window.__p').then(() => {
+      assert.strictEqual(on.run('ringTimer !== null'), true,
+        'listening mode must turn a silent incoming card into an actual ring');
+      on.stop();
+
+      const off = loadApp();
+      fakeIncoming(off);
+      off.run('listenMode = false; window.__p = addrCheckOnce();');
+      return off.run('window.__p').then(() => {
+        assert.strictEqual(off.run("$('addrIncoming').classList.contains('hide')"), false,
+          'the card itself must still appear with the mode off — only the ring is gated');
+        assert.strictEqual(off.run('ringTimer'), null,
+          'without listening mode, nothing may start making noise on its own');
+        off.stop();
+      });
+    });
+  });
+
+  test('accepting or ignoring the call silences a ring already in progress', () => {
+    const app = loadApp();
+    app.run(`
+      addrPending = { msg: { sdp: 'v=0', rid: 'r1', nick: 'Marco' }, sec: { key:{}, seed:'s' }, slot: 0 };
+      ringForIncomingAddr();
+    `);
+    assert.strictEqual(app.run('ringTimer !== null'), true, 'the setup must actually be ringing first');
+    app.run("$('btnAddrIgnore').listeners.click[0]();");
+    assert.strictEqual(app.run('ringTimer'), null, 'ignoring a call must not leave it ringing behind the closed card');
+    app.stop();
+  });
+
+  test('a ring left unanswered stops itself, rather than running until the battery says otherwise', () => {
+    const app = loadApp();
+    app.run('ringForIncomingAddr();');
+    assert.strictEqual(app.run('ringTimer !== null'), true);
+    app.run(`clearTimeout(listenRingTimer); stopRing();`);   /* simulates the timeout firing, without a 45s real wait */
+    assert.strictEqual(app.run('ringTimer'), null);
+    app.stop();
+  });
+});

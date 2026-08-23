@@ -374,6 +374,22 @@
       <div class="helptext hide" id="notifyIosHint" data-i18n="notify.iosHint">Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.</div>
     </div>
 
+    <!-- L'altra metà della coppia con notifyCard, deliberatamente vicina: quella
+         sopra avvisa con l'app chiusa (passa dal sistema del telefono); questa
+         fa squillare per davvero, ma solo finché questa schermata resta aperta
+         — nessun sistema esterno coinvolto, per chi lo preferisce così. -->
+    <div class="card" id="listenCard">
+      <div class="switchrow" id="listenRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span>
+        <div class="txt">
+          <b data-i18n="listen.title">Resta in ascolto delle chiamate</b>
+          <span data-i18n="listen.sub">Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="helptext mt10 hide" id="listenStatus" data-i18n="listen.status">In ascolto — se cambi schermata o app, si ferma finché non torni qui.</div>
+    </div>
+
     <div class="card" id="autocleanCard">
       <div class="switchrow" id="autocleanRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span>

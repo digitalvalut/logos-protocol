@@ -176,6 +176,7 @@ Object.assign(I18N.en, {
 "notify.title":"Let me know when someone's looking for me",
 "notify.sub":"A notification if a contact tries to reach you and you don't have the app open — no name, no message, just a heads-up.",
 "notify.iosHint":"On iPhone this only works once you've added the app to your Home Screen first: tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>, and open the app from there.",
+"listen.title":"Stay listening for calls","listen.sub":"The phone really rings, like a real call, for as long as you keep this screen open. Uses more battery; no outside service is involved.","listen.status":"Listening — if you switch screen or app, it stops until you come back here.",
 "notify.blocked":"Notifications blocked by the browser. Check the site's settings.",
 "sas.title":"Security check",
 "sas.lead":"Optional: say these three words to each other out loud. If you both see the same ones, nobody has come in between — but you can keep chatting without doing this.",
@@ -351,6 +352,7 @@ Object.assign(I18N.it, {
 "notify.title":"Avvisami quando qualcuno mi cerca",
 "notify.sub":"Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.",
 "notify.iosHint":"Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.",
+"listen.title":"Resta in ascolto delle chiamate","listen.sub":"Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.","listen.status":"In ascolto — se cambi schermata o app, si ferma finché non torni qui.",
 "notify.blocked":"Notifiche bloccate dal browser. Controlla le impostazioni del sito.",
 "sas.title":"Controllo di sicurezza",
 "sas.lead":"Facoltativo: ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo — ma potete continuare a scrivere anche senza.",
@@ -519,6 +521,7 @@ Object.assign(I18N.fr, {
 "notify.title":"Prévenez-moi quand quelqu'un me cherche",
 "notify.sub":"Une notification si un contact essaie de vous joindre et que vous n'avez pas l'appli ouverte — aucun nom, aucun message, juste un signal.",
 "notify.iosHint":"Sur iPhone, cela ne fonctionne que si vous avez d'abord ajouté l'appli à votre écran d'accueil : touchez <b>Partager</b> dans Safari, puis <b>Sur l'écran d'accueil</b>, et ouvrez l'appli depuis là.",
+"listen.title":"Rester à l'écoute des appels","listen.sub":"Le téléphone sonne vraiment, comme un appel réel, tant que vous gardez cet écran ouvert. Consomme plus de batterie ; aucun service extérieur n'est impliqué.","listen.status":"À l'écoute — si vous changez d'écran ou d'appli, ça s'arrête jusqu'à votre retour ici.",
 "notify.blocked":"Notifications bloquées par le navigateur. Vérifiez les paramètres du site.",
 "sas.title":"Contrôle de sécurité",
 "sas.lead":"Facultatif : dites-vous ces trois mots à voix haute. Si vous voyez tous les deux les mêmes, personne ne s'est interposé — mais vous pouvez continuer à écrire sans le faire.",
@@ -687,6 +690,7 @@ Object.assign(I18N.de, {
 "notify.title":"Benachrichtige mich, wenn mich jemand sucht",
 "notify.sub":"Eine Benachrichtigung, wenn ein Kontakt versucht dich zu erreichen und du die App nicht offen hast — kein Name, keine Nachricht, nur ein Hinweis.",
 "notify.iosHint":"Auf dem iPhone funktioniert das nur, wenn du die App zuerst zum Home-Bildschirm hinzugefügt hast: tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Home-Bildschirm</b>, und öffne die App von dort.",
+"listen.title":"Auf Anrufe lauschen","listen.sub":"Das Telefon klingelt wirklich, wie bei einem echten Anruf, solange dieser Bildschirm geöffnet bleibt. Verbraucht mehr Akku; kein externer Dienst ist beteiligt.","listen.status":"In Bereitschaft — wechselst du Bildschirm oder App, stoppt es, bis du hierher zurückkehrst.",
 "notify.blocked":"Benachrichtigungen vom Browser blockiert. Prüfe die Einstellungen der Seite.",
 "sas.title":"Sicherheitsprüfung",
 "sas.lead":"Optional: Sagt euch diese drei Wörter laut. Wenn ihr beide dieselben seht, hat sich niemand dazwischengeschaltet — ihr könnt aber auch ohne das weiterschreiben.",
@@ -855,6 +859,7 @@ Object.assign(I18N.es, {
 "notify.title":"Avísame cuando alguien me busque",
 "notify.sub":"Una notificación si un contacto intenta contactarte y no tienes la app abierta — sin nombre, sin mensaje, solo un aviso.",
 "notify.iosHint":"En iPhone esto solo funciona si primero añadiste la app a tu pantalla de inicio: toca <b>Compartir</b> en Safari, luego <b>Añadir a inicio</b>, y abre la app desde ahí.",
+"listen.title":"Quedarse a la escucha de llamadas","listen.sub":"El teléfono suena de verdad, como una llamada real, mientras mantengas esta pantalla abierta. Consume más batería; no interviene ningún servicio externo.","listen.status":"Escuchando — si cambias de pantalla o de app, se detiene hasta que vuelvas aquí.",
 "notify.blocked":"Notificaciones bloqueadas por el navegador. Comprueba los ajustes del sitio.",
 "sas.title":"Comprobación de seguridad",
 "sas.lead":"Opcional: decíos estas tres palabras en voz alta. Si ambos veis las mismas, nadie se ha interpuesto — pero podéis seguir escribiendo sin hacerlo.",
@@ -1023,6 +1028,7 @@ Object.assign(I18N.pt, {
 "notify.title":"Avise-me quando alguém me procurar",
 "notify.sub":"Uma notificação se um contacto tentar chegar até si e não tiver a app aberta — sem nome, sem mensagem, apenas um aviso.",
 "notify.iosHint":"No iPhone isto só funciona se primeiro adicionar a app ao seu ecrã principal: toque em <b>Partilhar</b> no Safari, depois em <b>Adicionar ao ecrã principal</b>, e abra a app a partir daí.",
+"listen.title":"Ficar à escuta de chamadas","listen.sub":"O telemóvel toca mesmo, como uma chamada real, enquanto mantiver este ecrã aberto. Consome mais bateria; nenhum serviço externo está envolvido.","listen.status":"À escuta — se mudar de ecrã ou de app, para até voltar aqui.",
 "notify.blocked":"Notificações bloqueadas pelo navegador. Verifique as definições do site.",
 "sas.title":"Verificação de segurança",
 "sas.lead":"Opcional: digam estas três palavras um ao outro em voz alta. Se ambos virem as mesmas, ninguém se interpôs — mas podem continuar a escrever sem o fazer.",
@@ -1191,6 +1197,7 @@ Object.assign(I18N.ru, {
 "notify.title":"Сообщите мне, когда меня кто-то ищет",
 "notify.sub":"Уведомление, если контакт пытается связаться с вами, а приложение у вас не открыто — ни имени, ни сообщения, только сигнал.",
 "notify.iosHint":"На iPhone это работает только если вы сначала добавили приложение на главный экран: нажмите <b>Поделиться</b> в Safari, затем <b>На экран «Домой»</b>, и открывайте приложение оттуда.",
+"listen.title":"Оставаться на связи для звонков","listen.sub":"Телефон звонит по-настоящему, как настоящий вызов, пока этот экран открыт. Расходует больше заряда; никакой внешний сервис не задействован.","listen.status":"На связи — если переключитесь на другой экран или приложение, приём остановится до возвращения сюда.",
 "notify.blocked":"Уведомления заблокированы браузером. Проверьте настройки сайта.",
 "sas.title":"Проверка безопасности",
 "sas.lead":"Необязательно: произнесите друг другу эти три слова вслух. Если вы оба видите одинаковые, никто не вклинился — но можно продолжать переписку и без этого.",
@@ -1359,6 +1366,7 @@ Object.assign(I18N.zh, {
 "notify.title":"有人找我时通知我",
 "notify.sub":"当联系人试图联系你而你没有打开应用时发送通知——没有姓名，没有消息内容，只是一个提醒。",
 "notify.iosHint":"在 iPhone 上，只有先将应用添加到主屏幕后才能使用此功能：在 Safari 中点击<b>分享</b>，然后点击<b>添加到主屏幕</b>，并从那里打开应用。",
+"listen.title":"保持接听等待","listen.sub":"只要这个屏幕保持打开，手机就会像真正的电话一样响铃。会更耗电；不涉及任何外部服务。","listen.status":"正在等待来电——切换到其他屏幕或应用会暂停，回到这里才会恢复。",
 "notify.blocked":"通知被浏览器阻止。请检查网站设置。",
 "sas.title":"安全检查",
 "sas.lead":"可选：互相大声说出这三个词。如果你们看到的一样，说明没有人插入其中——不这样做也可以继续聊天。",
@@ -1527,6 +1535,7 @@ Object.assign(I18N.ar, {
 "notify.title":"أعلمني عندما يبحث عني أحد",
 "notify.sub":"إشعار إذا حاول أحد جهات اتصالك الوصول إليك ولم يكن التطبيق مفتوحًا لديك — بلا اسم، بلا رسالة، مجرد تنبيه.",
 "notify.iosHint":"على آيفون، يعمل هذا فقط بعد إضافة التطبيق إلى شاشتك الرئيسية أولًا: اضغط <b>مشاركة</b> في سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>، وافتح التطبيق من هناك.",
+"listen.title":"ابقَ بانتظار المكالمات","listen.sub":"يرن الهاتف فعلًا كأنها مكالمة حقيقية، طالما أبقيت هذه الشاشة مفتوحة. يستهلك بطارية أكثر؛ لا يشارك أي خدمة خارجية.","listen.status":"بانتظار — إذا بدّلت الشاشة أو التطبيق، يتوقف حتى تعود إلى هنا.",
 "notify.blocked":"حظر المتصفح الإشعارات. تحقق من إعدادات الموقع.",
 "sas.title":"فحص الأمان",
 "sas.lead":"اختياري: انطقا هذه الكلمات الثلاث لبعضكما بصوت عالٍ. إذا رأيتما نفس الكلمات، فلم يتدخّل أحد — لكن يمكنكما الاستمرار في الكتابة دون فعل ذلك.",
@@ -1695,6 +1704,7 @@ Object.assign(I18N.ur, {
 "notify.title":"مجھے بتائیں جب کوئی مجھے ڈھونڈے",
 "notify.sub":"اگر کوئی رابطہ آپ تک پہنچنے کی کوشش کرے اور آپ کی ایپ کھلی نہ ہو تو ایک اطلاع — کوئی نام نہیں، کوئی پیغام نہیں، بس ایک اشارہ۔",
 "notify.iosHint":"آئی فون پر یہ صرف اس وقت کام کرتا ہے جب آپ پہلے ایپ کو اپنی ہوم اسکرین پر شامل کر چکے ہوں: سفاری میں <b>شیئر</b> پر ٹچ کریں، پھر <b>ہوم اسکرین پر شامل کریں</b>، اور وہاں سے ایپ کھولیں۔",
+"listen.title":"کالز کے لیے سنتے رہیں","listen.sub":"جب تک آپ یہ اسکرین کھلی رکھیں، فون واقعی بجتا ہے، جیسے ایک اصل کال۔ زیادہ بیٹری استعمال ہوتی ہے؛ کوئی بیرونی سروس شامل نہیں۔","listen.status":"سن رہے ہیں — اگر آپ اسکرین یا ایپ بدلیں تو یہ رک جاتا ہے جب تک آپ یہاں واپس نہ آئیں۔",
 "notify.blocked":"براؤزر نے اطلاعات بلاک کر دیں۔ سائٹ کی سیٹنگز چیک کریں۔",
 "sas.title":"سیکیورٹی چیک",
 "sas.lead":"اختیاری: یہ تین الفاظ ایک دوسرے کو بلند آواز میں بتائیں۔ اگر آپ دونوں ایک جیسے الفاظ دیکھیں، تو کسی نے مداخلت نہیں کی — لیکن آپ اس کے بغیر بھی لکھنا جاری رکھ سکتے ہیں۔",
@@ -1863,6 +1873,7 @@ Object.assign(I18N.hi, {
 "notify.title":"जब कोई मुझे ढूंढे तो बताएं",
 "notify.sub":"अगर कोई संपर्क आपसे जुड़ने की कोशिश करे और आपका ऐप खुला न हो तो एक सूचना — कोई नाम नहीं, कोई संदेश नहीं, बस एक इशारा।",
 "notify.iosHint":"iPhone पर यह तभी काम करता है जब आपने पहले ऐप को अपनी होम स्क्रीन पर जोड़ा हो: Safari में <b>शेयर</b> टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b>, और वहां से ऐप खोलें।",
+"listen.title":"कॉल के लिए सुनते रहें","listen.sub":"जब तक आप यह स्क्रीन खुली रखते हैं, फ़ोन सच में बजता है, असली कॉल की तरह। बैटरी ज़्यादा खर्च होती है; कोई बाहरी सेवा शामिल नहीं है।","listen.status":"सुन रहे हैं — अगर आप स्क्रीन या ऐप बदलते हैं, तो यह तब तक रुक जाता है जब तक आप यहाँ वापस नहीं आते।",
 "notify.blocked":"ब्राउज़र ने सूचनाएं ब्लॉक कर दीं। साइट की सेटिंग्स जांचें।",
 "sas.title":"सुरक्षा जांच",
 "sas.lead":"वैकल्पिक: एक-दूसरे को ये तीन शब्द ज़ोर से बताएं। अगर आप दोनों एक जैसे शब्द देखें, तो किसी ने दखल नहीं दिया — लेकिन आप इसके बिना भी लिखना जारी रख सकते हैं।",
@@ -2031,6 +2042,7 @@ Object.assign(I18N.bn, {
 "notify.title":"কেউ আমাকে খুঁজলে আমাকে জানান",
 "notify.sub":"কোনো পরিচিতি আপনার কাছে পৌঁছানোর চেষ্টা করলে এবং আপনার অ্যাপ খোলা না থাকলে একটি বিজ্ঞপ্তি — কোনো নাম নেই, কোনো বার্তা নেই, শুধু একটি ইঙ্গিত।",
 "notify.iosHint":"iPhone-এ এটি তখনই কাজ করে যখন আপনি প্রথমে অ্যাপটি আপনার হোম স্ক্রিনে যোগ করেছেন: Safari-তে <b>শেয়ার</b>-এ ট্যাপ করুন, তারপর <b>হোম স্ক্রিনে যোগ করুন</b>, এবং সেখান থেকে অ্যাপ খুলুন।",
+"listen.title":"কলের জন্য শুনতে থাকুন","listen.sub":"যতক্ষণ আপনি এই স্ক্রিন খোলা রাখবেন, ফোন সত্যিই বাজবে, আসল কলের মতো। বেশি ব্যাটারি খরচ হয়; কোনো বাইরের সেবা জড়িত নেই।","listen.status":"শুনছে — স্ক্রিন বা অ্যাপ পাল্টালে, আপনি এখানে ফিরে না আসা পর্যন্ত থেমে যাবে।",
 "notify.blocked":"ব্রাউজার বিজ্ঞপ্তি ব্লক করেছে। সাইটের সেটিংস পরীক্ষা করুন।",
 "sas.title":"নিরাপত্তা পরীক্ষা",
 "sas.lead":"ঐচ্ছিক: একে অপরকে এই তিনটি শব্দ জোরে বলুন। আপনারা দুজনেই একই শব্দ দেখলে, কেউ ঢুকে পড়েনি — তবে এটি না করেও আপনি লেখা চালিয়ে যেতে পারেন।",
@@ -2199,6 +2211,7 @@ Object.assign(I18N.id, {
 "notify.title":"Beri tahu saya saat seseorang mencari saya",
 "notify.sub":"Notifikasi jika kontak mencoba menghubungi Anda dan Anda tidak membuka aplikasi — tanpa nama, tanpa pesan, hanya sebuah tanda.",
 "notify.iosHint":"Di iPhone ini hanya berfungsi jika Anda sudah menambahkan aplikasi ke Layar Utama terlebih dahulu: ketuk <b>Bagikan</b> di Safari, lalu <b>Tambah ke Layar Utama</b>, dan buka aplikasi dari sana.",
+"listen.title":"Tetap mendengarkan panggilan","listen.sub":"Ponsel benar-benar berdering, seperti panggilan sungguhan, selama Anda membuka layar ini. Menghabiskan lebih banyak baterai; tidak ada layanan luar yang terlibat.","listen.status":"Mendengarkan — jika Anda beralih layar atau aplikasi, ini berhenti sampai Anda kembali ke sini.",
 "notify.blocked":"Notifikasi diblokir oleh browser. Periksa pengaturan situs.",
 "sas.title":"Pemeriksaan keamanan",
 "sas.lead":"Opsional: ucapkan tiga kata ini satu sama lain dengan suara keras. Jika Anda berdua melihat kata yang sama, tidak ada yang menyisip — tetapi Anda tetap bisa melanjutkan chat tanpa melakukannya.",
@@ -4220,6 +4233,59 @@ $('notifyRow').addEventListener('keydown', e => {
   if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); $('notifyRow').click(); }
 });
 
+/* ============================== rispondere come un telefono vero ==============================
+   La coppia deliberata di notifyRow qui sopra. Quella avvisa con l'app chiusa,
+   passando dal sistema di notifiche del telefono — su Android, per come Chrome
+   stesso è costruito, quella strada tocca comunque l'infrastruttura di Google a
+   livello di sistema operativo, che l'app lo voglia o no: non è una scelta di
+   Logos, è come funziona il Push web su quel sistema.
+
+   Questa non usa NESSUNA di quelle strade. È tutto dentro alla pagina aperta:
+   lo schermo tenuto acceso con lo stesso strumento già usato durante una
+   chiamata (keepScreenAwake/letScreenSleep, sopra), e lo squillo vero già
+   scritto per le chiamate (startRing/playRingTone) agganciato al momento in
+   cui qualcuno chiama l'indirizzo — non più una schermata silenziosa da
+   notare, uno squillo subito. Zero rete in più rispetto al controllo che
+   l'app fa già ogni cinque secondi quando è aperta: nessun servizio nuovo,
+   nessuno che sappia che stai aspettando una chiamata a parte chi ti chiama.
+
+   Il limite è reale e va detto, non nascosto: funziona solo finché questa
+   scheda resta quella davanti. Cambiare app anche un istante rilascia lo
+   schermo sveglio da solo (comportamento del browser, non evitabile) — per
+   questo il ritorno lo riarma da sé, nel visibilitychange più sotto, invece
+   di lasciare che la persona debba ricordarsene. */
+let listenMode = false, listenRingTimer = null;
+function paintListenMode(on){
+  $('listenRow').classList.toggle('on', on);
+  $('listenRow').setAttribute('aria-pressed', on ? 'true' : 'false');
+  $('listenStatus').classList.toggle('hide', !on);
+}
+$('listenRow').addEventListener('click', () => {
+  listenMode = !listenMode;
+  paintListenMode(listenMode);
+  if (listenMode) keepScreenAwake();
+  else if (callState !== 'active') letScreenSleep();   /* una chiamata in corso ha la priorità sullo spegnimento */
+});
+$('listenRow').addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); $('listenRow').click(); }
+});
+/* Niente, oggi, ferma da solo uno squillo lasciato senza risposta — il
+   controllo che porta qui (addrCheckOnce) non viene richiamato mentre
+   addrPending è impostato, quindi il giro da 2,2s dentro startRing()
+   andrebbe avanti per sempre. Stessa cortesia già usata per le chiamate vere
+   (armCallTimeout, 35s): dopo un po' si smette di disturbare, restando
+   comunque possibile rispondere in silenzio più tardi dalla stessa scheda. */
+const LISTEN_RING_MS = 45000;
+function ringForIncomingAddr(){
+  startRing(true);
+  clearTimeout(listenRingTimer);
+  listenRingTimer = setTimeout(stopRing, LISTEN_RING_MS);
+}
+function stopListenRing(){
+  clearTimeout(listenRingTimer); listenRingTimer = null;
+  stopRing();
+}
+
 /* ============================== auto-reconnect (mailbox) ==============================
    Two people who have already met once can find each other again without pasting a code —
    but ONLY if both have the app open at the same moment. There is no way around that without
@@ -4969,6 +5035,9 @@ async function addrCheckOnce(){
     $('addrIncoming').classList.remove('hide');
     $('addrIncoming').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     toast(t('addr.incomingToast','Qualcuno ti sta cercando al tuo indirizzo.'));
+    /* la modalità "resta in ascolto" trasforma questo, che altrimenti sarebbe
+       solo una scheda silenziosa da notare, in uno squillo vero */
+    if (listenMode) ringForIncomingAddr();
     return;
   }
 }
@@ -4995,12 +5064,13 @@ document.addEventListener('visibilitychange', () => {
        protection lasted only until the first glance at another app, and the
        rest of the call ran with the screen free to sleep again — which is the
        failure it was added to prevent. */
-    if (callState === 'active') keepScreenAwake();
+    if (callState === 'active' || listenMode) keepScreenAwake();
   }
 });
 
 async function acceptAddrCall(){
   if (!addrPending) return;
+  stopListenRing();
   const { msg, sec, slot } = addrPending;
   addrPending = null;
   $('addrIncoming').classList.add('hide');
@@ -5548,6 +5618,7 @@ $('btnAddrAccept').addEventListener('click', acceptAddrCall);
 $('btnAddrIgnore').addEventListener('click', () => {
   /* turned away for good: an address given out publicly is one a nuisance can
      hold too, and "ignore" that only lasts a minute is not a defence */
+  stopListenRing();
   if (addrPending && addrPending.msg) blockFp(addrPending.msg.fp);
   addrPending = null;
   $('addrIncoming').classList.add('hide');
@@ -5563,7 +5634,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.66';
+const APP_VERSION = 'logos-modifica-3.67';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

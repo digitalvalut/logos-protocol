@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.66` — 23 agosto 2026*
+*Versione descritta: `logos-modifica-3.67` — 23 agosto 2026*
 
 ---
 
@@ -111,6 +111,11 @@ ciascuno con la propria barra di avanzamento. **Chiamate audio e video**, con
 video della fotocamera con quella dello schermo sullo stesso collegamento già
 aperto — nessun server nuovo, nessun costo aggiuntivo). Cambio fotocamera, muto,
 vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronologia.
+**"Resta in ascolto delle chiamate"**: tiene lo schermo acceso e fa squillare
+il telefono per davvero (suono sintetizzato + vibrazione, già esistenti per le
+chiamate normali) nell'istante in cui qualcuno chiama l'indirizzo, invece della
+sola scheda silenziosa da notare — zero servizio esterno, si riarma da sola
+tornando sull'app dopo averla lasciata un attimo.
 
 ### Interfaccia e accessibilità
 - **13 lingue** complete (it, en, ar, bn, de, es, fr, hi, id, pt, ru, ur, zh),
@@ -147,7 +152,7 @@ vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronolog
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **110 test automatici** a ogni pubblicazione, senza installare niente
+- **116 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -448,5 +453,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
-`logos-modifica-3.66`.*
+`logos-modifica-3.67`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*
