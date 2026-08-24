@@ -1890,3 +1890,116 @@ test.describe('staying in listening mode', () => {
     app.stop();
   });
 });
+
+/* ------------------------------------------------------------------------
+   A phone photo carries more than the picture — GPS, device model, the
+   software that saved it. stripJpegMetadata/stripPngMetadata cut those
+   wrapper segments out on-device before a file is ever sent, without
+   touching a single pixel byte. These tests build tiny, real JPEG/PNG
+   structures by hand (not decodable pictures — just correctly-framed
+   markers/chunks, which is all the stripper ever looks at) so the guard
+   can be checked precisely: the metadata segment must be gone, and every
+   byte of what remains must be identical to the input, not merely similar.
+   ------------------------------------------------------------------------ */
+test.describe('taking the GPS and the device model back out of a photo', () => {
+
+  test('stripJpegMetadata removes an EXIF (APP1) segment, byte-identical scan data', () => {
+    const app = loadApp();
+    const withExif = app.run(`
+      window.__jpg = new Uint8Array([
+        0xFF,0xD8,
+        0xFF,0xE1,0x00,0x0A, 0x45,0x78,0x69,0x66,0x00,0x00,0xAA,0xBB,
+        0xFF,0xDA, 0x01,0x02,0x03,
+        0xFF,0xD9
+      ]);
+      Array.from(stripJpegMetadata(window.__jpg));
+    `);
+    assert.deepStrictEqual(withExif, [0xFF,0xD8, 0xFF,0xDA,0x01,0x02,0x03, 0xFF,0xD9],
+      'the EXIF segment must be cut out whole, leaving SOI, SOS and the scan data exactly as they arrived');
+    app.stop();
+  });
+
+  test('stripJpegMetadata leaves a JPEG with no metadata to strip completely unchanged', () => {
+    const app = loadApp();
+    const clean = app.run(`
+      window.__jpg = new Uint8Array([0xFF,0xD8, 0xFF,0xDA,0x09,0x08,0x07, 0xFF,0xD9]);
+      Array.from(stripJpegMetadata(window.__jpg));
+    `);
+    assert.deepStrictEqual(clean, [0xFF,0xD8, 0xFF,0xDA,0x09,0x08,0x07, 0xFF,0xD9],
+      'nothing to remove means nothing may change, not even by one byte');
+    app.stop();
+  });
+
+  test('stripJpegMetadata leaves an unrecognisable file untouched rather than guess', () => {
+    const app = loadApp();
+    const notAJpeg = app.run(`Array.from(stripJpegMetadata(new Uint8Array([1,2,3,4,5])))`);
+    assert.deepStrictEqual(notAJpeg, [1,2,3,4,5],
+      'a file that does not start with the JPEG signature must be returned exactly as given, never mangled on a guess');
+    app.stop();
+  });
+
+  test('stripPngMetadata removes a tEXt chunk, keeps IHDR/IDAT/IEND intact', () => {
+    const app = loadApp();
+    const { before, after } = app.run(`
+      function u32(n){ return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255]; }
+      function ascii(s){ return Array.from(s).map(c => c.charCodeAt(0)); }
+      function chunk(type, data){ return [...u32(data.length), ...ascii(type), ...data, 0,0,0,0]; }
+      const bytes = [
+        0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A,
+        ...chunk('IHDR', new Array(13).fill(0)),
+        ...chunk('tEXt', ascii('GPS!!')),
+        ...chunk('IDAT', [1,2,3]),
+        ...chunk('IEND', []),
+      ];
+      window.__before = bytes;
+      window.__after = Array.from(stripPngMetadata(new Uint8Array(bytes)));
+      ({ before: window.__before, after: window.__after });
+    `);
+    assert.ok(!after.some((b,i) => 'tEXt'.split('').every((c,j) => after[i+j] === c.charCodeAt(0))),
+      'the ASCII bytes "tEXt" must not appear anywhere in the output — the whole chunk is gone, not just renamed');
+    assert.ok(before.length > after.length, 'stripping a real metadata chunk must actually shrink the file');
+    const sig = after.slice(0, 8);
+    assert.deepStrictEqual(sig, [0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A], 'the PNG signature itself must survive untouched');
+    app.stop();
+  });
+
+  test('stripFileMetadata passes through formats it does not yet cover, e.g. a video', () => {
+    const app = loadApp();
+    const same = app.run(`
+      window.__f = new File([new Uint8Array([9,9,9])], 'clip.mp4', { type: 'video/mp4' });
+      window.__p = stripFileMetadata(window.__f).then(r => r === window.__f);
+    `);
+    return app.run('window.__p').then(unchanged => {
+      assert.strictEqual(unchanged, true,
+        'a format the stripper does not parse must be sent through exactly as picked, never silently altered or dropped');
+      app.stop();
+    });
+  });
+
+  test('sendFile strips EXIF before the bytes ever reach the wire', () => {
+    const app = loadApp();
+    app.run(`
+      window.__sent = [];
+      dc = { readyState: 'open', send: function(m){ window.__sent.push(m); } };
+      peerNick = 'Marco';
+      mediaPut = function(){ return Promise.resolve(); };
+      const withExif = new Uint8Array([
+        0xFF,0xD8,
+        0xFF,0xE1,0x00,0x0A, 0x45,0x78,0x69,0x66,0x00,0x00,0xAA,0xBB,
+        0xFF,0xDA, 0x01,0x02,0x03,
+        0xFF,0xD9
+      ]);
+      window.__p = sendFile(new File([withExif], 'foto.jpg', { type: 'image/jpeg' }));
+    `);
+    return app.run('window.__p').then(() => {
+      const start = JSON.parse(app.run('window.__sent[0]'));
+      assert.strictEqual(start.size, 9,
+        'the size announced in file-start must be the stripped size (9 bytes), not the original one with EXIF still in it (20)');
+      const framed = app.run('Array.from(new Uint8Array(window.__sent[1]))');
+      const payload = framed.slice(16); // first 16 bytes are the transfer id
+      assert.deepStrictEqual(payload, [0xFF,0xD8, 0xFF,0xDA,0x01,0x02,0x03, 0xFF,0xD9],
+        'the bytes that actually cross the data channel must already be the metadata-free version');
+      app.stop();
+    });
+  });
+});

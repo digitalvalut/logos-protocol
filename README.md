@@ -56,6 +56,10 @@ anyone — because there is no server handling your conversation at all.
 - Text messages, emoji, voice messages, photos, video and file sharing — files up to
   **512 MB, sent uncompressed** at original quality, several at once by picking or
   dragging them in, each with its own progress bar.
+- **A photo leaves its GPS location and camera model behind, not carries it along.** JPEGs
+  and PNGs have their embedded location, device and software metadata stripped on-device
+  before sending — not by re-compressing the picture, which stays pixel-for-pixel the same,
+  just by cutting out the wrapper data that had nothing to do with the image itself.
 - Audio and video calls, direct between the two browsers, with **screen sharing** —
   swaps the camera track for the screen mid-call, on any browser that supports it, no
   new server and no extra cost involved.
@@ -116,7 +120,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-116 automated tests, each verified by deliberately reintroducing the bug it guards against
+122 automated tests, each verified by deliberately reintroducing the bug it guards against
 and confirming it fails red before the fix — not just written to pass. They run in a
 ~150-line hand-written browser sandbox, not a framework, in keeping with the
 zero-runtime-dependency rule. `node --test` from the repository root.
@@ -174,7 +178,8 @@ la conserva al posto tuo.
 Messaggi, foto, video, chiamate — con **condivisione dello schermo** durante le
 videochiamate — file fino a **512 MB nella qualità originale**, mandabili più alla volta
 trascinandoli dentro, e su Android **condivisibili direttamente da un'altra app** (Foto,
-Gmail, ecc.) senza nemmeno aprire prima Logos. Un **indirizzo permanente** più fino a
+Gmail, ecc.) senza nemmeno aprire prima Logos. Le foto **lasciano indietro la posizione GPS
+e il modello del telefono** prima di partire, senza perdere un pixel di qualità. Un **indirizzo permanente** più fino a
 **8 indirizzi usa e getta**, una **rubrica** che richiama un indirizzo salvato con un
 tocco solo, autodistruzione dei messaggi, **pulizia automatica** opzionale (spenta di
 base), un "colpetto" push discreto per farsi sentire senza tenere l'app aperta, codice QR

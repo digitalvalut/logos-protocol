@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.68` — 23 agosto 2026*
+*Versione descritta: `logos-modifica-3.69` — 24 agosto 2026*
 
 ---
 
@@ -116,6 +116,12 @@ il telefono per davvero (suono sintetizzato + vibrazione, già esistenti per le
 chiamate normali) nell'istante in cui qualcuno chiama l'indirizzo, invece della
 sola scheda silenziosa da notare — zero servizio esterno, si riarma da sola
 tornando sull'app dopo averla lasciata un attimo.
+**Foto ripulite dai metadati prima di partire** (v3.69): un JPEG o PNG scattato
+con il telefono porta con sé GPS, modello del dispositivo, a volte il software
+usato per salvarlo — tolto sul dispositivo, byte a byte, prima dell'invio, senza
+toccare un solo pixel dell'immagine (non è ricompressione: i segmenti EXIF/XMP/
+IPTC vengono ritagliati fuori, i dati dell'immagine passano intatti). Copre
+JPEG e PNG; WebP e HEIC non ancora.
 
 ### Interfaccia e accessibilità
 - **13 lingue** complete (it, en, ar, bn, de, es, fr, hi, id, pt, ru, ur, zh),
@@ -152,7 +158,7 @@ tornando sull'app dopo averla lasciata un attimo.
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **116 test automatici** a ogni pubblicazione, senza installare niente
+- **122 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -430,6 +436,29 @@ solo sotto pressione di memoria (specialmente Safari/iOS) — l'app mostra la
 scritta onesta anche in quel caso, la stessa già usata per un media
 genuinamente perso.
 
+### Metadati fuori dalle foto, senza toccare i pixel (v3.69)
+
+Un JPEG scattato con un telefono porta con sé, invisibile, molto più della
+foto: coordinate GPS precise a pochi metri, modello del dispositivo, a volte
+il software che l'ha salvato. Cifrato, ma leggibile appena aperto dall'altra
+parte — una falla che vanifica il resto dell'architettura, perché rivela chi
+e dove sei anche quando il contenuto resta protetto.
+
+Deliberatamente **non** implementato come ricompressione (che avrebbe
+contraddetto "qualità originale, non compressa", già un vanto dichiarato
+contro WhatsApp/Telegram): `stripJpegMetadata`/`stripPngMetadata` camminano
+byte per byte dentro il contenitore del file — segmenti APPn per il JPEG,
+chunk per il PNG — e ritagliano fuori solo i segmenti di metadati (APP1/EXIF,
+APP13/IPTC, COM per JPEG; tEXt/zTXt/iTXt/eXIf/tIME per PNG), lasciando i dati
+dell'immagine vera e propria byte-identici. Zero perdita di qualità, perché
+non c'è nessuna decodifica/ricodifica dei pixel in mezzo.
+
+Applicato in `sendFile()`, ma solo per i tipi JPEG/PNG — ogni altro file
+prosegue esattamente come prima, senza nemmeno passare dall'unico punto
+asincrono in più che i due formati coperti richiedono (leggere i byte per
+poterli ispezionare). Copre JPEG e PNG; WebP e HEIC restano fuori per ora,
+dichiarato apertamente, non nascosto.
+
 ---
 
 ## 10. Domande utili da fare a un'AI
@@ -452,6 +481,6 @@ cose della §4 che esistono già.
 
 ---
 
-*Dossier generato il 16 agosto 2026, aggiornato il 23 agosto 2026 sulla versione
-`logos-modifica-3.68`.*
+*Dossier generato il 16 agosto 2026, aggiornato il 24 agosto 2026 sulla versione
+`logos-modifica-3.69`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

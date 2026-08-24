@@ -5634,7 +5634,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.68';
+const APP_VERSION = 'logos-modifica-3.69';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6973,9 +6973,88 @@ function blockedBySafety(){
   return true;
 }
 
+/* ============================== away with what a photo says about you ==============================
+   A phone camera writes far more into a JPEG or PNG than the picture itself:
+   GPS coordinates precise to a few metres, the device model, sometimes a
+   camera serial number, in a PNG often the name of the software that saved
+   it. None of that is the message someone meant to send — it is the file
+   quietly saying where you were and what you own, riding along encrypted
+   but still legible the moment it's opened. Stripped here, on-device,
+   before a single byte leaves for the other side.
+
+   This is not the same thing as compression, and deliberately isn't one:
+   nothing about the picture itself — its pixels, its resolution, its JPEG
+   compression — is touched or re-encoded. Only the wrapper segments that
+   carry EXIF/XMP/IPTC metadata are cut out; the image bytes are copied
+   through byte-for-byte. "Full quality, nothing hidden" survives both
+   halves of that sentence. */
+function stripJpegMetadata(bytes){
+  if (bytes.length < 4 || bytes[0] !== 0xFF || bytes[1] !== 0xD8) return bytes; // not a JPEG we recognise
+  const DROP = new Set([0xE1 /* APP1: EXIF, XMP */, 0xED /* APP13: IPTC/Photoshop */, 0xFE /* COM */]);
+  const out = [0xFF, 0xD8];
+  let i = 2;
+  while (i < bytes.length){
+    if (bytes[i] !== 0xFF) return bytes; // malformed for what we expected; leave the original untouched
+    let m = i + 1;
+    while (bytes[m] === 0xFF) m++;
+    const marker = bytes[m];
+    if (marker === 0xD9){ out.push(0xFF, 0xD9); i = m + 1; break; } // EOI
+    if (marker === 0xDA){ // SOS: entropy-coded scan data begins — copy the rest verbatim, unparsed
+      for (let k = i; k < bytes.length; k++) out.push(bytes[k]);
+      i = bytes.length;
+      break;
+    }
+    if (marker === 0x01 || (marker >= 0xD0 && marker <= 0xD7)){ // standalone markers, no length field
+      out.push(0xFF, marker);
+      i = m + 1;
+      continue;
+    }
+    if (m + 2 >= bytes.length) return bytes;
+    const len = (bytes[m + 1] << 8) | bytes[m + 2];
+    const segStart = m + 1, segEnd = segStart + len;
+    if (segEnd > bytes.length) return bytes;
+    if (!DROP.has(marker)) for (let k = m - 1; k < segEnd; k++) out.push(bytes[k]);
+    i = segEnd;
+  }
+  return new Uint8Array(out);
+}
+function stripPngMetadata(bytes){
+  const SIG = [0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A];
+  if (bytes.length < 8 || !SIG.every((b,idx) => bytes[idx] === b)) return bytes;
+  const DROP = new Set(['tEXt','zTXt','iTXt','eXIf','tIME']);
+  const out = Array.from(bytes.slice(0, 8));
+  let i = 8, sawEnd = false;
+  while (i + 8 <= bytes.length){
+    const len = (bytes[i]<<24 | bytes[i+1]<<16 | bytes[i+2]<<8 | bytes[i+3]) >>> 0;
+    const type = String.fromCharCode(bytes[i+4], bytes[i+5], bytes[i+6], bytes[i+7]);
+    const chunkEnd = i + 8 + len + 4; // length + type + data + crc
+    if (chunkEnd > bytes.length) return bytes;
+    if (!DROP.has(type)) for (let k = i; k < chunkEnd; k++) out.push(bytes[k]);
+    i = chunkEnd;
+    if (type === 'IEND'){ sawEnd = true; break; }
+  }
+  if (!sawEnd) return bytes; // no IEND found: something's off about this file, don't risk sending it truncated
+  return new Uint8Array(out);
+}
+async function stripFileMetadata(file){
+  if (file.type !== 'image/jpeg' && file.type !== 'image/png') return file; // other formats: passed through unchanged, not yet covered
+  try{
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const cleaned = file.type === 'image/jpeg' ? stripJpegMetadata(bytes) : stripPngMetadata(bytes);
+    if (cleaned.length === bytes.length && cleaned === bytes) return file; // nothing dropped, no need to reallocate
+    return new File([cleaned], file.name, { type: file.type });
+  }catch(e){ return file; } // parsing went sideways: send the original rather than risk a corrupted file
+}
+
 async function sendFile(file){
   if (!file || !dc || dc.readyState !== 'open') return;
   if (blockedBySafety()) return;
+  /* Only jpeg/png ever need the async detour through arrayBuffer() — every
+     other type (the overwhelming majority of sends) must stay perfectly
+     synchronous up to this point, exactly as before, because the bubble
+     this function paints next is relied on to already exist the instant
+     sendFile() is called without being awaited. */
+  if (file.type === 'image/jpeg' || file.type === 'image/png') file = await stripFileMetadata(file);
   /* The receiving side has refused anything over this since the August audit,
      and it refuses it in silence — there is no reply channel for "no". This
      side never checked, so a file too large was pushed in full, every byte of
@@ -7069,7 +7148,7 @@ async function checkForSharedFiles(){
   if (!pendingSharedFiles.length) return;
   if (dc && dc.readyState === 'open'){
     const files = pendingSharedFiles; pendingSharedFiles = [];
-    sendFilesQueue(files);
+    await sendFilesQueue(files);
   }else{
     toast(fill(t('share.pending','{n} file pronti da mandare — arrivano appena ti colleghi'), { n: pendingSharedFiles.length }));
   }
