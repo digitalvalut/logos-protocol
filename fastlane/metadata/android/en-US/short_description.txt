@@ -1,0 +1,1 @@
+Encrypted peer-to-peer chat and calls. No account, no server, no phone number.

@@ -1,0 +1,62 @@
+Peer-to-peer encrypted chat, voice and video calls, and file sharing — directly
+between two devices, with no account, no phone number, and no server that ever
+sees a message.
+
+Two browsers negotiate a private WebRTC connection and talk to each other
+directly. A small relay only ever helps them find each other and, when an
+unusually strict network requires it, forwards traffic that is already
+encrypted and which it has no key to read. There is no database anywhere
+holding conversations.
+
+<b>How you reach someone</b>
+
+A permanent address (DV-XXXX-XXXX-XXXX) is the SHA-256 hash of a key pair
+generated on the device, so it verifies itself: whoever dials it fetches the
+published key, checks that it really hashes back to the address dialled, and
+only then trusts it. A substituted key produces a different address and is
+rejected. Up to eight throwaway addresses can be held alongside the permanent
+one, each revocable on its own.
+
+You can also connect by a short 6-digit code, a tappable invite link, or by
+scanning a QR code in person.
+
+<b>Knowing who you are really talking to</b>
+
+The first time you connect to someone, both sides see the same three-word
+security code, derived from the actual cryptographic handshake — the same
+principle used by ZRTP-based secure calling. Read them aloud once; if they
+match, nobody is sitting in the middle. That check is bound to the other
+person's cryptographic fingerprint, not to a display name.
+
+<b>What it does</b>
+
+• Text, emoji, voice messages, photos, video and files up to 512 MB, sent
+  uncompressed at original quality
+• Photos have their embedded GPS location, device model and software metadata
+  stripped on-device before sending, without re-encoding the image
+• Audio and video calls with screen sharing
+• A sealed letter for someone who does not answer, held up to 7 days, openable
+  only by the address owner
+• Self-destructing messages and optional automatic cleanup of old conversations
+• Interface in 13 languages, with right-to-left layout for Arabic and Urdu
+
+<b>Honest limits</b>
+
+Both people need to be online at the same time for a live conversation. That is
+the price of having no server, and it is architectural, not a bug.
+
+Your IP address is visible to the person you connect to, as it is in any direct
+peer-to-peer connection.
+
+<b>About this package</b>
+
+This is a Trusted Web Activity: a thin installable wrapper around the web
+application, which is the real program and lives in the same repository. It
+adds an icon and full-screen display and nothing else — no push notifications,
+no extra permissions, no service that is not already part of the web app.
+
+Every cryptographic primitive comes from the browser's own Web Crypto API. No
+third-party script, library or CDN resource is loaded at any point.
+
+Built by Associazione di Promozione Sociale DigitalValut, an Italian nonprofit.
+Free forever, with no account and nothing to buy.

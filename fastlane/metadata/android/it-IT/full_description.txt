@@ -1,0 +1,66 @@
+Chat cifrata da persona a persona, con chiamate audio e video e invio di file —
+direttamente fra due dispositivi, senza account, senza numero di telefono e
+senza nessun server che veda mai un messaggio.
+
+I due browser stabiliscono una connessione WebRTC privata e si parlano
+direttamente. Un piccolo ponte serve solo a farli incontrare all'inizio e, dove
+una rete particolarmente chiusa lo impone, a inoltrare traffico già cifrato di
+cui non possiede la chiave. Non esiste nessun database, da nessuna parte, che
+conservi le conversazioni.
+
+<b>Come ci si fa raggiungere</b>
+
+L'indirizzo permanente (DV-XXXX-XXXX-XXXX) è l'impronta SHA-256 di una coppia di
+chiavi generata sul dispositivo, quindi si verifica da solo: chi lo compone
+scarica la chiave pubblicata, controlla che corrisponda davvero all'indirizzo
+chiamato, e solo allora si fida. Una chiave sostituita produce un indirizzo
+diverso e viene rifiutata. Accanto a quello permanente si possono tenere fino a
+otto indirizzi usa e getta, ognuno cancellabile per conto suo.
+
+Ci si può collegare anche con un codice di sei cifre, un link d'invito o
+inquadrando un codice QR di persona.
+
+<b>Sapere davvero con chi si sta parlando</b>
+
+Alla prima connessione con qualcuno, entrambi vedete lo stesso codice di
+sicurezza di tre parole, generato dalla connessione crittografica reale — lo
+stesso principio delle chiamate sicure basate su ZRTP. Ditevele a voce una
+volta: se coincidono, nessuno si è messo in mezzo. Quella conferma resta legata
+all'impronta crittografica della persona, non al nome che si è scelta.
+
+<b>Cosa fa</b>
+
+• Testo, emoji, messaggi vocali, foto, video e file fino a 512 MB, mandati non
+  compressi nella qualità originale
+• Le foto vengono ripulite sul dispositivo da posizione GPS, modello del
+  telefono e software prima di partire, senza ricomprimere l'immagine
+• Chiamate audio e video con condivisione dello schermo
+• Una lettera sigillata per chi non risponde, conservata fino a 7 giorni e
+  apribile solo da chi possiede quell'indirizzo
+• Messaggi che si autodistruggono e pulizia automatica opzionale delle
+  conversazioni vecchie
+• Interfaccia in 13 lingue, con impaginazione da destra a sinistra per arabo e
+  urdu
+
+<b>I limiti, detti chiaramente</b>
+
+Per una conversazione dal vivo servono entrambi online nello stesso momento. È
+il prezzo del non avere un server, ed è una scelta di architettura, non un
+difetto.
+
+Il tuo indirizzo IP è visibile alla persona con cui ti colleghi, come in
+qualunque connessione diretta fra due dispositivi.
+
+<b>Su questo pacchetto</b>
+
+È una Trusted Web Activity: un involucro installabile sottile attorno
+all'applicazione web, che è il programma vero e vive nello stesso repository.
+Aggiunge un'icona e la visualizzazione a schermo intero, e nient'altro —
+nessuna notifica push, nessun permesso in più, nessun servizio che non faccia
+già parte dell'applicazione web.
+
+Ogni primitiva crittografica arriva dalle API Web Crypto del browser stesso.
+Nessuno script, libreria o risorsa di terze parti viene mai caricato.
+
+Realizzata dall'Associazione di Promozione Sociale DigitalValut, ente del terzo
+settore italiano. Gratis per sempre, senza account e senza nulla da comprare.

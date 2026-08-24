@@ -1,0 +1,5 @@
+First release on F-Droid.
+
+Installable wrapper around the DigitalValut Logos web app: peer-to-peer
+encrypted chat, calls and file sharing with no account and no server holding
+messages.

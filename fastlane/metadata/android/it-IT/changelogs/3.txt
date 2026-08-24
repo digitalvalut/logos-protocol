@@ -1,0 +1,5 @@
+Prima pubblicazione su F-Droid.
+
+Involucro installabile attorno all app web DigitalValut Logos: chat cifrata da
+persona a persona, chiamate e invio di file, senza account e senza nessun
+server che conservi i messaggi.
