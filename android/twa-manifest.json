@@ -1,0 +1,62 @@
+{
+  "packageId": "io.github.digitalvalut.logos",
+  "host": "digitalvalut.github.io",
+  "name": "DigitalValut Logos",
+  "launcherName": "DV Logos",
+  "display": "standalone",
+  "themeColor": "#0B0D10",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#0B0D10",
+  "enableNotifications": false,
+  "startUrl": "/logos-protocol/modifica.html",
+  "iconUrl": "https://digitalvalut.github.io/logos-protocol/modifica-icon-512.png",
+  "maskableIconUrl": "https://digitalvalut.github.io/logos-protocol/modifica-icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "3",
+  "appVersionCode": 3,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://digitalvalut.github.io/logos-protocol/modifica-manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://digitalvalut.github.io/logos-protocol/modifica.html",
+  "minSdkVersion": 21,
+  "shareTarget": {
+    "action": "https://digitalvalut.github.io/logos-protocol/modifica.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "sharedFiles",
+          "accept": [
+            "*/*"
+          ]
+        }
+      ]
+    }
+  },
+  "orientation": "any",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [],
+  "appVersion": "3"
+}
