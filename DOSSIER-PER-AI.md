@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.70` — 25 agosto 2026*
+*Versione descritta: `logos-modifica-3.71` — 25 agosto 2026*
 
 ---
 
@@ -149,6 +149,16 @@ JPEG e PNG; WebP e HEIC non ancora.
   fosse una risposta valida, e nessun tentativo successivo ne aveva più uno
 - **Rispetta un "rallenta" (429) del Worker** invece di continuare a insistere
   allo stesso ritmo
+- **Due contatti che si leggono uguali non sono piu indistinguibili (v3.71)**:
+  chiunque poteva presentarsi come "Mамма" (con lettere cirilliche) e comparire
+  in rubrica come una riga identica a quella vera — e **sopra** di essa, perche
+  la piu recente va in cima. Costo dell'attacco: mandare un saluto. Ora i nomi
+  vengono confrontati su una forma normalizzata (NFKC, invisibili rimossi,
+  omoglifi cirillici/greci ricondotti al latino), **solo per il confronto e mai
+  per la memorizzazione** — il nome di chi si chiama davvero cosi resta scritto
+  come lo ha scelto. E dove due nomi collidono, la rubrica dice **quale dei due
+  e stato verificato a voce**, usando le tre parole che l'app gia ricorda per
+  impronta: "(2)" dice che sono due, non quale sia tua madre.
 - **Una connessione abbandonata non rende piu sordo il telefono (v3.70)**: una
   procedura interrotta da un'eccezione lasciava la connessione in stato `new` —
   ne chiusa ne fallita — e `busyWithSomeone()` la leggeva come "occupato" per
@@ -168,7 +178,7 @@ JPEG e PNG; WebP e HEIC non ancora.
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **127 test automatici** a ogni pubblicazione, senza installare niente
+- **133 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -492,5 +502,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 25 agosto 2026 sulla versione
-`logos-modifica-3.70`.*
+`logos-modifica-3.71`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

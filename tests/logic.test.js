@@ -2092,3 +2092,103 @@ test.describe('una connessione abbandonata non rende sordo il telefono', () => {
     });
   });
 });
+
+/* ------------------------------------------------------------------------
+   A4 — due contatti identici a vedersi, e l'impostore in cima.
+
+   La difesa costruita prima confrontava le impronte, quindi "Mamma" e "Mамма"
+   (con lettere cirilliche) diventavano correttamente due persone diverse. E
+   l'utente vedeva due righe identiche. Il suffisso di disambiguazione — che
+   esisteva gia — scattava solo per nomi uguali byte per byte, quindi una sola
+   lettera scambiata gli passava accanto, e `unshift` metteva il nuovo arrivato
+   in cima: l'impostore sopra la voce vera, indistinguibile.
+
+   Costo dell'attacco: mandare un saluto. Pubblico su cui funziona: esattamente
+   quello dichiarato dall'app.
+   ------------------------------------------------------------------------ */
+test.describe('due nomi che sembrano lo stesso nome', () => {
+
+  const OMOGLIFO = 'Mаmmа';        /* Mamma con due 'a' cirilliche */
+  const INVISIBILE = 'Mam​ma';           /* Mamma con uno spazio a larghezza zero */
+
+  test('riconosce come uguali i nomi che si leggono uguali', () => {
+    const app = loadApp();
+    const uguali = app.run(`[
+      nickSkeleton('Mamma') === nickSkeleton('${OMOGLIFO}'),
+      nickSkeleton('Mamma') === nickSkeleton('${INVISIBILE}'),
+      nickSkeleton('Avvocato') === nickSkeleton('Аvvocato')
+    ]`);
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(' + JSON.stringify(uguali) + ')')), [true,true,true],
+      'una sola lettera scambiata non deve bastare a farsi passare per un altro');
+    app.stop();
+  });
+
+  test('NON confonde due nomi genuinamente diversi', () => {
+    /* Il lato da non rompere: se questo cede, la rubrica di chiunque diventa
+       un elenco di finti duplicati e l'avviso perde ogni significato. */
+    const app = loadApp();
+    assert.strictEqual(app.run("nickSkeleton('Mamma') === nickSkeleton('Papa')"), false);
+    assert.strictEqual(app.run("nickSkeleton('Anna') === nickSkeleton('Anno')"), false);
+    app.stop();
+  });
+
+  test('un nome scritto in un altro alfabeto resta scritto com era', () => {
+    /* Si normalizza per CONFRONTARE, mai per salvare: il nome vero di una
+       persona puo legittimamente essere in cirillico, e riscriverglielo
+       sarebbe un torto suo. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('${OMOGLIFO}', 'fp-uno', null, null);
+    `);
+    assert.strictEqual(app.run('loadContacts()[0].nick'), OMOGLIFO,
+      'il nome memorizzato deve restare quello che la persona ha scelto');
+    app.stop();
+  });
+
+  test("l'impostore non puo piu presentarsi con un nome identico a vedersi", () => {
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Mamma', 'fp-vera', null, null);
+      touchContact('${OMOGLIFO}', 'fp-attaccante', null, null);
+    `);
+    const nomi = JSON.parse(app.run('JSON.stringify(loadContacts().map(function(c){ return c.nick; }))'));
+    assert.strictEqual(nomi.length, 2, 'restano due persone diverse: l\'impronta e cio che conta');
+    assert.ok(nomi.some(n => /\(2\)/.test(n)),
+      'il secondo che rivendica lo stesso nome deve portarne il segno: senza, le due righe si leggono identiche');
+    app.stop();
+  });
+
+  test('la rubrica dice quale dei due e stato verificato a voce', () => {
+    /* La parte che protegge davvero: "(2)" dice che sono due, non quale sia
+       tua madre. Solo le tre parole dette a voce lo dicono, e l'app se le
+       ricorda gia per impronta. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      writeSafetyRec(safetyKeyFp('fp-vera'), 'parola parola parola');   /* verificata a voce */
+      touchContact('Mamma', 'fp-vera', null, null);
+      touchContact('${OMOGLIFO}', 'fp-attaccante', null, null);
+      renderContacts();
+    `);
+    const html = app.run("$('contactsList').innerHTML");
+    assert.match(html, /ctrust ok/,   'la voce verificata deve essere riconoscibile');
+    assert.match(html, /ctrust bad/,  'quella mai verificata deve essere segnalata');
+    app.stop();
+  });
+
+  test('con un solo contatto non compare nessun avviso', () => {
+    /* Un avviso su ogni riga sarebbe tappezzeria entro una settimana, e il
+       giorno che conta nessuno lo vedrebbe. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Mamma', 'fp-vera', null, null);
+      renderContacts();
+    `);
+    assert.doesNotMatch(app.run("$('contactsList').innerHTML"), /ctrust/,
+      'senza collisione non c\'e niente da avvertire');
+    app.stop();
+  });
+});

@@ -303,6 +303,13 @@
   .contactrow .info{flex:1;min-width:0}
   .contactrow .info b{font-size:1rem;display:block}
   .contactrow .info span{font-size:0.8125rem;color:var(--faint)}
+  /* Shown only on the rows whose names read the same, so it is never wallpaper:
+     on the day it appears it is the only thing answering "which of these two is
+     actually her?". Never colour alone — the words carry it too, for anyone who
+     cannot tell green from red. */
+  .contactrow .ctrust{display:block;font-style:normal;font-weight:600;margin-top:2px}
+  .contactrow .ctrust.ok{color:var(--ok)}
+  .contactrow .ctrust.bad{color:var(--bad)}
   .contactrow .rm{background:none;border:none;color:var(--faint);font-size:1rem;padding:6px;cursor:pointer;flex-shrink:0}
   .contactrow .rm:hover{color:var(--bad)}
 

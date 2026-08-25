@@ -73,6 +73,8 @@ let CURLANG = 'it';
 const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, id: {}, pt: {}, ru: {}, ur: {}, zh: {} };
 
 Object.assign(I18N.en, {
+"contacts.sameLookVerified":"verified by voice",
+"contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
 "install.btn":"Install",
 "home.title":"Talk to anyone, wherever they are",
@@ -249,6 +251,8 @@ Object.assign(I18N.en, {
 "media.stepsAndroidApp":"Go back to your phone's Home screen|Press and hold the <b>DigitalValut Logos</b> icon|Tap <b>App info</b> (or the ⓘ icon)|Tap <b>Permissions</b>, then turn on <b>Microphone</b> and <b>Camera</b>|Reopen the app"
 });
 Object.assign(I18N.it, {
+"contacts.sameLookVerified":"verificato a voce",
+"contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
 "install.btn":"Installa",
 "home.title":"Parla con chi vuoi, ovunque sia",
@@ -426,6 +430,8 @@ Object.assign(I18N.it, {
 });
 
 Object.assign(I18N.fr, {
+"contacts.sameLookVerified":"vérifié de vive voix",
+"contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
 "install.btn":"Installer",
 "home.title":"Parlez à qui vous voulez, où qu'il soit",
@@ -595,6 +601,8 @@ Object.assign(I18N.fr, {
 });
 
 Object.assign(I18N.de, {
+"contacts.sameLookVerified":"mündlich bestätigt",
+"contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
 "install.btn":"Installieren",
 "home.title":"Sprich mit jedem, wo immer er ist",
@@ -764,6 +772,8 @@ Object.assign(I18N.de, {
 });
 
 Object.assign(I18N.es, {
+"contacts.sameLookVerified":"verificado de viva voz",
+"contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
 "install.btn":"Instalar",
 "home.title":"Habla con quien quieras, esté donde esté",
@@ -933,6 +943,8 @@ Object.assign(I18N.es, {
 });
 
 Object.assign(I18N.pt, {
+"contacts.sameLookVerified":"verificado por voz",
+"contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
 "install.btn":"Instalar",
 "home.title":"Fale com quem quiser, onde quer que esteja",
@@ -1102,6 +1114,8 @@ Object.assign(I18N.pt, {
 });
 
 Object.assign(I18N.ru, {
+"contacts.sameLookVerified":"подтверждён голосом",
+"contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
 "install.btn":"Установить",
 "home.title":"Говорите с кем хотите, где бы они ни были",
@@ -1271,6 +1285,8 @@ Object.assign(I18N.ru, {
 });
 
 Object.assign(I18N.zh, {
+"contacts.sameLookVerified":"已通过语音验证",
+"contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
 "install.btn":"安装",
 "home.title":"随时随地，和你想聊的人聊天",
@@ -1440,6 +1456,8 @@ Object.assign(I18N.zh, {
 });
 
 Object.assign(I18N.ar, {
+"contacts.sameLookVerified":"تم التحقق صوتيًّا",
+"contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
 "install.btn":"تثبيت",
 "home.title":"تحدّث مع من تريد، أينما كان",
@@ -1609,6 +1627,8 @@ Object.assign(I18N.ar, {
 });
 
 Object.assign(I18N.ur, {
+"contacts.sameLookVerified":"زبانی تصدیق شدہ",
+"contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
 "install.btn":"انسٹال کریں",
 "home.title":"جس سے چاہیں بات کریں، وہ جہاں بھی ہو",
@@ -1778,6 +1798,8 @@ Object.assign(I18N.ur, {
 });
 
 Object.assign(I18N.hi, {
+"contacts.sameLookVerified":"आवाज़ से सत्यापित",
+"contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
 "install.btn":"इंस्टॉल करें",
 "home.title":"जिससे चाहें बात करें, वे कहीं भी हों",
@@ -1947,6 +1969,8 @@ Object.assign(I18N.hi, {
 });
 
 Object.assign(I18N.bn, {
+"contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা",
+"contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
 "install.btn":"ইনস্টল করুন",
 "home.title":"যার সাথে চান কথা বলুন, তিনি যেখানেই থাকুন",
@@ -2116,6 +2140,8 @@ Object.assign(I18N.bn, {
 });
 
 Object.assign(I18N.id, {
+"contacts.sameLookVerified":"diverifikasi lewat suara",
+"contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
 "install.btn":"Pasang",
 "home.title":"Bicara dengan siapa pun yang Anda mau, di mana pun mereka berada",
@@ -4023,15 +4049,52 @@ function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.
    Two different fingerprints are two different people, whatever they call
    themselves. The newcomer is filed under a name that says so, and the record
    already on file is left exactly as it was. */
+
+/* ---------------- names that only look the same ----------------
+   The defence above compares fingerprints, so "Mamma" and "Mамма" — the second
+   with Cyrillic letters — correctly become two separate people. And the person
+   reading the list sees two identical rows.
+
+   The disambiguating suffix only ever fired for names identical byte for byte,
+   so a single swapped letter walked straight past it, and `unshift` put the
+   newcomer at the top: the impostor above the real entry, indistinguishable.
+   Costing an attacker nothing but a hello.
+
+   Normalised for the *comparison* only — never for storage, because someone's
+   real name legitimately contains Cyrillic, Greek or Arabic and rewriting it
+   would be its own kind of insult. NFKC folds the compatibility forms
+   (fullwidth, ligatures); the invisible characters are removed outright, since
+   they have no business in a display name and exist here only to defeat exactly
+   this check; then the handful of letters that genuinely look Latin are mapped
+   to what they impersonate. */
+const CONFUSABLE_FROM = 'аеорсухіјѕһԁԛԝАВЕКМНОРСТУХЅІЈЈαορυνωАΒΕΖΗΙΚΜΝΟΡΤΥΧıɩⅰⅼ';
+const CONFUSABLE_TO   = 'aeopcyxijshdqwABEKMHOPCTYXSIJJaopuvwABEZHIKMNOPTYXiil1';
+function nickSkeleton(nick){
+  let s = String(nick == null ? '' : nick);
+  try{ s = s.normalize('NFKC'); }catch(e){}
+  /* zero-width joiners/spaces and the bidirectional overrides: invisible on
+     screen, decisive to a byte comparison */
+  s = s.replace(/[​-‏‪-‮⁠-⁤⁦-⁩﻿]/g, '');
+  let out = '';
+  for (const ch of s){
+    const i = CONFUSABLE_FROM.indexOf(ch);
+    out += i === -1 ? ch : CONFUSABLE_TO[i];
+  }
+  return out.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
 function touchContact(nick, fp, push, addr){
   if (!nick) return;
   let list = loadContacts();
-  let prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
+  /* compared on the skeleton, so a swapped Cyrillic letter no longer slips past
+     the suffix that exists precisely to make a second claimant visible */
+  const skel = nickSkeleton(nick);
+  let prev = list.find(c => nickSkeleton(c.nick) === skel);
   if (prev && prev.fp && fp && prev.fp !== fp){
     let n = 2;
-    while (list.some(c => c.nick.toLowerCase() === (nick + ' (' + n + ')').toLowerCase() && c.fp !== fp)) n++;
+    while (list.some(c => nickSkeleton(c.nick) === nickSkeleton(nick + ' (' + n + ')') && c.fp !== fp)) n++;
     nick = nick + ' (' + n + ')';
-    prev = list.find(c => c.nick.toLowerCase() === nick.toLowerCase());
+    prev = list.find(c => nickSkeleton(c.nick) === nickSkeleton(nick));
   }
   const keepFp = fp || (prev && prev.fp) || null;
   /* `push` arrives fresh on every 'hello', which is exactly right: if someone
@@ -4069,12 +4132,38 @@ function relTime(ts){
 function renderContacts(){
   const list = loadContacts();
   $('contactsCard').classList.toggle('hide', list.length === 0);
-  $('contactsList').innerHTML = list.map(c => `
+  /* Two entries that read the same on screen are the whole point of the
+     impersonation, so the suffix alone was never going to be enough: "Mamma"
+     and "Mamma (2)" says there are two of them, not which one is your mother.
+     The app already knows something no impostor can forge — whether the three
+     words were ever said out loud for that fingerprint — and that is the answer
+     to the only question worth asking here. Shown only where two names collide,
+     deliberately: a badge on every row would be background noise within a week,
+     and the one time it mattered nobody would see it. */
+  /* Grouped on the name *without* the disambiguating suffix, or the suffix would
+     defeat the very check that produced it: once the newcomer is filed as
+     "Mamma (2)" the two skeletons no longer match, and the warning would be
+     missing from the single case it exists for — found by the test, not by
+     reading. And "(2)" on its own reads to a non-technical person as "her second
+     phone", not "somebody else entirely". */
+  const groupKey = c => nickSkeleton(String(c.nick).replace(/\s*\(\d+\)\s*$/, ''));
+  const seen = Object.create(null);
+  for (const c of list){ const k = groupKey(c); seen[k] = (seen[k] || 0) + 1; }
+  $('contactsList').innerHTML = list.map(c => {
+    let mark = '';
+    if (seen[groupKey(c)] > 1){
+      const ok = !!(c.fp && readSafetyRec(safetyKeyFp(c.fp)));
+      mark = ok
+        ? `<em class="ctrust ok">${esc(t('contacts.sameLookVerified','verificato a voce'))}</em>`
+        : `<em class="ctrust bad">${esc(t('contacts.sameLookUnverified','mai verificato — nome quasi identico a un altro'))}</em>`;
+    }
+    return `
     <div class="contactrow" data-nick="${esc(c.nick)}">
       <div class="av">${esc(initials(c.nick))}</div>
-      <div class="info"><b>${esc(c.nick)}</b><span>${esc(relTime(c.lastSeen))}</span></div>
+      <div class="info"><b>${esc(c.nick)}</b><span>${esc(relTime(c.lastSeen))}${mark}</span></div>
       <button class="rm" data-rm="${esc(c.nick)}" title="Rimuovi" aria-label="Rimuovi">×</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 $('contactsList').addEventListener('click', ev => {
   const rm = ev.target.closest('[data-rm]');
@@ -5671,7 +5760,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.70';
+const APP_VERSION = 'logos-modifica-3.71';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
