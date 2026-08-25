@@ -44,3 +44,7 @@ CLASSIFICA-SICUREZZA-*.md
 # pubblicare aggiornamenti che i telefoni accettano come autentici.
 *.keystore
 *.jks
+
+# Gli APK compilati: vivono nelle Release di GitHub, non nella storia di git.
+*.apk
+*.idsig
