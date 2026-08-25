@@ -2003,3 +2003,92 @@ test.describe('taking the GPS and the device model back out of a photo', () => {
     });
   });
 });
+
+/* ------------------------------------------------------------------------
+   A2 — la sordità per abbandono.
+
+   Una procedura interrotta da un'eccezione lasciava la connessione in stato
+   'new': né chiusa né fallita, quindi `busyWithSomeone()` la leggeva come
+   "occupato" e il dispositivo restava irraggiungibile a chiunque, per sempre,
+   fino a un ricaricamento. Invisibile a chi lo subisce — vede un'app normale —
+   e innescabile da remoto da chi gli parla.
+
+   È la quarta volta che questo progetto viene morso dalla stessa classe di
+   difetto (v3.35, v3.36, v3.37, e questa). Per questo la correzione non è solo
+   una toppa nei catch: ogni connessione viene marcata alla nascita, nell'unico
+   punto da cui passano tutte, e l'età da sola basta a riconoscere un tentativo
+   abbandonato — anche in codice che nessuno ha ancora scritto.
+   ------------------------------------------------------------------------ */
+test.describe('una connessione abbandonata non rende sordo il telefono', () => {
+
+  test('un handshake davvero in corso continua a bloccarne un secondo', () => {
+    /* Il lato da non rompere: se questo cede, due tentativi si calpestano a
+       vicenda e la correzione sarebbe peggiore del difetto. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'new';
+      pc.__bornAt = Date.now();          /* nato adesso: si sta costruendo davvero */
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), true,
+      'una connessione appena creata sta legittimamente lavorando e deve bloccare');
+    app.stop();
+  });
+
+  test("una 'new' più vecchia di qualunque costruzione onesta smette di bloccare", () => {
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'new';
+      pc.__bornAt = Date.now() - (STALE_BUILD_MS + 1000);
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), false,
+      'dopo tre minuti in "new" non si sta costruendo piu niente: era un tentativo abbandonato');
+    app.stop();
+  });
+
+  test('la soglia lascia margine alla piu lenta delle procedure legittime (45s)', () => {
+    /* La costante non è un numero a caso: se qualcuno la abbassasse sotto i 45
+       secondi di tryAutoReconnectInner, taglierebbe corto una riconnessione
+       lecita. Il test esiste per accorgersene. */
+    const app = loadApp();
+    assert.ok(app.run('STALE_BUILD_MS') >= 45000 * 2,
+      'la soglia deve stare almeno al doppio della piu lunga costruzione che arriva a quel controllo');
+    app.stop();
+  });
+
+  test('ogni connessione viene marcata alla nascita, senza che nessuno se ne ricordi', () => {
+    /* La proprietà che rende la correzione strutturale invece che una toppa:
+       sta nella fabbrica, quindi vale anche per procedure non ancora scritte. */
+    const app = loadApp();
+    app.run(`
+      myIdentity = function(){ return Promise.resolve(null); };
+      fetchIceServers = function(){ return Promise.resolve([]); };
+      window.__p = newPeerConnection();
+    `);
+    return app.run('window.__p').then(conn => {
+      const stamped = app.run('window.__p.then(function(c){ return typeof c.__bornAt; })');
+      return stamped.then(t => {
+        assert.strictEqual(t, 'number',
+          'senza marchio alla nascita l\'eta non e leggibile e il paracadute non esiste');
+        app.stop();
+      });
+    });
+  });
+
+  test('accettare una chiamata che fallisce lascia il telefono raggiungibile', () => {
+    /* Stessa iniezione di guasto gia usata per il pump abbandonato: il guasto
+       arriva dopo che la connessione e stata creata e messa nel globale. */
+    const app = loadApp();
+    app.run(`
+      addrPending = { msg: { sdp: 'v=0', rid: 'r1' }, sec: { key:{}, seed:'s' }, slot: 0 };
+      sealWith = function(){ throw new Error('guasto dopo la creazione della connessione'); };
+      window.__p = acceptAddrCall().catch(function(){});
+    `);
+    return app.run('window.__p').then(() => new Promise(r => setTimeout(r, 20))).then(() => {
+      assert.strictEqual(app.run('busyWithSomeone()'), false,
+        'dopo un fallimento il dispositivo deve tornare raggiungibile subito, non fra tre minuti');
+      app.stop();
+    });
+  });
+});

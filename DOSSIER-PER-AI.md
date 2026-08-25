@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.69` — 24 agosto 2026*
+*Versione descritta: `logos-modifica-3.70` — 25 agosto 2026*
 
 ---
 
@@ -149,6 +149,16 @@ JPEG e PNG; WebP e HEIC non ancora.
   fosse una risposta valida, e nessun tentativo successivo ne aveva più uno
 - **Rispetta un "rallenta" (429) del Worker** invece di continuare a insistere
   allo stesso ritmo
+- **Una connessione abbandonata non rende piu sordo il telefono (v3.70)**: una
+  procedura interrotta da un'eccezione lasciava la connessione in stato `new` —
+  ne chiusa ne fallita — e `busyWithSomeone()` la leggeva come "occupato" per
+  sempre, rendendo il dispositivo irraggiungibile a chiunque fino a un
+  ricaricamento. Invisibile a chi lo subisce, innescabile da remoto. Corretto in
+  due modi insieme: ogni connessione viene **marcata alla nascita** nell'unico
+  punto da cui passano tutte (`newPeerConnection`), cosi nessuna procedura deve
+  ricordarsi di nulla e una `new` piu vecchia di 3 minuti smette da sola di
+  bloccare; e i due `catch` che potevano lasciarla li ora la chiudono subito,
+  perche il recupero sia immediato invece che fra tre minuti.
 - **Un pulsante di uscita quando il collegamento vacilla**: se lo stato
   `disconnected` non si risolve da solo entro qualche secondo (tipico di un
   cambio rete a metà chiamata), offre subito la stessa via d'uscita già
@@ -158,7 +168,7 @@ JPEG e PNG; WebP e HEIC non ancora.
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **122 test automatici** a ogni pubblicazione, senza installare niente
+- **127 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -481,6 +491,6 @@ cose della §4 che esistono già.
 
 ---
 
-*Dossier generato il 16 agosto 2026, aggiornato il 24 agosto 2026 sulla versione
-`logos-modifica-3.69`.*
+*Dossier generato il 16 agosto 2026, aggiornato il 25 agosto 2026 sulla versione
+`logos-modifica-3.70`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

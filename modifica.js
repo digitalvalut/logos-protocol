@@ -3222,6 +3222,15 @@ async function newPeerConnection(){
   const config = { iceServers };
   if (cert) config.certificates = [cert];
   const conn = new RTCPeerConnection(config);
+  /* Stamped here, at the one place every connection is born, precisely so that
+     nothing anywhere else has to remember to do it. An attempt abandoned by an
+     exception stays in state 'new' — neither closed nor failed — and used to
+     read as "busy" for good, which is the deafness this project has now been
+     bitten by four separate times. Age is the one signal that survives a
+     forgotten cleanup: a build still in 'new' minutes later is not a build any
+     more, whatever the code that started it did or failed to do. See
+     busyWithSomeone(). */
+  conn.__bornAt = Date.now();
   /* the dot follows the connection rather than a guess about it */
   conn.addEventListener('connectionstatechange', () => onConnectionStateChange(conn));
   return conn;
@@ -4956,6 +4965,11 @@ let addrPollTimer = null, addrPending = null;
 /* the connection an invite is merely *waiting* on, "we are the caller", and
    "a known contact is being let in right now" */
 let quickSharePc = null, dialing = false, autoAccepting = false;
+/* Four times the longest build that can actually reach the state check in
+   busyWithSomeone() (auto-reconnect, 45s). Generous on purpose: cutting a slow
+   handshake short would be a regression, while waiting three minutes to notice
+   an abandoned one only matters when something has already gone wrong. */
+const STALE_BUILD_MS = 180000;
 /* the connection a manually-created invite (btnCreate) is waiting on someone
    to paste an answer back into — distinct from quickSharePc, which waits on a
    *typed* code instead of a pasted one. btnConnectAsA checks this before
@@ -4994,7 +5008,21 @@ function busyWithSomeone(){
      nothing: attempts that failed or were closed used to sit in this variable
      indefinitely, and every one of them was a permanently deaf address */
   const st = pc.connectionState;
-  return st !== 'closed' && st !== 'failed';
+  if (st === 'closed' || st === 'failed') return false;
+  /* The same rule, extended to the one state that had no way of expiring.
+     'new' is legitimate while a handshake is being built — but only for as long
+     as building one can honestly take. The two procedures that hold 'new' for
+     minutes (dialling an address, an invite left waiting) never reach this line:
+     `dialing` and `quickSharePc` above return before it. Everything that does
+     reach it is done inside 45 seconds at the very worst, so a connection still
+     sitting in 'new' after three minutes was abandoned by an exception, and
+     treating it as "busy" is what shut the whole device off to everyone.
+     Deliberately a backstop, not the repair: the catches below close their own
+     connection so recovery is immediate rather than three minutes late. This
+     exists for the failure nobody has thought of yet — including in code not
+     written. */
+  if (st === 'new' && pc.__bornAt && Date.now() - pc.__bornAt > STALE_BUILD_MS) return false;
+  return true;
 }
 
 async function addrCheckOnce(){
@@ -5117,7 +5145,13 @@ async function acceptAddrCall(){
     watchHandshakeProgress(myPc, $('quickStatusA'), $('diagQuickA'), pump, ok => {
       if (!ok) hideBigConnectingA(true);
     });
-  }catch(e){ hideBigConnectingA(true); stopStrayPump(myPc); }
+  }catch(e){
+    hideBigConnectingA(true);
+    stopStrayPump(myPc);
+    /* a half-built connection left in the global reads as "busy" and closes this
+       device off to everyone — the same line acceptIncomingAutoOffer has always had */
+    if (pc === myPc){ try{ pc.close(); }catch(_){} pc = null; }
+  }
 }
 
 /* Every connection path below builds a candidate pump inside its `try`, which
@@ -5340,6 +5374,9 @@ async function dialAddress(raw, unvouched){
   }catch(e){
     dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
     stopStrayPump(myPc);
+    /* same reason as everywhere else: a call that threw must not leave this
+       device unreachable to the next person who tries it */
+    if (pc === myPc){ try{ pc.close(); }catch(_){} pc = null; }
     hideBigConnectingB(true);
     showScreen('screenHome');
     setStatus($('addrDialStatus'), t('addr.dialFailed','Non sono riuscito a chiamare questo indirizzo.'), 'bad');
@@ -5634,7 +5671,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.69';
+const APP_VERSION = 'logos-modifica-3.70';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
