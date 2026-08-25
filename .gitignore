@@ -39,3 +39,8 @@ mutanti/
 # ordinato per promettenza è una mappa, non una nota di metodo.
 INVARIANTI.md
 CLASSIFICA-SICUREZZA-*.md
+
+# La chiave che firma l app Android: se finisce online, chiunque puo
+# pubblicare aggiornamenti che i telefoni accettano come autentici.
+*.keystore
+*.jks
