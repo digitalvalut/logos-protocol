@@ -50,13 +50,15 @@ peer-to-peer connection.
 
 <b>About this package</b>
 
-This is a Trusted Web Activity: a thin installable wrapper around the web
-application, which is the real program and lives in the same repository. It
-adds an icon and full-screen display and nothing else — no push notifications,
-no extra permissions, no service that is not already part of the web app.
+The entire application is inside this package. It is not a wrapper that opens a
+website: the app is served from the package's own storage, so what runs on your
+phone is what was built from the source in this repository, and it keeps working
+when the website cannot be reached at all.
 
-Every cryptographic primitive comes from the browser's own Web Crypto API. No
-third-party script, library or CDN resource is loaded at any point.
+It adds no push notifications and no service that is not already part of the
+application. Every cryptographic primitive comes from the system's own Web Crypto
+implementation. No third-party script, library or CDN resource is loaded at any
+point.
 
 Built by Associazione di Promozione Sociale DigitalValut, an Italian nonprofit.
 Free forever, with no account and nothing to buy.

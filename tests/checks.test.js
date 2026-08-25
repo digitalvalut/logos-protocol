@@ -152,11 +152,21 @@ test('the app and its service worker claim the same version', () => {
 /* The app tells people "this copy is at an address the service refuses". It can
    only tell the truth about that while its own list matches the Worker's. */
 
+/* A comment sitting between the brackets is normal and welcome — these lists are
+   exactly the place that deserves explaining. An apostrophe inside one would
+   otherwise read as the start of an origin, so comments come out first. */
+function originsIn(source, name){
+  const body = (source.match(new RegExp(name + '\\s*=\\s*\\[([^\\]]*)\\]')) || [, ''])[1]
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    /* Only at the start of a line, or the two slashes of https:// would take
+       the origin they belong to away with them. */
+    .replace(/(^|\n)[ \t]*\/\/[^\n]*/g, '$1');
+  return [...body.matchAll(/'([^']+)'/g)].map(m => m[1]);
+}
+
 test('the app knows exactly which origins the Worker answers for', () => {
-  const inApp = [...(JS.match(/SERVICE_ORIGINS\s*=\s*\[([^\]]*)\]/) || [,''])[1]
-    .matchAll(/'([^']+)'/g)].map(m => m[1]);
-  const inWorker = [...(WORKER.match(/ALLOWED_ORIGINS\s*=\s*\[([^\]]*)\]/) || [,''])[1]
-    .matchAll(/'([^']+)'/g)].map(m => m[1]);
+  const inApp = originsIn(JS, 'SERVICE_ORIGINS');
+  const inWorker = originsIn(WORKER, 'ALLOWED_ORIGINS');
   assert.ok(inApp.length, 'SERVICE_ORIGINS not found in modifica.js');
   assert.deepStrictEqual(inApp.sort(), inWorker.sort(),
     'the app and the Worker disagree about which origins work');

@@ -1,0 +1,12 @@
+Non e piu un involucro attorno a un sito.
+
+L intera applicazione ora sta dentro il pacchetto e viene aperta dalla memoria
+dell app stessa: quello che gira sul telefono e quello che e stato costruito da
+questo codice, e continua a funzionare anche quando il sito non e raggiungibile
+— che per chi vive sotto censura e la differenza fra avere lo strumento e non
+averlo.
+
+L identita del dispositivo ora vive nella memoria dell app invece che in quella
+del browser, dove poteva essere cancellata quando lo spazio scarseggia: perderla
+significava perdere il proprio indirizzo e il modo in cui i contatti ti
+raggiungono, senza nessun account da recuperare.

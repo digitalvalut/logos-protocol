@@ -53,14 +53,14 @@ qualunque connessione diretta fra due dispositivi.
 
 <b>Su questo pacchetto</b>
 
-È una Trusted Web Activity: un involucro installabile sottile attorno
-all'applicazione web, che è il programma vero e vive nello stesso repository.
-Aggiunge un'icona e la visualizzazione a schermo intero, e nient'altro —
-nessuna notifica push, nessun permesso in più, nessun servizio che non faccia
-già parte dell'applicazione web.
+L'intera applicazione sta dentro questo pacchetto. Non e un involucro che apre un
+sito: l'app viene aperta dalla memoria del pacchetto stesso, quindi cio che gira
+sul tuo telefono e cio che e stato costruito dal codice di questo repository, e
+continua a funzionare anche quando il sito non e raggiungibile.
 
-Ogni primitiva crittografica arriva dalle API Web Crypto del browser stesso.
-Nessuno script, libreria o risorsa di terze parti viene mai caricato.
+Non aggiunge notifiche push ne alcun servizio che non faccia gia parte
+dell'applicazione. Ogni primitiva crittografica arriva dalle API Web Crypto del
+sistema. Nessuno script, libreria o risorsa di terze parti viene mai caricato.
 
 Realizzata dall'Associazione di Promozione Sociale DigitalValut, ente del terzo
 settore italiano. Gratis per sempre, senza account e senza nulla da comprare.

@@ -127,10 +127,18 @@ Every published APK is signed with the same key, whose SHA-256 fingerprint is:
 
 You can check any downloaded file against it with
 `apksigner verify --print-certs <file>.apk` — if the fingerprint differs, the file did not
-come from us, whatever it claims. Being honest about what this package is: today it is a
-thin wrapper that opens the web app above, so it offers nothing the installed web app does
-not already do. It exists for people who want an installable file rather than a browser
-flow.
+come from us, whatever it claims.
+
+What is inside the package: the whole application. It is not a wrapper that opens the
+website — `assets/logos.html` is the single-file build in this repository, served to the
+app's own WebView from `https://appassets.androidplatform.net`, an address Android reserves
+for an app's own bundled files and which nothing outside the app can reach. So the app
+opens and works with the website unreachable, which where the web is filtered is the
+difference between having the tool and not having it.
+
+It is served over `https` rather than opened as a `file://` path for a reason worth stating
+plainly: a `file://` page is not a secure context, and a browser withholds Web Crypto and
+WebRTC from one — an app with neither encryption nor calls, which is to say nothing at all.
 
 ## It is also one single file
 
@@ -215,7 +223,8 @@ o link per collegarsi, e tutta l'interfaccia in **13 lingue**. Si installa su iP
 Android, Windows, Mac e Linux senza alcun account né pagamento. Su Android c'è anche un
 **pacchetto APK firmato** ([ultima versione](https://github.com/digitalvalut/logos-protocol/releases/latest)),
 aggiornabile in automatico con [Obtainium](https://github.com/ImranR98/Obtainium) senza
-passare da nessuno store.
+passare da nessuno store. Quel pacchetto **contiene l'applicazione intera**: non apre il
+sito, lo porta dentro di sé — quindi funziona anche dove il sito è bloccato.
 
 **L'invito aspetta:** mandalo e chiudi pure l'app — chi lo apre, anche il giorno dopo, ti
 fa squillare il telefono, e appena riapri siete connessi. **Il QR si verifica da solo:**

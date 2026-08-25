@@ -4439,8 +4439,12 @@ const MAILBOX_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/mailbox/';
    Kept here as well so the app can say *why* nothing works when it is being
    served from somewhere else — a local test server, or a copy someone put on
    their own host — instead of leaving a spinner running and then blaming the
-   person who was called. Must match ALLOWED_ORIGINS in turn-worker/worker.js. */
-const SERVICE_ORIGINS = ['https://digitalvalut.github.io', 'https://logos.digitalvalut.it'];
+   person who was called. Must match ALLOWED_ORIGINS in turn-worker/worker.js.
+
+   The third is not a site anybody can visit. It is the address the Android app
+   serves itself from, out of its own package, and it has to be listed here or
+   the app would open on a phone and announce that the address system is down. */
+const SERVICE_ORIGINS = ['https://digitalvalut.github.io', 'https://logos.digitalvalut.it', 'https://appassets.androidplatform.net'];
 
 async function myFingerprintHex(){
   const cert = await myIdentity();
@@ -5802,7 +5806,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.72';
+const APP_VERSION = 'logos-modifica-3.73';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

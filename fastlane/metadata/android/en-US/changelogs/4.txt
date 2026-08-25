@@ -1,0 +1,11 @@
+No longer a wrapper around a website.
+
+The entire application is now inside the package and is served from the app's
+own storage, so what runs on the phone is what was built from this source — and
+it keeps working when the website cannot be reached at all, which for people
+under network censorship is the difference between having the tool and not.
+
+The device's identity now lives in the app's own storage rather than the
+browser's, where it could be evicted under storage pressure: losing it meant
+losing your address and every contact's way of reaching you, with no account to
+recover.

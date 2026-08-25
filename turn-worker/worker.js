@@ -60,6 +60,14 @@
 const ALLOWED_ORIGINS = [
   'https://digitalvalut.github.io',
   'https://logos.digitalvalut.it',
+  /* The Android app carries the whole application inside itself and serves it
+     from here — the fixed address Android reserves for an app's own bundled
+     files. It is not a site anybody can register or reach from outside: only
+     the app's own WebView ever answers on it. Served over https on purpose
+     rather than from a file:// path, because a file:// page is not a secure
+     context and the browser switches off Web Crypto and WebRTC there, which is
+     the whole of this app. */
+  'https://appassets.androidplatform.net',
 ];
 const ALLOWED_ORIGIN = ALLOWED_ORIGINS[0]; // what an unknown origin is answered with
 const TURN_TTL_SECONDS = 86400; // 24h — long enough for the longest realistic call
