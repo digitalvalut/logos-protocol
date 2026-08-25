@@ -2192,3 +2192,134 @@ test.describe('due nomi che sembrano lo stesso nome', () => {
     app.stop();
   });
 });
+
+/* ------------------------------------------------------------------------
+   M4-M7 — i reperti MEDIO dell'audit ostile.
+   Nessuno di questi rompe la cifratura o perde messaggi: sono uno stato che
+   mente, una contabilita che non conta, un tetto tarato su una macchina che
+   non esiste e un costo pagato a ogni messaggio per sempre.
+   ------------------------------------------------------------------------ */
+test.describe('le economie invisibili (M4-M7)', () => {
+
+  /* ---- M7 ---- */
+  test('M7 — un pump che muore smette di dire che sta girando', () => {
+    /* Il ciclo era un fire-and-forget senza catch: moriva come rejection non
+       raccolta e `stopped` restava falso, quindi `quickPump` puntava a un pump
+       fermo. Il danno non e il pump morto — e lo stato che mente su di lui. */
+    const app = loadApp();
+    app.run(`
+      slotId = function(){ throw new Error('guasto persistente'); };
+      window.__p = candidatePump(new RTCPeerConnection(), { seed:'s', key:{} }, 'a', 'b');
+    `);
+    return new Promise(r => setTimeout(r, 40)).then(() => {
+      assert.strictEqual(app.run('window.__p.isRunning()'), false,
+        'dopo un\'eccezione il pump deve ammettere di essere fermo, non continuare a dichiararsi vivo');
+      app.stop();
+    });
+  });
+
+  test('M7 — un pump sano continua a dichiararsi vivo', () => {
+    const app = loadApp();
+    app.run(`window.__p = candidatePump(new RTCPeerConnection(), { seed:'s', key:{} }, 'a', 'b');`);
+    assert.strictEqual(app.run('window.__p.isRunning()'), true);
+    app.run('window.__p.stop();');
+    assert.strictEqual(app.run('window.__p.isRunning()'), false, 'e fermarsi deve restare fermarsi');
+    app.stop();
+  });
+
+  /* ---- M4 ---- */
+  test('M4 — i file gia arrivati non escono piu dalla contabilita', () => {
+    /* MAX_INCOMING_TOTAL sorvegliava solo i trasferimenti in corso. Un file
+       finito usciva da li e restava vivo nel suo object URL, invisibile: 40
+       file da 4 MB erano 160 MB che il conteggio giurava fossero zero. */
+    const app = loadApp();
+    assert.strictEqual(app.run('heldMediaBytes()'), 0);
+    app.run(`keepObjectUrl('blob:finto-1', 4 * 1024 * 1024);
+             keepObjectUrl('blob:finto-2', 4 * 1024 * 1024);`);
+    assert.strictEqual(app.run('heldMediaBytes()'), 8 * 1024 * 1024,
+      'cio che e trattenuto in memoria deve comparire nel conteggio');
+    app.run('releaseObjectUrls();');
+    assert.strictEqual(app.run('heldMediaBytes()'), 0, 'e sparire quando viene davvero rilasciato');
+    app.stop();
+  });
+
+  test('M4 — un file rifiutato per mancanza di memoria viene DETTO', () => {
+    /* Era un `return` nudo: il file non arrivava e basta, nessuna bolla,
+       nessuna riga, su nessuno dei due lati. La stessa perdita silenziosa che
+       il lato mittente considera il peggiore dei guasti possibili. */
+    const app = loadApp();
+    app.run(`
+      peerNick = 'Marco';
+      keepObjectUrl('blob:enorme', MAX_INCOMING_TOTAL);   /* memoria gia piena */
+      onDcMessage({ data: JSON.stringify({ type:'file-start', id:'x1', name:'foto.jpg', mime:'image/jpeg', size: 1024 }) });
+    `);
+    assert.strictEqual(app.run('Object.keys(incoming).length'), 0, 'il trasferimento non deve partire');
+    const testo = app.run("$('msgs').children.map(function(r){ return r.textContent || ''; }).join(' ')");
+    assert.match(testo, /foto\.jpg/,
+      'chi riceve deve sapere che un file e stato rifiutato, e quale: il silenzio era il difetto');
+    app.stop();
+  });
+
+  /* ---- M5 ---- */
+  test('M5 — il tetto della memoria e piu basso di quanto un telefono sopporta', () => {
+    /* 768 MB difendevano da un muro che il dispositivo raggiunge molto prima:
+       una scheda su telefono viene uccisa fra i 200 e i 400 MB. */
+    const app = loadApp();
+    const tetto = app.run('MAX_INCOMING_TOTAL');
+    assert.ok(tetto <= 768 * 1024 * 1024, 'non deve mai superare il valore storico');
+    assert.ok(tetto >= 128 * 1024 * 1024, 'ne scendere cosi tanto da rifiutare un uso normale');
+    app.stop();
+  });
+
+  test('M5 — la misura vera batte la forma del dispositivo, in tutti i casi', () => {
+    /* Difetto mio, trovato dalla prova dal vivo e non dai test: `isIOS` conta
+       apposta anche un Mac che dichiara punti di tocco, perche e cosi che un
+       iPad si annuncia da iPadOS 13 in poi. Chiesto per primo, metteva un
+       desktop con 8 GB sullo stesso budget di un telefono. Questo test esiste
+       perche quell'ordine non torni a invertirsi. */
+    const app = loadApp();
+    const f = 'tightMemoryDevice';
+    assert.strictEqual(app.run(f + '(8, true)'),  false, 'un Mac con 8 GB non e un dispositivo stretto, anche se isIOS dice di si');
+    assert.strictEqual(app.run(f + '(4, false)'), true,  '4 GB o meno lo e, misurato');
+    assert.strictEqual(app.run(f + '(undefined, true)'),  true,  'senza misura, un iPhone/iPad e stretto');
+    assert.strictEqual(app.run(f + '(undefined, false)'), false, 'senza misura, un desktop non lo e');
+    app.stop();
+  });
+
+  /* ---- M6 ---- */
+  test('M6 — la cronologia ha un tetto in byte, non solo in voci', () => {
+    /* Trecento voci ordinarie sono qualche decina di kilobyte; trecento voci
+       lunghe sono megabyte, riserializzati per intero a ogni messaggio. */
+    const app = loadApp();
+    app.run(`
+      destructArmed = false; historyBroken = false; lastHistoryTry = 0;
+      for (var i = 0; i < 40; i++) saveToHistory('Marco', new Array(20000).join('x'), true);
+    `);
+    const peso = app.run("(localStorage.getItem(historyKeyNow('Marco')) || '').length");
+    assert.ok(peso <= app.run('MAX_HISTORY_BYTES') * 1.5, 'la cronologia di una conversazione non puo crescere senza limite: ' + peso);
+    assert.ok(app.run("JSON.parse(localStorage.getItem(historyKeyNow('Marco'))).length") >= 1,
+      'e l\'ultimo messaggio deve comunque esserci');
+    app.stop();
+  });
+
+  test('M6 — a memoria piena non si ritenta una scrittura a ogni messaggio', () => {
+    /* Misurato dall'audit: 30ms per messaggio, spesi per una scrittura che
+       poteva solo fallire, per il resto della visita. */
+    const app = loadApp();
+    app.run(`
+      destructArmed = false;
+      window.__tentativi = 0;
+      const vero = localStorage.setItem.bind(localStorage);
+      localStorage.setItem = function(k, v){
+        if (String(k).indexOf('dvlogos-history-') === 0){ window.__tentativi++; throw new Error('quota piena'); }
+        return vero(k, v);
+      };
+      historyBroken = false; lastHistoryTry = 0;
+      for (var i = 0; i < 10; i++) saveToHistory('Marco', 'ciao', true);
+    `);
+    assert.strictEqual(app.run('historyBroken'), true, 'il guasto va comunque registrato');
+    assert.strictEqual(app.run('window.__tentativi'), 1,
+      'dieci messaggi non devono costare dieci scritture destinate a fallire');
+    app.stop();
+  });
+});

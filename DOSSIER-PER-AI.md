@@ -16,7 +16,7 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-*Versione descritta: `logos-modifica-3.71` — 25 agosto 2026*
+*Versione descritta: `logos-modifica-3.72` — 25 agosto 2026*
 
 ---
 
@@ -149,6 +149,18 @@ JPEG e PNG; WebP e HEIC non ancora.
   fosse una risposta valida, e nessun tentativo successivo ne aveva più uno
 - **Rispetta un "rallenta" (429) del Worker** invece di continuare a insistere
   allo stesso ritmo
+- **Le economie invisibili, chiuse (v3.72)**: un file gia ricevuto usciva dalla
+  contabilita della memoria e restava vivo senza essere contato (40 file da 4 MB
+  = 160 MB che il conteggio giurava fossero zero); il tetto di 768 MB difendeva
+  da un muro che un telefono raggiunge fra i 200 e i 400 MB, quindi sui
+  dispositivi che dovevano proteggere non scattava mai — la scheda moriva e
+  basta; a memoria piena ogni messaggio ripagava l'intera riserializzazione
+  della cronologia per una scrittura che poteva solo fallire; e il ciclo che
+  raccoglie gli indirizzi di rete moriva in silenzio lasciando uno stato che
+  diceva il falso. **In piu**, trovato lavorando: il rifiuto di un file per
+  memoria piena era un `return` muto — nessuna bolla, nessuna riga, su nessuno
+  dei due lati, cioe la stessa perdita silenziosa che il lato mittente considera
+  il guasto peggiore di tutti. Ora viene detto.
 - **Due contatti che si leggono uguali non sono piu indistinguibili (v3.71)**:
   chiunque poteva presentarsi come "Mамма" (con lettere cirilliche) e comparire
   in rubrica come una riga identica a quella vera — e **sopra** di essa, perche
@@ -178,7 +190,7 @@ JPEG e PNG; WebP e HEIC non ancora.
 ### Resilienza
 - **File unico**: tutta l'app in un solo HTML da mettere ovunque
 - **Sopravvive senza Cloudflare**: il codice lungo non passa da nessun server
-- **133 test automatici** a ogni pubblicazione, senza installare niente
+- **141 test automatici** a ogni pubblicazione, senza installare niente
 
 ---
 
@@ -502,5 +514,5 @@ cose della §4 che esistono già.
 ---
 
 *Dossier generato il 16 agosto 2026, aggiornato il 25 agosto 2026 sulla versione
-`logos-modifica-3.71`.*
+`logos-modifica-3.72`.*
 *Non contiene chiavi, password né dati personali: può essere condiviso liberamente.*

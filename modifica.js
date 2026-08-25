@@ -73,6 +73,7 @@ let CURLANG = 'it';
 const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, id: {}, pt: {}, ru: {}, ur: {}, zh: {} };
 
 Object.assign(I18N.en, {
+"file.noRoomIn":"“{n}” was not received: this device already has too much held in memory. Reload the page and ask for it again.",
 "contacts.sameLookVerified":"verified by voice",
 "contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
@@ -251,6 +252,7 @@ Object.assign(I18N.en, {
 "media.stepsAndroidApp":"Go back to your phone's Home screen|Press and hold the <b>DigitalValut Logos</b> icon|Tap <b>App info</b> (or the ⓘ icon)|Tap <b>Permissions</b>, then turn on <b>Microphone</b> and <b>Camera</b>|Reopen the app"
 });
 Object.assign(I18N.it, {
+"file.noRoomIn":"«{n}» non è stato ricevuto: questo dispositivo ha già troppa roba aperta in memoria. Ricarica la pagina e fattelo rimandare.",
 "contacts.sameLookVerified":"verificato a voce",
 "contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -430,6 +432,7 @@ Object.assign(I18N.it, {
 });
 
 Object.assign(I18N.fr, {
+"file.noRoomIn":"« {n} » n'a pas été reçu : cet appareil garde déjà trop de choses en mémoire. Rechargez la page et demandez qu'on vous le renvoie.",
 "contacts.sameLookVerified":"vérifié de vive voix",
 "contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
@@ -601,6 +604,7 @@ Object.assign(I18N.fr, {
 });
 
 Object.assign(I18N.de, {
+"file.noRoomIn":"„{n}“ wurde nicht empfangen: Dieses Gerät hält bereits zu viel im Speicher. Lade die Seite neu und lass es dir erneut senden.",
 "contacts.sameLookVerified":"mündlich bestätigt",
 "contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
@@ -772,6 +776,7 @@ Object.assign(I18N.de, {
 });
 
 Object.assign(I18N.es, {
+"file.noRoomIn":"«{n}» no se ha recibido: este dispositivo ya tiene demasiado en memoria. Recarga la página y pide que te lo reenvíen.",
 "contacts.sameLookVerified":"verificado de viva voz",
 "contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
@@ -943,6 +948,7 @@ Object.assign(I18N.es, {
 });
 
 Object.assign(I18N.pt, {
+"file.noRoomIn":"«{n}» não foi recebido: este dispositivo já tem demasiada coisa em memória. Recarrega a página e pede que to enviem de novo.",
 "contacts.sameLookVerified":"verificado por voz",
 "contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
@@ -1114,6 +1120,7 @@ Object.assign(I18N.pt, {
 });
 
 Object.assign(I18N.ru, {
+"file.noRoomIn":"«{n}» не получен: на этом устройстве уже слишком много в памяти. Перезагрузите страницу и попросите отправить снова.",
 "contacts.sameLookVerified":"подтверждён голосом",
 "contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
@@ -1285,6 +1292,7 @@ Object.assign(I18N.ru, {
 });
 
 Object.assign(I18N.zh, {
+"file.noRoomIn":"未能接收「{n}」：此设备内存中已保留过多内容。请重新载入页面并请对方重新发送。",
 "contacts.sameLookVerified":"已通过语音验证",
 "contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
@@ -1456,6 +1464,7 @@ Object.assign(I18N.zh, {
 });
 
 Object.assign(I18N.ar, {
+"file.noRoomIn":"لم يتم استلام «{n}»: هذا الجهاز يحتفظ بالكثير في الذاكرة بالفعل. أعد تحميل الصفحة واطلب إرساله مرة أخرى.",
 "contacts.sameLookVerified":"تم التحقق صوتيًّا",
 "contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
@@ -1627,6 +1636,7 @@ Object.assign(I18N.ar, {
 });
 
 Object.assign(I18N.ur, {
+"file.noRoomIn":"«{n}» موصول نہیں ہوا: اس ڈیوائس کی یادداشت میں پہلے ہی بہت کچھ ہے۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ بھیجنے کو کہیں۔",
 "contacts.sameLookVerified":"زبانی تصدیق شدہ",
 "contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
@@ -1798,6 +1808,7 @@ Object.assign(I18N.ur, {
 });
 
 Object.assign(I18N.hi, {
+"file.noRoomIn":"«{n}» प्राप्त नहीं हुआ: इस डिवाइस की मेमोरी में पहले से बहुत कुछ है। पेज दोबारा लोड करें और फिर से भेजने को कहें।",
 "contacts.sameLookVerified":"आवाज़ से सत्यापित",
 "contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
@@ -1969,6 +1980,7 @@ Object.assign(I18N.hi, {
 });
 
 Object.assign(I18N.bn, {
+"file.noRoomIn":"«{n}» গ্রহণ করা যায়নি: এই ডিভাইসের মেমরিতে ইতিমধ্যেই অনেক কিছু আছে। পৃষ্ঠাটি রিলোড করুন এবং আবার পাঠাতে বলুন।",
 "contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা",
 "contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
@@ -2140,6 +2152,7 @@ Object.assign(I18N.bn, {
 });
 
 Object.assign(I18N.id, {
+"file.noRoomIn":"«{n}» tidak diterima: perangkat ini sudah menyimpan terlalu banyak di memori. Muat ulang halaman dan minta dikirim lagi.",
 "contacts.sameLookVerified":"diverifikasi lewat suara",
 "contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
@@ -3904,7 +3917,7 @@ function rehydrateMedia(container){
     const id = el.getAttribute('data-media-id');
     const rec = await mediaGet(convKey, id);
     if (rec && rec.blob){
-      const url = keepObjectUrl(URL.createObjectURL(rec.blob));
+      const url = keepObjectUrl(URL.createObjectURL(rec.blob), rec.blob.size);
       if (el.tagName === 'A') el.href = url; else el.src = url;
       el.removeAttribute('data-media-id');
     } else {
@@ -3923,11 +3936,32 @@ function saveToHistory(nick, html, mine){
      moment between the two is a moment where the phone holds it. So an armed
      session never touches the disk at all. */
   if (destructArmed) return;
+  /* Once the phone is full this write can only fail, and it failed expensively:
+     the whole history read back, parsed, appended to, re-serialised and offered
+     to a storage that had already refused it — measured at 30ms per message,
+     paid on every message, for the rest of the visit. The flag is not the fix
+     for that; it only records it. Retried on a timer instead, so recovery still
+     happens on its own once there is room again, without spending a full
+     serialisation to discover there is not. */
+  if (historyBroken && Date.now() - lastHistoryTry < HISTORY_RETRY_MS) return;
+  lastHistoryTry = Date.now();
   const key = historyKeyNow(nick);
   let list = [];
   try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
   list.push({ html, mine, t: Date.now() });
   if (list.length > 300) list = list.slice(-300);
+  /* A cap counting entries says nothing about what they weigh: three hundred
+     ordinary lines are a few tens of kilobytes, three hundred long pasted ones
+     are megabytes, and every single message after that re-serialises all of it
+     to write it back. Trimmed from the oldest end until the budget is met —
+     except for the message that has just arrived, which is kept whatever its
+     size, because dropping the thing being saved would be a stranger failure
+     than running slightly over. */
+  let bytes = 0;
+  for (let i = list.length - 1; i >= 0; i--){
+    bytes += (list[i].html || '').length + 48;   /* 48: the wrapper around it, near enough */
+    if (bytes > MAX_HISTORY_BYTES && i < list.length - 1){ list = list.slice(i + 1); break; }
+  }
   try{
     localStorage.setItem(key, JSON.stringify(list));
     /* Cleared on the way out, not only set on the way in. Once a single write
@@ -3947,6 +3981,14 @@ function saveToHistory(nick, html, mine){
    self-destruct button far below: this runs on every message and must never
    depend on how far down the file has been reached. */
 let historyBroken = false, destructArmed = false;
+/* Roughly a thousand ordinary messages per conversation — far more than anyone
+   scrolls back through, and small enough that no single conversation can eat the
+   whole localStorage budget the app shares between all of them. */
+const MAX_HISTORY_BYTES = 256 * 1024;
+/* Long enough that a full phone stops costing anything per message, short enough
+   that clearing space is noticed while the person is still in the same session. */
+const HISTORY_RETRY_MS = 30000;
+let lastHistoryTry = 0;
 
 /* Everything this device kept about one person. Used by the self-destruct,
    which until now cleared only what was on the screen — so the app said
@@ -5760,7 +5802,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.71';
+const APP_VERSION = 'logos-modifica-3.72';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6565,24 +6607,43 @@ function candidatePump(pcObj, sec, mine, theirs){
     }catch(e){}
   };
   const pumpStarted = Date.now();
+  const stop = () => { stopped = true; clearTimeout(flushTimer); };
   (async () => {
-    while (!stopped){
-      const key = await slotId(sec.seed, 'trickle-' + theirs + '-' + inN);
-      const msg = await mailboxGetSealed(key, sec);
-      if (msg && Array.isArray(msg.c)){
-        inN++;
-        for (const c of msg.c){ if (remoteSet) await add(c); else held.push(c); }
-        continue; /* a batch was waiting, the next one may be too */
+    /* This loop was a fire-and-forget with no catch, so an exception killed it
+       as an unhandled rejection and left `stopped` false: `quickPump` went on
+       pointing at a pump that was no longer running. stopQuickPump() believed it
+       had one to stop, stopStrayPump believed it had stopped it, and every
+       diagnosis after that started from a false reading. The loop being dead is
+       not the part we can fix here — the state lying about it is.
+
+       Stopping rather than skipping a turn, decided by reading the code instead
+       of guessing at it: a network failure never reaches here as an exception at
+       all. mailboxGet catches its own and returns null, and openFrom does the
+       same, so a lost connection already looks like "nothing waiting" and simply
+       waits for the next turn. What can still throw is a persistent fault — no
+       crypto, a malformed secret — and retrying one of those forever is spinning,
+       not resilience. */
+    try{
+      while (!stopped){
+        const key = await slotId(sec.seed, 'trickle-' + theirs + '-' + inN);
+        const msg = await mailboxGetSealed(key, sec);
+        if (msg && Array.isArray(msg.c)){
+          inN++;
+          for (const c of msg.c){ if (remoteSet) await add(c); else held.push(c); }
+          continue; /* a batch was waiting, the next one may be too */
+        }
+        await new Promise(r => setTimeout(r, pollGap(pumpStarted, 700)));
       }
-      await new Promise(r => setTimeout(r, pollGap(pumpStarted, 700)));
-    }
+    }catch(e){ stop(); }
   })();
 
   return {
     /* candidates cannot be handed over before the other side's description is in
        place, so anything that arrives early waits here rather than being dropped */
     remoteReady: async () => { remoteSet = true; for (const c of held.splice(0)) await add(c); },
-    stop: () => { stopped = true; clearTimeout(flushTimer); },
+    stop,
+    /* so "is this pump actually alive?" can be asked rather than assumed */
+    isRunning: () => !stopped,
   };
 }
 
@@ -7084,10 +7145,22 @@ function sendText(){
    They cannot be released the moment they are made: the <img> on screen is
    still using it. They are released when the messages themselves go, which is
    the only moment nothing can be pointing at them any more. */
-const liveObjectUrls = new Set();
-function keepObjectUrl(url){ liveObjectUrls.add(url); return url; }
+/* Holding the size alongside the URL, because the total this app bounds was
+   only ever counting transfers still in flight. A file that finished left that
+   table and carried on living here, held by its object URL, invisible to every
+   check: forty finished files of four megabytes is a hundred and sixty
+   megabytes the accounting swore was zero. Nothing here is freed early — a URL
+   still on screen must keep working — but what is held is now counted, so the
+   number the caps are compared against is the true one. */
+const liveObjectUrls = new Map();
+function keepObjectUrl(url, bytes){ liveObjectUrls.set(url, Number(bytes) || 0); return url; }
+function heldMediaBytes(){
+  let n = 0;
+  for (const b of liveObjectUrls.values()) n += b;
+  return n;
+}
 function releaseObjectUrls(){
-  for (const u of liveObjectUrls){ try{ URL.revokeObjectURL(u); }catch(e){} }
+  for (const u of liveObjectUrls.keys()){ try{ URL.revokeObjectURL(u); }catch(e){} }
   liveObjectUrls.clear();
 }
 
@@ -7224,7 +7297,7 @@ async function sendFile(file){
     return;
   }
   persistMedia(peerNick, id, file);
-  const url = keepObjectUrl(URL.createObjectURL(file));
+  const url = keepObjectUrl(URL.createObjectURL(file), file.size);
   const isImg = file.type.startsWith('image/'), isVid = file.type.startsWith('video/'), isAud = file.type.startsWith('audio/');
   const mid = esc(id);
   const preview = isImg ? '<img data-media-id="'+mid+'" src="'+url+'">' : isVid ? '<video data-media-id="'+mid+'" src="'+url+'" controls></video>'
@@ -7362,7 +7435,48 @@ const MAX_OPEN_TRANSFERS = 20;
    is ten gigabytes of chunks held in memory on a phone. Not an error anybody
    could handle — the tab is simply killed. What has to be bounded is the
    total, so that is what this bounds. */
-const MAX_INCOMING_TOTAL = 768 * 1024 * 1024;
+/* 768 MB was defending against a wall the device reaches long before it. A
+   browser tab on a phone is killed somewhere between two and four hundred
+   megabytes, so on the machines that need this cap most it never once fired:
+   the tab simply died, mid-transfer, with nothing said to anybody.
+
+   Lowered only where there is real evidence of a constrained device — iOS, which
+   the app already detects for other reasons, or a browser that reports four
+   gigabytes or less. Where there is no such evidence the old number stands
+   untouched, because a desktop genuinely does cope and refusing a file it could
+   have taken would be its own kind of wrong. A refusal is worse than a transfer
+   that works and far better than a tab that dies, which is the only other thing
+   on offer here.
+   ⚠️ Consequence worth knowing: on a constrained device a single file near the
+   advertised 512 MB is now refused — out loud, which it was not before. It was
+   never actually arriving on those devices; it was taking the tab down with it. */
+/* Pulled out whole so every combination can be asked directly, instead of
+   trusting that whichever one this machine happens to be is the one that
+   matters. Order inside it is the point, and it took a live test to find that
+   out: `isIOS` counts a Mac reporting touch points on purpose, because that is
+   how an iPad has announced itself since iPadOS 13 — a good test for "iPad" and
+   a wrong one for "short of memory". Asked first, it put a desktop with eight
+   gigabytes of RAM on the same budget as a phone.
+   So the real measurement goes first wherever the browser offers one — Chrome
+   and Edge report it on desktop and on Android alike — and the shape of the
+   device is consulted only where it does not, which is Safari and Firefox:
+   there an iPhone or an iPad reads as tight, a desktop Mac without a touch
+   screen does not. */
+function tightMemoryDevice(gb, ios){
+  return typeof gb === 'number' ? gb <= 4 : !!ios;
+}
+/* 768 MB was guarding against a wall the device reaches long before it: a
+   browser tab on a phone is killed somewhere between two and four hundred
+   megabytes, so on the very machines this cap exists to protect it never once
+   fired — the tab simply died mid-transfer with nothing said to anyone.
+   Lowered only where there is evidence of a constrained device; where there is
+   none the old number stands, because a desktop genuinely does cope and
+   refusing a file it could have taken would be its own kind of wrong.
+   ⚠️ Consequence worth knowing: on a constrained device a single file near the
+   advertised 512 MB is now refused — out loud, which it never was before. It
+   was not arriving on those devices anyway; it was taking the tab down with
+   it. */
+const MAX_INCOMING_TOTAL = (tightMemoryDevice(navigator.deviceMemory, isIOS) ? 192 : 768) * 1024 * 1024;
 /* A transfer only ever left `incoming` by finishing or by overflowing its cap.
    A peer that opened twenty and then sent nothing at all filled the table with
    records that would never do either, and every later file-start was dropped
@@ -7471,7 +7585,18 @@ function onDcMessage(ev){
       if (Object.keys(incoming).length >= MAX_OPEN_TRANSFERS) return;
       const declared = Number(msg.size);
       if (!(declared >= 0) || declared > MAX_INCOMING_BYTES) return;
-      if (pledgedIncomingBytes() + Math.min(declared, MAX_INCOMING_BYTES) > MAX_INCOMING_TOTAL) return;
+      /* Weighed against everything genuinely being held — transfers under way
+         plus every finished file still alive in memory — rather than only the
+         first of the two.
+         And said out loud. This was a bare `return`: the file simply never
+         arrived. No bubble, no line, nothing, on either side. That is precisely
+         the failure the sending side calls the worst of the lot — silent loss
+         confirmed by a screen that looks fine — and it was sitting here
+         untouched on the receiving side. */
+      if (pledgedIncomingBytes() + heldMediaBytes() + Math.min(declared, MAX_INCOMING_BYTES) > MAX_INCOMING_TOTAL){
+        sysLine(fill(t('file.noRoomIn','«{n}» non è stato ricevuto: questo dispositivo ha già troppa roba aperta in memoria. Ricarica la pagina e fattelo rimandare.'), { n: msg.name || '' }));
+        return;
+      }
       /* Same reasoning as the sending side: nothing used to appear until the
          whole thing had arrived, so a large incoming file looked identical to
          nothing happening at all. */
@@ -7483,7 +7608,7 @@ function onDcMessage(ev){
     } else if (msg.type === 'file-end'){
       const rec = incoming[msg.id]; if (!rec) return;
       const blob = new Blob(rec.chunks, { type: rec.meta.mime || 'application/octet-stream' });
-      const url = keepObjectUrl(URL.createObjectURL(blob));
+      const url = keepObjectUrl(URL.createObjectURL(blob), blob.size);
       persistMedia(peerNick, msg.id, blob);
       const mime = rec.meta.mime || '';
       const isImg = mime.startsWith('image/'), isVid = mime.startsWith('video/'), isAud = mime.startsWith('audio/');
@@ -7518,7 +7643,7 @@ function onDcMessage(ev){
     /* Checked here and not only at file-start, because the start-time check
        can be walked straight past: twenty transfers each declaring one byte
        pass it trivially, and what matters is what actually arrives. */
-    if (heldIncomingBytes() + piece.byteLength > MAX_INCOMING_TOTAL){
+    if (heldIncomingBytes() + heldMediaBytes() + piece.byteLength > MAX_INCOMING_TOTAL){
       rec.xfer.fail(t('file.tooBig','Un file in arrivo è stato interrotto: non corrispondeva a quanto dichiarato.'));
       delete incoming[id];
       return;
