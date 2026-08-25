@@ -12,6 +12,13 @@ verità.rtf
 __pycache__/
 .claude/
 
+# The whole web app, bundled into one file for the Android package. Written by
+# the build (build-single-file.py, from the bundleWebApp Gradle task) and never
+# committed: it is output, and a copy of output sitting in the source tree is
+# how a build stops being reproducible. Spelled out because the LOGOS.html rule
+# below catches it only by accident, and only where the filesystem ignores case.
+android/app/src/main/assets/logos.html
+
 # LOGOS (the file-sealing tool) — kept locally, no longer published on GitHub
 LOGOS.html
 logos.py
