@@ -104,6 +104,34 @@ anyone — because there is no server handling your conversation at all.
 
 No app store, no account, nothing to buy.
 
+### Android, as a signed APK
+
+There is also a signed Android package, if you would rather have a real app icon than a
+web-app shortcut: **[download the latest APK](https://github.com/digitalvalut/logos-protocol/releases/latest)**.
+
+To get updates automatically without any app store, use
+**[Obtainium](https://github.com/ImranR98/Obtainium)** — it installs and updates apps
+straight from their source releases. Add this URL as the app source:
+
+```
+https://github.com/digitalvalut/logos-protocol
+```
+
+Obtainium will find each new `android-*` release on its own from then on.
+
+Every published APK is signed with the same key, whose SHA-256 fingerprint is:
+
+```
+423e3094890bd7ee31e4438b687bf0ccdc41dba44a2f512eba27d7e533fee190
+```
+
+You can check any downloaded file against it with
+`apksigner verify --print-certs <file>.apk` — if the fingerprint differs, the file did not
+come from us, whatever it claims. Being honest about what this package is: today it is a
+thin wrapper that opens the web app above, so it offers nothing the installed web app does
+not already do. It exists for people who want an installable file rather than a browser
+flow.
+
 ## It is also one single file
 
 ```bash
@@ -184,7 +212,10 @@ e il modello del telefono** prima di partire, senza perdere un pixel di qualità
 tocco solo, autodistruzione dei messaggi, **pulizia automatica** opzionale (spenta di
 base), un "colpetto" push discreto per farsi sentire senza tenere l'app aperta, codice QR
 o link per collegarsi, e tutta l'interfaccia in **13 lingue**. Si installa su iPhone,
-Android, Windows, Mac e Linux senza alcun account né pagamento.
+Android, Windows, Mac e Linux senza alcun account né pagamento. Su Android c'è anche un
+**pacchetto APK firmato** ([ultima versione](https://github.com/digitalvalut/logos-protocol/releases/latest)),
+aggiornabile in automatico con [Obtainium](https://github.com/ImranR98/Obtainium) senza
+passare da nessuno store.
 
 **L'invito aspetta:** mandalo e chiudi pure l'app — chi lo apre, anche il giorno dopo, ti
 fa squillare il telefono, e appena riapri siete connessi. **Il QR si verifica da solo:**
