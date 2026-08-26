@@ -1,0 +1,10 @@
+Whoever receives an invitation now learns that the Android app exists. The
+shared message used to carry only the website address, so anyone opening it on
+Android stayed on the web version forever without knowing a better one existed
+for them. It now carries both links, with one line explaining the difference,
+in all thirteen languages.
+
+Built with Java 21, the same version F-Droid uses to rebuild the app from
+source. Different compilers produce different bytecode, and that was standing
+in the way of proving that the published package contains exactly the public
+source and nothing else.

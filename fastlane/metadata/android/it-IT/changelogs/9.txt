@@ -1,0 +1,10 @@
+Chi riceve un invito adesso sa che l app Android esiste. Prima il messaggio
+condiviso portava solo l indirizzo del sito: chi lo apriva da Android restava
+sulla versione web per sempre, senza sapere che per lui ce n era una migliore.
+Ora il messaggio porta tutti e due i link, con una riga che spiega la
+differenza, in tutte e tredici le lingue.
+
+Costruita con Java 21, la stessa versione che usa F-Droid per ricostruire
+l app dal sorgente. Compilatori diversi producono codice diverso, e questo
+impediva di dimostrare che il pacchetto pubblicato contiene esattamente il
+codice pubblico e nient altro.
