@@ -148,6 +148,7 @@ Object.assign(I18N.en, {
 "toast.clipboardEmpty":"There is nothing to paste.",
 "toast.pasteManually":"Hold your finger on the box and choose Paste.",
 "home.shareAppText":"Free, no account, works on any phone or computer, sends real files and photos at full quality — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"If you have Android, there is an app as well: it keeps working even when this site cannot be reached, and your address cannot be lost.",
 "lock.title":"Extra protection",
 "lock.sub":"Locks the invite with a passphrase you say out loud. Worth turning on if the code travels over WhatsApp, email or SMS.",
 "lock.passCap":"Passphrase",
@@ -297,6 +298,7 @@ Object.assign(I18N.it, {
 "toast.clipboardEmpty":"Non c'\u00e8 niente da incollare.",
 "toast.pasteManually":"Tieni premuto sul riquadro e scegli Incolla.",
 "home.shareAppText":"Gratis, senza account, funziona su qualunque telefono o computer, manda foto e file veri senza comprimerli — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"Se hai Android c'è anche l'app: continua a funzionare anche quando questo sito è irraggiungibile, e il tuo indirizzo non si perde.",
 "nav.back":"Indietro",
 "start.share":"Manda l'invito","btn.copyCode":"Copia il codice",
 "join.sendAnswer":"Manda la risposta",
@@ -509,6 +511,7 @@ Object.assign(I18N.fr, {
 "btn.paste":"Coller","btn.showCode":"Afficher le code",
 "toast.clipboardEmpty":"Il n'y a rien à coller.","toast.pasteManually":"Maintenez le doigt sur la case et choisissez Coller.",
 "home.shareAppText":"Gratuit, sans compte, fonctionne sur tout téléphone ou ordinateur, envoie photos et fichiers en qualité originale — DigitalValut Logos :\n\n",
+"home.shareAppAndroid":"Si vous avez Android, il existe aussi une application : elle continue de fonctionner même quand ce site est inaccessible, et votre adresse ne se perd pas.",
 "lock.title":"Protection supplémentaire",
 "lock.sub":"Verrouille l'invitation avec une phrase secrète que vous dites à voix haute. Utile si le code passe par WhatsApp, e-mail ou SMS.",
 "lock.passCap":"Phrase secrète",
@@ -685,6 +688,7 @@ Object.assign(I18N.de, {
 "btn.paste":"Einfügen","btn.showCode":"Code anzeigen",
 "toast.clipboardEmpty":"Es gibt nichts zum Einfügen.","toast.pasteManually":"Halte den Finger auf das Feld und wähle Einfügen.",
 "home.shareAppText":"Kostenlos, ohne Konto, funktioniert auf jedem Telefon oder Computer, sendet Fotos und Dateien in Originalqualität — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"Für Android gibt es auch eine App: Sie funktioniert weiter, auch wenn diese Seite nicht erreichbar ist, und deine Adresse geht nicht verloren.",
 "lock.title":"Zusätzlicher Schutz",
 "lock.sub":"Sperrt die Einladung mit einer Passphrase, die du laut sagst. Sinnvoll, wenn der Code über WhatsApp, E-Mail oder SMS reist.",
 "lock.passCap":"Passphrase",
@@ -861,6 +865,7 @@ Object.assign(I18N.es, {
 "btn.paste":"Pegar","btn.showCode":"Mostrar el código",
 "toast.clipboardEmpty":"No hay nada que pegar.","toast.pasteManually":"Mantén el dedo sobre el recuadro y elige Pegar.",
 "home.shareAppText":"Gratis, sin cuenta, funciona en cualquier teléfono u ordenador, envía fotos y archivos en calidad original — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"Si tienes Android, también hay una aplicación: sigue funcionando aunque este sitio no sea accesible, y tu dirección no se pierde.",
 "lock.title":"Protección extra",
 "lock.sub":"Bloquea la invitación con una frase secreta que dices en voz alta. Útil si el código viaja por WhatsApp, correo o SMS.",
 "lock.passCap":"Frase secreta",
@@ -1037,6 +1042,7 @@ Object.assign(I18N.pt, {
 "btn.paste":"Colar","btn.showCode":"Mostrar o código",
 "toast.clipboardEmpty":"Não há nada para colar.","toast.pasteManually":"Mantenha o dedo na caixa e escolha Colar.",
 "home.shareAppText":"Grátis, sem conta, funciona em qualquer telemóvel ou computador, envia fotos e ficheiros na qualidade original — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"Se tens Android, há também uma aplicação: continua a funcionar mesmo quando este site está inacessível, e o teu endereço não se perde.",
 "lock.title":"Proteção extra",
 "lock.sub":"Bloqueia o convite com uma frase-passe que diz em voz alta. Vale a pena ativar se o código passar por WhatsApp, e-mail ou SMS.",
 "lock.passCap":"Frase-passe",
@@ -1213,6 +1219,7 @@ Object.assign(I18N.ru, {
 "btn.paste":"Вставить","btn.showCode":"Показать код",
 "toast.clipboardEmpty":"Нечего вставить.","toast.pasteManually":"Удерживайте палец на поле и выберите Вставить.",
 "home.shareAppText":"Бесплатно, без аккаунта, работает на любом телефоне или компьютере, отправляет фото и файлы в исходном качестве — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"Если у вас Android, есть и приложение: оно работает, даже когда этот сайт недоступен, и ваш адрес не теряется.",
 "lock.title":"Дополнительная защита",
 "lock.sub":"Блокирует приглашение кодовой фразой, которую вы произносите вслух. Стоит включить, если код проходит через WhatsApp, почту или SMS.",
 "lock.passCap":"Кодовая фраза",
@@ -1389,6 +1396,7 @@ Object.assign(I18N.zh, {
 "btn.paste":"粘贴","btn.showCode":"显示代码",
 "toast.clipboardEmpty":"没有可粘贴的内容。","toast.pasteManually":"按住方框并选择粘贴。",
 "home.shareAppText":"免费，无需账号，可在任何手机或电脑上使用，发送照片和文件保持原画质——DigitalValut Logos：\n\n",
+"home.shareAppAndroid":"如果你用 Android，还有一个应用：即使本站无法访问也能继续使用，你的地址也不会丢失。",
 "lock.title":"额外保护",
 "lock.sub":"用你口头说出的密语锁定邀请。如果代码通过 WhatsApp、邮件或短信传送，值得开启。",
 "lock.passCap":"密语",
@@ -1565,6 +1573,7 @@ Object.assign(I18N.ar, {
 "btn.paste":"لصق","btn.showCode":"إظهار الرمز",
 "toast.clipboardEmpty":"لا يوجد شيء للصقه.","toast.pasteManually":"اضغط مطولًا على المربع واختر لصق.",
 "home.shareAppText":"مجاني، بلا حساب، يعمل على أي هاتف أو كمبيوتر، يرسل الصور والملفات بجودتها الأصلية — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"إذا كنت تستخدم أندرويد، فهناك تطبيق أيضاً: يواصل العمل حتى عندما يتعذّر الوصول إلى هذا الموقع، ولا يضيع عنوانك.",
 "lock.title":"حماية إضافية",
 "lock.sub":"يقفل الدعوة بعبارة سرية تنطقها بصوت عالٍ. يستحق التفعيل إذا مرّ الرمز عبر واتساب أو البريد الإلكتروني أو الرسائل النصية.",
 "lock.passCap":"العبارة السرية",
@@ -1741,6 +1750,7 @@ Object.assign(I18N.ur, {
 "btn.paste":"پیسٹ کریں","btn.showCode":"کوڈ دکھائیں",
 "toast.clipboardEmpty":"پیسٹ کرنے کے لیے کچھ نہیں ہے۔","toast.pasteManually":"باکس پر انگلی دبائے رکھیں اور پیسٹ منتخب کریں۔",
 "home.shareAppText":"مفت، بغیر اکاؤنٹ کے، کسی بھی فون یا کمپیوٹر پر کام کرتا ہے، تصاویر اور فائلیں اصل کوالٹی میں بھیجتا ہے — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"اگر آپ اینڈرائڈ استعمال کرتے ہیں تو ایک ایپ بھی ہے: یہ اس وقت بھی کام کرتی رہتی ہے جب یہ سائٹ دستیاب نہ ہو، اور آپ کا پتہ ضائع نہیں ہوتا۔",
 "lock.title":"اضافی تحفظ",
 "lock.sub":"دعوت کو ایک پاس فریز سے لاک کرتا ہے جو آپ بلند آواز میں کہتے ہیں۔ اگر کوڈ واٹس ایپ، ای میل یا SMS سے گزرتا ہے تو اسے آن کرنا فائدہ مند ہے۔",
 "lock.passCap":"پاس فریز",
@@ -1917,6 +1927,7 @@ Object.assign(I18N.hi, {
 "btn.paste":"पेस्ट करें","btn.showCode":"कोड दिखाएं",
 "toast.clipboardEmpty":"पेस्ट करने के लिए कुछ नहीं है।","toast.pasteManually":"बॉक्स पर उंगली दबाए रखें और पेस्ट चुनें।",
 "home.shareAppText":"मुफ़्त, बिना खाते के, किसी भी फ़ोन या कंप्यूटर पर काम करता है, फ़ोटो और फ़ाइलें असली क्वालिटी में भेजता है — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"अगर आप Android इस्तेमाल करते हैं तो एक ऐप भी है: यह तब भी चलती रहती है जब यह साइट न खुले, और आपका पता खोता नहीं।",
 "lock.title":"अतिरिक्त सुरक्षा",
 "lock.sub":"निमंत्रण को एक पासफ़्रेज़ से लॉक करता है जिसे आप ज़ोर से बोलते हैं। अगर कोड WhatsApp, ईमेल या SMS से गुज़रता है तो इसे चालू करना फ़ायदेमंद है।",
 "lock.passCap":"पासफ़्रेज़",
@@ -2093,6 +2104,7 @@ Object.assign(I18N.bn, {
 "btn.paste":"পেস্ট করুন","btn.showCode":"কোড দেখান",
 "toast.clipboardEmpty":"পেস্ট করার মতো কিছু নেই।","toast.pasteManually":"বাক্সের উপর আঙুল ধরে রাখুন এবং পেস্ট নির্বাচন করুন।",
 "home.shareAppText":"বিনামূল্যে, অ্যাকাউন্ট ছাড়াই, যেকোনো ফোন বা কম্পিউটারে কাজ করে, ছবি ও ফাইল আসল মানে পাঠায় — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"আপনি Android ব্যবহার করলে একটি অ্যাপও আছে: এই সাইটে পৌঁছানো না গেলেও এটি কাজ করে যায়, আর আপনার ঠিকানা হারায় না।",
 "lock.title":"অতিরিক্ত সুরক্ষা",
 "lock.sub":"আপনি জোরে বলা একটি পাসফ্রেজ দিয়ে আমন্ত্রণ লক করে। কোডটি WhatsApp, ইমেল বা SMS-এর মাধ্যমে গেলে এটি চালু করা মূল্যবান।",
 "lock.passCap":"পাসফ্রেজ",
@@ -2269,6 +2281,7 @@ Object.assign(I18N.id, {
 "btn.paste":"Tempel","btn.showCode":"Tampilkan kode",
 "toast.clipboardEmpty":"Tidak ada yang bisa ditempel.","toast.pasteManually":"Tahan jari pada kotak dan pilih Tempel.",
 "home.shareAppText":"Gratis, tanpa akun, berfungsi di ponsel atau komputer mana pun, mengirim foto dan berkas dalam kualitas asli — DigitalValut Logos:\n\n",
+"home.shareAppAndroid":"Kalau kamu pakai Android, ada juga aplikasinya: tetap berfungsi meski situs ini tidak bisa diakses, dan alamatmu tidak hilang.",
 "lock.title":"Perlindungan ekstra",
 "lock.sub":"Mengunci undangan dengan frasa sandi yang Anda ucapkan dengan suara keras. Berguna diaktifkan jika kode melewati WhatsApp, email, atau SMS.",
 "lock.passCap":"Frasa sandi",
@@ -3671,7 +3684,16 @@ async function copyOrSelect(text, boxEl){
 /* Sharing the app itself — not an invite to a chat, just "here's where to get it" */
 async function shareTheApp(){
   const link = shareBase();
-  const text = t('home.shareAppText') + link;
+  /* Both, always, and never one or the other. The person sharing has no idea
+     what the person receiving is holding, and the two links are not rivals:
+     the first works on anything, in three seconds, with nothing to install —
+     which is what somebody wants when the point is to talk *now*. The second
+     is for keeping. Sending only the first is what happened until now, and it
+     meant the Android app was invisible to everyone who ever arrived by
+     invitation: they stayed on the web version for good, never told that for
+     them there was something that survives the site being blocked. */
+  const text = t('home.shareAppText') + link
+             + '\n\n' + t('home.shareAppAndroid') + '\n' + ANDROID_APP_URL;
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
   await copyOrSelect(text, null);
 }
@@ -4581,6 +4603,11 @@ const SERVICE_ORIGINS = ['https://digitalvalut.github.io', 'https://logos.digita
    the same place when it is being run from a website. */
 const APP_PACKAGE_ORIGIN = 'https://appassets.androidplatform.net';
 const PUBLIC_APP_URL = 'https://digitalvalut.github.io/logos-protocol/modifica.html';
+/* The Android package, under a filename that never changes: GitHub serves the
+   newest release from this one address, so an invitation sent today still hands
+   somebody the current app a year from now. Every release carries a copy under
+   this name alongside the versioned one the F-Droid recipe expects. */
+const ANDROID_APP_URL = 'https://github.com/digitalvalut/logos-protocol/releases/latest/download/DigitalValut-Logos.apk';
 function shareBase(){
   return location.origin === APP_PACKAGE_ORIGIN
     ? PUBLIC_APP_URL

@@ -2502,6 +2502,44 @@ test.describe('un invito mandato dall\'app si apre anche altrove', () => {
     app.stop();
   });
 
+
+  /* Chi riceve un invito resta su quello che gli è arrivato. Finché il
+     messaggio nominava soltanto il sito, l'app Android era invisibile a
+     chiunque fosse entrato per quella porta: nessuno gli diceva mai che per
+     lui esisteva una copia che sopravvive al sito bloccato. */
+  test('il messaggio di condivisione offre sia il sito sia l\'app', async () => {
+    const app = loadApp(DENTRO_APP);
+    /* Si chiama la funzione vera e si legge cosa consegna davvero al telefono.
+       La prima versione di questo test ricomponeva il messaggio da sé, pezzo
+       per pezzo: restava verde anche dopo aver tolto il link dell'app da
+       shareTheApp, perché quella funzione non la guardava mai. Un test che non
+       si accorge del guasto che sorveglia è peggio di nessun test: dice che va
+       tutto bene. */
+    app.run("window.__condiviso = null;"
+          + "navigator.share = async (d) => { window.__condiviso = d.text; };");
+    await app.run('shareTheApp()');
+    const testo = app.run('window.__condiviso');
+    assert.ok(testo, 'shareTheApp non ha consegnato nessun messaggio');
+    assert.ok(/digitalvalut\.github\.io/.test(testo),
+      'manca il link del sito, che è l\'unico che funziona su iPhone');
+    assert.ok(/releases\/latest\/download\/DigitalValut-Logos\.apk/.test(testo),
+      'manca il link dell\'app Android');
+    assert.ok(!/appassets\.androidplatform\.net/.test(testo),
+      'il messaggio nomina l\'indirizzo interno, che fuori da quel telefono non esiste');
+    app.stop();
+  });
+
+  test('il link dell\'app non invecchia a ogni versione', () => {
+    const app = loadApp();
+    const url = app.run('ANDROID_APP_URL');
+    /* "latest" più un nome di file fisso: un invito mandato oggi consegna
+       l'ultima versione anche fra un anno. Con il numero di versione dentro,
+       ogni pubblicazione lascerebbe in giro link morti in mano alla gente. */
+    assert.ok(!/-v\d+\.apk/.test(url),
+      `il link porta il numero di versione e morirà alla prossima: ${url}`);
+    assert.match(url, /\/releases\/latest\/download\//);
+    app.stop();
+  });
   test('su un sito vero i link restano quelli di quel sito', () => {
     const app = loadApp();
     /* la correzione non deve dirottare altrove chi sta già su una pagina
