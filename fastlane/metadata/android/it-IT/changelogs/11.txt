@@ -1,0 +1,10 @@
+Nessuna differenza nell applicazione: e identica alla versione 10.
+
+Cambia solo il modo in cui il pacchetto viene firmato. F-Droid ricostruisce
+l app dal codice pubblico e la confronta con quella pubblicata qui: devono
+venire identiche bit per bit, ed e cosi che chiunque puo verificare che nel
+pacchetto non ci sia nulla che non sia anche nel codice.
+
+Il confronto falliva su una differenza di allineamento interno introdotta
+dallo strumento di firma. Ora la firma preserva la disposizione originale,
+e la ricostruzione viene identica.

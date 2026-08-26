@@ -1,0 +1,10 @@
+No change to the application: it is identical to version 10.
+
+Only the way the package is signed is different. F-Droid rebuilds the app from
+the public source and compares it against the one published here: the two must
+come out bit for bit identical, and that is how anyone can check that the
+package contains nothing the source does not.
+
+The comparison was failing on an internal alignment difference introduced by
+the signing tool. The signature now preserves the original layout, and the
+rebuild comes out identical.
