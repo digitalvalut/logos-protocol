@@ -1,0 +1,13 @@
+The keyboard no longer covers what you are typing.
+
+This was the unpaid price of the previous fix: an app drawn edge to edge is no
+longer resized by Android for anything, the keyboard included. The keyboard is
+now part of the calculation.
+
+Call permissions are asked for one at a time. The app used to demand the
+microphone and the camera together, so anyone who had turned the camera down
+could not place a voice call either — and was told the microphone was busy.
+
+And a refused microphone now says so. The refusal used to reach the page as
+"the microphone is in use by another app", which sent people looking for the
+problem in the wrong place entirely.

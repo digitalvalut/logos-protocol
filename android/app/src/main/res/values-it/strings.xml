@@ -22,4 +22,6 @@
   <string name="chWatchingWhy">La riga silenziosa e permanente che dice che il telefono può ancora squillare. Non fa mai alcun suono.</string>
   <string name="chRinging">Chiamate in arrivo</string>
   <string name="chRingingWhy">Squilla e mostra la chiamata sullo schermo bloccato.</string>
+  <string name="micDenied">Senza microfono non si può fare una chiamata. Puoi concederlo nelle Impostazioni.</string>
+  <string name="openSettings">Impostazioni</string>
 </resources>

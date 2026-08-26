@@ -24,4 +24,6 @@
   <string name="chWatchingWhy">The quiet, permanent line saying the phone is still able to ring. It never makes a sound.</string>
   <string name="chRinging">Incoming calls</string>
   <string name="chRingingWhy">Rings and shows the call on the lock screen.</string>
+  <string name="micDenied">Without the microphone there can be no call. You can allow it in Settings.</string>
+  <string name="openSettings">Settings</string>
 </resources>

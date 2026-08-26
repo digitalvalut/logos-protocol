@@ -25,6 +25,13 @@
          install time, and refusing them leaves messages and files working. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Not something anybody is asked about: it is granted at install and
+         shows up in no list. WebRTC audio in a WebView needs it to put the
+         device into communication mode, and without it the microphone refuses
+         to start at all while the camera opens perfectly well — which reads, to
+         whoever is trying to make a call, as "the microphone is already in use
+         by another app". -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <!-- Writing a received file into Downloads. Not needed from Android 10
          onward, where the same thing goes through MediaStore instead. -->

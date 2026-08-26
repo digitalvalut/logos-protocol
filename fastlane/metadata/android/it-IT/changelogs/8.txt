@@ -1,0 +1,14 @@
+La tastiera non copre piu quello che scrivi.
+
+Era il prezzo, non pagato, della correzione precedente: da quando l app si
+disegna da bordo a bordo Android non le restringe piu la finestra da sola,
+e non lo fa nemmeno per la tastiera. Ora la tastiera e nel conto.
+
+I permessi per le chiamate vengono chiesti uno per uno. Prima l app
+pretendeva microfono e fotocamera insieme: chi aveva negato la fotocamera
+non poteva fare nemmeno una chiamata vocale, e si sentiva dire che il
+microfono era occupato.
+
+E se il microfono viene negato, adesso lo dice: prima l errore arrivava
+alla pagina come "il microfono e in uso da un altra app", che mandava a
+cercare il problema dalla parte sbagliata.

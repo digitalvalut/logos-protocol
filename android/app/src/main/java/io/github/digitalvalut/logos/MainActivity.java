@@ -153,11 +153,15 @@ public class MainActivity extends Activity {
                         request.deny();
                         return;
                     }
-                    if (hasAvPermissions()) {
+                    String[] needed = permissionsNeededFor(request);
+                    if (needed.length == 0) { request.deny(); return; }
+                    if (holdsAll(needed)) {
                         request.grant(request.getResources());
-                    } else {
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         pendingWebPermission = request;
-                        askAvPermissions();
+                        requestPermissions(needed, REQ_PERMS);
+                    } else {
+                        request.grant(request.getResources());
                     }
                 });
             }
@@ -252,7 +256,19 @@ public class MainActivity extends Activity {
         root.setOnApplyWindowInsetsListener((v, windowInsets) -> {
             android.graphics.Insets bars = windowInsets.getInsets(
                     WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            /* The keyboard belongs in here too, and this is the debt that came
+               with going edge to edge. adjustResize works by letting the system
+               shrink the window when the keyboard opens; a window told not to
+               fit system windows is no longer shrunk for anything, the keyboard
+               included. Without this the keyboard sits over the message box and
+               somebody typing cannot see a word of what they are writing —
+               which is not a rough edge, it is the app not working.
+
+               The larger of the two, never the sum: while the keyboard is up it
+               covers the navigation bar, so adding both would leave a strip of
+               dead space the height of that bar underneath it. */
+            android.graphics.Insets keyboard = windowInsets.getInsets(WindowInsets.Type.ime());
+            v.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, keyboard.bottom));
             return WindowInsets.CONSUMED;
         });
     }
@@ -434,15 +450,29 @@ public class MainActivity extends Activity {
 
     /* ---------------- permissions ---------------- */
 
-    private boolean hasAvPermissions() {
-        return checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-            && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    /**
+     * The Android permissions a particular page request actually needs.
+     *
+     * Asked for exactly, rather than as a pair. A voice call requests the
+     * microphone and nothing else; demanding the camera as well meant that
+     * somebody who had turned the camera down could not place a voice call
+     * either, and was told the microphone was busy. Two separate things, asked
+     * for separately.
+     */
+    private static String[] permissionsNeededFor(PermissionRequest request) {
+        java.util.List<String> need = new java.util.ArrayList<>();
+        for (String r : request.getResources()) {
+            if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(r)) need.add(Manifest.permission.RECORD_AUDIO);
+            else if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(r)) need.add(Manifest.permission.CAMERA);
+        }
+        return need.toArray(new String[0]);
     }
 
-    private void askAvPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{ Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA }, REQ_PERMS);
+    private boolean holdsAll(String[] permissions) {
+        for (String p : permissions) {
+            if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) return false;
         }
+        return true;
     }
 
     @Override
@@ -452,7 +482,29 @@ public class MainActivity extends Activity {
         pendingWebPermission = null;
         /* Answered either way. A request left hanging is a call that never says
            yes and never says no. */
-        if (hasAvPermissions()) r.grant(r.getResources()); else r.deny();
+        if (holdsAll(permissionsNeededFor(r))) { r.grant(r.getResources()); return; }
+        r.deny();
+        /* A refusal reaches the page as a media error, and the page reads that
+           the same way it would on a laptop: as the microphone being held by
+           some other program. Nobody would guess from that message that the
+           answer is a switch in Android's own settings — so it is said here,
+           where the refusal actually happened, and the settings page is one tap
+           away rather than five. */
+        sendToSettingsAbout(Manifest.permission.RECORD_AUDIO);
+    }
+
+    private void sendToSettingsAbout(String permission) {
+        boolean askedAgainWouldWork = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && shouldShowRequestPermissionRationale(permission);
+        Toast.makeText(this, R.string.micDenied, Toast.LENGTH_LONG).show();
+        /* Only when Android will not ask again. While it still would, another
+           attempt at calling brings the ordinary prompt back, and throwing
+           somebody into a settings screen for that would be heavy-handed. */
+        if (askedAgainWouldWork) return;
+        try {
+            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", getPackageName(), null)));
+        } catch (Exception ignored) {}
     }
 
     @Override
