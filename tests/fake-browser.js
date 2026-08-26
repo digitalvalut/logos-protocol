@@ -188,10 +188,15 @@ function buildSandbox(options = {}){
       mediaDevices: { enumerateDevices: () => Promise.resolve([]), getUserMedia: () => Promise.reject(new Error('no media in tests')) },
       serviceWorker: { register: () => Promise.resolve({}), ready: new Promise(() => {}), controller: null, addEventListener(){} },
     },
-    location: { origin: 'https://digitalvalut.github.io', pathname: '/logos-protocol/modifica.html',
-                protocol: 'https:', host: 'digitalvalut.github.io', hostname: 'digitalvalut.github.io',
-                hash: '', search: '', href: 'https://digitalvalut.github.io/logos-protocol/modifica.html',
-                reload(){}, replace(){}, assign(){} },
+    /* Overridable, because where the app is being served from changes what it
+       may say. Inside the Android package it runs at an origin that exists on
+       one phone and nowhere else, and a test has to be able to stand there. */
+    location: Object.assign(
+      { origin: 'https://digitalvalut.github.io', pathname: '/logos-protocol/modifica.html',
+        protocol: 'https:', host: 'digitalvalut.github.io', hostname: 'digitalvalut.github.io',
+        hash: '', search: '', href: 'https://digitalvalut.github.io/logos-protocol/modifica.html',
+        reload(){}, replace(){}, assign(){} },
+      options.location || {}),
     history: { replaceState(){}, pushState(){} },
     /* how an installed app announces itself — the difference between having an
        address bar with a padlock in it and having no address bar at all */
@@ -211,7 +216,21 @@ function buildSandbox(options = {}){
       setRemoteDescription(){ this.remoteDescription = { sdp: 'v=0\r\n' }; return Promise.resolve(); }
       addIceCandidate(){ return Promise.resolve(); }
       getStats(){ return Promise.resolve(new Map()); }
-      addEventListener(){}
+      /* Listeners are really kept, because "has this connection finished?" is a
+         question answered by an event and by nothing else. A no-op here made
+         "the handshake is still climbing" impossible to write down — and that
+         is the exact state a candidate pump has to survive. */
+      addEventListener(type, fn){
+        (this.__ls || (this.__ls = {}))[type] = (this.__ls[type] || []).concat(fn);
+      }
+      removeEventListener(type, fn){
+        if (this.__ls && this.__ls[type]) this.__ls[type] = this.__ls[type].filter(f => f !== fn);
+      }
+      /* Lets a test move a connection the way a network would. */
+      __become(state){
+        this.connectionState = state;
+        for (const fn of ((this.__ls || {}).connectionstatechange || [])) fn({ type: 'connectionstatechange' });
+      }
       close(){ this.connectionState = 'closed'; }
       static generateCertificate(){ return Promise.resolve({ getFingerprints: () => [{ value: 'AA:BB' }] }); }
     },

@@ -3624,7 +3624,7 @@ $('btnCreate').addEventListener('click', async () => {
   $('pasteAnswerCard').classList.remove('hide');
   if (await robustCopy(code)) toast(t('toast.sealCopied'));
 });
-function inviteLink(code){ return location.origin + location.pathname + '#i=' + encodeURIComponent(code); }
+function inviteLink(code){ return shareBase() + '#i=' + encodeURIComponent(code); }
 
 /* Copy that actually works: try the modern API, then a legacy textarea+execCommand
    fallback (not gated by the same permission/activation rules), and only if both
@@ -3670,7 +3670,7 @@ async function copyOrSelect(text, boxEl){
 
 /* Sharing the app itself — not an invite to a chat, just "here's where to get it" */
 async function shareTheApp(){
-  const link = location.origin + location.pathname;
+  const link = shareBase();
   const text = t('home.shareAppText') + link;
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
   await copyOrSelect(text, null);
@@ -4568,6 +4568,25 @@ const MAILBOX_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/mailbox/';
    the app would open on a phone and announce that the address system is down. */
 const SERVICE_ORIGINS = ['https://digitalvalut.github.io', 'https://logos.digitalvalut.it', 'https://appassets.androidplatform.net'];
 
+/* ---------------------------------------------------------------------------
+   Where a link handed to somebody else has to point.
+
+   Inside the Android package this app is served from appassets.androidplatform.net,
+   an origin that resolves inside that one app's WebView on that one phone and
+   nowhere else in the world. A link built out of it is not a link: whoever
+   receives it gets ERR_NAME_NOT_RESOLVED, and there is nothing they can do
+   about it. Every invitation sent from the app was arriving dead.
+
+   So links are built from where the app can actually be reached, which is only
+   the same place when it is being run from a website. */
+const APP_PACKAGE_ORIGIN = 'https://appassets.androidplatform.net';
+const PUBLIC_APP_URL = 'https://digitalvalut.github.io/logos-protocol/modifica.html';
+function shareBase(){
+  return location.origin === APP_PACKAGE_ORIGIN
+    ? PUBLIC_APP_URL
+    : location.origin + location.pathname;
+}
+
 async function myFingerprintHex(){
   const cert = await myIdentity();
   if (!cert) return null;
@@ -5163,7 +5182,7 @@ function blockFp(fp){
 }
 function isBlockedFp(fp){ return !!fp && addrBlocked().indexOf(fp) >= 0; }
 
-function addrLink(addr){ return location.origin + location.pathname + '#a=' + addr; }
+function addrLink(addr){ return shareBase() + '#a=' + addr; }
 
 /* Left where anyone holding the address can find it, so they can ring this
    phone rather than hope it happens to be open. It says only "buzz here" —
@@ -5439,6 +5458,56 @@ function stopStrayPump(ownerPc){
      never stop a pump whose connection is actually working. */
   if (!ownerPc && quickPumpOwner && connectionWorking(quickPumpOwner)) return;
   stopQuickPump();
+}
+
+/* Longer than any honest negotiation and shorter than anybody's patience. Only
+   ever reached by an attempt that neither connected nor failed — a peer that
+   walked away mid-handshake, which leaves no event behind to notice. */
+const PUMP_GRACE_MS = 45000;
+
+/* "Has this attempt finished?" is not the same question as "is it working?",
+   and asking the second one at the moment the handshake begins is how a
+   connection gets strangled by its own cleanup.
+
+   The pump is the only thing carrying the other side's ICE candidates. At the
+   instant the offer/answer exchange completes, connectionState is still
+   `connecting` and no data channel is open, so connectionWorking() says no —
+   correctly, it is not working *yet*. Stopping the pump on that answer removes
+   the one thing that would have made it work: the candidates never arrive, no
+   pair is ever formed, and the connection sits at `connecting` until it is
+   given up on.
+
+   It only bites when trickle is actually needed. Two devices on one network
+   have usable addresses in the offer itself and connect regardless, which is
+   why this survived: it is invisible on a desk with two machines side by side,
+   and total on a phone using mobile data talking to a laptop on wi-fi.
+
+   So: wait for the outcome instead of guessing it. A connection that succeeds
+   keeps its pump, exactly as before. One that fails or is closed drops it at
+   once. One that does neither drops it when the grace runs out — which is the
+   abandoned pump the original check was written to prevent, and it is still
+   prevented. */
+function stopPumpOnceSettled(ownerPc){
+  if (!ownerPc){ stopStrayPump(); return; }
+  if (connectionWorking(ownerPc)) return;
+  let done = false;
+  const settle = () => {
+    const st = ownerPc.connectionState;
+    if (done || st === 'new' || st === 'connecting') return;
+    done = true;
+    clearTimeout(timer);
+    ownerPc.removeEventListener('connectionstatechange', settle);
+    /* `connected` leaves it alone, as the working case always did. */
+    if (st !== 'connected') stopStrayPump(ownerPc);
+  };
+  const timer = setTimeout(() => {
+    if (done) return;
+    done = true;
+    ownerPc.removeEventListener('connectionstatechange', settle);
+    stopStrayPump(ownerPc);
+  }, PUMP_GRACE_MS);
+  ownerPc.addEventListener('connectionstatechange', settle);
+  settle();   /* it may already have settled while this was being set up */
 }
 
 /* ---------------- saying who you are before you ring ----------------
@@ -6926,13 +6995,18 @@ async function startQuickShare(existingCode, quiet){
        scadenza del codice, quella per eccezione no, e un pump abbandonato
        interroga la cassetta due o tre volte al secondo per sempre — su un
        piano gratuito è il modo più rapido di spegnere il servizio a tutti.
-       Nel finally e non in un catch, così copre anche i ritorni anticipati;
-       e solo se la connessione non sta funzionando, perché su una riuscita
-       il pump deve restare vivo mentre l'handshake sale. */
-    if (myPc && !connectionWorking(myPc)) stopStrayPump(myPc);
+       Nel finally e non in un catch, così copre anche i ritorni anticipati.
+
+       Diceva "e solo se la connessione non sta funzionando, perché su una
+       riuscita il pump deve restare vivo mentre l'handshake sale" — ed era
+       proprio lì l'errore: quando questo finally scatta l'handshake *sta*
+       salendo, quindi non funziona ancora, quindi il pump veniva fermato.
+       Adesso si aspetta l'esito invece di indovinarlo. Vedi
+       stopPumpOnceSettled. */
+    stopPumpOnceSettled(myPc);
   }
 }
-function quickLink(code){ return location.origin + location.pathname + '#q=' + code; }
+function quickLink(code){ return shareBase() + '#q=' + code; }
 
 /* ---------------- a QR held out in person is an authenticated channel ----------------
    Everything else here has to assume the invite travelled through something

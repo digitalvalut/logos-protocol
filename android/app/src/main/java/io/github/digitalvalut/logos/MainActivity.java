@@ -40,6 +40,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.webkit.WebViewAssetLoader;
@@ -193,9 +194,14 @@ public class MainActivity extends Activity {
            One line, and it comes back on the day it rings. */
         // web.addJavascriptInterface(new RingBridge(), "AndroidRing");
 
-        keepClearOfTheSystemBars();
+        /* A frame around the WebView, so the insets have something to shrink
+           that the page will actually feel. */
+        FrameLayout root = new FrameLayout(this);
+        root.addView(web, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        keepClearOfTheSystemBars(root);
 
-        setContentView(web);
+        setContentView(root);
         if (getIntent() != null
                 && getIntent().getBooleanExtra(CallActivity.EXTRA_ANSWERED, false)) {
             answeredPending = true;
@@ -233,10 +239,17 @@ public class MainActivity extends Activity {
      * library injects a permission of its own into the manifest, and this app
      * asking for a permission nobody can explain is worse than a version check.
      */
-    private void keepClearOfTheSystemBars() {
+    private void keepClearOfTheSystemBars(FrameLayout root) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return;
         getWindow().setDecorFitsSystemWindows(false);
-        web.setOnApplyWindowInsetsListener((v, windowInsets) -> {
+        /* The padding goes on the frame holding the WebView, not on the WebView.
+           Padding a WebView directly does fire and does hold — it simply does
+           not reach the page: the viewport it reports stayed the full height of
+           the screen, so the layout went on being computed as though the status
+           bar were not there, and the header went on being sliced. Padding the
+           frame makes the WebView genuinely smaller, which is a thing the page
+           cannot fail to notice. */
+        root.setOnApplyWindowInsetsListener((v, windowInsets) -> {
             android.graphics.Insets bars = windowInsets.getInsets(
                     WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom);

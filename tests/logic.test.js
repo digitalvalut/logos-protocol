@@ -2454,3 +2454,121 @@ test.describe('il telefono che squilla anche ad app chiusa', () => {
     app.stop();
   });
 });
+
+/* ------------------------------------------------------------------------
+   Un invito mandato da dentro l'app deve poterlo aprire qualcun altro.
+
+   Dentro il pacchetto Android l'app è servita da appassets.androidplatform.net,
+   che esiste dentro quella WebView su quel telefono e in nessun altro posto al
+   mondo. Un invito costruito da lì non è un link: chi lo riceve legge
+   ERR_NAME_NOT_RESOLVED e non c'è niente che possa farci.
+
+   Se ne è accorto chi usava l'app, mandandosi un invito dal telefono al proprio
+   computer, non i test — che davano tutti verde perché stavano sempre e solo
+   in piedi su un sito. Da qui la possibilità di spostarli.
+   ------------------------------------------------------------------------ */
+
+const DENTRO_APP = { location: {
+  origin: 'https://appassets.androidplatform.net',
+  pathname: '/assets/logos.html',
+  host: 'appassets.androidplatform.net',
+  hostname: 'appassets.androidplatform.net',
+  href: 'https://appassets.androidplatform.net/assets/logos.html',
+} };
+
+test.describe('un invito mandato dall\'app si apre anche altrove', () => {
+
+  test('nessun link generato dentro l\'app nomina l\'indirizzo interno', () => {
+    const app = loadApp(DENTRO_APP);
+    const links = {
+      invito: app.run("inviteLink('ABC123')"),
+      indirizzo: app.run("addrLink('XK7Y9HDWH3SH')"),
+      codice: app.run("quickLink('443351')"),
+    };
+    for (const [nome, url] of Object.entries(links)){
+      assert.ok(!/appassets\.androidplatform\.net/.test(url),
+        `il link "${nome}" punta a un indirizzo che esiste solo dentro l'app: ${url}`);
+      assert.ok(/^https:\/\/digitalvalut\.github\.io\//.test(url),
+        `il link "${nome}" non punta al sito pubblico: ${url}`);
+    }
+    app.stop();
+  });
+
+  test('il pezzo dopo il cancelletto resta quello giusto', () => {
+    const app = loadApp(DENTRO_APP);
+    assert.match(app.run("quickLink('443351')"), /#q=443351$/);
+    assert.match(app.run("addrLink('XK7Y9HDWH3SH')"), /#a=XK7Y9HDWH3SH$/);
+    assert.match(app.run("inviteLink('ABC123')"), /#i=ABC123$/);
+    app.stop();
+  });
+
+  test('su un sito vero i link restano quelli di quel sito', () => {
+    const app = loadApp();
+    /* la correzione non deve dirottare altrove chi sta già su una pagina
+       raggiungibile: una copia legittima su un altro host resta padrona
+       dei propri link */
+    assert.strictEqual(app.run("quickLink('443351')"),
+      'https://digitalvalut.github.io/logos-protocol/modifica.html#q=443351');
+    app.stop();
+  });
+
+});
+
+/* ------------------------------------------------------------------------
+   La pompa dei candidati non va spenta mentre la connessione sta salendo.
+
+   È l'unica cosa che porta i candidati di rete dell'altro lato. Fermarla
+   perché la connessione "non funziona ancora" toglie di mezzo proprio ciò
+   che la farebbe funzionare: i candidati non arrivano mai, nessuna coppia
+   viene formata, e la connessione resta a `connecting` finché non ci si
+   arrende. Si vede solo quando i due non sono sulla stessa rete — su una
+   scrivania con due macchine accanto è invisibile.
+   ------------------------------------------------------------------------ */
+
+test.describe('la pompa dei candidati sopravvive alla stretta di mano', () => {
+
+  test('mentre la connessione sale, la pompa resta viva', () => {
+    const app = loadApp();
+    app.run(`
+      window.__pc = new RTCPeerConnection();
+      quickPump = candidatePump(window.__pc, { seed:'s', key:{} }, 'a', 'b');
+      quickPumpOwner = window.__pc;
+      window.__pc.connectionState = 'connecting';
+      stopPumpOnceSettled(window.__pc);
+    `);
+    assert.strictEqual(app.run('quickPump !== null'), true,
+      'la pompa e stata fermata mentre la stretta di mano era in corso: i candidati dell altro lato non arriveranno mai');
+    app.stop();
+  });
+
+  test('quando la connessione fallisce, la pompa viene fermata', () => {
+    const app = loadApp();
+    app.run(`
+      window.__pc = new RTCPeerConnection();
+      quickPump = candidatePump(window.__pc, { seed:'s', key:{} }, 'a', 'b');
+      quickPumpOwner = window.__pc;
+      window.__pc.connectionState = 'connecting';
+      stopPumpOnceSettled(window.__pc);
+      window.__pc.__become('failed');
+    `);
+    assert.strictEqual(app.run('quickPump === null'), true,
+      'una connessione fallita lascia dietro una pompa che interroga la cassetta per sempre');
+    app.stop();
+  });
+
+  test('quando la connessione riesce, la pompa non viene buttata via', () => {
+    const app = loadApp();
+    app.run(`
+      window.__pc = new RTCPeerConnection();
+      quickPump = candidatePump(window.__pc, { seed:'s', key:{} }, 'a', 'b');
+      quickPumpOwner = window.__pc;
+      window.__pc.connectionState = 'connecting';
+      stopPumpOnceSettled(window.__pc);
+      window.__pc.__become('connected');
+    `);
+    assert.strictEqual(app.run('quickPump !== null'), true,
+      'la pompa e stata fermata su una connessione riuscita');
+    app.stop();
+  });
+
+});

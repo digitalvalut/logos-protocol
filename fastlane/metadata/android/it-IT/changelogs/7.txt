@@ -1,0 +1,19 @@
+Tre difetti che si vedevano solo usandola davvero su un telefono.
+
+Gli inviti mandati dall app non si aprivano. Il link veniva costruito con
+l indirizzo interno da cui l app serve se stessa, che esiste dentro quella
+app su quel telefono e in nessun altro posto al mondo: chi lo riceveva
+leggeva "impossibile raggiungere il sito". Ora ogni invito, ogni QR e ogni
+indirizzo condiviso puntano al sito pubblico.
+
+Le connessioni fra dispositivi su reti diverse non si stabilivano. Chi
+crea l invito fermava il meccanismo che porta gli indirizzi di rete
+dell altro, perche la connessione "non funzionava ancora" — cioe toglieva
+di mezzo proprio cio che l avrebbe fatta funzionare. Si vedeva solo quando
+i due non erano sulla stessa rete: fra un telefono in 4G e un computer in
+wifi, sempre.
+
+L intestazione finiva ancora sotto l orologio. La correzione precedente
+restringeva la finestra dal di dentro, dove la pagina non se ne accorgeva.
+
+Sotto l icona ora c e scritto DV Logos, cosi il nome ci sta tutto.

@@ -29,9 +29,9 @@ android {
         applicationId "io.github.digitalvalut.logos"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 6
-        versionName "6"
-        resValue "string", "appName", "DigitalValut Logos"
+        versionCode 7
+        versionName "7"
+        resValue "string", "appName", "DV Logos"
     }
 
     buildTypes {

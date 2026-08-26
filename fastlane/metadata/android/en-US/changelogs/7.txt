@@ -1,0 +1,19 @@
+Three defects that only showed up in real use on a phone.
+
+Invitations sent from the app did not open. The link was built from the
+internal address the app serves itself from, which exists inside that one app
+on that one phone and nowhere else on earth: whoever received it got "site
+cannot be reached". Every invitation, QR code and shared address now points at
+the public site.
+
+Connections between devices on different networks never completed. The side
+creating the invitation shut down the mechanism carrying the other side's
+network addresses, because the connection "wasn't working yet" — removing the
+very thing that would have made it work. It only showed when the two were not
+on the same network: between a phone on mobile data and a laptop on wi-fi,
+always.
+
+The header was still sliding under the clock. The previous fix shrank the
+window from the inside, where the page could not feel it.
+
+The launcher now reads DV Logos, so the whole name fits.
