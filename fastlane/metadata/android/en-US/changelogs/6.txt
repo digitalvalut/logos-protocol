@@ -1,0 +1,11 @@
+Version 5 refused to install on some phones, saying only "App not installed".
+
+It carried seven permissions and four components more than the version before
+it — foreground service, notifications, wake lock, start at boot — all for
+ringing while the app is closed, which was switched off in that same version.
+Asking for permissions on behalf of a feature that does nothing is wrong on its
+own terms. It no longer asks, and what it declares is now exactly what version
+4 declared.
+
+Both fixes from version 5 are still here: the logo, and the header that no
+longer slides underneath the clock.

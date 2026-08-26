@@ -29,8 +29,8 @@ android {
         applicationId "io.github.digitalvalut.logos"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 5
-        versionName "5"
+        versionCode 6
+        versionName "6"
         resValue "string", "appName", "DigitalValut Logos"
     }
 
@@ -55,10 +55,10 @@ dependencies {
        them are all of this app. */
     implementation 'androidx.webkit:webkit:1.11.0'
 
-    /* Window insets, so the page stays clear of the clock and the navigation
-       bar. Named here rather than relied on as something webkit happens to
-       bring along with it, because the layout breaks if that ever changes. */
-    implementation 'androidx.core:core:1.13.1'
+    /* Deliberately the only one. androidx.core was here for a moment, for the
+       window insets, and was taken back out: it injects a permission of its own
+       into the manifest, and an app that asks for something nobody can explain
+       is a worse trade than a version check written by hand. */
 }
 
 /* One source of truth. `digitalvalut-logos.html` is the entire application folded

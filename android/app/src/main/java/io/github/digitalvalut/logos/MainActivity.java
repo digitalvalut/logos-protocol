@@ -30,6 +30,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -41,10 +42,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.webkit.WebViewAssetLoader;
 
 import java.io.OutputStream;
@@ -225,15 +222,25 @@ public class MainActivity extends Activity {
      * an older emulator instead of only in the hands of whoever has a new phone.
      * The cutout is included: on a phone with a hole-punch camera in landscape,
      * the system bar insets alone do not clear it.
+     *
+     * Below Android 11 nothing is changed. Edge to edge is not forced there and
+     * the system already lays the window out below the bars, so the correct
+     * amount of work is none. Android 11 is old enough to cover every phone the
+     * enforcement will ever reach, and new enough to be sitting on an emulator
+     * here — which is what makes this testable rather than hopeful.
+     *
+     * Written against the framework rather than androidx.core on purpose. That
+     * library injects a permission of its own into the manifest, and this app
+     * asking for a permission nobody can explain is worse than a version check.
      */
     private void keepClearOfTheSystemBars() {
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        ViewCompat.setOnApplyWindowInsetsListener(web, (v, windowInsets) -> {
-            Insets bars = windowInsets.getInsets(
-                    WindowInsetsCompat.Type.systemBars()
-                            | WindowInsetsCompat.Type.displayCutout());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return;
+        getWindow().setDecorFitsSystemWindows(false);
+        web.setOnApplyWindowInsetsListener((v, windowInsets) -> {
+            android.graphics.Insets bars = windowInsets.getInsets(
+                    WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
-            return WindowInsetsCompat.CONSUMED;
+            return WindowInsets.CONSUMED;
         });
     }
 

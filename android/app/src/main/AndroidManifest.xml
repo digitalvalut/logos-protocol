@@ -31,22 +31,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
-    <!-- Ringing while the app is closed, and nothing else. There is no push
-         service here and no Google Play Services: the phone does its own
-         waiting, which is why it needs to be allowed to keep doing it. The
-         whole group is inert until somebody turns the feature on. -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- What puts an incoming call on the lock screen instead of leaving a
-         silent line in a shade nobody looks at. -->
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-    <!-- Without it the processor sleeps between one check and the next, and the
-         phone rings whenever it happens to wake up — too late to answer. -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- A restarted phone should not quietly stop being reachable while the
-         setting still reads as on. -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Nothing here for ringing while the app is closed. That feature is built
+         and its classes are in this package, but the one line that would let the
+         page reach them is commented out until it has been seen to work, so the
+         six permissions it needs — foreground service, notifications, full
+         screen intent, wake lock, boot — are not asked for either. Declaring
+         them now would put six requests in front of somebody for something that
+         does nothing. They come back in the same commit the feature does. -->
 
     <!-- Declared, but not required: a phone with no camera still does messages,
          files and voice, and should not be told the app is unavailable. -->
@@ -73,39 +64,10 @@
             </intent-filter>
         </activity>
 
-        <!-- The least a locked screen can show and still mean something: that
-             somebody is calling, and two buttons. Excluded from recents so a
-             missed call does not sit in the task switcher afterwards. -->
-        <activity
-            android:name=".CallActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTop"
-            android:showOnLockScreen="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-
-        <service
-            android:name=".RingService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <!-- Android asks what the special use is. The honest answer, and the
-                 reason no ordinary type fits: this app has no push service, so
-                 the phone has to do its own waiting for an incoming call. -->
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Waiting for incoming peer-to-peer calls without any push service" />
-        </service>
-
-        <receiver
-            android:name=".BootReceiver"
-            android:exported="true"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
+        <!-- CallActivity, RingService and BootReceiver are written and are in
+             the source, but they are not declared here while the feature that
+             drives them is switched off. An undeclared component cannot start,
+             so leaving them in would only mean carrying their permissions. -->
 
     </application>
 

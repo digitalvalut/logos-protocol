@@ -1,0 +1,12 @@
+La v5 su alcuni telefoni si rifiutava di installarsi, dicendo solo "App non
+installata".
+
+Portava con se sette permessi e quattro componenti in piu della versione
+precedente — servizio in primo piano, notifiche, sveglia del processore,
+avvio al riavvio del telefono — tutti per lo squillo ad app chiusa, che pero
+in quella versione era spento. Chiedere permessi per una funzione che non
+funziona e sbagliato di per se: adesso non li chiede piu, e cio che dichiara
+e esattamente cio che dichiarava la v4.
+
+Restano dentro le due correzioni della v5: il logo, e l intestazione che non
+finisce piu sotto l orologio.
