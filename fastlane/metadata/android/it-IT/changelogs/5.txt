@@ -1,0 +1,11 @@
+Due cose che sul telefono erano visibilmente sbagliate.
+
+Il logo non compariva. Il file unico lo cercava accanto a se, come file
+separato — cosa che funziona sul sito, dove quel file sta davvero li accanto, e
+non puo funzionare dentro il pacchetto, dove accanto non c e nulla. Ora il logo
+fa parte del file a cui appartiene.
+
+L intestazione finiva sotto l orologio e la batteria, tagliata a meta. Un app
+che punta a un Android recente viene disegnata da bordo a bordo che lo chieda o
+no, ed e compito dell app togliersi da sotto le barre di sistema. Ora lo fa, su
+tutte le versioni e non solo su quelle che lo impongono.

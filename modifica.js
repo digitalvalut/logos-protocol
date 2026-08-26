@@ -74,6 +74,9 @@ const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, i
 
 Object.assign(I18N.en, {
 "file.noRoomIn":"“{n}” was not received: this device already has too much held in memory. Reload the page and ask for it again.",
+"listen.needLockScreen":"To ring on a locked screen, Android needs one more permission. Opening the page where it is given.",
+"android.ringTitle":"Someone is calling",
+"android.ringBody":"Open DigitalValut Logos to answer.",
 "contacts.sameLookVerified":"verified by voice",
 "contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
@@ -180,6 +183,7 @@ Object.assign(I18N.en, {
 "notify.sub":"A notification if a contact tries to reach you and you don't have the app open — no name, no message, just a heads-up.",
 "notify.iosHint":"On iPhone this only works once you've added the app to your Home Screen first: tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>, and open the app from there.",
 "listen.title":"Stay listening for calls","listen.sub":"The phone really rings, like a real call, for as long as you keep this screen open. Uses more battery; no outside service is involved.","listen.status":"Listening — if you switch screen or app, it stops until you come back here.",
+"listen.subApp":"The phone really rings, like a real call, even with the app closed. The waiting is done by the phone itself: no account, no push service, nothing outside. Uses more battery.","listen.statusApp":"Listening — the phone stays reachable even with the app closed.",
 "notify.blocked":"Notifications blocked by the browser. Check the site's settings.",
 "sas.title":"Security check",
 "sas.lead":"Optional: say these three words to each other out loud. If you both see the same ones, nobody has come in between — but you can keep chatting without doing this.",
@@ -253,6 +257,9 @@ Object.assign(I18N.en, {
 });
 Object.assign(I18N.it, {
 "file.noRoomIn":"«{n}» non è stato ricevuto: questo dispositivo ha già troppa roba aperta in memoria. Ricarica la pagina e fattelo rimandare.",
+"listen.needLockScreen":"Per squillare a schermo bloccato, Android chiede un permesso in più. Ti porto sulla pagina dove si concede.",
+"android.ringTitle":"Qualcuno ti sta chiamando",
+"android.ringBody":"Apri DigitalValut Logos per rispondere.",
 "contacts.sameLookVerified":"verificato a voce",
 "contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
@@ -359,6 +366,7 @@ Object.assign(I18N.it, {
 "notify.sub":"Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.",
 "notify.iosHint":"Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.",
 "listen.title":"Resta in ascolto delle chiamate","listen.sub":"Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.","listen.status":"In ascolto — se cambi schermata o app, si ferma finché non torni qui.",
+"listen.subApp":"Il telefono squilla davvero, come una chiamata vera, anche ad app chiusa. Ad aspettare è il telefono stesso: nessun account, nessun servizio push, niente di esterno. Consuma più batteria.","listen.statusApp":"In ascolto — il telefono resta raggiungibile anche ad app chiusa.",
 "notify.blocked":"Notifiche bloccate dal browser. Controlla le impostazioni del sito.",
 "sas.title":"Controllo di sicurezza",
 "sas.lead":"Facoltativo: ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo — ma potete continuare a scrivere anche senza.",
@@ -433,6 +441,9 @@ Object.assign(I18N.it, {
 
 Object.assign(I18N.fr, {
 "file.noRoomIn":"« {n} » n'a pas été reçu : cet appareil garde déjà trop de choses en mémoire. Rechargez la page et demandez qu'on vous le renvoie.",
+"listen.needLockScreen":"Pour sonner sur un écran verrouillé, Android demande une autorisation de plus. Ouverture de la page où l'accorder.",
+"android.ringTitle":"Quelqu’un vous appelle",
+"android.ringBody":"Ouvrez DigitalValut Logos pour répondre.",
 "contacts.sameLookVerified":"vérifié de vive voix",
 "contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
@@ -531,6 +542,7 @@ Object.assign(I18N.fr, {
 "notify.sub":"Une notification si un contact essaie de vous joindre et que vous n'avez pas l'appli ouverte — aucun nom, aucun message, juste un signal.",
 "notify.iosHint":"Sur iPhone, cela ne fonctionne que si vous avez d'abord ajouté l'appli à votre écran d'accueil : touchez <b>Partager</b> dans Safari, puis <b>Sur l'écran d'accueil</b>, et ouvrez l'appli depuis là.",
 "listen.title":"Rester à l'écoute des appels","listen.sub":"Le téléphone sonne vraiment, comme un appel réel, tant que vous gardez cet écran ouvert. Consomme plus de batterie ; aucun service extérieur n'est impliqué.","listen.status":"À l'écoute — si vous changez d'écran ou d'appli, ça s'arrête jusqu'à votre retour ici.",
+"listen.subApp":"Le téléphone sonne vraiment, comme un appel réel, même appli fermée. C'est le téléphone lui-même qui attend : aucun compte, aucun service de notification, rien d'extérieur. Consomme plus de batterie.","listen.statusApp":"À l'écoute — le téléphone reste joignable même appli fermée.",
 "notify.blocked":"Notifications bloquées par le navigateur. Vérifiez les paramètres du site.",
 "sas.title":"Contrôle de sécurité",
 "sas.lead":"Facultatif : dites-vous ces trois mots à voix haute. Si vous voyez tous les deux les mêmes, personne ne s'est interposé — mais vous pouvez continuer à écrire sans le faire.",
@@ -605,6 +617,9 @@ Object.assign(I18N.fr, {
 
 Object.assign(I18N.de, {
 "file.noRoomIn":"„{n}“ wurde nicht empfangen: Dieses Gerät hält bereits zu viel im Speicher. Lade die Seite neu und lass es dir erneut senden.",
+"listen.needLockScreen":"Um bei gesperrtem Bildschirm zu klingeln, verlangt Android eine weitere Berechtigung. Die Seite dafür wird geöffnet.",
+"android.ringTitle":"Jemand ruft an",
+"android.ringBody":"Öffne DigitalValut Logos, um abzunehmen.",
 "contacts.sameLookVerified":"mündlich bestätigt",
 "contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
@@ -703,6 +718,7 @@ Object.assign(I18N.de, {
 "notify.sub":"Eine Benachrichtigung, wenn ein Kontakt versucht dich zu erreichen und du die App nicht offen hast — kein Name, keine Nachricht, nur ein Hinweis.",
 "notify.iosHint":"Auf dem iPhone funktioniert das nur, wenn du die App zuerst zum Home-Bildschirm hinzugefügt hast: tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Home-Bildschirm</b>, und öffne die App von dort.",
 "listen.title":"Auf Anrufe lauschen","listen.sub":"Das Telefon klingelt wirklich, wie bei einem echten Anruf, solange dieser Bildschirm geöffnet bleibt. Verbraucht mehr Akku; kein externer Dienst ist beteiligt.","listen.status":"In Bereitschaft — wechselst du Bildschirm oder App, stoppt es, bis du hierher zurückkehrst.",
+"listen.subApp":"Das Telefon klingelt wirklich, wie bei einem echten Anruf, auch bei geschlossener App. Das Warten übernimmt das Telefon selbst: kein Konto, kein Push-Dienst, nichts Externes. Verbraucht mehr Akku.","listen.statusApp":"In Bereitschaft — das Telefon bleibt auch bei geschlossener App erreichbar.",
 "notify.blocked":"Benachrichtigungen vom Browser blockiert. Prüfe die Einstellungen der Seite.",
 "sas.title":"Sicherheitsprüfung",
 "sas.lead":"Optional: Sagt euch diese drei Wörter laut. Wenn ihr beide dieselben seht, hat sich niemand dazwischengeschaltet — ihr könnt aber auch ohne das weiterschreiben.",
@@ -777,6 +793,9 @@ Object.assign(I18N.de, {
 
 Object.assign(I18N.es, {
 "file.noRoomIn":"«{n}» no se ha recibido: este dispositivo ya tiene demasiado en memoria. Recarga la página y pide que te lo reenvíen.",
+"listen.needLockScreen":"Para sonar con la pantalla bloqueada, Android pide un permiso más. Abriendo la página donde se concede.",
+"android.ringTitle":"Alguien te está llamando",
+"android.ringBody":"Abre DigitalValut Logos para responder.",
 "contacts.sameLookVerified":"verificado de viva voz",
 "contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
@@ -875,6 +894,7 @@ Object.assign(I18N.es, {
 "notify.sub":"Una notificación si un contacto intenta contactarte y no tienes la app abierta — sin nombre, sin mensaje, solo un aviso.",
 "notify.iosHint":"En iPhone esto solo funciona si primero añadiste la app a tu pantalla de inicio: toca <b>Compartir</b> en Safari, luego <b>Añadir a inicio</b>, y abre la app desde ahí.",
 "listen.title":"Quedarse a la escucha de llamadas","listen.sub":"El teléfono suena de verdad, como una llamada real, mientras mantengas esta pantalla abierta. Consume más batería; no interviene ningún servicio externo.","listen.status":"Escuchando — si cambias de pantalla o de app, se detiene hasta que vuelvas aquí.",
+"listen.subApp":"El teléfono suena de verdad, como una llamada real, incluso con la app cerrada. Quien espera es el propio teléfono: sin cuenta, sin servicio de notificaciones, nada externo. Consume más batería.","listen.statusApp":"Escuchando — el teléfono sigue localizable incluso con la app cerrada.",
 "notify.blocked":"Notificaciones bloqueadas por el navegador. Comprueba los ajustes del sitio.",
 "sas.title":"Comprobación de seguridad",
 "sas.lead":"Opcional: decíos estas tres palabras en voz alta. Si ambos veis las mismas, nadie se ha interpuesto — pero podéis seguir escribiendo sin hacerlo.",
@@ -949,6 +969,9 @@ Object.assign(I18N.es, {
 
 Object.assign(I18N.pt, {
 "file.noRoomIn":"«{n}» não foi recebido: este dispositivo já tem demasiada coisa em memória. Recarrega a página e pede que to enviem de novo.",
+"listen.needLockScreen":"Para tocar com o ecrã bloqueado, o Android pede mais uma permissão. A abrir a página onde se concede.",
+"android.ringTitle":"Alguém está a ligar",
+"android.ringBody":"Abre o DigitalValut Logos para atender.",
 "contacts.sameLookVerified":"verificado por voz",
 "contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
@@ -1047,6 +1070,7 @@ Object.assign(I18N.pt, {
 "notify.sub":"Uma notificação se um contacto tentar chegar até si e não tiver a app aberta — sem nome, sem mensagem, apenas um aviso.",
 "notify.iosHint":"No iPhone isto só funciona se primeiro adicionar a app ao seu ecrã principal: toque em <b>Partilhar</b> no Safari, depois em <b>Adicionar ao ecrã principal</b>, e abra a app a partir daí.",
 "listen.title":"Ficar à escuta de chamadas","listen.sub":"O telemóvel toca mesmo, como uma chamada real, enquanto mantiver este ecrã aberto. Consome mais bateria; nenhum serviço externo está envolvido.","listen.status":"À escuta — se mudar de ecrã ou de app, para até voltar aqui.",
+"listen.subApp":"O telemóvel toca mesmo, como uma chamada real, mesmo com a app fechada. Quem espera é o próprio telemóvel: sem conta, sem serviço de notificações, nada externo. Consome mais bateria.","listen.statusApp":"À escuta — o telemóvel continua contactável mesmo com a app fechada.",
 "notify.blocked":"Notificações bloqueadas pelo navegador. Verifique as definições do site.",
 "sas.title":"Verificação de segurança",
 "sas.lead":"Opcional: digam estas três palavras um ao outro em voz alta. Se ambos virem as mesmas, ninguém se interpôs — mas podem continuar a escrever sem o fazer.",
@@ -1121,6 +1145,9 @@ Object.assign(I18N.pt, {
 
 Object.assign(I18N.ru, {
 "file.noRoomIn":"«{n}» не получен: на этом устройстве уже слишком много в памяти. Перезагрузите страницу и попросите отправить снова.",
+"listen.needLockScreen":"Чтобы звонить на заблокированном экране, Android требует ещё одно разрешение. Открываю страницу, где его выдают.",
+"android.ringTitle":"Вам звонят",
+"android.ringBody":"Откройте DigitalValut Logos, чтобы ответить.",
 "contacts.sameLookVerified":"подтверждён голосом",
 "contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
@@ -1219,6 +1246,7 @@ Object.assign(I18N.ru, {
 "notify.sub":"Уведомление, если контакт пытается связаться с вами, а приложение у вас не открыто — ни имени, ни сообщения, только сигнал.",
 "notify.iosHint":"На iPhone это работает только если вы сначала добавили приложение на главный экран: нажмите <b>Поделиться</b> в Safari, затем <b>На экран «Домой»</b>, и открывайте приложение оттуда.",
 "listen.title":"Оставаться на связи для звонков","listen.sub":"Телефон звонит по-настоящему, как настоящий вызов, пока этот экран открыт. Расходует больше заряда; никакой внешний сервис не задействован.","listen.status":"На связи — если переключитесь на другой экран или приложение, приём остановится до возвращения сюда.",
+"listen.subApp":"Телефон звонит по-настоящему, как настоящий вызов, даже когда приложение закрыто. Ждёт сам телефон: без учётной записи, без службы уведомлений, без чего-либо внешнего. Расходует больше заряда.","listen.statusApp":"На связи — телефон остаётся доступен даже при закрытом приложении.",
 "notify.blocked":"Уведомления заблокированы браузером. Проверьте настройки сайта.",
 "sas.title":"Проверка безопасности",
 "sas.lead":"Необязательно: произнесите друг другу эти три слова вслух. Если вы оба видите одинаковые, никто не вклинился — но можно продолжать переписку и без этого.",
@@ -1293,6 +1321,9 @@ Object.assign(I18N.ru, {
 
 Object.assign(I18N.zh, {
 "file.noRoomIn":"未能接收「{n}」：此设备内存中已保留过多内容。请重新载入页面并请对方重新发送。",
+"listen.needLockScreen":"要在锁屏时响铃，Android 还需要一项权限。正在打开授予该权限的页面。",
+"android.ringTitle":"有人正在呼叫你",
+"android.ringBody":"打开 DigitalValut Logos 接听。",
 "contacts.sameLookVerified":"已通过语音验证",
 "contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
@@ -1391,6 +1422,7 @@ Object.assign(I18N.zh, {
 "notify.sub":"当联系人试图联系你而你没有打开应用时发送通知——没有姓名，没有消息内容，只是一个提醒。",
 "notify.iosHint":"在 iPhone 上，只有先将应用添加到主屏幕后才能使用此功能：在 Safari 中点击<b>分享</b>，然后点击<b>添加到主屏幕</b>，并从那里打开应用。",
 "listen.title":"保持接听等待","listen.sub":"只要这个屏幕保持打开，手机就会像真正的电话一样响铃。会更耗电；不涉及任何外部服务。","listen.status":"正在等待来电——切换到其他屏幕或应用会暂停，回到这里才会恢复。",
+"listen.subApp":"即使应用已关闭，手机也会像真正的电话一样响铃。等待由手机自己完成：没有账号，没有推送服务，不涉及任何外部服务。会更耗电。","listen.statusApp":"正在等待来电——即使应用关闭，手机依然可以被找到。",
 "notify.blocked":"通知被浏览器阻止。请检查网站设置。",
 "sas.title":"安全检查",
 "sas.lead":"可选：互相大声说出这三个词。如果你们看到的一样，说明没有人插入其中——不这样做也可以继续聊天。",
@@ -1465,6 +1497,9 @@ Object.assign(I18N.zh, {
 
 Object.assign(I18N.ar, {
 "file.noRoomIn":"لم يتم استلام «{n}»: هذا الجهاز يحتفظ بالكثير في الذاكرة بالفعل. أعد تحميل الصفحة واطلب إرساله مرة أخرى.",
+"listen.needLockScreen":"كي يرن الهاتف والشاشة مقفلة، يطلب أندرويد إذناً إضافياً. يجري فتح الصفحة التي يُمنح فيها.",
+"android.ringTitle":"هناك من يتصل بك",
+"android.ringBody":"افتح DigitalValut Logos للرد.",
 "contacts.sameLookVerified":"تم التحقق صوتيًّا",
 "contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
@@ -1563,6 +1598,7 @@ Object.assign(I18N.ar, {
 "notify.sub":"إشعار إذا حاول أحد جهات اتصالك الوصول إليك ولم يكن التطبيق مفتوحًا لديك — بلا اسم، بلا رسالة، مجرد تنبيه.",
 "notify.iosHint":"على آيفون، يعمل هذا فقط بعد إضافة التطبيق إلى شاشتك الرئيسية أولًا: اضغط <b>مشاركة</b> في سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>، وافتح التطبيق من هناك.",
 "listen.title":"ابقَ بانتظار المكالمات","listen.sub":"يرن الهاتف فعلًا كأنها مكالمة حقيقية، طالما أبقيت هذه الشاشة مفتوحة. يستهلك بطارية أكثر؛ لا يشارك أي خدمة خارجية.","listen.status":"بانتظار — إذا بدّلت الشاشة أو التطبيق، يتوقف حتى تعود إلى هنا.",
+"listen.subApp":"يرن الهاتف فعلاً، مثل مكالمة حقيقية، حتى والتطبيق مغلق. الهاتف نفسه هو من ينتظر: بلا حساب، بلا خدمة إشعارات، ولا شيء خارجي. يستهلك بطارية أكثر.","listen.statusApp":"قيد الاستماع — يبقى الهاتف قابلاً للوصول حتى والتطبيق مغلق.",
 "notify.blocked":"حظر المتصفح الإشعارات. تحقق من إعدادات الموقع.",
 "sas.title":"فحص الأمان",
 "sas.lead":"اختياري: انطقا هذه الكلمات الثلاث لبعضكما بصوت عالٍ. إذا رأيتما نفس الكلمات، فلم يتدخّل أحد — لكن يمكنكما الاستمرار في الكتابة دون فعل ذلك.",
@@ -1637,6 +1673,9 @@ Object.assign(I18N.ar, {
 
 Object.assign(I18N.ur, {
 "file.noRoomIn":"«{n}» موصول نہیں ہوا: اس ڈیوائس کی یادداشت میں پہلے ہی بہت کچھ ہے۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ بھیجنے کو کہیں۔",
+"listen.needLockScreen":"مقفل اسکرین پر بجنے کے لیے اینڈرائیڈ کو ایک اور اجازت درکار ہے۔ وہ صفحہ کھولا جا رہا ہے جہاں یہ دی جاتی ہے۔",
+"android.ringTitle":"کوئی آپ کو کال کر رہا ہے",
+"android.ringBody":"جواب دینے کے لیے DigitalValut Logos کھولیں۔",
 "contacts.sameLookVerified":"زبانی تصدیق شدہ",
 "contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
@@ -1735,6 +1774,7 @@ Object.assign(I18N.ur, {
 "notify.sub":"اگر کوئی رابطہ آپ تک پہنچنے کی کوشش کرے اور آپ کی ایپ کھلی نہ ہو تو ایک اطلاع — کوئی نام نہیں، کوئی پیغام نہیں، بس ایک اشارہ۔",
 "notify.iosHint":"آئی فون پر یہ صرف اس وقت کام کرتا ہے جب آپ پہلے ایپ کو اپنی ہوم اسکرین پر شامل کر چکے ہوں: سفاری میں <b>شیئر</b> پر ٹچ کریں، پھر <b>ہوم اسکرین پر شامل کریں</b>، اور وہاں سے ایپ کھولیں۔",
 "listen.title":"کالز کے لیے سنتے رہیں","listen.sub":"جب تک آپ یہ اسکرین کھلی رکھیں، فون واقعی بجتا ہے، جیسے ایک اصل کال۔ زیادہ بیٹری استعمال ہوتی ہے؛ کوئی بیرونی سروس شامل نہیں۔","listen.status":"سن رہے ہیں — اگر آپ اسکرین یا ایپ بدلیں تو یہ رک جاتا ہے جب تک آپ یہاں واپس نہ آئیں۔",
+"listen.subApp":"ایپ بند ہونے پر بھی فون واقعی بجتا ہے، ایک حقیقی کال کی طرح۔ انتظار فون خود کرتا ہے: نہ کوئی اکاؤنٹ، نہ پش سروس، نہ کوئی بیرونی چیز۔ بیٹری زیادہ خرچ ہوتی ہے۔","listen.statusApp":"سن رہا ہے — ایپ بند ہونے پر بھی فون تک پہنچا جا سکتا ہے۔",
 "notify.blocked":"براؤزر نے اطلاعات بلاک کر دیں۔ سائٹ کی سیٹنگز چیک کریں۔",
 "sas.title":"سیکیورٹی چیک",
 "sas.lead":"اختیاری: یہ تین الفاظ ایک دوسرے کو بلند آواز میں بتائیں۔ اگر آپ دونوں ایک جیسے الفاظ دیکھیں، تو کسی نے مداخلت نہیں کی — لیکن آپ اس کے بغیر بھی لکھنا جاری رکھ سکتے ہیں۔",
@@ -1809,6 +1849,9 @@ Object.assign(I18N.ur, {
 
 Object.assign(I18N.hi, {
 "file.noRoomIn":"«{n}» प्राप्त नहीं हुआ: इस डिवाइस की मेमोरी में पहले से बहुत कुछ है। पेज दोबारा लोड करें और फिर से भेजने को कहें।",
+"listen.needLockScreen":"लॉक स्क्रीन पर बजने के लिए Android को एक और अनुमति चाहिए। वह पृष्ठ खोला जा रहा है जहाँ यह दी जाती है।",
+"android.ringTitle":"कोई आपको कॉल कर रहा है",
+"android.ringBody":"उत्तर देने के लिए DigitalValut Logos खोलें।",
 "contacts.sameLookVerified":"आवाज़ से सत्यापित",
 "contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
@@ -1907,6 +1950,7 @@ Object.assign(I18N.hi, {
 "notify.sub":"अगर कोई संपर्क आपसे जुड़ने की कोशिश करे और आपका ऐप खुला न हो तो एक सूचना — कोई नाम नहीं, कोई संदेश नहीं, बस एक इशारा।",
 "notify.iosHint":"iPhone पर यह तभी काम करता है जब आपने पहले ऐप को अपनी होम स्क्रीन पर जोड़ा हो: Safari में <b>शेयर</b> टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b>, और वहां से ऐप खोलें।",
 "listen.title":"कॉल के लिए सुनते रहें","listen.sub":"जब तक आप यह स्क्रीन खुली रखते हैं, फ़ोन सच में बजता है, असली कॉल की तरह। बैटरी ज़्यादा खर्च होती है; कोई बाहरी सेवा शामिल नहीं है।","listen.status":"सुन रहे हैं — अगर आप स्क्रीन या ऐप बदलते हैं, तो यह तब तक रुक जाता है जब तक आप यहाँ वापस नहीं आते।",
+"listen.subApp":"ऐप बंद होने पर भी फ़ोन सचमुच बजता है, एक असली कॉल की तरह। इंतज़ार फ़ोन खुद करता है: कोई खाता नहीं, कोई पुश सेवा नहीं, बाहर का कुछ नहीं। बैटरी ज़्यादा लगती है।","listen.statusApp":"सुन रहा है — ऐप बंद होने पर भी फ़ोन तक पहुँचा जा सकता है।",
 "notify.blocked":"ब्राउज़र ने सूचनाएं ब्लॉक कर दीं। साइट की सेटिंग्स जांचें।",
 "sas.title":"सुरक्षा जांच",
 "sas.lead":"वैकल्पिक: एक-दूसरे को ये तीन शब्द ज़ोर से बताएं। अगर आप दोनों एक जैसे शब्द देखें, तो किसी ने दखल नहीं दिया — लेकिन आप इसके बिना भी लिखना जारी रख सकते हैं।",
@@ -1981,6 +2025,9 @@ Object.assign(I18N.hi, {
 
 Object.assign(I18N.bn, {
 "file.noRoomIn":"«{n}» গ্রহণ করা যায়নি: এই ডিভাইসের মেমরিতে ইতিমধ্যেই অনেক কিছু আছে। পৃষ্ঠাটি রিলোড করুন এবং আবার পাঠাতে বলুন।",
+"listen.needLockScreen":"লক স্ক্রিনে বাজতে হলে Android-এর আরও একটি অনুমতি লাগে। যেখানে তা দেওয়া যায় সেই পাতা খোলা হচ্ছে।",
+"android.ringTitle":"কেউ আপনাকে ডাকছে",
+"android.ringBody":"উত্তর দিতে DigitalValut Logos খুলুন।",
 "contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা",
 "contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
@@ -2079,6 +2126,7 @@ Object.assign(I18N.bn, {
 "notify.sub":"কোনো পরিচিতি আপনার কাছে পৌঁছানোর চেষ্টা করলে এবং আপনার অ্যাপ খোলা না থাকলে একটি বিজ্ঞপ্তি — কোনো নাম নেই, কোনো বার্তা নেই, শুধু একটি ইঙ্গিত।",
 "notify.iosHint":"iPhone-এ এটি তখনই কাজ করে যখন আপনি প্রথমে অ্যাপটি আপনার হোম স্ক্রিনে যোগ করেছেন: Safari-তে <b>শেয়ার</b>-এ ট্যাপ করুন, তারপর <b>হোম স্ক্রিনে যোগ করুন</b>, এবং সেখান থেকে অ্যাপ খুলুন।",
 "listen.title":"কলের জন্য শুনতে থাকুন","listen.sub":"যতক্ষণ আপনি এই স্ক্রিন খোলা রাখবেন, ফোন সত্যিই বাজবে, আসল কলের মতো। বেশি ব্যাটারি খরচ হয়; কোনো বাইরের সেবা জড়িত নেই।","listen.status":"শুনছে — স্ক্রিন বা অ্যাপ পাল্টালে, আপনি এখানে ফিরে না আসা পর্যন্ত থেমে যাবে।",
+"listen.subApp":"অ্যাপ বন্ধ থাকলেও ফোন সত্যিই বাজে, একটি আসল কলের মতো। অপেক্ষাটা ফোন নিজেই করে: কোনো অ্যাকাউন্ট নেই, কোনো পুশ সেবা নেই, বাইরের কিছুই নেই। ব্যাটারি বেশি খরচ হয়।","listen.statusApp":"শুনছে — অ্যাপ বন্ধ থাকলেও ফোনে পৌঁছানো যায়।",
 "notify.blocked":"ব্রাউজার বিজ্ঞপ্তি ব্লক করেছে। সাইটের সেটিংস পরীক্ষা করুন।",
 "sas.title":"নিরাপত্তা পরীক্ষা",
 "sas.lead":"ঐচ্ছিক: একে অপরকে এই তিনটি শব্দ জোরে বলুন। আপনারা দুজনেই একই শব্দ দেখলে, কেউ ঢুকে পড়েনি — তবে এটি না করেও আপনি লেখা চালিয়ে যেতে পারেন।",
@@ -2153,6 +2201,9 @@ Object.assign(I18N.bn, {
 
 Object.assign(I18N.id, {
 "file.noRoomIn":"«{n}» tidak diterima: perangkat ini sudah menyimpan terlalu banyak di memori. Muat ulang halaman dan minta dikirim lagi.",
+"listen.needLockScreen":"Untuk berdering saat layar terkunci, Android meminta satu izin lagi. Membuka halaman tempat izin itu diberikan.",
+"android.ringTitle":"Ada yang menelepon",
+"android.ringBody":"Buka DigitalValut Logos untuk menjawab.",
 "contacts.sameLookVerified":"diverifikasi lewat suara",
 "contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
@@ -2251,6 +2302,7 @@ Object.assign(I18N.id, {
 "notify.sub":"Notifikasi jika kontak mencoba menghubungi Anda dan Anda tidak membuka aplikasi — tanpa nama, tanpa pesan, hanya sebuah tanda.",
 "notify.iosHint":"Di iPhone ini hanya berfungsi jika Anda sudah menambahkan aplikasi ke Layar Utama terlebih dahulu: ketuk <b>Bagikan</b> di Safari, lalu <b>Tambah ke Layar Utama</b>, dan buka aplikasi dari sana.",
 "listen.title":"Tetap mendengarkan panggilan","listen.sub":"Ponsel benar-benar berdering, seperti panggilan sungguhan, selama Anda membuka layar ini. Menghabiskan lebih banyak baterai; tidak ada layanan luar yang terlibat.","listen.status":"Mendengarkan — jika Anda beralih layar atau aplikasi, ini berhenti sampai Anda kembali ke sini.",
+"listen.subApp":"Ponsel benar-benar berdering, seperti panggilan sungguhan, bahkan saat aplikasi tertutup. Yang menunggu adalah ponselnya sendiri: tanpa akun, tanpa layanan push, tanpa apa pun dari luar. Lebih boros baterai.","listen.statusApp":"Mendengarkan — ponsel tetap bisa dihubungi meski aplikasi tertutup.",
 "notify.blocked":"Notifikasi diblokir oleh browser. Periksa pengaturan situs.",
 "sas.title":"Pemeriksaan keamanan",
 "sas.lead":"Opsional: ucapkan tiga kata ini satu sama lain dengan suara keras. Jika Anda berdua melihat kata yang sama, tidak ada yang menyisip — tetapi Anda tetap bisa melanjutkan chat tanpa melakukannya.",
@@ -4405,7 +4457,77 @@ $('listenRow').addEventListener('click', () => {
   paintListenMode(listenMode);
   if (listenMode) keepScreenAwake();
   else if (callState !== 'active') letScreenSleep();   /* una chiamata in corso ha la priorità sullo spegnimento */
+  handOverWatchToAndroid();
 });
+
+/* ---------------------------------------------------------------------------
+   Lo stesso interruttore, dentro l'app Android, vale molto di più.
+
+   Qui in una pagina il limite scritto qui sopra è invalicabile: chiusa la
+   scheda, non resta nessuno ad aspettare. L'unico modo che il web ha di
+   svegliare un telefono è il Web Push, che su Android passa dai server di
+   Google — e questa app non ne imbarca nessuno, per scelta.
+
+   Nel pacchetto Android c'è invece un servizio che può stare sveglio al posto
+   nostro. Non gli si consegna nulla di segreto: soltanto *dove* guardare (le
+   caselle, che si ricavano dagli indirizzi che uno distribuisce comunque),
+   l'indirizzo del relay a cui chiedere, e le due righe da mostrare, già nella
+   lingua scelta — così quella funzione non ha bisogno di tredici traduzioni
+   sue. Lui sbircia soltanto: la busta resta dov'è, chiusa, e a leggerla e
+   aprirla è questa pagina quando l'app si riapre, esattamente come sempre. */
+const androidRing = (() => {
+  try{
+    return (typeof AndroidRing !== 'undefined' && AndroidRing && AndroidRing.available())
+      ? AndroidRing : null;
+  }catch(_){ return null; }
+})();
+
+/* Dentro l'app quel testo direbbe una cosa falsa: che l'ascolto finisce appena
+   cambi schermata. Lì non finisce, ed è tutta la differenza — quindi si punta
+   alle due frasi giuste una volta sola, invece di lasciare in giro una promessa
+   sbagliata in un senso o nell'altro. */
+if (androidRing){
+  const sub = document.querySelector('#listenRow [data-i18n="listen.sub"]');
+  if (sub) sub.setAttribute('data-i18n', 'listen.subApp');
+  const st = $('listenStatus');
+  if (st) st.setAttribute('data-i18n', 'listen.statusApp');
+}
+
+async function handOverWatchToAndroid(){
+  if (!androidRing) return;
+  try{
+    if (!listenMode){ androidRing.stop(); return; }
+    const keys = [];
+    for (const n of activeSlots()){
+      const addr = await myAddress(n);
+      if (!addr) continue;
+      keys.push(await slotId(await addrSlotSeed(addr), 'addr-offer'));
+    }
+    /* Nessun indirizzo attivo significa che non c'è niente da sorvegliare, e un
+       servizio acceso a guardare il nulla è solo batteria buttata. */
+    if (!keys.length){ androidRing.stop(); return; }
+    androidRing.watch(keys.join(','), MAILBOX_BASE,
+      t('android.ringTitle', 'Qualcuno ti sta chiamando'),
+      t('android.ringBody', 'Apri DigitalValut Logos per rispondere.'));
+    /* Da Android 14 il diritto di prendersi uno schermo bloccato non si ha piu
+       installando: si concede a mano, per ogni app. Senza, la chiamata arriva
+       lo stesso ma come una striscia che un telefono bloccato non mostra —
+       cioe tutta la differenza fra squillare e non squillare. Tacerlo
+       lascerebbe qualcuno convinto di essere raggiungibile senza esserlo. */
+    if (androidRing.canTakeOverLockScreen && !androidRing.canTakeOverLockScreen()){
+      toast(t('listen.needLockScreen',
+        'Per squillare a schermo bloccato, Android chiede un permesso in piu. Ti porto sulla pagina dove si concede.'));
+      androidRing.askForLockScreen();
+    }
+  }catch(_){ /* un ponte assente o che rifiuta non deve rompere la pagina */ }
+}
+
+/* Chiamata da Android quando si risponde dallo schermo bloccato. Il servizio
+   sapeva soltanto che una busta esisteva: leggerla e aprirla tocca a qui, e
+   l'unica cosa che serve è farlo subito invece che al prossimo giro. */
+window.dvAndroidCall = function(){
+  try{ addrCheckOnce(); }catch(_){}
+};
 $('listenRow').addEventListener('keydown', e => {
   if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); $('listenRow').click(); }
 });
@@ -5219,7 +5341,14 @@ function stopAddrPolling(){ clearInterval(addrPollTimer); addrPollTimer = null; 
    exactly what makes the tab go hidden and stop here. It has to pick back up
    wherever the app was left, not only if that happened to be Home. */
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden'){ stopAddrPolling(); stopInboxPolling(); }
+  if (document.visibilityState === 'hidden'){
+    stopAddrPolling(); stopInboxPolling();
+    /* Il momento esatto in cui la consegna conta: la pagina smette di guardare
+       proprio adesso, e da adesso in poi deve guardare il telefono. Rifatta
+       ogni volta, non una sola all'accensione, perché nel frattempo possono
+       essere nati o spariti indirizzi usa e getta. */
+    handOverWatchToAndroid();
+  }
   else {
     startAddrPolling(); startInboxPolling();
     /* The screen lock is dropped by the system every time this page is
@@ -5806,7 +5935,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.73';
+const APP_VERSION = 'logos-modifica-3.74';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

@@ -18,6 +18,7 @@ package io.github.digitalvalut.logos;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -40,6 +41,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.webkit.WebViewAssetLoader;
 
 import java.io.OutputStream;
@@ -61,10 +66,14 @@ public class MainActivity extends Activity {
     private static final String START = ORIGIN + "/assets/logos.html";
     private static final int REQ_PERMS = 1;
     private static final int REQ_FILE = 2;
+    private static final int REQ_NOTIFY = 3;
 
     private WebView web;
     private ValueCallback<Uri[]> pendingFiles;
     private PermissionRequest pendingWebPermission;
+    /* A call answered before the page has finished loading: the nudge is held
+       until onPageFinished, or it would be sent to nothing at all. */
+    private boolean answeredPending;
 
     @Override
     protected void onCreate(Bundle state) {
@@ -95,6 +104,18 @@ public class MainActivity extends Activity {
            would come up with no identity every single time. */
         s.setDomStorageEnabled(true);
         s.setDatabaseEnabled(true);
+        /* A WebView ignores the page's own <meta name="viewport"> unless told
+           not to. The page says width=device-width, and without this line that
+           instruction is thrown away and the layout is measured against a width
+           that is not the screen's — so the app sits wider than the phone and
+           slides sideways. It also restores viewport-fit=cover, which is how
+           the page keeps clear of the notch and the gesture bar. */
+        s.setUseWideViewPort(true);
+        s.setLoadWithOverviewMode(true);
+        /* Nothing here is a document to be zoomed into; the layout already
+           answers to the screen, and pinch-zoom on it only breaks the framing. */
+        s.setBuiltInZoomControls(false);
+        s.setSupportZoom(false);
         /* A ringtone has to be able to start without somebody first tapping the
            screen, which is the entire point of a ringtone. */
         s.setMediaPlaybackRequiresUserGesture(false);
@@ -119,6 +140,7 @@ public class MainActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 view.evaluateJavascript(SAVE_SHIM, null);
+                if (answeredPending) { answeredPending = false; tellPageACallIsWaiting(); }
             }
         });
 
@@ -161,10 +183,58 @@ public class MainActivity extends Activity {
            page it is exposed to is the one inside this package, under a policy
            that refuses to run any script but its own. */
         web.addJavascriptInterface(new SaveBridge(), "AndroidSave");
+        /* Deliberately not connected yet.
+
+           The service, the call screen and the restart-after-reboot are all
+           written and all in this package, but none of it has been watched
+           ringing on a real phone. The page asks whether this bridge is here
+           and, finding it, changes what the listening switch promises: that
+           the watch carries on after you leave the screen. Registering it
+           before that promise has been seen to hold would put a claim on
+           somebody's screen on the strength of code that merely compiles.
+
+           One line, and it comes back on the day it rings. */
+        // web.addJavascriptInterface(new RingBridge(), "AndroidRing");
+
+        keepClearOfTheSystemBars();
 
         setContentView(web);
+        if (getIntent() != null
+                && getIntent().getBooleanExtra(CallActivity.EXTRA_ANSWERED, false)) {
+            answeredPending = true;
+        }
         if (state != null) web.restoreState(state);
         else web.loadUrl(START);
+    }
+
+    /**
+     * Keeps the page out from under the clock and the navigation bar.
+     *
+     * From Android 15 an app that targets a recent SDK — this one targets 36 —
+     * is laid out edge to edge whether it asks to be or not, behind the status
+     * bar at the top and the navigation bar at the bottom. Handling that is the
+     * app's job, and not doing it is not subtle: the header sits underneath the
+     * clock and the battery, sliced in half.
+     *
+     * The page cannot rescue itself. It only ever asks for the bottom inset,
+     * because in a browser the top one is the browser's own problem.
+     *
+     * Edge to edge is switched on deliberately for every version rather than
+     * left to arrive by itself on new ones, so that one arrangement holds from
+     * Android 5 to Android 16 — and so the behaviour can be seen and tested on
+     * an older emulator instead of only in the hands of whoever has a new phone.
+     * The cutout is included: on a phone with a hole-punch camera in landscape,
+     * the system bar insets alone do not clear it.
+     */
+    private void keepClearOfTheSystemBars() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        ViewCompat.setOnApplyWindowInsetsListener(web, (v, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                            | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 
     /* ------------------------------------------------------------------
@@ -227,6 +297,118 @@ public class MainActivity extends Activity {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this,
                         R.string.saveFailed, Toast.LENGTH_LONG).show());
             }
+        }
+    }
+
+    /* ------------------------------------------------------------------
+       Ringing while the app is closed.
+
+       The page cannot do this and never will: when the app is shut, the page is
+       gone, and the only thing the web offers for waking a phone is Web Push,
+       which on Android runs through Google. This app carries none of that on
+       purpose. So the page hands the waiting over to a service on this side —
+       the mailbox keys it listens on, the relay to ask, and the two lines of
+       text to show, already in whichever of the thirteen languages the person
+       chose. Keeping the wording on that side is why this feature does not need
+       thirteen more translations over here.
+       ------------------------------------------------------------------ */
+    public class RingBridge {
+
+        /** Lets the page know it is running somewhere that can actually ring. */
+        @JavascriptInterface
+        public boolean available() { return true; }
+
+        /**
+         * @param keysCsv hex SHA-256 mailbox keys, comma separated
+         * @param base    the relay's mailbox address, https and ending /mailbox/
+         * @param title   what a locked screen should say, in the user's language
+         * @param body    the quieter line under it
+         */
+        @JavascriptInterface
+        public void watch(String keysCsv, String base, String title, String body) {
+            if (RingService.keysOf(String.valueOf(keysCsv)).isEmpty()) return;
+            if (!RingService.isSafeBase(base)) return;
+            Intent go = new Intent(MainActivity.this, RingService.class)
+                .setAction(RingService.ACTION_WATCH)
+                .putExtra(RingService.EXTRA_KEYS, keysCsv)
+                .putExtra(RingService.EXTRA_BASE, base)
+                .putExtra(RingService.EXTRA_TITLE, title)
+                .putExtra(RingService.EXTRA_BODY, body);
+            runOnUiThread(() -> {
+                askToPostNotifications();
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(go);
+                    else startService(go);
+                } catch (Exception ignored) {}
+            });
+        }
+
+        /**
+         * From Android 14 the right to take over a locked screen is not handed
+         * out at install any more — it is granted per app, in the phone's own
+         * settings. Without it a call still arrives, but as a banner that a
+         * locked phone never shows, which is the whole difference between
+         * ringing and not. This reports the state so the page can say so
+         * plainly rather than letting somebody believe they are reachable.
+         */
+        @JavascriptInterface
+        public boolean canTakeOverLockScreen() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return true;
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            return nm != null && nm.canUseFullScreenIntent();
+        }
+
+        /** Opens the one settings page where that permission is given. */
+        @JavascriptInterface
+        public void askForLockScreen() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return;
+            runOnUiThread(() -> {
+                try {
+                    startActivity(new Intent(
+                        android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                        Uri.parse("package:" + getPackageName())));
+                } catch (Exception ignored) {}
+            });
+        }
+
+        @JavascriptInterface
+        public void stop() {
+            RingService.saveWatching(MainActivity.this, false);
+            runOnUiThread(() -> {
+                try {
+                    startService(new Intent(MainActivity.this, RingService.class)
+                        .setAction(RingService.ACTION_STOP));
+                } catch (Exception ignored) {}
+            });
+        }
+    }
+
+    /* A silent ring is not a ring. Asked for only when somebody actually turns
+       the feature on, never at launch. */
+    private void askToPostNotifications() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) return;
+        try { requestPermissions(new String[]{ Manifest.permission.POST_NOTIFICATIONS }, REQ_NOTIFY); }
+        catch (Exception ignored) {}
+    }
+
+    /* Answering from the lock screen brings us here. The service only ever knew
+       that something was waiting; the reading and the decrypting are the page's,
+       so all this does is tell it to look now instead of at its next poll. */
+    private void tellPageACallIsWaiting() {
+        if (web == null) return;
+        web.evaluateJavascript(
+            "window.dvAndroidCall && window.dvAndroidCall();", null);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent != null && intent.getBooleanExtra(CallActivity.EXTRA_ANSWERED, false)) {
+            answeredPending = true;
+            tellPageACallIsWaiting();
         }
     }
 

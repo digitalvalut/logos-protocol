@@ -39,8 +39,13 @@ script:
     with the network off. Hosted properly, the ordinary four-file version does
     both.
 
-The icons stay external on purpose: embedding them would roughly double the file
-for no gain, and a missing icon costs nothing.
+The logo is embedded, because "a single file" has to mean it. It used to stay
+out, on the reasoning that a missing icon costs nothing — which was true while
+this build was only ever a curiosity you could host anywhere. It stopped being
+true the moment the Android package started serving this file as the app: there
+the logo is the app's own face on its first screen, and it came up as a broken
+image. The 192px icon is used rather than the 512px one because it is displayed
+small; that is about 40 KB apiece instead of 260.
 """
 
 import base64
@@ -58,6 +63,44 @@ def read(name):
     if not path.exists():
         sys.exit(f"missing {name} — run this from the folder holding the app")
     return path.read_text(encoding="utf-8")
+
+
+def data_uri(name):
+    """The bytes of an image, folded into the page itself."""
+    path = HERE / name
+    if not path.exists():
+        sys.exit(f"missing {name} — the logo has to be embedded, see the note at the top")
+    return "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode()
+
+
+def embed_the_logo(html):
+    """Everything the page would otherwise go looking for beside itself.
+
+    A relative path works on the website, where those files sit next to the
+    HTML, and fails silently everywhere else — most visibly inside the Android
+    package, where nothing exists beside this file at all.
+    """
+    logo = data_uri("modifica-icon-192.png")
+
+    html, n_img = re.subn(r'src="modifica-icon-512\.png"', f'src="{logo}"', html)
+    if n_img < 1:
+        sys.exit("could not find the logo image in modifica.html")
+
+    # Tab icons are cosmetic, and a second and third copy of the same 40 KB to
+    # decorate a tab is not worth carrying. Dropped rather than left pointing at
+    # files that are not there.
+    html = re.sub(
+        r'\n?[ \t]*<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]*>',
+        "",
+        html,
+    )
+
+    # The licence sits beside the app in the repository, not beside this file.
+    html = html.replace(
+        'href="LICENSE"',
+        'href="https://github.com/digitalvalut/logos-protocol/blob/main/LICENSE"',
+    )
+    return html, n_img
 
 
 def check_version_matches():
@@ -145,6 +188,18 @@ def main():
 
     # The fingerprints panel needs no help: finding no separate files to fetch,
     # the app hashes the one file it has become instead. See selfSeal().
+
+    html, n_logo = embed_the_logo(html)
+    print(f"logo embedded in {n_logo} place(s); no file is looked for beside this one")
+
+    # Nothing may be left pointing outside: this file has to stand alone, and a
+    # relative path that survives here is a broken image on somebody's phone.
+    stragglers = sorted(set(
+        m.group(1) for m in re.finditer(r'(?:src|href)="((?!https?:|data:|#|mailto:)[^"{}$\']+)"', html)
+    ))
+    if stragglers:
+        sys.exit("these would be looked for beside the file, and will not be there: "
+                 + ", ".join(stragglers))
 
     OUT.write_text(html, encoding="utf-8")
 

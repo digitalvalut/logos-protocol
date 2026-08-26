@@ -29,8 +29,8 @@ android {
         applicationId "io.github.digitalvalut.logos"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 4
-        versionName "4"
+        versionCode 5
+        versionName "5"
         resValue "string", "appName", "DigitalValut Logos"
     }
 
@@ -48,12 +48,17 @@ android {
 }
 
 dependencies {
-    /* The only dependency, and it earns its keep: WebViewAssetLoader serves the
-       bundled application from https://appassets.androidplatform.net rather than
-       a file:// path. That distinction is the whole build — a file:// page is not
-       a secure context, and a browser switches off Web Crypto and WebRTC there,
-       which between them are all of this app. */
+    /* WebViewAssetLoader serves the bundled application from
+       https://appassets.androidplatform.net rather than a file:// path. That
+       distinction is the whole build — a file:// page is not a secure context,
+       and a browser switches off Web Crypto and WebRTC there, which between
+       them are all of this app. */
     implementation 'androidx.webkit:webkit:1.11.0'
+
+    /* Window insets, so the page stays clear of the clock and the navigation
+       bar. Named here rather than relied on as something webkit happens to
+       bring along with it, because the layout breaks if that ever changes. */
+    implementation 'androidx.core:core:1.13.1'
 }
 
 /* One source of truth. `digitalvalut-logos.html` is the entire application folded

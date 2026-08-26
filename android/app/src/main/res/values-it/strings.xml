@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Solo le parole che Android tiene per sé: i nomi dei canali di notifica, che
+    compaiono nelle impostazioni del telefono, e il ripiego per l'istante prima
+    che la pagina abbia detto la sua. Il testo di una chiamata in arrivo arriva
+    dall'app, già nella lingua scelta.
+-->
+<resources>
+  <string name="savedToDownloads">Salvato in Download: %1$s</string>
+  <string name="saveFailed">Non è stato possibile salvare il file.</string>
+
+  <string name="incomingTitle">Qualcuno ti sta chiamando</string>
+  <string name="incomingBody">Apri DigitalValut Logos per rispondere.</string>
+  <string name="answer">Rispondi</string>
+  <string name="dismiss">Non ora</string>
+
+  <string name="watchingTitle">In ascolto delle chiamate</string>
+  <string name="watchingBody">Nessun account e nessun servizio push: il telefono aspetta da solo.</string>
+  <string name="watchingStop">Ferma</string>
+
+  <string name="chWatching">In ascolto delle chiamate</string>
+  <string name="chWatchingWhy">La riga silenziosa e permanente che dice che il telefono può ancora squillare. Non fa mai alcun suono.</string>
+  <string name="chRinging">Chiamate in arrivo</string>
+  <string name="chRingingWhy">Squilla e mostra la chiamata sullo schermo bloccato.</string>
+</resources>

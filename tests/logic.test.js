@@ -2323,3 +2323,134 @@ test.describe('le economie invisibili (M4-M7)', () => {
     app.stop();
   });
 });
+
+/* ------------------------------------------------------------------------
+   Squillare a telefono chiuso.
+
+   In una pagina questo è impossibile: chiusa la scheda non resta nessuno ad
+   aspettare, e l'unico modo che il web offre per svegliare un telefono passa
+   dai server di Google. Dentro il pacchetto Android c'è invece un servizio che
+   può stare sveglio, e la pagina gli consegna dove guardare.
+
+   Quello che si prova qui è la consegna, che è la parte che può sbagliare in
+   silenzio: consegnare le caselle sbagliate, o consegnarle quando l'utente ha
+   detto di no, o dimenticarsi di fermare il servizio. Un errore qui non si
+   vede su nessuno schermo — si vede solo dal fatto che il telefono non squilla
+   più, o che squilla quando non doveva.
+   ------------------------------------------------------------------------ */
+test.describe('il telefono che squilla anche ad app chiusa', () => {
+
+  function withAndroid(){
+    const app = loadApp({ androidRing: true });
+    app.run(`
+      activeSlots = function(){ return [0]; };
+      myAddress = function(){ return Promise.resolve('AAAABBBBCCCC'); };
+      addrSlotSeed = function(){ return Promise.resolve('seed'); };
+      slotId = function(){ return Promise.resolve('a'.repeat(64)); };
+    `);
+    return app;
+  }
+  const calls = app => app.sandbox.__androidRingCalls;
+
+  test('in un browser normale non esiste nessun ponte, e la pagina non ci prova nemmeno', () => {
+    const app = loadApp();
+    assert.strictEqual(app.run('androidRing'), null,
+      'fuori dal pacchetto Android non deve esistere alcun ponte');
+    return app.run('handOverWatchToAndroid()').then(() => {
+      assert.strictEqual(app.run('typeof AndroidRing'), 'undefined');
+      app.stop();
+    });
+  });
+
+  test('acceso, consegna le caselle da sorvegliare, il relay e le parole giuste', () => {
+    const app = withAndroid();
+    app.run('listenMode = true; window.__p = handOverWatchToAndroid();');
+    return app.run('window.__p').then(() => {
+      const c = calls(app);
+      assert.strictEqual(c.length, 1, 'una sola consegna');
+      assert.strictEqual(c[0].what, 'watch');
+      assert.strictEqual(c[0].keys, 'a'.repeat(64),
+        'deve consegnare la casella davvero calcolata dall indirizzo');
+      assert.ok(/^https:\/\/.*\/mailbox\/$/.test(c[0].base),
+        'il relay va consegnato dalla pagina, non scritto dentro il telefono: ' + c[0].base);
+      assert.ok(c[0].title && c[0].title.length > 3, 'la schermata bloccata deve avere un titolo');
+      app.stop();
+    });
+  });
+
+  test('spento, il servizio va fermato — non semplicemente lasciato andare', () => {
+    const app = withAndroid();
+    app.run('listenMode = false; window.__p = handOverWatchToAndroid();');
+    return app.run('window.__p').then(() => {
+      const c = calls(app);
+      assert.deepStrictEqual(c.map(x => x.what), ['stop'],
+        'spegnere l interruttore deve fermare davvero il servizio');
+      app.stop();
+    });
+  });
+
+  test('senza nessun indirizzo attivo non si tiene acceso un servizio a guardare il nulla', () => {
+    const app = withAndroid();
+    app.run('activeSlots = function(){ return []; };');
+    app.run('listenMode = true; window.__p = handOverWatchToAndroid();');
+    return app.run('window.__p').then(() => {
+      assert.deepStrictEqual(calls(app).map(x => x.what), ['stop'],
+        'nessun indirizzo da sorvegliare deve spegnere, non accendere');
+      app.stop();
+    });
+  });
+
+  test('la consegna si rifa quando la pagina sparisce, non solo una volta all avvio', () => {
+    const app = withAndroid();
+    app.run('listenMode = true;');
+    app.run(`
+      document.visibilityState = 'hidden';
+      (document.listeners['visibilitychange'] || []).forEach(function(f){ f(); });
+    `);
+    return new Promise(r => setTimeout(r, 30)).then(() => {
+      assert.ok(calls(app).some(x => x.what === 'watch'),
+        'uscire dall app e il momento esatto in cui il telefono deve prendere in mano l ascolto');
+      app.stop();
+    });
+  });
+
+  test('se Android nega lo schermo bloccato lo dice, invece di lasciar credere di essere raggiungibili', () => {
+    const app = loadApp({ androidRing: true, androidLockScreen: false });
+    app.run(`
+      activeSlots = function(){ return [0]; };
+      myAddress = function(){ return Promise.resolve('AAAABBBBCCCC'); };
+      addrSlotSeed = function(){ return Promise.resolve('seed'); };
+      slotId = function(){ return Promise.resolve('a'.repeat(64)); };
+      listenMode = true; window.__p = handOverWatchToAndroid();
+    `);
+    return app.run('window.__p').then(() => {
+      const c = app.sandbox.__androidRingCalls.map(x => x.what);
+      assert.ok(c.includes('watch'), 'l ascolto va acceso comunque: una striscia e meglio di niente');
+      assert.ok(c.includes('askForLockScreen'),
+        'senza quel permesso un telefono bloccato non mostra nulla, e va detto invece che taciuto');
+      app.stop();
+    });
+  });
+
+  test('quando invece il permesso c e, non si disturba nessuno', () => {
+    const app = withAndroid();
+    app.run('listenMode = true; window.__p = handOverWatchToAndroid();');
+    return app.run('window.__p').then(() => {
+      const c = app.sandbox.__androidRingCalls.map(x => x.what);
+      assert.ok(!c.includes('askForLockScreen'),
+        'chiedere un permesso gia concesso e solo un fastidio');
+      app.stop();
+    });
+  });
+
+  test('rispondere dallo schermo bloccato fa leggere la busta alla pagina, non al servizio', () => {
+    const app = withAndroid();
+    app.run('window.__letto = 0; addrCheckOnce = function(){ window.__letto++; };');
+    assert.strictEqual(app.run('typeof window.dvAndroidCall'), 'function',
+      'Android deve avere un modo per dire alla pagina che una chiamata aspetta');
+    app.run('window.dvAndroidCall();');
+    assert.strictEqual(app.run('window.__letto'), 1,
+      'la lettura e la decifratura restano della pagina: il servizio non apre mai la busta');
+    app.stop();
+  });
+});

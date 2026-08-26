@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    The application's own text lives in the web app, in thirteen languages. Only
-    what Android itself has to show — the launcher label, and the two words after
-    saving a file — is here.
+    The application's own text lives in the web app, in thirteen languages, and
+    the wording an incoming call shows is handed over from there already
+    translated — which is why there are no thirteen copies of it here. What is
+    left is the fallback for the moment before the page has spoken, plus the
+    words Android itself insists on owning: notification channel names, shown in
+    the phone's own settings, and the two words after saving a file.
 -->
 <resources>
   <string name="savedToDownloads">Saved to Downloads: %1$s</string>
   <string name="saveFailed">Could not save the file.</string>
+
+  <string name="incomingTitle">Someone is calling</string>
+  <string name="incomingBody">Open DigitalValut Logos to answer.</string>
+  <string name="answer">Answer</string>
+  <string name="dismiss">Not now</string>
+
+  <string name="watchingTitle">Listening for calls</string>
+  <string name="watchingBody">No account and no push service — the phone waits by itself.</string>
+  <string name="watchingStop">Stop</string>
+
+  <string name="chWatching">Listening for calls</string>
+  <string name="chWatchingWhy">The quiet, permanent line saying the phone is still able to ring. It never makes a sound.</string>
+  <string name="chRinging">Incoming calls</string>
+  <string name="chRingingWhy">Rings and shows the call on the lock screen.</string>
 </resources>

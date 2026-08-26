@@ -172,6 +172,32 @@ test('the app knows exactly which origins the Worker answers for', () => {
     'the app and the Worker disagree about which origins work');
 });
 
+/* ------------------------------------------------------------ the peek -- */
+/* The Android app rings by asking the relay whether a call is waiting. If that
+   look emptied the box, the app would open to nothing and the call would be
+   lost — the feature would destroy exactly what it exists to announce. It is
+   one `await` away from being wrong and nothing on a screen would ever show
+   it, so it is held here instead. */
+
+test('looking into a mailbox without emptying it really does not empty it', () => {
+  const get = WORKER.slice(WORKER.indexOf('async function handleMailbox'));
+  const body = get.slice(0, get.indexOf('\n}'));
+  const peekAt = body.indexOf("peek");
+  assert.ok(peekAt > 0, 'the peek branch is gone from the Worker');
+
+  /* everything the peek branch does, from the test on ?peek= to its closing
+     brace: no delete may appear anywhere inside it */
+  const branch = body.slice(peekAt, body.indexOf('const val = await env.MAILBOX.get(key)', peekAt));
+  assert.ok(branch.length > 40, 'could not read the peek branch');
+  assert.ok(!/delete/.test(branch),
+    'a peek that deletes swallows the very call it is ringing about');
+
+  /* and the ordinary read must still delete, or a message could be replayed */
+  const ordinary = body.slice(body.indexOf('const val = await env.MAILBOX.get(key)'));
+  assert.match(ordinary, /MAILBOX\.delete\(key\)/,
+    'the ordinary read must stay read-once');
+});
+
 /* --------------------------------------------------- nothing from outside -- */
 /* Loading no code written by anybody else is this app's strongest security
    property. It is worth a test rather than a good intention. */

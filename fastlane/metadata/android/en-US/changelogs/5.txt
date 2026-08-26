@@ -1,0 +1,11 @@
+Two things that were plainly wrong on a phone.
+
+The logo did not appear. The single-file build looked for it beside itself, as
+a separate file — which works on the website, where that file sits next to the
+page, and cannot work inside the package, where nothing sits beside anything.
+The logo is now part of the file it belongs to.
+
+The header was sliding underneath the clock and the battery, cut in half. An app
+targeting a recent Android is laid out edge to edge whether it asks to be or
+not, and it is the app's job to keep clear of the system bars. It now does, on
+every version rather than only the ones that force the issue.

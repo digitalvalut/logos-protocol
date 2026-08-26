@@ -253,6 +253,28 @@ function buildSandbox(options = {}){
   };
   sandbox.dispatchEvent = function(ev){ (this.listeners[ev && ev.type] || []).forEach(fn => fn(ev)); return true; };
 
+  /* The bridge the Android package puts in front of the page, and the only way
+     the app can ring with itself closed. Present only when a test asks for it,
+     because that is the truth everywhere else: in a browser there is no such
+     object, and the app has to carry on without one. Every call is written
+     down, so a test can ask what the page actually handed over — the keys it
+     said to watch matter more here than any return value. */
+  if (options.androidRing){
+    sandbox.__androidRingCalls = [];
+    sandbox.AndroidRing = {
+      available: () => true,
+      watch(keys, base, title, body){
+        sandbox.__androidRingCalls.push({ what: 'watch', keys, base, title, body });
+      },
+      stop(){ sandbox.__androidRingCalls.push({ what: 'stop' }); },
+      /* From Android 14 taking over a locked screen is granted by hand. A test
+         can say it was refused and check that the app admits it instead of
+         leaving somebody believing they are reachable. */
+      canTakeOverLockScreen: () => options.androidLockScreen !== false,
+      askForLockScreen(){ sandbox.__androidRingCalls.push({ what: 'askForLockScreen' }); },
+    };
+  }
+
   sandbox.window = sandbox;
   sandbox.globalThis = sandbox;
   sandbox.self = sandbox;

@@ -500,6 +500,23 @@ async function handleMailbox(request, env, cors, key){
   }
 
   if (request.method === 'GET'){
+    /* A look that does not empty the box. It exists for one job: the Android
+       app can keep watching for calls with its screen off and its window
+       closed, and to ring it only has to know that something is waiting — not
+       what. An ordinary read would swallow the very message it is ringing
+       about, and the app would open to an empty box.
+
+       This gives nothing away that the key did not already give. Whoever can
+       compute this key can also empty the box, which is strictly more than
+       being told whether it is occupied; and the answer here is one bit, with
+       no envelope attached. It is metered exactly like every other read. */
+    if (new URL(request.url).searchParams.get('peek') === '1'){
+      const there = await env.MAILBOX.get(key);
+      return there === null
+        ? json({ empty: true }, 404, cors)
+        : json({ waiting: true }, 200, cors);
+    }
+
     const val = await env.MAILBOX.get(key);
     if (val === null) return json({ empty: true }, 404, cors);
     /* read-once: delete on the way out, so a message can't be replayed or
