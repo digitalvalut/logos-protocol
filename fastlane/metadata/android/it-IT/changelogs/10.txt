@@ -1,0 +1,20 @@
+Un telefono non diventa piu sordo dopo una chiamata andata male.
+
+Segnalato da due telefoni che non si collegavano piu fra loro ne con
+l indirizzo permanente ne col codice a sei cifre, e che tornavano a
+funzionare solo chiudendo del tutto l app.
+
+L app teneva da parte l ultimo tentativo di connessione per sapere se
+era gia impegnata in una conversazione. Esisteva gia una scadenza per i
+tentativi abbandonati, ma copriva un solo stato. Un tentativo che
+arrivava fino a mezza strada e li si piantava non scadeva mai — ed e
+esattamente li che si ferma una chiamata fra due dispositivi che non
+riescono a raggiungersi.
+
+Da quel momento il telefono si credeva occupato per sempre: rifiutava
+ogni chiamata in arrivo e ogni nuovo tentativo, senza niente sullo
+schermo che lo dicesse e senza altra via d uscita che ammazzare l app.
+
+Ora la scadenza vale per qualunque tentativo che non sia mai arrivato a
+collegarsi. Una conversazione vera continua a contare come occupato per
+tutto il tempo che dura, anche di un ora.

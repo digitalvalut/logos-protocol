@@ -3335,6 +3335,14 @@ async function newPeerConnection(){
      more, whatever the code that started it did or failed to do. See
      busyWithSomeone(). */
   conn.__bornAt = Date.now();
+  /* Age alone cannot free a connection that is genuinely in use: a call an hour
+     old is older than any staleness threshold and is exactly the thing that must
+     go on counting as busy. So the age rule is allowed to apply only to
+     connections that never got anywhere in the first place, and this is how one
+     is told from the other. */
+  conn.addEventListener('connectionstatechange', () => {
+    if (conn.connectionState === 'connected') conn.__everConnected = true;
+  });
   /* the dot follows the connection rather than a guess about it */
   conn.addEventListener('connectionstatechange', () => onConnectionStateChange(conn));
   return conn;
@@ -5324,7 +5332,19 @@ function busyWithSomeone(){
      connection so recovery is immediate rather than three minutes late. This
      exists for the failure nobody has thought of yet — including in code not
      written. */
-  if (st === 'new' && pc.__bornAt && Date.now() - pc.__bornAt > STALE_BUILD_MS) return false;
+  /* Reported by two people whose phones stopped being reachable by any route at
+     all — neither the permanent address nor a six-digit code — and came back the
+     moment the app was force-closed. The rule above covered 'new' and nothing
+     else, so an attempt that reached 'connecting' and stalled there never
+     expired, and 'connecting' is precisely where a handshake stops when two
+     devices cannot reach each other. One failed call and the phone was deaf for
+     the rest of the session, with nothing on screen to say so and no way back
+     except killing the app, which nobody would think to do.
+
+     The comment above says this backstop exists for the failure nobody has
+     thought of yet. The failure nobody had thought of was the state next door. */
+  if (st !== 'connected' && !pc.__everConnected
+      && pc.__bornAt && Date.now() - pc.__bornAt > STALE_BUILD_MS) return false;
   return true;
 }
 
@@ -6031,7 +6051,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.74';
+const APP_VERSION = 'logos-modifica-3.75';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

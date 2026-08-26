@@ -1,0 +1,19 @@
+A phone no longer goes deaf after one call that did not work.
+
+Reported by two phones that stopped being able to reach each other by any
+route — neither the permanent address nor a six-digit code — and came back
+only when the app was force-closed.
+
+The app keeps the last connection attempt around to know whether it is already
+busy with someone. There was already an expiry for abandoned attempts, but it
+covered a single state. An attempt that got halfway and stalled never expired,
+and halfway is exactly where a call stops when two devices cannot reach each
+other.
+
+From then on the phone believed it was busy for good: it refused every incoming
+call and every new attempt, with nothing on screen to say so and no way out but
+killing the app.
+
+The expiry now applies to any attempt that never managed to connect at all. A
+real conversation goes on counting as busy for as long as it lasts, an hour
+included.

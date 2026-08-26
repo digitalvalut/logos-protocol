@@ -2021,6 +2021,68 @@ test.describe('taking the GPS and the device model back out of a photo', () => {
    ------------------------------------------------------------------------ */
 test.describe('una connessione abbandonata non rende sordo il telefono', () => {
 
+  test("una 'connecting' piantata smette di bloccare, come una 'new'", () => {
+    /* Segnalato da due telefoni che non si collegavano piu ne con l'indirizzo
+       ne col codice, e che tornavano a funzionare solo ammazzando l'app. La
+       scadenza copriva soltanto 'new', e un tentativo che arriva a 'connecting'
+       e li si pianta e proprio come finisce una chiamata fra due dispositivi
+       che non riescono a raggiungersi. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'connecting';
+      pc.__bornAt = Date.now() - 10 * 60000;   /* dieci minuti fa */
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), false,
+      "una 'connecting' di dieci minuti fa e un tentativo morto, non una chiamata");
+    app.stop();
+  });
+
+  test("una 'connecting' appena nata continua a bloccare", () => {
+    /* Il lato da non rompere: mentre una connessione si sta davvero stabilendo,
+       un secondo tentativo deve ancora essere tenuto fuori. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'connecting';
+      pc.__bornAt = Date.now();
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), true,
+      'una connessione che si sta stabilendo adesso deve bloccarne una seconda');
+    app.stop();
+  });
+
+  test('una chiamata vera non viene liberata dal passare del tempo', () => {
+    /* La ragione per cui la scadenza non puo guardare solo l'eta: una
+       conversazione in corso da un'ora e piu vecchia di qualunque soglia, ed e
+       esattamente cio che deve continuare a contare come occupato. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'connected';
+      pc.__everConnected = true;
+      pc.__bornAt = Date.now() - 60 * 60000;   /* un'ora fa */
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), true,
+      "una chiamata in corso da un'ora resta una chiamata in corso");
+    app.stop();
+  });
+
+  test('una chiamata caduta dopo essere riuscita non viene scambiata per un tentativo morto', () => {
+    /* Una connessione che ha funzionato e poi e caduta e un caso diverso da una
+       che non e mai partita, e l'eta da sola non le distingue. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'disconnected';
+      pc.__everConnected = true;
+      pc.__bornAt = Date.now() - 60 * 60000;
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), true,
+      'ha funzionato davvero: non e il tentativo abbandonato che la scadenza cerca');
+    app.stop();
+  });
+
   test('un handshake davvero in corso continua a bloccarne un secondo', () => {
     /* Il lato da non rompere: se questo cede, due tentativi si calpestano a
        vicenda e la correzione sarebbe peggiore del difetto. */
