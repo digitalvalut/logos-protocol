@@ -3341,7 +3341,7 @@ async function newPeerConnection(){
      connections that never got anywhere in the first place, and this is how one
      is told from the other. */
   conn.addEventListener('connectionstatechange', () => {
-    if (conn.connectionState === 'connected') conn.__everConnected = true;
+    if (conn.connectionState === 'connected') conn.__lastOkAt = Date.now();
   });
   /* the dot follows the connection rather than a guess about it */
   conn.addEventListener('connectionstatechange', () => onConnectionStateChange(conn));
@@ -5281,6 +5281,12 @@ let quickSharePc = null, dialing = false, autoAccepting = false;
    handshake short would be a regression, while waiting three minutes to notice
    an abandoned one only matters when something has already gone wrong. */
 const STALE_BUILD_MS = 180000;
+/* A call that really is recovering comes back within a few seconds — a lift, a
+   tunnel, wifi handing over to mobile data. Forty-five seconds is generous for
+   all of those and short enough that nobody sits unreachable wondering why.
+   Deliberately far shorter than the three minutes allowed to a handshake that
+   never completed: there is much less to wait for once a call is over. */
+const DROPPED_CALL_GRACE_MS = 45000;
 /* the connection a manually-created invite (btnCreate) is waiting on someone
    to paste an answer back into — distinct from quickSharePc, which waits on a
    *typed* code instead of a pasted one. btnConnectAsA checks this before
@@ -5343,9 +5349,27 @@ function busyWithSomeone(){
 
      The comment above says this backstop exists for the failure nobody has
      thought of yet. The failure nobody had thought of was the state next door. */
-  if (st !== 'connected' && !pc.__everConnected
-      && pc.__bornAt && Date.now() - pc.__bornAt > STALE_BUILD_MS) return false;
-  return true;
+  if (st === 'connected') return true;
+
+  /* Yesterday's version of this rule left a hole that put a phone back in the
+     same silence it was written to end, and the test written beside it sealed
+     the hole in: a connection that HAD connected was exempted from expiring at
+     all. The thought was that a live call must not be torn away from somebody
+     for being old, which is right — but 'disconnected' is neither 'closed' nor
+     'failed', so a call that dropped and never came back sat in that exemption
+     for good. Reported from a phone whose own diagnostics panel read "paused:
+     you are already in a conversation" while its owner was looking at the
+     settings screen, in no conversation at all.
+
+     Measured from the last moment it actually worked rather than from its
+     birth, so both cases fall out of one rule: one that never connected is
+     counted from when it was built, one that connected is counted from when it
+     stopped. A call in a tunnel is still busy; a call that ended twenty minutes
+     ago is not. */
+  const since = pc.__lastOkAt || pc.__bornAt;
+  if (!since) return true;
+  const grace = pc.__lastOkAt ? DROPPED_CALL_GRACE_MS : STALE_BUILD_MS;
+  return Date.now() - since <= grace;
 }
 
 async function addrCheckOnce(){
@@ -6051,7 +6075,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.75';
+const APP_VERSION = 'logos-modifica-3.76';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

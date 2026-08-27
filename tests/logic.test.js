@@ -2060,7 +2060,7 @@ test.describe('una connessione abbandonata non rende sordo il telefono', () => {
     app.run(`
       pc = new RTCPeerConnection(); quickSharePc = null;
       pc.connectionState = 'connected';
-      pc.__everConnected = true;
+      pc.__lastOkAt = Date.now() - 60 * 60000;
       pc.__bornAt = Date.now() - 60 * 60000;   /* un'ora fa */
     `);
     assert.strictEqual(app.run('busyWithSomeone()'), true,
@@ -2068,18 +2068,53 @@ test.describe('una connessione abbandonata non rende sordo il telefono', () => {
     app.stop();
   });
 
-  test('una chiamata caduta dopo essere riuscita non viene scambiata per un tentativo morto', () => {
-    /* Una connessione che ha funzionato e poi e caduta e un caso diverso da una
-       che non e mai partita, e l'eta da sola non le distingue. */
+  test('una chiamata caduta un attimo fa blocca ancora: potrebbe tornare', () => {
+    /* Un tunnel, un ascensore, il wifi che passa al 4G: torna da sola in
+       qualche secondo, e strapparla di mano a chi sta parlando sarebbe peggio
+       del difetto. */
     const app = loadApp();
     app.run(`
       pc = new RTCPeerConnection(); quickSharePc = null;
       pc.connectionState = 'disconnected';
-      pc.__everConnected = true;
       pc.__bornAt = Date.now() - 60 * 60000;
+      pc.__lastOkAt = Date.now() - 5000;      /* funzionava cinque secondi fa */
     `);
     assert.strictEqual(app.run('busyWithSomeone()'), true,
-      'ha funzionato davvero: non e il tentativo abbandonato che la scadenza cerca');
+      'cinque secondi fa era viva: si aspetta che torni');
+    app.stop();
+  });
+
+  test('una chiamata caduta e mai tornata smette di bloccare', () => {
+    /* IL DIFETTO SEGNALATO. La correzione precedente esentava dalla scadenza
+       qualunque connessione che fosse riuscita almeno una volta, e
+       'disconnected' non e ne 'closed' ne 'failed': una chiamata caduta restava
+       li per sempre. Il pannello diagnostico del telefono diceva "in pausa: sei
+       gia in una conversazione" mentre il suo proprietario guardava le
+       impostazioni, senza nessuna conversazione aperta. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'disconnected';
+      pc.__bornAt = Date.now() - 60 * 60000;
+      pc.__lastOkAt = Date.now() - 20 * 60000;   /* caduta venti minuti fa */
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), false,
+      'caduta venti minuti fa e finita: non deve rendere sordo il telefono');
+    app.stop();
+  });
+
+  test('una chiamata in corso non viene liberata per anzianita', () => {
+    /* Il lato da non rompere: una conversazione che dura da un'ora e proprio
+       cio che deve continuare a bloccarne una seconda. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection(); quickSharePc = null;
+      pc.connectionState = 'connected';
+      pc.__bornAt = Date.now() - 60 * 60000;
+      pc.__lastOkAt = Date.now() - 60 * 60000;
+    `);
+    assert.strictEqual(app.run('busyWithSomeone()'), true,
+      "una chiamata in corso da un'ora resta una chiamata in corso");
     app.stop();
   });
 

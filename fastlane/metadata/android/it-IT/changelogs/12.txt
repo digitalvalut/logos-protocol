@@ -1,0 +1,16 @@
+Quando cade la linea, il telefono torna raggiungibile.
+
+Correzione di una correzione. Ieri era stato sistemato il caso di un
+tentativo di connessione che si piantava a meta e lasciava il telefono
+convinto di essere occupato per sempre. Quella correzione pero esentava
+dalla scadenza qualunque connessione che fosse riuscita almeno una volta
+— e una chiamata caduta non risulta ne chiusa ne fallita, quindi restava
+li per sempre.
+
+Il risultato era lo stesso silenzio di prima, raggiunto per un'altra
+strada: bastava che una chiamata cadesse e nessuno ti trovava piu.
+
+Adesso il tempo si conta dall'ultimo momento in cui la connessione ha
+davvero funzionato, non da quando e nata. Una chiamata caduta un attimo
+fa continua a bloccare, perche in un tunnel o in ascensore torna da sola.
+Una caduta e mai tornata, dopo quarantacinque secondi, smette.

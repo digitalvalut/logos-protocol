@@ -1,0 +1,15 @@
+When a call drops, the phone becomes reachable again.
+
+A fix to a fix. Yesterday's release addressed a connection attempt that stalled
+halfway and left the phone believing it was busy for good. That fix, however,
+exempted from expiry any connection that had managed to connect at least once —
+and a dropped call is neither closed nor failed, so it sat in that exemption
+forever.
+
+The result was the same silence as before, reached by another route: one dropped
+call and nobody could reach you again.
+
+Time is now counted from the last moment the connection actually worked rather
+than from when it was created. A call that dropped a moment ago still blocks,
+because in a lift or a tunnel it comes back on its own. One that dropped and
+never returned stops blocking after forty-five seconds.
