@@ -2394,6 +2394,110 @@ test.describe('la casella dove i due telefoni si danno appuntamento', () => {
 
 });
 
+test.describe('trovare qualcuno dal suo indirizzo, con piu relay', () => {
+
+  /* Un indirizzo Logos e' l'impronta della chiave pubblica che ci sta dietro:
+     per questo una chiave sbagliata si riconosce da sola, e per questo un relay
+     bugiardo non puo' sostituirla. Ma con piu' relay nasce un pericolo nuovo,
+     che con uno solo non esisteva: un relay guasto che risponde per primo con
+     spazzatura potrebbe far fallire la ricerca mentre gli altri avevano la
+     risposta giusta. Questi test difendono proprio quello. */
+
+  const conKey = (regole) => `
+    window.__chiamate = [];
+    const vera = await myPubB64();
+    const indirizzo = await myAddress(0);
+    /* La chiave dell'impostore non e' spazzatura: e' una chiave P-256 VERA,
+       generata qui, che semplicemente appartiene a un altro. Una stringa a caso
+       verrebbe scartata da importKey e il test passerebbe senza mai arrivare al
+       controllo dell'indirizzo — che e' l'unica cosa che deve fermare questo
+       attacco. Scoperto sabotando: tolto quel controllo, il test restava verde. */
+    const altro = await crypto.subtle.generateKey({ name:'ECDH', namedCurve:'P-256' }, true, ['deriveBits']);
+    const altroPub = ab2b64(await crypto.subtle.exportKey('raw', altro.publicKey));
+    fetch = (url, opts) => {
+      window.__chiamate.push(url);
+      const r = (${JSON.stringify(regole)}).find(x => url.indexOf(x.host) >= 0);
+      if (!r || r.come === 'errore') return Promise.reject(new Error('giu'));
+      if (r.come === 'vuoto') return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve(null) });
+      const corpo = r.come === 'buona'
+        ? { p: vera, n: 0 }
+        : { p: altroPub, n: 0 };   /* chiave vera, ma di un altro: solo l'indirizzo la smaschera */
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(corpo) });
+    };
+    RELAYS.length = 0;
+    RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+  `;
+
+  test('IL PERICOLO NUOVO: un relay che risponde per primo con una chiave falsa non fa fallire la ricerca', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${conKey([{host:'uno',come:'falsa'},{host:'due',come:'falsa'},{host:'tre',come:'buona'}])}
+      const k = await fetchAddrKey(indirizzo);
+      return JSON.stringify({ trovata: !!k, slot: k && k.slot, interrogati: window.__chiamate.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.trovata, true, 'la chiave buona del terzo relay doveva vincere');
+      assert.strictEqual(o.slot, 0);
+      assert.strictEqual(o.interrogati, 3, 'li interroga tutti, non si ferma al primo che risponde');
+      app.stop();
+    });
+  });
+
+  test('se MENTONO TUTTI non si crede a nessuno', () => {
+    /* Il controllo resta l ultima parola: nessun relay e creduto perche e
+       arrivato primo, e tre bugie non fanno una verita. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${conKey([{host:'uno',come:'falsa'},{host:'due',come:'falsa'},{host:'tre',come:'falsa'}])}
+      const k = await fetchAddrKey(indirizzo);
+      return JSON.stringify({ trovata: !!k });
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(JSON.parse(x).trovata, false, 'una chiave che non ricalcola l indirizzo va buttata');
+      app.stop();
+    });
+  });
+
+  test('basta un relay vivo per essere ancora raggiungibili', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${conKey([{host:'uno',come:'errore'},{host:'due',come:'vuoto'},{host:'tre',come:'buona'}])}
+      const k = await fetchAddrKey(indirizzo);
+      return JSON.stringify({ trovata: !!k, raggiungibile: brokerReachable });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.trovata, true);
+      assert.strictEqual(o.raggiungibile, true);
+      app.stop();
+    });
+  });
+
+  test('la chiave viene pubblicata su TUTTI i relay, non sul primo', () => {
+    /* Se la tua chiave sta in un posto solo, basta bloccare quel posto perche
+       chi conosce il tuo indirizzo non riesca piu a raggiungerti. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      window.__put = [];
+      fetch = (url, opts) => {
+        if (opts && opts.method === 'PUT') window.__put.push(url);
+        return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
+      };
+      RELAYS.length = 0; RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+      const ok = await publishAddrKey(0);
+      return JSON.stringify({ ok, dove: window.__put.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, true);
+      assert.strictEqual(o.dove, 3, 'deve pubblicarla su tutti e tre');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('mettere al riparo una conversazione', () => {
 
   /* Il banco di prova non ha IndexedDB, e i test che gia esistevano lo

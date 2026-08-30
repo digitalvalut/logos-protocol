@@ -2786,6 +2786,53 @@ function askAnyRelay(percorso, opts, ms){
   });
 }
 
+/* Come askAnyRelay, ma vince il primo la cui risposta SUPERA IL CONTROLLO, non
+   il primo che risponde.
+
+   La differenza non e' una raffinatezza. Certe cose che l'app chiede — la
+   chiave pubblica dietro un indirizzo, per esempio — si verificano da sole: se
+   la chiave non ricalcola l'indirizzo che si stava cercando, e' falsa e si
+   butta. Con un relay solo bastava prendere la risposta e controllarla. Con
+   molti, prendere la prima e fermarsi la' regalerebbe a un singolo relay guasto
+   o ostile il potere di far fallire ogni ricerca semplicemente rispondendo per
+   primo con spazzatura — mentre gli altri avevano la risposta giusta.
+
+   Qui invece un relay che mente viene scartato e la ricerca continua sugli
+   altri. Il controllo resta l'unica cosa di cui fidarsi: nessun relay e'
+   creduto perche' e' arrivato primo. */
+function askAnyValid(percorso, opts, ms, controlla){
+  const attesa = ms || 5000;
+  return new Promise(resolve => {
+    const n = RELAYS.length;
+    const stati = [];
+    let rimasti = n, gia = false, risposto = 0;
+    if (!n) return resolve({ val: null, stati, risposto: 0 });
+    const ctrl = [], timer = [];
+    const chiudi = (v) => {
+      gia = true;
+      for (let i = 0; i < n; i++){ clearTimeout(timer[i]); if (ctrl[i]){ try{ ctrl[i].abort(); }catch(e){} } }
+      resolve({ val: v, stati, risposto });
+    };
+    RELAYS.forEach((base, i) => {
+      ctrl[i] = new AbortController();
+      timer[i] = setTimeout(() => { try{ ctrl[i].abort(); }catch(e){} }, attesa);
+      fetch(base + percorso, Object.assign({}, opts || {}, { signal: ctrl[i].signal }))
+        .then(async res => {
+          risposto++;
+          if (res) stati.push(res.status);
+          clearTimeout(timer[i]);
+          if (gia) return;
+          let v = null;
+          if (res && res.ok){ try{ v = await controlla(res); }catch(e){ v = null; } }
+          if (gia) return;
+          if (v !== null && v !== undefined) return chiudi(v);
+          if (--rimasti === 0) resolve({ val: null, stati, risposto });
+        })
+        .catch(() => { clearTimeout(timer[i]); if (gia) return; if (--rimasti === 0) resolve({ val: null, stati, risposto }); });
+    });
+  });
+}
+
 /* Lascia la stessa cosa su TUTTI i relay, e dice com'e andata su ciascuno.
 
    Qui non basta il primo che risponde: se il biglietto lo lasci su un servizio
@@ -5427,10 +5474,12 @@ async function publishAddrKey(slot){
   const addr = await myAddress(slot);
   if (!pub || !addr) return false;
   try{
-    const res = await fetch(PUBKEY_BASE + await keySlotFor(addr), {
+    /* Su tutti i relay: se la chiave sta in un posto solo, basta bloccare quel
+       posto perche chi conosce il tuo indirizzo non riesca piu a raggiungerti. */
+    const e = await tellAllRelays(RELAY_PATH.key + await keySlotFor(addr), {
       method: 'PUT', body: JSON.stringify({ p: pub, n: slot | 0 })
     });
-    return res.ok;
+    return e.riusciti > 0;
   }catch(e){ return false; }
 }
 
@@ -5450,21 +5499,26 @@ async function publishAddrKey(slot){
    60-bit second preimage: with 256 slot numbers to play with, around 2^52
    generated key pairs. That is the same wall as before and it still holds. */
 async function fetchAddrKey(addr){
-  let rec;
-  try{
-    const res = await fetch(PUBKEY_BASE + await keySlotFor(addr), { method: 'GET' });
-    brokerReachable = true;
-    if (res.status !== 200) return null;
-    rec = await res.json();
-  }catch(e){ brokerReachable = false; return null; }
-  if (!rec || typeof rec.p !== 'string') return null;
-  const n = rec.n | 0;
-  if (n < 0 || n > 255) return null;
-  if (await addressFromPub(rec.p, n) !== addr) return null;
-  try{
-    const key = await crypto.subtle.importKey('raw', b642ab(rec.p), { name:'ECDH', namedCurve:'P-256' }, false, []);
-    return { key, slot: n };
-  }catch(e){ return null; }
+  /* Il controllo qui sotto e' lo stesso di sempre, ma adesso decide anche QUALE
+     relay credere: si chiede a tutti, e vince il primo la cui risposta ricalcola
+     l'indirizzo cercato. Un relay che risponde per primo con una chiave falsa
+     viene scartato e la ricerca prosegue sugli altri, invece di far fallire
+     tutto — che e' quello che sarebbe successo prendendo semplicemente la prima
+     risposta arrivata. */
+  const esito = await askAnyValid(RELAY_PATH.key + await keySlotFor(addr), { method: 'GET' }, 5000,
+    async res => {
+      const rec = await res.json();
+      if (!rec || typeof rec.p !== 'string') return null;
+      const n = rec.n | 0;
+      if (n < 0 || n > 255) return null;
+      if (await addressFromPub(rec.p, n) !== addr) return null;
+      try{
+        const key = await crypto.subtle.importKey('raw', b642ab(rec.p), { name:'ECDH', namedCurve:'P-256' }, false, []);
+        return { key, slot: n };
+      }catch(e){ return null; }
+    });
+  brokerReachable = esito.risposto > 0;
+  return esito.val || null;
 }
 
 /* Caller side. A one-time key pair per call, so two calls to the same address
