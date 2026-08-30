@@ -2021,19 +2021,75 @@ test.describe('taking the GPS and the device model back out of a photo', () => {
    ------------------------------------------------------------------------ */
 test.describe('mettere al riparo una conversazione', () => {
 
-  const prepara = `
+  /* Il banco di prova non ha IndexedDB, e i test che gia esistevano lo
+     aggiravano sostituendo mediaPut/mediaGet con finte — utile per verificare
+     CHI viene chiamato, inutile per verificare cosa succede ai byte. Qui serve
+     l'opposto: che mediaSealConv giri davvero, cifratura inclusa. Quindi un
+     magazzino minimo in memoria, con le sole cose che quella funzione usa:
+     transazioni, un indice su convKey, un cursore. */
+  const magazzino = `
+    window.__store = new Map();
+    openMediaDB = () => Promise.resolve({
+      transaction(){
+        /* IndexedDB vero chiude la transazione quando le richieste sono
+           esaurite, non subito: chiuderla prima farebbe leggere zero record a
+           un codice che invece funziona. */
+        const tx = { oncomplete: null, onerror: null, pending: 0 };
+        const chiudi = () => setTimeout(() => {
+          if (tx.pending > 0) return chiudi();
+          tx.oncomplete && tx.oncomplete();
+        }, 0);
+        chiudi();
+        const richiesta = (lavoro) => {
+          const rq = {}; tx.pending++;
+          setTimeout(() => { lavoro(rq); tx.pending--; }, 0);
+          return rq;
+        };
+        return {
+          objectStore(){
+            return {
+              put: r => window.__store.set(r.key, r),
+              get: k => richiesta(rq => { rq.result = window.__store.get(k) || null; rq.onsuccess && rq.onsuccess(); }),
+              index: () => ({ openCursor(range){
+                const want = range && range.only !== undefined ? range.only : range;
+                const hits = [...window.__store.values()].filter(v => v.convKey === want);
+                let n = 0;
+                return richiesta(function passo(rq){
+                  if (n < hits.length){
+                    const v = hits[n++];
+                    rq.result = { value: v,
+                      continue: () => { tx.pending++; setTimeout(() => { passo(rq); tx.pending--; }, 0); },
+                      delete: () => window.__store.delete(v.key) };
+                  } else rq.result = null;
+                  rq.onsuccess && rq.onsuccess();
+                });
+              } }),
+            };
+          },
+          get oncomplete(){ return tx.oncomplete; }, set oncomplete(f){ tx.oncomplete = f; },
+          get onerror(){ return tx.onerror; }, set onerror(f){ tx.onerror = f; },
+        };
+      },
+    });
+    IDBKeyRange = { only: v => ({ only: v }) };
+  `;
+
+  const prepara = magazzino + `
     localStorage.setItem('dvlogos-history-fp-aabb', JSON.stringify([{html:'ci vediamo alle sei', mine:false, t:Date.now()}]));
     localStorage.setItem('dvlogos-safety-fp-aabb', JSON.stringify({code:'luna gatto pane', since:Date.now()}));
     localStorage.setItem('dvlogos-contacts', JSON.stringify([{nick:'Giulia', fp:'aabb'}, {nick:'Marco', fp:'ccdd'}]));
+    window.__store.set('dvlogos-history-fp-aabb::ph1', {
+      key: 'dvlogos-history-fp-aabb::ph1', convKey: 'dvlogos-history-fp-aabb',
+      blob: new Blob(['CONTENUTO-DEL-DOCUMENTO'], { type: 'image/jpeg' }), t: Date.now() });
   `;
 
   test('la conversazione entra nella cassetta e sparisce dal telefono', () => {
     const app = loadApp();
     const r = app.run(`(async () => {
       ${prepara}
-      const ok = await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const res = await protectConversation('aabb', 'Giulia', 'gelsomino');
       return JSON.stringify({
-        ok,
+        ok: res.ok,
         storia: localStorage.getItem('dvlogos-history-fp-aabb'),
         verifica: localStorage.getItem('dvlogos-safety-fp-aabb'),
         contatti: JSON.parse(localStorage.getItem('dvlogos-contacts')).map(c => c.nick),
@@ -2060,10 +2116,37 @@ test.describe('mettere al riparo una conversazione', () => {
     return r.then(x => {
       const b = JSON.parse(x);
       assert.ok(b, 'deve riaprirsi');
-      assert.strictEqual(b.fp, 'aabb');
       assert.strictEqual(b.nick, 'Giulia');
       assert.strictEqual(b.contatto, 'Giulia', 'anche il contatto deve essere dentro');
       assert.match(b.storia, /ci vediamo alle sei/, 'i messaggi devono essere intatti');
+      app.stop();
+    });
+  });
+
+  test('la foto viene cifrata, non cancellata, e torna leggibile', () => {
+    /* Il caso per cui questa cassaforte esiste: la foto di un documento e la
+       cosa importante, non un accessorio da buttare per fare spazio. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const b = await openProtected('gelsomino');
+      const sec = await vaultSecrets('gelsomino');
+      const blob = await mediaUnsealOne(b.mediaKey, 'ph1', sec.key);
+      const cifrato = [...window.__store.values()].find(v => v.sealed);
+      return JSON.stringify({
+        recuperata: blob ? await blob.text() : null,
+        tipo: blob ? blob.type : null,
+        originaleRimasta: [...window.__store.values()].some(v => v.convKey === 'dvlogos-history-fp-aabb'),
+        inChiaro: cifrato ? (await cifrato.blob.text()).indexOf('CONTENUTO-DEL-DOCUMENTO') >= 0 : null,
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.recuperata, 'CONTENUTO-DEL-DOCUMENTO', 'la foto deve tornare identica');
+      assert.strictEqual(o.tipo, 'image/jpeg', 'anche il tipo deve sopravvivere');
+      assert.strictEqual(o.originaleRimasta, false, "l'originale in chiaro non deve restare");
+      assert.strictEqual(o.inChiaro, false, 'quello che resta nel magazzino non deve essere leggibile');
       app.stop();
     });
   });
@@ -2080,8 +2163,7 @@ test.describe('mettere al riparo una conversazione', () => {
 
   test('IL PUNTO CRITICO: se la cassetta non si scrive, non si cancella niente', () => {
     /* Cancellare e poi scoprire che la scrittura non era riuscita vorrebbe dire
-       distruggere una conversazione mentre si prometteva di proteggerla. La
-       memoria piena e il caso vero: succede sui telefoni pieni. */
+       distruggere una conversazione mentre si prometteva di proteggerla. */
     const app = loadApp();
     const r = app.run(`(async () => {
       ${prepara}
@@ -2090,12 +2172,13 @@ test.describe('mettere al riparo una conversazione', () => {
         if (String(k).indexOf('dvlogos-v-') === 0) throw new Error('memoria piena');
         return vero(k, v);
       };
-      const ok = await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const res = await protectConversation('aabb', 'Giulia', 'gelsomino');
       localStorage.setItem = vero;
       return JSON.stringify({
-        ok,
+        ok: res.ok,
         storia: localStorage.getItem('dvlogos-history-fp-aabb'),
         contatti: JSON.parse(localStorage.getItem('dvlogos-contacts')).map(c => c.nick),
+        fotoSalva: [...window.__store.values()].some(v => v.convKey === 'dvlogos-history-fp-aabb'),
       });
     })()`);
     return r.then(x => {
@@ -2103,7 +2186,143 @@ test.describe('mettere al riparo una conversazione', () => {
       assert.strictEqual(o.ok, false, 'deve dire di no, non fingere che sia andata');
       assert.ok(o.storia && o.storia.indexOf('ci vediamo alle sei') >= 0,
         'LA CONVERSAZIONE DEVE ESSERE ANCORA LI: nulla va cancellato se la cassetta non ha ricevuto');
+      assert.strictEqual(o.fotoSalva, true, 'e nemmeno la foto va toccata');
       assert.deepStrictEqual(o.contatti.sort(), ['Giulia', 'Marco'], 'il contatto non va tolto');
+      app.stop();
+    });
+  });
+
+  test('un file troppo grande ferma tutto e viene riferito, non cancellato', () => {
+    /* Ne cancellato di nascosto ne lasciato in chiaro fingendo di averlo messo
+       via: chi guarda lo schermo deve poter scegliere. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      window.__store.set('dvlogos-history-fp-aabb::big', {
+        key: 'dvlogos-history-fp-aabb::big', convKey: 'dvlogos-history-fp-aabb',
+        blob: { size: VAULT_MAX_FILE + 1, type: 'video/mp4', arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)) },
+        t: Date.now() });
+      const res = await protectConversation('aabb', 'Giulia', 'gelsomino');
+      return JSON.stringify({
+        ok: res.ok,
+        troppoGrandi: res.tooBig.map(f => f.id),
+        storia: localStorage.getItem('dvlogos-history-fp-aabb'),
+        residui: [...window.__store.values()].filter(v => v.sealed).length,
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, false, 'non deve dichiarare riuscita una protezione parziale');
+      assert.deepStrictEqual(o.troppoGrandi, ['big'], 'deve dire quale file non ci stava');
+      assert.ok(o.storia && o.storia.indexOf('ci vediamo') >= 0, 'la conversazione resta intatta');
+      assert.strictEqual(o.residui, 0, 'e non deve lasciare in giro meta lavoro');
+      app.stop();
+    });
+  });
+
+  test('il giro completo: al riparo e poi di nuovo allo scoperto', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const res = await restoreProtected('gelsomino');
+      const sec = await vaultSecrets('gelsomino');
+      const foto = await mediaGet('dvlogos-history-fp-aabb', 'ph1');
+      return JSON.stringify({
+        ok: res.ok, persi: res.persi,
+        storia: localStorage.getItem('dvlogos-history-fp-aabb'),
+        verifica: localStorage.getItem('dvlogos-safety-fp-aabb'),
+        contatti: JSON.parse(localStorage.getItem('dvlogos-contacts')).map(c => c.nick).sort(),
+        foto: foto ? await foto.blob.text() : null,
+        fotoCifrata: !!(foto && foto.sealed),
+        cassettaVuota: !(await vaultGet('gelsomino')),
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, true, 'doveva riuscire');
+      assert.deepStrictEqual(o.persi, [], 'niente doveva andare perso');
+      assert.ok(o.storia && o.storia.indexOf('ci vediamo alle sei') >= 0, 'i messaggi tornano');
+      assert.ok(o.verifica && o.verifica.indexOf('luna gatto pane') >= 0, 'le tre parole tornano');
+      assert.deepStrictEqual(o.contatti, ['Giulia', 'Marco'], 'il contatto torna nella lista');
+      assert.strictEqual(o.foto, 'CONTENUTO-DEL-DOCUMENTO', 'la foto torna identica');
+      assert.strictEqual(o.fotoCifrata, false, 'e torna in chiaro, utilizzabile');
+      assert.strictEqual(o.cassettaVuota, true, 'e la cassetta si svuota, non lascia doppioni');
+      app.stop();
+    });
+  });
+
+  test('riaprire con la parola sbagliata non tocca niente', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const res = await restoreProtected('geranio');
+      return JSON.stringify({
+        ok: res.ok, wrong: res.wrong,
+        storia: localStorage.getItem('dvlogos-history-fp-aabb'),
+        cassettaCePeranco: !!(await vaultGet('gelsomino')),
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, false);
+      assert.strictEqual(o.wrong, true, 'deve dire che la parola non e quella');
+      assert.strictEqual(o.storia, null, 'e non deve tirare fuori niente');
+      assert.strictEqual(o.cassettaCePeranco, true, "ne svuotare la cassetta di qualcun altro");
+    }).then(() => app.stop());
+  });
+
+  test('al ritorno, se la scrittura protesta la cassetta resta piena', () => {
+    /* Svuotare e poi scoprire che la scrittura non era riuscita vorrebbe dire
+       perdere la conversazione nel momento in cui si chiedeva di riaverla. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const vero = localStorage.setItem.bind(localStorage);
+      localStorage.setItem = (k, v) => {
+        if (String(k).indexOf('dvlogos-history-') === 0) throw new Error('memoria piena');
+        return vero(k, v);
+      };
+      const res = await restoreProtected('gelsomino');
+      localStorage.setItem = vero;
+      const b = await vaultGet('gelsomino');
+      return JSON.stringify({ ok: res.ok, cassettaSalva: !!b, storiaDentro: b && b.history });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, false, 'deve dire di no');
+      assert.strictEqual(o.cassettaSalva, true, 'LA CASSETTA NON VA SVUOTATA se il telefono non ha riscritto');
+      assert.ok(o.storiaDentro && o.storiaDentro.indexOf('ci vediamo alle sei') >= 0, 'e dentro deve esserci ancora tutto');
+      app.stop();
+    });
+  });
+
+  test('IL PUNTO CRITICO AL RITORNO: memoria che accetta e butta via senza protestare', () => {
+    /* Il caso peggiore, e quello per cui esiste la rilettura: una memoria che
+       non da errore e non scrive. Senza il ricontrollo la cassetta verrebbe
+       svuotata credendo che il telefono avesse ripreso tutto, e la
+       conversazione sparirebbe nel momento in cui si chiedeva di riaverla. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const vero = localStorage.setItem.bind(localStorage);
+      localStorage.setItem = (k, v) => {
+        if (String(k).indexOf('dvlogos-history-') === 0) return;   /* accetta e non fa niente */
+        return vero(k, v);
+      };
+      const res = await restoreProtected('gelsomino');
+      localStorage.setItem = vero;
+      const b = await vaultGet('gelsomino');
+      return JSON.stringify({ ok: res.ok, cassettaSalva: !!b, storiaDentro: b && b.history });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, false, 'non deve dichiarare riuscito un ritorno che non e avvenuto');
+      assert.strictEqual(o.cassettaSalva, true, 'LA CASSETTA NON VA SVUOTATA senza la prova che il telefono ha riscritto');
+      assert.ok(o.storiaDentro && o.storiaDentro.indexOf('ci vediamo alle sei') >= 0, 'e dentro deve esserci ancora tutto');
       app.stop();
     });
   });

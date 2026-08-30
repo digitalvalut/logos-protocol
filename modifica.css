@@ -688,3 +688,14 @@
   .xferbar>i{display:block;height:100%;width:0%;background:currentColor;
     border-radius:99px;transition:width .15s linear;opacity:.9}
   .xfermeta{font-size:0.75rem;opacity:.75;margin-top:4px}
+
+/* La cassaforte delle conversazioni. Il pannello di conferma si stacca dalla
+   lista con un bordo, perche' quello che ci si legge dentro non e' un dettaglio
+   della riga sopra: e' l'unica cosa dell'app che non si puo' disfare. */
+.protectbox{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--panel2)}
+.protectbox .btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.protectbox .btnrow .btn{flex:1 1 auto}
+.vaultopen{margin-top:18px}
+.contactrow .lock{background:none;border:0;color:var(--faint);cursor:pointer;padding:6px;line-height:0}
+.contactrow .lock:hover{color:var(--ink)}
+.contactrow .lock svg{width:18px;height:18px}
