@@ -2110,12 +2110,14 @@ test.describe('mettere al riparo una conversazione', () => {
     const r = app.run(`(async () => {
       ${prepara}
       await protectConversation('aabb', 'Giulia', 'gelsomino');
-      const b = await openProtected('gelsomino');
-      return JSON.stringify(b && { fp: b.fp, nick: b.nick, storia: b.history, contatto: b.contact && b.contact.nick });
+      const dentro = await openProtected('gelsomino');
+      const b = dentro && dentro[0];
+      return JSON.stringify(b && { quante: dentro.length, fp: b.fp, nick: b.nick, storia: b.history, contatto: b.contact && b.contact.nick });
     })()`);
     return r.then(x => {
       const b = JSON.parse(x);
       assert.ok(b, 'deve riaprirsi');
+      assert.strictEqual(b.quante, 1, 'una sola conversazione in quella cassetta');
       assert.strictEqual(b.nick, 'Giulia');
       assert.strictEqual(b.contatto, 'Giulia', 'anche il contatto deve essere dentro');
       assert.match(b.storia, /ci vediamo alle sei/, 'i messaggi devono essere intatti');
@@ -2130,7 +2132,7 @@ test.describe('mettere al riparo una conversazione', () => {
     const r = app.run(`(async () => {
       ${prepara}
       await protectConversation('aabb', 'Giulia', 'gelsomino');
-      const b = await openProtected('gelsomino');
+      const b = (await openProtected('gelsomino'))[0];
       const sec = await vaultSecrets('gelsomino');
       const blob = await mediaUnsealOne(b.mediaKey, 'ph1', sec.key);
       const cifrato = [...window.__store.values()].find(v => v.sealed);
@@ -2287,8 +2289,9 @@ test.describe('mettere al riparo una conversazione', () => {
       };
       const res = await restoreProtected('gelsomino');
       localStorage.setItem = vero;
-      const b = await vaultGet('gelsomino');
-      return JSON.stringify({ ok: res.ok, cassettaSalva: !!b, storiaDentro: b && b.history });
+      const dentro = boxItems(await vaultGet('gelsomino'));
+      return JSON.stringify({ ok: res.ok, cassettaSalva: dentro.length > 0,
+                              storiaDentro: dentro.length ? dentro[0].history : null });
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
@@ -2315,14 +2318,76 @@ test.describe('mettere al riparo una conversazione', () => {
       };
       const res = await restoreProtected('gelsomino');
       localStorage.setItem = vero;
-      const b = await vaultGet('gelsomino');
-      return JSON.stringify({ ok: res.ok, cassettaSalva: !!b, storiaDentro: b && b.history });
+      const dentro = boxItems(await vaultGet('gelsomino'));
+      return JSON.stringify({ ok: res.ok, cassettaSalva: dentro.length > 0,
+                              storiaDentro: dentro.length ? dentro[0].history : null });
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
       assert.strictEqual(o.ok, false, 'non deve dichiarare riuscito un ritorno che non e avvenuto');
       assert.strictEqual(o.cassettaSalva, true, 'LA CASSETTA NON VA SVUOTATA senza la prova che il telefono ha riscritto');
       assert.ok(o.storiaDentro && o.storiaDentro.indexOf('ci vediamo alle sei') >= 0, 'e dentro deve esserci ancora tutto');
+      app.stop();
+    });
+  });
+
+  test('IL BUCO PIU GRAVE: lo stesso PIN su due conversazioni non ne distrugge una', () => {
+    /* La domanda piu ovvia che una persona possa fare — "posso usare lo stesso
+       PIN per tutte?" — e quella che ha scoperto il difetto. Con una cassetta
+       sola per PIN, la seconda conversazione sovrascriveva la prima, e la prima
+       era gia stata cancellata dal telefono: persa per sempre, in silenzio, nel
+       momento esatto in cui l'app prometteva di proteggerla. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${magazzino}
+      localStorage.setItem('dvlogos-contacts', JSON.stringify([{nick:'Giulia',fp:'aaaa'},{nick:'Marco',fp:'bbbb'}]));
+      localStorage.setItem('dvlogos-history-fp-aaaa', JSON.stringify([{html:'PAROLE-DI-GIULIA',mine:false,t:1}]));
+      localStorage.setItem('dvlogos-history-fp-bbbb', JSON.stringify([{html:'PAROLE-DI-MARCO',mine:false,t:1}]));
+      window.__store.set('dvlogos-history-fp-aaaa::f1', { key:'dvlogos-history-fp-aaaa::f1', convKey:'dvlogos-history-fp-aaaa', blob:new Blob(['FOTO-DI-GIULIA'],{type:'image/jpeg'}), t:1 });
+      window.__store.set('dvlogos-history-fp-bbbb::f1', { key:'dvlogos-history-fp-bbbb::f1', convKey:'dvlogos-history-fp-bbbb', blob:new Blob(['FOTO-DI-MARCO'],{type:'image/jpeg'}), t:1 });
+
+      const a = await protectConversation('aaaa','Giulia','1234');
+      const b = await protectConversation('bbbb','Marco','1234');
+      const res = await restoreProtected('1234');
+      const fotoG = await mediaGet('dvlogos-history-fp-aaaa','f1');
+      const fotoM = await mediaGet('dvlogos-history-fp-bbbb','f1');
+      return JSON.stringify({
+        primaOk: a.ok, secondaOk: b.ok, quante: res.quante,
+        giulia: localStorage.getItem('dvlogos-history-fp-aaaa'),
+        marco:  localStorage.getItem('dvlogos-history-fp-bbbb'),
+        contatti: JSON.parse(localStorage.getItem('dvlogos-contacts')).map(c=>c.nick).sort(),
+        fotoGiulia: fotoG ? await fotoG.blob.text() : null,
+        fotoMarco:  fotoM ? await fotoM.blob.text() : null,
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.primaOk, true);
+      assert.strictEqual(o.secondaOk, true, 'la seconda deve poter usare lo stesso PIN');
+      assert.strictEqual(o.quante, 2, 'la cassetta deve restituirle TUTTE E DUE');
+      assert.ok(o.giulia && o.giulia.indexOf('PAROLE-DI-GIULIA') >= 0, 'GIULIA NON DEVE ESSERE PERSA');
+      assert.ok(o.marco && o.marco.indexOf('PAROLE-DI-MARCO') >= 0, 'e nemmeno Marco');
+      assert.deepStrictEqual(o.contatti, ['Giulia','Marco'], 'tornano tutti e due nella lista');
+      assert.strictEqual(o.fotoGiulia, 'FOTO-DI-GIULIA', 'le foto non devono mescolarsi');
+      assert.strictEqual(o.fotoMarco,  'FOTO-DI-MARCO',  'ognuna alla sua conversazione');
+      app.stop();
+    });
+  });
+
+  test('rimettere via la stessa conversazione due volte non la duplica', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb','Giulia','1234');
+      localStorage.setItem('dvlogos-history-fp-aabb', JSON.stringify([{html:'versione nuova',mine:false,t:2}]));
+      await protectConversation('aabb','Giulia','1234');
+      const res = await restoreProtected('1234');
+      return JSON.stringify({ quante: res.quante, storia: localStorage.getItem('dvlogos-history-fp-aabb') });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.quante, 1, 'una sola voce, non due');
+      assert.ok(o.storia && o.storia.indexOf('versione nuova') >= 0, 'e vale l ultima messa via');
       app.stop();
     });
   });
