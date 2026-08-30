@@ -2833,6 +2833,38 @@ function askAnyValid(percorso, opts, ms, controlla){
   });
 }
 
+/* Raccoglie da TUTTI i relay e restituisce tutto quello che ha trovato.
+
+   Serve dove i relay possono contenere cose DIVERSE, non copie della stessa.
+   Le lettere sigillate sono il caso: una cassetta ne accumula molte nel corso
+   di giorni, e se un relay era spento quando ne arrivava una, quella lettera
+   esiste soltanto sull'altro. Fermarsi al primo che risponde farebbe sparire
+   per sempre i messaggi depositati mentre uno dei due non c'era — e sarebbero
+   proprio quelli lasciati nei momenti peggiori.
+
+   Nessuna risposta viene creduta per il fatto di essere arrivata: quello che
+   torna di qui e' materiale grezzo, e chi chiama lo apre e lo verifica come ha
+   sempre fatto. */
+function askAllRelays(percorso, opts, ms){
+  const attesa = ms || 5000;
+  return Promise.all(RELAYS.map(base => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), attesa);
+    return fetch(base + percorso, Object.assign({}, opts || {}, { signal: ctrl.signal }))
+      .then(async res => {
+        clearTimeout(timer);
+        if (!res || !res.ok) return { ok: false, stato: res ? res.status : 0, dati: null };
+        try{ return { ok: true, stato: res.status, dati: await res.json() }; }
+        catch(e){ return { ok: false, stato: res.status, dati: null }; }
+      })
+      .catch(() => { clearTimeout(timer); return { ok: false, stato: 0, dati: null }; });
+  })).then(esiti => ({
+    dati: esiti.filter(x => x.ok).map(x => x.dati),
+    risposto: esiti.filter(x => x.stato > 0).length,
+    stati: esiti.map(x => x.stato).filter(x => x > 0),
+  }));
+}
+
 /* Lascia la stessa cosa su TUTTI i relay, e dice com'e andata su ciascuno.
 
    Qui non basta il primo che risponde: se il biglietto lo lasci su un servizio
@@ -5662,10 +5694,15 @@ async function letterPut(addr, obj){
     if (!sec) return false;   /* no verified key: better nothing than in the clear */
     const box = await slotId(sec.seed, 'letterbox');
     const rand = hex(crypto.getRandomValues(new Uint8Array(8)));
-    const res = await fetch(LETTER_BASE + box + '/' + rand, {
-      method: 'PUT', body: JSON.stringify(await sealWith(sec, obj))
-    });
-    return res.ok;
+    /* SIGILLATA UNA VOLTA SOLA, e poi gli stessi identici byte a tutti i relay.
+       Sigillarla una volta per relay darebbe cifrature diverse dello stesso
+       messaggio: non romperebbe la cifratura, ma renderebbe impossibile
+       riconoscere che sono la stessa lettera — e chi guarda i relay dall'esterno
+       vedrebbe comparire piu' buste dove ce n'e' una sola. Stesso nome di
+       casella e stesso numero, cosi' la lettera e' LA STESSA ovunque. */
+    const busta = JSON.stringify(await sealWith(sec, obj));
+    const e = await tellAllRelays(RELAY_PATH.letter + box + '/' + rand, { method: 'PUT', body: busta });
+    return e.riusciti > 0;
   }catch(e){ return false; }
 }
 /* Collecting empties the box, so whatever comes back is kept on this device
@@ -5677,12 +5714,30 @@ async function letterGet(addr){
   try{
     const seed = await addrSlotSeed(addr);
     const box = await slotId(seed, 'letterbox');
-    const res = await fetch(LETTER_BASE + box, { method: 'GET' });
-    if (res.status !== 200) return [];
-    const raw = await res.json();
-    if (!Array.isArray(raw)) return [];
+    /* Da TUTTI, e unite: relay diversi possono avere lettere diverse, perche
+       una depositata mentre uno era spento esiste soltanto sull'altro. */
+    const e = await askAllRelays(RELAY_PATH.letter + box, { method: 'GET' }, 5000);
+
+    /* La stessa lettera torna da ogni relay che ce l'aveva: identica al byte,
+       perche e stata sigillata una volta sola. Si tiene la prima e si scartano
+       le copie — l'utente deve vedere un messaggio, non due. */
+    const viste = Object.create(null);
+    const buste = [];
+    for (const raw of e.dati){
+      if (!Array.isArray(raw)) continue;
+      for (const s of raw){
+        if (typeof s !== 'string' || viste[s]) continue;
+        viste[s] = 1;
+        buste.push(s);
+      }
+    }
+
+    /* Ogni busta si apre da sola, e una manomessa non apre: la firma dentro
+       AES-GCM non torna e viene scartata in silenzio. Un relay che cambia o
+       sostituisce una lettera fa fallire QUELLA, non le altre — comprese le
+       copie sane della stessa lettera arrivate dagli altri relay. */
     const out = [];
-    for (const s of raw){
+    for (const s of buste){
       try{
         const opened = await addrOpenIncoming(JSON.parse(s), seed);
         if (opened && opened.obj) out.push(opened.obj);
@@ -6727,7 +6782,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.80';
+const APP_VERSION = 'logos-modifica-3.81';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

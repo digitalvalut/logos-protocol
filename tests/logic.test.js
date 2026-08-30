@@ -2498,6 +2498,201 @@ test.describe('trovare qualcuno dal suo indirizzo, con piu relay', () => {
 
 });
 
+test.describe('le lettere sigillate su piu relay', () => {
+
+  /* Una rete finta che TIENE davvero le lettere, una cassetta per relay: cosi
+     si controlla DOVE sono finite, non solo quante richieste sono partite.
+     Quali relay sono spenti si cambia a caldo con window.__giu, senza svuotare
+     le cassette — serve per il caso in cui una lettera arriva mentre uno e giu
+     e viene raccolta dopo che e tornato su. */
+  const rete = `
+    window.__cassette = { 'uno.example': {}, 'due.example': {}, 'tre.example': {} };
+    window.__giu = [];
+    window.__manomette = null;
+    fetch = (url, opts) => {
+      const host = ['uno.example','due.example','tre.example'].find(h => url.indexOf(h) >= 0);
+      if (!host || window.__giu.indexOf(host) >= 0) return Promise.reject(new Error('relay giu'));
+      const pezzi = (url.split('/letter/')[1] || '').split('/');
+      const box = pezzi[0], id = pezzi[1];
+      const c = window.__cassette[host];
+      if (opts && opts.method === 'PUT'){
+        c[box] = c[box] || {};
+        c[box][id] = opts.body;
+        return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
+      }
+      const dentro = c[box] ? Object.keys(c[box]).map(k => {
+        const v = c[box][k];
+        return window.__manomette === host ? v.replace(/"c":"./, '"c":"Z') : v;
+      }) : [];
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(dentro) });
+    };
+    RELAYS.length = 0;
+    RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+    const mioIndirizzo = await myAddress(0);
+    const miaPub = await myPubB64();
+    /* si finge di conoscere gia la chiave verificata dell indirizzo: e cio che
+       letterPut pretende prima di sigillare qualunque cosa */
+    fetchAddrKey = async () => ({
+      key: await crypto.subtle.importKey('raw', b642ab(miaPub), { name:'ECDH', namedCurve:'P-256' }, false, []),
+      slot: 0,
+    });
+    const quante = (h) => { const b = Object.keys(window.__cassette[h])[0];
+                            return b ? Object.keys(window.__cassette[h][b]).length : 0; };
+    const bustaDi = (h) => { const b = Object.keys(window.__cassette[h])[0]; if (!b) return null;
+                             const k = Object.keys(window.__cassette[h][b])[0];
+                             return k ? window.__cassette[h][b][k] : null; };
+  `;
+
+  test('PROPRIETA 1: la lettera viene depositata DAVVERO su tutti i relay, identica', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      const ok = await letterPut(mioIndirizzo, { testo: 'ci vediamo domani' });
+      const b = ['uno.example','due.example','tre.example'].map(bustaDi);
+      return JSON.stringify({
+        ok, quante: ['uno.example','due.example','tre.example'].map(quante),
+        identiche: b[0] === b[1] && b[1] === b[2] && !!b[0],
+        inChiaro: !!(b[0] && b[0].indexOf('ci vediamo domani') >= 0),
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, true, 'il deposito deve riuscire');
+      assert.deepStrictEqual(o.quante, [1,1,1], 'la lettera deve esserci su tutti e tre');
+      assert.strictEqual(o.identiche, true,
+        'la busta deve essere IDENTICA ovunque: sigillata una volta sola, non una per relay');
+      assert.strictEqual(o.inChiaro, false, 'il testo non deve comparire in chiaro nella busta');
+      app.stop();
+    });
+  });
+
+  test('PROPRIETA 2: raccogliendo da tre relay non nascono doppioni', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      await letterPut(mioIndirizzo, { testo: 'una sola volta' });
+      const lette = await letterGet(mioIndirizzo);
+      return JSON.stringify({ quante: lette.length, testo: lette[0] && lette[0].testo });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.quante, 1, 'una lettera su tre relay deve restare UNA, non tre');
+      assert.strictEqual(o.testo, 'una sola volta');
+      app.stop();
+    });
+  });
+
+  test('PROPRIETA 3: un relay che manomette viene scartato, e la lettera arriva lo stesso', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      await letterPut(mioIndirizzo, { testo: 'contenuto autentico' });
+      window.__manomette = 'uno.example';
+      const lette = await letterGet(mioIndirizzo);
+      return JSON.stringify({ quante: lette.length, testo: lette[0] && lette[0].testo });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.quante, 1, 'la manomessa va scartata e la sana deve restare');
+      assert.strictEqual(o.testo, 'contenuto autentico', 'il contenuto non deve essere quello alterato');
+      app.stop();
+    });
+  });
+
+  test('PROPRIETA 3b: se manomettono TUTTI, non passa niente invece di passare spazzatura', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      await letterPut(mioIndirizzo, { testo: 'autentico' });
+      const originale = fetch;
+      fetch = (url, opts) => (opts && opts.method === 'PUT') ? originale(url, opts)
+        : originale(url, opts).then(async res => {
+            const d = await res.json();
+            return { ok: true, status: 200,
+                     json: () => Promise.resolve(d.map(v => v.replace(/"c":"./, '"c":"Z'))) };
+          });
+      const lette = await letterGet(mioIndirizzo);
+      return JSON.stringify({ quante: lette.length });
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(JSON.parse(x).quante, 0, 'meglio niente che un contenuto non autentico');
+      app.stop();
+    });
+  });
+
+  test('PROPRIETA 4: la scadenza dei 7 giorni non e stata toccata', () => {
+    const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
+    assert.ok(/const LETTER_TTL_SECONDS = 7 \* 24 \* 3600;/.test(worker),
+      'la settimana di conservazione e una promessa fatta a chi le usa');
+    assert.ok(/expirationTtl: LETTER_TTL_SECONDS/.test(worker),
+      'la scadenza deve restare applicata alla scrittura della lettera');
+  });
+
+  test('PROPRIETA 5: un relay spento non impedisce agli altri di funzionare', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      window.__giu = ['due.example'];
+      const ok = await letterPut(mioIndirizzo, { testo: 'passa lo stesso' });
+      const lette = await letterGet(mioIndirizzo);
+      return JSON.stringify({ ok, quante: lette.length, testo: lette[0] && lette[0].testo });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, true, 'due relay vivi bastano per depositare');
+      assert.strictEqual(o.quante, 1);
+      assert.strictEqual(o.testo, 'passa lo stesso');
+      app.stop();
+    });
+  });
+
+  test('PROPRIETA 5b: la lettera lasciata mentre gli altri erano giu NON va persa', () => {
+    /* Il motivo per cui la raccolta unisce invece di fermarsi al primo che
+       risponde: se un relay era spento quando la lettera e arrivata, quella
+       lettera esiste soltanto sull altro — e sono proprio quelle lasciate nei
+       momenti peggiori. Fermarsi al primo le farebbe sparire. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      window.__giu = ['uno.example','due.example'];
+      await letterPut(mioIndirizzo, { testo: 'lasciata al buio' });
+      window.__giu = [];                       /* tornano su, ma vuoti */
+      const lette = await letterGet(mioIndirizzo);
+      return JSON.stringify({
+        quante: lette.length, testo: lette[0] && lette[0].testo,
+        soloSuTre: quante('uno.example') === 0 && quante('due.example') === 0 && quante('tre.example') === 1,
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.soloSuTre, true, 'la lettera deve stare su un relay solo, per il senso della prova');
+      assert.strictEqual(o.quante, 1, 'e deve essere trovata lo stesso');
+      assert.strictEqual(o.testo, 'lasciata al buio');
+      app.stop();
+    });
+  });
+
+  test('PROPRIETA 6: senza chiave verificata la lettera NON parte, invece di partire in chiaro', () => {
+    /* La garanzia piu importante: meglio non spedire che spedire leggibile.
+       Il multi-relay non deve averla indebolita. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete}
+      fetchAddrKey = async () => null;   /* nessuna chiave verificabile */
+      const ok = await letterPut(mioIndirizzo, { testo: 'segreto' });
+      const scritti = ['uno.example','due.example','tre.example'].filter(h => quante(h) > 0);
+      return JSON.stringify({ ok, relayScritti: scritti.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, false, 'senza chiave verificata deve rifiutarsi');
+      assert.strictEqual(o.relayScritti, 0, 'e non deve aver scritto NIENTE da nessuna parte');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('mettere al riparo una conversazione', () => {
 
   /* Il banco di prova non ha IndexedDB, e i test che gia esistevano lo
