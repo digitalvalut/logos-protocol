@@ -4739,6 +4739,90 @@ async function pairSecrets(secretStr){
 }
 async function slotId(seed, label){ return sha256Hex2(seed + '/' + label); }
 
+/* ============================ la cassaforte ============================
+   Quello che Logos protegge magnificamente in viaggio, finora lo lasciava
+   scoperto all'arrivo: la cronologia e i nomi dei contatti stanno su questo
+   dispositivo in chiaro, e chi ha il telefono sbloccato in mano non deve
+   rompere niente — apre e legge.
+
+   Chiude quel buco senza toccare nulla di cio che gia funziona. Nessuna
+   primitiva nuova: la stessa PBKDF2 -> AES-GCM che l'app usa gia per i codici
+   a sei cifre, gli stessi sealFor/openFrom, lo stesso slotId. Meno codice
+   nuovo vicino alle chiavi, meno da fidarsi.
+
+   Tre scelte, e sono l'idea di chi usa l'app, non la mia:
+
+   - UNA PAROLA PER CONVERSAZIONE, non una per tutta l'app. Dimenticarla costa
+     una conversazione, non tutta la vita dentro il telefono. Sbaglia piu
+     piano, ed e la caratteristica giusta per una cosa che protegge persone.
+
+   - CHI NON LA USA NON SE NE ACCORGE. Spenta di partenza: chi non sceglie una
+     parola trova l'app identica a prima, senza un passaggio in piu.
+
+   - IL NOME DELLA CASSETTA NASCE DALLA PAROLA STESSA. Non esiste una lista di
+     "conversazioni protette" da consultare: senza la parola non si sa nemmeno
+     quale casella guardare, e i nomi delle caselle sono cifre esadecimali che
+     non dicono niente.
+
+   Il limite, detto qui e non nascosto: chi ispeziona la memoria del browser
+   vede comunque CHE esistono delle caselle cifrate, e quante. Non chi c'e
+   dentro, non cosa dicono, non con chi hai parlato — ma il fatto che qualcosa
+   ci sia si vede. Nascondere anche quello richiede riempitivi ed esche, ed e
+   un problema diverso da questo.
+
+   Iterazioni molto piu alte di QUICK_ITER: quel codice deve nascere in fretta
+   con due persone che aspettano, questa parola si digita una volta per sessione
+   e puo permettersi di costare. Il costo lo paga una volta chi possiede il
+   telefono; lo paga a ogni tentativo chi lo ha rubato. */
+const VAULT_ITER = 600000;
+const VAULT_SALT = new TextEncoder().encode('DigitalValut Logos vault v1');
+
+async function vaultSecrets(word){
+  const base = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode('logos-vault-v1:' + word), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name:'PBKDF2', salt: VAULT_SALT, iterations: VAULT_ITER, hash:'SHA-256' }, base, 512);
+  const raw = new Uint8Array(bits);
+  const key = await crypto.subtle.importKey('raw', raw.slice(0, 32), { name:'AES-GCM' }, false, ['encrypt','decrypt']);
+  return { key, seed: hex(raw.slice(32, 64)) };
+}
+
+/* Il nome della cassetta in memoria. Deriva dalla parola, quindi senza la
+   parola non c'e nulla da cercare, e quello che si vede e solo esadecimale. */
+async function vaultSlot(seed){ return 'dvlogos-v-' + await slotId(seed, 'vault'); }
+
+/* Scrive. Torna false invece di lanciare se la memoria e piena o negata: chi
+   chiama deve poter dire "non sono riuscito a proteggerla" a chi sta guardando
+   lo schermo, invece di far finta di si. */
+async function vaultPut(word, obj){
+  try{
+    const sec = await vaultSecrets(word);
+    localStorage.setItem(await vaultSlot(sec.seed), JSON.stringify(await sealFor(sec.key, obj)));
+    return true;
+  }catch(e){ return false; }
+}
+
+/* Legge. Parola sbagliata e cassetta inesistente danno lo stesso identico
+   risultato - null - e non e pigrizia: distinguerle direbbe a chi prova le
+   parole a caso quali stanno almeno colpendo qualcosa. */
+async function vaultGet(word){
+  try{
+    const sec = await vaultSecrets(word);
+    const raw = localStorage.getItem(await vaultSlot(sec.seed));
+    if (!raw) return null;
+    return await openFrom(sec.key, JSON.parse(raw));
+  }catch(e){ return null; }
+}
+
+/* Cancella, per chi vuole riportare una conversazione allo scoperto. */
+async function vaultDrop(word){
+  try{
+    const sec = await vaultSecrets(word);
+    localStorage.removeItem(await vaultSlot(sec.seed));
+    return true;
+  }catch(e){ return false; }
+}
+
 async function sealFor(key, obj){
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const ct = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(obj)));

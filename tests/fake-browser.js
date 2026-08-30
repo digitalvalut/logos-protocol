@@ -120,16 +120,38 @@ class FakeElement {
   toDataURL(){ return 'data:,'; }
 }
 
+/* A real localStorage exposes the stored keys as own enumerable properties —
+   `Object.keys(localStorage)` returns what was saved, and the methods live on
+   the prototype where enumeration cannot see them. The version here kept
+   everything in a Map and returned a plain object, so `Object.keys` handed back
+   `getItem`, `setItem`, `removeItem`... and nothing that had actually been
+   stored.
+
+   That is not a cosmetic difference. runAutoclean() — the automatic removal of
+   old conversations — walks exactly that list to find `dvlogos-history-` keys.
+   Under the old harness the loop found nothing and fell straight through, so
+   any test written for it would have passed without ever entering the body it
+   was meant to check. Found while testing something else entirely: a new test
+   asserted a key WOULD be there, and it was the first assertion in this suite
+   pointed the right way round to notice. */
 function makeStorage(){
   const map = new Map();
-  return {
+  const methods = {
     getItem: k => (map.has(String(k)) ? map.get(String(k)) : null),
-    setItem: (k, v) => { map.set(String(k), String(v)); },
-    removeItem: k => { map.delete(String(k)); },
-    clear: () => map.clear(),
+    setItem: (k, v) => {
+      map.set(String(k), String(v));
+      Object.defineProperty(store, String(k), {
+        value: String(v), enumerable: true, configurable: true, writable: true });
+    },
+    removeItem: k => { map.delete(String(k)); delete store[String(k)]; },
+    clear: () => { for (const k of map.keys()) delete store[k]; map.clear(); },
     key: i => [...map.keys()][i] ?? null,
     get length(){ return map.size; },
   };
+  /* the methods on the prototype, the stored keys on the object itself —
+     which is the arrangement a browser presents */
+  const store = Object.create(methods);
+  return store;
 }
 
 /* Every id the app asks for gets a real element back, created on demand. The

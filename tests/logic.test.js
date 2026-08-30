@@ -2019,6 +2019,115 @@ test.describe('taking the GPS and the device model back out of a photo', () => {
    punto da cui passano tutte, e l'età da sola basta a riconoscere un tentativo
    abbandonato — anche in codice che nessuno ha ancora scritto.
    ------------------------------------------------------------------------ */
+test.describe('la cassaforte delle conversazioni', () => {
+
+  test('quello che entra con una parola esce identico con la stessa parola', () => {
+    const app = loadApp();
+    const dentro = app.run(`(async () => {
+      await vaultPut('gelsomino', { msgs: ['ciao', 'come stai'], nick: 'Marco' });
+      return JSON.stringify(await vaultGet('gelsomino'));
+    })()`);
+    return dentro.then(r => {
+      assert.deepStrictEqual(JSON.parse(r), { msgs: ['ciao', 'come stai'], nick: 'Marco' },
+        'la conversazione deve tornare esattamente com era');
+      app.stop();
+    });
+  });
+
+  test('con la parola sbagliata non esce niente', () => {
+    const app = loadApp();
+    const fuori = app.run(`(async () => {
+      await vaultPut('gelsomino', { msgs: ['un segreto'] });
+      return await vaultGet('geranio');
+    })()`);
+    return fuori.then(r => {
+      assert.strictEqual(r, null, 'una parola sbagliata non deve aprire niente');
+      app.stop();
+    });
+  });
+
+  test('una parola sbagliata e una cassetta inesistente si assomigliano', () => {
+    /* Distinguerle direbbe a chi tenta le parole a caso quali stanno almeno
+       colpendo qualcosa che esiste. */
+    const app = loadApp();
+    const due = app.run(`(async () => {
+      await vaultPut('gelsomino', { msgs: ['x'] });
+      const sbagliata = await vaultGet('geranio');
+      const inesistente = await vaultGet('parolamaiusata');
+      return JSON.stringify([sbagliata, inesistente]);
+    })()`);
+    return due.then(r => {
+      const [a, b] = JSON.parse(r);
+      assert.strictEqual(a, b, 'i due casi devono dare lo stesso risultato');
+      app.stop();
+    });
+  });
+
+  test('il nome della cassetta non contiene la parola', () => {
+    /* Se il nome tradisse la parola, la cassaforte sarebbe una vetrina. */
+    const app = loadApp();
+    const chiavi = app.run(`(async () => {
+      await vaultPut('gelsomino', { msgs: ['x'] });
+      return JSON.stringify(Object.keys(localStorage));
+    })()`);
+    return chiavi.then(r => {
+      const k = JSON.parse(r).filter(x => x.startsWith('dvlogos-v-'));
+      assert.strictEqual(k.length, 1, 'deve esserci una cassetta');
+      assert.ok(!k[0].includes('gelsomino'), 'il nome non deve contenere la parola');
+      assert.match(k[0], /^dvlogos-v-[0-9a-f]{64}$/, 'il nome deve essere solo esadecimale');
+      app.stop();
+    });
+  });
+
+  test('quello che finisce in memoria non e leggibile', () => {
+    /* Il punto di tutto: chi ha il telefono in mano non deve leggere niente. */
+    const app = loadApp();
+    const grezzo = app.run(`(async () => {
+      await vaultPut('gelsomino', { msgs: ['ci vediamo alle sei'], nick: 'Giulia' });
+      return Object.keys(localStorage).filter(k => k.startsWith('dvlogos-v-')).map(k => localStorage.getItem(k)).join('');
+    })()`);
+    return grezzo.then(r => {
+      assert.ok(!r.includes('ci vediamo'), 'il messaggio non deve comparire in chiaro');
+      assert.ok(!r.includes('Giulia'), 'il nome non deve comparire in chiaro');
+      app.stop();
+    });
+  });
+
+  test('due parole diverse sono due cassette diverse', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      await vaultPut('gelsomino', { chi: 'prima' });
+      await vaultPut('geranio', { chi: 'seconda' });
+      return JSON.stringify([await vaultGet('gelsomino'), await vaultGet('geranio')]);
+    })()`);
+    return r.then(x => {
+      const [a, b] = JSON.parse(x);
+      assert.strictEqual(a.chi, 'prima');
+      assert.strictEqual(b.chi, 'seconda', 'le due cassette non devono mescolarsi');
+      app.stop();
+    });
+  });
+
+  test('cancellare una cassetta la fa sparire davvero', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      await vaultPut('gelsomino', { msgs: ['x'] });
+      await vaultDrop('gelsomino');
+      return JSON.stringify({
+        dopo: await vaultGet('gelsomino'),
+        rimaste: Object.keys(localStorage).filter(k => k.startsWith('dvlogos-v-')).length
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.dopo, null, 'dopo la cancellazione non deve aprirsi piu');
+      assert.strictEqual(o.rimaste, 0, 'non deve restare niente in memoria');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('una connessione abbandonata non rende sordo il telefono', () => {
 
   test("una 'connecting' piantata smette di bloccare, come una 'new'", () => {
