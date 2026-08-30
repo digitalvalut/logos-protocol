@@ -2019,6 +2019,111 @@ test.describe('taking the GPS and the device model back out of a photo', () => {
    punto da cui passano tutte, e l'età da sola basta a riconoscere un tentativo
    abbandonato — anche in codice che nessuno ha ancora scritto.
    ------------------------------------------------------------------------ */
+test.describe('mettere al riparo una conversazione', () => {
+
+  const prepara = `
+    localStorage.setItem('dvlogos-history-fp-aabb', JSON.stringify([{html:'ci vediamo alle sei', mine:false, t:Date.now()}]));
+    localStorage.setItem('dvlogos-safety-fp-aabb', JSON.stringify({code:'luna gatto pane', since:Date.now()}));
+    localStorage.setItem('dvlogos-contacts', JSON.stringify([{nick:'Giulia', fp:'aabb'}, {nick:'Marco', fp:'ccdd'}]));
+  `;
+
+  test('la conversazione entra nella cassetta e sparisce dal telefono', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      const ok = await protectConversation('aabb', 'Giulia', 'gelsomino');
+      return JSON.stringify({
+        ok,
+        storia: localStorage.getItem('dvlogos-history-fp-aabb'),
+        verifica: localStorage.getItem('dvlogos-safety-fp-aabb'),
+        contatti: JSON.parse(localStorage.getItem('dvlogos-contacts')).map(c => c.nick),
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, true, 'doveva riuscire');
+      assert.strictEqual(o.storia, null, 'la storia in chiaro deve sparire');
+      assert.strictEqual(o.verifica, null, 'la verifica in chiaro deve sparire');
+      assert.deepStrictEqual(o.contatti, ['Marco'], 'solo quel contatto va tolto dalla lista');
+      app.stop();
+    });
+  });
+
+  test('e si riapre identica con la parola giusta', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      const b = await openProtected('gelsomino');
+      return JSON.stringify(b && { fp: b.fp, nick: b.nick, storia: b.history, contatto: b.contact && b.contact.nick });
+    })()`);
+    return r.then(x => {
+      const b = JSON.parse(x);
+      assert.ok(b, 'deve riaprirsi');
+      assert.strictEqual(b.fp, 'aabb');
+      assert.strictEqual(b.nick, 'Giulia');
+      assert.strictEqual(b.contatto, 'Giulia', 'anche il contatto deve essere dentro');
+      assert.match(b.storia, /ci vediamo alle sei/, 'i messaggi devono essere intatti');
+      app.stop();
+    });
+  });
+
+  test('con la parola sbagliata non si riapre', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      return await openProtected('geranio');
+    })()`);
+    return r.then(x => { assert.strictEqual(x, null); app.stop(); });
+  });
+
+  test('IL PUNTO CRITICO: se la cassetta non si scrive, non si cancella niente', () => {
+    /* Cancellare e poi scoprire che la scrittura non era riuscita vorrebbe dire
+       distruggere una conversazione mentre si prometteva di proteggerla. La
+       memoria piena e il caso vero: succede sui telefoni pieni. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      const vero = localStorage.setItem.bind(localStorage);
+      localStorage.setItem = (k, v) => {
+        if (String(k).indexOf('dvlogos-v-') === 0) throw new Error('memoria piena');
+        return vero(k, v);
+      };
+      const ok = await protectConversation('aabb', 'Giulia', 'gelsomino');
+      localStorage.setItem = vero;
+      return JSON.stringify({
+        ok,
+        storia: localStorage.getItem('dvlogos-history-fp-aabb'),
+        contatti: JSON.parse(localStorage.getItem('dvlogos-contacts')).map(c => c.nick),
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, false, 'deve dire di no, non fingere che sia andata');
+      assert.ok(o.storia && o.storia.indexOf('ci vediamo alle sei') >= 0,
+        'LA CONVERSAZIONE DEVE ESSERE ANCORA LI: nulla va cancellato se la cassetta non ha ricevuto');
+      assert.deepStrictEqual(o.contatti.sort(), ['Giulia', 'Marco'], 'il contatto non va tolto');
+      app.stop();
+    });
+  });
+
+  test('le altre conversazioni non vengono toccate', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${prepara}
+      localStorage.setItem('dvlogos-history-fp-ccdd', JSON.stringify([{html:'altra conversazione', mine:true, t:Date.now()}]));
+      await protectConversation('aabb', 'Giulia', 'gelsomino');
+      return localStorage.getItem('dvlogos-history-fp-ccdd');
+    })()`);
+    return r.then(x => {
+      assert.ok(x && x.indexOf('altra conversazione') >= 0, "la conversazione di un altro contatto resta dov'era");
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('la cassaforte delle conversazioni', () => {
 
   test('quello che entra con una parola esce identico con la stessa parola', () => {

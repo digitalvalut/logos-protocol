@@ -4815,6 +4815,68 @@ async function vaultGet(word){
 }
 
 /* Cancella, per chi vuole riportare una conversazione allo scoperto. */
+/* Mette una conversazione al riparo: i messaggi, il nome che le hai dato e la
+   verifica a tre parole entrano nella cassetta, e quello che restava in chiaro
+   sul telefono sparisce.
+
+   L'ORDINE E' LA SICUREZZA, e non e una formalita: si scrive, si RILEGGE per
+   controllare che sia davvero arrivato tutto, e solo allora si cancella. Al
+   contrario — cancellare e poi scoprire che la scrittura non era riuscita,
+   perche la memoria era piena o negata — vorrebbe dire distruggere una
+   conversazione mentre si prometteva di proteggerla. Se la rilettura non
+   torna, non si tocca niente e si dice di no.
+
+   Foto e file vengono cancellati, non messi al riparo, ed e una scelta di chi
+   usa l'app fatta a occhi aperti: vivono in un magazzino separato che questa
+   cassetta non sa maneggiare, e lasciarli in chiaro accanto a una
+   conversazione "protetta" sarebbe la cosa peggiore delle tre — un'app che
+   lascia credere di aver messo via qualcosa che invece e ancora li. Chi preme
+   il pulsante deve leggerlo prima, non scoprirlo dopo. */
+async function protectConversation(fp, nick, word){
+  if (!fp || !word) return false;
+  const hKey = historyKeyFp(fp);
+  const sKey = safetyKeyFp(fp);
+
+  let history = null, safety = null, contact = null;
+  try{
+    history = localStorage.getItem(hKey);
+    safety  = localStorage.getItem(sKey);
+    contact = loadContacts().find(c => c.fp === fp) || null;
+  }catch(e){ return false; }
+
+  const bundle = { v: 1, fp, nick: nick || (contact && contact.nick) || '', history, safety, contact, at: Date.now() };
+
+  if (!await vaultPut(word, bundle)) return false;
+
+  /* La rilettura non e pedanteria: e l'unica prova che quello che sta per
+     essere cancellato esiste da qualche altra parte. Confrontata sul contenuto
+     e non solo sulla presenza, perche una cassetta scritta a meta aprirebbe
+     lo stesso. */
+  const check = await vaultGet(word);
+  if (!check || check.fp !== fp || check.history !== history || check.safety !== safety) return false;
+
+  try{
+    localStorage.removeItem(hKey);
+    localStorage.removeItem(sKey);
+    saveContacts(loadContacts().filter(c => c.fp !== fp));
+  }catch(e){ /* la cassetta e a posto: quel che resta in chiaro e un residuo, non una perdita */ }
+  try{ await mediaDeleteByConv(hKey); }catch(e){}
+  return true;
+}
+
+/* Riapre. Torna null tanto per una parola sbagliata quanto per una cassetta che
+   non e mai esistita, come vaultGet: chi prova parole a caso non deve poter
+   capire quali stanno almeno bussando a qualcosa.
+
+   Non riscrive nulla in chiaro sul telefono. Chi chiama riceve il contenuto e
+   lo mostra, e quando quella schermata si chiude non resta niente da nessuna
+   parte — la stessa disciplina della modalita che non tocca mai il disco. */
+async function openProtected(word){
+  const b = await vaultGet(word);
+  if (!b || b.v !== 1 || !b.fp) return null;
+  return b;
+}
+
 async function vaultDrop(word){
   try{
     const sec = await vaultSecrets(word);
