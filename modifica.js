@@ -2721,6 +2721,78 @@ $('easyHintClose').addEventListener('click', () => {
 const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev'];
 const RELAY = RELAYS[0];
 
+/* Chiede la stessa cosa a TUTTI i relay insieme e tiene la prima risposta
+   buona che arriva.
+
+   Insieme, non uno dopo l'altro, e non e' per fare in fretta: un servizio
+   bloccato quasi mai risponde "no". Resta muto, e la richiesta muore da sola
+   allo scadere del tempo. In fila indiana basterebbe che il bloccato fosse il
+   primo della lista per far aspettare tutti gli altri ogni volta — cioe' per
+   rendere l'app inutilizzabile senza nemmeno spegnerla.
+
+   Chi risponde per primo vince, e agli altri non si bada: l'unica cosa che
+   conta e che il biglietto sia stato trovato da qualche parte. */
+function askAnyRelay(percorso, opts, ms){
+  const attesa = ms || 5000;
+  return new Promise(resolve => {
+    const n = RELAYS.length;
+    if (!n) return resolve(null);
+    let rimasti = n, gia = false;
+    const ctrl = [], timer = [];
+
+    /* Appena uno risponde, gli altri vengono fermati sul posto. Trovato perche
+       un test e rimasto appeso: senza questo, le richieste perdenti restano
+       aperte fino allo scadere del tempo anche quando la risposta e gia in
+       mano — connessioni tenute in piedi per niente, e su un telefono in
+       mobilita e traffico e batteria buttati. Il vincitore NON si ferma: la
+       sua risposta e ancora da leggere. */
+    const fermaGliAltri = (salvo) => {
+      for (let i = 0; i < n; i++){
+        clearTimeout(timer[i]);
+        if (i !== salvo && ctrl[i]){ try{ ctrl[i].abort(); }catch(e){} }
+      }
+    };
+
+    RELAYS.forEach((base, i) => {
+      ctrl[i] = new AbortController();
+      timer[i] = setTimeout(() => { try{ ctrl[i].abort(); }catch(e){} }, attesa);
+      fetch(base + percorso, Object.assign({}, opts || {}, { signal: ctrl[i].signal }))
+        .then(res => {
+          if (gia) return;
+          if (res && res.ok){ gia = true; fermaGliAltri(i); resolve(res); return; }
+          clearTimeout(timer[i]);
+          if (--rimasti === 0) resolve(null);
+        })
+        .catch(() => {
+          clearTimeout(timer[i]);
+          if (gia) return;
+          if (--rimasti === 0) resolve(null);
+        });
+    });
+  });
+}
+
+/* Lascia la stessa cosa su TUTTI i relay, e dice su quanti e riuscito.
+
+   Qui non basta il primo che risponde: se il biglietto lo lasci su un servizio
+   solo e quello viene bloccato, chi ti cerca non ti trova piu, anche se gli
+   altri sono vivi. Lasciarlo dappertutto e' proprio il punto: per farti
+   sparire bisogna spegnerli tutti insieme.
+
+   Torna il numero, non vero/falso, perche chi chiama deve poter distinguere
+   "nessuno mi ha preso il biglietto" da "uno solo su tre" — la seconda funziona
+   ma vuol dire che il margine si sta assottigliando. */
+function tellAllRelays(percorso, opts, ms){
+  const attesa = ms || 5000;
+  return Promise.all(RELAYS.map(base => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), attesa);
+    return fetch(base + percorso, Object.assign({}, opts || {}, { signal: ctrl.signal }))
+      .then(res => { clearTimeout(timer); return !!(res && res.ok); })
+      .catch(() => { clearTimeout(timer); return false; });
+  })).then(esiti => esiti.filter(Boolean).length);
+}
+
 const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
 const TURN_BROKER_URL = RELAY + '/';
 

@@ -2068,6 +2068,108 @@ test.describe('dove l app va a bussare', () => {
 
 });
 
+test.describe('parlare a piu relay insieme', () => {
+
+  /* Una rete finta che si comporta come quella vera nei modi che contano: uno
+     risponde, uno dice di no, uno resta MUTO — che e' il caso interessante,
+     perche un servizio bloccato tace, non rifiuta. */
+  const rete = (regole) => `
+    window.__chiamate = [];
+    fetch = (url, opts) => {
+      window.__chiamate.push(url);
+      const r = (${JSON.stringify(regole)}).find(x => url.indexOf(x.host) >= 0);
+      if (!r || r.come === 'errore') return Promise.reject(new Error('rete giu'));
+      if (r.come === 'muto') return new Promise((_, no) => {
+        opts.signal.addEventListener('abort', () => no(new Error('scaduto')));
+      });
+      return Promise.resolve({ ok: r.come === 'si', status: r.come === 'si' ? 200 : 500,
+                               json: () => Promise.resolve({ chi: r.host }) });
+    };
+    RELAYS.length = 0;
+    RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+  `;
+
+  test('chiede a tutti e tiene la prima risposta buona', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'no'},{host:'due',come:'si'},{host:'tre',come:'si'}])}
+      const res = await askAnyRelay('/key/abc');
+      const dati = res ? await res.json() : null;
+      return JSON.stringify({ trovato: !!res, chi: dati && dati.chi, quanti: window.__chiamate.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.trovato, true, 'uno buono c era');
+      assert.strictEqual(o.quanti, 3, 'li interroga tutti e tre insieme, non a turno');
+      app.stop();
+    });
+  });
+
+  test('IL CASO CHE CONTA: un relay bloccato non blocca gli altri', () => {
+    /* Un servizio bloccato non risponde "no": tace. Se le richieste andassero
+       in fila, il muto in cima alla lista farebbe aspettare tutti — cioe'
+       renderebbe l'app inservibile senza spegnerla. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'muto'},{host:'due',come:'muto'},{host:'tre',come:'si'}])}
+      const t0 = Date.now();
+      const res = await askAnyRelay('/key/abc', {}, 20000);
+      return JSON.stringify({ trovato: !!res, chi: res ? (await res.json()).chi : null, ms: Date.now() - t0 });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.trovato, true, 'il terzo doveva rispondere');
+      assert.strictEqual(o.chi, 'tre');
+      assert.ok(o.ms < 3000, 'non deve aspettare i muti: ha impiegato ' + o.ms + ' ms');
+      app.stop();
+    });
+  });
+
+  test('se tacciono tutti torna niente, senza restare appeso', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'muto'},{host:'due',come:'errore'},{host:'tre',come:'no'}])}
+      const res = await askAnyRelay('/key/abc', {}, 400);
+      return JSON.stringify({ trovato: !!res });
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(JSON.parse(x).trovato, false, 'deve dire di no, non aspettare per sempre');
+      app.stop();
+    });
+  });
+
+  test('il biglietto viene lasciato su tutti, non solo sul primo', () => {
+    /* Lasciarlo su uno solo vuol dire che basta bloccare quello per farti
+       sparire, anche se gli altri sono vivi. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'si'},{host:'due',come:'si'},{host:'tre',come:'si'}])}
+      const n = await tellAllRelays('/key/abc', { method: 'PUT' });
+      return JSON.stringify({ riusciti: n, contattati: window.__chiamate.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.contattati, 3, 'deve scrivere su tutti e tre');
+      assert.strictEqual(o.riusciti, 3);
+      app.stop();
+    });
+  });
+
+  test('e se solo uno accetta, lo dice invece di fingere che vada tutto bene', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'errore'},{host:'due',come:'no'},{host:'tre',come:'si'}])}
+      const n = await tellAllRelays('/key/abc', { method: 'PUT' }, 400);
+      return JSON.stringify({ riusciti: n });
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(JSON.parse(x).riusciti, 1, 'uno su tre: chi chiama deve poterlo sapere');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('mettere al riparo una conversazione', () => {
 
   /* Il banco di prova non ha IndexedDB, e i test che gia esistevano lo
