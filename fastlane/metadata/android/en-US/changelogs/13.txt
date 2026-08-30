@@ -1,0 +1,14 @@
+Throwaway addresses now say what they do not do, as well as what they do.
+
+What they said was true: delete the address and that person can no longer reach
+you, and they never had your permanent one. But it let people believe something
+more, and that something is not true.
+
+A throwaway address hides which address you own. It does not make you a
+different person: the three-word security code comes from the device's
+certificate, which stays the same. Anyone who has already read those three words
+with you finds them unchanged, and knows it is you.
+
+Reported by someone who connected through a throwaway code and found the earlier
+conversation waiting there, and quite reasonably did not understand why. It was
+not a defect — it was something the app had never said.

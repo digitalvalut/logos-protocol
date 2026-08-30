@@ -1,0 +1,14 @@
+Gli indirizzi usa e getta adesso dicono anche cosa NON fanno.
+
+Dicevano il vero: cancelli l indirizzo e quella persona non ti trova piu,
+e il tuo indirizzo permanente non l ha mai avuto. Ma lasciavano credere
+qualcosa di piu, e quel qualcosa non e vero.
+
+Un indirizzo usa e getta nasconde quale indirizzo possiedi. Non ti rende
+una persona diversa: il codice di sicurezza a tre parole nasce dal
+certificato del dispositivo, che resta lo stesso. Chi ha gia letto quelle
+tre parole con te le ritrova identiche, e capisce che sei tu.
+
+Segnalato da chi, dopo essersi collegato con un codice usa e getta, si e
+ritrovato la conversazione precedente e giustamente non capiva perche.
+Non era un difetto: era una cosa che l app non aveva mai detto.

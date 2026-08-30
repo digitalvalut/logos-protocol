@@ -325,6 +325,14 @@
       <div class="burners">
         <label class="fieldlabel" data-i18n="burn.title">Indirizzi usa e getta</label>
         <div class="helptext" data-i18n="burn.help">Uno per ogni annuncio o sconosciuto. Quando hai finito lo cancelli e quella persona non ti trova più — il tuo indirizzo vero non l'ha mai avuto.</div>
+        <!-- Detto qui perche' "usa e getta" da solo lascia credere una cosa che non
+             e' vera: cambia l'indirizzo, non il certificato del dispositivo, quindi
+             il codice di sicurezza a tre parole resta lo stesso. Chi ti ha gia'
+             verificato ti riconosce. Scoperto da chi usava l'app, che si e' ritrovato
+             la vecchia conversazione dentro un contatto nuovo e giustamente non
+             capiva. Meglio saperlo prima di darlo a qualcuno da cui si vuole restare
+             separati. -->
+        <div class="helptext mt8" data-i18n="burn.sameYou">Un indirizzo usa e getta nasconde qual è il tuo indirizzo — non ti rende un estraneo. Chi ha già letto con te le tre parole di sicurezza ritrova qui le stesse tre parole, e capisce che sei tu.</div>
         <div id="burnerList"></div>
         <div class="burnernew">
           <input type="text" id="burnerName" class="sans-input" maxlength="40" autocomplete="off"
