@@ -2740,15 +2740,16 @@ function askAnyRelay(percorso, opts, ms){
   const attesa = ms || 5000;
   return new Promise(resolve => {
     const n = RELAYS.length;
-    if (!n) return resolve(null);
-    let rimasti = n, gia = false;
+    const stati = [];
+    let rimasti = n, gia = false, risposto = 0;
+    if (!n) return resolve({ res: null, stati, risposto: 0 });
     const ctrl = [], timer = [];
 
     /* Appena uno risponde, gli altri vengono fermati sul posto. Trovato perche
        un test e rimasto appeso: senza questo, le richieste perdenti restano
        aperte fino allo scadere del tempo anche quando la risposta e gia in
        mano — connessioni tenute in piedi per niente, e su un telefono in
-       mobilita e traffico e batteria buttati. Il vincitore NON si ferma: la
+       mobilita sono traffico e batteria buttati. Il vincitore NON si ferma: la
        sua risposta e ancora da leggere. */
     const fermaGliAltri = (salvo) => {
       for (let i = 0; i < n; i++){
@@ -2757,44 +2758,54 @@ function askAnyRelay(percorso, opts, ms){
       }
     };
 
+    /* Torna anche COME e andata, non solo se e andata. "Nessuno risponde" e
+       "tutti dicono di rallentare" sono due cose diverse: confonderle era gia
+       stato un difetto vero — l'app continuava a insistere allo stesso ritmo
+       proprio nel momento in cui le era stato detto di rallentare. Con un relay
+       solo bastava guardare lo stato della risposta; con molti va ricostruito,
+       non buttato via. */
     RELAYS.forEach((base, i) => {
       ctrl[i] = new AbortController();
       timer[i] = setTimeout(() => { try{ ctrl[i].abort(); }catch(e){} }, attesa);
       fetch(base + percorso, Object.assign({}, opts || {}, { signal: ctrl[i].signal }))
         .then(res => {
+          risposto++;
+          if (res) stati.push(res.status);
           if (gia) return;
-          if (res && res.ok){ gia = true; fermaGliAltri(i); resolve(res); return; }
+          if (res && res.ok){ gia = true; fermaGliAltri(i); resolve({ res, stati, risposto }); return; }
           clearTimeout(timer[i]);
-          if (--rimasti === 0) resolve(null);
+          if (--rimasti === 0) resolve({ res: null, stati, risposto });
         })
         .catch(() => {
           clearTimeout(timer[i]);
           if (gia) return;
-          if (--rimasti === 0) resolve(null);
+          if (--rimasti === 0) resolve({ res: null, stati, risposto });
         });
     });
   });
 }
 
-/* Lascia la stessa cosa su TUTTI i relay, e dice su quanti e riuscito.
+/* Lascia la stessa cosa su TUTTI i relay, e dice com'e andata su ciascuno.
 
    Qui non basta il primo che risponde: se il biglietto lo lasci su un servizio
    solo e quello viene bloccato, chi ti cerca non ti trova piu, anche se gli
-   altri sono vivi. Lasciarlo dappertutto e' proprio il punto: per farti
-   sparire bisogna spegnerli tutti insieme.
+   altri sono vivi. Lasciarlo dappertutto e proprio il punto: per farti sparire
+   bisogna spegnerli tutti insieme.
 
-   Torna il numero, non vero/falso, perche chi chiama deve poter distinguere
+   Torna il numero e non vero/falso, perche chi chiama deve poter distinguere
    "nessuno mi ha preso il biglietto" da "uno solo su tre" — la seconda funziona
    ma vuol dire che il margine si sta assottigliando. */
 function tellAllRelays(percorso, opts, ms){
   const attesa = ms || 5000;
+  const stati = [];
+  let risposto = 0;
   return Promise.all(RELAYS.map(base => {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), attesa);
     return fetch(base + percorso, Object.assign({}, opts || {}, { signal: ctrl.signal }))
-      .then(res => { clearTimeout(timer); return !!(res && res.ok); })
+      .then(res => { clearTimeout(timer); risposto++; if (res) stati.push(res.status); return !!(res && res.ok); })
       .catch(() => { clearTimeout(timer); return false; });
-  })).then(esiti => esiti.filter(Boolean).length);
+  })).then(esiti => ({ riusciti: esiti.filter(Boolean).length, stati, risposto }));
 }
 
 const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
@@ -2832,9 +2843,9 @@ async function fetchIceServers(){
          se nessun relay risponde si ripiega su STUN da solo, la chiamata parte
          lo stesso quando la rete lo consente, e chi guarda lo schermo non si
          accorge di niente. Il posto giusto dove sbagliare per primi. */
-      const res = await askAnyRelay(RELAY_PATH.turn, {}, 5000);
-      if (!res) throw new Error('nessun relay ha risposto');
-      const data = await res.json();
+      const esito = await askAnyRelay(RELAY_PATH.turn, {}, 5000);
+      if (!esito.res) throw new Error('nessun relay ha risposto');
+      const data = await esito.res.json();
       if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
       cachedIceServers = data.iceServers;
       return cachedIceServers;
@@ -4659,6 +4670,10 @@ async function handOverWatchToAndroid(){
     /* Nessun indirizzo attivo significa che non c'è niente da sorvegliare, e un
        servizio acceso a guardare il nulla è solo batteria buttata. */
     if (!keys.length){ androidRing.stop(); return; }
+    /* Ancora un relay solo: questa sorveglianza gira nel codice Android, che
+       riceve UN indirizzo e lo interroga da se'. Renderla plurale vuol dire
+       toccare anche quel lato, ed e' un passo separato — segnato qui perche'
+       non passi per fatto. */
     androidRing.watch(keys.join(','), MAILBOX_BASE,
       t('android.ringTitle', 'Qualcuno ti sta chiamando'),
       t('android.ringBody', 'Apri DigitalValut Logos per rispondere.'));
@@ -4773,21 +4788,29 @@ let brokerReachable = true;
    the one moment the app was told to back off was the one moment it could
    not, in principle, be told anything at all. Read by pollGap() below. */
 let mailboxThrottled = false;
+/* Il biglietto viene lasciato su TUTTI i relay, non sul primo che lo accetta:
+   se sta in un posto solo, basta bloccare quel posto perche chi ti cerca non ti
+   trovi piu, anche con gli altri vivi. Basta uno che lo prenda perche l'incontro
+   possa avvenire. */
 async function mailboxPut(key, obj){
   try{
-    const res = await fetch(MAILBOX_BASE + key, { method:'PUT', body: JSON.stringify(obj) });
-    brokerReachable = true;
-    mailboxThrottled = res.status === 429;
-    return res.ok;
+    const e = await tellAllRelays(RELAY_PATH.mailbox + key, { method:'PUT', body: JSON.stringify(obj) });
+    brokerReachable = e.risposto > 0;
+    /* Rallentare solo se NESSUNO ha accettato e qualcuno lo ha chiesto: se anche
+       un solo relay ha preso il biglietto, l'app non ha motivo di frenare. */
+    mailboxThrottled = e.riusciti === 0 && e.stati.indexOf(429) >= 0;
+    return e.riusciti > 0;
   }catch(e){ brokerReachable = false; return false; }
 }
+/* Qui invece basta il primo che risponde: il biglietto e lo stesso ovunque, e
+   l'unica cosa che conta e averlo trovato da qualche parte. */
 async function mailboxGet(key){
   try{
-    const res = await fetch(MAILBOX_BASE + key, { method:'GET' });
-    brokerReachable = true; /* a 404 is a perfectly healthy answer: the slot is empty */
-    mailboxThrottled = res.status === 429;
-    if (res.status !== 200) return null;
-    return await res.json();
+    const e = await askAnyRelay(RELAY_PATH.mailbox + key, { method:'GET' });
+    brokerReachable = e.risposto > 0; /* un 404 e una risposta sanissima: la casella e vuota */
+    mailboxThrottled = !e.res && e.stati.indexOf(429) >= 0;
+    if (!e.res) return null;
+    return await e.res.json();
   }catch(e){ brokerReachable = false; return null; }
 }
 
@@ -6673,11 +6696,12 @@ async function brokerAlive(){
   try{
     /* any answer at all means it is there — a 404 on an empty slot is the
        healthy case, and even a "too many requests" proves it is alive */
-    await Promise.race([
-      fetch(MAILBOX_BASE + '0'.repeat(64), { method: 'GET', cache: 'no-store' }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('slow')), 6000)),
-    ]);
-    return 'ok';
+    /* Sano se ne risponde ANCHE UNO SOLO: e' esattamente il senso di averne
+       piu' d'uno. Un 404 sulla casella vuota e' il caso sano, e perfino un
+       "troppe richieste" dimostra che qualcuno e' vivo — per questo si guarda
+       se qualcuno ha risposto, non se la risposta era buona. */
+    const e = await askAnyRelay(RELAY_PATH.mailbox + '0'.repeat(64), { method: 'GET', cache: 'no-store' }, 6000);
+    return e.risposto > 0 ? 'ok' : 'bad';
   }catch(e){ return 'bad'; }
 }
 

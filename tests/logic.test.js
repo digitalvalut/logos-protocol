@@ -2134,9 +2134,9 @@ test.describe('parlare a piu relay insieme', () => {
     const app = loadApp();
     const r = app.run(`(async () => {
       ${rete([{host:'uno',come:'no'},{host:'due',come:'si'},{host:'tre',come:'si'}])}
-      const res = await askAnyRelay('/key/abc');
-      const dati = res ? await res.json() : null;
-      return JSON.stringify({ trovato: !!res, chi: dati && dati.chi, quanti: window.__chiamate.length });
+      const e = await askAnyRelay('/key/abc');
+      const dati = e.res ? await e.res.json() : null;
+      return JSON.stringify({ trovato: !!e.res, chi: dati && dati.chi, quanti: window.__chiamate.length });
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
@@ -2154,8 +2154,8 @@ test.describe('parlare a piu relay insieme', () => {
     const r = app.run(`(async () => {
       ${rete([{host:'uno',come:'muto'},{host:'due',come:'muto'},{host:'tre',come:'si'}])}
       const t0 = Date.now();
-      const res = await askAnyRelay('/key/abc', {}, 20000);
-      return JSON.stringify({ trovato: !!res, chi: res ? (await res.json()).chi : null, ms: Date.now() - t0 });
+      const e = await askAnyRelay('/key/abc', {}, 20000);
+      return JSON.stringify({ trovato: !!e.res, chi: e.res ? (await e.res.json()).chi : null, ms: Date.now() - t0 });
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
@@ -2170,8 +2170,8 @@ test.describe('parlare a piu relay insieme', () => {
     const app = loadApp();
     const r = app.run(`(async () => {
       ${rete([{host:'uno',come:'muto'},{host:'due',come:'errore'},{host:'tre',come:'no'}])}
-      const res = await askAnyRelay('/key/abc', {}, 400);
-      return JSON.stringify({ trovato: !!res });
+      const e = await askAnyRelay('/key/abc', {}, 400);
+      return JSON.stringify({ trovato: !!e.res });
     })()`);
     return r.then(x => {
       assert.strictEqual(JSON.parse(x).trovato, false, 'deve dire di no, non aspettare per sempre');
@@ -2185,8 +2185,8 @@ test.describe('parlare a piu relay insieme', () => {
     const app = loadApp();
     const r = app.run(`(async () => {
       ${rete([{host:'uno',come:'si'},{host:'due',come:'si'},{host:'tre',come:'si'}])}
-      const n = await tellAllRelays('/key/abc', { method: 'PUT' });
-      return JSON.stringify({ riusciti: n, contattati: window.__chiamate.length });
+      const e = await tellAllRelays('/key/abc', { method: 'PUT' });
+      return JSON.stringify({ riusciti: e.riusciti, contattati: window.__chiamate.length });
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
@@ -2200,11 +2200,179 @@ test.describe('parlare a piu relay insieme', () => {
     const app = loadApp();
     const r = app.run(`(async () => {
       ${rete([{host:'uno',come:'errore'},{host:'due',come:'no'},{host:'tre',come:'si'}])}
-      const n = await tellAllRelays('/key/abc', { method: 'PUT' }, 400);
-      return JSON.stringify({ riusciti: n });
+      const e = await tellAllRelays('/key/abc', { method: 'PUT' }, 400);
+      return JSON.stringify({ riusciti: e.riusciti });
     })()`);
     return r.then(x => {
       assert.strictEqual(JSON.parse(x).riusciti, 1, 'uno su tre: chi chiama deve poterlo sapere');
+      app.stop();
+    });
+  });
+
+});
+
+test.describe('la casella dove i due telefoni si danno appuntamento', () => {
+
+  const rete = (regole) => `
+    window.__chiamate = [];
+    fetch = (url, opts) => {
+      window.__chiamate.push({ url, come: (opts && opts.method) || 'GET' });
+      const r = (${JSON.stringify(regole)}).find(x => url.indexOf(x.host) >= 0);
+      if (!r || r.come === 'errore') return Promise.reject(new Error('rete giu'));
+      if (r.come === 'muto') return new Promise((_, no) => {
+        opts.signal.addEventListener('abort', () => no(new Error('scaduto')));
+      });
+      const st = r.come === 'si' ? 200 : (r.come === 'lento' ? 429 : 404);
+      return Promise.resolve({ ok: st === 200, status: st, json: () => Promise.resolve({ chi: r.host }) });
+    };
+    RELAYS.length = 0;
+    RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+  `;
+
+  test('IL BIGLIETTO VIENE DAVVERO LASCIATO SU TUTTI, non solo spedito a tutti', () => {
+    /* Contare le richieste non basta e me ne sono accorto sabotando: anche
+       "chiedi a tutti e tieni il primo" ne manda tre — poi pero ANNULLA le
+       altre due appena una risponde, e su quei due relay il biglietto non
+       arriva mai. La differenza si vede solo guardando le richieste annullate.
+       Un relay lento fa emergere il caso: se qualcuno tiene il conto solo di
+       quante ne partono, il difetto passa. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      window.__chiamate = []; window.__annullate = [];
+      fetch = (url, opts) => {
+        window.__chiamate.push(url);
+        const lento = url.indexOf('uno.example') >= 0;
+        return new Promise((ok, no) => {
+          if (opts && opts.signal) opts.signal.addEventListener('abort', () => {
+            window.__annullate.push(url); no(new Error('annullata'));
+          });
+          setTimeout(() => ok({ ok: true, status: 200, json: () => Promise.resolve({}) }), lento ? 40 : 1);
+        });
+      };
+      RELAYS.length = 0;
+      RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+      const ok = await mailboxPut('a'.repeat(64), { ciao: 1 });
+      await new Promise(r => setTimeout(r, 80));
+      return JSON.stringify({ ok, partite: window.__chiamate.length, annullate: window.__annullate });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ok, true);
+      assert.strictEqual(o.partite, 3, 'deve partire verso tutti e tre');
+      assert.deepStrictEqual(o.annullate, [],
+        'NESSUNA deve essere annullata: un biglietto interrotto e un biglietto non lasciato');
+      app.stop();
+    });
+  });
+
+  test('leggendo invece si annullano le altre appena una risponde', () => {
+    /* Il rovescio esatto, e va bene cosi: il biglietto e lo stesso ovunque, e
+       una volta trovato tenere aperte le altre richieste e traffico buttato. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      window.__annullate = [];
+      fetch = (url, opts) => {
+        const lento = url.indexOf('uno.example') >= 0;
+        return new Promise((ok, no) => {
+          if (opts && opts.signal) opts.signal.addEventListener('abort', () => {
+            window.__annullate.push(url); no(new Error('annullata'));
+          });
+          setTimeout(() => ok({ ok: true, status: 200, json: () => Promise.resolve({ x: 1 }) }), lento ? 40 : 1);
+        });
+      };
+      RELAYS.length = 0;
+      RELAYS.push('https://uno.example', 'https://due.example', 'https://tre.example');
+      const letto = await mailboxGet('a'.repeat(64));
+      await new Promise(r => setTimeout(r, 80));
+      return JSON.stringify({ letto: !!letto, annullate: window.__annullate.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.letto, true);
+      assert.ok(o.annullate >= 1, 'la lenta va fermata invece di restare appesa');
+      app.stop();
+    });
+  });
+
+  test('basta un relay vivo perche l appuntamento regga', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'errore'},{host:'due',come:'errore'},{host:'tre',come:'si'}])}
+      const messo = await mailboxPut('a'.repeat(64), { ciao: 1 });
+      const letto = await mailboxGet('a'.repeat(64));
+      return JSON.stringify({ messo, letto: !!letto, raggiungibile: brokerReachable });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.messo, true, 'uno che lo prende basta');
+      assert.strictEqual(o.letto, true, 'e uno che lo restituisce basta');
+      assert.strictEqual(o.raggiungibile, true);
+      app.stop();
+    });
+  });
+
+  test('se sono giu tutti, lo dice invece di far finta', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'errore'},{host:'due',come:'errore'},{host:'tre',come:'errore'}])}
+      const messo = await mailboxPut('a'.repeat(64), { ciao: 1 });
+      const letto = await mailboxGet('a'.repeat(64));
+      return JSON.stringify({ messo, letto, raggiungibile: brokerReachable, rallenta: mailboxThrottled });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.messo, false);
+      assert.strictEqual(o.letto, null);
+      assert.strictEqual(o.raggiungibile, false, 'il servizio non e raggiungibile e va detto');
+      assert.strictEqual(o.rallenta, false, 'e non e "rallenta": e proprio giu, sono due cose diverse');
+      app.stop();
+    });
+  });
+
+  test('LA DISTINZIONE CHE ERA GIA COSTATA UN DIFETTO: "rallenta" non e "giu"', () => {
+    /* Con un relay solo bastava guardare lo stato della risposta. Con molti va
+       ricostruita: se tutti dicono 429 l app deve frenare, non credersi
+       irraggiungibile e insistere allo stesso ritmo. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'lento'},{host:'due',come:'lento'},{host:'tre',come:'lento'}])}
+      const letto = await mailboxGet('a'.repeat(64));
+      return JSON.stringify({ letto, raggiungibile: brokerReachable, rallenta: mailboxThrottled });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.letto, null);
+      assert.strictEqual(o.raggiungibile, true, 'hanno risposto: sono vivi');
+      assert.strictEqual(o.rallenta, true, 'e hanno chiesto di rallentare');
+      app.stop();
+    });
+  });
+
+  test('se uno accetta, non si frena solo perche un altro dice di rallentare', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'lento'},{host:'due',come:'si'},{host:'tre',come:'lento'}])}
+      await mailboxPut('a'.repeat(64), { ciao: 1 });
+      return JSON.stringify({ rallenta: mailboxThrottled });
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(JSON.parse(x).rallenta, false, 'uno ha preso il biglietto: non c e motivo di frenare');
+      app.stop();
+    });
+  });
+
+  test('la casella vuota resta una risposta sana, non un guasto', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${rete([{host:'uno',come:'vuota'},{host:'due',come:'vuota'},{host:'tre',come:'vuota'}])}
+      const letto = await mailboxGet('a'.repeat(64));
+      return JSON.stringify({ letto, raggiungibile: brokerReachable, rallenta: mailboxThrottled });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.letto, null, 'niente dentro');
+      assert.strictEqual(o.raggiungibile, true, 'ma il servizio e sanissimo');
+      assert.strictEqual(o.rallenta, false);
       app.stop();
     });
   });
