@@ -2718,8 +2718,32 @@ $('easyHintClose').addEventListener('click', () => {
    altrove. Un campo libero costringerebbe ad allargarla a qualunque indirizzo,
    cioe' a buttarla via. Chi vuole il proprio relay ricompila la sua copia:
    l'app e' un file solo e la ricostruzione e' verificabile da chiunque. */
-const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev',
-                'https://digitalvalut-turn-2.burbeng78.workers.dev'];
+/* ⚠️ TORNATO A UNO SOLO IL 31 AGO 2026, DOPO UNA PROVA SU TELEFONI VERI.
+   Non toccare questa lista finche' non e' risolto quello che c'e' scritto qui
+   sotto: due relay hanno ROTTO le connessioni, non le hanno rese piu' robuste.
+
+   L'errore, mio: la casella di posta SI SVUOTA QUANDO VIENE LETTA — apposta,
+   perche' un messaggio non venga raccolto due volte. Scrivere lo stesso
+   biglietto su due relay non crea una copia di riserva: crea DUE MESSAGGI
+   INDIPENDENTI, in due caselle che si svuotano in momenti diversi. Se la
+   scrittura su uno arriva un istante dopo che l'altro e' gia' stato letto,
+   quella copia resta li' e viene raccolta al giro successivo — un messaggio di
+   ieri consegnato oggi, fuori ordine, in mezzo a quelli nuovi.
+
+   Sui telefoni si e' visto cosi': connessioni lentissime, e le tre parole di
+   sicurezza calcolate da una parte e non dall'altra, perche' i due lati stavano
+   guardando pezzi diversi della stessa conversazione.
+
+   ⚠️ LA LEZIONE, PER CHI TOCCHERA' QUESTO CODICE: "scrivi su tutti e leggi da
+   tutti" vale solo per i dati che si possono leggere PIU' VOLTE senza
+   cambiarli — le chiavi pubbliche, le lettere. NON vale per un appuntamento
+   che si consuma leggendolo. Per quello serve che i due lati si accordino
+   PRIMA su quale relay usare, non che li usino entrambi.
+
+   Tutto il resto del lavoro sui relay resta e funziona: con un indirizzo solo
+   in lista, askAnyRelay / tellAllRelays / askAllRelays si comportano
+   esattamente come il vecchio codice a un relay. */
+const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev'];
 const RELAY = RELAYS[0];
 
 /* Le porte del servizio, in un posto solo. Finche' non saranno passate tutte da
@@ -6782,7 +6806,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.81';
+const APP_VERSION = 'logos-modifica-3.82';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

@@ -2047,10 +2047,16 @@ test.describe('dove l app va a bussare', () => {
          lavoro: per fermare Logos bisogna spegnerli entrambi insieme. Il primo
          resta quello storico, cosi' chi ha una versione vecchia continua a
          incontrare chi ha quella nuova. */
+      /* ⚠️ UNO SOLO, e deve restare uno finche' il difetto non e' risolto.
+         Due relay hanno rotto le connessioni su telefoni veri: la casella
+         dell'appuntamento si svuota quando viene letta, quindi scriverla su
+         due relay crea due messaggi indipendenti che si consumano in momenti
+         diversi. Questo test e' qui per impedire che qualcuno rimetta il
+         secondo relay senza aver prima cambiato il modo in cui i due lati
+         scelgono dove incontrarsi. */
       assert.strictEqual(o.lista[0], atteso, 'il primo deve restare quello storico');
-      assert.ok(o.lista.length >= 2, 'devono essercene almeno due: e il senso del lavoro');
-      assert.ok(o.lista.indexOf('https://digitalvalut-turn-2.burbeng78.workers.dev') >= 0,
-        'il secondo relay deve essere in lista');
+      assert.strictEqual(o.lista.length, 1,
+        'UN RELAY SOLO: rimetterne due senza risolvere la casella read-once rompe le connessioni');
       assert.strictEqual(new Set(o.lista).size, o.lista.length, 'nessun doppione');
       assert.strictEqual(o.uno, atteso);
       assert.deepStrictEqual(o.porte, { turn:'/', knock:'/knock', mailbox:'/mailbox/',
