@@ -2718,7 +2718,8 @@ $('easyHintClose').addEventListener('click', () => {
    altrove. Un campo libero costringerebbe ad allargarla a qualunque indirizzo,
    cioe' a buttarla via. Chi vuole il proprio relay ricompila la sua copia:
    l'app e' un file solo e la ricostruzione e' verificabile da chiunque. */
-const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev'];
+const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev',
+                'https://digitalvalut-turn-2.burbeng78.workers.dev'];
 const RELAY = RELAYS[0];
 
 /* Le porte del servizio, in un posto solo. Finche' non saranno passate tutte da

@@ -1663,7 +1663,14 @@ test.describe('what the audit found', () => {
       window.__both = Promise.all([fetchIceServers(), fetchIceServers()]);
     `);
     return app.run('window.__both').then(() => {
-      assert.strictEqual(app.run('window.__asked'), 1,
+      /* Un giro solo, non uno per chiamante. Con piu' relay un giro vale
+         quante sono le liste — chiedere a tutti e' voluto — quindi il conto da
+         difendere e' "un giro", non "una richiesta": due chiamanti che non si
+         deduplicano ne farebbero il doppio. La misura resta esatta invece che
+         diventare un "minore di", che avrebbe lasciato passare proprio il
+         difetto che questo test esiste per prendere. */
+      const giro = app.run('RELAYS.length');
+      assert.strictEqual(app.run('window.__asked'), giro,
         'the credentials were fetched more than once for two callers that arrived together');
       app.stop();
     });
@@ -2036,7 +2043,15 @@ test.describe('dove l app va a bussare', () => {
     })`);
     return Promise.resolve(r).then(x => {
       const o = JSON.parse(x);
-      assert.deepStrictEqual(o.lista, [atteso], 'la lista parte con un relay solo');
+      /* Da qui in poi la lista ne contiene DUE, ed e' il punto di tutto il
+         lavoro: per fermare Logos bisogna spegnerli entrambi insieme. Il primo
+         resta quello storico, cosi' chi ha una versione vecchia continua a
+         incontrare chi ha quella nuova. */
+      assert.strictEqual(o.lista[0], atteso, 'il primo deve restare quello storico');
+      assert.ok(o.lista.length >= 2, 'devono essercene almeno due: e il senso del lavoro');
+      assert.ok(o.lista.indexOf('https://digitalvalut-turn-2.burbeng78.workers.dev') >= 0,
+        'il secondo relay deve essere in lista');
+      assert.strictEqual(new Set(o.lista).size, o.lista.length, 'nessun doppione');
       assert.strictEqual(o.uno, atteso);
       assert.deepStrictEqual(o.porte, { turn:'/', knock:'/knock', mailbox:'/mailbox/',
                                         key:'/key/', wake:'/wake/', letter:'/letter/' },
