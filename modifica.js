@@ -2704,8 +2704,25 @@ $('easyHintClose').addEventListener('click', () => {
    not just untested — that is why this uses a paid one instead of another
    guess: DigitalValut's own Cloudflare Realtime TURN, kept behind a small
    Worker so the account's secret key never has to sit in a public page. */
+/* ---- dove sta il servizio che mette in contatto i due telefoni ------------
+   Un posto solo. Fino a qui lo stesso indirizzo era scritto a mano in sei punti
+   diversi: cambiarlo voleva dire ricordarseli tutti e sei, e AGGIUNGERNE un
+   secondo era impossibile senza toccare sei righe sparse per novemila. Questa
+   lista e' la fondazione del resto — piu' avanti ne conterra' piu' di uno, e
+   l'app li provera' tutti.
+
+   Deliberatamente una lista fissa scritta qui dentro, e non una casella in cui
+   l'utente incolla un indirizzo: la regola di sicurezza della pagina
+   (`connect-src`) elenca uno per uno i posti che il browser puo' contattare, ed
+   e' quella regola che impedisce a una pagina manomessa di spedire i tuoi dati
+   altrove. Un campo libero costringerebbe ad allargarla a qualunque indirizzo,
+   cioe' a buttarla via. Chi vuole il proprio relay ricompila la sua copia:
+   l'app e' un file solo e la ricostruzione e' verificabile da chiunque. */
+const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev'];
+const RELAY = RELAYS[0];
+
 const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
-const TURN_BROKER_URL = 'https://digitalvalut-turn.burbeng78.workers.dev/';
+const TURN_BROKER_URL = RELAY + '/';
 
 let cachedIceServers = null;
 /* Fetched once per page load and reused — the credentials are valid 24h, far
@@ -4377,7 +4394,7 @@ $('contactsList').addEventListener('click', ev => {
    iOS only allows this for a PWA added to the Home Screen (a real Apple restriction, not a
    choice made here) — the toggle only appears where it can actually work. */
 const VAPID_PUBLIC_KEY = 'BM4QXIv3U4bOctmAoYQShEuxagG_99NF8QRRKqdwAo9XsabHFSmux_BRF2tY0c0TT_YxzUHs3lBb13PFAmTtKGY';
-const KNOCK_URL = 'https://digitalvalut-turn.burbeng78.workers.dev/knock';
+const KNOCK_URL = RELAY + '/knock';
 
 function sanitizePushSub(sub){
   if (!sub || typeof sub !== 'object') return null;
@@ -4615,7 +4632,7 @@ function stopListenRing(){
    is already built from — see myIdentity() above), hashed, so the mailbox never sees a name or
    a message: only "someone who knows this hash is trying to reach that hash right now". A
    message is picked up at most once and expires within two minutes either way. */
-const MAILBOX_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/mailbox/';
+const MAILBOX_BASE = RELAY + '/mailbox/';
 /* The Worker answers for these origins and refuses every other one outright.
    Kept here as well so the app can say *why* nothing works when it is being
    served from somewhere else — a local test server, or a copy someone put on
@@ -5287,7 +5304,7 @@ function pollGap(startedAt, normalMs){
    it always was. The flaw was that the *key* came from the same public string,
    so finding the slot meant reading it too. Now finding it means finding a
    sealed envelope and nothing else. */
-const PUBKEY_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/key/';
+const PUBKEY_BASE = RELAY + '/key/';
 
 async function addrSlotSeed(addr){ return sha256Hex2('logos-addr-slot-v2:' + addr); }
 
@@ -5443,7 +5460,7 @@ async function addrOpenIncoming(env, seed){
    Whoever opens the invite later finds no live offer, reads the note, and rings
    them. Their phone buzzes, they open the app, the invite quietly goes live
    again on the same code, and the two connect. Nobody had to be waiting. */
-const WAKE_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/wake/';
+const WAKE_BASE = RELAY + '/wake/';
 
 async function wakePut(key, obj){
   try{ const res = await fetch(WAKE_BASE + key, { method:'PUT', body: JSON.stringify(obj) }); return res.ok; }
@@ -5477,7 +5494,7 @@ async function wakeGetSealed(key, sec){
    hash, and deletes it the moment it is collected. It cannot open it, and it
    has no idea who wrote it or who will read it — but it is holding something,
    and that is a smaller promise than "nothing is kept anywhere". */
-const LETTER_BASE = 'https://digitalvalut-turn.burbeng78.workers.dev/letter/';
+const LETTER_BASE = RELAY + '/letter/';
 
 /* Sealed to the address's public key, like a call is. This is the change that
    matters most of the whole of P2: a letter is the one thing here that sits on

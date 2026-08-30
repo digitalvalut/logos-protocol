@@ -2019,6 +2019,55 @@ test.describe('taking the GPS and the device model back out of a photo', () => {
    punto da cui passano tutte, e l'età da sola basta a riconoscere un tentativo
    abbandonato — anche in codice che nessuno ha ancora scritto.
    ------------------------------------------------------------------------ */
+test.describe('dove l app va a bussare', () => {
+
+  /* Sei indirizzi che prima erano scritti a mano sei volte e adesso nascono da
+     una lista sola. Il rischio del riordino e' silenzioso: un indirizzo che
+     cambia di una lettera non fa errore da nessuna parte, l'app semplicemente
+     non trova piu' nessuno. Qui sono inchiodati uno per uno. */
+  const atteso = 'https://digitalvalut-turn.burbeng78.workers.dev';
+
+  test('i sei indirizzi restano esattamente quelli di prima', () => {
+    const app = loadApp();
+    const r = app.run(`JSON.stringify({
+      lista: RELAYS, uno: RELAY,
+      turn: TURN_BROKER_URL, knock: KNOCK_URL, mailbox: MAILBOX_BASE,
+      key: PUBKEY_BASE, wake: WAKE_BASE, letter: LETTER_BASE,
+    })`);
+    return Promise.resolve(r).then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.lista, [atteso], 'la lista parte con un relay solo');
+      assert.strictEqual(o.uno, atteso);
+      assert.strictEqual(o.turn,    atteso + '/');
+      assert.strictEqual(o.knock,   atteso + '/knock');
+      assert.strictEqual(o.mailbox, atteso + '/mailbox/');
+      assert.strictEqual(o.key,     atteso + '/key/');
+      assert.strictEqual(o.wake,    atteso + '/wake/');
+      assert.strictEqual(o.letter,  atteso + '/letter/');
+      app.stop();
+    });
+  });
+
+  test('ogni relay della lista e autorizzato dalla regola della pagina', () => {
+    /* Se un relay finisse nella lista senza essere anche in `connect-src`, il
+       browser lo bloccherebbe e l'app fallirebbe SOLO in produzione, in
+       silenzio: qui la lista e la regola vengono confrontate. */
+    const fs = require('fs');
+    const html = fs.readFileSync(__dirname + '/../modifica.html', 'utf8');
+    const riga = (html.match(/connect-src[^;]*/) || [''])[0];
+    assert.ok(riga, 'la regola connect-src deve esistere');
+    const app = loadApp();
+    const r = app.run('JSON.stringify(RELAYS)');
+    return Promise.resolve(r).then(x => {
+      for (const u of JSON.parse(x)){
+        assert.ok(riga.indexOf(u) >= 0, 'relay non autorizzato dalla pagina: ' + u);
+      }
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('mettere al riparo una conversazione', () => {
 
   /* Il banco di prova non ha IndexedDB, e i test che gia esistevano lo
