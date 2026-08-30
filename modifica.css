@@ -699,3 +699,10 @@
 .contactrow .lock{background:none;border:0;color:var(--faint);cursor:pointer;padding:6px;line-height:0}
 .contactrow .lock:hover{color:var(--ink)}
 .contactrow .lock svg{width:18px;height:18px}
+.protectbox .strength{min-height:1.1em;margin-top:6px}
+.protectbox .strength.weak{color:var(--warn)}
+.protectbox .strength.good{color:var(--dim)}
+.protectbox .strength.strong{color:var(--ok)}
+.protmore{margin-top:12px}
+.protmore summary{cursor:pointer;color:var(--faint);font-size:0.8125rem;list-style:none}
+.protmore summary::-webkit-details-marker{display:none}
