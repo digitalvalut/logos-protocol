@@ -2030,20 +2030,61 @@ test.describe('dove l app va a bussare', () => {
   test('i sei indirizzi restano esattamente quelli di prima', () => {
     const app = loadApp();
     const r = app.run(`JSON.stringify({
-      lista: RELAYS, uno: RELAY,
-      turn: TURN_BROKER_URL, knock: KNOCK_URL, mailbox: MAILBOX_BASE,
+      lista: RELAYS, uno: RELAY, porte: RELAY_PATH,
+      knock: KNOCK_URL, mailbox: MAILBOX_BASE,
       key: PUBKEY_BASE, wake: WAKE_BASE, letter: LETTER_BASE,
     })`);
     return Promise.resolve(r).then(x => {
       const o = JSON.parse(x);
       assert.deepStrictEqual(o.lista, [atteso], 'la lista parte con un relay solo');
       assert.strictEqual(o.uno, atteso);
-      assert.strictEqual(o.turn,    atteso + '/');
+      assert.deepStrictEqual(o.porte, { turn:'/', knock:'/knock', mailbox:'/mailbox/',
+                                        key:'/key/', wake:'/wake/', letter:'/letter/' },
+        'le porte del servizio non devono cambiare nome');
       assert.strictEqual(o.knock,   atteso + '/knock');
       assert.strictEqual(o.mailbox, atteso + '/mailbox/');
       assert.strictEqual(o.key,     atteso + '/key/');
       assert.strictEqual(o.wake,    atteso + '/wake/');
       assert.strictEqual(o.letter,  atteso + '/letter/');
+      app.stop();
+    });
+  });
+
+  test('le credenziali di collegamento vengono chieste a TUTTI i relay', () => {
+    /* La prima chiamata davvero convertita. Si controlla dove va a bussare,
+       non solo che funzioni: un indirizzo giusto ma chiesto a un relay solo
+       sarebbe indistinguibile da prima. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      window.__chiamate = [];
+      fetch = (url) => { window.__chiamate.push(url);
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ iceServers: [{ urls: 'turn:x' }] }) }); };
+      RELAYS.length = 0; RELAYS.push('https://uno.example', 'https://due.example');
+      const s = await fetchIceServers();
+      return JSON.stringify({ dove: window.__chiamate, quanti: s.length });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.dove.sort(), ['https://due.example/', 'https://uno.example/'],
+        'deve chiederle a tutti e due, sulla porta giusta');
+      app.stop();
+    });
+  });
+
+  test('se nessun relay risponde, la chiamata parte lo stesso con STUN', () => {
+    /* Il motivo per cui questa e la prima convertita: fallire qui non rompe
+       niente che si veda. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      fetch = () => Promise.reject(new Error('tutti giu'));
+      RELAYS.length = 0; RELAYS.push('https://uno.example', 'https://due.example');
+      const s = await fetchIceServers();
+      return JSON.stringify({ quanti: s.length, primo: s[0] && s[0].urls });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.ok(o.quanti > 0, 'deve ripiegare su qualcosa, non restare a mani vuote');
+      assert.match(String(o.primo), /^stun:/, 'e quel qualcosa e STUN');
       app.stop();
     });
   });

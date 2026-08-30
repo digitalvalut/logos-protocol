@@ -2721,6 +2721,10 @@ $('easyHintClose').addEventListener('click', () => {
 const RELAYS = ['https://digitalvalut-turn.burbeng78.workers.dev'];
 const RELAY = RELAYS[0];
 
+/* Le porte del servizio, in un posto solo. Finche' non saranno passate tutte da
+   askAnyRelay, quelle ancora da convertire restano scritte come prima. */
+const RELAY_PATH = { turn: '/', knock: '/knock', mailbox: '/mailbox/', key: '/key/', wake: '/wake/', letter: '/letter/' };
+
 /* Chiede la stessa cosa a TUTTI i relay insieme e tiene la prima risposta
    buona che arriva.
 
@@ -2794,7 +2798,7 @@ function tellAllRelays(percorso, opts, ms){
 }
 
 const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
-const TURN_BROKER_URL = RELAY + '/';
+/* TURN_BROKER_URL non esiste piu': l'indirizzo lo costruisce askAnyRelay. */
 
 let cachedIceServers = null;
 /* Fetched once per page load and reused — the credentials are valid 24h, far
@@ -2824,11 +2828,12 @@ async function fetchIceServers(){
   if (iceServersPromise) return iceServersPromise;
   iceServersPromise = (async () => {
     try{
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 5000);
-      const res = await fetch(TURN_BROKER_URL, { signal: ctrl.signal });
-      clearTimeout(timer);
-      if (!res.ok) throw new Error('broker responded ' + res.status);
+      /* Il primo che passa da askAnyRelay, e apposta il piu' innocuo di tutti:
+         se nessun relay risponde si ripiega su STUN da solo, la chiamata parte
+         lo stesso quando la rete lo consente, e chi guarda lo schermo non si
+         accorge di niente. Il posto giusto dove sbagliare per primi. */
+      const res = await askAnyRelay(RELAY_PATH.turn, {}, 5000);
+      if (!res) throw new Error('nessun relay ha risposto');
       const data = await res.json();
       if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
       cachedIceServers = data.iceServers;
