@@ -251,31 +251,6 @@
            non vengono cancellate, che una parola dimenticata non si recupera, e
            fin dove arriva questa protezione. Chi conferma deve aver gia' letto
            l'unica cosa che non si puo' disfare. -->
-      <!-- Semplice per chi lo usa, onesto lo stesso. Una riga sola a vista:
-           cosa sparisce, cosa lo riporta, e che dimenticarlo e' definitivo. Il
-           resto sta dietro "Cosa succede esattamente" — c'e' per chi lo cerca e
-           non e' in mezzo ai piedi a chi vuole solo mettere via una foto.
-           Un campo solo: la conferma ripetuta era attrito, non sicurezza. -->
-      <div class="protectbox hide" id="protectBox">
-        <label class="fieldlabel" id="protectTitle"></label>
-        <div class="helptext" data-i18n="prot.oneline">Sparisce dal telefono: messaggi e foto. Torna solo con quello che scrivi qui. <b>Se lo dimentichi non torna più</b> — non possiamo riaprirla nemmeno noi.</div>
-        <input type="password" id="protectWord" class="sans-input mt10" maxlength="120" autocomplete="new-password"
-               data-i18n-ph="prot.wordPh" placeholder="Il PIN o la frase che la riapre">
-        <div class="helptext strength" id="protectStrength"></div>
-        <div class="btnrow mt10">
-          <button class="btn" id="btnProtectGo"><span data-i18n="prot.go">Metti al riparo</span></button>
-          <button class="btn ghost" id="btnProtectCancel"><span data-i18n="prot.cancel">Annulla</span></button>
-        </div>
-        <div class="status" id="protectStatus"></div>
-        <details class="protmore">
-          <summary data-i18n="prot.more">Cosa succede esattamente</summary>
-          <div class="helptext mt8" data-i18n="prot.what1">La conversazione sparisce dal telefono: i messaggi, il nome del contatto e la verifica a tre parole. Chi prende in mano il telefono non trova né la conversazione né il contatto.</div>
-          <div class="helptext mt8" data-i18n="prot.what2">Le foto e i file <b>non vengono cancellati</b>: entrano cifrati nella cassaforte e tornano quando la riapri.</div>
-          <div class="helptext mt8" data-i18n="prot.what4">Chi guarda l'app non trova niente. Chi ha strumenti da laboratorio può capire che qualcosa è stato messo via, ma non cosa né con chi.</div>
-          <div class="helptext mt8" data-i18n="prot.samePin">Puoi usare lo stesso PIN per più conversazioni: finiscono nella stessa cassaforte e tornano tutte insieme.</div>
-          <div class="helptext mt8" data-i18n="prot.whatGuess">Un PIN corto è comodo e si difende bene da chi ti sfila il telefono di mano. Contro chi ha attrezzatura seria conta solo la lunghezza: una frase intera vale immensamente più di sei cifre. E una frase famosa vale meno di una che ti sei inventato tu.</div>
-        </details>
-      </div>
     </div>
 
     
@@ -373,18 +348,6 @@
         <div class="status" id="burnerStatus"></div>
       </div>
 
-      <!-- Sempre qui, sempre uguale, che ci sia qualcosa dentro o no: un campo
-           che comparisse solo quando la cassaforte e' piena direbbe da solo che
-           la cassaforte e' piena. Parola sbagliata e cassaforte vuota danno la
-           stessa identica risposta, per la stessa ragione. -->
-      <div class="vaultopen">
-        <label class="fieldlabel" data-i18n="prot.openTitle">Riaprire una conversazione al riparo</label>
-        <div class="helptext" data-i18n="prot.openHelp">Scrivi la parola. Se non c'è niente con quella parola non succede nulla: l'app non dice se hai sbagliato o se non c'era niente.</div>
-        <input type="password" id="vaultWord" class="sans-input mt10" maxlength="120" autocomplete="off"
-               data-i18n-ph="prot.wordPh" placeholder="La parola per riaprirla">
-        <button class="btn mt10" id="btnVaultOpen"><span data-i18n="prot.openGo">Apri</span></button>
-        <div class="status" id="vaultStatus"></div>
-      </div>
 
       <div class="addrdial">
         <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
@@ -459,6 +422,21 @@
           <option value="90" data-i18n="autoclean.d90">90 giorni</option>
           <option value="365" data-i18n="autoclean.d365">1 anno</option>
         </select>
+      </div>
+
+      <!-- Un pulsante solo, e una domanda sola. Niente parole da ricordare,
+           niente da sbagliare a meta': quello che sparisce, sparisce. -->
+      <div class="wipebox">
+        <div class="helptext" data-i18n="wipe.help">Vuoi far sparire foto, video e conversazioni da questo telefono? Non si possono recuperare.</div>
+        <button class="btn danger mt10" id="btnWipe"><span data-i18n="wipe.btn">Pulisci tutto</span></button>
+        <div class="wipeconfirm hide" id="wipeConfirm">
+          <div class="helptext" data-i18n="wipe.sure"><b>Sicuro?</b> Spariscono i messaggi, i contatti, le foto e i video. Il tuo indirizzo resta il tuo, e chi ce l'ha continua a trovarti.</div>
+          <div class="btnrow mt10">
+            <button class="btn danger" id="btnWipeYes"><span data-i18n="wipe.yes">Sì, cancella tutto</span></button>
+            <button class="btn ghost" id="btnWipeNo"><span data-i18n="wipe.no">No, lascia stare</span></button>
+          </div>
+        </div>
+        <div class="status" id="wipeStatus"></div>
       </div>
     </div>
 

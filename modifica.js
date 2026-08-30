@@ -73,6 +73,7 @@ let CURLANG = 'it';
 const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, id: {}, pt: {}, ru: {}, ur: {}, zh: {} };
 
 Object.assign(I18N.en, {
+"wipe.help":"Want photos, videos and conversations gone from this phone? They cannot be recovered.","wipe.btn":"Wipe everything","wipe.sure":"<b>Sure?</b> Messages, contacts, photos and videos all go. Your address stays yours, and anyone who has it can still reach you.","wipe.yes":"Yes, wipe it all","wipe.no":"No, leave it","wipe.done":"Done. There is nothing left on this phone.",
 "file.noRoomIn":"“{n}” was not received: this device already has too much held in memory. Reload the page and ask for it again.",
 "listen.needLockScreen":"To ring on a locked screen, Android needs one more permission. Opening the page where it is given.",
 "android.ringTitle":"Someone is calling",
@@ -206,7 +207,7 @@ Object.assign(I18N.en, {
 "addr.title":"Your permanent address","addr.sub":"Give this out instead of a phone number. Anyone holding it can reach you whenever they like, without knowing your name or your number. Off by default.","addr.qrHint":"Scanning it calls you directly","addr.share":"Send your address","addr.showQr":"Show the QR","addr.reachNote":"So people can reach you with the app closed too, turn on notifications below.","addr.dialLabel":"Got someone's address?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Call it","addr.badFormat":"That address isn't written right. It's 12 characters, like DV-K7M2-9QRT-X4WP.","addr.itsYou":"That's your own address.","addr.callingTitle":"Calling…","addr.callingHint":"If their app is closed I'll ring their phone. It can take a moment.","addr.noAnswer":"No answer. They've been alerted — try again later.","addr.dialFailed":"I couldn't call that address.","addr.noKey":"That address doesn't seem to be active any more. Ask the person to reopen the app and send it to you again: addresses changed with the latest update.","addr.noBroker":"I couldn't even start the call: the service that puts you in touch didn't answer. If you're using a copy of the app at a different address, open the official one.","addr.incomingTitle":"Someone is looking for you","addr.incomingSub":"The name and the reason were written by whoever is calling: until you accept, nobody can prove they really are that person.","addr.incomingToast":"Someone is calling your address.","addr.accept":"Accept","addr.ignore":"Ignore","addr.verified":"Verified: whoever answered really does own the address {a}. Nobody can have got in between.","addr.blockedIn":"A call from someone you turned away: ignored.","addr.shareText":"You can reach me here, without my phone number. My DigitalValut Logos address is {a}\n\nTap to call me:",
 "addr.provenNotWho":"Whoever answered really does own the address {a} — but that address came to you in a letter, and whoever wrote it could put any name on it. If you are not sure who they are, say the three words to each other.",
 "addr.incomingAt":"through “{name}”","burn.title":"Throwaway addresses","burn.help":"One per listing, one per stranger. Delete it when you're done and that person can't reach you any more — they never had your real one.","burn.sameYou":"A throwaway address hides which address you own — it does not make you a stranger. Anyone who has already read the three security words with you sees the same three words here, and knows it is you.","burn.namePh":"What for? e.g. Second-hand sofa","burn.add":"Create","burn.send":"Send this address","burn.delete":"Delete","burn.deleted":"“{name}” deleted. That address no longer answers.","burn.made":"“{name}” created. You can hand it out now.","burn.needName":"Give it a name, so you know who you gave it to.","burn.full":"You can have {n} at a time. Delete one to make another.","burn.untitled":"Unnamed",
-"prot.working":"Working… this takes a few seconds: that slowness is what makes guessing words pointless.","prot.openDoneMany":"{n} conversations are back in the list, with their photos.","prot.samePin":"You can use the same PIN for several conversations: they go into the same safe and come back together.","prot.lock":"Put away","prot.title":"Put the conversation with “{name}” away","prot.what1":"The conversation disappears from this phone: the messages, the contact's name and the three-word check. Someone picking up your phone finds neither the conversation nor the contact.","prot.what2":"Photos and files are <b>not deleted</b>: they go into the safe encrypted and come back when you open it.","prot.what3":"You choose a word. <b>If you forget it, nobody can open it</b> — not you, not us. There is no way to recover it.","prot.what4":"Someone looking through the app finds nothing. Someone with forensic tools can tell that something was put away, but not what, and not with whom.","prot.wordPh":"The PIN or phrase that opens it","prot.word2Ph":"Type it again","prot.go":"Put away","prot.cancel":"Cancel","prot.needWord":"Type something: without it there is no safe.","prot.short":"Too short: at least 4 characters.","prot.mismatch":"The two words are not the same.","prot.done":"“{name}” is put away. That word is what brings it back.","prot.failed":"It did not work. Nothing was deleted: the conversation is still where it was.","prot.tooBig":"It did not work: {n} files are too big for the safe (over 64 MB). Nothing was touched. Delete those files from the conversation, then try again.","prot.openTitle":"Open a conversation you put away","prot.openHelp":"Type the word. If nothing matches it, nothing happens: the app does not say whether you got it wrong or there was nothing there.","prot.openGo":"Open","prot.openNothing":"Nothing opens with that word.","prot.openDone":"“{name}” is back in the list, with its photos.","prot.openLost":"“{name}” is back, but {n} files did not open again.","prot.openFailed":"It did not work. The safe is still full: try again when the phone has more room.",
+
 "knock.title":"You are contacting","knock.nameLabel":"What's your name?","knock.namePh":"Your name","knock.msgLabel":"What do you need? (optional)","knock.msgPh":"e.g. Do you have size 42 shoes?","knock.go":"Call","knock.note":"Your name and this line are seen only by the person you're calling. No server can read them.",
 "letter.title":"Messages left for you","letter.noneTitle":"Nobody is answering right now.","letter.noneSub":"I've already let them know you tried to reach them. If you want to say more, write it here.","letter.ph":"Write your message here","letter.leave":"Leave the message","letter.cancel":"Never mind","letter.needText":"Write a line or two, so they know what you wanted.","letter.left":"Message left. They'll find it when they open the app.","letter.failed":"I couldn't leave the message. Try again.","letter.callBack":"Call back","letter.dismiss":"Done",
 "home.bigStart":"Talk to someone","home.bigStartD":"Create an invite to send","home.bigJoin":"I have a code","home.bigJoinD":"Someone sent me an invite","set.lang":"Language","set.textsize":"Text size","conn.direct":"A direct link between the two phones","conn.directShort":"connected directly","conn.relay":"A safe link, through an encrypted bridge","conn.relayShort":"connected (bridge)","conn.down":"Connection lost","conn.downShort":"lost","conn.working":"Connecting","conn.wobbly":"The link wobbled — trying to pick it back up","conn.wobblyShort":"reconnecting","chat.linkLost":"The connection dropped. Nothing was lost.","chat.backHome":"Back to home","chat.stillWobbly":"The connection hasn't come back yet. You can keep waiting, or go back to home and try again.",
@@ -256,9 +257,10 @@ Object.assign(I18N.en, {
 "health.version":"Version in use",
 "health.versionOld":"Part of the app is still the old one. Close it and open it again.",
 "media.stepsAndroidApp":"Go back to your phone's Home screen|Press and hold the <b>DigitalValut Logos</b> icon|Tap <b>App info</b> (or the ⓘ icon)|Tap <b>Permissions</b>, then turn on <b>Microphone</b> and <b>Camera</b>|Reopen the app",
-"prot.oneline":"It disappears from the phone: messages and photos. Only what you type here brings it back. <b>Forget it and it is gone</b> — we cannot reopen it either.","prot.more":"What happens exactly","prot.s1":"Quick to type. Fine against someone who picks up your phone.","prot.s2":"Good.","prot.s3":"Very strong.","prot.whatGuess":"A short PIN is convenient and holds up well against someone who grabs your phone. Against serious equipment only length counts: a whole phrase is worth immensely more than six digits. And a famous phrase is worth less than one you made up.",
+
 });
 Object.assign(I18N.it, {
+"wipe.help":"Vuoi far sparire foto, video e conversazioni da questo telefono? Non si possono recuperare.","wipe.btn":"Pulisci tutto","wipe.sure":"<b>Sicuro?</b> Spariscono i messaggi, i contatti, le foto e i video. Il tuo indirizzo resta il tuo, e chi ce l'ha continua a trovarti.","wipe.yes":"Sì, cancella tutto","wipe.no":"No, lascia stare","wipe.done":"Fatto. Su questo telefono non c'è più niente.",
 "file.noRoomIn":"«{n}» non è stato ricevuto: questo dispositivo ha già troppa roba aperta in memoria. Ricarica la pagina e fattelo rimandare.",
 "listen.needLockScreen":"Per squillare a schermo bloccato, Android chiede un permesso in più. Ti porto sulla pagina dove si concede.",
 "android.ringTitle":"Qualcuno ti sta chiamando",
@@ -392,7 +394,7 @@ Object.assign(I18N.it, {
 "addr.title":"Il tuo indirizzo permanente","addr.sub":"Da dare al posto del numero di telefono. Chi ce l'ha può cercarti quando vuole, senza sapere il tuo nome né il tuo numero. Spento di base.","addr.qrHint":"Chi lo inquadra ti chiama direttamente","addr.share":"Manda il tuo indirizzo","addr.showQr":"Mostra il QR","addr.reachNote":"Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.","addr.dialLabel":"Hai l'indirizzo di qualcuno?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Chiamalo","addr.badFormat":"Questo indirizzo non è scritto bene. Sono 12 caratteri, tipo DV-K7M2-9QRT-X4WP.","addr.itsYou":"Questo è il tuo indirizzo.","addr.callingTitle":"Sto chiamando…","addr.callingHint":"Se la persona ha l'app chiusa le faccio squillare il telefono. Può volerci qualche istante.","addr.noAnswer":"Non ha risposto. L'ho avvisata: riprova più tardi.","addr.dialFailed":"Non sono riuscito a chiamare questo indirizzo.","addr.noKey":"Questo indirizzo non risulta più attivo. Chiedi alla persona di riaprire l'app e di rimandartelo: gli indirizzi sono cambiati con l'ultimo aggiornamento.","addr.noBroker":"Non sono riuscito nemmeno a far partire la chiamata: il servizio che vi fa incontrare non ha risposto. Se stai usando una copia dell'app su un altro indirizzo, apri quella ufficiale.","addr.incomingTitle":"Qualcuno ti sta cercando","addr.incomingSub":"Il nome e il motivo li ha scritti chi ti cerca: finché non accetti, nessuno può dimostrare di essere davvero quella persona.","addr.incomingToast":"Qualcuno ti sta cercando al tuo indirizzo.","addr.accept":"Accetta","addr.ignore":"Ignora","addr.verified":"Verificato: chi ha risposto possiede davvero l'indirizzo {a}. Nessuno può essersi messo in mezzo.","addr.blockedIn":"Chiamata da un contatto che avevi rifiutato: ignorata.","addr.shareText":"Puoi cercarmi qui, senza il mio numero di telefono. Il mio indirizzo su DigitalValut Logos è {a}\n\nTocca per chiamarmi:",
 "addr.provenNotWho":"Chi ha risposto possiede davvero l'indirizzo {a} — ma quell'indirizzo te l'ha lasciato una lettera, e chi l'ha scritta può aver messo qualunque nome. Se non sei sicuro di chi sia, ditevi le tre parole.",
 "addr.incomingAt":"tramite «{name}»","burn.title":"Indirizzi usa e getta","burn.help":"Uno per ogni annuncio o sconosciuto. Quando hai finito lo cancelli e quella persona non ti trova più — il tuo indirizzo vero non l'ha mai avuto.","burn.sameYou":"Un indirizzo usa e getta nasconde qual è il tuo indirizzo — non ti rende un estraneo. Chi ha già letto con te le tre parole di sicurezza ritrova qui le stesse tre parole, e capisce che sei tu.","burn.namePh":"Per cosa? es. Divano usato","burn.add":"Crea","burn.send":"Manda questo indirizzo","burn.delete":"Cancella","burn.deleted":"«{name}» cancellato. Quell'indirizzo non risponde più.","burn.made":"«{name}» creato. Ora puoi darlo a chi vuoi.","burn.needName":"Dagli un nome, così sai a chi l'hai dato.","burn.full":"Puoi averne al massimo {n} insieme. Cancellane uno per farne un altro.","burn.untitled":"Senza nome",
-"prot.working":"Sto lavorando… ci vuole qualche secondo: è la lentezza che rende inutile provare le parole a raffica.","prot.openDoneMany":"{n} conversazioni sono tornate nella lista, con le loro foto.","prot.samePin":"Puoi usare lo stesso PIN per più conversazioni: finiscono nella stessa cassaforte e tornano tutte insieme.","prot.lock":"Metti al riparo","prot.title":"Mettere al riparo la conversazione con «{name}»","prot.what1":"La conversazione sparisce dal telefono: i messaggi, il nome del contatto e la verifica a tre parole. Chi prende in mano il telefono non trova né la conversazione né il contatto.","prot.what2":"Le foto e i file <b>non vengono cancellati</b>: entrano cifrati nella cassaforte e tornano quando la riapri.","prot.what3":"Serve una parola che scegli tu. <b>Se la dimentichi non la riapre nessuno</b> — né tu né noi. Non esiste un modo per recuperarla.","prot.what4":"Chi guarda l'app non trova niente. Chi ha strumenti da laboratorio può capire che qualcosa è stato messo via, ma non cosa né con chi.","prot.wordPh":"Il PIN o la frase che la riapre","prot.word2Ph":"Ripetila","prot.go":"Metti al riparo","prot.cancel":"Annulla","prot.needWord":"Scrivi qualcosa: senza, non c'è nessuna cassaforte.","prot.short":"Troppo corto: almeno 4 caratteri.","prot.mismatch":"Le due parole non sono uguali.","prot.done":"«{name}» è al riparo. Per ritrovarla serve quella parola.","prot.failed":"Non è riuscita. Non è stato cancellato niente: la conversazione è ancora dov'era.","prot.tooBig":"Non è riuscita: {n} file sono troppo grandi per la cassaforte (oltre 64 MB). Non è stato toccato niente. Cancella quei file dalla conversazione, poi riprova.","prot.openTitle":"Riaprire una conversazione al riparo","prot.openHelp":"Scrivi la parola. Se non c'è niente con quella parola non succede nulla: l'app non dice se hai sbagliato o se non c'era niente.","prot.openGo":"Apri","prot.openNothing":"Niente da aprire con quella parola.","prot.openDone":"«{name}» è tornata nella lista, con le sue foto.","prot.openLost":"«{name}» è tornata, ma {n} file non si sono riaperti.","prot.openFailed":"Non è riuscita. La cassaforte è rimasta piena: riprova quando il telefono ha più spazio.",
+
 "knock.title":"Stai contattando","knock.nameLabel":"Come ti chiami?","knock.namePh":"Il tuo nome","knock.msgLabel":"Cosa ti serve? (se vuoi)","knock.msgPh":"es. Avete le scarpe numero 42?","knock.go":"Chiama","knock.note":"Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.",
 "letter.title":"Messaggi lasciati per te","letter.noneTitle":"Non risponde nessuno adesso.","letter.noneSub":"Le ho già segnato che l'hai cercata. Se vuoi dirle qualcosa in più, scrivilo qui.","letter.ph":"Scrivi qui il tuo messaggio","letter.leave":"Lascia il messaggio","letter.cancel":"Lascia perdere","letter.needText":"Scrivi due parole, così sa cosa volevi.","letter.left":"Messaggio lasciato. Lo troverà appena apre l'app.","letter.failed":"Non sono riuscito a lasciare il messaggio. Riprova.","letter.callBack":"Richiama","letter.dismiss":"Fatto",
 "home.bigStart":"Parla con qualcuno","home.bigStartD":"Crea un invito da mandare","home.bigJoin":"Ho un codice","home.bigJoinD":"Mi hanno mandato un invito","set.lang":"Lingua","set.textsize":"Dimensione del testo","conn.direct":"Collegamento diretto fra i due telefoni","conn.directShort":"collegata direttamente","conn.relay":"Collegamento sicuro, attraverso un ponte cifrato","conn.relayShort":"collegata (ponte)","conn.down":"Connessione caduta","conn.downShort":"caduta","conn.working":"Collegamento in corso","conn.wobbly":"Il collegamento ha vacillato — sto riprendendolo","conn.wobblyShort":"sto riprendendo","chat.linkLost":"Il collegamento è caduto. Non si è perso niente.","chat.backHome":"Torna alla home","chat.stillWobbly":"Il collegamento non è ancora tornato. Puoi aspettare ancora, oppure tornare alla home e riprovare.",
@@ -442,10 +444,11 @@ Object.assign(I18N.it, {
 "health.version":"Versione in uso",
 "health.versionOld":"Una parte dell'app è ancora vecchia. Chiudila e riaprila.",
 "media.stepsAndroidApp":"Torna alla schermata Home del telefono|Tieni premuta l'icona di <b>DigitalValut Logos</b>|Tocca <b>Informazioni app</b> (o l'icona ⓘ)|Tocca <b>Autorizzazioni</b>, poi attiva <b>Microfono</b> e <b>Fotocamera</b>|Riapri l'app",
-"prot.oneline":"Sparisce dal telefono: messaggi e foto. Torna solo con quello che scrivi qui. <b>Se lo dimentichi non torna più</b> — non possiamo riaprirla nemmeno noi.","prot.more":"Cosa succede esattamente","prot.s1":"Veloce da scrivere. Va bene contro chi ti prende il telefono in mano.","prot.s2":"Buona.","prot.s3":"Molto sicura.","prot.whatGuess":"Un PIN corto è comodo e si difende bene da chi ti sfila il telefono di mano. Contro chi ha attrezzatura seria conta solo la lunghezza: una frase intera vale immensamente più di sei cifre. E una frase famosa vale meno di una che ti sei inventato tu.",
+
 });
 
 Object.assign(I18N.fr, {
+"wipe.help":"Faire disparaître photos, vidéos et conversations de ce téléphone ? Rien ne pourra être récupéré.","wipe.btn":"Tout effacer","wipe.sure":"<b>Sûr ?</b> Messages, contacts, photos et vidéos disparaissent. Votre adresse reste la vôtre, et qui l'a peut toujours vous joindre.","wipe.yes":"Oui, tout effacer","wipe.no":"Non, laisser","wipe.done":"C'est fait. Il ne reste rien sur ce téléphone.",
 "file.noRoomIn":"« {n} » n'a pas été reçu : cet appareil garde déjà trop de choses en mémoire. Rechargez la page et demandez qu'on vous le renvoie.",
 "listen.needLockScreen":"Pour sonner sur un écran verrouillé, Android demande une autorisation de plus. Ouverture de la page où l'accorder.",
 "android.ringTitle":"Quelqu’un vous appelle",
@@ -571,7 +574,7 @@ Object.assign(I18N.fr, {
 "addr.title":"Votre adresse permanente","addr.sub":"À donner à la place du numéro de téléphone. Qui la possède peut vous joindre quand il veut, sans connaître ni votre nom ni votre numéro. Désactivée par défaut.","addr.qrHint":"La scanner vous appelle directement","addr.share":"Envoyer votre adresse","addr.showQr":"Afficher le QR","addr.reachNote":"Pour qu'on puisse vous joindre même l'application fermée, activez les notifications ci-dessous.","addr.dialLabel":"Vous avez l'adresse de quelqu'un ?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"L'appeler","addr.badFormat":"Cette adresse est mal écrite. Ce sont 12 caractères, comme DV-K7M2-9QRT-X4WP.","addr.itsYou":"C'est votre propre adresse.","addr.callingTitle":"J'appelle…","addr.callingHint":"Si son application est fermée, je fais sonner son téléphone. Cela peut prendre un instant.","addr.noAnswer":"Pas de réponse. La personne a été prévenue : réessayez plus tard.","addr.dialFailed":"Je n'ai pas pu appeler cette adresse.","addr.noKey":"Cette adresse ne semble plus active. Demandez à la personne de rouvrir l'application et de vous la renvoyer : les adresses ont changé avec la dernière mise à jour.","addr.noBroker":"Je n'ai même pas pu lancer l'appel : le service qui vous met en relation n'a pas répondu. Si vous utilisez une copie de l'application à une autre adresse, ouvrez l'officielle.","addr.incomingTitle":"Quelqu'un vous cherche","addr.incomingSub":"Le nom et le motif ont été écrits par la personne qui appelle : tant que vous n'acceptez pas, rien ne prouve qu'elle soit vraiment celle-là.","addr.incomingToast":"Quelqu'un appelle votre adresse.","addr.accept":"Accepter","addr.ignore":"Ignorer","addr.verified":"Vérifié : la personne qui a répondu possède bien l'adresse {a}. Personne n'a pu s'interposer.","addr.blockedIn":"Appel d'une personne que vous aviez écartée : ignoré.","addr.shareText":"Vous pouvez me joindre ici, sans mon numéro de téléphone. Mon adresse DigitalValut Logos est {a}\n\nTouchez pour m'appeler :",
 "addr.provenNotWho":"La personne qui a répondu possède bien l'adresse {a} — mais cette adresse vous est arrivée par une lettre, et son auteur a pu y mettre n'importe quel nom. Si vous n'êtes pas sûr, dites-vous les trois mots.",
 "addr.incomingAt":"via « {name} »","burn.title":"Adresses jetables","burn.help":"Une par annonce, une par inconnu. Supprimez-la une fois terminé et cette personne ne peut plus vous joindre — elle n'a jamais eu la vraie.","burn.sameYou":"Une adresse jetable cache quelle adresse vous possédez — elle ne fait pas de vous un inconnu. Qui a déjà lu avec vous les trois mots de sécurité retrouve ici les mêmes trois mots, et sait que c'est vous.","burn.namePh":"Pour quoi ? ex. Canapé d'occasion","burn.add":"Créer","burn.send":"Envoyer cette adresse","burn.delete":"Supprimer","burn.deleted":"« {name} » supprimée. Cette adresse ne répond plus.","burn.made":"« {name} » créée. Vous pouvez la donner.","burn.needName":"Donnez-lui un nom, pour savoir à qui vous l'avez donnée.","burn.full":"Vous pouvez en avoir {n} à la fois. Supprimez-en une pour en créer une autre.","burn.untitled":"Sans nom",
-"prot.working":"En cours… quelques secondes : cette lenteur est ce qui rend inutile d'essayer les mots en rafale.","prot.openDoneMany":"{n} conversations sont revenues dans la liste, avec leurs photos.","prot.samePin":"Vous pouvez utiliser le même code pour plusieurs conversations : elles vont dans le même coffre et reviennent ensemble.","prot.lock":"Mettre à l'abri","prot.title":"Mettre à l'abri la conversation avec « {name} »","prot.what1":"La conversation disparaît du téléphone : les messages, le nom du contact et la vérification à trois mots. Qui prend votre téléphone ne trouve ni la conversation ni le contact.","prot.what2":"Les photos et les fichiers <b>ne sont pas supprimés</b> : ils entrent chiffrés dans le coffre et reviennent à l'ouverture.","prot.what3":"Vous choisissez un mot. <b>Si vous l'oubliez, personne ne peut ouvrir</b> — ni vous ni nous. Aucune récupération n'existe.","prot.what4":"Qui regarde l'application ne trouve rien. Qui dispose d'outils d'analyse peut voir que quelque chose a été rangé, mais pas quoi ni avec qui.","prot.wordPh":"Le code ou la phrase qui rouvre","prot.word2Ph":"Répétez-le","prot.go":"Mettre à l'abri","prot.cancel":"Annuler","prot.needWord":"Écrivez quelque chose : sans cela, pas de coffre.","prot.short":"Trop court : au moins 4 caractères.","prot.mismatch":"Les deux mots ne sont pas identiques.","prot.done":"« {name} » est à l'abri. C'est ce mot qui la ramène.","prot.failed":"Échec. Rien n'a été supprimé : la conversation est toujours là.","prot.tooBig":"Échec : {n} fichiers sont trop gros pour le coffre (plus de 64 Mo). Rien n'a été touché. Supprimez-les de la conversation, puis réessayez.","prot.openTitle":"Rouvrir une conversation mise à l'abri","prot.openHelp":"Écrivez le mot. Si rien n'y correspond, rien ne se passe : l'application ne dit pas si vous vous êtes trompé ou s'il n'y avait rien.","prot.openGo":"Ouvrir","prot.openNothing":"Rien ne s'ouvre avec ce mot.","prot.openDone":"« {name} » est revenue dans la liste, avec ses photos.","prot.openLost":"« {name} » est revenue, mais {n} fichiers ne se sont pas rouverts.","prot.openFailed":"Échec. Le coffre est resté plein : réessayez quand le téléphone aura plus de place.",
+
 "knock.title":"Vous contactez","knock.nameLabel":"Comment vous appelez-vous ?","knock.namePh":"Votre nom","knock.msgLabel":"Que vous faut-il ? (facultatif)","knock.msgPh":"ex. Avez-vous des chaussures en 42 ?","knock.go":"Appeler","knock.note":"Votre nom et cette phrase ne sont vus que par la personne appelée. Aucun serveur ne peut les lire.",
 "letter.title":"Messages laissés pour vous","letter.noneTitle":"Personne ne répond pour le moment.","letter.noneSub":"Je lui ai déjà fait savoir que vous avez essayé de la joindre. Si vous voulez en dire plus, écrivez-le ici.","letter.ph":"Écrivez votre message ici","letter.leave":"Laisser le message","letter.cancel":"Laisser tomber","letter.needText":"Écrivez deux mots, qu'elle sache ce que vous vouliez.","letter.left":"Message laissé. La personne le trouvera en ouvrant l'application.","letter.failed":"Je n'ai pas pu laisser le message. Réessayez.","letter.callBack":"Rappeler","letter.dismiss":"Terminé",
 "home.bigStart":"Parler à quelqu'un","home.bigStartD":"Créer une invitation à envoyer","home.bigJoin":"J'ai un code","home.bigJoinD":"On m'a envoyé une invitation","set.lang":"Langue","set.textsize":"Taille du texte","conn.direct":"Liaison directe entre les deux téléphones","conn.directShort":"connectée directement","conn.relay":"Liaison sûre, via un pont chiffré","conn.relayShort":"connectée (pont)","conn.down":"Connexion perdue","conn.downShort":"perdue","conn.working":"Connexion en cours","conn.wobbly":"La liaison a vacillé — je la reprends","conn.wobblyShort":"je reprends","chat.linkLost":"La connexion est tombée. Rien n'est perdu.","chat.backHome":"Retour à l'accueil","chat.stillWobbly":"La connexion n'est pas encore revenue. Vous pouvez continuer à attendre, ou revenir à l'accueil et réessayer.",
@@ -621,10 +624,11 @@ Object.assign(I18N.fr, {
 "health.version":"Version utilisée",
 "health.versionOld":"Une partie de l'application est encore l'ancienne. Fermez-la et rouvrez-la.",
 "media.stepsAndroidApp":"Retournez à l'écran d'accueil du téléphone|Appuyez longuement sur l'icône <b>DigitalValut Logos</b>|Touchez <b>Infos sur l'appli</b> (ou l'icône ⓘ)|Touchez <b>Autorisations</b>, puis activez <b>Microphone</b> et <b>Caméra</b>|Rouvrez l'application",
-"prot.oneline":"Elle disparaît du téléphone : messages et photos. Seul ce que vous écrivez ici la ramène. <b>Si vous l'oubliez, c'est fini</b> — nous ne pouvons pas la rouvrir non plus.","prot.more":"Ce qui se passe exactement","prot.s1":"Rapide à écrire. Suffit contre qui prend votre téléphone en main.","prot.s2":"Bien.","prot.s3":"Très sûr.","prot.whatGuess":"Un code court est pratique et résiste bien à qui vous arrache le téléphone. Face à du matériel sérieux, seule la longueur compte : une phrase entière vaut immensément plus que six chiffres. Et une phrase célèbre vaut moins qu'une que vous avez inventée.",
+
 });
 
 Object.assign(I18N.de, {
+"wipe.help":"Sollen Fotos, Videos und Gespräche von diesem Telefon verschwinden? Sie sind nicht wiederherstellbar.","wipe.btn":"Alles löschen","wipe.sure":"<b>Sicher?</b> Nachrichten, Kontakte, Fotos und Videos sind dann weg. Deine Adresse bleibt deine, und wer sie hat, erreicht dich weiterhin.","wipe.yes":"Ja, alles löschen","wipe.no":"Nein, lassen","wipe.done":"Erledigt. Auf diesem Telefon ist nichts mehr.",
 "file.noRoomIn":"„{n}“ wurde nicht empfangen: Dieses Gerät hält bereits zu viel im Speicher. Lade die Seite neu und lass es dir erneut senden.",
 "listen.needLockScreen":"Um bei gesperrtem Bildschirm zu klingeln, verlangt Android eine weitere Berechtigung. Die Seite dafür wird geöffnet.",
 "android.ringTitle":"Jemand ruft an",
@@ -750,7 +754,7 @@ Object.assign(I18N.de, {
 "addr.title":"Deine dauerhafte Adresse","addr.sub":"Gib sie statt einer Telefonnummer weiter. Wer sie hat, erreicht dich jederzeit, ohne deinen Namen oder deine Nummer zu kennen. Standardmäßig aus.","addr.qrHint":"Wer ihn scannt, ruft dich direkt an","addr.share":"Adresse senden","addr.showQr":"QR anzeigen","addr.reachNote":"Damit man dich auch bei geschlossener App erreicht, schalte unten die Hinweise ein.","addr.dialLabel":"Hast du die Adresse von jemandem?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Anrufen","addr.badFormat":"Diese Adresse ist falsch geschrieben. Es sind 12 Zeichen, etwa DV-K7M2-9QRT-X4WP.","addr.itsYou":"Das ist deine eigene Adresse.","addr.callingTitle":"Ich rufe an…","addr.callingHint":"Ist die App dort geschlossen, lasse ich das Telefon klingeln. Das kann einen Moment dauern.","addr.noAnswer":"Keine Antwort. Die Person wurde benachrichtigt — versuch es später.","addr.dialFailed":"Ich konnte diese Adresse nicht anrufen.","addr.noKey":"Diese Adresse scheint nicht mehr aktiv zu sein. Bitte die Person, die App neu zu öffnen und sie dir noch einmal zu schicken: die Adressen haben sich mit dem letzten Update geändert.","addr.noBroker":"Ich konnte den Anruf nicht einmal starten: der Dienst, der euch zusammenbringt, hat nicht geantwortet. Wenn du eine Kopie der App unter einer anderen Adresse benutzt, öffne die offizielle.","addr.incomingTitle":"Jemand sucht dich","addr.incomingSub":"Name und Grund hat die anrufende Person selbst geschrieben: bis du annimmst, kann niemand beweisen, dass sie das wirklich ist.","addr.incomingToast":"Jemand ruft deine Adresse an.","addr.accept":"Annehmen","addr.ignore":"Ignorieren","addr.verified":"Bestätigt: wer geantwortet hat, besitzt die Adresse {a} wirklich. Niemand kann sich dazwischengeschoben haben.","addr.blockedIn":"Anruf von jemandem, den du abgewiesen hattest: ignoriert.","addr.shareText":"Hier erreichst du mich, ganz ohne meine Telefonnummer. Meine DigitalValut-Logos-Adresse ist {a}\n\nZum Anrufen tippen:",
 "addr.provenNotWho":"Wer geantwortet hat, besitzt die Adresse {a} wirklich — aber diese Adresse kam per Brief, und wer ihn schrieb, konnte jeden Namen daraufsetzen. Wenn du unsicher bist, sagt euch die drei Wörter.",
 "addr.incomingAt":"über „{name}“","burn.title":"Wegwerf-Adressen","burn.help":"Eine pro Anzeige, eine pro Fremdem. Löschst du sie, kommt diese Person nicht mehr an dich heran — deine echte hatte sie nie.","burn.sameYou":"Eine Wegwerf-Adresse verbirgt, welche Adresse dir gehört — sie macht dich nicht zu einer fremden Person. Wer die drei Sicherheitswörter schon einmal mit dir gelesen hat, sieht hier dieselben drei Wörter und weiß, dass du es bist.","burn.namePh":"Wofür? z. B. Gebrauchtes Sofa","burn.add":"Anlegen","burn.send":"Diese Adresse senden","burn.delete":"Löschen","burn.deleted":"„{name}“ gelöscht. Diese Adresse antwortet nicht mehr.","burn.made":"„{name}“ angelegt. Du kannst sie jetzt weitergeben.","burn.needName":"Gib ihr einen Namen, damit du weißt, wem du sie gegeben hast.","burn.full":"Du kannst {n} gleichzeitig haben. Lösche eine, um eine neue anzulegen.","burn.untitled":"Ohne Namen",
-"prot.working":"Einen Moment… das dauert ein paar Sekunden: diese Langsamkeit macht das Durchprobieren von Wörtern sinnlos.","prot.openDoneMany":"{n} Gespräche sind wieder in der Liste, mit ihren Fotos.","prot.samePin":"Du kannst dieselbe PIN für mehrere Gespräche nehmen: sie landen im selben Tresor und kommen zusammen zurück.","prot.lock":"Wegschließen","prot.title":"Das Gespräch mit „{name}“ wegschließen","prot.what1":"Das Gespräch verschwindet vom Telefon: die Nachrichten, der Name des Kontakts und die Drei-Wort-Prüfung. Wer dein Telefon in die Hand nimmt, findet weder das Gespräch noch den Kontakt.","prot.what2":"Fotos und Dateien werden <b>nicht gelöscht</b>: sie wandern verschlüsselt in den Tresor und kommen beim Öffnen zurück.","prot.what3":"Du wählst ein Wort. <b>Vergisst du es, kann niemand mehr öffnen</b> — weder du noch wir. Eine Wiederherstellung gibt es nicht.","prot.what4":"Wer die App durchsieht, findet nichts. Wer forensische Werkzeuge hat, erkennt, dass etwas weggeschlossen wurde — aber nicht was und nicht mit wem.","prot.wordPh":"Die PIN oder der Satz zum Öffnen","prot.word2Ph":"Noch einmal","prot.go":"Wegschließen","prot.cancel":"Abbrechen","prot.needWord":"Schreib etwas: ohne gibt es keinen Tresor.","prot.short":"Zu kurz: mindestens 4 Zeichen.","prot.mismatch":"Die beiden Wörter sind nicht gleich.","prot.done":"„{name}“ ist weggeschlossen. Dieses Wort holt es zurück.","prot.failed":"Hat nicht geklappt. Nichts wurde gelöscht: das Gespräch ist noch da.","prot.tooBig":"Hat nicht geklappt: {n} Dateien sind zu groß für den Tresor (über 64 MB). Nichts wurde angetastet. Lösche sie aus dem Gespräch und versuch es erneut.","prot.openTitle":"Ein weggeschlossenes Gespräch öffnen","prot.openHelp":"Schreib das Wort. Passt nichts dazu, passiert nichts: die App sagt nicht, ob du dich geirrt hast oder ob nichts da war.","prot.openGo":"Öffnen","prot.openNothing":"Mit diesem Wort öffnet sich nichts.","prot.openDone":"„{name}“ ist wieder in der Liste, mit den Fotos.","prot.openLost":"„{name}“ ist zurück, aber {n} Dateien ließen sich nicht wieder öffnen.","prot.openFailed":"Hat nicht geklappt. Der Tresor blieb voll: versuch es, wenn das Telefon mehr Platz hat.",
+
 "knock.title":"Du kontaktierst","knock.nameLabel":"Wie heißt du?","knock.namePh":"Dein Name","knock.msgLabel":"Was brauchst du? (optional)","knock.msgPh":"z. B. Habt ihr Schuhe in Größe 42?","knock.go":"Anrufen","knock.note":"Deinen Namen und diesen Satz sieht nur die angerufene Person. Kein Server kann sie lesen.",
 "letter.title":"Nachrichten für dich","letter.noneTitle":"Gerade antwortet niemand.","letter.noneSub":"Ich habe ihr schon mitgeteilt, dass du sie erreichen wolltest. Wenn du mehr sagen willst, schreib es hier.","letter.ph":"Schreib deine Nachricht hier","letter.leave":"Nachricht hinterlassen","letter.cancel":"Doch nicht","letter.needText":"Schreib zwei Zeilen, damit sie weiß, worum es ging.","letter.left":"Nachricht hinterlassen. Sie wird sie beim Öffnen der App finden.","letter.failed":"Ich konnte die Nachricht nicht hinterlassen. Versuch es nochmal.","letter.callBack":"Zurückrufen","letter.dismiss":"Erledigt",
 "home.bigStart":"Mit jemandem sprechen","home.bigStartD":"Eine Einladung erstellen","home.bigJoin":"Ich habe einen Code","home.bigJoinD":"Mir wurde eine Einladung geschickt","set.lang":"Sprache","set.textsize":"Textgröße","conn.direct":"Direkte Verbindung zwischen den beiden Telefonen","conn.directShort":"direkt verbunden","conn.relay":"Sichere Verbindung über eine verschlüsselte Brücke","conn.relayShort":"verbunden (Brücke)","conn.down":"Verbindung verloren","conn.downShort":"verloren","conn.working":"Verbindung wird aufgebaut","conn.wobbly":"Die Verbindung hat gewackelt — ich hole sie zurück","conn.wobblyShort":"verbinde neu","chat.linkLost":"Die Verbindung ist abgebrochen. Nichts ist verloren.","chat.backHome":"Zurück zur Startseite","chat.stillWobbly":"Die Verbindung ist noch nicht zurück. Du kannst weiter warten oder zur Startseite zurückgehen und es erneut versuchen.",
@@ -800,10 +804,11 @@ Object.assign(I18N.de, {
 "health.version":"Verwendete Version",
 "health.versionOld":"Ein Teil der App ist noch der alte. Schließe sie und öffne sie neu.",
 "media.stepsAndroidApp":"Geh zurück zum Startbildschirm deines Telefons|Halte das Symbol von <b>DigitalValut Logos</b> gedrückt|Tippe auf <b>App-Info</b> (oder das Symbol ⓘ)|Tippe auf <b>Berechtigungen</b> und schalte dann <b>Mikrofon</b> und <b>Kamera</b> ein|Öffne die App erneut",
-"prot.oneline":"Es verschwindet vom Telefon: Nachrichten und Fotos. Nur was du hier eingibst, holt es zurück. <b>Vergisst du es, ist es weg</b> — auch wir können es nicht öffnen.","prot.more":"Was genau passiert","prot.s1":"Schnell getippt. Reicht gegen jemanden, der dein Telefon in die Hand nimmt.","prot.s2":"Gut.","prot.s3":"Sehr sicher.","prot.whatGuess":"Eine kurze PIN ist bequem und hält gut gegen jemanden, der dir das Telefon abnimmt. Gegen ernsthafte Ausrüstung zählt nur die Länge: ein ganzer Satz ist unendlich viel mehr wert als sechs Ziffern. Und ein berühmter Satz ist weniger wert als ein selbst erfundener.",
+
 });
 
 Object.assign(I18N.es, {
+"wipe.help":"¿Quieres que fotos, vídeos y conversaciones desaparezcan de este teléfono? No se pueden recuperar.","wipe.btn":"Borrar todo","wipe.sure":"<b>¿Seguro?</b> Desaparecen mensajes, contactos, fotos y vídeos. Tu dirección sigue siendo tuya, y quien la tenga podrá localizarte.","wipe.yes":"Sí, borrar todo","wipe.no":"No, dejarlo","wipe.done":"Hecho. En este teléfono ya no queda nada.",
 "file.noRoomIn":"«{n}» no se ha recibido: este dispositivo ya tiene demasiado en memoria. Recarga la página y pide que te lo reenvíen.",
 "listen.needLockScreen":"Para sonar con la pantalla bloqueada, Android pide un permiso más. Abriendo la página donde se concede.",
 "android.ringTitle":"Alguien te está llamando",
@@ -929,7 +934,7 @@ Object.assign(I18N.es, {
 "addr.title":"Tu dirección permanente","addr.sub":"Dala en lugar del número de teléfono. Quien la tenga puede buscarte cuando quiera, sin saber tu nombre ni tu número. Desactivada por defecto.","addr.qrHint":"Quien lo escanea te llama directamente","addr.share":"Enviar tu dirección","addr.showQr":"Mostrar el QR","addr.reachNote":"Para que puedan localizarte también con la aplicación cerrada, activa los avisos aquí abajo.","addr.dialLabel":"¿Tienes la dirección de alguien?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Llamarla","addr.badFormat":"Esa dirección está mal escrita. Son 12 caracteres, como DV-K7M2-9QRT-X4WP.","addr.itsYou":"Esa es tu propia dirección.","addr.callingTitle":"Llamando…","addr.callingHint":"Si tiene la aplicación cerrada, le hago sonar el teléfono. Puede tardar un momento.","addr.noAnswer":"No ha contestado. Ya se le ha avisado: inténtalo más tarde.","addr.dialFailed":"No he podido llamar a esa dirección.","addr.noKey":"Esa dirección ya no parece activa. Pídele a la persona que vuelva a abrir la aplicación y te la envíe otra vez: las direcciones han cambiado con la última actualización.","addr.noBroker":"No he podido ni iniciar la llamada: el servicio que os pone en contacto no ha respondido. Si estás usando una copia de la aplicación en otra dirección, abre la oficial.","addr.incomingTitle":"Alguien te está buscando","addr.incomingSub":"El nombre y el motivo los ha escrito quien llama: hasta que no aceptes, nadie puede demostrar que sea esa persona de verdad.","addr.incomingToast":"Alguien está llamando a tu dirección.","addr.accept":"Aceptar","addr.ignore":"Ignorar","addr.verified":"Verificado: quien ha respondido posee de verdad la dirección {a}. Nadie ha podido meterse en medio.","addr.blockedIn":"Llamada de alguien a quien habías rechazado: ignorada.","addr.shareText":"Puedes buscarme aquí, sin mi número de teléfono. Mi dirección en DigitalValut Logos es {a}\n\nToca para llamarme:",
 "addr.provenNotWho":"Quien ha respondido posee de verdad la dirección {a} — pero esa dirección te llegó en una carta, y quien la escribió pudo poner cualquier nombre. Si no estás seguro, decíos las tres palabras.",
 "addr.incomingAt":"a través de «{name}»","burn.title":"Direcciones de usar y tirar","burn.help":"Una por anuncio, una por desconocido. Cuando termines la borras y esa persona ya no puede localizarte — nunca tuvo la de verdad.","burn.sameYou":"Una dirección desechable oculta cuál es tu dirección — no te convierte en un desconocido. Quien ya haya leído contigo las tres palabras de seguridad ve aquí las mismas tres palabras, y sabe que eres tú.","burn.namePh":"¿Para qué? p. ej. Sofá de segunda mano","burn.add":"Crear","burn.send":"Enviar esta dirección","burn.delete":"Borrar","burn.deleted":"«{name}» borrada. Esa dirección ya no responde.","burn.made":"«{name}» creada. Ya puedes darla.","burn.needName":"Ponle un nombre, así sabes a quién se la diste.","burn.full":"Puedes tener {n} a la vez. Borra una para crear otra.","burn.untitled":"Sin nombre",
-"prot.working":"Trabajando… tarda unos segundos: esa lentitud es lo que hace inútil probar palabras a lo loco.","prot.openDoneMany":"{n} conversaciones han vuelto a la lista, con sus fotos.","prot.samePin":"Puedes usar el mismo PIN para varias conversaciones: van a la misma caja fuerte y vuelven juntas.","prot.lock":"Poner a resguardo","prot.title":"Poner a resguardo la conversación con «{name}»","prot.what1":"La conversación desaparece del teléfono: los mensajes, el nombre del contacto y la verificación de tres palabras. Quien coja tu teléfono no encuentra ni la conversación ni el contacto.","prot.what2":"Las fotos y los archivos <b>no se borran</b>: entran cifrados en la caja fuerte y vuelven al abrirla.","prot.what3":"Eliges una palabra. <b>Si la olvidas, nadie puede abrir</b> — ni tú ni nosotros. No hay forma de recuperarla.","prot.what4":"Quien mira la aplicación no encuentra nada. Quien tiene herramientas forenses puede ver que algo se guardó, pero no qué ni con quién.","prot.wordPh":"El PIN o la frase que la abre","prot.word2Ph":"Repítela","prot.go":"Poner a resguardo","prot.cancel":"Cancelar","prot.needWord":"Escribe algo: sin ello no hay caja fuerte.","prot.short":"Demasiado corto: al menos 4 caracteres.","prot.mismatch":"Las dos palabras no son iguales.","prot.done":"«{name}» está a resguardo. Esa palabra es lo que la trae de vuelta.","prot.failed":"No ha funcionado. No se ha borrado nada: la conversación sigue donde estaba.","prot.tooBig":"No ha funcionado: {n} archivos son demasiado grandes para la caja fuerte (más de 64 MB). No se ha tocado nada. Bórralos de la conversación y vuelve a intentarlo.","prot.openTitle":"Reabrir una conversación a resguardo","prot.openHelp":"Escribe la palabra. Si nada coincide, no pasa nada: la aplicación no dice si te has equivocado o si no había nada.","prot.openGo":"Abrir","prot.openNothing":"Nada se abre con esa palabra.","prot.openDone":"«{name}» ha vuelto a la lista, con sus fotos.","prot.openLost":"«{name}» ha vuelto, pero {n} archivos no se han reabierto.","prot.openFailed":"No ha funcionado. La caja fuerte sigue llena: inténtalo cuando el teléfono tenga más espacio.",
+
 "knock.title":"Estás contactando con","knock.nameLabel":"¿Cómo te llamas?","knock.namePh":"Tu nombre","knock.msgLabel":"¿Qué necesitas? (opcional)","knock.msgPh":"p. ej. ¿Tenéis zapatos del 42?","knock.go":"Llamar","knock.note":"Tu nombre y esta frase solo los ve la persona a la que llamas. Ningún servidor puede leerlos.",
 "letter.title":"Mensajes que te han dejado","letter.noneTitle":"Ahora mismo no contesta nadie.","letter.noneSub":"Ya le he avisado de que has intentado localizarla. Si quieres decirle algo más, escríbelo aquí.","letter.ph":"Escribe aquí tu mensaje","letter.leave":"Dejar el mensaje","letter.cancel":"Déjalo","letter.needText":"Escribe dos palabras, así sabrá qué querías.","letter.left":"Mensaje dejado. Lo encontrará al abrir la aplicación.","letter.failed":"No he podido dejar el mensaje. Inténtalo otra vez.","letter.callBack":"Devolver la llamada","letter.dismiss":"Hecho",
 "home.bigStart":"Hablar con alguien","home.bigStartD":"Crea una invitación para enviar","home.bigJoin":"Tengo un código","home.bigJoinD":"Me han enviado una invitación","set.lang":"Idioma","set.textsize":"Tamaño del texto","conn.direct":"Enlace directo entre los dos teléfonos","conn.directShort":"conectada directamente","conn.relay":"Enlace seguro, por un puente cifrado","conn.relayShort":"conectada (puente)","conn.down":"Conexión perdida","conn.downShort":"perdida","conn.working":"Conectando","conn.wobbly":"La conexión ha vacilado — la estoy recuperando","conn.wobblyShort":"recuperando","chat.linkLost":"La conexión se ha caído. No se ha perdido nada.","chat.backHome":"Volver al inicio","chat.stillWobbly":"La conexión todavía no ha vuelto. Puedes seguir esperando, o volver al inicio e intentarlo de nuevo.",
@@ -979,10 +984,11 @@ Object.assign(I18N.es, {
 "health.version":"Versión en uso",
 "health.versionOld":"Una parte de la aplicación sigue siendo la antigua. Ciérrala y vuelve a abrirla.",
 "media.stepsAndroidApp":"Vuelve a la pantalla de inicio del teléfono|Mantén pulsado el icono de <b>DigitalValut Logos</b>|Toca <b>Información de la app</b> (o el icono ⓘ)|Toca <b>Permisos</b> y activa <b>Micrófono</b> y <b>Cámara</b>|Vuelve a abrir la app",
-"prot.oneline":"Desaparece del teléfono: mensajes y fotos. Solo lo que escribas aquí la trae de vuelta. <b>Si lo olvidas, se acabó</b> — nosotros tampoco podemos abrirla.","prot.more":"Qué pasa exactamente","prot.s1":"Rápido de escribir. Sirve contra quien coge tu teléfono.","prot.s2":"Buena.","prot.s3":"Muy segura.","prot.whatGuess":"Un PIN corto es cómodo y aguanta bien contra quien te quita el teléfono. Frente a equipo serio solo cuenta la longitud: una frase entera vale muchísimo más que seis cifras. Y una frase famosa vale menos que una que te hayas inventado.",
+
 });
 
 Object.assign(I18N.pt, {
+"wipe.help":"Quer que fotografias, vídeos e conversas desapareçam deste telemóvel? Não podem ser recuperados.","wipe.btn":"Limpar tudo","wipe.sure":"<b>De certeza?</b> Desaparecem mensagens, contactos, fotografias e vídeos. O seu endereço continua seu, e quem o tem continua a encontrá-lo.","wipe.yes":"Sim, apagar tudo","wipe.no":"Não, deixar","wipe.done":"Feito. Neste telemóvel já não há nada.",
 "file.noRoomIn":"«{n}» não foi recebido: este dispositivo já tem demasiada coisa em memória. Recarrega a página e pede que to enviem de novo.",
 "listen.needLockScreen":"Para tocar com o ecrã bloqueado, o Android pede mais uma permissão. A abrir a página onde se concede.",
 "android.ringTitle":"Alguém está a ligar",
@@ -1108,7 +1114,7 @@ Object.assign(I18N.pt, {
 "addr.title":"O seu endereço permanente","addr.sub":"Dê este em vez do número de telefone. Quem o tiver pode procurá-lo quando quiser, sem saber o seu nome nem o seu número. Desativado por predefinição.","addr.qrHint":"Quem o ler chama-o diretamente","addr.share":"Enviar o seu endereço","addr.showQr":"Mostrar o QR","addr.reachNote":"Para que o possam alcançar mesmo com a aplicação fechada, ative os avisos aqui em baixo.","addr.dialLabel":"Tem o endereço de alguém?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Ligar","addr.badFormat":"Esse endereço está mal escrito. São 12 caracteres, como DV-K7M2-9QRT-X4WP.","addr.itsYou":"Esse é o seu próprio endereço.","addr.callingTitle":"A ligar…","addr.callingHint":"Se tiver a aplicação fechada, faço tocar o telemóvel. Pode demorar um instante.","addr.noAnswer":"Não atendeu. Já foi avisada: tente mais tarde.","addr.dialFailed":"Não consegui ligar para esse endereço.","addr.noKey":"Esse endereço já não parece ativo. Peça à pessoa para reabrir a aplicação e enviá-lo de novo: os endereços mudaram com a última atualização.","addr.noBroker":"Não consegui sequer iniciar a chamada: o serviço que vos põe em contacto não respondeu. Se está a usar uma cópia da aplicação noutro endereço, abra a oficial.","addr.incomingTitle":"Alguém está à sua procura","addr.incomingSub":"O nome e o motivo foram escritos por quem liga: enquanto não aceitar, ninguém pode provar que é mesmo essa pessoa.","addr.incomingToast":"Alguém está a ligar para o seu endereço.","addr.accept":"Aceitar","addr.ignore":"Ignorar","addr.verified":"Verificado: quem respondeu possui mesmo o endereço {a}. Ninguém se pode ter metido pelo meio.","addr.blockedIn":"Chamada de alguém que tinha recusado: ignorada.","addr.shareText":"Pode encontrar-me aqui, sem o meu número de telefone. O meu endereço no DigitalValut Logos é {a}\n\nToque para me ligar:",
 "addr.provenNotWho":"Quem respondeu possui mesmo o endereço {a} — mas esse endereço chegou numa carta, e quem a escreveu podia pôr qualquer nome. Se não tem a certeza, digam as três palavras.",
 "addr.incomingAt":"através de «{name}»","burn.title":"Endereços descartáveis","burn.help":"Um por anúncio, um por desconhecido. Quando acabar, apaga-o e essa pessoa deixa de o encontrar — nunca teve o verdadeiro.","burn.sameYou":"Um endereço descartável esconde qual é o seu endereço — não faz de si um desconhecido. Quem já leu consigo as três palavras de segurança encontra aqui as mesmas três palavras, e sabe que é você.","burn.namePh":"Para quê? ex. Sofá usado","burn.add":"Criar","burn.send":"Enviar este endereço","burn.delete":"Apagar","burn.deleted":"«{name}» apagado. Esse endereço já não responde.","burn.made":"«{name}» criado. Já o pode dar.","burn.needName":"Dê-lhe um nome, para saber a quem o deu.","burn.full":"Pode ter {n} ao mesmo tempo. Apague um para criar outro.","burn.untitled":"Sem nome",
-"prot.working":"A trabalhar… demora alguns segundos: é essa lentidão que torna inútil tentar palavras à sorte.","prot.openDoneMany":"{n} conversas voltaram à lista, com as suas fotografias.","prot.samePin":"Pode usar o mesmo PIN para várias conversas: vão para o mesmo cofre e voltam juntas.","prot.lock":"Pôr a salvo","prot.title":"Pôr a salvo a conversa com «{name}»","prot.what1":"A conversa desaparece do telemóvel: as mensagens, o nome do contacto e a verificação de três palavras. Quem pegar no telemóvel não encontra nem a conversa nem o contacto.","prot.what2":"As fotografias e os ficheiros <b>não são apagados</b>: entram cifrados no cofre e voltam quando o abre.","prot.what3":"Escolhe uma palavra. <b>Se a esquecer, ninguém consegue abrir</b> — nem você nem nós. Não há forma de a recuperar.","prot.what4":"Quem olha para a aplicação não encontra nada. Quem tem ferramentas forenses percebe que algo foi guardado, mas não o quê nem com quem.","prot.wordPh":"O PIN ou a frase que a abre","prot.word2Ph":"Repita-a","prot.go":"Pôr a salvo","prot.cancel":"Cancelar","prot.needWord":"Escreva algo: sem isso não há cofre.","prot.short":"Demasiado curto: pelo menos 4 caracteres.","prot.mismatch":"As duas palavras não são iguais.","prot.done":"«{name}» está a salvo. É essa palavra que a traz de volta.","prot.failed":"Não resultou. Nada foi apagado: a conversa continua onde estava.","prot.tooBig":"Não resultou: {n} ficheiros são grandes demais para o cofre (mais de 64 MB). Nada foi tocado. Apague-os da conversa e tente de novo.","prot.openTitle":"Reabrir uma conversa posta a salvo","prot.openHelp":"Escreva a palavra. Se nada corresponder, nada acontece: a aplicação não diz se errou ou se não havia nada.","prot.openGo":"Abrir","prot.openNothing":"Nada se abre com essa palavra.","prot.openDone":"«{name}» voltou à lista, com as fotografias.","prot.openLost":"«{name}» voltou, mas {n} ficheiros não se reabriram.","prot.openFailed":"Não resultou. O cofre continua cheio: tente quando o telemóvel tiver mais espaço.",
+
 "knock.title":"Está a contactar","knock.nameLabel":"Como se chama?","knock.namePh":"O seu nome","knock.msgLabel":"Do que precisa? (opcional)","knock.msgPh":"ex. Têm sapatos do 42?","knock.go":"Ligar","knock.note":"O seu nome e esta frase só são vistos pela pessoa a quem liga. Nenhum servidor os consegue ler.",
 "letter.title":"Mensagens deixadas para si","letter.noneTitle":"Ninguém está a responder agora.","letter.noneSub":"Já lhe avisei de que tentou contactá-la. Se quiser dizer mais alguma coisa, escreva aqui.","letter.ph":"Escreva aqui a sua mensagem","letter.leave":"Deixar a mensagem","letter.cancel":"Deixe estar","letter.needText":"Escreva duas palavras, para saber o que queria.","letter.left":"Mensagem deixada. Vai encontrá-la ao abrir a aplicação.","letter.failed":"Não consegui deixar a mensagem. Tente de novo.","letter.callBack":"Ligar de volta","letter.dismiss":"Feito",
 "home.bigStart":"Falar com alguém","home.bigStartD":"Criar um convite para enviar","home.bigJoin":"Tenho um código","home.bigJoinD":"Enviaram-me um convite","set.lang":"Idioma","set.textsize":"Tamanho do texto","conn.direct":"Ligação direta entre os dois telemóveis","conn.directShort":"ligada diretamente","conn.relay":"Ligação segura, por uma ponte cifrada","conn.relayShort":"ligada (ponte)","conn.down":"Ligação perdida","conn.downShort":"perdida","conn.working":"A ligar","conn.wobbly":"A ligação vacilou — estou a retomá-la","conn.wobblyShort":"a retomar","chat.linkLost":"A ligação caiu. Não se perdeu nada.","chat.backHome":"Voltar ao início","chat.stillWobbly":"A ligação ainda não voltou. Pode continuar à espera, ou voltar ao início e tentar novamente.",
@@ -1158,10 +1164,11 @@ Object.assign(I18N.pt, {
 "health.version":"Versão em uso",
 "health.versionOld":"Uma parte da aplicação ainda é a antiga. Feche-a e volte a abri-la.",
 "media.stepsAndroidApp":"Volte ao ecrã principal do telemóvel|Mantenha premido o ícone do <b>DigitalValut Logos</b>|Toque em <b>Informações da app</b> (ou no ícone ⓘ)|Toque em <b>Autorizações</b> e ative <b>Microfone</b> e <b>Câmara</b>|Reabra a aplicação",
-"prot.oneline":"Desaparece do telemóvel: mensagens e fotografias. Só o que escrever aqui a traz de volta. <b>Se o esquecer, acabou</b> — nem nós a conseguimos abrir.","prot.more":"O que acontece exactamente","prot.s1":"Rápido de escrever. Chega contra quem lhe pega no telemóvel.","prot.s2":"Boa.","prot.s3":"Muito segura.","prot.whatGuess":"Um PIN curto é cómodo e aguenta bem contra quem lhe tira o telemóvel. Contra equipamento sério só conta o comprimento: uma frase inteira vale imensamente mais do que seis dígitos. E uma frase famosa vale menos do que uma inventada por si.",
+
 });
 
 Object.assign(I18N.ru, {
+"wipe.help":"Убрать с этого телефона фотографии, видео и разговоры? Восстановить их будет нельзя.","wipe.btn":"Стереть всё","wipe.sure":"<b>Точно?</b> Исчезнут сообщения, контакты, фотографии и видео. Ваш адрес останется вашим, и тот, у кого он есть, по-прежнему вас найдёт.","wipe.yes":"Да, стереть всё","wipe.no":"Нет, оставить","wipe.done":"Готово. На этом телефоне ничего не осталось.",
 "file.noRoomIn":"«{n}» не получен: на этом устройстве уже слишком много в памяти. Перезагрузите страницу и попросите отправить снова.",
 "listen.needLockScreen":"Чтобы звонить на заблокированном экране, Android требует ещё одно разрешение. Открываю страницу, где его выдают.",
 "android.ringTitle":"Вам звонят",
@@ -1287,7 +1294,7 @@ Object.assign(I18N.ru, {
 "addr.title":"Ваш постоянный адрес","addr.sub":"Давайте его вместо номера телефона. Тот, у кого он есть, сможет связаться с вами в любой момент, не зная ни вашего имени, ни номера. По умолчанию выключено.","addr.qrHint":"Кто его отсканирует, сразу позвонит вам","addr.share":"Отправить адрес","addr.showQr":"Показать QR","addr.reachNote":"Чтобы вас могли застать и при закрытом приложении, включите уведомления ниже.","addr.dialLabel":"Есть чей-то адрес?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Позвонить","addr.badFormat":"Адрес записан неверно. Это 12 символов, например DV-K7M2-9QRT-X4WP.","addr.itsYou":"Это ваш собственный адрес.","addr.callingTitle":"Звоню…","addr.callingHint":"Если приложение закрыто, я заставлю телефон зазвонить. Это может занять момент.","addr.noAnswer":"Ответа нет. Я предупредил — попробуйте позже.","addr.dialFailed":"Не удалось позвонить на этот адрес.","addr.noKey":"Похоже, этот адрес больше не активен. Попросите человека заново открыть приложение и прислать адрес ещё раз: адреса изменились с последним обновлением.","addr.noBroker":"Я даже не смог начать звонок: служба, которая вас соединяет, не ответила. Если вы используете копию приложения по другому адресу, откройте официальную.","addr.incomingTitle":"Вас ищут","addr.incomingSub":"Имя и причину написал тот, кто звонит: пока вы не примете, никто не может доказать, что это действительно он.","addr.incomingToast":"Кто-то звонит на ваш адрес.","addr.accept":"Принять","addr.ignore":"Пропустить","addr.verified":"Проверено: ответивший действительно владеет адресом {a}. Никто не мог вклиниться.","addr.blockedIn":"Звонок от того, кому вы уже отказали: пропущен.","addr.shareText":"Со мной можно связаться здесь, без номера телефона. Мой адрес в DigitalValut Logos — {a}\n\nНажмите, чтобы позвонить:",
 "addr.provenNotWho":"Ответивший действительно владеет адресом {a} — но этот адрес пришёл к вам в письме, а написавший мог указать любое имя. Если не уверены, произнесите друг другу три слова.",
 "addr.incomingAt":"через «{name}»","burn.title":"Одноразовые адреса","burn.help":"По одному на объявление, по одному на незнакомца. Удалите — и этот человек больше вас не найдёт: настоящего у него никогда не было.","burn.sameYou":"Одноразовый адрес скрывает, какой адрес принадлежит вам, но не делает вас незнакомцем. Тот, кто уже сверял с вами три слова безопасности, увидит здесь те же три слова и поймёт, что это вы.","burn.namePh":"Для чего? напр. Диван б/у","burn.add":"Создать","burn.send":"Отправить этот адрес","burn.delete":"Удалить","burn.deleted":"«{name}» удалён. Этот адрес больше не отвечает.","burn.made":"«{name}» создан. Можно раздавать.","burn.needName":"Дайте ему имя, чтобы помнить, кому отдали.","burn.full":"Одновременно можно иметь {n}. Удалите один, чтобы создать новый.","burn.untitled":"Без имени",
-"prot.working":"Идёт работа… это займёт несколько секунд: именно эта медлительность делает перебор слов бессмысленным.","prot.openDoneMany":"{n} разговоров вернулись в список вместе с фотографиями.","prot.samePin":"Один и тот же ПИН можно использовать для нескольких разговоров: они попадают в один сейф и возвращаются вместе.","prot.lock":"Убрать","prot.title":"Убрать разговор с «{name}»","prot.what1":"Разговор исчезает с телефона: сообщения, имя контакта и проверка из трёх слов. Тот, кто возьмёт телефон, не найдёт ни разговора, ни контакта.","prot.what2":"Фотографии и файлы <b>не удаляются</b>: они попадают в сейф зашифрованными и возвращаются при открытии.","prot.what3":"Вы выбираете слово. <b>Забудете — не откроет никто</b>: ни вы, ни мы. Восстановления не существует.","prot.what4":"Тот, кто просматривает приложение, не найдёт ничего. Тот, у кого есть криминалистические инструменты, поймёт, что что-то убрано, но не что и не с кем.","prot.wordPh":"ПИН или фраза, которая откроет","prot.word2Ph":"Повторите","prot.go":"Убрать","prot.cancel":"Отмена","prot.needWord":"Напишите что-нибудь: без этого сейфа нет.","prot.short":"Слишком коротко: минимум 4 символа.","prot.mismatch":"Слова не совпадают.","prot.done":"«{name}» убран. Вернёт его именно это слово.","prot.failed":"Не получилось. Ничего не удалено: разговор на месте.","prot.tooBig":"Не получилось: {n} файлов слишком велики для сейфа (больше 64 МБ). Ничего не тронуто. Удалите их из разговора и попробуйте снова.","prot.openTitle":"Открыть убранный разговор","prot.openHelp":"Напишите слово. Если ничего не совпадёт, ничего не произойдёт: приложение не скажет, ошиблись вы или там ничего не было.","prot.openGo":"Открыть","prot.openNothing":"С этим словом ничего не открывается.","prot.openDone":"«{name}» вернулся в список вместе с фотографиями.","prot.openLost":"«{name}» вернулся, но {n} файлов не открылись.","prot.openFailed":"Не получилось. Сейф остался полным: попробуйте, когда на телефоне будет больше места.",
+
 "knock.title":"Вы связываетесь с","knock.nameLabel":"Как вас зовут?","knock.namePh":"Ваше имя","knock.msgLabel":"Что вам нужно? (не обязательно)","knock.msgPh":"напр. Есть обувь 42 размера?","knock.go":"Позвонить","knock.note":"Ваше имя и эту фразу видит только тот, кому вы звоните. Ни один сервер их не прочтёт.",
 "letter.title":"Оставленные вам сообщения","letter.noneTitle":"Сейчас никто не отвечает.","letter.noneSub":"Я уже сообщил ей, что вы пытались до неё дозвониться. Если хотите сказать больше, напишите здесь.","letter.ph":"Напишите сообщение здесь","letter.leave":"Оставить сообщение","letter.cancel":"Не надо","letter.needText":"Напишите пару слов, чтобы было понятно, зачем вы звонили.","letter.left":"Сообщение оставлено. Его увидят при открытии приложения.","letter.failed":"Не удалось оставить сообщение. Попробуйте ещё раз.","letter.callBack":"Перезвонить","letter.dismiss":"Готово",
 "home.bigStart":"Поговорить с кем-то","home.bigStartD":"Создать приглашение","home.bigJoin":"У меня есть код","home.bigJoinD":"Мне прислали приглашение","set.lang":"Язык","set.textsize":"Размер текста","conn.direct":"Прямая связь между двумя телефонами","conn.directShort":"соединено напрямую","conn.relay":"Надёжная связь через зашифрованный мост","conn.relayShort":"соединено (мост)","conn.down":"Связь потеряна","conn.downShort":"потеряна","conn.working":"Соединение","conn.wobbly":"Связь дрогнула — восстанавливаю","conn.wobblyShort":"восстанавливаю","chat.linkLost":"Соединение прервалось. Ничего не потеряно.","chat.backHome":"Назад на главную","chat.stillWobbly":"Соединение пока не восстановилось. Можете подождать ещё, либо вернуться на главную и попробовать снова.",
@@ -1337,10 +1344,11 @@ Object.assign(I18N.ru, {
 "health.version":"Используемая версия",
 "health.versionOld":"Часть приложения всё ещё старая. Закройте его и откройте снова.",
 "media.stepsAndroidApp":"Вернитесь на главный экран телефона|Нажмите и удерживайте значок <b>DigitalValut Logos</b>|Нажмите <b>О приложении</b> (или значок ⓘ)|Нажмите <b>Разрешения</b>, включите <b>Микрофон</b> и <b>Камеру</b>|Откройте приложение снова",
-"prot.oneline":"Исчезает с телефона: сообщения и фотографии. Вернёт только то, что вы напишете здесь. <b>Забудете — не вернётся</b>: мы тоже не сможем открыть.","prot.more":"Что именно происходит","prot.s1":"Быстро набрать. Годится против того, кто взял ваш телефон в руки.","prot.s2":"Хорошо.","prot.s3":"Очень надёжно.","prot.whatGuess":"Короткий ПИН удобен и хорошо держится против того, кто выхватил телефон. Против серьёзной техники важна только длина: целая фраза несравненно надёжнее шести цифр. А известная фраза слабее придуманной вами.",
+
 });
 
 Object.assign(I18N.zh, {
+"wipe.help":"要把照片、视频和对话从这台手机上清除吗？无法恢复。","wipe.btn":"全部清除","wipe.sure":"<b>确定吗？</b>消息、联系人、照片和视频都会消失。你的地址仍然是你的，有它的人依然能找到你。","wipe.yes":"是的，全部清除","wipe.no":"不，算了","wipe.done":"完成。这台手机上什么都没有了。",
 "file.noRoomIn":"未能接收「{n}」：此设备内存中已保留过多内容。请重新载入页面并请对方重新发送。",
 "listen.needLockScreen":"要在锁屏时响铃，Android 还需要一项权限。正在打开授予该权限的页面。",
 "android.ringTitle":"有人正在呼叫你",
@@ -1466,7 +1474,7 @@ Object.assign(I18N.zh, {
 "addr.title":"你的永久地址","addr.sub":"把它给别人，代替电话号码。拿到它的人随时都能找到你，而不必知道你的名字或号码。默认关闭。","addr.qrHint":"扫一下就能直接呼叫你","addr.share":"发送你的地址","addr.showQr":"显示二维码","addr.reachNote":"想让别人在应用关闭时也能找到你，请打开下面的通知。","addr.dialLabel":"有别人的地址吗？","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"呼叫","addr.badFormat":"这个地址写得不对。它是 12 个字符，例如 DV-K7M2-9QRT-X4WP。","addr.itsYou":"这是你自己的地址。","addr.callingTitle":"正在呼叫…","addr.callingHint":"如果对方的应用关着，我会让手机响起来。可能需要一点时间。","addr.noAnswer":"没有回应。已经通知过对方了，稍后再试。","addr.dialFailed":"无法呼叫这个地址。","addr.noKey":"这个地址似乎已经失效。请让对方重新打开应用并再发一次：地址在最近一次更新中变了。","addr.noBroker":"我连呼叫都没能发出：帮你们牵线的服务没有回应。如果你用的是放在别处的应用副本，请打开官方的那个。","addr.incomingTitle":"有人在找你","addr.incomingSub":"名字和理由是呼叫方自己写的：在你接受之前，没有人能证明他确实是那个人。","addr.incomingToast":"有人正在呼叫你的地址。","addr.accept":"接受","addr.ignore":"忽略","addr.verified":"已验证：应答的一方确实拥有地址 {a}。不可能有人插在中间。","addr.blockedIn":"来自你已拒绝过的人的呼叫：已忽略。","addr.shareText":"你可以在这里找到我，不需要我的电话号码。我的 DigitalValut Logos 地址是 {a}\n\n点一下就能呼叫我：",
 "addr.provenNotWho":"应答的人确实拥有地址 {a} —— 但这个地址是通过一封信到你手里的，写信的人可以署任何名字。如果不确定对方是谁，请互相说出那三个词。",
 "addr.incomingAt":"通过“{name}”","burn.title":"一次性地址","burn.help":"每条广告一个，每个陌生人一个。用完删掉，那个人就再也找不到你——他从来没拿到过你真正的地址。","burn.sameYou":"一次性地址只是隐藏你拥有哪个地址，并不会让你变成陌生人。曾与你核对过三个安全词的人，在这里会看到同样的三个词，从而知道是你。","burn.namePh":"用来做什么？例如：二手沙发","burn.add":"创建","burn.send":"发送这个地址","burn.delete":"删除","burn.deleted":"“{name}”已删除。该地址不再应答。","burn.made":"“{name}”已创建，可以发给别人了。","burn.needName":"给它起个名字，这样你知道给了谁。","burn.full":"最多同时保留 {n} 个。删掉一个才能再建。","burn.untitled":"未命名",
-"prot.working":"处理中……需要几秒钟：正是这种缓慢让逐个试词变得没有意义。","prot.openDoneMany":"{n} 段对话已回到列表，照片也回来了。","prot.samePin":"同一个密码可以用于多段对话：它们放进同一个保险箱，也会一起回来。","prot.lock":"收起来","prot.title":"把与“{name}”的对话收起来","prot.what1":"这段对话会从手机上消失：消息、联系人姓名和三个安全词的验证。拿起你手机的人既找不到对话，也找不到这个联系人。","prot.what2":"照片和文件<b>不会被删除</b>：它们会加密后放进保险箱，重新打开时回来。","prot.what3":"你要选一个词。<b>忘了就没有人能打开</b>——你不行，我们也不行。没有任何找回的办法。","prot.what4":"翻看这个应用的人什么也找不到。拥有取证工具的人能看出有东西被收起来了，但看不出是什么，也看不出和谁。","prot.wordPh":"用来打开的密码或短句","prot.word2Ph":"再写一遍","prot.go":"收起来","prot.cancel":"取消","prot.needWord":"写点什么：没有它就没有保险箱。","prot.short":"太短了：至少 4 个字符。","prot.mismatch":"两次写的不一样。","prot.done":"“{name}”已收起。要找回它，就靠那个词。","prot.failed":"没有成功。什么都没有删除：对话还在原处。","prot.tooBig":"没有成功：有 {n} 个文件对保险箱来说太大了（超过 64 MB）。什么都没有动。先从对话里删掉这些文件，再试一次。","prot.openTitle":"重新打开收起来的对话","prot.openHelp":"写下那个词。如果没有对应的内容，什么也不会发生：应用不会告诉你是写错了还是本来就没有。","prot.openGo":"打开","prot.openNothing":"这个词打不开任何东西。","prot.openDone":"“{name}”已回到列表，照片也回来了。","prot.openLost":"“{name}”回来了，但有 {n} 个文件没能重新打开。","prot.openFailed":"没有成功。保险箱还是满的：等手机有更多空间时再试。",
+
 "knock.title":"你正在联系","knock.nameLabel":"你叫什么名字？","knock.namePh":"你的名字","knock.msgLabel":"你需要什么？（可不填）","knock.msgPh":"例如：有42码的鞋吗？","knock.go":"呼叫","knock.note":"你的名字和这句话只有被叫的人能看到。任何服务器都读不到。",
 "letter.title":"留给你的消息","letter.noneTitle":"现在没有人接听。","letter.noneSub":"我已经告诉对方你找过她了。如果你想多说几句，可以写在这里。","letter.ph":"在这里写下你的消息","letter.leave":"留下消息","letter.cancel":"算了","letter.needText":"写上一两句，让对方知道你想说什么。","letter.left":"消息已留下。对方打开应用就会看到。","letter.failed":"没能留下消息，请再试一次。","letter.callBack":"回拨","letter.dismiss":"完成",
 "home.bigStart":"和某人聊天","home.bigStartD":"创建一个邀请发送","home.bigJoin":"我有一个码","home.bigJoinD":"有人给我发了邀请","set.lang":"语言","set.textsize":"文字大小","conn.direct":"两台手机之间的直接连接","conn.directShort":"已直接连接","conn.relay":"安全连接，经由加密中转","conn.relayShort":"已连接（中转）","conn.down":"连接已断开","conn.downShort":"已断开","conn.working":"正在连接","conn.wobbly":"连接不稳，正在恢复","conn.wobblyShort":"正在恢复","chat.linkLost":"连接已断开。什么都没丢。","chat.backHome":"返回主页","chat.stillWobbly":"连接还没恢复。你可以继续等待，也可以返回主页重试。",
@@ -1516,10 +1524,11 @@ Object.assign(I18N.zh, {
 "health.version":"正在使用的版本",
 "health.versionOld":"应用的一部分还是旧的。请关闭后重新打开。",
 "media.stepsAndroidApp":"返回手机主屏幕|长按 <b>DigitalValut Logos</b> 图标|点按<b>应用信息</b>（或 ⓘ 图标）|点按<b>权限</b>，然后开启<b>麦克风</b>和<b>摄像头</b>|重新打开应用",
-"prot.oneline":"它会从手机上消失：消息和照片。只有你在这里写的内容能把它带回来。<b>忘了就再也回不来</b>——我们也打不开。","prot.more":"具体会发生什么","prot.s1":"输入很快。对付顺手拿起你手机的人足够了。","prot.s2":"不错。","prot.s3":"非常安全。","prot.whatGuess":"短密码方便，对付抢走手机的人很够用。面对专业设备时只有长度有意义：一整句话远远胜过六位数字。而一句名言不如你自己编的一句。",
+
 });
 
 Object.assign(I18N.ar, {
+"wipe.help":"هل تريد إزالة الصور ومقاطع الفيديو والمحادثات من هذا الهاتف؟ لا يمكن استرجاعها.","wipe.btn":"امسح كل شيء","wipe.sure":"<b>متأكد؟</b> ستختفي الرسائل وجهات الاتصال والصور والفيديوهات. عنوانك يبقى لك، ومن يملكه يظل قادرًا على الوصول إليك.","wipe.yes":"نعم، امسح الكل","wipe.no":"لا، اتركه","wipe.done":"تم. لم يبق شيء على هذا الهاتف.",
 "file.noRoomIn":"لم يتم استلام «{n}»: هذا الجهاز يحتفظ بالكثير في الذاكرة بالفعل. أعد تحميل الصفحة واطلب إرساله مرة أخرى.",
 "listen.needLockScreen":"كي يرن الهاتف والشاشة مقفلة، يطلب أندرويد إذناً إضافياً. يجري فتح الصفحة التي يُمنح فيها.",
 "android.ringTitle":"هناك من يتصل بك",
@@ -1645,7 +1654,7 @@ Object.assign(I18N.ar, {
 "addr.title":"عنوانك الدائم","addr.sub":"أعطِه بدلًا من رقم هاتفك. من يملكه يستطيع الوصول إليك متى شاء، دون معرفة اسمك ولا رقمك. متوقف افتراضيًا.","addr.qrHint":"من يمسحه يتصل بك مباشرة","addr.share":"أرسل عنوانك","addr.showQr":"أظهر رمز QR","addr.reachNote":"لكي يصلوا إليك حتى والتطبيق مغلق، فعّل التنبيهات في الأسفل.","addr.dialLabel":"هل لديك عنوان أحدهم؟","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"اتصل به","addr.badFormat":"هذا العنوان مكتوب بشكل خاطئ. إنه 12 حرفًا، مثل DV-K7M2-9QRT-X4WP.","addr.itsYou":"هذا عنوانك أنت.","addr.callingTitle":"جارٍ الاتصال…","addr.callingHint":"إن كان تطبيقه مغلقًا سأجعل هاتفه يرن. قد يستغرق الأمر لحظة.","addr.noAnswer":"لم يردّ. لقد نبّهته: حاول لاحقًا.","addr.dialFailed":"لم أتمكن من الاتصال بهذا العنوان.","addr.noKey":"لا يبدو أن هذا العنوان لا يزال نشطًا. اطلب من الشخص أن يعيد فتح التطبيق ويرسله إليك مرة أخرى: تغيّرت العناوين مع التحديث الأخير.","addr.noBroker":"لم أتمكن حتى من بدء الاتصال: الخدمة التي تجمعكما لم تُجب. إذا كنت تستخدم نسخة من التطبيق على عنوان آخر، فافتح النسخة الرسمية.","addr.incomingTitle":"أحدهم يبحث عنك","addr.incomingSub":"الاسم والسبب كتبهما من يتصل بك: إلى أن تقبل، لا أحد يستطيع إثبات أنه فعلًا ذلك الشخص.","addr.incomingToast":"أحدهم يتصل بعنوانك.","addr.accept":"اقبل","addr.ignore":"تجاهل","addr.verified":"تم التحقق: من ردّ يملك فعلًا العنوان {a}. لا يمكن لأحد أن يكون قد توسّط.","addr.blockedIn":"اتصال من شخص سبق أن رفضته: تم تجاهله.","addr.shareText":"يمكنك الوصول إليّ هنا، دون رقم هاتفي. عنواني على DigitalValut Logos هو {a}\n\nاضغط للاتصال بي:",
 "addr.provenNotWho":"من ردّ يملك فعلًا العنوان {a} — لكن هذا العنوان وصلك في رسالة، ومن كتبها كان بإمكانه وضع أي اسم. إن لم تكن متأكدًا، فتبادلا الكلمات الثلاث.",
 "addr.incomingAt":"عبر «{name}»","burn.title":"عناوين للاستعمال مرة واحدة","burn.help":"واحد لكل إعلان، وواحد لكل غريب. احذفه عند الانتهاء فلا يعود ذلك الشخص يصل إليك — لم يحصل على عنوانك الحقيقي أصلًا.","burn.sameYou":"العنوان المؤقت يخفي أي عنوان تملك، لكنه لا يجعلك شخصًا غريبًا. من قرأ معك كلمات الأمان الثلاث من قبل سيرى هنا الكلمات الثلاث نفسها، ويعرف أنك أنت.","burn.namePh":"لماذا؟ مثلًا: أريكة مستعملة","burn.add":"إنشاء","burn.send":"أرسل هذا العنوان","burn.delete":"احذف","burn.deleted":"تم حذف «{name}». هذا العنوان لم يعد يردّ.","burn.made":"تم إنشاء «{name}». يمكنك إعطاؤه الآن.","burn.needName":"أعطه اسمًا لتعرف لمن أعطيته.","burn.full":"يمكنك الاحتفاظ بـ {n} في وقت واحد. احذف واحدًا لإنشاء آخر.","burn.untitled":"بلا اسم",
-"prot.working":"جارٍ العمل… يستغرق بضع ثوانٍ: هذا البطء نفسه هو ما يجعل تجريب الكلمات بلا جدوى.","prot.openDoneMany":"عادت {n} محادثات إلى القائمة ومعها صورها.","prot.samePin":"يمكنك استخدام الرمز نفسه لعدة محادثات: تدخل الخزنة نفسها وتعود معًا.","prot.lock":"ضعها في الأمان","prot.title":"وضع المحادثة مع «{name}» في الأمان","prot.what1":"تختفي المحادثة من الهاتف: الرسائل واسم جهة الاتصال والتحقّق بالكلمات الثلاث. من يأخذ هاتفك لن يجد المحادثة ولا جهة الاتصال.","prot.what2":"الصور والملفات <b>لا تُحذف</b>: تدخل الخزنة مُعمّاة وتعود عند فتحها.","prot.what3":"تختار كلمة. <b>إن نسيتها لا يستطيع أحد الفتح</b> — لا أنت ولا نحن. لا توجد أي طريقة للاسترجاع.","prot.what4":"من يتصفّح التطبيق لا يجد شيئًا. ومن يملك أدوات تحليل جنائي يستطيع أن يعرف أن شيئًا قد أُخفي، لكن لا ما هو ولا مع من.","prot.wordPh":"الرمز أو الجملة التي تفتحها","prot.word2Ph":"أعد كتابتها","prot.go":"ضعها في الأمان","prot.cancel":"إلغاء","prot.needWord":"اكتب شيئًا: بدونه لا توجد خزنة.","prot.short":"قصير جدًا: أربعة أحرف على الأقل.","prot.mismatch":"الكلمتان غير متطابقتين.","prot.done":"«{name}» في الأمان الآن. تلك الكلمة هي ما يعيدها.","prot.failed":"لم تنجح. لم يُحذف شيء: المحادثة ما زالت مكانها.","prot.tooBig":"لم تنجح: {n} من الملفات أكبر من أن تتّسع لها الخزنة (أكثر من ٦٤ ميغابايت). لم يُمَسّ شيء. احذف تلك الملفات من المحادثة ثم أعد المحاولة.","prot.openTitle":"فتح محادثة موضوعة في الأمان","prot.openHelp":"اكتب الكلمة. إن لم يطابقها شيء فلن يحدث شيء: التطبيق لا يقول إن كنت أخطأت أم لم يكن هناك شيء أصلًا.","prot.openGo":"افتح","prot.openNothing":"لا شيء يُفتح بهذه الكلمة.","prot.openDone":"عادت «{name}» إلى القائمة ومعها صورها.","prot.openLost":"عادت «{name}»، لكن {n} من الملفات لم تُفتح.","prot.openFailed":"لم تنجح. بقيت الخزنة ممتلئة: أعد المحاولة عندما تتوفّر مساحة أكبر في الهاتف.",
+
 "knock.title":"أنت تتواصل مع","knock.nameLabel":"ما اسمك؟","knock.namePh":"اسمك","knock.msgLabel":"ماذا تحتاج؟ (اختياري)","knock.msgPh":"مثلًا: هل لديكم حذاء مقاس 42؟","knock.go":"اتصل","knock.note":"اسمك وهذه الجملة لا يراهما إلا الشخص الذي تتصل به. لا يستطيع أي خادم قراءتهما.",
 "letter.title":"رسائل تُركت لك","letter.noneTitle":"لا أحد يردّ الآن.","letter.noneSub":"أخبرتها بالفعل أنك حاولت الوصول إليها. إذا أردت أن تقول المزيد، اكتبه هنا.","letter.ph":"اكتب رسالتك هنا","letter.leave":"اترك الرسالة","letter.cancel":"لا بأس","letter.needText":"اكتب كلمتين ليعرف ماذا أردت.","letter.left":"تُركت الرسالة. سيجدها عند فتح التطبيق.","letter.failed":"لم أتمكن من ترك الرسالة. حاول مرة أخرى.","letter.callBack":"عاود الاتصال","letter.dismiss":"تم",
 "home.bigStart":"تحدّث مع أحدهم","home.bigStartD":"أنشئ دعوة لإرسالها","home.bigJoin":"لديّ رمز","home.bigJoinD":"أرسل لي أحدهم دعوة","set.lang":"اللغة","set.textsize":"حجم النص","conn.direct":"اتصال مباشر بين الهاتفين","conn.directShort":"متصل مباشرة","conn.relay":"اتصال آمن عبر جسر مشفَّر","conn.relayShort":"متصل (جسر)","conn.down":"انقطع الاتصال","conn.downShort":"منقطع","conn.working":"جارٍ الاتصال","conn.wobbly":"تذبذب الاتصال — أحاول استعادته","conn.wobblyShort":"جارٍ الاستعادة","chat.linkLost":"انقطع الاتصال. لم يُفقد شيء.","chat.backHome":"العودة إلى الصفحة الرئيسية","chat.stillWobbly":"لم يعد الاتصال بعد. يمكنك الانتظار أكثر، أو العودة إلى الصفحة الرئيسية والمحاولة من جديد.",
@@ -1695,10 +1704,11 @@ Object.assign(I18N.ar, {
 "health.version":"النسخة المستخدمة",
 "health.versionOld":"جزء من التطبيق ما زال قديمًا. أغلقه ثم افتحه من جديد.",
 "media.stepsAndroidApp":"ارجع إلى الشاشة الرئيسية للهاتف|اضغط مطولًا على أيقونة <b>DigitalValut Logos</b>|اضغط <b>معلومات التطبيق</b> (أو أيقونة ⓘ)|اضغط <b>الأذونات</b>، ثم فعّل <b>الميكروفون</b> و<b>الكاميرا</b>|أعد فتح التطبيق",
-"prot.oneline":"تختفي من الهاتف: الرسائل والصور. لا يعيدها إلا ما تكتبه هنا. <b>إن نسيته فلن تعود</b> — ولا نستطيع نحن فتحها أيضًا.","prot.more":"ماذا يحدث بالضبط","prot.s1":"سريع الكتابة. يكفي أمام من يأخذ هاتفك بيده.","prot.s2":"جيد.","prot.s3":"آمن جدًا.","prot.whatGuess":"الرمز القصير مريح ويصمد جيدًا أمام من ينتزع هاتفك. أمام المعدات الجادة لا يهم سوى الطول: جملة كاملة تساوي أضعافًا مضاعفة عن ستة أرقام. والجملة المشهورة أقل قيمة من جملة اخترعتها أنت.",
+
 });
 
 Object.assign(I18N.ur, {
+"wipe.help":"اس فون سے تصویریں، ویڈیو اور گفتگوئیں ہٹا دیں؟ واپس نہیں آئیں گی۔","wipe.btn":"سب مٹا دیں","wipe.sure":"<b>یقین ہے؟</b> پیغامات، رابطے، تصویریں اور ویڈیو سب چلے جائیں گے۔ آپ کا پتہ آپ ہی کا رہے گا، اور جس کے پاس ہے وہ آپ تک پہنچ سکے گا۔","wipe.yes":"ہاں، سب مٹا دو","wipe.no":"نہیں، رہنے دو","wipe.done":"ہو گیا۔ اس فون پر اب کچھ نہیں۔",
 "file.noRoomIn":"«{n}» موصول نہیں ہوا: اس ڈیوائس کی یادداشت میں پہلے ہی بہت کچھ ہے۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ بھیجنے کو کہیں۔",
 "listen.needLockScreen":"مقفل اسکرین پر بجنے کے لیے اینڈرائیڈ کو ایک اور اجازت درکار ہے۔ وہ صفحہ کھولا جا رہا ہے جہاں یہ دی جاتی ہے۔",
 "android.ringTitle":"کوئی آپ کو کال کر رہا ہے",
@@ -1824,7 +1834,7 @@ Object.assign(I18N.ur, {
 "addr.title":"آپ کا مستقل پتہ","addr.sub":"فون نمبر کے بجائے یہ دیں۔ جس کے پاس یہ ہو وہ جب چاہے آپ تک پہنچ سکتا ہے، آپ کا نام یا نمبر جانے بغیر۔ بطور ڈیفالٹ بند۔","addr.qrHint":"جو اسے اسکین کرے سیدھا آپ کو کال کرے گا","addr.share":"اپنا پتہ بھیجیں","addr.showQr":"QR دکھائیں","addr.reachNote":"تاکہ ایپ بند ہونے پر بھی لوگ آپ تک پہنچ سکیں، نیچے اطلاعات آن کریں۔","addr.dialLabel":"کیا آپ کے پاس کسی کا پتہ ہے؟","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"کال کریں","addr.badFormat":"یہ پتہ صحیح نہیں لکھا۔ یہ 12 حروف کا ہوتا ہے، جیسے DV-K7M2-9QRT-X4WP۔","addr.itsYou":"یہ تو آپ کا اپنا پتہ ہے۔","addr.callingTitle":"کال کی جا رہی ہے…","addr.callingHint":"اگر ان کی ایپ بند ہو تو میں ان کا فون بجا دوں گا۔ اس میں کچھ لمحے لگ سکتے ہیں۔","addr.noAnswer":"کوئی جواب نہیں۔ میں نے اطلاع دے دی ہے: بعد میں کوشش کریں۔","addr.dialFailed":"میں اس پتے پر کال نہیں کر سکا۔","addr.noKey":"یہ پتہ اب فعال نہیں لگتا۔ اس شخص سے کہیں کہ ایپ دوبارہ کھولے اور یہ دوبارہ بھیجے: تازہ اپ ڈیٹ کے ساتھ پتے بدل گئے ہیں۔","addr.noBroker":"میں کال شروع تک نہ کر سکا: جو سروس آپ کو ملاتی ہے اس نے جواب نہیں دیا۔ اگر آپ ایپ کی کوئی نقل کسی اور پتے پر استعمال کر رہے ہیں تو سرکاری والی کھولیں۔","addr.incomingTitle":"کوئی آپ کو ڈھونڈ رہا ہے","addr.incomingSub":"نام اور وجہ کال کرنے والے نے خود لکھی ہے: جب تک آپ قبول نہ کریں، کوئی ثابت نہیں کر سکتا کہ وہ واقعی وہی شخص ہے۔","addr.incomingToast":"کوئی آپ کے پتے پر کال کر رہا ہے۔","addr.accept":"قبول کریں","addr.ignore":"نظرانداز کریں","addr.verified":"تصدیق ہو گئی: جواب دینے والا واقعی پتے {a} کا مالک ہے۔ کوئی درمیان میں نہیں آ سکتا تھا۔","addr.blockedIn":"اس شخص کی کال جسے آپ پہلے رد کر چکے تھے: نظرانداز کر دی گئی۔","addr.shareText":"آپ مجھ تک یہاں پہنچ سکتے ہیں، میرے فون نمبر کے بغیر۔ DigitalValut Logos پر میرا پتہ {a} ہے\n\nمجھے کال کرنے کے لیے ٹیپ کریں:",
 "addr.provenNotWho":"جس نے جواب دیا وہ واقعی پتہ {a} کا مالک ہے — لیکن یہ پتہ آپ کو ایک خط میں ملا تھا، اور لکھنے والا کوئی بھی نام ڈال سکتا تھا۔ اگر یقین نہ ہو تو تین الفاظ ایک دوسرے کو بتائیں۔",
 "addr.incomingAt":"«{name}» کے ذریعے","burn.title":"ایک بار استعمال ہونے والے پتے","burn.help":"ہر اشتہار کے لیے ایک، ہر اجنبی کے لیے ایک۔ کام ختم ہو تو حذف کر دیں، وہ شخص پھر آپ تک نہیں پہنچ سکتا — اصل پتہ تو اُس کے پاس تھا ہی نہیں۔","burn.sameYou":"عارضی پتہ صرف یہ چھپاتا ہے کہ آپ کا پتہ کون سا ہے — یہ آپ کو اجنبی نہیں بناتا۔ جس نے پہلے آپ کے ساتھ تین حفاظتی الفاظ پڑھے ہوں، اسے یہاں وہی تین الفاظ نظر آئیں گے اور وہ جان جائے گا کہ یہ آپ ہیں۔","burn.namePh":"کس لیے؟ مثلاً: پرانا صوفہ","burn.add":"بنائیں","burn.send":"یہ پتہ بھیجیں","burn.delete":"حذف کریں","burn.deleted":"«{name}» حذف ہو گیا۔ وہ پتہ اب جواب نہیں دیتا۔","burn.made":"«{name}» بن گیا۔ اب آپ اسے دے سکتے ہیں۔","burn.needName":"اسے نام دیں تاکہ یاد رہے کسے دیا تھا۔","burn.full":"ایک وقت میں زیادہ سے زیادہ {n} رکھ سکتے ہیں۔ نیا بنانے کے لیے ایک حذف کریں۔","burn.untitled":"بے نام",
-"prot.working":"کام جاری ہے… چند سیکنڈ لگتے ہیں: یہی سستی الفاظ کو اندازے سے آزمانا بے کار بنا دیتی ہے۔","prot.openDoneMany":"{n} گفتگوئیں اپنی تصویروں سمیت فہرست میں واپس آ گئیں۔","prot.samePin":"ایک ہی PIN کئی گفتگوؤں کے لیے استعمال کر سکتے ہیں: وہ ایک ہی تجوری میں جاتی ہیں اور ساتھ واپس آتی ہیں۔","prot.lock":"محفوظ کر دیں","prot.title":"«{name}» کے ساتھ گفتگو محفوظ کر دیں","prot.what1":"گفتگو فون سے غائب ہو جاتی ہے: پیغامات، رابطے کا نام اور تین لفظوں والی تصدیق۔ جو آپ کا فون اٹھائے گا اسے نہ گفتگو ملے گی نہ رابطہ۔","prot.what2":"تصویریں اور فائلیں <b>مٹائی نہیں جاتیں</b>: وہ خفیہ ہو کر تجوری میں جاتی ہیں اور کھولنے پر واپس آ جاتی ہیں۔","prot.what3":"آپ ایک لفظ چنتے ہیں۔ <b>بھول گئے تو کوئی نہیں کھول سکتا</b> — نہ آپ، نہ ہم۔ واپس پانے کا کوئی راستہ نہیں۔","prot.what4":"ایپ دیکھنے والے کو کچھ نہیں ملے گا۔ جس کے پاس فورنسک اوزار ہوں وہ جان سکتا ہے کہ کچھ رکھا گیا ہے، مگر کیا اور کس کے ساتھ — یہ نہیں۔","prot.wordPh":"جو PIN یا جملہ اسے کھولے گا","prot.word2Ph":"دوبارہ لکھیں","prot.go":"محفوظ کر دیں","prot.cancel":"منسوخ","prot.needWord":"کچھ لکھیں: اس کے بغیر کوئی تجوری نہیں۔","prot.short":"بہت مختصر: کم از کم 4 حروف۔","prot.mismatch":"دونوں لفظ ایک جیسے نہیں ہیں۔","prot.done":"«{name}» محفوظ ہو گئی۔ اسے وہی لفظ واپس لائے گا۔","prot.failed":"نہیں ہو سکا۔ کچھ نہیں مٹا: گفتگو جہاں تھی وہیں ہے۔","prot.tooBig":"نہیں ہو سکا: {n} فائلیں تجوری کے لیے بہت بڑی ہیں (64 MB سے زیادہ)۔ کچھ نہیں چھیڑا گیا۔ انہیں گفتگو سے ہٹا کر دوبارہ کوشش کریں۔","prot.openTitle":"محفوظ کی گئی گفتگو دوبارہ کھولیں","prot.openHelp":"وہ لفظ لکھیں۔ اگر کچھ میل نہ کھایا تو کچھ نہیں ہوگا: ایپ نہیں بتاتی کہ آپ نے غلط لکھا یا وہاں کچھ تھا ہی نہیں۔","prot.openGo":"کھولیں","prot.openNothing":"اس لفظ سے کچھ نہیں کھلتا۔","prot.openDone":"«{name}» اپنی تصویروں سمیت فہرست میں واپس آ گئی۔","prot.openLost":"«{name}» واپس آ گئی، مگر {n} فائلیں دوبارہ نہ کھل سکیں۔","prot.openFailed":"نہیں ہو سکا۔ تجوری بھری رہ گئی: جب فون میں زیادہ جگہ ہو تو دوبارہ کوشش کریں۔",
+
 "knock.title":"آپ رابطہ کر رہے ہیں","knock.nameLabel":"آپ کا نام کیا ہے؟","knock.namePh":"آپ کا نام","knock.msgLabel":"آپ کو کیا چاہیے؟ (اختیاری)","knock.msgPh":"مثلاً: کیا آپ کے پاس 42 نمبر کے جوتے ہیں؟","knock.go":"کال کریں","knock.note":"آپ کا نام اور یہ جملہ صرف وہی شخص دیکھتا ہے جسے آپ کال کر رہے ہیں۔ کوئی سرور انہیں نہیں پڑھ سکتا۔",
 "letter.title":"آپ کے لیے چھوڑے گئے پیغامات","letter.noneTitle":"ابھی کوئی جواب نہیں دے رہا۔","letter.noneSub":"میں انہیں پہلے ہی بتا چکا ہوں کہ آپ نے رابطہ کرنے کی کوشش کی۔ اگر مزید کچھ کہنا ہے تو یہاں لکھیں۔","letter.ph":"اپنا پیغام یہاں لکھیں","letter.leave":"پیغام چھوڑیں","letter.cancel":"رہنے دیں","letter.needText":"دو لفظ لکھ دیں تاکہ انہیں معلوم ہو آپ کیا چاہتے تھے۔","letter.left":"پیغام چھوڑ دیا گیا۔ ایپ کھولتے ہی مل جائے گا۔","letter.failed":"میں پیغام نہیں چھوڑ سکا۔ دوبارہ کوشش کریں۔","letter.callBack":"واپس کال کریں","letter.dismiss":"ہو گیا",
 "home.bigStart":"کسی سے بات کریں","home.bigStartD":"بھیجنے کے لیے دعوت بنائیں","home.bigJoin":"میرے پاس کوڈ ہے","home.bigJoinD":"مجھے کسی نے دعوت بھیجی ہے","set.lang":"زبان","set.textsize":"متن کا سائز","conn.direct":"دونوں فونز کے درمیان براہِ راست رابطہ","conn.directShort":"براہِ راست منسلک","conn.relay":"خفیہ پل کے ذریعے محفوظ رابطہ","conn.relayShort":"منسلک (پل)","conn.down":"رابطہ منقطع ہو گیا","conn.downShort":"منقطع","conn.working":"رابطہ ہو رہا ہے","conn.wobbly":"رابطہ لڑکھڑایا — دوبارہ جوڑ رہا ہوں","conn.wobblyShort":"دوبارہ جوڑ رہا ہوں","chat.linkLost":"رابطہ منقطع ہو گیا۔ کچھ ضائع نہیں ہوا۔","chat.backHome":"ہوم پر واپس جائیں","chat.stillWobbly":"رابطہ ابھی تک واپس نہیں آیا۔ آپ مزید انتظار کر سکتے ہیں، یا ہوم پر واپس جا کر دوبارہ کوشش کر سکتے ہیں۔",
@@ -1874,10 +1884,11 @@ Object.assign(I18N.ur, {
 "health.version":"زیرِ استعمال ورژن",
 "health.versionOld":"ایپ کا ایک حصہ اب بھی پرانا ہے۔ اسے بند کر کے دوبارہ کھولیں۔",
 "media.stepsAndroidApp":"فون کی ہوم اسکرین پر واپس جائیں|<b>DigitalValut Logos</b> آئیکن کو دبائے رکھیں|<b>ایپ کی معلومات</b> (یا ⓘ آئیکن) پر ٹیپ کریں|<b>اجازتیں</b> پر ٹیپ کریں، پھر <b>مائیکروفون</b> اور <b>کیمرہ</b> آن کریں|ایپ دوبارہ کھولیں",
-"prot.oneline":"یہ فون سے غائب ہو جاتی ہے: پیغامات اور تصویریں۔ اسے صرف وہی واپس لاتا ہے جو آپ یہاں لکھتے ہیں۔ <b>بھول گئے تو گئی</b> — ہم بھی نہیں کھول سکتے۔","prot.more":"اصل میں کیا ہوتا ہے","prot.s1":"لکھنے میں تیز۔ جو آپ کا فون اٹھا لے اس کے لیے کافی ہے۔","prot.s2":"ٹھیک ہے۔","prot.s3":"بہت محفوظ۔","prot.whatGuess":"مختصر PIN آسان ہے اور فون چھیننے والے کے سامنے اچھا ٹکتا ہے۔ سنجیدہ آلات کے سامنے صرف لمبائی اہم ہے: پورا جملہ چھ ہندسوں سے کہیں زیادہ ہے۔ اور مشہور جملہ آپ کے اپنے بنائے ہوئے سے کمزور ہے۔",
+
 });
 
 Object.assign(I18N.hi, {
+"wipe.help":"इस फ़ोन से तस्वीरें, वीडियो और बातचीत हटा दें? वापस नहीं आएंगी।","wipe.btn":"सब मिटाएँ","wipe.sure":"<b>पक्का?</b> संदेश, संपर्क, तस्वीरें और वीडियो सब चले जाएंगे। आपका पता आपका ही रहेगा, और जिसके पास है वह आपसे संपर्क कर सकेगा।","wipe.yes":"हाँ, सब मिटा दो","wipe.no":"नहीं, रहने दो","wipe.done":"हो गया। इस फ़ोन पर अब कुछ नहीं है।",
 "file.noRoomIn":"«{n}» प्राप्त नहीं हुआ: इस डिवाइस की मेमोरी में पहले से बहुत कुछ है। पेज दोबारा लोड करें और फिर से भेजने को कहें।",
 "listen.needLockScreen":"लॉक स्क्रीन पर बजने के लिए Android को एक और अनुमति चाहिए। वह पृष्ठ खोला जा रहा है जहाँ यह दी जाती है।",
 "android.ringTitle":"कोई आपको कॉल कर रहा है",
@@ -2003,7 +2014,7 @@ Object.assign(I18N.hi, {
 "addr.title":"आपका स्थायी पता","addr.sub":"फ़ोन नंबर की जगह यह दें। जिसके पास यह हो वह जब चाहे आप तक पहुँच सकता है, आपका नाम या नंबर जाने बिना। डिफ़ॉल्ट रूप से बंद।","addr.qrHint":"जो इसे स्कैन करे सीधे आपको कॉल करेगा","addr.share":"अपना पता भेजें","addr.showQr":"QR दिखाएं","addr.reachNote":"ताकि ऐप बंद होने पर भी लोग आप तक पहुँच सकें, नीचे सूचनाएं चालू करें।","addr.dialLabel":"किसी का पता है आपके पास?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"कॉल करें","addr.badFormat":"यह पता ठीक से नहीं लिखा है। यह 12 अक्षरों का होता है, जैसे DV-K7M2-9QRT-X4WP।","addr.itsYou":"यह तो आपका अपना पता है।","addr.callingTitle":"कॉल किया जा रहा है…","addr.callingHint":"अगर उनका ऐप बंद है तो मैं उनका फ़ोन बजा दूंगा। इसमें थोड़ा समय लग सकता है।","addr.noAnswer":"कोई जवाब नहीं। मैंने बता दिया है: बाद में कोशिश करें।","addr.dialFailed":"मैं इस पते पर कॉल नहीं कर सका।","addr.noKey":"यह पता अब सक्रिय नहीं लगता। उस व्यक्ति से कहें कि ऐप दोबारा खोलें और इसे फिर भेजें: पिछले अपडेट के साथ पते बदल गए हैं।","addr.noBroker":"मैं कॉल शुरू तक नहीं कर सका: जो सेवा आपको मिलाती है उसने जवाब नहीं दिया। अगर आप ऐप की कोई नकल किसी और पते पर इस्तेमाल कर रहे हैं, तो आधिकारिक वाली खोलें।","addr.incomingTitle":"कोई आपको ढूंढ रहा है","addr.incomingSub":"नाम और कारण कॉल करने वाले ने खुद लिखे हैं: जब तक आप स्वीकार न करें, कोई साबित नहीं कर सकता कि वह सचमुच वही व्यक्ति है।","addr.incomingToast":"कोई आपके पते पर कॉल कर रहा है।","addr.accept":"स्वीकार करें","addr.ignore":"अनदेखा करें","addr.verified":"सत्यापित: जिसने जवाब दिया वह सचमुच पते {a} का मालिक है। कोई बीच में नहीं आ सकता था।","addr.blockedIn":"उस व्यक्ति की कॉल जिसे आपने पहले मना कर दिया था: अनदेखी की गई।","addr.shareText":"आप मुझ तक यहाँ पहुँच सकते हैं, मेरे फ़ोन नंबर के बिना। DigitalValut Logos पर मेरा पता {a} है\n\nमुझे कॉल करने के लिए टैप करें:",
 "addr.provenNotWho":"जिसने जवाब दिया वह वाकई पता {a} का मालिक है — पर वह पता आपको एक चिट्ठी में मिला था, और लिखने वाला कोई भी नाम डाल सकता था। यकीन न हो तो एक-दूसरे को तीन शब्द बताएं।",
 "addr.incomingAt":"«{name}» के ज़रिए","burn.title":"इस्तेमाल करके फेंकने वाले पते","burn.help":"हर विज्ञापन के लिए एक, हर अजनबी के लिए एक। काम पूरा हो तो मिटा दें और वह व्यक्ति आप तक नहीं पहुँच सकता — असली पता उसके पास कभी था ही नहीं।","burn.sameYou":"एक बार का पता केवल यह छिपाता है कि आपका पता कौन-सा है — यह आपको अजनबी नहीं बनाता। जिसने पहले आपके साथ तीन सुरक्षा शब्द पढ़े हों, उसे यहाँ वही तीन शब्द दिखेंगे और वह जान जाएगा कि यह आप हैं।","burn.namePh":"किस लिए? जैसे: पुराना सोफ़ा","burn.add":"बनाएं","burn.send":"यह पता भेजें","burn.delete":"मिटाएं","burn.deleted":"«{name}» मिटा दिया। वह पता अब जवाब नहीं देता।","burn.made":"«{name}» बन गया। अब आप इसे दे सकते हैं।","burn.needName":"इसे नाम दें, ताकि पता रहे किसे दिया था।","burn.full":"एक साथ ज़्यादा से ज़्यादा {n} रख सकते हैं। नया बनाने के लिए एक मिटाएं।","burn.untitled":"बिना नाम",
-"prot.working":"काम चल रहा है… कुछ सेकंड लगते हैं: यही धीमापन शब्दों को अंधाधुंध आज़माना बेकार बना देता है।","prot.openDoneMany":"{n} बातचीत अपनी तस्वीरों के साथ सूची में लौट आईं।","prot.samePin":"एक ही PIN कई बातचीत के लिए इस्तेमाल कर सकते हैं: वे एक ही तिजोरी में जाती हैं और साथ लौटती हैं।","prot.lock":"सुरक्षित रख दें","prot.title":"«{name}» के साथ की बातचीत सुरक्षित रख दें","prot.what1":"बातचीत फ़ोन से गायब हो जाती है: संदेश, संपर्क का नाम और तीन शब्दों वाली जाँच। जो आपका फ़ोन उठाएगा उसे न बातचीत मिलेगी, न संपर्क।","prot.what2":"तस्वीरें और फ़ाइलें <b>मिटाई नहीं जातीं</b>: वे कूटबद्ध होकर तिजोरी में जाती हैं और खोलने पर वापस आ जाती हैं।","prot.what3":"आप एक शब्द चुनते हैं। <b>भूल गए तो कोई नहीं खोल सकता</b> — न आप, न हम। वापस पाने का कोई रास्ता नहीं है।","prot.what4":"ऐप देखने वाले को कुछ नहीं मिलेगा। फ़ोरेंसिक औज़ार रखने वाला यह जान सकता है कि कुछ रखा गया है, पर क्या और किसके साथ — यह नहीं।","prot.wordPh":"जो PIN या वाक्य इसे खोलेगा","prot.word2Ph":"दोबारा लिखें","prot.go":"सुरक्षित रख दें","prot.cancel":"रद्द करें","prot.needWord":"कुछ लिखें: उसके बिना कोई तिजोरी नहीं।","prot.short":"बहुत छोटा: कम से कम 4 अक्षर।","prot.mismatch":"दोनों शब्द एक जैसे नहीं हैं।","prot.done":"«{name}» सुरक्षित रख दी गई। उसे वापस वही शब्द लाएगा।","prot.failed":"नहीं हो सका। कुछ भी मिटाया नहीं गया: बातचीत जहाँ थी वहीं है।","prot.tooBig":"नहीं हो सका: {n} फ़ाइलें तिजोरी के लिए बहुत बड़ी हैं (64 MB से ज़्यादा)। कुछ भी नहीं छुआ गया। उन्हें बातचीत से हटाकर फिर कोशिश करें।","prot.openTitle":"सुरक्षित रखी बातचीत फिर खोलें","prot.openHelp":"वह शब्द लिखें। अगर उससे कुछ मेल नहीं खाता तो कुछ नहीं होगा: ऐप यह नहीं बताता कि आपने ग़लत लिखा या वहाँ कुछ था ही नहीं।","prot.openGo":"खोलें","prot.openNothing":"उस शब्द से कुछ नहीं खुलता।","prot.openDone":"«{name}» अपनी तस्वीरों के साथ सूची में लौट आई।","prot.openLost":"«{name}» लौट आई, पर {n} फ़ाइलें दोबारा नहीं खुलीं।","prot.openFailed":"नहीं हो सका। तिजोरी भरी रह गई: फ़ोन में और जगह हो तब कोशिश करें।",
+
 "knock.title":"आप संपर्क कर रहे हैं","knock.nameLabel":"आपका नाम क्या है?","knock.namePh":"आपका नाम","knock.msgLabel":"आपको क्या चाहिए? (वैकल्पिक)","knock.msgPh":"जैसे: क्या 42 नंबर के जूते हैं?","knock.go":"कॉल करें","knock.note":"आपका नाम और यह वाक्य सिर्फ़ वही व्यक्ति देखता है जिसे आप कॉल कर रहे हैं। कोई सर्वर इन्हें नहीं पढ़ सकता।",
 "letter.title":"आपके लिए छोड़े गए संदेश","letter.noneTitle":"अभी कोई जवाब नहीं दे रहा।","letter.noneSub":"मैं उसे पहले ही बता चुका हूँ कि आपने संपर्क करने की कोशिश की। अगर कुछ और कहना है तो यहाँ लिखें।","letter.ph":"अपना संदेश यहाँ लिखें","letter.leave":"संदेश छोड़ें","letter.cancel":"रहने दें","letter.needText":"दो शब्द लिख दें, ताकि उन्हें पता चले आप क्या चाहते थे।","letter.left":"संदेश छोड़ दिया। ऐप खोलते ही उन्हें मिल जाएगा।","letter.failed":"मैं संदेश नहीं छोड़ सका। फिर कोशिश करें।","letter.callBack":"वापस कॉल करें","letter.dismiss":"हो गया",
 "home.bigStart":"किसी से बात करें","home.bigStartD":"भेजने के लिए निमंत्रण बनाएं","home.bigJoin":"मेरे पास कोड है","home.bigJoinD":"मुझे किसी ने निमंत्रण भेजा है","set.lang":"भाषा","set.textsize":"टेक्स्ट का आकार","conn.direct":"दोनों फ़ोन के बीच सीधा संपर्क","conn.directShort":"सीधे जुड़ा","conn.relay":"एन्क्रिप्टेड पुल से सुरक्षित संपर्क","conn.relayShort":"जुड़ा (पुल)","conn.down":"संपर्क टूट गया","conn.downShort":"टूटा","conn.working":"जुड़ रहा है","conn.wobbly":"कनेक्शन डगमगाया — फिर से जोड़ रहा हूँ","conn.wobblyShort":"फिर जोड़ रहा है","chat.linkLost":"कनेक्शन टूट गया। कुछ खोया नहीं।","chat.backHome":"होम पर वापस जाएं","chat.stillWobbly":"कनेक्शन अभी तक वापस नहीं आया। आप और इंतज़ार कर सकते हैं, या होम पर वापस जाकर फिर से कोशिश कर सकते हैं।",
@@ -2053,10 +2064,11 @@ Object.assign(I18N.hi, {
 "health.version":"इस्तेमाल हो रहा संस्करण",
 "health.versionOld":"ऐप का एक हिस्सा अब भी पुराना है। इसे बंद करके दोबारा खोलें।",
 "media.stepsAndroidApp":"फ़ोन की होम स्क्रीन पर वापस जाएं|<b>DigitalValut Logos</b> आइकन को दबाकर रखें|<b>ऐप की जानकारी</b> (या ⓘ आइकन) पर टैप करें|<b>अनुमतियां</b> पर टैप करें, फिर <b>माइक्रोफ़ोन</b> और <b>कैमरा</b> चालू करें|ऐप फिर से खोलें",
-"prot.oneline":"यह फ़ोन से गायब हो जाती है: संदेश और तस्वीरें। इसे सिर्फ़ वही वापस लाता है जो आप यहाँ लिखते हैं। <b>भूल गए तो गई</b> — हम भी नहीं खोल सकते।","prot.more":"असल में क्या होता है","prot.s1":"लिखने में तेज़। जो आपका फ़ोन उठा ले उसके लिए काफ़ी है।","prot.s2":"ठीक है।","prot.s3":"बहुत सुरक्षित।","prot.whatGuess":"छोटा PIN आसान है और फ़ोन छीनने वाले के आगे अच्छा टिकता है। गंभीर उपकरणों के सामने सिर्फ़ लंबाई मायने रखती है: पूरा वाक्य छह अंकों से कहीं ज़्यादा है। और मशहूर वाक्य आपके अपने बनाए वाक्य से कमज़ोर है।",
+
 });
 
 Object.assign(I18N.bn, {
+"wipe.help":"এই ফোন থেকে ছবি, ভিডিও আর কথাবার্তা মুছে ফেলবেন? ফেরানো যাবে না।","wipe.btn":"সব মুছুন","wipe.sure":"<b>নিশ্চিত?</b> বার্তা, পরিচিতি, ছবি ও ভিডিও সব চলে যাবে। আপনার ঠিকানা আপনারই থাকবে, যার কাছে আছে সে আপনাকে খুঁজে পাবে।","wipe.yes":"হ্যাঁ, সব মুছে দিন","wipe.no":"না, থাক","wipe.done":"হয়ে গেছে। এই ফোনে আর কিছু নেই।",
 "file.noRoomIn":"«{n}» গ্রহণ করা যায়নি: এই ডিভাইসের মেমরিতে ইতিমধ্যেই অনেক কিছু আছে। পৃষ্ঠাটি রিলোড করুন এবং আবার পাঠাতে বলুন।",
 "listen.needLockScreen":"লক স্ক্রিনে বাজতে হলে Android-এর আরও একটি অনুমতি লাগে। যেখানে তা দেওয়া যায় সেই পাতা খোলা হচ্ছে।",
 "android.ringTitle":"কেউ আপনাকে ডাকছে",
@@ -2182,7 +2194,7 @@ Object.assign(I18N.bn, {
 "addr.title":"আপনার স্থায়ী ঠিকানা","addr.sub":"ফোন নম্বরের বদলে এটি দিন। যার কাছে এটি আছে সে যখন খুশি আপনার সঙ্গে যোগাযোগ করতে পারবে, আপনার নাম বা নম্বর না জেনেই। ডিফল্টভাবে বন্ধ।","addr.qrHint":"যে এটি স্ক্যান করবে সরাসরি আপনাকে ডাকবে","addr.share":"আপনার ঠিকানা পাঠান","addr.showQr":"QR দেখান","addr.reachNote":"অ্যাপ বন্ধ থাকলেও যাতে আপনাকে পাওয়া যায়, নিচের বিজ্ঞপ্তি চালু করুন।","addr.dialLabel":"কারও ঠিকানা আছে?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"ডাকুন","addr.badFormat":"এই ঠিকানাটি ঠিকভাবে লেখা হয়নি। এটি ১২টি অক্ষরের, যেমন DV-K7M2-9QRT-X4WP।","addr.itsYou":"এটি তো আপনার নিজের ঠিকানা।","addr.callingTitle":"ডাকা হচ্ছে…","addr.callingHint":"তাঁর অ্যাপ বন্ধ থাকলে আমি ফোন বাজিয়ে দেব। একটু সময় লাগতে পারে।","addr.noAnswer":"সাড়া নেই। জানিয়ে দিয়েছি: পরে চেষ্টা করুন।","addr.dialFailed":"এই ঠিকানায় ডাকতে পারিনি।","addr.noKey":"এই ঠিকানাটি আর সক্রিয় বলে মনে হচ্ছে না। ওই ব্যক্তিকে অ্যাপটি আবার খুলে ঠিকানাটি আবার পাঠাতে বলুন: সর্বশেষ হালনাগাদে ঠিকানা বদলে গেছে।","addr.noBroker":"আমি কলটা শুরুই করতে পারিনি: যে সেবা আপনাদের যোগাযোগ করিয়ে দেয় সেটি সাড়া দেয়নি। আপনি যদি অ্যাপের কোনো কপি অন্য ঠিকানায় ব্যবহার করেন, তবে আসলটি খুলুন।","addr.incomingTitle":"কেউ আপনাকে খুঁজছে","addr.incomingSub":"নাম আর কারণ যিনি ডাকছেন তিনিই লিখেছেন: আপনি গ্রহণ না করা পর্যন্ত কেউ প্রমাণ করতে পারে না যে তিনি সত্যিই সেই ব্যক্তি।","addr.incomingToast":"কেউ আপনার ঠিকানায় ডাকছে।","addr.accept":"গ্রহণ করুন","addr.ignore":"উপেক্ষা করুন","addr.verified":"যাচাই হয়েছে: যিনি সাড়া দিয়েছেন তিনি সত্যিই {a} ঠিকানার মালিক। কেউ মাঝখানে ঢুকতে পারেনি।","addr.blockedIn":"আপনি আগে ফিরিয়ে দিয়েছেন এমন কারও ডাক: উপেক্ষা করা হয়েছে।","addr.shareText":"আমাকে এখানে পাওয়া যাবে, আমার ফোন নম্বর ছাড়াই। DigitalValut Logos-এ আমার ঠিকানা {a}\n\nআমাকে ডাকতে ট্যাপ করুন:",
 "addr.provenNotWho":"যে উত্তর দিয়েছে সে সত্যিই {a} ঠিকানার মালিক — কিন্তু ওই ঠিকানা আপনার কাছে একটি চিঠিতে এসেছিল, আর যে লিখেছে সে যেকোনো নাম বসাতে পারত। নিশ্চিত না হলে একে অপরকে তিনটি শব্দ বলুন।",
 "addr.incomingAt":"«{name}»-এর মাধ্যমে","burn.title":"একবার ব্যবহারের ঠিকানা","burn.help":"প্রতিটি বিজ্ঞাপনের জন্য একটি, প্রতিটি অপরিচিতের জন্য একটি। কাজ শেষে মুছে দিন, সেই ব্যক্তি আর আপনাকে পাবে না — আসলটি তার কাছে কখনও ছিলই না।","burn.sameYou":"একবার ব্যবহারের ঠিকানা শুধু লুকায় আপনার ঠিকানা কোনটি — এটি আপনাকে অচেনা করে না। যিনি আগে আপনার সঙ্গে তিনটি নিরাপত্তা শব্দ মিলিয়েছেন, তিনি এখানে সেই একই তিনটি শব্দ দেখবেন এবং বুঝবেন এটি আপনি।","burn.namePh":"কীসের জন্য? যেমন: পুরনো সোফা","burn.add":"তৈরি করুন","burn.send":"এই ঠিকানা পাঠান","burn.delete":"মুছুন","burn.deleted":"«{name}» মোছা হয়েছে। ওই ঠিকানা আর সাড়া দেয় না।","burn.made":"«{name}» তৈরি হয়েছে। এখন দিতে পারেন।","burn.needName":"একটি নাম দিন, যাতে মনে থাকে কাকে দিয়েছেন।","burn.full":"একসঙ্গে সর্বোচ্চ {n}টি রাখতে পারেন। নতুন বানাতে একটি মুছুন।","burn.untitled":"নামহীন",
-"prot.working":"চলছে… কয়েক সেকেন্ড লাগে: এই ধীরগতিই শব্দ আন্দাজে চেষ্টা করাকে অর্থহীন করে দেয়।","prot.openDoneMany":"{n}টি কথাবার্তা ছবিসহ তালিকায় ফিরে এসেছে।","prot.samePin":"একই PIN একাধিক কথাবার্তার জন্য ব্যবহার করতে পারেন: সেগুলো একই সিন্দুকে যায় এবং একসঙ্গে ফেরে।","prot.lock":"সরিয়ে রাখুন","prot.title":"«{name}»-এর সঙ্গের কথাবার্তা সরিয়ে রাখুন","prot.what1":"কথাবার্তা ফোন থেকে মুছে যায়: বার্তা, পরিচিতির নাম এবং তিন শব্দের যাচাই। যে আপনার ফোন হাতে নেবে সে কথাবার্তাও পাবে না, পরিচিতিও না।","prot.what2":"ছবি ও ফাইল <b>মুছে ফেলা হয় না</b>: সেগুলো এনক্রিপ্ট হয়ে সিন্দুকে ঢোকে এবং খুললে ফিরে আসে।","prot.what3":"আপনি একটা শব্দ বাছবেন। <b>ভুলে গেলে কেউ খুলতে পারবে না</b> — আপনিও না, আমরাও না। ফিরে পাওয়ার কোনো উপায় নেই।","prot.what4":"যে অ্যাপ ঘেঁটে দেখবে সে কিছুই পাবে না। যার ফরেনসিক যন্ত্র আছে সে বুঝতে পারবে কিছু সরানো হয়েছে, কিন্তু কী বা কার সঙ্গে তা নয়।","prot.wordPh":"যে PIN বা বাক্য খুলবে","prot.word2Ph":"আবার লিখুন","prot.go":"সরিয়ে রাখুন","prot.cancel":"বাতিল","prot.needWord":"কিছু লিখুন: ছাড়া কোনো সিন্দুক নেই।","prot.short":"খুব ছোট: অন্তত ৪টি অক্ষর।","prot.mismatch":"দুটো শব্দ এক নয়।","prot.done":"«{name}» সরিয়ে রাখা হয়েছে। ওই শব্দটাই ফিরিয়ে আনবে।","prot.failed":"হয়নি। কিছুই মোছা হয়নি: কথাবার্তা যেখানে ছিল সেখানেই আছে।","prot.tooBig":"হয়নি: {n}টি ফাইল সিন্দুকের পক্ষে বড় (৬৪ MB-র বেশি)। কিছুই ছোঁয়া হয়নি। ওগুলো কথাবার্তা থেকে মুছে আবার চেষ্টা করুন।","prot.openTitle":"সরিয়ে রাখা কথাবার্তা আবার খুলুন","prot.openHelp":"শব্দটা লিখুন। কিছু না মিললে কিছুই হবে না: অ্যাপ বলবে না আপনি ভুল লিখেছেন নাকি ওখানে কিছুই ছিল না।","prot.openGo":"খুলুন","prot.openNothing":"ওই শব্দে কিছু খোলে না।","prot.openDone":"«{name}» ছবিসহ তালিকায় ফিরে এসেছে।","prot.openLost":"«{name}» ফিরেছে, তবে {n}টি ফাইল আর খোলেনি।","prot.openFailed":"হয়নি। সিন্দুক ভরাই রইল: ফোনে জায়গা হলে আবার চেষ্টা করুন।",
+
 "knock.title":"আপনি যোগাযোগ করছেন","knock.nameLabel":"আপনার নাম কী?","knock.namePh":"আপনার নাম","knock.msgLabel":"আপনার কী দরকার? (ইচ্ছা হলে)","knock.msgPh":"যেমন: ৪২ সাইজের জুতো আছে?","knock.go":"ডাকুন","knock.note":"আপনার নাম আর এই বাক্যটি কেবল যাকে ডাকছেন তিনিই দেখেন। কোনও সার্ভার সেগুলি পড়তে পারে না।",
 "letter.title":"আপনার জন্য রাখা বার্তা","letter.noneTitle":"এখন কেউ সাড়া দিচ্ছে না।","letter.noneSub":"আমি তাকে আগেই জানিয়ে দিয়েছি যে আপনি তার সঙ্গে যোগাযোগের চেষ্টা করেছেন। আরও কিছু বলতে চাইলে এখানে লিখুন।","letter.ph":"আপনার বার্তা এখানে লিখুন","letter.leave":"বার্তা রাখুন","letter.cancel":"থাক","letter.needText":"দু-এক কথা লিখুন, যাতে বোঝেন আপনি কী চেয়েছিলেন।","letter.left":"বার্তা রাখা হয়েছে। অ্যাপ খুললেই দেখতে পাবেন।","letter.failed":"বার্তা রাখতে পারিনি। আবার চেষ্টা করুন।","letter.callBack":"ফিরে ডাকুন","letter.dismiss":"হয়েছে",
 "home.bigStart":"কারও সঙ্গে কথা বলুন","home.bigStartD":"পাঠানোর জন্য আমন্ত্রণ তৈরি করুন","home.bigJoin":"আমার কাছে কোড আছে","home.bigJoinD":"কেউ আমাকে আমন্ত্রণ পাঠিয়েছে","set.lang":"ভাষা","set.textsize":"লেখার আকার","conn.direct":"দুই ফোনের মধ্যে সরাসরি সংযোগ","conn.directShort":"সরাসরি যুক্ত","conn.relay":"এনক্রিপ্টেড সেতুর মাধ্যমে নিরাপদ সংযোগ","conn.relayShort":"যুক্ত (সেতু)","conn.down":"সংযোগ বিচ্ছিন্ন","conn.downShort":"বিচ্ছিন্ন","conn.working":"সংযোগ হচ্ছে","conn.wobbly":"সংযোগ টলে গেছে — আবার জুড়ছি","conn.wobblyShort":"আবার জুড়ছি","chat.linkLost":"সংযোগ বিচ্ছিন্ন হয়েছে। কিছুই হারায়নি।","chat.backHome":"হোমে ফিরে যান","chat.stillWobbly":"সংযোগ এখনও ফিরে আসেনি। আপনি আরও অপেক্ষা করতে পারেন, অথবা হোমে ফিরে গিয়ে আবার চেষ্টা করতে পারেন।",
@@ -2232,10 +2244,11 @@ Object.assign(I18N.bn, {
 "health.version":"ব্যবহৃত সংস্করণ",
 "health.versionOld":"অ্যাপের একটি অংশ এখনও পুরোনো। বন্ধ করে আবার খুলুন।",
 "media.stepsAndroidApp":"ফোনের হোম স্ক্রিনে ফিরে যান|<b>DigitalValut Logos</b> আইকনটি চেপে ধরে রাখুন|<b>অ্যাপ তথ্য</b> (বা ⓘ আইকন) ট্যাপ করুন|<b>অনুমতি</b> ট্যাপ করুন, তারপর <b>মাইক্রোফোন</b> ও <b>ক্যামেরা</b> চালু করুন|অ্যাপটি আবার খুলুন",
-"prot.oneline":"এটি ফোন থেকে মুছে যায়: বার্তা আর ছবি। কেবল আপনি এখানে যা লিখবেন সেটাই ফিরিয়ে আনে। <b>ভুলে গেলে আর ফেরে না</b> — আমরাও খুলতে পারি না।","prot.more":"আসলে কী ঘটে","prot.s1":"লিখতে দ্রুত। যে ফোন হাতে তুলে নেয় তার বিরুদ্ধে যথেষ্ট।","prot.s2":"ভালো।","prot.s3":"খুব নিরাপদ।","prot.whatGuess":"ছোট PIN সুবিধাজনক এবং ফোন ছিনিয়ে নেওয়া লোকের বিরুদ্ধে ভালোই টেকে। গুরুতর যন্ত্রপাতির সামনে কেবল দৈর্ঘ্যই গোনে: একটা গোটা বাক্য ছয় অঙ্কের চেয়ে বহুগুণ বেশি। আর বিখ্যাত বাক্য নিজের বানানো বাক্যের চেয়ে দুর্বল।",
+
 });
 
 Object.assign(I18N.id, {
+"wipe.help":"Ingin foto, video, dan percakapan hilang dari ponsel ini? Tidak bisa dikembalikan.","wipe.btn":"Hapus semua","wipe.sure":"<b>Yakin?</b> Pesan, kontak, foto, dan video semuanya hilang. Alamat Anda tetap milik Anda, dan siapa pun yang punya masih bisa menghubungi.","wipe.yes":"Ya, hapus semua","wipe.no":"Tidak, biarkan","wipe.done":"Selesai. Tidak ada apa-apa lagi di ponsel ini.",
 "file.noRoomIn":"«{n}» tidak diterima: perangkat ini sudah menyimpan terlalu banyak di memori. Muat ulang halaman dan minta dikirim lagi.",
 "listen.needLockScreen":"Untuk berdering saat layar terkunci, Android meminta satu izin lagi. Membuka halaman tempat izin itu diberikan.",
 "android.ringTitle":"Ada yang menelepon",
@@ -2361,7 +2374,7 @@ Object.assign(I18N.id, {
 "addr.title":"Alamat permanen Anda","addr.sub":"Berikan ini sebagai ganti nomor telepon. Siapa pun yang memilikinya bisa menghubungi Anda kapan saja, tanpa tahu nama maupun nomor Anda. Nonaktif secara default.","addr.qrHint":"Yang memindainya langsung menelepon Anda","addr.share":"Kirim alamat Anda","addr.showQr":"Tampilkan QR","addr.reachNote":"Agar orang bisa menghubungi Anda meski aplikasi tertutup, aktifkan pemberitahuan di bawah.","addr.dialLabel":"Punya alamat seseorang?","addr.dialPh":"DV-XXXX-XXXX-XXXX","addr.dial":"Telepon","addr.badFormat":"Alamat itu salah tulis. Panjangnya 12 karakter, seperti DV-K7M2-9QRT-X4WP.","addr.itsYou":"Itu alamat Anda sendiri.","addr.callingTitle":"Menelepon…","addr.callingHint":"Kalau aplikasinya tertutup, saya akan membunyikan ponselnya. Bisa perlu sejenak.","addr.noAnswer":"Tidak ada jawaban. Sudah diberi tahu: coba lagi nanti.","addr.dialFailed":"Saya tidak bisa menelepon alamat itu.","addr.noKey":"Alamat itu sepertinya sudah tidak aktif. Minta orangnya membuka aplikasi lagi dan mengirimkannya kembali: alamat berubah pada pembaruan terakhir.","addr.noBroker":"Saya bahkan tidak bisa memulai panggilan: layanan yang mempertemukan Anda tidak menjawab. Kalau Anda memakai salinan aplikasi di alamat lain, buka yang resmi.","addr.incomingTitle":"Ada yang mencari Anda","addr.incomingSub":"Nama dan alasannya ditulis sendiri oleh si penelepon: sampai Anda menerima, tidak ada yang bisa membuktikan dia memang orang itu.","addr.incomingToast":"Ada yang menelepon alamat Anda.","addr.accept":"Terima","addr.ignore":"Abaikan","addr.verified":"Terverifikasi: yang menjawab benar-benar pemilik alamat {a}. Tidak mungkin ada yang menyusup di tengah.","addr.blockedIn":"Panggilan dari orang yang pernah Anda tolak: diabaikan.","addr.shareText":"Anda bisa menghubungi saya di sini, tanpa nomor telepon saya. Alamat DigitalValut Logos saya adalah {a}\n\nKetuk untuk menelepon saya:",
 "addr.provenNotWho":"Yang menjawab memang pemilik alamat {a} — tetapi alamat itu sampai kepada Anda lewat sebuah surat, dan penulisnya bisa memakai nama apa pun. Kalau belum yakin, ucapkan tiga kata itu satu sama lain.",
 "addr.incomingAt":"lewat “{name}”","burn.title":"Alamat sekali pakai","burn.help":"Satu untuk tiap iklan, satu untuk tiap orang asing. Hapus kalau sudah selesai, dan orang itu tak bisa menghubungi Anda lagi — alamat asli Anda tak pernah dia pegang.","burn.sameYou":"Alamat sekali pakai hanya menyembunyikan alamat mana yang Anda miliki — bukan menjadikan Anda orang asing. Siapa pun yang pernah membaca tiga kata keamanan bersama Anda akan melihat tiga kata yang sama di sini, dan tahu itu Anda.","burn.namePh":"Untuk apa? mis. Sofa bekas","burn.add":"Buat","burn.send":"Kirim alamat ini","burn.delete":"Hapus","burn.deleted":"“{name}” dihapus. Alamat itu tidak menjawab lagi.","burn.made":"“{name}” dibuat. Sekarang bisa Anda berikan.","burn.needName":"Beri nama, supaya Anda ingat sudah memberikannya ke siapa.","burn.full":"Maksimal {n} sekaligus. Hapus satu untuk membuat yang baru.","burn.untitled":"Tanpa nama",
-"prot.working":"Sedang bekerja… perlu beberapa detik: justru kelambatan itu yang membuat menebak kata jadi sia-sia.","prot.openDoneMany":"{n} percakapan kembali ke daftar, lengkap dengan fotonya.","prot.samePin":"PIN yang sama bisa dipakai untuk beberapa percakapan: semuanya masuk ke brankas yang sama dan kembali bersama.","prot.lock":"Simpan aman","prot.title":"Simpan aman percakapan dengan “{name}”","prot.what1":"Percakapan hilang dari ponsel: pesan, nama kontak, dan pemeriksaan tiga kata. Siapa pun yang mengambil ponsel Anda tidak menemukan percakapan maupun kontaknya.","prot.what2":"Foto dan berkas <b>tidak dihapus</b>: semuanya masuk ke brankas dalam keadaan terenkripsi dan kembali saat dibuka.","prot.what3":"Anda memilih sebuah kata. <b>Kalau lupa, tidak ada yang bisa membukanya</b> — Anda tidak, kami juga tidak. Tidak ada cara memulihkannya.","prot.what4":"Yang memeriksa aplikasi tidak menemukan apa pun. Yang punya alat forensik bisa tahu ada sesuatu yang disimpan, tapi bukan apa dan dengan siapa.","prot.wordPh":"PIN atau kalimat yang membukanya","prot.word2Ph":"Tulis sekali lagi","prot.go":"Simpan aman","prot.cancel":"Batal","prot.needWord":"Tulis sesuatu: tanpa itu tidak ada brankas.","prot.short":"Terlalu pendek: minimal 4 karakter.","prot.mismatch":"Kedua kata tidak sama.","prot.done":"“{name}” sudah tersimpan aman. Kata itulah yang mengembalikannya.","prot.failed":"Tidak berhasil. Tidak ada yang dihapus: percakapan masih di tempatnya.","prot.tooBig":"Tidak berhasil: {n} berkas terlalu besar untuk brankas (lebih dari 64 MB). Tidak ada yang disentuh. Hapus berkas itu dari percakapan, lalu coba lagi.","prot.openTitle":"Buka kembali percakapan yang disimpan aman","prot.openHelp":"Tulis katanya. Kalau tidak ada yang cocok, tidak terjadi apa-apa: aplikasi tidak memberi tahu apakah Anda salah atau memang tidak ada apa-apa.","prot.openGo":"Buka","prot.openNothing":"Tidak ada yang terbuka dengan kata itu.","prot.openDone":"“{name}” kembali ke daftar, lengkap dengan fotonya.","prot.openLost":"“{name}” kembali, tetapi {n} berkas tidak terbuka lagi.","prot.openFailed":"Tidak berhasil. Brankas tetap penuh: coba lagi saat ponsel punya ruang lebih.",
+
 "knock.title":"Anda menghubungi","knock.nameLabel":"Siapa nama Anda?","knock.namePh":"Nama Anda","knock.msgLabel":"Anda perlu apa? (boleh kosong)","knock.msgPh":"mis. Ada sepatu ukuran 42?","knock.go":"Telepon","knock.note":"Nama Anda dan kalimat ini hanya dilihat oleh orang yang Anda telepon. Tidak ada server yang bisa membacanya.",
 "letter.title":"Pesan yang ditinggalkan untuk Anda","letter.noneTitle":"Sekarang tidak ada yang menjawab.","letter.noneSub":"Saya sudah memberi tahu dia bahwa Anda mencoba menghubunginya. Kalau mau bilang lebih banyak, tulis di sini.","letter.ph":"Tulis pesan Anda di sini","letter.leave":"Tinggalkan pesan","letter.cancel":"Tidak jadi","letter.needText":"Tulis satu dua kalimat, supaya dia tahu apa yang Anda mau.","letter.left":"Pesan ditinggalkan. Dia akan menemukannya saat membuka aplikasi.","letter.failed":"Saya tidak bisa meninggalkan pesan. Coba lagi.","letter.callBack":"Telepon balik","letter.dismiss":"Selesai",
 "home.bigStart":"Bicara dengan seseorang","home.bigStartD":"Buat undangan untuk dikirim","home.bigJoin":"Saya punya kode","home.bigJoinD":"Seseorang mengirimi saya undangan","set.lang":"Bahasa","set.textsize":"Ukuran teks","conn.direct":"Sambungan langsung antara kedua ponsel","conn.directShort":"tersambung langsung","conn.relay":"Sambungan aman lewat jembatan terenkripsi","conn.relayShort":"tersambung (jembatan)","conn.down":"Sambungan terputus","conn.downShort":"terputus","conn.working":"Menyambungkan","conn.wobbly":"Sambungan goyah — sedang dipulihkan","conn.wobblyShort":"memulihkan","chat.linkLost":"Sambungan terputus. Tidak ada yang hilang.","chat.backHome":"Kembali ke beranda","chat.stillWobbly":"Sambungan belum kembali. Anda bisa terus menunggu, atau kembali ke beranda dan coba lagi.",
@@ -2411,7 +2424,7 @@ Object.assign(I18N.id, {
 "health.version":"Versi yang dipakai",
 "health.versionOld":"Sebagian aplikasi masih yang lama. Tutup lalu buka lagi.",
 "media.stepsAndroidApp":"Kembali ke layar Utama ponsel|Tekan lama ikon <b>DigitalValut Logos</b>|Ketuk <b>Info aplikasi</b> (atau ikon ⓘ)|Ketuk <b>Izin</b>, lalu aktifkan <b>Mikrofon</b> dan <b>Kamera</b>|Buka lagi aplikasinya",
-"prot.oneline":"Ia hilang dari ponsel: pesan dan foto. Hanya yang Anda tulis di sini yang mengembalikannya. <b>Kalau lupa, hilang selamanya</b> — kami pun tidak bisa membukanya.","prot.more":"Apa yang sebenarnya terjadi","prot.s1":"Cepat diketik. Cukup melawan orang yang mengambil ponsel Anda.","prot.s2":"Bagus.","prot.s3":"Sangat aman.","prot.whatGuess":"PIN pendek praktis dan cukup tangguh melawan orang yang merebut ponsel Anda. Melawan peralatan serius hanya panjang yang berarti: satu kalimat utuh jauh lebih berharga daripada enam angka. Dan kalimat terkenal lebih lemah daripada yang Anda karang sendiri.",
+
 });
 
 function t(key, fallback){
@@ -4338,6 +4351,58 @@ $('btnClearHistory').addEventListener('click', () => {
    my phone forever"), not a privacy action taken on someone else's behalf. Nothing here
    is on unless the person switches it on themselves, and every message already carries
    its own timestamp, so this needed no new bookkeeping to build. */
+/* Pulisci tutto: un pulsante solo, che fa sparire davvero tutto.
+
+   Sostituisce la cassaforte col PIN, e il motivo e' semplice. La cassaforte
+   chiedeva di ricordare una parola, aspettare qualche secondo e non sbagliare
+   mai — e in cambio nascondeva una conversazione lasciando comunque, a chi
+   guarda la memoria del telefono con gli strumenti giusti, il segno che
+   qualcosa era stato messo via. Questo invece non nasconde: CANCELLA. Non c'e'
+   niente da ricordare e niente che si possa sbagliare a meta'.
+
+   Tutto vuol dire tutto: i messaggi, i contatti, le foto e i video, i codici di
+   verifica a tre parole, i messaggi lasciati da chi non ti ha trovato. Non
+   tocca la tua identita' — il tuo indirizzo resta il tuo, e chi ce l'ha
+   continua a raggiungerti — perche' cancellare anche quella e' una cosa
+   diversa, che si fa dal pulsante suo. */
+async function wipeEverything(){
+  let chiavi = [];
+  try{ chiavi = Object.keys(localStorage); }catch(e){}
+  const daTenere = /^dvlogos-(id|addr-on|autoclean|autoclean-days|lang|nick|textsize|notify|onboarded|simple)$/;
+  for (const k of chiavi){
+    if (k.indexOf('dvlogos-') !== 0) continue;
+    if (daTenere.test(k)) continue;
+    try{ localStorage.removeItem(k); }catch(e){}
+  }
+  /* Le foto e i video stanno in un magazzino separato, e vanno svuotati li:
+     cancellare le conversazioni e lasciare le immagini sarebbe la promessa
+     peggiore di tutte — quella mantenuta a meta'. */
+  try{ await mediaDeleteOlderThan(Date.now() + 1); }catch(e){}
+  return true;
+}
+
+/* Due tocchi, non uno: il primo apre la domanda, il secondo cancella. Non e'
+   un "sei sicuro?" per abitudine — e' l'unica cosa dell'app che non si puo'
+   disfare, e un dito storto sullo schermo non deve bastare. */
+$('btnWipe').addEventListener('click', () => {
+  $('wipeConfirm').classList.remove('hide');
+  $('wipeStatus').textContent = '';
+});
+$('btnWipeNo').addEventListener('click', () => {
+  $('wipeConfirm').classList.add('hide');
+  $('wipeStatus').textContent = '';
+});
+$('btnWipeYes').addEventListener('click', async () => {
+  const st = $('wipeStatus');
+  $('btnWipeYes').disabled = true;
+  try{ await wipeEverything(); }catch(e){}
+  $('btnWipeYes').disabled = false;
+  $('wipeConfirm').classList.add('hide');
+  try{ renderContacts(); }catch(e){}
+  try{ renderLetters(); }catch(e){}
+  st.textContent = t('wipe.done', 'Fatto. Su questo telefono non c\'e piu niente.');
+});
+
 function autocleanPref(){ try{ return localStorage.getItem('dvlogos-autoclean') === '1'; }catch(e){ return false; } }
 function setAutocleanPref(on){ try{ localStorage.setItem('dvlogos-autoclean', on ? '1' : '0'); }catch(e){} }
 function autocleanDays(){ try{ return parseInt(localStorage.getItem('dvlogos-autoclean-days'), 10) || 30; }catch(e){ return 30; } }
@@ -4520,7 +4585,6 @@ function renderContacts(){
     <div class="contactrow" data-nick="${esc(c.nick)}">
       <div class="av">${esc(initials(c.nick))}</div>
       <div class="info"><b>${esc(c.nick)}</b><span>${esc(relTime(c.lastSeen))}${mark}</span></div>
-      <button class="lock" data-prot="${esc(c.nick)}" title="${esc(t('prot.lock','Metti al riparo'))}" aria-label="${esc(t('prot.lock','Metti al riparo'))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></button>
       <button class="rm" data-rm="${esc(c.nick)}" title="Rimuovi" aria-label="Rimuovi">×</button>
     </div>`;
   }).join('');
@@ -4532,8 +4596,6 @@ $('contactsList').addEventListener('click', ev => {
     renderContacts();
     return;
   }
-  const lock = ev.target.closest('[data-prot]');
-  if (lock){ openProtectBox(lock.getAttribute('data-prot')); return; }
   const row = ev.target.closest('.contactrow');
   if (!row) return;
   /* a tap here creates or replaces pc just like goStart/goJoin do, and was
@@ -4989,456 +5051,12 @@ async function pairSecrets(secretStr){
 }
 async function slotId(seed, label){ return sha256Hex2(seed + '/' + label); }
 
-/* ============================ la cassaforte ============================
-   Quello che Logos protegge magnificamente in viaggio, finora lo lasciava
-   scoperto all'arrivo: la cronologia e i nomi dei contatti stanno su questo
-   dispositivo in chiaro, e chi ha il telefono sbloccato in mano non deve
-   rompere niente — apre e legge.
-
-   Chiude quel buco senza toccare nulla di cio che gia funziona. Nessuna
-   primitiva nuova: la stessa PBKDF2 -> AES-GCM che l'app usa gia per i codici
-   a sei cifre, gli stessi sealFor/openFrom, lo stesso slotId. Meno codice
-   nuovo vicino alle chiavi, meno da fidarsi.
-
-   Tre scelte, e sono l'idea di chi usa l'app, non la mia:
-
-   - UNA PAROLA PER CONVERSAZIONE, non una per tutta l'app. Dimenticarla costa
-     una conversazione, non tutta la vita dentro il telefono. Sbaglia piu
-     piano, ed e la caratteristica giusta per una cosa che protegge persone.
-
-   - CHI NON LA USA NON SE NE ACCORGE. Spenta di partenza: chi non sceglie una
-     parola trova l'app identica a prima, senza un passaggio in piu.
-
-   - IL NOME DELLA CASSETTA NASCE DALLA PAROLA STESSA. Non esiste una lista di
-     "conversazioni protette" da consultare: senza la parola non si sa nemmeno
-     quale casella guardare, e i nomi delle caselle sono cifre esadecimali che
-     non dicono niente.
-
-   Il limite, detto qui e non nascosto: chi ispeziona la memoria del browser
-   vede comunque CHE esistono delle caselle cifrate, e quante. Non chi c'e
-   dentro, non cosa dicono, non con chi hai parlato — ma il fatto che qualcosa
-   ci sia si vede. Nascondere anche quello richiede riempitivi ed esche, ed e
-   un problema diverso da questo.
-
-   Iterazioni molto piu alte di QUICK_ITER: quel codice deve nascere in fretta
-   con due persone che aspettano, questa parola si digita una volta per sessione
-   e puo permettersi di costare. Il costo lo paga una volta chi possiede il
-   telefono; lo paga a ogni tentativo chi lo ha rubato. */
-const VAULT_ITER = 600000;
-const VAULT_SALT = new TextEncoder().encode('DigitalValut Logos vault v1');
-
-async function vaultSecrets(word){
-  const base = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode('logos-vault-v1:' + word), 'PBKDF2', false, ['deriveBits']);
-  const bits = await crypto.subtle.deriveBits(
-    { name:'PBKDF2', salt: VAULT_SALT, iterations: VAULT_ITER, hash:'SHA-256' }, base, 512);
-  const raw = new Uint8Array(bits);
-  const key = await crypto.subtle.importKey('raw', raw.slice(0, 32), { name:'AES-GCM' }, false, ['encrypt','decrypt']);
-  return { key, seed: hex(raw.slice(32, 64)) };
-}
-
-/* Il nome della cassetta in memoria. Deriva dalla parola, quindi senza la
-   parola non c'e nulla da cercare, e quello che si vede e solo esadecimale. */
-async function vaultSlot(seed){ return 'dvlogos-v-' + await slotId(seed, 'vault'); }
-
-/* Scrive. Torna false invece di lanciare se la memoria e piena o negata: chi
-   chiama deve poter dire "non sono riuscito a proteggerla" a chi sta guardando
-   lo schermo, invece di far finta di si. */
-async function vaultPut(word, obj, sec){
-  try{
-    sec = sec || await vaultSecrets(word);
-    localStorage.setItem(await vaultSlot(sec.seed), JSON.stringify(await sealFor(sec.key, obj)));
-    return true;
-  }catch(e){ return false; }
-}
-
-/* Legge. Parola sbagliata e cassetta inesistente danno lo stesso identico
-   risultato - null - e non e pigrizia: distinguerle direbbe a chi prova le
-   parole a caso quali stanno almeno colpendo qualcosa. */
-async function vaultGet(word, sec){
-  try{
-    sec = sec || await vaultSecrets(word);
-    const raw = localStorage.getItem(await vaultSlot(sec.seed));
-    if (!raw) return null;
-    return await openFrom(sec.key, JSON.parse(raw));
-  }catch(e){ return null; }
-}
-
-/* Cancella, per chi vuole riportare una conversazione allo scoperto. */
-/* Il tetto per quello che entra nella cassaforte. Cifrare vuol dire tenere in
-   memoria contemporaneamente il file e la sua copia cifrata: mezzo giga di
-   video diventerebbero piu di un giga di memoria richiesta, e su un telefono
-   non c'e. Sessantaquattro megabyte coprono con abbondanza foto e documenti —
-   il caso per cui questa cassaforte esiste — e quello che non ci sta non viene
-   ne cancellato di nascosto ne lasciato in chiaro fingendo di averlo messo via:
-   viene RIFERITO a chi ha chiesto di proteggere, perche sia lui a decidere
-   guardando lo schermo. */
-const VAULT_MAX_FILE = 64 * 1024 * 1024;
-
-/* Cifra le foto, i video e i file di una conversazione e li rimette nello
-   stesso magazzino sotto un nome che nasce dalla parola, non dalla persona.
-
-   Diviso in tre tempi per un motivo tecnico che sembra un dettaglio e non lo e:
-   una transazione su IndexedDB si chiude da sola appena il programma si ferma
-   ad aspettare qualcosa, e cifrare e proprio un'attesa. Leggere e scrivere
-   dentro la stessa transazione, con la cifratura in mezzo, la farebbe morire a
-   meta lavoro — e a meta lavoro qui vuol dire una conversazione per meta
-   cifrata e per meta no. Quindi: si legge tutto, si chiude, si cifra fuori, si
-   riscrive in una transazione nuova. */
-async function mediaSealConv(oldConvKey, newConvKey, key){
-  const db = await openMediaDB();
-
-  const records = await new Promise((resolve, reject) => {
-    const out = [];
-    const tx = db.transaction(MEDIA_STORE, 'readonly');
-    const rq = tx.objectStore(MEDIA_STORE).index('convKey').openCursor(IDBKeyRange.only(oldConvKey));
-    rq.onsuccess = () => { const cur = rq.result; if (cur){ out.push(cur.value); cur.continue(); } };
-    tx.oncomplete = () => resolve(out);
-    tx.onerror = () => reject(tx.error);
-  });
-
-  const sealed = [], tooBig = [];
-  for (const rec of records){
-    const id = String(rec.key).slice(String(rec.convKey).length + 2);
-    const size = rec.blob && rec.blob.size ? rec.blob.size : 0;
-    if (size > VAULT_MAX_FILE){ tooBig.push({ id, size }); continue; }
-    try{
-      const iv = crypto.getRandomValues(new Uint8Array(12));
-      const ct = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, await rec.blob.arrayBuffer());
-      sealed.push({ id, iv, ct, mime: rec.blob.type || '', t: rec.t });
-    }catch(e){ return { ok: false, tooBig }; }
-  }
-
-  try{
-    await new Promise((resolve, reject) => {
-      const tx = db.transaction(MEDIA_STORE, 'readwrite');
-      const store = tx.objectStore(MEDIA_STORE);
-      for (const m of sealed){
-        store.put({ key: mediaDbKey(newConvKey, m.id), convKey: newConvKey,
-                    blob: new Blob([m.ct]), iv: m.iv, mime: m.mime, sealed: 1, t: m.t });
-      }
-      tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
-    });
-  }catch(e){ return { ok: false, tooBig }; }
-
-  return { ok: true, tooBig, count: sealed.length };
-}
-
-/* Riporta alla luce un singolo file, per mostrarlo. Torna null su qualunque
-   inciampo — chiave sbagliata, record mancante, byte corrotti — perche a chi
-   guarda lo schermo un'immagine che non compare dice gia tutto, e distinguere
-   i motivi direbbe qualcosa in piu a chi non deve saperlo. */
-async function mediaUnsealOne(convKey, id, key){
-  try{
-    const rec = await mediaGet(convKey, id);
-    if (!rec || !rec.sealed) return null;
-    const pt = await crypto.subtle.decrypt(
-      { name:'AES-GCM', iv: new Uint8Array(rec.iv) }, key, await rec.blob.arrayBuffer());
-    return new Blob([pt], { type: rec.mime || '' });
-  }catch(e){ return null; }
-}
-
-/* Il nome della cassetta delle foto dipende dalla conversazione, non solo dal
-   PIN: due conversazioni messe via con lo STESSO PIN devono finire in due
-   scomparti diversi, o la seconda seppellisce la prima. */
-async function mediaKeyFor(sec, fp){ return 'dvlogos-vm-' + await slotId(sec.seed, 'media:' + fp); }
-
-/* Una cassetta puo contenere piu conversazioni. Le prime versioni ne tenevano
-   una sola e il nome della cassetta nasceva dal solo PIN: bastava usare lo
-   stesso PIN una seconda volta perche la seconda conversazione SOVRASCRIVESSE
-   la prima — e la prima, gia cancellata dal telefono, era persa per sempre.
-   Trovato da chi usa l'app, con la domanda piu ovvia del mondo: "posso mettere
-   lo stesso PIN a tutte?". Ora si: stesso PIN vuol dire stessa cassetta, e
-   dentro ci stanno tutte. */
-function boxItems(b){
-  if (!b) return [];
-  if (b.v === 2 && Array.isArray(b.items)) return b.items;
-  if (b.v === 1 && b.fp) return [b];   /* cassette scritte dalle v14/v15 */
-  return [];
-}
-
-async function protectConversation(fp, nick, word){
-  if (!fp || !word) return { ok: false, tooBig: [] };
-  const hKey = historyKeyFp(fp);
-  const sKey = safetyKeyFp(fp);
-
-  let history = null, safety = null, contact = null;
-  try{
-    history = localStorage.getItem(hKey);
-    safety  = localStorage.getItem(sKey);
-    contact = loadContacts().find(c => c.fp === fp) || null;
-  }catch(e){ return { ok: false, tooBig: [] }; }
-
-  const sec = await vaultSecrets(word);
-  const vaultConvKey = await mediaKeyFor(sec, fp);
-
-  /* Le foto per prime, e apposta: sono la parte che puo non riuscire — memoria
-     insufficiente, un file troppo grande, il magazzino che rifiuta. Scoprirlo
-     DOPO aver messo via i messaggi vorrebbe dire trovarsi con meta conversazione
-     al riparo e meta ancora scoperta, senza che nessuno lo abbia deciso. */
-  const media = await mediaSealConv(hKey, vaultConvKey, sec.key);
-  if (!media.ok) return { ok: false, tooBig: media.tooBig };
-
-  /* Qualcosa non ci stava. Non si decide qui cosa farne: si torna indietro
-     pulendo quello che si era gia cifrato, e si riferisce. */
-  if (media.tooBig.length){
-    try{ await mediaDeleteByConv(vaultConvKey); }catch(e){}
-    return { ok: false, tooBig: media.tooBig };
-  }
-
-  const voce = { fp, nick: nick || (contact && contact.nick) || '', history, safety, contact,
-                 mediaKey: vaultConvKey, at: Date.now() };
-
-  /* Si legge la cassetta che quel PIN apre gia, e ci si aggiunge. Rimettere via
-     la STESSA conversazione due volte la sostituisce, non la duplica. */
-  const dentro = boxItems(await vaultGet(word, sec)).filter(x => x.fp !== fp);
-  dentro.push(voce);
-
-  if (!await vaultPut(word, { v: 2, items: dentro }, sec)){
-    try{ await mediaDeleteByConv(vaultConvKey); }catch(e){}
-    return { ok: false, tooBig: [] };
-  }
-
-  /* La rilettura non e pedanteria: e l'unica prova che quello che sta per
-     essere cancellato esiste da qualche altra parte. Confrontata sul contenuto
-     e non solo sulla presenza, e cercando PROPRIO questa conversazione: una
-     cassetta che si apre ma in cui la nostra voce manca aprirebbe lo stesso. */
-  const riletta = boxItems(await vaultGet(word, sec)).find(x => x.fp === fp);
-  if (!riletta || riletta.history !== history || riletta.safety !== safety){
-    try{ await mediaDeleteByConv(vaultConvKey); }catch(e){}
-    return { ok: false, tooBig: [] };
-  }
-
-  try{
-    localStorage.removeItem(hKey);
-    localStorage.removeItem(sKey);
-    saveContacts(loadContacts().filter(c => c.fp !== fp));
-  }catch(e){ /* la cassetta e a posto: quel che resta in chiaro e un residuo, non una perdita */ }
-  /* Solo adesso: la copia cifrata esiste ed e stata riletta. */
-  try{ await mediaDeleteByConv(hKey); }catch(e){}
-  return { ok: true, tooBig: [], media: media.count, dentro: dentro.length };
-}
-
-/* Il cammino inverso: riporta in chiaro le foto di una conversazione che
-   torna allo scoperto. Stessi tre tempi di mediaSealConv, e per lo stesso
-   motivo — leggi, chiudi, decifra fuori, riscrivi. Un file che non si decifra
-   non ferma gli altri: viene contato e riferito, perche una foto perduta e un
-   fatto da sapere, non un motivo per lasciare tutto il resto sepolto. */
-async function mediaUnsealConv(vaultConvKey, plainConvKey, key){
-  const db = await openMediaDB();
-
-  const records = await new Promise((resolve, reject) => {
-    const out = [];
-    const tx = db.transaction(MEDIA_STORE, 'readonly');
-    const rq = tx.objectStore(MEDIA_STORE).index('convKey').openCursor(IDBKeyRange.only(vaultConvKey));
-    rq.onsuccess = () => { const cur = rq.result; if (cur){ out.push(cur.value); cur.continue(); } };
-    tx.oncomplete = () => resolve(out);
-    tx.onerror = () => reject(tx.error);
-  });
-
-  const aperti = [], persi = [];
-  for (const rec of records){
-    const id = String(rec.key).slice(String(rec.convKey).length + 2);
-    try{
-      const pt = await crypto.subtle.decrypt(
-        { name:'AES-GCM', iv: new Uint8Array(rec.iv) }, key, await rec.blob.arrayBuffer());
-      aperti.push({ id, blob: new Blob([pt], { type: rec.mime || '' }), t: rec.t });
-    }catch(e){ persi.push(id); }
-  }
-
-  try{
-    await new Promise((resolve, reject) => {
-      const tx = db.transaction(MEDIA_STORE, 'readwrite');
-      const store = tx.objectStore(MEDIA_STORE);
-      for (const m of aperti){
-        store.put({ key: mediaDbKey(plainConvKey, m.id), convKey: plainConvKey, blob: m.blob, t: m.t });
-      }
-      tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
-    });
-  }catch(e){ return { ok: false, persi }; }
-
-  return { ok: true, persi, count: aperti.length };
-}
-
-async function openProtected(word, sec){
-  const b = await vaultGet(word, sec);
-  const items = boxItems(b);
-  return items.length ? items : null;
-}
-
-/* Riporta allo scoperto TUTTO quello che quel PIN apre: se ci sono tre
-   conversazioni dentro, tornano tutte e tre. Stesso PIN, stessa cassetta.
-
-   L'ORDINE E' LO STESSO DI PRIMA, ROVESCIATO E CON LA STESSA REGOLA: si
-   riscrive tutto in chiaro, si RILEGGE, e solo allora si svuota la cassetta.
-   Se anche una sola non torna, la cassetta NON si svuota: meglio ritrovarsi
-   una conversazione scritta due volte che una persa. */
-async function restoreProtected(word){
-  const sec = await vaultSecrets(word);
-  const items = boxItems(await vaultGet(word, sec));
-  if (!items.length) return { ok: false, wrong: true, persi: [], quante: 0 };
-
-  let persi = [];
-  for (const b of items){
-    const hKey = historyKeyFp(b.fp);
-    const sKey = safetyKeyFp(b.fp);
-
-    if (b.mediaKey){
-      const m = await mediaUnsealConv(b.mediaKey, hKey, sec.key);
-      if (!m.ok) return { ok: false, wrong: false, persi, quante: 0 };
-      persi = persi.concat(m.persi);
-    }
-
-    try{
-      if (b.history != null) localStorage.setItem(hKey, b.history);
-      if (b.safety  != null) localStorage.setItem(sKey, b.safety);
-      if (b.contact && !loadContacts().some(c => c.fp === b.fp)){
-        saveContacts(loadContacts().concat([b.contact]));
-      }
-    }catch(e){ return { ok: false, wrong: false, persi, quante: 0 }; }
-
-    if (b.history != null && localStorage.getItem(hKey) !== b.history){
-      return { ok: false, wrong: false, persi, quante: 0 };
-    }
-  }
-
-  /* Tutte rilette: solo adesso si svuota. */
-  try{ await vaultDrop(word, sec); }catch(e){}
-  for (const b of items){ if (b.mediaKey){ try{ await mediaDeleteByConv(b.mediaKey); }catch(e){} } }
-  return { ok: true, wrong: false, persi, quante: items.length,
-           nick: items.length === 1 ? items[0].nick : '', fp: items[0].fp };
-}
-
-/* ---- la cassaforte sullo schermo ----------------------------------------
-   Il pannello non e' una conferma "sei sicuro?": e' il posto dove si legge cosa
-   succede, prima di poterlo fare. La parola si chiede due volte per una ragione
-   sola — dimenticarla e' l'unico errore di questa app che non si puo' rimediare
-   in nessun modo, nemmeno da noi. */
-let protectFor = null;
-
-function openProtectBox(nick){
-  const c = loadContacts().find(x => x.nick === nick);
-  if (!c || !c.fp){ toast(t('prot.failed','Non è riuscita.')); return; }
-  protectFor = c;
-  $('protectTitle').textContent = fill(t('prot.title','Mettere al riparo la conversazione con «{name}»'), { name: c.nick });
-  $('protectWord').value = '';
-  $('protectStatus').textContent = '';
-  mostraForza();
-  $('protectBox').classList.remove('hide');
-  $('protectWord').focus();
-}
-function closeProtectBox(){
-  protectFor = null;
-  $('protectWord').value = '';
-  $('protectStatus').textContent = '';
-  mostraForza();
-  $('protectBox').classList.add('hide');
-}
-$('btnProtectCancel').addEventListener('click', closeProtectBox);
-
-/* Quanto regge quello che si sta scrivendo, detto in una riga mentre lo si
-   scrive. Il conto e' grezzo apposta: quante combinazioni ha un segreto di
-   questa lunghezza e con questo tipo di caratteri, diviso per quante ne prova
-   in un secondo chi ha una scheda grafica seria — circa 16.000, perche' ogni
-   tentativo deve rifare le 600.000 ripetizioni. Grezzo, ma dalla parte giusta:
-   NON tiene conto che una frase gia' sentita si indovina molto prima di una
-   inventata, e infatti quel limite e' scritto sotto "Cosa succede esattamente"
-   invece di essere lasciato intendere da un pallino verde. */
-const TENTATIVI_AL_SECONDO = 16000;
-function forzaDi(w){
-  if (!w) return null;
-  let alfabeto = 0;
-  if (/[0-9]/.test(w)) alfabeto += 10;
-  if (/[a-z\u00e0-\u00ff]/.test(w)) alfabeto += 26;
-  if (/[A-Z\u00c0-\u00de]/.test(w)) alfabeto += 26;
-  if (/[^0-9a-zA-Z\u00c0-\u00ff]/.test(w)) alfabeto += 33;
-  const secondi = Math.pow(alfabeto || 10, w.length) / TENTATIVI_AL_SECONDO;
-  const anni = secondi / (3600 * 24 * 365);
-  if (anni < 1)     return { cls: 'weak',   key: 'prot.s1', pre: 'Veloce da scrivere.' };
-  if (anni < 10000) return { cls: 'good',   key: 'prot.s2', pre: 'Buona.' };
-  return              { cls: 'strong', key: 'prot.s3', pre: 'Molto sicura.' };
-}
-function mostraForza(){
-  const el = $('protectStrength');
-  if (!el) return;
-  const f = forzaDi($('protectWord').value);
-  el.className = 'helptext strength' + (f ? ' ' + f.cls : '');
-  el.textContent = f ? t(f.key, f.pre) : '';
-}
-$('protectWord').addEventListener('input', mostraForza);
-
-$('btnProtectGo').addEventListener('click', async () => {
-  if (!protectFor) return;
-  const w = $('protectWord').value;
-  const st = $('protectStatus');
-  /* Un solo divieto, e il piu' basso possibile: quattro cifre. Sopra quello si
-     avvisa e si lascia decidere, perche' rifiutare un PIN che l'utente ha
-     scelto sapendo cosa fa vorrebbe dire togliergli la funzione, non
-     proteggerlo. */
-  if (!w){ st.textContent = t('prot.needWord','Scrivi qualcosa.'); return; }
-  if (w.length < 4){ st.textContent = t('prot.short','Troppo corto: almeno 4 caratteri.'); return; }
-
-  const btn = $('btnProtectGo');
-  btn.disabled = true; st.textContent = t('prot.working','Sto lavorando…');
-  const c = protectFor;
-  let res;
-  try{ res = await protectConversation(c.fp, c.nick, w); }
-  catch(e){ res = { ok: false, tooBig: [] }; }
-  btn.disabled = false;
-
-  if (res.ok){
-    closeProtectBox();
-    renderContacts();
-    toast(fill(t('prot.done','«{name}» è al riparo.'), { name: c.nick }));
-    return;
-  }
-  /* Non riuscita vuol dire non riuscita, e la conversazione e' rimasta dov'era:
-     detto per esteso, perche' "errore" da solo lascerebbe credere di averla persa. */
-  st.textContent = res.tooBig && res.tooBig.length
-    ? fill(t('prot.tooBig','Non è riuscita: {n} file sono troppo grandi.'), { n: res.tooBig.length })
-    : t('prot.failed','Non è riuscita. Non è stato cancellato niente.');
-});
-
-$('btnVaultOpen').addEventListener('click', async () => {
-  const w = $('vaultWord').value;
-  const st = $('vaultStatus');
-  const btn = $('btnVaultOpen');
-  if (!w){ st.textContent = t('prot.needWord','Scrivi una parola.'); return; }
-
-  btn.disabled = true; st.textContent = t('prot.working','Sto lavorando…');
-  let res;
-  try{ res = await restoreProtected(w); }
-  catch(e){ res = { ok: false, wrong: false, persi: [] }; }
-  btn.disabled = false;
-  $('vaultWord').value = '';
-
-  if (res.ok){
-    renderContacts();
-    /* Una sola torna col suo nome; piu di una si contano, perche elencarle
-       tutte in una riga di stato sarebbe illeggibile proprio quando serve
-       leggere. */
-    st.textContent = res.persi && res.persi.length
-      ? fill(t('prot.openLost','«{name}» è tornata, ma {n} file non si sono riaperti.'), { name: res.nick, n: res.persi.length })
-      : (res.quante > 1
-          ? fill(t('prot.openDoneMany','{n} conversazioni sono tornate nella lista.'), { n: res.quante })
-          : fill(t('prot.openDone','«{name}» è tornata nella lista.'), { name: res.nick }));
-    return;
-  }
-  /* Parola sbagliata e cassaforte vuota danno la stessa risposta, come in
-     vaultGet e per lo stesso motivo: dire "quasi" a chi tira a indovinare
-     sarebbe l'unico aiuto di cui avrebbe bisogno. */
-  st.textContent = res.wrong
-    ? t('prot.openNothing','Niente da aprire con quella parola.')
-    : t('prot.openFailed','Non è riuscita. La cassaforte è rimasta piena.');
-});
-
-async function vaultDrop(word, sec){
-  try{
-    sec = sec || await vaultSecrets(word);
-    localStorage.removeItem(await vaultSlot(sec.seed));
-    return true;
-  }catch(e){ return false; }
-}
+/* La cassaforte con il PIN e' stata tolta il 31 agosto 2026, per scelta di chi
+   usa l'app: aggiungeva un'attesa, una parola da ricordare e un errore che non
+   si poteva disfare, per un guadagno che non valeva quel prezzo. Le foto
+   restano nella conversazione, dove uno se le aspetta, e chi vuole far sparire
+   tutto ha un pulsante solo che cancella tutto. Il codice sta nella storia di
+   git alla versione 18, se un giorno servisse ripensarla meglio. */
 
 async function sealFor(key, obj){
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -6806,7 +6424,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.82';
+const APP_VERSION = 'logos-modifica-3.83';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
