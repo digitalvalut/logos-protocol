@@ -3153,44 +3153,67 @@ function connectionWorking(pcObj){
   return false;
 }
 
+/* Quanto si aspetta prima di dire che non e' riuscita. Dodici secondi non
+   bastavano: su due telefoni in mobilita' la connessione atterrava dopo, e la
+   gente vedeva il rosso e POI la chat aprirsi. */
+const FAIL_GRACE_MS = 20000;
+/* Dopo aver detto che non e' riuscita si continua comunque a mandare
+   candidati per un altro po': e' proprio in quella finestra che spesso arriva
+   l'indirizzo buono. Oltre questo si smette davvero, o resterebbe a macinare
+   per sempre su una connessione morta. */
+const PUMP_BACKSTOP_MS = 60000;
+
 function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
-  let settled = false, failTimer = null;
+  let settled = false, detto = false, failTimer = null, backstop = null;
   const tick = () => { if (diagEl && !settled) diagEl.textContent = diagLine(pcObj); };
   const diagTimer = diagEl ? setInterval(tick, 1200) : null;
   if (diagEl){ diagEl.classList.remove('hide'); tick(); }
-  const stop = () => { if (diagTimer) clearInterval(diagTimer); clearTimeout(failTimer); if (pump) pump.stop(); };
+  const stop = () => {
+    if (diagTimer) clearInterval(diagTimer);
+    clearTimeout(failTimer); clearTimeout(backstop);
+    if (pump) pump.stop();
+  };
   const onChange = () => {
-    if (settled) return;
     const st = pcObj.connectionState;
+
+    /* IL SUCCESSO HA SEMPRE L'ULTIMA PAROLA, anche se un attimo prima si era
+       gia' detto che non era riuscita. Prima no: dichiarato il fallimento, la
+       sorveglianza si chiudeva, e il rosso restava sullo schermo mentre la
+       chat si apriva sotto. Chi guardava vedeva scritto "non e' stato
+       possibile collegarsi" dentro una conversazione che funzionava. */
     if (st === 'connected'){
+      if (settled) return;
       settled = true; stop();
       setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide');
       if (onSettle) onSettle(true);
       return;
     }
-    /* 'failed' is not the end of the story. While candidates are still
-       trickling in, an ICE agent can burn through everything it knows about,
-       report failure, and then succeed a moment later on an address that had
-       not arrived yet. Announcing defeat on the first 'failed' is what put
-       "could not connect" on one phone while the other was already in the
-       chat. So: wait, and only speak up if it is still broken and the channel
-       really never opened. */
+    if (settled) return;
+
+    /* 'failed' non e' la fine della storia. Mentre i candidati arrivano ancora,
+       l'ICE puo' esaurire tutto quello che conosce, dichiarare fallimento e
+       riuscire un attimo dopo su un indirizzo che non era ancora arrivato. */
     if (st === 'failed'){
+      if (detto) return;
       clearTimeout(failTimer);
       failTimer = setTimeout(() => {
-        if (settled) return;
-        if (connectionWorking(pcObj)) return;
-        settled = true; stop();
+        if (settled || connectionWorking(pcObj)) return;
+        /* DETTO, NON DECISO: si avvisa chi guarda, ma la sorveglianza resta
+           accesa e i candidati continuano a partire. Prima qui si fermava
+           tutto — cioe' si toglieva alla connessione proprio la cosa che le
+           avrebbe permesso di riuscire, un istante dopo aver detto che non ci
+           riusciva. */
+        detto = true;
         setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
         if (onSettle) onSettle(false);
-      }, 12000);
+        clearTimeout(backstop);
+        backstop = setTimeout(() => { if (!settled && pump) pump.stop(); }, PUMP_BACKSTOP_MS);
+      }, FAIL_GRACE_MS);
       return;
     }
-    /* 'closed' had no guard at all, unlike 'failed' — it spoke the instant it
-       arrived. But a connection closes for ordinary reasons too (the session
-       being reset, a second attempt taking over), and announcing defeat for
-       those printed a failure over a conversation that was fine. */
+
+    /* 'closed' invece e' definitivo: una connessione chiusa non torna. */
     if (st === 'closed'){
       if (connectionWorking(pcObj)) return;
       settled = true; stop();
@@ -6424,7 +6447,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.83';
+const APP_VERSION = 'logos-modifica-3.84';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

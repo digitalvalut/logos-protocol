@@ -696,5 +696,10 @@
 .wipeconfirm{margin-top:12px}
 .wipebox .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .wipebox .btnrow .btn{flex:1 1 auto}
-.btn.danger{border-color:var(--bad);color:var(--bad)}
-.btn.danger:hover{background:var(--bad);color:var(--bg)}
+/* ⚠️ NON ridefinire .btn.danger qui. Una regola aggiunta in fondo al foglio
+   vince su quella scritta prima, e il 31 agosto 2026 e' successo: lo stile
+   inventato per questo pulsante ha rubato il colore a "Termina" e a "Nuova
+   sessione", che da bianchi su rosso sono diventati rossi su chiaro —
+   illeggibili se non ci passavi sopra col mouse. Il pulsante qui sotto usa
+   .btn.danger com'e' gia' definito piu' su, e va bene cosi': deve somigliare
+   agli altri pulsanti pericolosi dell'app, non distinguersene. */

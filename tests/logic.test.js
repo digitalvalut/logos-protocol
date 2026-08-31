@@ -2504,6 +2504,103 @@ test.describe('trovare qualcuno dal suo indirizzo, con piu relay', () => {
 
 });
 
+test.describe('il rosso che compare mentre invece si sta collegando', () => {
+
+  const scena = `
+    window.__pompaFerma = false;
+    const pompa = { stop(){ window.__pompaFerma = true; } };
+    const stato = { textContent: '', className: '' };
+    const diag = { textContent: '', classList: { add(){}, remove(){} } };
+    setStatus = (el, testo) => { if (el) el.textContent = testo; };
+    connectionWorking = () => false;
+    const finto = {
+      connectionState: 'connecting',
+      __ascolta: null,
+      addEventListener(_, f){ this.__ascolta = f; },
+      vai(s){ this.connectionState = s; this.__ascolta(); },
+    };
+    window.__esiti = [];
+    watchHandshakeProgress(finto, stato, diag, pompa, ok => window.__esiti.push(ok));
+  `;
+
+  test('IL DIFETTO VISTO SUL TELEFONO: dopo aver detto "non riuscita", una connessione che riesce toglie il rosso', () => {
+    /* Prima il rosso restava sullo schermo mentre la chat si apriva sotto: chi
+       guardava leggeva "non e stato possibile collegarsi" dentro una
+       conversazione che funzionava benissimo. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      finto.vai('failed');
+      await new Promise(r => setTimeout(r, FAIL_GRACE_MS + 200));
+      const dopoIlRosso = stato.textContent;
+      finto.vai('connected');
+      return JSON.stringify({ dopoIlRosso, allaFine: stato.textContent, esiti: window.__esiti });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.match(o.dopoIlRosso, /Non è stato possibile/, 'dopo l attesa il messaggio ci deve essere');
+      assert.strictEqual(o.allaFine, '', 'MA UNA VOLTA COLLEGATA IL MESSAGGIO DEVE SPARIRE');
+      assert.deepStrictEqual(o.esiti, [false, true], 'e chi ascolta deve sapere che alla fine e andata bene');
+      app.stop();
+    });
+  });
+
+  test('dopo il rosso i candidati CONTINUANO a partire', () => {
+    /* Prima, dichiarando il fallimento, si fermava anche l invio dei candidati:
+       si toglieva alla connessione proprio la cosa che le avrebbe permesso di
+       riuscire, un istante dopo aver detto che non ci riusciva. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      finto.vai('failed');
+      await new Promise(r => setTimeout(r, FAIL_GRACE_MS + 200));
+      return JSON.stringify({ rosso: !!stato.textContent, pompaFerma: window.__pompaFerma });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.rosso, true);
+      assert.strictEqual(o.pompaFerma, false, 'la pompa dei candidati NON va fermata quando si annuncia il fallimento');
+      app.stop();
+    });
+  });
+
+  test('se si collega prima dell attesa, il rosso non compare mai', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      finto.vai('failed');
+      await new Promise(r => setTimeout(r, 300));
+      finto.vai('connected');
+      await new Promise(r => setTimeout(r, FAIL_GRACE_MS + 200));
+      return JSON.stringify({ testo: stato.textContent, esiti: window.__esiti, pompaFerma: window.__pompaFerma });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.testo, '', 'nessun messaggio: e andata bene e basta');
+      assert.deepStrictEqual(o.esiti, [true], 'e nessuno deve aver sentito dire che era fallita');
+      assert.strictEqual(o.pompaFerma, true, 'a connessione riuscita la pompa si ferma');
+      app.stop();
+    });
+  });
+
+  test('una connessione chiusa resta chiusa: quello si dice e basta', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      finto.vai('closed');
+      await new Promise(r => setTimeout(r, 200));
+      return JSON.stringify({ testo: stato.textContent, pompaFerma: window.__pompaFerma });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.match(o.testo, /Non è stato possibile/, 'una chiusa e definitiva');
+      assert.strictEqual(o.pompaFerma, true, 'e li la pompa va fermata');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `
@@ -2649,7 +2746,11 @@ test.describe('le lettere sigillate su piu relay', () => {
       }
       const dentro = c[box] ? Object.keys(c[box]).map(k => {
         const v = c[box][k];
-        return window.__manomette === host ? v.replace(/"c":"./, '"c":"Z') : v;
+        /* La manomissione deve cambiare DAVVERO il carattere: sostituirlo con
+           una lettera fissa non manometteva niente quando era gia quella, e il
+           test falliva a caso circa una volta su sessanta. */
+        return window.__manomette === host
+          ? v.replace(/"c":"(.)/, (m, c) => '"c":"' + (c === 'Z' ? 'Y' : 'Z')) : v;
       }) : [];
       return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(dentro) });
     };
@@ -2736,7 +2837,8 @@ test.describe('le lettere sigillate su piu relay', () => {
         : originale(url, opts).then(async res => {
             const d = await res.json();
             return { ok: true, status: 200,
-                     json: () => Promise.resolve(d.map(v => v.replace(/"c":"./, '"c":"Z'))) };
+                     json: () => Promise.resolve(d.map(v =>
+                       v.replace(/"c":"(.)/, (m, c) => '"c":"' + (c === 'Z' ? 'Y' : 'Z')))) };
           });
       const lette = await letterGet(mioIndirizzo);
       return JSON.stringify({ quante: lette.length });
