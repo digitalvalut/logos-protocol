@@ -3298,16 +3298,25 @@ function wireDataChannel(channel, ownerPc){
   }
   if (pc) pc.__dc = channel;
   if (pc) pc.ontrack = ev => attachRemoteStream(ev.streams[0]);
-  dc.onopen = async () => {
+  const salutaEEntra = async () => {
     enterChat();
     const fp = await myFingerprintHex();
     const push = notifyPref() ? await ensurePushSubscription() : null;
-    dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp, push }));
+    try{ dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp, push })); }catch(e){}
     if (pendingSharedFiles.length){
       const files = pendingSharedFiles; pendingSharedFiles = [];
       sendFilesQueue(files);
     }
   };
+  dc.onopen = salutaEEntra;
+  /* UNA CORSA CHE COLPISCE UN LATO SOLO. Il saluto parte quando il canale si
+     apre — ma un canale ARRIVATO (ondatachannel) puo' essere gia' aperto nel
+     momento in cui gli si attacca l'ascoltatore, e allora quell'avviso non
+     arriva mai: niente saluto, e l'altra parte non fa mai partire il confronto
+     delle tre parole. Chi CREA il canale non ha questo problema, perche' il suo
+     nasce chiuso. Ecco perche' le parole comparivano su un telefono e non
+     sull'altro, sempre dallo stesso lato: quello che digita il codice. */
+  if (dc.readyState === 'open') salutaEEntra();
   /* Said inside the conversation, not only on statusA. statusA lives on the
      start screen, and somebody whose line drops mid-chat is looking at the
      chat — so until now the whole thing simply stopped working with nothing
@@ -6510,7 +6519,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.85';
+const APP_VERSION = 'logos-modifica-3.86';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

@@ -2718,6 +2718,64 @@ test.describe('chi vince diventa la connessione attiva', () => {
 
 });
 
+test.describe('il saluto che fa partire le tre parole', () => {
+
+  const finta = (statoCanale) => `
+    window.__inviati = [];
+    const conn = { close(){}, connectionState: 'connected' };
+    pc = conn;
+    enterChat = () => { window.__entrato = true; };
+    myFingerprintHex = async () => 'aabb';
+    notifyPref = () => false;
+    const canale = {
+      binaryType: '', readyState: '${statoCanale}', onopen: null,
+      send(x){ window.__inviati.push(JSON.parse(x).type); },
+      apri(){ this.readyState = 'open'; if (this.onopen) this.onopen(); },
+    };
+    wireDataChannel(canale, conn);
+  `;
+
+  test('IL DIFETTO DI UN LATO SOLO: un canale gia aperto saluta lo stesso', () => {
+    /* Il saluto parte quando il canale si apre. Ma un canale ARRIVATO puo
+       essere gia aperto nel momento in cui gli si attacca l ascoltatore: quell
+       avviso non arriva mai, il saluto non parte, e l altra parte non fa mai
+       partire il confronto delle tre parole. Colpisce solo chi RICEVE il canale
+       — cioe chi digita il codice — ed e per questo che le parole comparivano
+       sempre e solo su un lato. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${finta('open')}
+      await new Promise(r => setTimeout(r, 60));
+      return JSON.stringify({ inviati: window.__inviati, entrato: !!window.__entrato });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.inviati, ['hello'], 'il saluto deve partire anche se il canale era gia aperto');
+      assert.strictEqual(o.entrato, true, 'e la chat deve aprirsi');
+      app.stop();
+    });
+  });
+
+  test('un canale che si apre dopo saluta una volta sola, non due', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${finta('connecting')}
+      await new Promise(r => setTimeout(r, 40));
+      const primaDiAprirsi = window.__inviati.length;
+      canale.apri();
+      await new Promise(r => setTimeout(r, 60));
+      return JSON.stringify({ primaDiAprirsi, dopo: window.__inviati });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.primaDiAprirsi, 0, 'finche non e aperto non si saluta');
+      assert.deepStrictEqual(o.dopo, ['hello'], 'e quando si apre si saluta UNA volta');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `
