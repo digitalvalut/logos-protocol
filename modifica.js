@@ -2679,8 +2679,30 @@ $('installClose').addEventListener('click', () => {
    the toolbar, not just read about. */
 const IOS_SHARE_ICON = '<svg class="shareicon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.5V4"/><path d="M7.5 8.5L12 4l4.5 4.5"/><path d="M4.5 12.5v7a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-7"/></svg>';
 if (isIOS && !isStandalone && location.protocol.startsWith('http')) showInstallBar(IOS_SHARE_ICON + t('install.iosText'), false);
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  window.addEventListener('load', () => { navigator.serviceWorker.register('modifica-sw.js', { scope: './modifica.html' }).catch(()=>{}); });
+/* Il pezzo che tiene l'app in memoria per farla funzionare senza rete.
+
+   NON su Android: li' l'applicazione e' gia' tutta dentro il pacchetto, un file
+   solo servito dal telefono stesso, e non c'e' niente da tenere in memoria per
+   quando manca la rete. Peggio: `modifica-sw.js` nel pacchetto NON C'E', quindi
+   la registrazione falliva a ogni avvio — in silenzio, perche' l'errore era
+   raccolto e buttato, ma faceva una richiesta destinata a fallire ogni volta e
+   lasciava la riga della versione in uno stato che non voleva dire niente.
+
+   `updateViaCache: 'none'` dice al browser di NON servire questo file dalla sua
+   cache quando controlla se ne esiste una versione nuova. Senza, il controllo
+   guardava una copia vecchia e poteva restare indietro finche' quella copia non
+   scadeva — ed e' il motivo per cui "una parte dell'app e' ancora vecchia"
+   restava anche premendo "Controlla di nuovo". E `update()` chiede quel
+   controllo subito, invece di aspettare che il browser ci pensi da solo. */
+if ('serviceWorker' in navigator
+    && location.protocol.startsWith('http')
+    && location.hostname !== 'appassets.androidplatform.net'){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('modifica-sw.js', { scope: './modifica.html', updateViaCache: 'none' })
+      .then(reg => { try{ reg.update(); }catch(e){} })
+      .catch(()=>{});
+  });
 }
 
 /* ============================== easy-mode hint ==============================
@@ -3251,16 +3273,31 @@ function toast(msg){
 }
 
 let peerNick = '';
-function wireDataChannel(channel){
+function wireDataChannel(channel, ownerPc){
   dc = channel;
   dc.binaryType = 'arraybuffer';
-  /* Also hung on the connection it belongs to. The failure checks used to ask
-     the global `dc` whether the channel was open, which is a different question
-     from "is *this* connection working" the moment there is more than one
-     attempt in play — and answering the wrong question is how a phone ends up
-     announcing a failure that never happened. */
+
+  /* CHI HA VINTO DIVENTA LA CONNESSIONE ATTIVA.
+
+     Prima il canale veniva appeso alla connessione GLOBALE, che quando c'e' piu'
+     di un tentativo in ballo puo' non essere quella su cui il canale si e'
+     davvero aperto. Da li' due sintomi che sembravano scollegati e sono la
+     stessa cosa: le tre parole di sicurezza calcolate da una parte e non
+     dall'altra — safetyDigest() legge le impronte dalla connessione globale, e
+     su quella sbagliata non trova niente — e il messaggio di fallimento che
+     restava scritto mentre la chat si apriva.
+
+     Il canale che si apre e' la prova di chi ce l'ha fatta: e' quella la
+     conversazione, e da qui in poi e' quella la connessione dell'app. */
+  if (ownerPc && pc !== ownerPc){
+    const vecchia = pc;
+    pc = ownerPc;
+    /* la perdente non va lasciata aperta: continuerebbe a far sembrare questo
+       telefono occupato con qualcuno */
+    if (vecchia && vecchia !== ownerPc){ try{ vecchia.close(); }catch(e){} }
+  }
   if (pc) pc.__dc = channel;
-  pc.ontrack = ev => attachRemoteStream(ev.streams[0]);
+  if (pc) pc.ontrack = ev => attachRemoteStream(ev.streams[0]);
   dc.onopen = async () => {
     enterChat();
     const fp = await myFingerprintHex();
@@ -3856,10 +3893,36 @@ function initials(name){
   if (!parts.length) return '?';
   return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
+/* Tutti i posti in cui puo' finire scritto che non e' riuscita. */
+const SCHERMI_DI_ATTESA = ['statusA','statusB','quickStatusA','quickStatusB'];
+const SCHERMI_DIAGNOSTICI = ['diagA','diagB','diagQuickA','diagQuickB'];
+
+/* Se sei nella chat, la connessione e' RIUSCITA. Punto: nessun messaggio di
+   fallimento puo' sopravvivere a questo momento.
+
+   Perche' non bastava ritirare il messaggio quando la connessione sorvegliata
+   dice "connected": la connessione che riesce spesso NON e' quella sorvegliata.
+   Un secondo tentativo, una riconnessione per indirizzo, una chiamata in
+   arrivo — chiunque di questi apre la chat, mentre il primo tentativo resta
+   fermo su "failed" con il suo rosso ancora scritto sullo schermo di prima. Chi
+   guarda torna indietro e lo ritrova li'.
+
+   Questo e' l'unico punto che sa con certezza che le due persone si sono
+   trovate, qualunque strada abbiano preso per arrivarci. */
+function silenziaGliErroriDiConnessione(){
+  for (const id of SCHERMI_DI_ATTESA){
+    try{ const el = $(id); if (el){ el.textContent = ''; el.className = (el.className || '').replace(/\bbad\b/g, ''); } }catch(e){}
+  }
+  for (const id of SCHERMI_DIAGNOSTICI){
+    try{ const el = $(id); if (el) el.classList.add('hide'); }catch(e){}
+  }
+}
+
 function enterChat(){
   /* whatever invite got us here has done its job — leaving it pending would put
      a dead code back on the air at every app open for the next day */
   clearPendingInvite();
+  silenziaGliErroriDiConnessione();
   showScreen('screenChat');
   $('mediaHelp').classList.add('hide');
   /* found now, while there is time to fix it, rather than while a phone rings */
@@ -3893,7 +3956,7 @@ $('btnCreate').addEventListener('click', async () => {
      that replaces the global underneath this attempt. */
   const myPc = pc;
   manualInvitePc = myPc;
-  wireDataChannel(myPc.createDataChannel('logos-modifica'));
+  wireDataChannel(myPc.createDataChannel('logos-modifica'), myPc);
   const offer = await myPc.createOffer();
   await myPc.setLocalDescription(offer);
   await waitIceComplete(myPc);
@@ -4062,7 +4125,7 @@ $('btnCreateAnswer').addEventListener('click', async () => {
      same fix: held locally, checked once the five awaits below have all had
      their chance to let the global be replaced from underneath */
   const myPc = pc;
-  myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+  myPc.ondatachannel = ev => wireDataChannel(ev.channel, myPc);
   await myPc.setRemoteDescription({ type: 'offer', sdp: parsed.sdp });
   const answer = await myPc.createAnswer();
   await myPc.setLocalDescription(answer);
@@ -5851,7 +5914,7 @@ async function acceptAddrCall(){
        broke both of them. */
     myPc = pc;
     quickSharePc = null;   /* answering supersedes any invite that was on hold */
-    myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+    myPc.ondatachannel = ev => wireDataChannel(ev.channel, myPc);
     const pump = candidatePump(myPc, sec, 'ab', 'ac');
     quickPump = pump; quickPumpOwner = myPc;
     await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });
@@ -6042,7 +6105,7 @@ async function dialAddress(raw, unvouched){
     pc = await newPeerConnection();
     myPc = pc;
     quickSharePc = null;   /* whatever invite was on hold, this call supersedes it */
-    wireDataChannel(myPc.createDataChannel('logos-modifica'));
+    wireDataChannel(myPc.createDataChannel('logos-modifica'), myPc);
     const pump = candidatePump(myPc, sec, 'ac', 'ab');
     quickPump = pump; quickPumpOwner = myPc;
     const offer = await myPc.createOffer();
@@ -6447,7 +6510,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.84';
+const APP_VERSION = 'logos-modifica-3.85';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6660,7 +6723,7 @@ async function tryAutoReconnectInner(contact){
   /* used instead of the global for the rest of this attempt: everything below
      waits, and whatever the person does meanwhile replaces the global */
   const myPc = pc;
-  wireDataChannel(myPc.createDataChannel('logos-modifica'));
+  wireDataChannel(myPc.createDataChannel('logos-modifica'), myPc);
   /* same trickle exchange as the short code above, and for the same reason:
      waiting for gathering to finish before speaking made one side declare
      failure while the other was already connected. The key comes from the two
@@ -6812,7 +6875,7 @@ async function acceptIncomingAutoOffer(contact, msg, sec){
        waits below give anything the person does time to replace it */
     myPc = pc;
     quickSharePc = null;   /* a contact getting through supersedes a waiting invite */
-    myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+    myPc.ondatachannel = ev => wireDataChannel(ev.channel, myPc);
     /* the key both sides derive independently from the caller's fingerprint then
        the callee's — here `contact.fp` is the caller and `myFp` is us */
     const pump = candidatePump(myPc, sec, 'b', 'a');
@@ -7352,7 +7415,7 @@ async function startQuickShare(existingCode, quiet){
      regardless: this one waits fifteen minutes, and it used to take the
      address down with it for the whole of them */
   quickSharePc = myPc;
-  wireDataChannel(myPc.createDataChannel('logos-modifica'));
+  wireDataChannel(myPc.createDataChannel('logos-modifica'), myPc);
   const sec = await secReady;
   if (pc !== myPc) return;
   const pump = candidatePump(myPc, sec, 'a', 'b');
@@ -7642,7 +7705,7 @@ async function tryQuickConnect(){
        acceptAddrCall: il catch lo usa, e `const` dentro il blocco lo rendeva
        invisibile proprio a chi doveva leggerlo. */
     myPc = pc;
-    myPc.ondatachannel = ev => wireDataChannel(ev.channel);
+    myPc.ondatachannel = ev => wireDataChannel(ev.channel, myPc);
     const pump = candidatePump(myPc, sec, 'b', 'a');
     quickPump = pump; quickPumpOwner = myPc;
     await myPc.setRemoteDescription({ type:'offer', sdp: msg.sdp });

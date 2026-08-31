@@ -2601,6 +2601,123 @@ test.describe('il rosso che compare mentre invece si sta collegando', () => {
 
 });
 
+test.describe('il pezzo che tiene l app in memoria', () => {
+
+  const sorgente = () => require('fs').readFileSync(__dirname + '/../modifica.js', 'utf8');
+
+  test('su Android non si registra: quel file nel pacchetto NON esiste', () => {
+    /* Il pacchetto Android contiene un file solo, assets/logos.html. La
+       registrazione di modifica-sw.js falliva quindi a ogni avvio — in
+       silenzio, perche l errore veniva raccolto e buttato, ma era una
+       richiesta destinata a fallire ogni volta. */
+    const src = sorgente();
+    const i = src.indexOf("serviceWorker' in navigator");
+    assert.ok(i > 0, 'la registrazione deve esistere');
+    const blocco = src.slice(i, src.indexOf('\n}', i));
+    assert.ok(blocco.indexOf("appassets.androidplatform.net") > 0,
+      'su Android non si deve registrare niente');
+  });
+
+  test('IL DIFETTO VISTO SULLO SCHERMO: il controllo non deve passare dalla cache', () => {
+    /* "Una parte dell app e ancora vecchia" restava anche premendo "Controlla
+       di nuovo": senza updateViaCache il browser cercava la versione nuova
+       guardando la propria copia vecchia, e non poteva accorgersi di niente. */
+    const src = sorgente();
+    const i = src.indexOf('.register(');
+    const blocco = src.slice(i, i + 260);
+    assert.ok(blocco.indexOf("updateViaCache: 'none'") > 0,
+      'il controllo della versione non deve essere servito dalla cache del browser');
+    assert.ok(blocco.indexOf('.update()') > 0,
+      'e va chiesto subito, invece di aspettare che il browser ci pensi');
+  });
+
+  test('la pagina e il pezzo in memoria dichiarano la STESSA versione', () => {
+    /* Se i due numeri non coincidono l app dice "una parte e ancora vecchia" —
+       ed e vero. Ma se non coincidono nel repository, lo direbbe a tutti per
+       sempre, per colpa di una svista al momento di pubblicare. */
+    const fs = require('fs');
+    const js = fs.readFileSync(__dirname + '/../modifica.js', 'utf8');
+    const sw = fs.readFileSync(__dirname + '/../modifica-sw.js', 'utf8');
+    const a = (js.match(/const APP_VERSION = '([^']+)'/) || [])[1];
+    const b = (sw.match(/const CACHE = '([^']+)'/) || [])[1];
+    assert.ok(a, 'APP_VERSION deve esistere');
+    assert.strictEqual(b, a, 'modifica-sw.js dichiara una versione diversa da modifica.js');
+  });
+
+});
+
+test.describe('chi vince diventa la connessione attiva', () => {
+
+  test('IL DIFETTO DELLE TRE PAROLE: il canale che si apre porta con se la sua connessione', () => {
+    /* Due sintomi, una causa. Il canale veniva appeso alla connessione GLOBALE,
+       che con piu di un tentativo in ballo puo non essere quella su cui il
+       canale si e aperto davvero. Da li: le tre parole calcolate da una parte e
+       non dall altra (safetyDigest legge le impronte dalla connessione globale,
+       e su quella sbagliata non trova niente), e il rosso che restava scritto
+       mentre la chat si apriva. */
+    const app = loadApp();
+    const r = app.run(`
+      const perdente = { chiusa: false, close(){ this.chiusa = true; }, connectionState: 'failed' };
+      const vincente = { connectionState: 'connected' };
+      pc = perdente;
+      const canale = { binaryType: '', readyState: 'open' };
+      wireDataChannel(canale, vincente);
+      JSON.stringify({
+        attivaEQuellaCheHaVinto: pc === vincente,
+        canaleAppesoAllaVincente: vincente.__dc === canale,
+        perdenteChiusa: perdente.chiusa,
+      });
+    `);
+    return Promise.resolve(r).then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.attivaEQuellaCheHaVinto, true,
+        'la connessione su cui si e aperto il canale deve diventare quella dell app');
+      assert.strictEqual(o.canaleAppesoAllaVincente, true);
+      assert.strictEqual(o.perdenteChiusa, true,
+        'la perdente va chiusa: aperta farebbe sembrare questo telefono occupato con qualcuno');
+      app.stop();
+    });
+  });
+
+  test('se ha vinto proprio quella attiva, non si tocca niente', () => {
+    const app = loadApp();
+    const r = app.run(`
+      const sola = { chiusa: false, close(){ this.chiusa = true; }, connectionState: 'connected' };
+      pc = sola;
+      wireDataChannel({ binaryType: '', readyState: 'open' }, sola);
+      JSON.stringify({ ancoraLei: pc === sola, chiusaPerSbaglio: sola.chiusa });
+    `);
+    return Promise.resolve(r).then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.ancoraLei, true);
+      assert.strictEqual(o.chiusaPerSbaglio, false, 'non deve chiudere la connessione che sta usando');
+      app.stop();
+    });
+  });
+
+  test('entrando in chat ogni messaggio di fallimento viene spento', () => {
+    /* Se sei nella chat, la connessione E riuscita: nessun rosso puo
+       sopravvivere a questo momento, da qualunque strada tu ci sia arrivato. */
+    const app = loadApp();
+    const r = app.run(`
+      for (const id of SCHERMI_DI_ATTESA){ const el = $(id); el.textContent = 'Non è stato possibile collegarsi.'; el.className = 'status bad'; }
+      for (const id of SCHERMI_DIAGNOSTICI){ $(id).classList.remove('hide'); }
+      silenziaGliErroriDiConnessione();
+      JSON.stringify({
+        testi: SCHERMI_DI_ATTESA.map(id => $(id).textContent),
+        rossi: SCHERMI_DI_ATTESA.filter(id => /\bbad\b/.test($(id).className)).length,
+      });
+    `);
+    return Promise.resolve(r).then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.testi, ['','','',''], 'nessun messaggio deve restare');
+      assert.strictEqual(o.rossi, 0, 'e nemmeno il colore rosso');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `
