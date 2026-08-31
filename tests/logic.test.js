@@ -2538,9 +2538,42 @@ test.describe('il rosso che compare mentre invece si sta collegando', () => {
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
-      assert.match(o.dopoIlRosso, /Non è stato possibile/, 'dopo l attesa il messaggio ci deve essere');
+      assert.match(o.dopoIlRosso, /ancora provando/,
+        'a venti secondi si dice che si sta ancora provando, NON che e fallita: e la verita, e i candidati partono ancora');
+      assert.doesNotMatch(o.dopoIlRosso, /Non è stato possibile/,
+        'nessun verdetto finche c e qualcosa da tentare');
       assert.strictEqual(o.allaFine, '', 'MA UNA VOLTA COLLEGATA IL MESSAGGIO DEVE SPARIRE');
-      assert.deepStrictEqual(o.esiti, [false, true], 'e chi ascolta deve sapere che alla fine e andata bene');
+      /* UNA VOLTA SOLA, e con "e andata bene". Prima a venti secondi si
+         annunciava il fallimento anche a chi ascolta: schermate che si
+         chiudevano, pulsanti che tornavano attivi, tutto per una connessione
+         che stava per riuscire. Ora a venti secondi si dice soltanto che si
+         sta ancora provando, e nessuno viene avvisato di un fallimento che non
+         c e stato. */
+      assert.deepStrictEqual(o.esiti, [true],
+        'nessuno deve sentirsi dire che e fallita mentre l app sta ancora provando');
+      app.stop();
+    });
+  });
+
+  test('IL VERDETTO ARRIVA SOLO QUANDO NON C E PIU NIENTE DA TENTARE', () => {
+    /* Dire "non e stato possibile" mentre l app sta ancora lavorando e la cosa
+       che fa sembrare rotto un prodotto che funziona: si legge il rosso e
+       trenta secondi dopo ci si trova nella conversazione. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      finto.vai('failed');
+      await new Promise(r => setTimeout(r, FAIL_GRACE_MS + 200));
+      const a20 = stato.textContent;
+      await new Promise(r => setTimeout(r, PUMP_BACKSTOP_MS + 400));
+      return JSON.stringify({ a20, allaFine: stato.textContent, pompaFerma: window.__pompaFerma, esiti: window.__esiti });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.match(o.a20, /ancora provando/, 'a venti secondi: sto provando');
+      assert.match(o.allaFine, /Non è stato possibile/, 'alla fine, quando non resta niente: il verdetto');
+      assert.strictEqual(o.pompaFerma, true, 'e solo allora si smette di mandare candidati');
+      assert.deepStrictEqual(o.esiti, [false], 'chi ascolta viene avvisato una volta sola, alla fine');
       app.stop();
     });
   });
@@ -2772,6 +2805,53 @@ test.describe('il saluto che fa partire le tre parole', () => {
       assert.deepStrictEqual(o.dopo, ['hello'], 'e quando si apre si saluta UNA volta');
       app.stop();
     });
+  });
+
+});
+
+test.describe('i testi dell app', () => {
+
+  test('NESSUNA CHIAVE SCRITTA DUE VOLTE: la seconda vince in silenzio', () => {
+    /* In un oggetto JavaScript, una chiave che compare due volte non da nessun
+       errore: vince l ultima, e la prima sparisce senza un fiato. Aggiungendo un
+       messaggio con un nome gia usato (connect.slow) mi sono ritrovato la frase
+       nuova ignorata e quella vecchia mostrata al suo posto, senza il minimo
+       segnale. L ha presa un test; da qui in poi la prende questo. */
+    const fs = require('fs');
+    const src = fs.readFileSync(__dirname + '/../modifica.js', 'utf8');
+    const lingue = ['it','en','ar','bn','de','es','fr','hi','id','pt','ru','ur','zh'];
+    const doppie = [];
+    for (const l of lingue){
+      const m = new RegExp('Object\\.assign\\(I18N\\.' + l + ',\\s*\\{').exec(src);
+      assert.ok(m, 'blocco della lingua ' + l + ' non trovato');
+      const blocco = src.slice(m.index + m[0].length, src.indexOf('\n});', m.index));
+      const viste = Object.create(null);
+      for (const k of blocco.match(/"[a-zA-Z][a-zA-Z0-9.]*":/g) || []){
+        if (viste[k]) doppie.push(l + ' ' + k);
+        viste[k] = 1;
+      }
+    }
+    assert.deepStrictEqual(doppie, [], 'chiavi scritte due volte nello stesso blocco lingua');
+  });
+
+  test('ogni lingua ha le stesse chiavi dell italiano', () => {
+    /* Una chiave che manca in una lingua fa comparire il testo inglese di
+       riserva in mezzo a una schermata italiana — o, peggio, il nome tecnico
+       della chiave. */
+    const fs = require('fs');
+    const src = fs.readFileSync(__dirname + '/../modifica.js', 'utf8');
+    const chiavi = (l) => {
+      const m = new RegExp('Object\\.assign\\(I18N\\.' + l + ',\\s*\\{').exec(src);
+      const blocco = src.slice(m.index + m[0].length, src.indexOf('\n});', m.index));
+      return new Set((blocco.match(/"[a-zA-Z][a-zA-Z0-9.]*":/g) || []).map(x => x.slice(1, -2)));
+    };
+    const base = chiavi('it');
+    const mancanti = [];
+    for (const l of ['en','ar','bn','de','es','fr','hi','id','pt','ru','ur','zh']){
+      const q = chiavi(l);
+      for (const k of base) if (!q.has(k)) mancanti.push(l + '/' + k);
+    }
+    assert.deepStrictEqual(mancanti.slice(0, 12), [], 'testi presenti in italiano e mancanti altrove');
   });
 
 });

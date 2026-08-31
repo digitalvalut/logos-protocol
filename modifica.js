@@ -73,6 +73,8 @@ let CURLANG = 'it';
 const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, id: {}, pt: {}, ru: {}, ur: {}, zh: {} };
 
 Object.assign(I18N.en, {
+"connect.slow":"This is taking longer than usual — that happens on very restricted networks (workplaces, some mobile networks) or if you are not online at the same moment. Wait a bit more, or create a fresh invite.",
+"connect.stillTrying":"Still trying — sometimes it takes a few seconds. Don't close this.",
 "wipe.help":"Want photos, videos and conversations gone from this phone? They cannot be recovered.","wipe.btn":"Wipe everything","wipe.sure":"<b>Sure?</b> Messages, contacts, photos and videos all go. Your address stays yours, and anyone who has it can still reach you.","wipe.yes":"Yes, wipe it all","wipe.no":"No, leave it","wipe.done":"Done. There is nothing left on this phone.",
 "file.noRoomIn":"“{n}” was not received: this device already has too much held in memory. Reload the page and ask for it again.",
 "listen.needLockScreen":"To ring on a locked screen, Android needs one more permission. Opening the page where it is given.",
@@ -163,7 +165,6 @@ Object.assign(I18N.en, {
 "join.badCode":"This code is not valid. Check that you copied all of it.",
 "connect.waiting":"Waiting for the connection…",
 "connect.failed":"Could not connect. Make sure you are both online, then create a fresh invite — old codes cannot be reused.",
-"connect.slow":"This is taking longer than usual — that happens on very restricted networks (workplaces, some mobile networks) or if you are not online at the same moment. Wait a bit more, or create a fresh invite.",
 "footer.seal":"Fingerprints of this app (SHA-256):",
 "verify.known":"verified",
 "verify.changedShort":"code changed",
@@ -260,6 +261,8 @@ Object.assign(I18N.en, {
 
 });
 Object.assign(I18N.it, {
+"connect.slow":"Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.",
+"connect.stillTrying":"Ci sto ancora provando — a volte servono un po' di secondi. Non chiudere.",
 "wipe.help":"Vuoi far sparire foto, video e conversazioni da questo telefono? Non si possono recuperare.","wipe.btn":"Pulisci tutto","wipe.sure":"<b>Sicuro?</b> Spariscono i messaggi, i contatti, le foto e i video. Il tuo indirizzo resta il tuo, e chi ce l'ha continua a trovarti.","wipe.yes":"Sì, cancella tutto","wipe.no":"No, lascia stare","wipe.done":"Fatto. Su questo telefono non c'è più niente.",
 "file.noRoomIn":"«{n}» non è stato ricevuto: questo dispositivo ha già troppa roba aperta in memoria. Ricarica la pagina e fattelo rimandare.",
 "listen.needLockScreen":"Per squillare a schermo bloccato, Android chiede un permesso in più. Ti porto sulla pagina dove si concede.",
@@ -328,7 +331,6 @@ Object.assign(I18N.it, {
 "join.badCode":"Questo codice non è valido. Controlla di averlo copiato tutto.",
 "connect.waiting":"In attesa della connessione…",
 "connect.failed":"Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.",
-"connect.slow":"Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.",
 "footer.seal":"Impronte di questa app (SHA-256):",
 "verify.known":"verificato",
 "verify.changedShort":"codice cambiato",
@@ -448,6 +450,8 @@ Object.assign(I18N.it, {
 });
 
 Object.assign(I18N.fr, {
+"connect.slow":"Cela prend plus de temps que d'habitude — cela arrive sur des réseaux très filtrés (entreprises, certains réseaux mobiles) ou si vous n'êtes pas en ligne au même moment. Attendez encore un peu, ou créez une nouvelle invitation.",
+"connect.stillTrying":"J'essaie encore — cela prend parfois quelques secondes. Ne fermez pas.",
 "wipe.help":"Faire disparaître photos, vidéos et conversations de ce téléphone ? Rien ne pourra être récupéré.","wipe.btn":"Tout effacer","wipe.sure":"<b>Sûr ?</b> Messages, contacts, photos et vidéos disparaissent. Votre adresse reste la vôtre, et qui l'a peut toujours vous joindre.","wipe.yes":"Oui, tout effacer","wipe.no":"Non, laisser","wipe.done":"C'est fait. Il ne reste rien sur ce téléphone.",
 "file.noRoomIn":"« {n} » n'a pas été reçu : cet appareil garde déjà trop de choses en mémoire. Rechargez la page et demandez qu'on vous le renvoie.",
 "listen.needLockScreen":"Pour sonner sur un écran verrouillé, Android demande une autorisation de plus. Ouverture de la page où l'accorder.",
@@ -531,7 +535,6 @@ Object.assign(I18N.fr, {
 "join.badCode":"Ce code n'est pas valide. Vérifiez que vous l'avez copié en entier.",
 "connect.waiting":"En attente de la connexion…",
 "connect.failed":"Impossible de se connecter. Assurez-vous d'être tous les deux en ligne, puis créez une nouvelle invitation — les anciens codes ne peuvent pas être réutilisés.",
-"connect.slow":"Cela prend plus de temps que d'habitude — cela arrive sur des réseaux très filtrés (entreprises, certains réseaux mobiles) ou si vous n'êtes pas en ligne au même moment. Attendez encore un peu, ou créez une nouvelle invitation.",
 "footer.seal":"Empreintes de cette application (SHA-256) :",
 "verify.known":"vérifié","verify.changedShort":"code changé","verify.accept":"Accepter le nouveau code",
 "verify.noteKnown":"Même code que la dernière fois : personne ne s'est interposé depuis.",
@@ -628,6 +631,8 @@ Object.assign(I18N.fr, {
 });
 
 Object.assign(I18N.de, {
+"connect.slow":"Das dauert länger als gewöhnlich — das passiert bei stark gefilterten Netzwerken (Firmen, manche Mobilfunknetze) oder wenn ihr nicht zur gleichen Zeit online seid. Wartet noch etwas, oder erstellt eine neue Einladung.",
+"connect.stillTrying":"Ich versuche es noch — manchmal dauert es ein paar Sekunden. Nicht schließen.",
 "wipe.help":"Sollen Fotos, Videos und Gespräche von diesem Telefon verschwinden? Sie sind nicht wiederherstellbar.","wipe.btn":"Alles löschen","wipe.sure":"<b>Sicher?</b> Nachrichten, Kontakte, Fotos und Videos sind dann weg. Deine Adresse bleibt deine, und wer sie hat, erreicht dich weiterhin.","wipe.yes":"Ja, alles löschen","wipe.no":"Nein, lassen","wipe.done":"Erledigt. Auf diesem Telefon ist nichts mehr.",
 "file.noRoomIn":"„{n}“ wurde nicht empfangen: Dieses Gerät hält bereits zu viel im Speicher. Lade die Seite neu und lass es dir erneut senden.",
 "listen.needLockScreen":"Um bei gesperrtem Bildschirm zu klingeln, verlangt Android eine weitere Berechtigung. Die Seite dafür wird geöffnet.",
@@ -711,7 +716,6 @@ Object.assign(I18N.de, {
 "join.badCode":"Dieser Code ist ungültig. Prüfe, ob du ihn vollständig kopiert hast.",
 "connect.waiting":"Warte auf die Verbindung…",
 "connect.failed":"Verbindung nicht möglich. Stellt sicher, dass ihr beide online seid, und erstellt dann eine neue Einladung — alte Codes können nicht wiederverwendet werden.",
-"connect.slow":"Das dauert länger als gewöhnlich — das passiert bei stark gefilterten Netzwerken (Firmen, manche Mobilfunknetze) oder wenn ihr nicht zur gleichen Zeit online seid. Wartet noch etwas, oder erstellt eine neue Einladung.",
 "footer.seal":"Fingerabdrücke dieser App (SHA-256):",
 "verify.known":"verifiziert","verify.changedShort":"Code geändert","verify.accept":"Neuen Code akzeptieren",
 "verify.noteKnown":"Gleicher Code wie letztes Mal: seitdem hat sich niemand dazwischengeschaltet.",
@@ -808,6 +812,8 @@ Object.assign(I18N.de, {
 });
 
 Object.assign(I18N.es, {
+"connect.slow":"Esto está tardando más de lo habitual — pasa en redes muy filtradas (empresas, algunas redes móviles) o si no estáis en línea al mismo tiempo. Esperad un poco más, o cread una invitación nueva.",
+"connect.stillTrying":"Sigo intentándolo — a veces tarda unos segundos. No cierres.",
 "wipe.help":"¿Quieres que fotos, vídeos y conversaciones desaparezcan de este teléfono? No se pueden recuperar.","wipe.btn":"Borrar todo","wipe.sure":"<b>¿Seguro?</b> Desaparecen mensajes, contactos, fotos y vídeos. Tu dirección sigue siendo tuya, y quien la tenga podrá localizarte.","wipe.yes":"Sí, borrar todo","wipe.no":"No, dejarlo","wipe.done":"Hecho. En este teléfono ya no queda nada.",
 "file.noRoomIn":"«{n}» no se ha recibido: este dispositivo ya tiene demasiado en memoria. Recarga la página y pide que te lo reenvíen.",
 "listen.needLockScreen":"Para sonar con la pantalla bloqueada, Android pide un permiso más. Abriendo la página donde se concede.",
@@ -891,7 +897,6 @@ Object.assign(I18N.es, {
 "join.badCode":"Este código no es válido. Comprueba que lo copiaste entero.",
 "connect.waiting":"Esperando la conexión…",
 "connect.failed":"No se pudo conectar. Aseguraos de estar ambos en línea, luego cread una invitación nueva — los códigos antiguos no se pueden reutilizar.",
-"connect.slow":"Esto está tardando más de lo habitual — pasa en redes muy filtradas (empresas, algunas redes móviles) o si no estáis en línea al mismo tiempo. Esperad un poco más, o cread una invitación nueva.",
 "footer.seal":"Huellas de esta app (SHA-256):",
 "verify.known":"verificado","verify.changedShort":"código cambiado","verify.accept":"Aceptar el nuevo código",
 "verify.noteKnown":"Mismo código que la última vez: nadie se ha interpuesto desde entonces.",
@@ -988,6 +993,8 @@ Object.assign(I18N.es, {
 });
 
 Object.assign(I18N.pt, {
+"connect.slow":"Isto está a demorar mais do que o habitual — acontece em redes muito filtradas (empresas, algumas redes móveis) ou se não estiverem online ao mesmo tempo. Esperem mais um pouco, ou criem um convite novo.",
+"connect.stillTrying":"Ainda a tentar — às vezes demora alguns segundos. Não feche.",
 "wipe.help":"Quer que fotografias, vídeos e conversas desapareçam deste telemóvel? Não podem ser recuperados.","wipe.btn":"Limpar tudo","wipe.sure":"<b>De certeza?</b> Desaparecem mensagens, contactos, fotografias e vídeos. O seu endereço continua seu, e quem o tem continua a encontrá-lo.","wipe.yes":"Sim, apagar tudo","wipe.no":"Não, deixar","wipe.done":"Feito. Neste telemóvel já não há nada.",
 "file.noRoomIn":"«{n}» não foi recebido: este dispositivo já tem demasiada coisa em memória. Recarrega a página e pede que to enviem de novo.",
 "listen.needLockScreen":"Para tocar com o ecrã bloqueado, o Android pede mais uma permissão. A abrir a página onde se concede.",
@@ -1071,7 +1078,6 @@ Object.assign(I18N.pt, {
 "join.badCode":"Este código não é válido. Verifique se o copiou todo.",
 "connect.waiting":"A aguardar a ligação…",
 "connect.failed":"Não foi possível ligar. Certifiquem-se de que ambos estão online, depois criem um convite novo — códigos antigos não podem ser reutilizados.",
-"connect.slow":"Isto está a demorar mais do que o habitual — acontece em redes muito filtradas (empresas, algumas redes móveis) ou se não estiverem online ao mesmo tempo. Esperem mais um pouco, ou criem um convite novo.",
 "footer.seal":"Impressões digitais desta app (SHA-256):",
 "verify.known":"verificado","verify.changedShort":"código alterado","verify.accept":"Aceitar o novo código",
 "verify.noteKnown":"Mesmo código da última vez: ninguém se interpôs desde então.",
@@ -1168,6 +1174,8 @@ Object.assign(I18N.pt, {
 });
 
 Object.assign(I18N.ru, {
+"connect.slow":"Это занимает больше времени, чем обычно — так бывает в сильно фильтруемых сетях (на работе, в некоторых мобильных сетях) или если вы не в сети одновременно. Подождите ещё немного или создайте новое приглашение.",
+"connect.stillTrying":"Ещё пробую — иногда нужно несколько секунд. Не закрывайте.",
 "wipe.help":"Убрать с этого телефона фотографии, видео и разговоры? Восстановить их будет нельзя.","wipe.btn":"Стереть всё","wipe.sure":"<b>Точно?</b> Исчезнут сообщения, контакты, фотографии и видео. Ваш адрес останется вашим, и тот, у кого он есть, по-прежнему вас найдёт.","wipe.yes":"Да, стереть всё","wipe.no":"Нет, оставить","wipe.done":"Готово. На этом телефоне ничего не осталось.",
 "file.noRoomIn":"«{n}» не получен: на этом устройстве уже слишком много в памяти. Перезагрузите страницу и попросите отправить снова.",
 "listen.needLockScreen":"Чтобы звонить на заблокированном экране, Android требует ещё одно разрешение. Открываю страницу, где его выдают.",
@@ -1251,7 +1259,6 @@ Object.assign(I18N.ru, {
 "join.badCode":"Этот код недействителен. Проверьте, что скопировали его полностью.",
 "connect.waiting":"Ожидание соединения…",
 "connect.failed":"Не удалось соединиться. Убедитесь, что вы оба онлайн, затем создайте новое приглашение — старые коды нельзя использовать повторно.",
-"connect.slow":"Это занимает больше времени, чем обычно — так бывает в сильно фильтруемых сетях (на работе, в некоторых мобильных сетях) или если вы не в сети одновременно. Подождите ещё немного или создайте новое приглашение.",
 "footer.seal":"Отпечатки этого приложения (SHA-256):",
 "verify.known":"проверено","verify.changedShort":"код изменился","verify.accept":"Принять новый код",
 "verify.noteKnown":"Тот же код, что и в прошлый раз: с тех пор никто не вклинился.",
@@ -1348,6 +1355,8 @@ Object.assign(I18N.ru, {
 });
 
 Object.assign(I18N.zh, {
+"connect.slow":"这比平常花的时间更长——这种情况常发生在过滤严格的网络（公司、部分移动网络）上，或者你们不在同一时间在线。请再等一会儿，或创建一个新邀请。",
+"connect.stillTrying":"还在尝试——有时需要几秒钟。请不要关闭。",
 "wipe.help":"要把照片、视频和对话从这台手机上清除吗？无法恢复。","wipe.btn":"全部清除","wipe.sure":"<b>确定吗？</b>消息、联系人、照片和视频都会消失。你的地址仍然是你的，有它的人依然能找到你。","wipe.yes":"是的，全部清除","wipe.no":"不，算了","wipe.done":"完成。这台手机上什么都没有了。",
 "file.noRoomIn":"未能接收「{n}」：此设备内存中已保留过多内容。请重新载入页面并请对方重新发送。",
 "listen.needLockScreen":"要在锁屏时响铃，Android 还需要一项权限。正在打开授予该权限的页面。",
@@ -1431,7 +1440,6 @@ Object.assign(I18N.zh, {
 "join.badCode":"此代码无效。请检查是否完整复制。",
 "connect.waiting":"正在等待连接…",
 "connect.failed":"无法连接。请确保双方都在线，然后创建一个新邀请——旧代码不能重复使用。",
-"connect.slow":"这比平常花的时间更长——这种情况常发生在过滤严格的网络（公司、部分移动网络）上，或者你们不在同一时间在线。请再等一会儿，或创建一个新邀请。",
 "footer.seal":"此应用的指纹（SHA-256）：",
 "verify.known":"已验证","verify.changedShort":"代码已更改","verify.accept":"接受新代码",
 "verify.noteKnown":"和上次相同的代码：此后没有人插入其中。",
@@ -1528,6 +1536,8 @@ Object.assign(I18N.zh, {
 });
 
 Object.assign(I18N.ar, {
+"connect.slow":"هذا يستغرق وقتًا أطول من المعتاد — يحدث هذا في الشبكات شديدة التصفية (أماكن العمل، بعض شبكات الجوال) أو إذا لم تكونا متصلَين في الوقت نفسه. انتظرا قليلًا بعد، أو أنشئا دعوة جديدة.",
+"connect.stillTrying":"ما زلت أحاول — أحيانًا يستغرق الأمر بضع ثوانٍ. لا تغلق.",
 "wipe.help":"هل تريد إزالة الصور ومقاطع الفيديو والمحادثات من هذا الهاتف؟ لا يمكن استرجاعها.","wipe.btn":"امسح كل شيء","wipe.sure":"<b>متأكد؟</b> ستختفي الرسائل وجهات الاتصال والصور والفيديوهات. عنوانك يبقى لك، ومن يملكه يظل قادرًا على الوصول إليك.","wipe.yes":"نعم، امسح الكل","wipe.no":"لا، اتركه","wipe.done":"تم. لم يبق شيء على هذا الهاتف.",
 "file.noRoomIn":"لم يتم استلام «{n}»: هذا الجهاز يحتفظ بالكثير في الذاكرة بالفعل. أعد تحميل الصفحة واطلب إرساله مرة أخرى.",
 "listen.needLockScreen":"كي يرن الهاتف والشاشة مقفلة، يطلب أندرويد إذناً إضافياً. يجري فتح الصفحة التي يُمنح فيها.",
@@ -1611,7 +1621,6 @@ Object.assign(I18N.ar, {
 "join.badCode":"هذا الرمز غير صالح. تحقق من أنك نسخته كاملًا.",
 "connect.waiting":"في انتظار الاتصال…",
 "connect.failed":"تعذّر الاتصال. تأكدا من أن كليكما متصل بالإنترنت، ثم أنشئا دعوة جديدة — لا يمكن إعادة استخدام الرموز القديمة.",
-"connect.slow":"هذا يستغرق وقتًا أطول من المعتاد — يحدث هذا في الشبكات شديدة التصفية (أماكن العمل، بعض شبكات الجوال) أو إذا لم تكونا متصلَين في الوقت نفسه. انتظرا قليلًا بعد، أو أنشئا دعوة جديدة.",
 "footer.seal":"بصمات هذا التطبيق (SHA-256):",
 "verify.known":"تم التحقق","verify.changedShort":"تغيّر الرمز","verify.accept":"قبول الرمز الجديد",
 "verify.noteKnown":"نفس الرمز كالمرة السابقة: لم يتدخّل أحد منذ ذلك الحين.",
@@ -1708,6 +1717,8 @@ Object.assign(I18N.ar, {
 });
 
 Object.assign(I18N.ur, {
+"connect.slow":"اس میں معمول سے زیادہ وقت لگ رہا ہے — ایسا سخت فلٹر شدہ نیٹ ورکس (دفاتر، بعض موبائل نیٹ ورکس) پر ہوتا ہے یا اگر آپ ایک ہی وقت میں آن لائن نہیں ہیں۔ تھوڑی دیر مزید انتظار کریں، یا ایک نئی دعوت بنائیں۔",
+"connect.stillTrying":"ابھی کوشش جاری ہے — کبھی چند سیکنڈ لگتے ہیں۔ بند نہ کریں۔",
 "wipe.help":"اس فون سے تصویریں، ویڈیو اور گفتگوئیں ہٹا دیں؟ واپس نہیں آئیں گی۔","wipe.btn":"سب مٹا دیں","wipe.sure":"<b>یقین ہے؟</b> پیغامات، رابطے، تصویریں اور ویڈیو سب چلے جائیں گے۔ آپ کا پتہ آپ ہی کا رہے گا، اور جس کے پاس ہے وہ آپ تک پہنچ سکے گا۔","wipe.yes":"ہاں، سب مٹا دو","wipe.no":"نہیں، رہنے دو","wipe.done":"ہو گیا۔ اس فون پر اب کچھ نہیں۔",
 "file.noRoomIn":"«{n}» موصول نہیں ہوا: اس ڈیوائس کی یادداشت میں پہلے ہی بہت کچھ ہے۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ بھیجنے کو کہیں۔",
 "listen.needLockScreen":"مقفل اسکرین پر بجنے کے لیے اینڈرائیڈ کو ایک اور اجازت درکار ہے۔ وہ صفحہ کھولا جا رہا ہے جہاں یہ دی جاتی ہے۔",
@@ -1791,7 +1802,6 @@ Object.assign(I18N.ur, {
 "join.badCode":"یہ کوڈ درست نہیں ہے۔ چیک کریں کہ آپ نے اسے مکمل کاپی کیا ہے۔",
 "connect.waiting":"کنکشن کا انتظار ہو رہا ہے…",
 "connect.failed":"کنکٹ نہیں ہو سکا۔ یقینی بنائیں کہ آپ دونوں آن لائن ہیں، پھر ایک نئی دعوت بنائیں — پرانے کوڈز دوبارہ استعمال نہیں ہو سکتے۔",
-"connect.slow":"اس میں معمول سے زیادہ وقت لگ رہا ہے — ایسا سخت فلٹر شدہ نیٹ ورکس (دفاتر، بعض موبائل نیٹ ورکس) پر ہوتا ہے یا اگر آپ ایک ہی وقت میں آن لائن نہیں ہیں۔ تھوڑی دیر مزید انتظار کریں، یا ایک نئی دعوت بنائیں۔",
 "footer.seal":"اس ایپ کے فنگرپرنٹس (SHA-256):",
 "verify.known":"تصدیق شدہ","verify.changedShort":"کوڈ تبدیل ہو گیا","verify.accept":"نیا کوڈ قبول کریں",
 "verify.noteKnown":"پچھلی بار جیسا ہی کوڈ: تب سے کسی نے مداخلت نہیں کی۔",
@@ -1888,6 +1898,8 @@ Object.assign(I18N.ur, {
 });
 
 Object.assign(I18N.hi, {
+"connect.slow":"इसमें सामान्य से ज़्यादा समय लग रहा है — यह भारी फ़िल्टर वाले नेटवर्क (दफ़्तर, कुछ मोबाइल नेटवर्क) पर होता है या अगर आप एक ही समय पर ऑनलाइन नहीं हैं। थोड़ा और इंतज़ार करें, या एक नया निमंत्रण बनाएं।",
+"connect.stillTrying":"अभी कोशिश जारी है — कभी-कभी कुछ सेकंड लगते हैं। बंद न करें।",
 "wipe.help":"इस फ़ोन से तस्वीरें, वीडियो और बातचीत हटा दें? वापस नहीं आएंगी।","wipe.btn":"सब मिटाएँ","wipe.sure":"<b>पक्का?</b> संदेश, संपर्क, तस्वीरें और वीडियो सब चले जाएंगे। आपका पता आपका ही रहेगा, और जिसके पास है वह आपसे संपर्क कर सकेगा।","wipe.yes":"हाँ, सब मिटा दो","wipe.no":"नहीं, रहने दो","wipe.done":"हो गया। इस फ़ोन पर अब कुछ नहीं है।",
 "file.noRoomIn":"«{n}» प्राप्त नहीं हुआ: इस डिवाइस की मेमोरी में पहले से बहुत कुछ है। पेज दोबारा लोड करें और फिर से भेजने को कहें।",
 "listen.needLockScreen":"लॉक स्क्रीन पर बजने के लिए Android को एक और अनुमति चाहिए। वह पृष्ठ खोला जा रहा है जहाँ यह दी जाती है।",
@@ -1971,7 +1983,6 @@ Object.assign(I18N.hi, {
 "join.badCode":"यह कोड मान्य नहीं है। जांचें कि आपने इसे पूरा कॉपी किया है।",
 "connect.waiting":"कनेक्शन का इंतज़ार हो रहा है…",
 "connect.failed":"कनेक्ट नहीं हो सका। सुनिश्चित करें कि आप दोनों ऑनलाइन हैं, फिर एक नया निमंत्रण बनाएं — पुराने कोड फिर से उपयोग नहीं किए जा सकते।",
-"connect.slow":"इसमें सामान्य से ज़्यादा समय लग रहा है — यह भारी फ़िल्टर वाले नेटवर्क (दफ़्तर, कुछ मोबाइल नेटवर्क) पर होता है या अगर आप एक ही समय पर ऑनलाइन नहीं हैं। थोड़ा और इंतज़ार करें, या एक नया निमंत्रण बनाएं।",
 "footer.seal":"इस ऐप के फ़िंगरप्रिंट (SHA-256):",
 "verify.known":"सत्यापित","verify.changedShort":"कोड बदल गया","verify.accept":"नया कोड स्वीकार करें",
 "verify.noteKnown":"पिछली बार जैसा ही कोड: तब से किसी ने दखल नहीं दिया।",
@@ -2068,6 +2079,8 @@ Object.assign(I18N.hi, {
 });
 
 Object.assign(I18N.bn, {
+"connect.slow":"এটি স্বাভাবিকের চেয়ে বেশি সময় নিচ্ছে — এটি অত্যন্ত ফিল্টার করা নেটওয়ার্কে (কর্মক্ষেত্র, কিছু মোবাইল নেটওয়ার্ক) অথবা আপনারা একই সময়ে অনলাইনে না থাকলে ঘটে। আরেকটু অপেক্ষা করুন, অথবা একটি নতুন আমন্ত্রণ তৈরি করুন।",
+"connect.stillTrying":"এখনও চেষ্টা চলছে — কখনও কয়েক সেকেন্ড লাগে। বন্ধ করবেন না।",
 "wipe.help":"এই ফোন থেকে ছবি, ভিডিও আর কথাবার্তা মুছে ফেলবেন? ফেরানো যাবে না।","wipe.btn":"সব মুছুন","wipe.sure":"<b>নিশ্চিত?</b> বার্তা, পরিচিতি, ছবি ও ভিডিও সব চলে যাবে। আপনার ঠিকানা আপনারই থাকবে, যার কাছে আছে সে আপনাকে খুঁজে পাবে।","wipe.yes":"হ্যাঁ, সব মুছে দিন","wipe.no":"না, থাক","wipe.done":"হয়ে গেছে। এই ফোনে আর কিছু নেই।",
 "file.noRoomIn":"«{n}» গ্রহণ করা যায়নি: এই ডিভাইসের মেমরিতে ইতিমধ্যেই অনেক কিছু আছে। পৃষ্ঠাটি রিলোড করুন এবং আবার পাঠাতে বলুন।",
 "listen.needLockScreen":"লক স্ক্রিনে বাজতে হলে Android-এর আরও একটি অনুমতি লাগে। যেখানে তা দেওয়া যায় সেই পাতা খোলা হচ্ছে।",
@@ -2151,7 +2164,6 @@ Object.assign(I18N.bn, {
 "join.badCode":"এই কোডটি বৈধ নয়। আপনি এটি সম্পূর্ণ কপি করেছেন কিনা পরীক্ষা করুন।",
 "connect.waiting":"সংযোগের অপেক্ষায়…",
 "connect.failed":"সংযোগ করা যায়নি। নিশ্চিত করুন আপনারা দুজনেই অনলাইনে আছেন, তারপর একটি নতুন আমন্ত্রণ তৈরি করুন — পুরানো কোড পুনরায় ব্যবহার করা যায় না।",
-"connect.slow":"এটি স্বাভাবিকের চেয়ে বেশি সময় নিচ্ছে — এটি অত্যন্ত ফিল্টার করা নেটওয়ার্কে (কর্মক্ষেত্র, কিছু মোবাইল নেটওয়ার্ক) অথবা আপনারা একই সময়ে অনলাইনে না থাকলে ঘটে। আরেকটু অপেক্ষা করুন, অথবা একটি নতুন আমন্ত্রণ তৈরি করুন।",
 "footer.seal":"এই অ্যাপের ফিঙ্গারপ্রিন্ট (SHA-256):",
 "verify.known":"যাচাইকৃত","verify.changedShort":"কোড পরিবর্তিত হয়েছে","verify.accept":"নতুন কোড গ্রহণ করুন",
 "verify.noteKnown":"গত বারের মতো একই কোড: তারপর থেকে কেউ ঢুকে পড়েনি।",
@@ -2248,6 +2260,8 @@ Object.assign(I18N.bn, {
 });
 
 Object.assign(I18N.id, {
+"connect.slow":"Ini memakan waktu lebih lama dari biasanya — hal ini terjadi pada jaringan yang sangat difilter (kantor, beberapa jaringan seluler) atau jika Anda tidak online pada saat yang sama. Tunggu sebentar lagi, atau buat undangan baru.",
+"connect.stillTrying":"Masih mencoba — kadang perlu beberapa detik. Jangan ditutup.",
 "wipe.help":"Ingin foto, video, dan percakapan hilang dari ponsel ini? Tidak bisa dikembalikan.","wipe.btn":"Hapus semua","wipe.sure":"<b>Yakin?</b> Pesan, kontak, foto, dan video semuanya hilang. Alamat Anda tetap milik Anda, dan siapa pun yang punya masih bisa menghubungi.","wipe.yes":"Ya, hapus semua","wipe.no":"Tidak, biarkan","wipe.done":"Selesai. Tidak ada apa-apa lagi di ponsel ini.",
 "file.noRoomIn":"«{n}» tidak diterima: perangkat ini sudah menyimpan terlalu banyak di memori. Muat ulang halaman dan minta dikirim lagi.",
 "listen.needLockScreen":"Untuk berdering saat layar terkunci, Android meminta satu izin lagi. Membuka halaman tempat izin itu diberikan.",
@@ -2331,7 +2345,6 @@ Object.assign(I18N.id, {
 "join.badCode":"Kode ini tidak valid. Periksa apakah Anda menyalinnya secara lengkap.",
 "connect.waiting":"Menunggu koneksi…",
 "connect.failed":"Tidak dapat terhubung. Pastikan Anda berdua online, lalu buat undangan baru — kode lama tidak dapat digunakan lagi.",
-"connect.slow":"Ini memakan waktu lebih lama dari biasanya — hal ini terjadi pada jaringan yang sangat difilter (kantor, beberapa jaringan seluler) atau jika Anda tidak online pada saat yang sama. Tunggu sebentar lagi, atau buat undangan baru.",
 "footer.seal":"Sidik jari aplikasi ini (SHA-256):",
 "verify.known":"terverifikasi","verify.changedShort":"kode berubah","verify.accept":"Terima kode baru",
 "verify.noteKnown":"Kode sama seperti terakhir kali: tidak ada yang menyisip sejak itu.",
@@ -3226,11 +3239,22 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
            tutto — cioe' si toglieva alla connessione proprio la cosa che le
            avrebbe permesso di riuscire, un istante dopo aver detto che non ci
            riusciva. */
+        /* NON un verdetto: un aggiornamento. Finche' i candidati continuano a
+           partire l'app STA ANCORA PROVANDO, e dirle fallita mentre lavora e'
+           la cosa che fa sembrare rotto un prodotto che funziona — chi guarda
+           legge "non e' stato possibile" e trenta secondi dopo si trova nella
+           conversazione. Il verdetto arriva solo quando non c'e' piu' niente da
+           tentare, cioe' quando anche i candidati hanno smesso. */
         detto = true;
-        setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
-        if (onSettle) onSettle(false);
+        setStatus(statusEl, t('connect.stillTrying','Ci sto ancora provando — a volte servono un po\' di secondi. Non chiudere.'));
         clearTimeout(backstop);
-        backstop = setTimeout(() => { if (!settled && pump) pump.stop(); }, PUMP_BACKSTOP_MS);
+        backstop = setTimeout(() => {
+          if (settled || connectionWorking(pcObj)) return;
+          if (pump) pump.stop();
+          settled = true; stop();
+          setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
+          if (onSettle) onSettle(false);
+        }, PUMP_BACKSTOP_MS);
       }, FAIL_GRACE_MS);
       return;
     }
@@ -6519,7 +6543,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.86';
+const APP_VERSION = 'logos-modifica-3.87';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
