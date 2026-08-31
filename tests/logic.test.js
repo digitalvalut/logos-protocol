@@ -2856,6 +2856,67 @@ test.describe('i testi dell app', () => {
 
 });
 
+test.describe('il lasciapassare per il ponte', () => {
+
+  /* H-04 dell audit esterno: il worker dava a chiunque, senza domande, un
+     lasciapassare valido 24 ore. Chi ne raccoglieva a sufficienza poteva far
+     passare traffico proprio a spese di chi ospita il servizio, o esaurirne la
+     capacita finche le chiamate vere non passavano piu. */
+
+  test('IL DIFETTO H-04: le credenziali durano minuti, non un giorno intero', () => {
+    const fs = require('fs');
+    const worker = fs.readFileSync(__dirname + '/../turn-worker/worker.js', 'utf8');
+    const m = worker.match(/const TURN_TTL_SECONDS = (\d+);/);
+    assert.ok(m, 'TURN_TTL_SECONDS deve esistere');
+    const secondi = parseInt(m[1], 10);
+    assert.ok(secondi <= 900, 'non piu di quindici minuti: erano 86400 (un giorno)');
+    assert.ok(secondi >= 120, 'ma nemmeno cosi corte da non bastare a far partire una chiamata');
+  });
+
+  test('IL LEGAME DA NON ROMPERE: l app li tiene MENO di quanto durano', () => {
+    /* Il difetto peggiore che questa correzione poteva introdurre: accorciare
+       la durata senza toccare per quanto l app li tiene avrebbe lasciato chi
+       tiene l app aperta a lungo con un lasciapassare scaduto in mano, e le
+       chiamate avrebbero smesso di passare dal ponte IN SILENZIO. Questo test
+       esiste perche fra sei mesi qualcuno cambiera un numero solo. */
+    const fs = require('fs');
+    const worker = fs.readFileSync(__dirname + '/../turn-worker/worker.js', 'utf8');
+    const client = fs.readFileSync(__dirname + '/../modifica.js', 'utf8');
+    const dura = parseInt(worker.match(/const TURN_TTL_SECONDS = (\d+);/)[1], 10) * 1000;
+    const tiene = eval(client.match(/const ICE_REUSE_MS = ([^;]+);/)[1]);
+    assert.ok(tiene < dura,
+      'l app tiene le credenziali (' + (tiene/60000) + ' min) piu a lungo di quanto durino (' + (dura/60000) + ' min)');
+    assert.ok(dura - tiene >= 60000,
+      'serve almeno un minuto di margine fra quando si smette di usarle e quando scadono');
+  });
+
+  test('le credenziali fresche si riusano, quelle vecchie si richiedono', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      window.__chieste = 0;
+      fetch = () => { window.__chieste++;
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ iceServers: [{ urls: 'turn:x' }] }) }); };
+      RELAYS.length = 0; RELAYS.push('https://uno.example');
+      await fetchIceServers();
+      const dopoLaPrima = window.__chieste;
+      await fetchIceServers();
+      const riusate = window.__chieste;
+      /* si finge che sia passato il tempo */
+      iceServersUntil = Date.now() - 1;
+      await fetchIceServers();
+      return JSON.stringify({ dopoLaPrima, riusate, dopoLaScadenza: window.__chieste });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.dopoLaPrima, 1, 'la prima volta si chiedono');
+      assert.strictEqual(o.riusate, 1, 'finche sono fresche NON si richiedono: costano denaro vero');
+      assert.strictEqual(o.dopoLaScadenza, 2, 'ma quando invecchiano si rinnovano da sole');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `

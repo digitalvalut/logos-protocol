@@ -2964,9 +2964,25 @@ const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, 
 /* TURN_BROKER_URL non esiste piu': l'indirizzo lo costruisce askAnyRelay. */
 
 let cachedIceServers = null;
-/* Fetched once per page load and reused — the credentials are valid 24h, far
-   longer than any single visit, so there is nothing to gain from asking
-   again mid-session, once it has genuinely succeeded.
+let iceServersUntil = 0;
+
+/* Quanto ci si fida di credenziali gia' in mano prima di richiederle.
+
+   ⚠️ IL NUMERO QUI SOTTO E' LEGATO A `TURN_TTL_SECONDS` NEL WORKER: quello dice
+   quanto durano davvero, questo quanto le teniamo. Questo deve restare
+   COMODAMENTE PIU' CORTO, o l'app userebbe credenziali gia' scadute e le
+   chiamate smetterebbero di passare dal ponte senza che nessuno lo dica.
+   Oggi: durano 10 minuti, se ne tengono 7. Se si cambia uno, si cambia l'altro. */
+const ICE_REUSE_MS = 7 * 60 * 1000;
+
+/* Chieste una volta e riusate finche' sono fresche.
+
+   Prima erano valide 24 ore e si chiedevano una volta per apertura della pagina,
+   perche' un giorno intero e' molto piu' lungo di qualunque visita. Quel
+   ragionamento poggiava tutto sulle 24 ore: accorciarle senza toccare questo
+   punto avrebbe lasciato chi tiene l'app aperta a lungo con un lasciapassare
+   scaduto in mano, e le chiamate avrebbero smesso di passare dal ponte in
+   silenzio — il tipo di guasto che non si vede finche' non serve davvero.
    A failure is deliberately NOT cached, and this is the one thing here that
    changed after it turned out to matter: a single blip on this fetch — a
    network hiccup at the exact moment the page opened, a slow cold start on
@@ -2980,7 +2996,7 @@ let cachedIceServers = null;
    reasonable chance that whatever failed a moment ago has already recovered. */
 let iceServersPromise = null;
 async function fetchIceServers(){
-  if (cachedIceServers) return cachedIceServers;
+  if (cachedIceServers && Date.now() < iceServersUntil) return cachedIceServers;
   /* The promise is held, not just the result — the same fix, for the same
      reason, as myIdentity() and myKeyPair() further down. Two callers arriving
      together (the screen warming this up, and the connection that needs it a
@@ -3000,6 +3016,7 @@ async function fetchIceServers(){
       const data = await esito.res.json();
       if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
       cachedIceServers = data.iceServers;
+      iceServersUntil = Date.now() + ICE_REUSE_MS;
       return cachedIceServers;
     }catch(e){
       return ICE_STUN_ONLY.iceServers;
@@ -6543,7 +6560,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.88';
+const APP_VERSION = 'logos-modifica-3.89';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

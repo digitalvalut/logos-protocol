@@ -70,7 +70,20 @@ const ALLOWED_ORIGINS = [
   'https://appassets.androidplatform.net',
 ];
 const ALLOWED_ORIGIN = ALLOWED_ORIGINS[0]; // what an unknown origin is answered with
-const TURN_TTL_SECONDS = 86400; // 24h — long enough for the longest realistic call
+/* Dieci minuti, non piu' ventiquattro ore.
+
+   Un lasciapassare per il ponte veniva dato a chiunque lo chiedesse, senza
+   domande, e valeva un giorno intero: chi ne raccoglieva a sufficienza poteva
+   far passare traffico proprio a spese di chi ospita il servizio, o esaurirne
+   la capacita' finche' le chiamate vere non passavano piu'. Accorciarlo non
+   chiude la porta — resta senza autenticazione — ma riduce di centoquaranta
+   volte quanto vale ogni singolo pezzo di carta portato via.
+
+   ⚠️ LEGATO A ICE_REUSE_MS NEL CLIENT, che dice per quanto l'app li tiene
+   prima di richiederli: quello deve restare comodamente piu' corto di questo,
+   o si finirebbe a usare credenziali gia' scadute. Cambiando uno, cambiare
+   l'altro. */
+const TURN_TTL_SECONDS = 600;
 const MAILBOX_TTL_SECONDS = 120; // long enough to open the app and be found, no longer
 const WAKE_TTL_SECONDS = 24 * 3600; // an invite is opened when the other person next picks up their phone
 const MAX_BODY_BYTES = 8192; // an encrypted offer/answer is ~1.5KB once sealed and base64'd; this is generous headroom
