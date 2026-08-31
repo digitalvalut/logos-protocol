@@ -91,10 +91,10 @@ Object.assign(I18N.en, {
 
 
 "home.legalSummary":"How it works, in three technical lines",
-"home.legalBody":"It reveals your network address (IP) to whoever you talk to; it needs both of you online at once, otherwise nothing arrives, and on heavily filtered networks calls may not connect; no website can prevent a screenshot, ever.",
-"home.legalGraph":"The service that puts the two phones in touch sees which slots are being checked and from which internet address: it can know who talks to whom, and how often — not what they say.",
+"home.legalBody":"You both need to be online at the same time, or nothing arrives; and on heavily filtered networks calls may not connect.",
+"home.legalGraph":"The service that puts the two phones in touch sees which slots are being checked: it can know who talks to whom, and how often — not what they say.",
 "home.legalShort":"The six-digit code is short: anyone able to record the invite slots could try every code and read what they hold. That is why they last two minutes and work once.",
-"home.legalNoLock":"Without the optional lock, the long invite crosses the channel you send it on readable by whoever carries it: it holds your network addresses, not your messages.",
+"home.legalNoLock":"Without the optional lock, the long invite crosses the channel you send it on readable by whoever carries it. Your messages do not: they never go through it.",
 "nav.back":"Back",
 "start.share":"Send the invite","btn.copyCode":"Copy the code",
 "join.sendAnswer":"Send the reply",
@@ -276,10 +276,10 @@ Object.assign(I18N.it, {
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
 "home.nameLabel":"Come ti chiami","home.namePh":"Il tuo nome",
 "home.legalSummary":"Come funziona, in tre righe tecniche",
-"home.legalBody":"Rivela il tuo indirizzo di rete (IP) a chi parli con te; serve che siate online insieme, altrimenti non arriva nulla, e su reti molto filtrate le chiamate possono non collegarsi; nessun sito web può impedire uno screenshot, a nessuno.",
-"home.legalGraph":"Il servizio che fa incontrare i due telefoni vede quali caselle vengono controllate e da quale indirizzo internet: può sapere chi parla con chi e quanto spesso — non cosa si dicono.",
+"home.legalBody":"Serve che siate online tutti e due nello stesso momento, altrimenti non arriva nulla; e su reti molto filtrate le chiamate possono non collegarsi.",
+"home.legalGraph":"Il servizio che fa incontrare i due telefoni vede quali caselle vengono controllate: può sapere chi parla con chi e quanto spesso — non cosa si dicono.",
 "home.legalShort":"Il codice a sei cifre è corto: chi riuscisse a registrare le caselle degli inviti potrebbe provarle tutte e leggere ciò che contengono. Per questo durano due minuti e valgono una volta sola.",
-"home.legalNoLock":"Senza il lucchetto opzionale, l'invito lungo attraversa il canale su cui lo mandi leggibile da chi lo trasporta: contiene i tuoi indirizzi di rete, non i messaggi.",
+"home.legalNoLock":"Senza il lucchetto opzionale, l'invito lungo attraversa il canale su cui lo mandi leggibile da chi lo trasporta. I messaggi no: quelli non ci passano mai.",
 "contacts.title":"Contatti recenti",
 "contacts.note":"Un tocco per rivederli: quello che vi siete detti è rimasto qui. Chi ha anche lasciato il suo indirizzo si richiama con un tocco solo — agli altri serve un invito nuovo.",
 "verify.title":"Codice di sicurezza",
@@ -467,10 +467,10 @@ Object.assign(I18N.fr, {
 
 
 "home.legalSummary":"Comment ça marche, en trois lignes techniques",
-"home.legalBody":"Cela révèle votre adresse réseau (IP) à votre interlocuteur ; il faut que vous soyez tous les deux en ligne en même temps, sinon rien n'arrive, et sur des réseaux très filtrés les appels peuvent ne pas se connecter ; aucun site web ne peut jamais empêcher une capture d'écran.",
-"home.legalGraph":"Le service qui met les deux téléphones en relation voit quelles boîtes sont consultées et depuis quelle adresse internet : il peut savoir qui parle à qui, et à quelle fréquence — pas ce qu'ils se disent.",
+"home.legalBody":"Vous devez être en ligne tous les deux en même temps, sinon rien n'arrive ; et sur les réseaux très filtrés les appels peuvent ne pas aboutir.",
+"home.legalGraph":"Le service qui met les deux téléphones en relation voit quelles boîtes sont consultées : il peut savoir qui parle à qui, et à quelle fréquence — pas ce qui se dit.",
 "home.legalShort":"Le code à six chiffres est court : qui pourrait enregistrer les boîtes des invitations pourrait tous les essayer et lire ce qu'elles contiennent. C'est pourquoi elles durent deux minutes et ne servent qu'une fois.",
-"home.legalNoLock":"Sans le verrou facultatif, l'invitation longue traverse le canal par lequel vous l'envoyez, lisible par qui la transporte : elle contient vos adresses réseau, pas vos messages.",
+"home.legalNoLock":"Sans le verrou optionnel, l'invitation longue traverse le canal que vous utilisez, lisible par qui la transporte. Vos messages non : ils n'y passent jamais.",
 "nav.back":"Retour",
 "start.create":"Préparer l'invitation","start.share":"Envoyer l'invitation","btn.copyCode":"Copier le code",
 "start.pastePh":"Collez la réponse ici…","btn.connect":"Entrer dans la discussion",
@@ -648,10 +648,10 @@ Object.assign(I18N.de, {
 
 
 "home.legalSummary":"Wie es funktioniert, in drei technischen Zeilen",
-"home.legalBody":"Es zeigt deine Netzwerkadresse (IP) demjenigen, mit dem du sprichst; ihr müsst beide gleichzeitig online sein, sonst kommt nichts an, und in stark gefilterten Netzwerken verbinden sich Anrufe möglicherweise nicht; keine Website kann jemals einen Screenshot verhindern.",
-"home.legalGraph":"Der Dienst, der die beiden Telefone zusammenbringt, sieht, welche Fächer abgefragt werden und von welcher Internetadresse: er kann wissen, wer mit wem spricht und wie oft — nicht, was gesagt wird.",
+"home.legalBody":"Ihr müsst beide gleichzeitig online sein, sonst kommt nichts an; und in stark gefilterten Netzen kommen Anrufe womöglich nicht zustande.",
+"home.legalGraph":"Der Dienst, der die beiden Telefone zusammenbringt, sieht, welche Fächer abgefragt werden: er kann wissen, wer mit wem spricht und wie oft — nicht, was gesagt wird.",
 "home.legalShort":"Der sechsstellige Code ist kurz: wer die Einladungsfächer aufzeichnen könnte, könnte alle Codes durchprobieren und ihren Inhalt lesen. Deshalb gelten sie zwei Minuten und nur einmal.",
-"home.legalNoLock":"Ohne das optionale Schloss läuft die lange Einladung über den Kanal, auf dem du sie schickst, lesbar für den, der sie transportiert: sie enthält deine Netzwerkadressen, nicht deine Nachrichten.",
+"home.legalNoLock":"Ohne das optionale Schloss läuft die lange Einladung lesbar über den Kanal, auf dem du sie schickst. Deine Nachrichten nicht: die gehen dort nie durch.",
 "nav.back":"Zurück",
 "start.create":"Einladung vorbereiten","start.share":"Einladung senden","btn.copyCode":"Code kopieren",
 "start.pastePh":"Antwort hier einfügen…","btn.connect":"In den Chat gehen",
@@ -829,10 +829,10 @@ Object.assign(I18N.es, {
 
 
 "home.legalSummary":"Cómo funciona, en tres líneas técnicas",
-"home.legalBody":"Revela tu dirección de red (IP) a quien hables; hace falta que ambos estéis en línea a la vez, si no, no llega nada, y en redes muy filtradas las llamadas pueden no conectarse; ninguna web puede impedir jamás una captura de pantalla.",
-"home.legalGraph":"El servicio que pone en contacto los dos teléfonos ve qué buzones se consultan y desde qué dirección de internet: puede saber quién habla con quién y con qué frecuencia — no qué se dicen.",
+"home.legalBody":"Tenéis que estar los dos en línea a la vez, o no llega nada; y en redes muy filtradas las llamadas pueden no conectarse.",
+"home.legalGraph":"El servicio que pone en contacto los dos teléfonos ve qué casillas se consultan: puede saber quién habla con quién y con qué frecuencia — no qué se dicen.",
 "home.legalShort":"El código de seis cifras es corto: quien pudiera registrar los buzones de las invitaciones podría probarlos todos y leer lo que contienen. Por eso duran dos minutos y valen una sola vez.",
-"home.legalNoLock":"Sin el candado opcional, la invitación larga atraviesa el canal por el que la envías legible para quien la transporta: contiene tus direcciones de red, no tus mensajes.",
+"home.legalNoLock":"Sin el candado opcional, la invitación larga cruza el canal por el que la envías legible para quien la transporta. Tus mensajes no: por ahí no pasan nunca.",
 "nav.back":"Atrás",
 "start.create":"Preparar la invitación","start.share":"Enviar la invitación","btn.copyCode":"Copiar el código",
 "start.pastePh":"Pega aquí la respuesta…","btn.connect":"Entrar en el chat",
@@ -1010,10 +1010,10 @@ Object.assign(I18N.pt, {
 
 
 "home.legalSummary":"Como funciona, em três linhas técnicas",
-"home.legalBody":"Revela o seu endereço de rede (IP) a quem fala consigo; é preciso que ambos estejam online ao mesmo tempo, senão nada chega, e em redes muito filtradas as chamadas podem não ligar; nenhum site pode impedir uma captura de ecrã, nunca.",
-"home.legalGraph":"O serviço que põe os dois telemóveis em contacto vê que caixas são consultadas e de que endereço de internet: pode saber quem fala com quem e com que frequência — não o que dizem.",
+"home.legalBody":"Têm de estar os dois online ao mesmo tempo, senão não chega nada; e em redes muito filtradas as chamadas podem não ligar.",
+"home.legalGraph":"O serviço que põe os dois telemóveis em contacto vê que caixas são consultadas: pode saber quem fala com quem e com que frequência — não o que dizem.",
 "home.legalShort":"O código de seis dígitos é curto: quem conseguisse registar as caixas dos convites podia experimentá-los todos e ler o que contêm. Por isso duram dois minutos e valem uma só vez.",
-"home.legalNoLock":"Sem o cadeado opcional, o convite longo atravessa o canal por onde o envia legível por quem o transporta: contém os seus endereços de rede, não as suas mensagens.",
+"home.legalNoLock":"Sem o cadeado opcional, o convite longo atravessa o canal por onde o envia legível para quem o transporta. As suas mensagens não: por ali nunca passam.",
 "nav.back":"Voltar",
 "start.create":"Preparar o convite","start.share":"Enviar o convite","btn.copyCode":"Copiar o código",
 "start.pastePh":"Cole aqui a resposta…","btn.connect":"Entrar na conversa",
@@ -1191,10 +1191,10 @@ Object.assign(I18N.ru, {
 
 
 "home.legalSummary":"Как это работает, в трёх технических строках",
-"home.legalBody":"Это раскрывает ваш сетевой адрес (IP) собеседнику; нужно, чтобы вы оба были онлайн одновременно, иначе ничего не дойдёт, а в сильно фильтруемых сетях звонки могут не соединиться; ни один сайт никогда не может предотвратить скриншот.",
-"home.legalGraph":"Служба, которая сводит два телефона, видит, какие ячейки проверяются и с какого интернет-адреса: она может знать, кто с кем говорит и как часто — но не что именно.",
+"home.legalBody":"Вы оба должны быть в сети одновременно, иначе ничего не дойдёт; а в сильно фильтруемых сетях звонки могут не соединяться.",
+"home.legalGraph":"Служба, которая сводит два телефона, видит, какие ячейки проверяются: она может знать, кто с кем говорит и как часто — но не о чём.",
 "home.legalShort":"Шестизначный код короток: тот, кто смог бы записать ячейки приглашений, перебрал бы все коды и прочитал их содержимое. Поэтому они живут две минуты и срабатывают один раз.",
-"home.legalNoLock":"Без необязательного замка длинное приглашение идёт по тому каналу, которым вы его отправляете, и читаемо для того, кто его переносит: в нём ваши сетевые адреса, а не сообщения.",
+"home.legalNoLock":"Без необязательного замка длинное приглашение идёт по выбранному вами каналу в читаемом виде для того, кто его несёт. Ваши сообщения — нет: они через него никогда не проходят.",
 "nav.back":"Назад",
 "start.create":"Подготовить приглашение","start.share":"Отправить приглашение","btn.copyCode":"Скопировать код",
 "start.pastePh":"Вставьте ответ сюда…","btn.connect":"Войти в чат",
@@ -1372,10 +1372,10 @@ Object.assign(I18N.zh, {
 
 
 "home.legalSummary":"工作原理，三句技术说明",
-"home.legalBody":"它会向和你聊天的人显示你的网络地址（IP）；需要双方同时在线，否则无法送达，在过滤严格的网络上通话可能无法连接；任何网站都无法阻止截图，永远不能。",
-"home.legalGraph":"让两部手机相遇的服务能看到哪些信箱被查询、来自哪个网络地址：它可以知道谁和谁在联系、多久一次——但不知道你们说了什么。",
+"home.legalBody":"你们两个必须同时在线，否则什么也送不到；在过滤严格的网络上，通话可能连不上。",
+"home.legalGraph":"让两台手机相遇的服务能看到哪些格子被查询：它可以知道谁和谁通话、多久一次——但不知道说了什么。",
 "home.legalShort":"六位数的码很短：能记录邀请信箱的人可以把所有码都试一遍并读到其中的内容。因此它们只存两分钟，且只能用一次。",
-"home.legalNoLock":"不加可选的锁时，长邀请会以可读的形式经过你发送它的渠道，传递它的人能看到：里面是你的网络地址，不是你的消息。",
+"home.legalNoLock":"不开可选的锁时，长邀请会以可读的形式经过你发送它的渠道，传递它的人能看到。你的消息不会：它们从不经过那里。",
 "nav.back":"返回",
 "start.create":"准备邀请","start.share":"发送邀请","btn.copyCode":"复制代码",
 "start.pastePh":"在此粘贴回复…","btn.connect":"进入聊天",
@@ -1553,10 +1553,10 @@ Object.assign(I18N.ar, {
 
 
 "home.legalSummary":"كيف يعمل هذا، في ثلاثة أسطر تقنية",
-"home.legalBody":"يكشف هذا عنوان شبكتك (IP) لمن تتحدث معه؛ يتطلب أن تكونا متصلَين في الوقت نفسه، وإلا لن يصل شيء، وفي الشبكات شديدة التصفية قد لا تتصل المكالمات؛ لا يمكن لأي موقع أن يمنع لقطة شاشة، أبدًا.",
-"home.legalGraph":"الخدمة التي تجمع الهاتفين ترى أي صناديق يجري فحصها ومن أي عنوان إنترنت: يمكنها معرفة من يتحدث مع من وكم مرة — لا ما يقولانه.",
+"home.legalBody":"يجب أن تكونا متصلين في الوقت نفسه، وإلا لن يصل شيء؛ وعلى الشبكات شديدة الترشيح قد لا تُنشأ المكالمات.",
+"home.legalGraph":"الخدمة التي تجمع الهاتفين ترى أي الصناديق يجري فحصها: يمكنها معرفة من يتحدث مع من وكم مرة — لا ما يقولانه.",
 "home.legalShort":"الرمز المكوّن من ستة أرقام قصير: من يستطيع تسجيل صناديق الدعوات يمكنه تجربتها كلها وقراءة ما تحتويه. لذلك تدوم دقيقتين وتصلح مرة واحدة.",
-"home.legalNoLock":"بدون القفل الاختياري، تعبر الدعوة الطويلة القناة التي ترسلها عبرها مقروءة لمن ينقلها: فهي تحتوي عناوين شبكتك، لا رسائلك.",
+"home.legalNoLock":"بدون القفل الاختياري، تعبر الدعوة الطويلة القناة التي ترسلها عبرها مقروءةً لمن ينقلها. أما رسائلك فلا: هي لا تمر من هناك أبدًا.",
 "nav.back":"رجوع",
 "start.create":"تجهيز الدعوة","start.share":"إرسال الدعوة","btn.copyCode":"نسخ الرمز",
 "start.pastePh":"الصق الرد هنا…","btn.connect":"ادخل إلى المحادثة",
@@ -1734,10 +1734,10 @@ Object.assign(I18N.ur, {
 
 
 "home.legalSummary":"یہ کیسے کام کرتا ہے، تین تکنیکی سطروں میں",
-"home.legalBody":"یہ آپ کا نیٹ ورک ایڈریس (IP) اس شخص کو ظاہر کرتا ہے جس سے آپ بات کر رہے ہیں؛ دونوں کا ایک ہی وقت میں آن لائن ہونا ضروری ہے، ورنہ کچھ نہیں پہنچے گا، اور سخت فلٹر شدہ نیٹ ورکس پر کالز کنیکٹ نہیں ہو سکتیں؛ کوئی ویب سائٹ کبھی بھی اسکرین شاٹ نہیں روک سکتی۔",
-"home.legalGraph":"جو سروس دونوں فونز کو ملاتی ہے وہ دیکھتی ہے کہ کون سے خانے چیک ہو رہے ہیں اور کس انٹرنیٹ پتے سے: وہ جان سکتی ہے کون کس سے بات کرتا ہے اور کتنی بار — یہ نہیں کہ کیا کہتے ہیں۔",
+"home.legalBody":"آپ دونوں کا ایک ہی وقت میں آن لائن ہونا ضروری ہے، ورنہ کچھ نہیں پہنچتا؛ اور بہت چھنے ہوئے نیٹ ورکس پر کالیں نہ جڑ سکیں۔",
+"home.legalGraph":"دونوں فونوں کو ملانے والی سروس دیکھتی ہے کہ کون سے خانے دیکھے جا رہے ہیں: وہ جان سکتی ہے کون کس سے بات کرتا ہے اور کتنی بار — کیا کہتے ہیں، وہ نہیں۔",
 "home.legalShort":"چھ ہندسوں کا کوڈ چھوٹا ہے: جو دعوتوں کے خانے ریکارڈ کر سکے وہ سارے کوڈ آزما کر ان کا مواد پڑھ سکتا ہے۔ اسی لیے یہ دو منٹ چلتے ہیں اور ایک بار کام آتے ہیں۔",
-"home.legalNoLock":"اختیاری تالے کے بغیر، لمبی دعوت اُس راستے سے گزرتی ہے جس پر آپ بھیجتے ہیں اور لے جانے والا اسے پڑھ سکتا ہے: اس میں آپ کے نیٹ ورک پتے ہوتے ہیں، آپ کے پیغامات نہیں۔",
+"home.legalNoLock":"اختیاری تالے کے بغیر، لمبی دعوت اُس راستے سے پڑھنے کے قابل حالت میں گزرتی ہے جس سے آپ بھیجتے ہیں۔ آپ کے پیغامات نہیں: وہ وہاں سے کبھی نہیں گزرتے۔",
 "nav.back":"واپس",
 "start.create":"دعوت تیار کریں","start.share":"دعوت بھیجیں","btn.copyCode":"کوڈ کاپی کریں",
 "start.pastePh":"جواب یہاں پیسٹ کریں…","btn.connect":"چیٹ میں جائیں",
@@ -1915,10 +1915,10 @@ Object.assign(I18N.hi, {
 
 
 "home.legalSummary":"यह कैसे काम करता है, तीन तकनीकी पंक्तियों में",
-"home.legalBody":"यह आपका नेटवर्क पता (IP) उस व्यक्ति को दिखाता है जिससे आप बात कर रहे हैं; ज़रूरी है कि आप दोनों एक ही समय पर ऑनलाइन हों, वरना कुछ नहीं पहुँचेगा, और भारी फ़िल्टर वाले नेटवर्क पर कॉल कनेक्ट नहीं हो सकतीं; कोई भी वेबसाइट कभी स्क्रीनशॉट नहीं रोक सकती।",
-"home.legalGraph":"जो सेवा दोनों फ़ोनों को मिलाती है वह देखती है कि कौन से बक्से जाँचे जा रहे हैं और किस इंटरनेट पते से: वह जान सकती है कौन किससे बात करता है और कितनी बार — यह नहीं कि वे क्या कहते हैं।",
+"home.legalBody":"आप दोनों का एक ही समय ऑनलाइन होना ज़रूरी है, वरना कुछ नहीं पहुँचता; और बहुत छने हुए नेटवर्क पर कॉल जुड़ नहीं भी सकती।",
+"home.legalGraph":"दोनों फ़ोनों को मिलाने वाली सेवा देखती है कि कौन-से खाने जाँचे जा रहे हैं: वह जान सकती है कौन किससे बात करता है और कितनी बार — क्या कहते हैं, वह नहीं।",
 "home.legalShort":"छह अंकों का कोड छोटा है: जो निमंत्रणों के बक्से रिकॉर्ड कर सके वह सारे कोड आज़माकर उनकी सामग्री पढ़ सकता है। इसीलिए वे दो मिनट चलते हैं और एक ही बार काम आते हैं।",
-"home.legalNoLock":"वैकल्पिक ताले के बिना, लंबा निमंत्रण उसी रास्ते से जाता है जिससे आप भेजते हैं और ले जाने वाला उसे पढ़ सकता है: उसमें आपके नेटवर्क पते होते हैं, आपके संदेश नहीं।",
+"home.legalNoLock":"वैकल्पिक ताले के बिना, लंबा निमंत्रण उस माध्यम से पढ़ने योग्य रूप में जाता है जिससे आप भेजते हैं। आपके संदेश नहीं: वे वहाँ से कभी नहीं गुज़रते।",
 "nav.back":"वापस",
 "start.create":"निमंत्रण तैयार करें","start.share":"निमंत्रण भेजें","btn.copyCode":"कोड कॉपी करें",
 "start.pastePh":"जवाब यहाँ पेस्ट करें…","btn.connect":"चैट में जाएं",
@@ -2096,10 +2096,10 @@ Object.assign(I18N.bn, {
 
 
 "home.legalSummary":"এটি কীভাবে কাজ করে, তিনটি প্রযুক্তিগত লাইনে",
-"home.legalBody":"এটি আপনি যার সাথে কথা বলছেন তাকে আপনার নেটওয়ার্ক ঠিকানা (IP) দেখায়; আপনাদের দুজনকেই একই সময়ে অনলাইনে থাকতে হবে, নাহলে কিছুই পৌঁছাবে না, এবং অত্যন্ত ফিল্টার করা নেটওয়ার্কে কল সংযুক্ত নাও হতে পারে; কোনো ওয়েবসাইট কখনও স্ক্রিনশট আটকাতে পারে না।",
-"home.legalGraph":"যে পরিষেবা দুটি ফোনকে মিলিয়ে দেয় সে দেখে কোন বাক্সগুলি পরীক্ষা করা হচ্ছে আর কোন ইন্টারনেট ঠিকানা থেকে: সে জানতে পারে কে কার সাথে কথা বলে আর কত ঘন ঘন — কী বলে তা নয়।",
+"home.legalBody":"আপনাদের দুজনকেই একই সময়ে অনলাইন থাকতে হবে, নইলে কিছুই পৌঁছায় না; আর খুব ছাঁকা নেটওয়ার্কে কল নাও যুক্ত হতে পারে।",
+"home.legalGraph":"দুই ফোনকে মেলানো পরিষেবাটি দেখে কোন খোপগুলো দেখা হচ্ছে: কে কার সঙ্গে কথা বলে আর কত ঘন ঘন, তা জানতে পারে — কী বলে তা নয়।",
 "home.legalShort":"ছয় অঙ্কের কোড ছোট: যে আমন্ত্রণের বাক্সগুলি রেকর্ড করতে পারে সে সব কোড চেষ্টা করে ভেতরের জিনিস পড়তে পারে। তাই সেগুলি দুই মিনিট টেকে আর একবারই কাজে লাগে।",
-"home.legalNoLock":"ঐচ্ছিক তালা ছাড়া, লম্বা আমন্ত্রণ যে পথে পাঠান সেই পথেই যায় এবং যে বহন করে সে পড়তে পারে: এতে থাকে আপনার নেটওয়ার্ক ঠিকানা, আপনার বার্তা নয়।",
+"home.legalNoLock":"ঐচ্ছিক তালা ছাড়া, লম্বা আমন্ত্রণটি যে পথে পাঠাচ্ছেন সেখানে পড়ার মতো অবস্থায় যায়। আপনার বার্তা নয়: সেগুলো ওখান দিয়ে কখনও যায় না।",
 "nav.back":"পিছনে",
 "start.create":"আমন্ত্রণ প্রস্তুত করুন","start.share":"আমন্ত্রণ পাঠান","btn.copyCode":"কোড কপি করুন",
 "start.pastePh":"উত্তর এখানে পেস্ট করুন…","btn.connect":"চ্যাটে প্রবেশ করুন",
@@ -2277,10 +2277,10 @@ Object.assign(I18N.id, {
 
 
 "home.legalSummary":"Cara kerjanya, dalam tiga baris teknis",
-"home.legalBody":"Ini mengungkapkan alamat jaringan (IP) Anda kepada lawan bicara Anda; Anda berdua harus online bersamaan, jika tidak tidak ada yang sampai, dan pada jaringan yang sangat difilter panggilan mungkin tidak tersambung; tidak ada situs web yang bisa mencegah tangkapan layar, tidak pernah.",
-"home.legalGraph":"Layanan yang mempertemukan kedua ponsel melihat kotak mana yang diperiksa dan dari alamat internet mana: ia bisa tahu siapa berbicara dengan siapa dan seberapa sering — bukan apa yang dikatakan.",
+"home.legalBody":"Kalian berdua harus online pada saat yang sama, kalau tidak tak ada yang sampai; dan di jaringan yang sangat disaring panggilan bisa gagal tersambung.",
+"home.legalGraph":"Layanan yang mempertemukan kedua ponsel melihat kotak mana yang diperiksa: ia bisa tahu siapa berbicara dengan siapa dan seberapa sering — bukan apa isinya.",
 "home.legalShort":"Kode enam angka itu pendek: siapa pun yang bisa merekam kotak undangan dapat mencoba semuanya dan membaca isinya. Karena itu kode hanya bertahan dua menit dan berlaku sekali.",
-"home.legalNoLock":"Tanpa gembok opsional, undangan panjang melintasi saluran tempat Anda mengirimnya dalam bentuk terbaca oleh yang membawanya: isinya alamat jaringan Anda, bukan pesan Anda.",
+"home.legalNoLock":"Tanpa kunci opsional, undangan panjang melewati saluran pengiriman dalam keadaan terbaca oleh yang membawanya. Pesan Anda tidak: pesan tidak pernah lewat situ.",
 "nav.back":"Kembali",
 "start.create":"Siapkan undangan","start.share":"Kirim undangan","btn.copyCode":"Salin kode",
 "start.pastePh":"Tempel balasan di sini…","btn.connect":"Masuk ke obrolan",
@@ -6543,7 +6543,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.87';
+const APP_VERSION = 'logos-modifica-3.88';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

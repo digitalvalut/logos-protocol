@@ -224,12 +224,12 @@
   .bigchoice.primary .ic{color:var(--accent-ink);opacity:.9}
   .bigchoice.primary .d{color:rgba(26,14,5,.72)}
 
-  .bigchoice.enter{background:linear-gradient(160deg,#9dbaff,#6f97f5);
-    border-color:transparent;color:#0a1330;
-    box-shadow:0 10px 30px rgba(111,151,245,.26)}
-  .bigchoice.enter:hover{box-shadow:0 16px 40px rgba(111,151,245,.34)}
-  .bigchoice.enter .ic{color:#0a1330;opacity:.9}
-  .bigchoice.enter .d{color:rgba(10,19,48,.70)}
+  .bigchoice.enter{background:linear-gradient(160deg,#5ab8ff,#2e86f5);
+    border-color:transparent;color:#08142e;
+    box-shadow:0 10px 30px rgba(46,134,245,.34)}
+  .bigchoice.enter:hover{box-shadow:0 16px 40px rgba(46,134,245,.42)}
+  .bigchoice.enter .ic{color:#08142e;opacity:.9}
+  .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
   .bigchoice:not(.primary):not(.enter):hover{border-color:var(--dim)}
 
