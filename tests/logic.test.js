@@ -3858,6 +3858,45 @@ test.describe('due nomi che sembrano lo stesso nome', () => {
       'senza collisione non c\'e niente da avvertire');
     app.stop();
   });
+
+  test('due sconosciuti che non hanno scritto un nome non sono un finto allarme', () => {
+    /* "Qualcuno" e cio che l'app scrive da sola quando l'altro non ha
+       digitato niente — non un nome scelto per sembrare un altro. Trovato
+       da un utente vero: due persone diverse, entrambe senza nome, finivano
+       segnalate come un possibile impostore l'una dell'altra. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Qualcuno', 'fp-uno', null, null);
+      touchContact('Qualcuno', 'fp-due', null, null);
+      renderContacts();
+    `);
+    const html = app.run("$('contactsList').innerHTML");
+    assert.doesNotMatch(html, /ctrust/,
+      'due nomi vuoti non sono due impostori: nessun avviso deve comparire');
+    const nomi = JSON.parse(app.run('JSON.stringify(loadContacts().map(function(c){ return c.nick; }))'));
+    assert.strictEqual(nomi.length, 2, 'restano comunque due contatti distinti');
+    assert.ok(nomi.some(n => /\(2\)/.test(n)),
+      'il secondo resta comunque contrassegnato "(2)": senza, le due righe si leggono identiche in elenco');
+    app.stop();
+  });
+
+  test('ma un nome VERO scelto per assomigliare a "Qualcuno" resta segnalato', () => {
+    /* Il lato da non rompere: l'esclusione vale solo per il segnaposto
+       automatico, non deve diventare una scappatoia — chi scrive davvero
+       "Qualcuno" (o un suo omoglifo) come nome scelto resta sotto lo stesso
+       controllo di sempre. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Mamma', 'fp-vera', null, null);
+      touchContact('Mаmmа', 'fp-attaccante', null, null);
+      renderContacts();
+    `);
+    assert.match(app.run("$('contactsList').innerHTML"), /ctrust bad/,
+      'una collisione su un nome vero deve restare segnalata come prima');
+    app.stop();
+  });
 });
 
 /* ------------------------------------------------------------------------

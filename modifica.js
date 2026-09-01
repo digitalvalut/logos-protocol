@@ -4720,6 +4720,17 @@ function nickSkeleton(nick){
   return out.toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
+/* "Qualcuno" (o il suo equivalente nelle altre 12 lingue) e cio che l'app
+   scrive da sola quando l'altra persona non ha digitato nessun nome — non e
+   un nome scelto per assomigliare a un altro. Due sconosciuti che hanno
+   entrambi lasciato il campo vuoto non si stanno impersonando a vicenda:
+   non hanno detto niente, nessuno dei due. Escluso dall'avviso "nome quasi
+   identico" per questo — il suffisso "(2)" resta comunque, cosi restano
+   distinguibili in elenco, solo senza l'allarme fuori luogo. */
+const PLACEHOLDER_NICK_SKELETONS = new Set(
+  Object.values(I18N).map(d => nickSkeleton((d && d['chat.someone']) || 'Qualcuno'))
+);
+
 function touchContact(nick, fp, push, addr){
   if (!nick) return;
   let list = loadContacts();
@@ -4788,7 +4799,8 @@ function renderContacts(){
   for (const c of list){ const k = groupKey(c); seen[k] = (seen[k] || 0) + 1; }
   $('contactsList').innerHTML = list.map(c => {
     let mark = '';
-    if (seen[groupKey(c)] > 1){
+    const gk = groupKey(c);
+    if (seen[gk] > 1 && !PLACEHOLDER_NICK_SKELETONS.has(gk)){
       const ok = !!(c.fp && readSafetyRec(safetyKeyFp(c.fp)));
       mark = ok
         ? `<em class="ctrust ok">${esc(t('contacts.sameLookVerified','verificato a voce'))}</em>`
@@ -6696,7 +6708,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.93';
+const APP_VERSION = 'logos-modifica-3.94';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
