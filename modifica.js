@@ -73,6 +73,7 @@ let CURLANG = 'it';
 const I18N = { it: {}, en: {}, ar: {}, bn: {}, de: {}, es: {}, fr: {}, hi: {}, id: {}, pt: {}, ru: {}, ur: {}, zh: {} };
 
 Object.assign(I18N.en, {
+"health.timing":"Last connection",
 "connect.slow":"This is taking longer than usual — that happens on very restricted networks (workplaces, some mobile networks) or if you are not online at the same moment. Wait a bit more, or create a fresh invite.",
 "connect.stillTrying":"Still trying — sometimes it takes a few seconds. Don't close this.",
 "wipe.help":"Want photos, videos and conversations gone from this phone? They cannot be recovered.","wipe.btn":"Wipe everything","wipe.sure":"<b>Sure?</b> Messages, contacts, photos and videos all go. Your address stays yours, and anyone who has it can still reach you.","wipe.yes":"Yes, wipe it all","wipe.no":"No, leave it","wipe.done":"Done. There is nothing left on this phone.",
@@ -261,6 +262,7 @@ Object.assign(I18N.en, {
 
 });
 Object.assign(I18N.it, {
+"health.timing":"Ultimo collegamento",
 "connect.slow":"Ci sta mettendo più del solito — capita su reti molto filtrate (aziendali, alcune reti mobili) o se non siete online nello stesso momento. Aspettate ancora un attimo, oppure create un invito nuovo.",
 "connect.stillTrying":"Ci sto ancora provando — a volte servono un po' di secondi. Non chiudere.",
 "wipe.help":"Vuoi far sparire foto, video e conversazioni da questo telefono? Non si possono recuperare.","wipe.btn":"Pulisci tutto","wipe.sure":"<b>Sicuro?</b> Spariscono i messaggi, i contatti, le foto e i video. Il tuo indirizzo resta il tuo, e chi ce l'ha continua a trovarti.","wipe.yes":"Sì, cancella tutto","wipe.no":"No, lascia stare","wipe.done":"Fatto. Su questo telefono non c'è più niente.",
@@ -450,6 +452,7 @@ Object.assign(I18N.it, {
 });
 
 Object.assign(I18N.fr, {
+"health.timing":"Dernière connexion",
 "connect.slow":"Cela prend plus de temps que d'habitude — cela arrive sur des réseaux très filtrés (entreprises, certains réseaux mobiles) ou si vous n'êtes pas en ligne au même moment. Attendez encore un peu, ou créez une nouvelle invitation.",
 "connect.stillTrying":"J'essaie encore — cela prend parfois quelques secondes. Ne fermez pas.",
 "wipe.help":"Faire disparaître photos, vidéos et conversations de ce téléphone ? Rien ne pourra être récupéré.","wipe.btn":"Tout effacer","wipe.sure":"<b>Sûr ?</b> Messages, contacts, photos et vidéos disparaissent. Votre adresse reste la vôtre, et qui l'a peut toujours vous joindre.","wipe.yes":"Oui, tout effacer","wipe.no":"Non, laisser","wipe.done":"C'est fait. Il ne reste rien sur ce téléphone.",
@@ -631,6 +634,7 @@ Object.assign(I18N.fr, {
 });
 
 Object.assign(I18N.de, {
+"health.timing":"Letzte Verbindung",
 "connect.slow":"Das dauert länger als gewöhnlich — das passiert bei stark gefilterten Netzwerken (Firmen, manche Mobilfunknetze) oder wenn ihr nicht zur gleichen Zeit online seid. Wartet noch etwas, oder erstellt eine neue Einladung.",
 "connect.stillTrying":"Ich versuche es noch — manchmal dauert es ein paar Sekunden. Nicht schließen.",
 "wipe.help":"Sollen Fotos, Videos und Gespräche von diesem Telefon verschwinden? Sie sind nicht wiederherstellbar.","wipe.btn":"Alles löschen","wipe.sure":"<b>Sicher?</b> Nachrichten, Kontakte, Fotos und Videos sind dann weg. Deine Adresse bleibt deine, und wer sie hat, erreicht dich weiterhin.","wipe.yes":"Ja, alles löschen","wipe.no":"Nein, lassen","wipe.done":"Erledigt. Auf diesem Telefon ist nichts mehr.",
@@ -812,6 +816,7 @@ Object.assign(I18N.de, {
 });
 
 Object.assign(I18N.es, {
+"health.timing":"Última conexión",
 "connect.slow":"Esto está tardando más de lo habitual — pasa en redes muy filtradas (empresas, algunas redes móviles) o si no estáis en línea al mismo tiempo. Esperad un poco más, o cread una invitación nueva.",
 "connect.stillTrying":"Sigo intentándolo — a veces tarda unos segundos. No cierres.",
 "wipe.help":"¿Quieres que fotos, vídeos y conversaciones desaparezcan de este teléfono? No se pueden recuperar.","wipe.btn":"Borrar todo","wipe.sure":"<b>¿Seguro?</b> Desaparecen mensajes, contactos, fotos y vídeos. Tu dirección sigue siendo tuya, y quien la tenga podrá localizarte.","wipe.yes":"Sí, borrar todo","wipe.no":"No, dejarlo","wipe.done":"Hecho. En este teléfono ya no queda nada.",
@@ -993,6 +998,7 @@ Object.assign(I18N.es, {
 });
 
 Object.assign(I18N.pt, {
+"health.timing":"Última ligação",
 "connect.slow":"Isto está a demorar mais do que o habitual — acontece em redes muito filtradas (empresas, algumas redes móveis) ou se não estiverem online ao mesmo tempo. Esperem mais um pouco, ou criem um convite novo.",
 "connect.stillTrying":"Ainda a tentar — às vezes demora alguns segundos. Não feche.",
 "wipe.help":"Quer que fotografias, vídeos e conversas desapareçam deste telemóvel? Não podem ser recuperados.","wipe.btn":"Limpar tudo","wipe.sure":"<b>De certeza?</b> Desaparecem mensagens, contactos, fotografias e vídeos. O seu endereço continua seu, e quem o tem continua a encontrá-lo.","wipe.yes":"Sim, apagar tudo","wipe.no":"Não, deixar","wipe.done":"Feito. Neste telemóvel já não há nada.",
@@ -1174,6 +1180,7 @@ Object.assign(I18N.pt, {
 });
 
 Object.assign(I18N.ru, {
+"health.timing":"Последнее соединение",
 "connect.slow":"Это занимает больше времени, чем обычно — так бывает в сильно фильтруемых сетях (на работе, в некоторых мобильных сетях) или если вы не в сети одновременно. Подождите ещё немного или создайте новое приглашение.",
 "connect.stillTrying":"Ещё пробую — иногда нужно несколько секунд. Не закрывайте.",
 "wipe.help":"Убрать с этого телефона фотографии, видео и разговоры? Восстановить их будет нельзя.","wipe.btn":"Стереть всё","wipe.sure":"<b>Точно?</b> Исчезнут сообщения, контакты, фотографии и видео. Ваш адрес останется вашим, и тот, у кого он есть, по-прежнему вас найдёт.","wipe.yes":"Да, стереть всё","wipe.no":"Нет, оставить","wipe.done":"Готово. На этом телефоне ничего не осталось.",
@@ -1355,6 +1362,7 @@ Object.assign(I18N.ru, {
 });
 
 Object.assign(I18N.zh, {
+"health.timing":"上次连接",
 "connect.slow":"这比平常花的时间更长——这种情况常发生在过滤严格的网络（公司、部分移动网络）上，或者你们不在同一时间在线。请再等一会儿，或创建一个新邀请。",
 "connect.stillTrying":"还在尝试——有时需要几秒钟。请不要关闭。",
 "wipe.help":"要把照片、视频和对话从这台手机上清除吗？无法恢复。","wipe.btn":"全部清除","wipe.sure":"<b>确定吗？</b>消息、联系人、照片和视频都会消失。你的地址仍然是你的，有它的人依然能找到你。","wipe.yes":"是的，全部清除","wipe.no":"不，算了","wipe.done":"完成。这台手机上什么都没有了。",
@@ -1536,6 +1544,7 @@ Object.assign(I18N.zh, {
 });
 
 Object.assign(I18N.ar, {
+"health.timing":"آخر اتصال",
 "connect.slow":"هذا يستغرق وقتًا أطول من المعتاد — يحدث هذا في الشبكات شديدة التصفية (أماكن العمل، بعض شبكات الجوال) أو إذا لم تكونا متصلَين في الوقت نفسه. انتظرا قليلًا بعد، أو أنشئا دعوة جديدة.",
 "connect.stillTrying":"ما زلت أحاول — أحيانًا يستغرق الأمر بضع ثوانٍ. لا تغلق.",
 "wipe.help":"هل تريد إزالة الصور ومقاطع الفيديو والمحادثات من هذا الهاتف؟ لا يمكن استرجاعها.","wipe.btn":"امسح كل شيء","wipe.sure":"<b>متأكد؟</b> ستختفي الرسائل وجهات الاتصال والصور والفيديوهات. عنوانك يبقى لك، ومن يملكه يظل قادرًا على الوصول إليك.","wipe.yes":"نعم، امسح الكل","wipe.no":"لا، اتركه","wipe.done":"تم. لم يبق شيء على هذا الهاتف.",
@@ -1717,6 +1726,7 @@ Object.assign(I18N.ar, {
 });
 
 Object.assign(I18N.ur, {
+"health.timing":"آخری کنکشن",
 "connect.slow":"اس میں معمول سے زیادہ وقت لگ رہا ہے — ایسا سخت فلٹر شدہ نیٹ ورکس (دفاتر، بعض موبائل نیٹ ورکس) پر ہوتا ہے یا اگر آپ ایک ہی وقت میں آن لائن نہیں ہیں۔ تھوڑی دیر مزید انتظار کریں، یا ایک نئی دعوت بنائیں۔",
 "connect.stillTrying":"ابھی کوشش جاری ہے — کبھی چند سیکنڈ لگتے ہیں۔ بند نہ کریں۔",
 "wipe.help":"اس فون سے تصویریں، ویڈیو اور گفتگوئیں ہٹا دیں؟ واپس نہیں آئیں گی۔","wipe.btn":"سب مٹا دیں","wipe.sure":"<b>یقین ہے؟</b> پیغامات، رابطے، تصویریں اور ویڈیو سب چلے جائیں گے۔ آپ کا پتہ آپ ہی کا رہے گا، اور جس کے پاس ہے وہ آپ تک پہنچ سکے گا۔","wipe.yes":"ہاں، سب مٹا دو","wipe.no":"نہیں، رہنے دو","wipe.done":"ہو گیا۔ اس فون پر اب کچھ نہیں۔",
@@ -1898,6 +1908,7 @@ Object.assign(I18N.ur, {
 });
 
 Object.assign(I18N.hi, {
+"health.timing":"पिछला कनेक्शन",
 "connect.slow":"इसमें सामान्य से ज़्यादा समय लग रहा है — यह भारी फ़िल्टर वाले नेटवर्क (दफ़्तर, कुछ मोबाइल नेटवर्क) पर होता है या अगर आप एक ही समय पर ऑनलाइन नहीं हैं। थोड़ा और इंतज़ार करें, या एक नया निमंत्रण बनाएं।",
 "connect.stillTrying":"अभी कोशिश जारी है — कभी-कभी कुछ सेकंड लगते हैं। बंद न करें।",
 "wipe.help":"इस फ़ोन से तस्वीरें, वीडियो और बातचीत हटा दें? वापस नहीं आएंगी।","wipe.btn":"सब मिटाएँ","wipe.sure":"<b>पक्का?</b> संदेश, संपर्क, तस्वीरें और वीडियो सब चले जाएंगे। आपका पता आपका ही रहेगा, और जिसके पास है वह आपसे संपर्क कर सकेगा।","wipe.yes":"हाँ, सब मिटा दो","wipe.no":"नहीं, रहने दो","wipe.done":"हो गया। इस फ़ोन पर अब कुछ नहीं है।",
@@ -2079,6 +2090,7 @@ Object.assign(I18N.hi, {
 });
 
 Object.assign(I18N.bn, {
+"health.timing":"শেষ সংযোগ",
 "connect.slow":"এটি স্বাভাবিকের চেয়ে বেশি সময় নিচ্ছে — এটি অত্যন্ত ফিল্টার করা নেটওয়ার্কে (কর্মক্ষেত্র, কিছু মোবাইল নেটওয়ার্ক) অথবা আপনারা একই সময়ে অনলাইনে না থাকলে ঘটে। আরেকটু অপেক্ষা করুন, অথবা একটি নতুন আমন্ত্রণ তৈরি করুন।",
 "connect.stillTrying":"এখনও চেষ্টা চলছে — কখনও কয়েক সেকেন্ড লাগে। বন্ধ করবেন না।",
 "wipe.help":"এই ফোন থেকে ছবি, ভিডিও আর কথাবার্তা মুছে ফেলবেন? ফেরানো যাবে না।","wipe.btn":"সব মুছুন","wipe.sure":"<b>নিশ্চিত?</b> বার্তা, পরিচিতি, ছবি ও ভিডিও সব চলে যাবে। আপনার ঠিকানা আপনারই থাকবে, যার কাছে আছে সে আপনাকে খুঁজে পাবে।","wipe.yes":"হ্যাঁ, সব মুছে দিন","wipe.no":"না, থাক","wipe.done":"হয়ে গেছে। এই ফোনে আর কিছু নেই।",
@@ -2260,6 +2272,7 @@ Object.assign(I18N.bn, {
 });
 
 Object.assign(I18N.id, {
+"health.timing":"Koneksi terakhir",
 "connect.slow":"Ini memakan waktu lebih lama dari biasanya — hal ini terjadi pada jaringan yang sangat difilter (kantor, beberapa jaringan seluler) atau jika Anda tidak online pada saat yang sama. Tunggu sebentar lagi, atau buat undangan baru.",
 "connect.stillTrying":"Masih mencoba — kadang perlu beberapa detik. Jangan ditutup.",
 "wipe.help":"Ingin foto, video, dan percakapan hilang dari ponsel ini? Tidak bisa dikembalikan.","wipe.btn":"Hapus semua","wipe.sure":"<b>Yakin?</b> Pesan, kontak, foto, dan video semuanya hilang. Alamat Anda tetap milik Anda, dan siapa pun yang punya masih bisa menghubungi.","wipe.yes":"Ya, hapus semua","wipe.no":"Tidak, biarkan","wipe.done":"Selesai. Tidak ada apa-apa lagi di ponsel ini.",
@@ -3237,6 +3250,10 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
     if (st === 'connected'){
       if (settled) return;
       settled = true; stop();
+      /* L'ultima tappa: trovare una strada che passi fra le due reti. Non e'
+         nostra — e sapere quanto pesa e' esattamente il punto di misurare. */
+      tempiSegna('rete');
+      ultimiTempi = tempiRiga();
       setStatus(statusEl, ''); if (diagEl) diagEl.classList.add('hide');
       if (onSettle) onSettle(true);
       return;
@@ -3677,6 +3694,41 @@ const DISCONNECT_GRACE_MS = 8000;
 /* Started here because this is the one place every kind of attempt passes
    through — short code, long code, QR, reconnect — so the number shown at the
    end is the real wait, not one route's guess at it. */
+/* ---- dove vanno i secondi ----------------------------------------------
+   Misura e basta: non cambia NIENTE di come l'app si comporta. Serve perche'
+   "ci mette troppo" e' un sintomo, non una diagnosi, e senza sapere quale
+   tappa e' lenta qualunque correzione e' un'ipotesi. La notte del 30-31 agosto
+   ha insegnato quanto costa tirare a indovinare.
+
+   Le tappe sono quattro e sono molto diverse fra loro:
+     preparazione — trasformare il codice in chiave e accendere la connessione;
+                    lenta APPOSTA, e' quello che rende inutile provare i codici
+     attesa       — l'altra persona non ha ancora digitato: non e' colpa nostra
+                    e non si puo' accorciare
+     scambio      — la stretta di mano vera e propria fra i due
+     rete         — trovare una strada che passi fra le due reti: non e' nostra
+
+   Solo "preparazione" e "scambio" sono nostre. Se il tempo sta li', si puo'
+   stringere. Se sta in "attesa" o "rete", stringere non serve a niente e va
+   detto invece di far perdere giornate. */
+let tappe = null;
+function tempiInizio(){ tappe = { t0: Date.now(), ultimo: Date.now(), voci: [] }; }
+function tempiSegna(nome){
+  if (!tappe) return;
+  const ora = Date.now();
+  tappe.voci.push({ nome, ms: ora - tappe.ultimo });
+  tappe.ultimo = ora;
+}
+/* Una riga sola, leggibile da chi non sa niente di reti: "preparazione 0,9s ·
+   attesa 4,2s · scambio 1,1s". Finisce nel resoconto di "Come sta l'app", che
+   e' gia' il posto dove si copia e si manda quando qualcosa non va. */
+function tempiRiga(){
+  if (!tappe || !tappe.voci.length) return '';
+  const tot = ((tappe.ultimo - tappe.t0) / 1000).toFixed(1);
+  return tappe.voci.map(v => v.nome + ' ' + (v.ms / 1000).toFixed(1) + 's').join(' · ') + '  (totale ' + tot + 's)';
+}
+let ultimiTempi = '';
+
 let connectStartedAt = 0;
 async function newPeerConnection(){
   connectStartedAt = Date.now();
@@ -6560,7 +6612,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.89';
+const APP_VERSION = 'logos-modifica-3.90';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6684,6 +6736,10 @@ async function runHealth(){
           : ['off', t('health.mic'), t('health.micUnknown')]);
 
   /* 6 — is the copy running actually the current one */
+  /* Messa qui e non in una schermata nuova: questo e' gia' il posto dove si
+     copia il resoconto quando qualcosa non va, ed e' la' che serve leggerla. */
+  if (ultimiTempi) rows.push(['ok', t('health.timing','Ultimo collegamento'), ultimiTempi]);
+
   const running = await swVersion();
   rows.push(!running ? ['off', t('health.version'), APP_VERSION]
           : running === APP_VERSION ? ['ok', t('health.version'), APP_VERSION]
@@ -7645,6 +7701,7 @@ async function tryQuickConnect(){
      find an empty mailbox and tear down a connection that is already working */
   if (!$('screenChat').classList.contains('hide')) return;
   quickConnecting = true;
+  tempiInizio();
   $('btnQuickConnect').disabled = true;
   setStatus($('quickStatusB'), t('lock.working','…'));
   showBigConnectingB();
@@ -7665,6 +7722,7 @@ async function tryQuickConnect(){
   try{
     const sec = await secReady;
     warmPc = await pcReady;
+    tempiSegna('preparazione');
     const offerKey = await slotId(sec.seed, 'offer');
     const answerKey = await slotId(sec.seed, 'answer');
 
@@ -7746,6 +7804,7 @@ async function tryQuickConnect(){
        to this point was spent waiting for the other person to be there at all,
        and counting that would report a three-minute wake-up as a three-minute
        connection on the very card that says how fast it was. */
+    tempiSegna('attesa');
     connectStartedAt = Date.now();
     pc = warmPc;
     warmPc = null;   /* handed over: the cleanup below must not close it now */
@@ -7766,6 +7825,7 @@ async function tryQuickConnect(){
     /* sent immediately: the other side needs this before it will recognise us,
        and everything still being gathered follows behind it */
     await mailboxPutSealed(answerKey, sec, { sdp: myPc.localDescription.sdp, nick: myNick() });
+    tempiSegna('scambio');
     /* the button stays disabled for the whole handshake now, not just until
        the offer was found — see the note on watchHandshakeProgress for why
        re-enabling it any earlier was a real bug, not a style choice */

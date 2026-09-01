@@ -2917,6 +2917,78 @@ test.describe('il lasciapassare per il ponte', () => {
 
 });
 
+test.describe('dove vanno i secondi', () => {
+
+  /* Misurare, non migliorare. "Ci mette troppo" e un sintomo: senza sapere
+     QUALE tappa e lenta, qualunque correzione e un ipotesi. */
+
+  test('le quattro tappe finiscono in una riga leggibile', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      tempiInizio();
+      await new Promise(r => setTimeout(r, 30)); tempiSegna('preparazione');
+      await new Promise(r => setTimeout(r, 30)); tempiSegna('attesa');
+      await new Promise(r => setTimeout(r, 30)); tempiSegna('scambio');
+      await new Promise(r => setTimeout(r, 30)); tempiSegna('rete');
+      return tempiRiga();
+    })()`);
+    return r.then(riga => {
+      for (const tappa of ['preparazione','attesa','scambio','rete']){
+        assert.match(riga, new RegExp(tappa), 'manca la tappa ' + tappa);
+      }
+      assert.match(riga, /totale/, 'deve dire anche il totale');
+      assert.match(riga, /\ds/, 'i tempi vanno scritti in secondi, non in millesimi');
+      app.stop();
+    });
+  });
+
+  test('senza aver misurato niente non inventa una riga', () => {
+    const app = loadApp();
+    const r = app.run('tempiRiga()');
+    return Promise.resolve(r).then(x => {
+      assert.strictEqual(x, '', 'meglio niente che un numero finto');
+      app.stop();
+    });
+  });
+
+  test('IL PATTO DI QUESTA MODIFICA: misura e basta, non cambia il comportamento', () => {
+    /* La promessa fatta a chi usa l app era "rischio zero, aggiunge solo un
+       numero". Questo test la tiene: i cronometri non devono decidere niente,
+       non devono fermare niente, non devono spostare niente. Se un giorno
+       qualcuno ci appende una decisione, questo test glielo ricorda. */
+    const fs = require('fs');
+    const src = fs.readFileSync(__dirname + '/../modifica.js', 'utf8');
+    for (const nome of ['tempiInizio','tempiSegna','tempiRiga']){
+      const i = src.indexOf('function ' + nome);
+      assert.ok(i > 0, nome + ' deve esistere');
+      const corpo = src.slice(i, src.indexOf('\n}', i));
+      assert.ok(corpo.indexOf('return ') < 0 || nome === 'tempiRiga',
+        nome + ' non deve decidere niente per chi lo chiama');
+      for (const vietato of ['pc.', 'mailbox', 'fetch(', 'setStatus', 'showScreen', 'close()']){
+        assert.ok(corpo.indexOf(vietato) < 0,
+          nome + ' tocca "' + vietato + '": deve solo misurare');
+      }
+    }
+  });
+
+  test('misurare due collegamenti di fila non mescola i tempi', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      tempiInizio(); await new Promise(r => setTimeout(r, 20)); tempiSegna('preparazione');
+      const primo = tempiRiga();
+      tempiInizio(); await new Promise(r => setTimeout(r, 20)); tempiSegna('preparazione');
+      return JSON.stringify({ primo, secondo: tempiRiga() });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual((o.secondo.match(/preparazione/g) || []).length, 1,
+        'il secondo collegamento deve ripartire da zero, non accodarsi al primo');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `
