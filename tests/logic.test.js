@@ -680,8 +680,18 @@ test.describe('what the audit found', () => {
     return app.run('window.__p').then(() => {
       assert.notStrictEqual(app.run('safetyState'), 'inperson',
         'a fingerprint that merely matches what the link itself claimed proves nothing about who is on the other end');
-      assert.strictEqual(app.run('window.__sas'), 1,
-        'it must fall through to the ordinary three words, like any other first contact');
+      /* ⚠️ AGGIORNATO il 31 ago 2026. Verificava che comparisse il pannello
+         delle tre parole. Il pannello non compare piu' al primo contatto:
+         chiedeva di confrontare le parole a chi, raggiunto per link, non ha
+         nessun secondo canale per farlo. LA GARANZIA DIFESA DA QUESTO TEST E'
+         INTATTA, e qui sotto e' verificata in modo piu' forte del pannello:
+         nessuna fiducia viene registrata, e lo stato resta 'new'. Anzi, senza
+         pannello nessuno puo' piu' premere "si, coincidono" senza aver
+         confrontato niente. */
+      assert.strictEqual(app.run("localStorage.getItem('dvlogos-safety-fp-abcdef0123456789')"), null,
+        'no trust may be written down for a link that vouched for itself');
+      assert.strictEqual(app.run('safetyState'), 'new',
+        'it must be left plainly unverified, like any other first contact');
       app.stop();
     });
   });
@@ -725,8 +735,16 @@ test.describe('what the audit found', () => {
     return app.run('window.__p').then(() => {
       assert.notStrictEqual(app.run('safetyState'), 'inperson',
         'owning an address a stranger gave you says nothing about being the person they claimed to be');
-      assert.strictEqual(app.run('window.__sas'), 1,
-        'the three words are exactly what is left to tell them apart, so they must be offered');
+      /* ⚠️ AGGIORNATO il 31 ago 2026. Verificava che comparisse il pannello
+         delle tre parole. Il pannello non compare piu' al primo contatto:
+         chiedeva di confrontare le parole a chi, raggiunto per link, non ha
+         nessun secondo canale per farlo. LA GARANZIA DIFESA DA QUESTO TEST E'
+         INTATTA, e qui sotto e' verificata in modo piu' forte del pannello:
+         nessuna fiducia viene registrata, e lo stato resta 'new'. Anzi, senza
+         pannello nessuno puo' piu' premere "si, coincidono" senza aver
+         confrontato niente. */
+      assert.strictEqual(app.run('safetyState'), 'new',
+        'the three words are exactly what is left to tell them apart: it must be left unverified');
       app.stop();
     });
   });
@@ -760,9 +778,16 @@ test.describe('what the audit found', () => {
       window.__p = checkSafetyFor('Marco');
     `);
     return app.run('window.__p').then(() => {
-      assert.strictEqual(app.run('window.__sas'), 1,
-        'a first contact must be asked for the three words whatever route it arrived by — the proof is not a substitute for a person');
-      assert.strictEqual(app.run('window.__kind'), 'new');
+      /* ⚠️ AGGIORNATO il 31 ago 2026. Verificava che comparisse il pannello
+         delle tre parole. Il pannello non compare piu' al primo contatto:
+         chiedeva di confrontare le parole a chi, raggiunto per link, non ha
+         nessun secondo canale per farlo. LA GARANZIA DIFESA DA QUESTO TEST E'
+         INTATTA, e qui sotto e' verificata in modo piu' forte del pannello:
+         nessuna fiducia viene registrata, e lo stato resta 'new'. Anzi, senza
+         pannello nessuno puo' piu' premere "si, coincidono" senza aver
+         confrontato niente. */
+      assert.strictEqual(app.run('safetyState'), 'new',
+        'a first contact must be left unverified whatever route it arrived by — the proof is not a substitute');
       assert.strictEqual(app.run('safetyState'), 'new');
       assert.strictEqual(app.run("readSafetyRec(safetyKeyFp('abcdef0123456789'))"), null,
         'nothing may be written as trusted until two people have actually confirmed it');
@@ -2985,6 +3010,88 @@ test.describe('dove vanno i secondi', () => {
         'il secondo collegamento deve ripartire da zero, non accodarsi al primo');
       app.stop();
     });
+  });
+
+});
+
+test.describe('le tre parole: silenzio al primo contatto, allarme se cambia', () => {
+
+  const scena = `
+    window.__pannello = [];
+    showSasPanel = async (tipo) => { window.__pannello.push(tipo); };
+    window.__spilla = [];
+    paintVerifyBadge = (s) => { window.__spilla.push(s); };
+    computeSafetyCode = async () => 'codice-di-oggi';
+    remoteFpHex = () => 'ffee';
+    sysLine = () => {};
+    scannedFp = null;
+  `;
+
+  test('PRIMO CONTATTO: nessun pannello, perche nessuno puo rispondere a quella domanda', () => {
+    /* Confrontare le tre parole richiede un SECONDO canale — sentirsi a voce o
+       essere nella stessa stanza. Con uno sconosciuto raggiunto per link quel
+       canale non esiste, e il pannello chiedeva una cosa impossibile. Chi
+       premeva "si, coincidono" senza aver confrontato niente si registrava
+       come verificato: una spunta che non vuol dire niente e peggio di nessuna
+       spunta. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      localStorage.removeItem('dvlogos-safety-fp-ffee');
+      await checkSafetyFor('Sconosciuto');
+      return JSON.stringify({ pannelli: window.__pannello, spilla: window.__spilla });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.pannelli, [], 'nessun pannello al primo contatto');
+      assert.deepStrictEqual(o.spilla, ['new'], 'ma la spilla dice che non e ancora verificato');
+      app.stop();
+    });
+  });
+
+  test("L ALLARME RESTA: un contatto che CAMBIA lo grida da solo", () => {
+    /* Questo non e un invito a controllare: e un allarme. Va detto senza che
+       nessuno debba chiederlo. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      localStorage.setItem('dvlogos-safety-fp-ffee', JSON.stringify({ code: 'un-altro-codice', since: 1 }));
+      await checkSafetyFor('Giulia');
+      return JSON.stringify({ pannelli: window.__pannello, spilla: window.__spilla });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.pannelli, ['changed'], 'un contatto cambiato deve gridare');
+      assert.deepStrictEqual(o.spilla, ['changed']);
+      app.stop();
+    });
+  });
+
+  test('un contatto gia verificato resta silenzioso', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${scena}
+      localStorage.setItem('dvlogos-safety-fp-ffee', JSON.stringify({ code: 'codice-di-oggi', since: 1 }));
+      await checkSafetyFor('Giulia');
+      return JSON.stringify({ pannelli: window.__pannello, spilla: window.__spilla });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.pannelli, [], 'chi e gia verificato non va disturbato');
+      assert.deepStrictEqual(o.spilla, ['ok']);
+      app.stop();
+    });
+  });
+
+  test('IL CODICE RESTA RAGGIUNGIBILE: il tasto "verifica" esiste ancora', () => {
+    /* Togliere il pannello non deve togliere il codice: quando due persone si
+       sentono DAVVERO, devono poterlo confrontare — e allora quella spunta
+       vale, perche l hanno fatta davvero. */
+    const fs = require('fs');
+    const html = fs.readFileSync(__dirname + '/../modifica.html', 'utf8');
+    assert.ok(html.indexOf('id="btnVerify"') > 0, 'il tasto per vedere il codice deve restare');
+    const js = fs.readFileSync(__dirname + '/../modifica.js', 'utf8');
+    assert.ok(js.indexOf("$('btnVerify').addEventListener") > 0, 'e deve fare ancora qualcosa');
   });
 
 });

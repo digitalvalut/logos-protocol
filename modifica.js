@@ -3934,7 +3934,32 @@ async function checkSafetyFor(nick){
      the real person. Now the two people are asked, once, and nothing is written
      until they say the words match. */
   paintVerifyBadge(rec ? 'changed' : 'new');
-  await showSasPanel(rec ? 'changed' : 'new');
+
+  /* ⚠️ IL PANNELLO COMPARE DA SOLO SOLO QUANDO QUALCOSA E' CAMBIATO.
+
+     Al primo contatto no, e il motivo l'ha trovato chi usa l'app: confrontare
+     le tre parole richiede un SECONDO CANALE — sentirsi a voce, o essere nella
+     stessa stanza. Con uno sconosciuto raggiunto per link quel canale non
+     esiste, e il pannello gli chiedeva una cosa che non poteva fare. Peggio:
+     chi preme "sì, coincidono" senza aver confrontato niente si ritrova
+     registrato come verificato. Una spunta che non vuol dire niente e' peggio
+     di nessuna spunta — la stessa critica che l'analisi esterna muove al
+     riconoscimento asserito via URL.
+
+     Quello che resta e' la meta' che ha senso da sola: un contatto che
+     CAMBIA non e' un invito a controllare, e' un allarme, e va gridato senza
+     che nessuno debba chiederlo.
+
+     Il codice non sparisce: sta sotto "verifica", sempre raggiungibile. Quando
+     due persone si sentono davvero, lo confrontano allora — e quella spunta
+     vale, perche' l'hanno fatta davvero.
+
+     ⚠️ Questo NON e' un permesso a fidarsi del primo contatto. La difesa vera
+     e' rendere l'incontro impossibile da dirottare (il link con un segreto
+     lungo invece di sei cifre, punto H-01 dell'analisi). Finche' quello non e'
+     fatto, qui non si guadagna sicurezza: si smette solo di chiederla a chi non
+     puo' darla. */
+  if (rec) await showSasPanel('changed');
 }
 function acceptNewSafety(){
   computeSafetyCode().then(code => {
@@ -6612,7 +6637,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.90';
+const APP_VERSION = 'logos-modifica-3.91';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
