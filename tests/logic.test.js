@@ -3216,6 +3216,58 @@ test.describe('il link porta un segreto lungo (audit H-01)', () => {
 
 });
 
+test.describe('le due strade devono restare compatibili', () => {
+
+  /* ⚠️ IL TEST CHE MANCAVA IL 31 AGOSTO, e la cui assenza ha rotto i
+     collegamenti veri. Avevo verificato che il seme non cambiasse e che la
+     busta col segreto non si aprisse senza — ma NON avevo verificato il caso
+     che conta di piu: chi mostra l invito non sa se l altro arrivera dal link
+     o digitando le sei cifre a mano, e sigillando col segreto lungo rendeva
+     impossibile la seconda strada. "Codice scaduto o sbagliato" su un codice
+     giusto. Questo test tiene chiusa quella porta. */
+
+  test('CHI DIGITA A MANO DEVE POTER APRIRE quello che chi mostra ha sigillato', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      /* chi mostra il codice prepara l invito */
+      const chiMostra = await quickSecrets('458538');
+      const busta = await sealWith(chiMostra, { sdp: 'offerta' });
+      /* chi digita le sei cifre a mano: nessun segreto lungo */
+      const chiDigita = await quickSecrets('458538');
+      const aperta = await openFrom(chiDigita.key, busta);
+      return JSON.stringify({
+        stessaCasella: chiMostra.seed === chiDigita.seed,
+        aperta: aperta && aperta.sdp,
+      });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.stessaCasella, true, 'devono cercarsi nello stesso posto');
+      assert.strictEqual(o.aperta, 'offerta',
+        'CHI DIGITA A MANO DEVE APRIRE: se non ci riesce, le sei cifre non servono piu a niente');
+      app.stop();
+    });
+  });
+
+  test('e chi arriva dal link apre la stessa busta', () => {
+    /* Finche il segreto lungo e inerte, entrambe le strade portano alla stessa
+       chiave — ed e esattamente quello che rende il collegamento possibile. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      const chiMostra = await quickSecrets('458538');
+      const busta = await sealWith(chiMostra, { sdp: 'offerta' });
+      const dalLink = await quickSecrets('458538');
+      const aperta = await openFrom(dalLink.key, busta);
+      return aperta && aperta.sdp;
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(x, 'offerta', 'anche chi arriva dal link deve aprire');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `

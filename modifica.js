@@ -6696,7 +6696,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.92';
+const APP_VERSION = 'logos-modifica-3.93';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -7592,7 +7592,23 @@ async function startQuickShare(existingCode, quiet){
      the stretch either, so the person watching paid for both end to end. Now
      they overlap and the pair costs whichever is slower. Identical work and
      identical iterations: nothing is weakened to buy the time. */
-  const secReady = quickSecrets(code, quickLinkSecret);
+  /* ⚠️ RITIRATO il 1 settembre 2026, dopo che ha rotto i collegamenti veri.
+
+     Chi mostra il codice sigillava SEMPRE con il segreto lungo. Ma chi digita
+     le sei cifre a mano quel segreto non ce l'ha — e non riusciva ad aprire
+     niente: "codice scaduto o sbagliato" su un codice giusto.
+
+     L'errore di progettazione, mio: chi mostra l'invito NON PUO' SAPERE se
+     l'altro arrivera' dal link o digitando a mano. Non puo' quindi scegliere
+     una sola chiave. La correzione H-01 va rifatta in modo che le due strade
+     coesistano — per esempio pubblicando l'offerta in due posti, uno per
+     ciascuna strada — e va pensata prima di riscriverla, non durante.
+
+     Per ora si torna esattamente al comportamento della v27: chiave dal solo
+     codice, come e' sempre stato. Il segreto lungo continua a viaggiare nel
+     link ma NON viene usato per sigillare: inerte, in attesa del disegno
+     giusto. */
+  const secReady = quickSecrets(code);
   secReady.catch(()=>{});   /* awaited below; this only silences the unhandled-rejection warning if the setup throws first */
   pc = await newPeerConnection();
   /* Every operation below targets this, the connection this call actually
@@ -7810,7 +7826,9 @@ async function tryQuickConnect(){
      up, waiting, and this one goes off to fetch relay credentials. Now the
      connection is built and warm before it is asked for, and the stretch runs
      alongside it instead of in front of it. */
-  const secReady = quickSecrets(code, quickJoinSecret);
+  /* ⚠️ Ritirato insieme all'altro lato: finche' chi mostra l'invito sigilla
+     col solo codice, chi entra deve aprire col solo codice. */
+  const secReady = quickSecrets(code);
   const pcReady = newPeerConnection();
   secReady.catch(()=>{}); pcReady.catch(()=>{});
   /* held until it is either handed over to `pc` or closed: a connection warmed
