@@ -163,15 +163,33 @@ test.describe('worker: la buca delle lettere', () => {
 test.describe('worker: i limiti di frequenza', () => {
 
   test('un diluvio di letture viene respinto con 429', async () => {
+    /* ⚠️ RISCRITTO IL 1 SET 2026. Fissava il numero 300 a mano, e quando il
+       Worker è passato a contare il COSTO invece delle CHIAMATE quel numero
+       non voleva più dire niente: una lettura della casella ne spende due (la
+       get più la delete), quindi lo stesso budget lascia passare metà delle
+       richieste. Il test è diventato rosso pur essendo il Worker più severo di
+       prima — un test legato al meccanismo, non alla promessa.
+       La promessa è: un diluvio viene fermato, e non passa più di quanto il
+       bilancio dichiarato consenta. Il numero se lo legge dal Worker. */
     const w = W.caricaWorker();
+    /* letto dalla sorgente e non dalla sandbox: un `const` in cima a un
+       modulo non diventa una proprietà dell'oggetto globale, quindi
+       `sandbox.RL_MAX_READS` è undefined — provato, ed è il motivo per cui
+       questa riga è com'è */
+    const sorgente = require('node:fs').readFileSync(
+      require('node:path').join(__dirname, '..', 'turn-worker', 'worker.js'), 'utf8');
+    const budget = Number((sorgente.match(/RL_MAX_READS\s*=\s*(\d+)/) || [])[1]);
+    assert.ok(budget > 0, 'il bilancio delle letture deve essere leggibile');
+    const massimo = Math.ceil(budget / 2) + 20;   /* ogni lettura costa 2 */
     const slot = '1'.repeat(64);
     let ok = 0, respinte = 0;
-    for (let i = 0; i < 400; i++){
+    for (let i = 0; i < budget + 200; i++){
       const r = await w.chiama('GET', '/mailbox/' + slot, { ip: '198.51.100.9' });
       if (r.status === 429) respinte++; else ok++;
     }
-    assert.ok(respinte > 0, 'nessuna richiesta respinta su 400: il limite non morde');
-    assert.ok(ok <= 320, `passate ${ok} richieste: più larghe del budget dichiarato di 300`);
+    assert.ok(respinte > 0, 'nessuna richiesta respinta: il limite non morde');
+    assert.ok(ok <= massimo,
+      `passate ${ok} richieste: più larghe del bilancio dichiarato di ${budget} unità di costo`);
   });
 
   test('le credenziali del relay sono metrate più strette delle letture', async () => {
@@ -223,5 +241,162 @@ test.describe('worker: il colpetto non è un relay aperto', () => {
     });
     assert.notStrictEqual(r.status, 200,
       'un endpoint arbitrario non deve poter essere raggiunto attraverso questo Worker');
+  });
+});
+
+/* ============================================================================
+   SPEGNERE LOGOS A TUTTI, DA SOLI, GRATIS — 1 settembre 2026.
+
+   Nato da una domanda dell'utente che questo file non sapeva reggere: "se uno
+   continua a scrivere codici a sei cifre e premere invio, satura Logos e lo
+   butta giu?". La risposta era si, e per quattro strade diverse, tutte piu
+   economiche che indovinare un codice.
+
+   ⚠️ LA RADICE ERA UN PRESUPPOSTO SCRITTO NEL WORKER: "lookups are free".
+   Non lo sono. Il piano gratuito da 100.000 letture e SOLO 1.000 SCRITTURE al
+   giorno per tutto l'account. Su quella frase erano tarati tutti i tetti.
+
+   ⚠️ PERCHE NESSUNO DEI 17 TEST PRECEDENTI POTEVA VEDERLO, ed e la lezione
+   che vale piu del codice: contavano RICHIESTE RESPINTE. Nessuno contava
+   OPERAZIONI KV SPESE. Una rotta che accetta poche richieste ma ne spende
+   quaranta ciascuna passava tutti i controlli esistenti a pieni voti.
+   Questi test contano il log del KV finto, cioe la cosa che si esaurisce
+   davvero, e non si lasciano piu ingannare da quanti 429 tornano.
+   ========================================================================== */
+test.describe('worker: nessuno puo svuotare la quota del giorno da solo', () => {
+
+  /* Quante operazioni KV sono finite sul magazzino, che e cio che Cloudflare
+     conta e che l'email di avviso misura. */
+  function operazioniSpese(w){ return w.env.MAILBOX._log.length; }
+
+  test('BUCO 1 — /wake in scrittura non era metrato affatto', async () => {
+    /* Mille scritture sono la quota di UN GIORNO INTERO per tutto l'account.
+       Prima della correzione questo ciclo ne spendeva 600 su 600 senza che
+       niente lo fermasse: pochi secondi di script e Logos era spento per
+       tutti fino a mezzanotte. */
+    const w = W.caricaWorker();
+    const slot = 'a'.repeat(64);
+    for (let i = 0; i < 600; i++){
+      await w.chiama('PUT', '/wake/' + slot, { body: 'x', ip: '198.51.100.20' });
+    }
+    const spese = operazioniSpese(w);
+    assert.ok(spese <= 70,
+      `un solo indirizzo ha speso ${spese} scritture su una quota giornaliera di 1000: ` +
+      'la rotta /wake deve essere metrata come ogni altra scrittura');
+  });
+
+  test('BUCO 2 — /letter in scrittura non era metrato affatto', async () => {
+    const w = W.caricaWorker();
+    const slot = 'b'.repeat(64);
+    for (let i = 0; i < 400; i++){
+      await w.chiama('PUT', '/letter/' + slot + '/' + String(i).padStart(16, '0'),
+                     { body: 'x', ip: '198.51.100.21' });
+    }
+    const spese = operazioniSpese(w);
+    assert.ok(spese <= 100,
+      `un solo indirizzo ha speso ${spese} operazioni depositando lettere: deve essere metrato`);
+  });
+
+  test('BUCO 3 — raccogliere lettere costava 41 operazioni contate come UNA', async () => {
+    /* Il piu grave, e invisibile leggendo la rotta: una list, poi una get e
+       una delete per ogni lettera. Il vecchio tetto di 300 richieste al
+       minuto dava a un solo indirizzo fino a 12.300 operazioni al minuto.
+
+       ⚠️ LA PRIMA STESURA DI QUESTO TEST NON PROVAVA NIENTE, ed e' la lezione
+       piu importante di tutta la correzione. Batteva su UNA SOLA buca: la
+       prima raccolta la svuota, e da li in poi ogni richiesta costa una list
+       e basta — l'amplificazione mordeva una volta e spariva. Col difetto
+       RIMESSO il test restava VERDE, e la soglia che avevo scelto cadeva per
+       caso esattamente sul valore sabotato. Scoperto sabotando, non
+       rileggendo. L'attacco vero e' spazzare TANTE buche piene, non frugare
+       duecento volte nella stessa.
+
+       ⚠️ E LA SECONDA STESURA SBAGLIAVA ANCORA, in modo piu sottile: dieci
+       buche si svuotano comunque, quindi il totale era quasi lo stesso con e
+       senza correzione (294 contro 360) e la soglia non separava niente.
+       Misurava "quanto costa svuotare quello che c'e'", che dipende da quante
+       lettere esistono — non dal difetto.
+       LA GARANZIA VERA, che non dipende da quanto c'e' in magazzino, e'
+       questa: IL WORKER NON DEVE MAI SPENDERE PIU OPERAZIONI DI QUANTE NE HA
+       ADDEBITATE. Con scorta abbondante il tetto per indirizzo e' 600 unita,
+       quindi la spesa deve restare li' intorno — non a migliaia. */
+    const w = W.caricaWorker();
+    const buche = [];
+    for (let b = 0; b < 60; b++){
+      const slot = (b.toString(16).padStart(2, '0')).repeat(32);
+      buche.push(slot);
+      /* si riempie usando il KV direttamente, per non far pagare il
+         riempimento allo stesso contatore che stiamo misurando */
+      for (let i = 0; i < 20; i++){
+        await w.env.MAILBOX.put('l:' + slot + ':' + String(i).padStart(16, '0'), 'busta');
+      }
+    }
+    w.env.MAILBOX._log.length = 0;
+    for (let i = 0; i < 400; i++){
+      await w.chiama('GET', '/letter/' + buche[i % buche.length], { ip: '198.51.100.22' });
+    }
+    /* Misurato davvero, invece che scelto a occhio: con la correzione la
+       spesa e' 891 (il tetto addebitato, 900, rispettato), col difetto
+       rimesso e' 2800. La soglia sta in mezzo — abbastanza sopra il valore
+       buono da non diventare rossa per un'oscillazione, abbastanza sotto
+       quello rotto da coglierlo. Una soglia posata sul valore sabotato, come
+       nella prima stesura, non separa niente. */
+    const spese = operazioniSpese(w);
+    assert.ok(spese <= 1500,
+      `un solo indirizzo ha speso ${spese} operazioni contro un tetto addebitato di 900: ` +
+      'una richiesta che ne vale quaranta non puo essere contata come una');
+  });
+
+  test('BUCO 4 — le scritture pagavano dal bilancio delle letture', async () => {
+    /* Le due risorse stanno in rapporto cento a uno (100.000 letture contro
+       1.000 scritture). Un contatore solo, tarato sull'abbondante, lasciava
+       la scarsa senza difesa. */
+    const w = W.caricaWorker();
+    const slot = 'd'.repeat(64);
+    for (let i = 0; i < 300; i++){
+      await w.chiama('PUT', '/mailbox/' + slot, { body: 'x', ip: '198.51.100.23' });
+    }
+    const scritture = w.env.MAILBOX._log.filter(v => v.op === 'put').length;
+    assert.ok(scritture <= 70,
+      `${scritture} scritture da un solo indirizzo in un minuto, su 1000 al giorno: ` +
+      'le scritture devono avere un bilancio proprio, piu stretto di quello delle letture');
+  });
+
+  test('IL FONDO DEL SECCHIO: tanti indirizzi diversi trovano comunque un muro', async () => {
+    /* I limiti per indirizzo fermano una persona, non cento — e non serve una
+       botnet: basta una rete mobile, dove l'indirizzo cambia da solo.
+       ⚠️ Questa difesa vede un solo isolate: NON e un tetto globale esatto,
+       e il commento nel Worker lo dice invece di lasciarlo credere. */
+    const w = W.caricaWorker();
+    const slot = 'e'.repeat(64);
+    for (let i = 0; i < 500; i++){
+      await w.chiama('PUT', '/wake/' + slot, { body: 'x', ip: '198.51.' + (i % 250) + '.' + (i % 200) });
+    }
+    const scritture = w.env.MAILBOX._log.filter(v => v.op === 'put').length;
+    assert.ok(scritture <= 70,
+      `${scritture} scritture da 500 indirizzi diversi: senza un tetto che ignori l'indirizzo, ` +
+      'cambiare IP aggira ogni limite');
+  });
+
+  test('E IL LATO DA NON ROMPERE: il PC e il telefono di casa devono passare', async () => {
+    /* ⚠️ IL PERICOLO VERO DI QUESTA CORREZIONE, piu dell'attacco che ferma:
+       stringere tanto da spegnere l'app a chi la usa bene. Il caso da
+       proteggere e' esattamente quello su cui si collauda ogni versione — il
+       PC e il telefono di casa, DIETRO LO STESSO INDIRIZZO perche' sulla
+       stessa rete — che si collegano fra loro.
+       Misurato col client di oggi: due dispositivi che si collegano spendono
+       476 unita al minuto, di cui ~240 di interrogazioni alla casella. Se
+       questo test diventa rosso, il tetto e' stato stretto troppo e va
+       allargato, non aggirato. */
+    const w = W.caricaWorker();
+    let passate = 0;
+    for (let i = 0; i < 120; i++){
+      const slot = (i % 2 === 0 ? 'f' : 'e').repeat(64);
+      const r = await w.chiama('GET', '/mailbox/' + slot, { ip: '198.51.100.30' });
+      if (r.status !== 429) passate++;
+    }
+    assert.strictEqual(passate, 120,
+      'due dispositivi sulla stessa rete che si collegano non devono MAI essere respinti: ' +
+      'se lo sono, la correzione ha spento l app invece di difenderla');
   });
 });

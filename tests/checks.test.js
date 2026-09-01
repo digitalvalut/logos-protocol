@@ -186,8 +186,19 @@ test('looking into a mailbox without emptying it really does not empty it', () =
   assert.ok(peekAt > 0, 'the peek branch is gone from the Worker');
 
   /* everything the peek branch does, from the test on ?peek= to its closing
-     brace: no delete may appear anywhere inside it */
-  const branch = body.slice(peekAt, body.indexOf('const val = await env.MAILBOX.get(key)', peekAt));
+     brace: no delete may appear anywhere inside it.
+
+     ⚠️ I COMMENTI VANNO TOLTI PRIMA DI GUARDARE, e il motivo e' una lezione
+     sui test che leggono il testo del codice invece di eseguirlo: il 1 set
+     2026 questo test e' diventato rosso perche' un commento NUOVO, aggiunto
+     poco sopra, conteneva la parola "delete" spiegando che la lettura
+     ordinaria ne fa una. Il codice era giusto, la garanzia intatta: a mentire
+     era il modo di misurare. Un test cosi' e' utile — coglie cose che nessuna
+     esecuzione mostrerebbe — ma deve guardare il CODICE, e un commento non
+     cancella niente. */
+  const senzaCommenti = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  const branch = senzaCommenti(
+    body.slice(peekAt, body.indexOf('const val = await env.MAILBOX.get(key)', peekAt)));
   assert.ok(branch.length > 40, 'could not read the peek branch');
   assert.ok(!/delete/.test(branch),
     'a peek that deletes swallows the very call it is ringing about');

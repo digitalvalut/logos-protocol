@@ -43,7 +43,17 @@ function kvVuoto(){
   const log = [];
   return {
     _m: m, _log: log,
-    async get(k){ const v = m.get(k); return v === undefined ? null : v.valore; },
+    /* ⚠️ LE LETTURE NON VENIVANO REGISTRATE, ed è sembrato un dettaglio finché
+       non è costato un test falso. Non lo è: le letture sono la quota che si
+       consuma per prima nell'uso normale (100.000 al giorno) ed erano l'unica
+       operazione che questo log NON vedeva. Un test che contasse "quante
+       operazioni ha speso il Worker" leggeva quindi un numero sistematicamente
+       più basso del vero, e un difetto che sprecasse SOLO letture sarebbe
+       stato invisibile. Trovato il 1 set 2026 sabotando un test che restava
+       verde. Stessa famiglia delle altre bugie del banco di prova
+       (localStorage non enumerabile, IndexedDB assente): mentiva lo strumento
+       di misura, non il codice misurato. */
+    async get(k){ const v = m.get(k); log.push({ op: 'get', k }); return v === undefined ? null : v.valore; },
     async put(k, valore, opts){
       m.set(k, { valore, ttl: opts && opts.expirationTtl });
       log.push({ op: 'put', k, ttl: opts && opts.expirationTtl, bytes: String(valore).length });

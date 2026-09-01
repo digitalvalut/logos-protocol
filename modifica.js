@@ -6053,12 +6053,37 @@ async function addrCheckOnce(){
    background used to keep asking the mailbox every five seconds forever, which
    is pure waste — nobody is there to answer, and the free quota is not
    infinite. It picks straight back up the moment the page is shown again. */
+/* ---- svelto quando serve, parsimonioso quando non serve ----
+   ⚠️ CAMBIATO IL 1 SET 2026, DOPO UN'EMAIL DI CLOUDFLARE. Ogni cinque secondi
+   per sempre, sommato al giro della rubrica, faceva 264 interrogazioni al
+   minuto da un dispositivo CHE NON STAVA FACENDO NIENTE — solo per avere
+   l'app aperta. E' cosi che meta della quota giornaliera se n'e' andata in
+   una giornata di prove, ed e' un consumo che cresce col numero di utenti
+   anche se nessuno di loro si sta chiamando.
+
+   La forma giusta non e' "piu lento", e' "svelto dove si nota, lento dove
+   non si nota". I primi trenta secondi dopo che si torna sull'app sono il
+   momento in cui una chiamata in arrivo va vista subito; da li in poi
+   nessuno sta guardando lo schermo aspettando, e quindici secondi non li
+   distingue nessuno da cinque. Stessa idea di pollGap(), applicata al
+   guardare invece che all'aspettare. */
+const ADDR_FAST_MS = 5000;
+const ADDR_SLOW_MS = 15000;
+const WATCH_FAST_WINDOW_MS = 30000;
+let addrWatchStarted = 0;
 function startAddrPolling(){
   if (addrPollTimer || !activeSlots().length || document.visibilityState === 'hidden') return;
-  addrPollTimer = setInterval(addrCheckOnce, 5000);
-  addrCheckOnce();
+  addrWatchStarted = Date.now();
+  const giro = () => {
+    addrCheckOnce();
+    const atteso = (Date.now() - addrWatchStarted) < WATCH_FAST_WINDOW_MS ? ADDR_FAST_MS : ADDR_SLOW_MS;
+    /* riprogrammato ogni volta invece di setInterval: e' l'unico modo perche'
+       l'intervallo possa cambiare da solo strada facendo */
+    addrPollTimer = setTimeout(giro, atteso);
+  };
+  giro();
 }
-function stopAddrPolling(){ clearInterval(addrPollTimer); addrPollTimer = null; }
+function stopAddrPolling(){ clearTimeout(addrPollTimer); addrPollTimer = null; }
 /* Reachable on whichever screen is open, not only Home — sending the address
    itself usually means switching away to WhatsApp or Messages first, which is
    exactly what makes the tab go hidden and stop here. It has to pick back up
@@ -6708,7 +6733,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.94';
+const APP_VERSION = 'logos-modifica-3.95';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -7008,7 +7033,10 @@ async function tryAutoReconnectInner(contact){
    contatti hai; il prezzo è che un contatto viene guardato ogni pochi giri
    invece che ogni giro, il che sposta la peggiore attesa di qualche secondo
    su una cosa che comunque richiede che l'altra persona apra l'app. */
-const INBOX_PER_GIRO = 8;
+/* Da 8 a 4 il 1 set 2026: vedi la nota su startInboxPolling. Con il giro che
+   riparte da dove si era fermato, otto o quattro cambia solo quanto in fretta
+   si completa il giro della rubrica, non se un contatto viene visto. */
+const INBOX_PER_GIRO = 4;
 let inboxCursore = 0;
 /* Il ciclo non era protetto dal rientro, a differenza di acceptIncomingAutoOffer
    (autoAccepting) e tryQuickConnect (quickConnecting) che lo sono da tempo. Una
@@ -7051,13 +7079,35 @@ async function checkInboxOnce(){
     inboxScanning = false;
   }
 }
+/* ⚠️ IL CONSUMO PIU GROSSO DI TUTTA L'APP, e nessuno lo vedeva perche' non
+   fa niente di visibile. Ogni quattro secondi interrogava OTTO contatti: 120
+   interrogazioni al minuto, per sempre, da un dispositivo fermo con l'app
+   aperta. Sommate all'indirizzo facevano 264 al minuto senza che l'utente
+   avesse chiesto niente — e con mille utenti sarebbe stata la quota
+   giornaliera di tutto l'account bruciata in due minuti.
+
+   Ora: quattro contatti per giro invece di otto, e venti secondi invece di
+   quattro passata la finestra svelta. Da 120 al minuto a 12.
+
+   ⚠️ IL PREZZO, detto invece che nascosto: un contatto che ti cerca puo'
+   metterci fino a venti secondi a essere notato, invece di quattro. La strada
+   giusta per l'immediatezza non e' interrogare piu spesso — e' la bussata
+   (le notifiche push), che arriva da sola e non costa niente a nessuno. */
+const INBOX_FAST_MS = 4000;
+const INBOX_SLOW_MS = 20000;
+let inboxWatchStarted = 0;
 function startInboxPolling(){
   if (inboxTimer || document.visibilityState === 'hidden') return;
-  inboxTimer = setInterval(checkInboxOnce, 4000);
-  checkInboxOnce();
+  inboxWatchStarted = Date.now();
+  const giro = () => {
+    checkInboxOnce();
+    const atteso = (Date.now() - inboxWatchStarted) < WATCH_FAST_WINDOW_MS ? INBOX_FAST_MS : INBOX_SLOW_MS;
+    inboxTimer = setTimeout(giro, atteso);
+  };
+  giro();
 }
 function stopInboxPolling(){
-  clearInterval(inboxTimer);
+  clearTimeout(inboxTimer);
   inboxTimer = null;
 }
 async function acceptIncomingAutoOffer(contact, msg, sec){

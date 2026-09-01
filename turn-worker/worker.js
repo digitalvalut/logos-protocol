@@ -150,9 +150,72 @@ async function handleTurn(env, cors){
 
    The budget is generous on purpose, because a legitimate connection polls a
    lot while two phones are finding each other. Anything far above it is not
-   someone trying to reach a friend. */
+   someone trying to reach a friend.
+
+   ⚠️ CORRETTO IL 1 SET 2026, DOPO UN'EMAIL DI CLOUDFLARE E UNA DOMANDA
+   DELL'UTENTE CHE QUESTO FILE NON SAPEVA REGGERE. Il commento qui sopra
+   diceva, testualmente, che le letture della cassetta "sono gratis". NON LO
+   SONO: il piano gratuito dà 100.000 letture E SOLO 1.000 SCRITTURE al
+   giorno, per tutto l'account. Su quel presupposto sbagliato era stato
+   costruito tutto il resto di questa sezione, e da lì sono nati quattro buchi
+   che insieme permettevano a UNA SOLA PERSONA di spegnere il servizio A
+   TUTTI, per l'intera giornata, senza spendere niente e senza indovinare
+   nessun codice:
+
+     1. /wake in scrittura non era metrato AFFATTO. Mille richieste — pochi
+        secondi — e la quota di scritture del giorno era finita per tutti.
+     2. /letter in scrittura non era metrato affatto, e ogni richiesta costa
+        DUE operazioni (una list più una put), non una.
+     3. /letter in lettura era metrato UNA VOLTA ma spende fino a 41
+        operazioni (1 list + 20 get + 20 delete). Al vecchio tetto di 300
+        richieste al minuto significava fino a 12.300 operazioni al minuto da
+        un solo indirizzo: la quota giornaliera di letture bruciata in otto
+        minuti.
+     4. Il contatore contava RICHIESTE, non COSTO. È l'errore che rende
+        inutile qualunque tetto: una richiesta che ne vale quaranta passava
+        come una che ne vale una.
+
+   La regola nuova, ed è la lezione generale: SI METRA IL COSTO, NON LA
+   CHIAMATA. Ogni rotta dichiara quante operazioni KV sta per spendere e paga
+   quel numero. Chi trova un modo per far costare di più una richiesta paga di
+   più, automaticamente, senza che nessuno debba ricordarsi di aggiornare un
+   tetto.
+
+   E le scritture hanno un bilancio SEPARATO e molto più stretto delle
+   letture, perché sono cento volte più scarse (1.000 contro 100.000). Prima
+   condividevano lo stesso contatore, il che voleva dire che il tetto era
+   tarato sulla risorsa abbondante e lasciava scoperta quella scarsa. */
 const RL_WINDOW_MS = 60000;
-const RL_MAX_LOOKUPS = 300;
+/* ⚠️ QUESTI DUE NUMERI SONO STATI MISURATI, NON SCELTI. Il conto vero, col
+   client di oggi: un dispositivo fermo con l'app aperta spende 88 unita al
+   minuto, uno che si sta collegando 238, e DUE dietro lo stesso indirizzo —
+   il PC e il telefono di casa sulla stessa rete, cioe' il caso piu comune di
+   tutti e quello su cui si collauda — ne spendono 476.
+   Un tetto sotto quella cifra non difende: SPEGNE L'APP alle persone che la
+   usano bene, che e' il modo piu sicuro di far fallire una correzione di
+   sicurezza. 600 copre una famiglia di tre dispositivi con margine.
+
+   Sembra piu largo dei 300 di prima e in realta' e' molte volte piu stretto:
+   300 RICHIESTE potevano valere 12.300 operazioni vere, 900 UNITA' DI COSTO
+   ne valgono al massimo 900. E' tutta la differenza fra contare le chiamate e
+   contare quello che si esaurisce davvero.
+
+   ⚠️ PERCHE 900 E NON 600, che basterebbe al client di oggi: CHI HA LA
+   VERSIONE VECCHIA NON SPARISCE. Un APK installato resta quello finche' la
+   persona non lo riscarica a mano, e il client precedente a v31 interroga
+   molto piu spesso — 828 unita al minuto per due dispositivi sulla stessa
+   rete. Un tetto a 600 non fermerebbe un attacco in piu, respingerebbe solo
+   le persone che non hanno ancora aggiornato. Si potra' scendere a 600
+   quando la v31 sara' diffusa, non prima.
+   Il tetto che ferma davvero l'attacco e' quello delle SCRITTURE qui sotto,
+   ed e' stretto: le letture sul piano gratuito sono cento volte piu
+   abbondanti, quindi essere generosi li' costa poco e salva gli aggiornamenti
+   mancati. */
+const RL_MAX_READS = 900;
+/* Scritture: una connessione onesta ne fa una ogni 80 secondi mentre aspetta.
+   30 al minuto coprono parecchi tentativi insieme e tolgono a un abusante il
+   99% di quello che aveva prima, che era: tutto. */
+const RL_MAX_WRITES = 30;
 
 /* The credentials route is metered separately, and far more tightly.
    A mailbox poll is something one honest connection does around a hundred and
@@ -162,10 +225,10 @@ const RL_MAX_LOOKUPS = 300;
    valid for a day. Anything past a couple a second from one address is not
    somebody opening the app.
    Worth separating because the two abuses cost differently. Hammering the
-   mailbox wastes lookups, which are free. Harvesting credentials hands
-   somebody a day of real relay capacity billed to this account — the only
-   thing here that costs actual money, and until now the only route with no
-   limit on it at all.
+   mailbox spends the account's daily KV allowance — see the correction above,
+   it is NOT free. Harvesting credentials hands somebody a day of real relay
+   capacity billed to this account — the only thing here that costs actual
+   money, and until v3.72 the only route with no limit on it at all.
    Still generous on purpose: a school or an office behind one address can
    have many people open the app at once, and a refused credential is not a
    dead end — the app falls back to a direct connection on its own, which
@@ -173,22 +236,86 @@ const RL_MAX_LOOKUPS = 300;
 const RL_TURN_MAX = 120;
 const rlHits = new Map();
 
+/* ---------------- il fondo del secchio: un tetto che non guarda l'indirizzo ----------------
+   I limiti per indirizzo, da soli, fermano una persona. Non fermano cento
+   indirizzi diversi che chiedono poco ciascuno — e non serve una botnet vera:
+   basta una rete mobile, dove gli indirizzi cambiano da soli.
+
+   Questo è il fondo del secchio: quanto TUTTO INSIEME questo isolate accetta
+   di spendere in un minuto, chiunque stia chiedendo. Il traffico onesto
+   misurato oggi è di pochi KB al giorno; il tetto giornaliero delle scritture
+   (1.000) diviso per i minuti di una giornata fa 0,7 al minuto di media. 60 al
+   minuto lascia ottanta volte quel margine per le raffiche legittime e toglie
+   comunque la possibilità di svuotare la giornata in pochi secondi.
+
+   ⚠️ IL LIMITE ONESTO DI QUESTA DIFESA, scritto invece che lasciato credere:
+   Cloudflare fa girare più isolate, e questo contatore ne vede uno solo. Non
+   è un tetto globale esatto — quello richiederebbe Durable Objects o il piano
+   a pagamento. È un limite al danno che un singolo isolate può fare, che è
+   molto meglio di niente e onestamente meno di un tetto vero.
+
+   ⚠️⚠️ E LA VERITÀ PIÙ GRANDE, che nessuna di queste righe risolve: SUL PIANO
+   GRATUITO IL PROBLEMA NON È L'ATTACCANTE, È IL SUCCESSO. Mille persone con
+   l'app aperta, tutte oneste, nessuna che chiama nessuno, spendono la quota
+   giornaliera di letture in circa un minuto — e le 1.000 scritture al giorno
+   sono il tetto vero: bastano per ottanta conversazioni al giorno IN TUTTO IL
+   MONDO. Queste difese impediscono a UNA persona di spegnere il servizio a
+   tutti, ed era una falla vera e grave. Non fanno, e non possono fare, di
+   Logos un servizio che regge la crescita.
+   Le due strade sono architetturali, non di taratura: portare l'attesa sulle
+   notifiche push (che arrivano da sole, invece di far chiedere al telefono
+   "c'è niente per me?" per sempre), oppure il piano a 5 dollari al mese, che
+   porta le letture a 10 milioni e le scritture a 1 milione al giorno. */
+const GLOBAL_MAX_READS = 3000;
+const GLOBAL_MAX_WRITES = 40;
+let globalBucket = { reads: 0, writes: 0, resetAt: 0 };
+
+function overGlobal(kind, cost){
+  const now = Date.now();
+  if (now >= globalBucket.resetAt){
+    globalBucket = { reads: 0, writes: 0, resetAt: now + RL_WINDOW_MS };
+  }
+  if (kind === 'w'){
+    globalBucket.writes += cost;
+    return globalBucket.writes > GLOBAL_MAX_WRITES;
+  }
+  globalBucket.reads += cost;
+  return globalBucket.reads > GLOBAL_MAX_READS;
+}
+
 /* One counter, kept per purpose as well as per address, so a busy
-   conversation cannot spend the credentials budget and vice versa. */
-function overLimit(request, bucket, max){
+   conversation cannot spend the credentials budget and vice versa.
+   `cost` è quante operazioni KV la richiesta sta per spendere: chiamare
+   questa funzione con 1 quando poi se ne spendono 41 è esattamente il difetto
+   che il commento in cima descrive. */
+function overLimit(request, bucket, max, cost){
+  const c = cost === undefined ? 1 : cost;
   const ip = request.headers.get('CF-Connecting-IP');
   if (!ip) return false; /* nothing to attribute it to: do not punish the request */
   const now = Date.now();
   const key = bucket + ':' + ip;
   let rec = rlHits.get(key);
   if (!rec || now >= rec.resetAt){ rec = { n: 0, resetAt: now + RL_WINDOW_MS }; rlHits.set(key, rec); }
-  rec.n++;
+  rec.n += c;
   /* keep the map from growing without bound on a long-lived isolate */
   if (rlHits.size > 4000) for (const [k, v] of rlHits) if (now >= v.resetAt) rlHits.delete(k);
   return rec.n > max;
 }
-function overRateLimit(request){ return overLimit(request, 'mail', RL_MAX_LOOKUPS); }
-function overTurnLimit(request){ return overLimit(request, 'turn', RL_TURN_MAX); }
+/* Le due porte da cui passa tutto. `cost` va dichiarato dalla rotta che sa
+   quanto sta per spendere; chi non lo dichiara paga 1, che è il minimo vero.
+   Il fondo del secchio viene consultato SEMPRE, anche per una richiesta senza
+   indirizzo: è l'unica difesa che regge quando l'indirizzo manca o cambia. */
+function overReadLimit(request, cost){
+  if (overGlobal('r', cost === undefined ? 1 : cost)) return true;
+  return overLimit(request, 'mail', RL_MAX_READS, cost);
+}
+function overWriteLimit(request, cost){
+  if (overGlobal('w', cost === undefined ? 1 : cost)) return true;
+  return overLimit(request, 'write', RL_MAX_WRITES, cost);
+}
+/* Nome storico, tenuto perché lo usano rotte che leggono soltanto. */
+function overRateLimit(request){ return overReadLimit(request, 1); }
+function overTurnLimit(request){ return overLimit(request, 'turn', RL_TURN_MAX, 1); }
 
 /* ---------------- the knock: signed here, never stored here ----------------
    Web Push authentication (RFC 8292): a JWT signed with the account's VAPID
@@ -329,6 +456,13 @@ async function handleWake(request, env, cors, key){
   if (!KEY_RE.test(key)) return json({ error: 'bad key' }, 400, cors);
 
   if (request.method === 'PUT'){
+    /* ⚠️ BUCO 1, chiuso il 1 set 2026: questa scrittura NON ERA METRATA
+       AFFATTO. Lo slot è calcolabile da chiunque abbia un invito, e la quota
+       gratuita è di mille scritture AL GIORNO PER TUTTO L'ACCOUNT: mille
+       richieste da una sola persona — pochi secondi — e nessuno al mondo
+       riusciva più a collegarsi fino a mezzanotte. Era il modo più economico
+       che esistesse per spegnere Logos. */
+    if (overWriteLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
     const body = await request.text();
     if (!body || body.length > MAX_WAKE_BYTES) return json({ error: 'bad body' }, 400, cors);
     await env.MAILBOX.put('w:' + key, body, { expirationTtl: WAKE_TTL_SECONDS });
@@ -394,8 +528,11 @@ async function handleKey(request, env, cors, key){
 
   if (request.method === 'PUT'){
     /* metered like every other write: the slot is computable from a public
-       address, so this is reachable by anyone who has one */
-    if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
+       address, so this is reachable by anyone who has one.
+       Dal 1 set 2026 paga dal bilancio delle SCRITTURE, non da quello delle
+       letture: era metrata, ma sul contatore sbagliato — quello tarato sulla
+       risorsa abbondante invece che su quella scarsa. */
+    if (overWriteLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
     const body = await request.text();
     if (!body || body.length > MAX_PUBKEY_BYTES) return json({ error: 'bad body' }, 400, cors);
     let rec;
@@ -453,6 +590,10 @@ async function handleKey(request, env, cors, key){
 const LETTER_TTL_SECONDS = 7 * 24 * 3600;
 const MAX_LETTER_BYTES = 4096;
 const MAX_LETTERS = 20;
+/* Quante se ne raccolgono in un colpo solo. Separato da MAX_LETTERS apposta:
+   quello è quante ne può TENERE la buca, questo è quante ne può COSTARE una
+   singola richiesta — ed è la seconda che un abusante controlla. */
+const LETTERS_PER_COLLECT = 5;
 const RAND_RE = /^[0-9a-f]{16,32}$/;
 
 async function handleLetter(request, env, cors, key, rand){
@@ -461,6 +602,9 @@ async function handleLetter(request, env, cors, key, rand){
   const prefix = 'l:' + key + ':';
 
   if (request.method === 'PUT'){
+    /* ⚠️ BUCO 2, chiuso il 1 set 2026: anche questa scrittura non era metrata,
+       e costa DUE operazioni (la list qui sotto più la put), non una. */
+    if (overWriteLimit(request, 2)) return json({ error: 'too many attempts' }, 429, cors);
     if (!RAND_RE.test(rand || '')) return json({ error: 'bad key' }, 400, cors);
     const body = await request.text();
     if (!body || body.length > MAX_LETTER_BYTES) return json({ error: 'bad body' }, 400, cors);
@@ -471,8 +615,17 @@ async function handleLetter(request, env, cors, key, rand){
   }
 
   if (request.method === 'GET'){
-    if (overRateLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
-    const held = await env.MAILBOX.list({ prefix, limit: MAX_LETTERS });
+    /* ⚠️ BUCO 3, chiuso il 1 set 2026: LA PEGGIORE DELLE QUATTRO, perché non
+       si vede leggendo la rotta ma solo contando cosa spende. Una sola
+       richiesta qui costa fino a 41 operazioni: 1 list, poi una get e una
+       delete per ognuna delle 20 lettere. Contata come UNA, al vecchio tetto
+       di 300 al minuto, dava a un singolo indirizzo fino a 12.300 operazioni
+       al minuto — la quota giornaliera di letture finita in otto minuti.
+       Ora la richiesta paga in anticipo quello che può spendere davvero, e
+       raccoglie al massimo LETTERS_PER_COLLECT per volta: chi ne ha di più le
+       prende al giro dopo, che è esattamente come funzionava già la casella. */
+    if (overReadLimit(request, 1 + LETTERS_PER_COLLECT * 2)) return json({ error: 'too many attempts' }, 429, cors);
+    const held = await env.MAILBOX.list({ prefix, limit: LETTERS_PER_COLLECT });
     const out = [];
     for (const k of held.keys){
       const v = await env.MAILBOX.get(k.name);
@@ -498,12 +651,15 @@ async function handleMailbox(request, env, cors, key){
      addresses: those are meant to be handed out, and anyone holding one can
      work out the slot it maps to. An unmetered write was therefore a way for
      somebody with your address to bury your incoming calls under their own,
-     as fast as they liked, for free. */
-  if (overRateLimit(request)){
-    return json({ error: 'too many attempts' }, 429, cors);
-  }
+     as fast as they liked, for free.
 
+     ⚠️ BUCO 4, chiuso il 1 set 2026: erano metrate entrambe, ma DALLO STESSO
+     CONTATORE — quello delle letture, tarato sulla risorsa che ce n'è cento
+     volte tanta. Una scrittura passava se c'era budget di LETTURE, cioè
+     quasi sempre, mentre la quota che si stava consumando era quella delle
+     scritture. Ora ognuna paga dal proprio bilancio. */
   if (request.method === 'PUT'){
+    if (overWriteLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
     const body = await request.text();
     if (!body || body.length > MAX_BODY_BYTES) return json({ error: 'bad body' }, 400, cors);
     /* last write wins — if two things land in the same inbox at once, only
@@ -524,11 +680,18 @@ async function handleMailbox(request, env, cors, key){
        being told whether it is occupied; and the answer here is one bit, with
        no envelope attached. It is metered exactly like every other read. */
     if (new URL(request.url).searchParams.get('peek') === '1'){
+      if (overReadLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
       const there = await env.MAILBOX.get(key);
       return there === null
         ? json({ empty: true }, 404, cors)
         : json({ waiting: true }, 200, cors);
     }
+
+    /* Due operazioni, non una: la get qui sotto e la delete che la segue.
+       È la stessa disattenzione del buco 3, in piccolo — e va contata
+       comunque, o il conto torna sbagliato del doppio proprio sulla rotta
+       più battuta di tutte. */
+    if (overReadLimit(request, 2)) return json({ error: 'too many attempts' }, 429, cors);
 
     const val = await env.MAILBOX.get(key);
     if (val === null) return json({ empty: true }, 404, cors);

@@ -1095,15 +1095,25 @@ test.describe('what the audit found', () => {
       for (let i = 0; i < 40; i++) l.push({ nick:'C'+i, fp:'fp'+i, lastSeen: Date.now(), push:null, addr:null });
       saveContacts(l);
     `);
+    /* ⚠️ I GIRI SI CONTANO, NON SI SCRIVONO A MANO. Prima erano dieci, fissi,
+       perche' dieci per otto fa quaranta — e il 1 set 2026, dimezzando il
+       lotto a quattro per consumare meno quota, questo test e' diventato
+       rosso pur restando la garanzia intatta. Un test che si rompe quando
+       cambia il PASSO invece che la PROMESSA sta misurando il meccanismo, non
+       cio' che conta: la promessa e' "nessuno viene dimenticato", e quanti
+       giri servano e' un dettaglio che il test puo' ricavarsi da solo. */
+    const perGiro = Number(app.run('INBOX_PER_GIRO'));
+    assert.ok(perGiro > 0, 'INBOX_PER_GIRO deve esistere');
+    const giri = Math.ceil(40 / perGiro) + 2;
     let p = Promise.resolve();
-    for (let giro = 0; giro < 10; giro++){
+    for (let giro = 0; giro < giri; giro++){
       p = p.then(() => { app.run('window.__g = checkInboxOnce();'); return app.run('window.__g'); })
            .then(() => new Promise(r => setTimeout(r, 5)));
     }
     return p.then(() => {
       const viste = Object.keys(JSON.parse(app.run('JSON.stringify(window.__viste)'))).length;
       assert.strictEqual(viste, 40,
-        `dopo dieci giri sono stati guardati solo ${viste} contatti su 40: girando a turno non si deve perdere nessuno`);
+        `dopo ${giri} giri sono stati guardati solo ${viste} contatti su 40: girando a turno non si deve perdere nessuno`);
       app.stop();
     });
   });
@@ -1767,15 +1777,34 @@ test.describe('what the audit found', () => {
     assert.match(worker, /endsWith\(s\)/, 'suffixes must be anchored to the end of the host');
   });
 
-  test('the credentials budget is tighter than the mailbox budget', () => {
+  test('ogni risorsa ha il suo bilancio, e il piu scarso e il piu stretto', () => {
     /* They exist for opposite reasons: a mailbox poll happens ~150 times per
        honest connection, credentials once per page load. Sharing one number
-       would mean either starving the first or leaving the second wide open. */
+       would mean either starving the first or leaving the second wide open.
+
+       ⚠️ ALLARGATO IL 1 SET 2026. Prima guardava due soli numeri, e non
+       poteva vedere il difetto che ha quasi spento Logos: LE SCRITTURE NON
+       AVEVANO UN BILANCIO PROPRIO. Pagavano da quello delle letture, che sul
+       piano gratuito sono CENTO VOLTE piu abbondanti (100.000 contro 1.000 al
+       giorno) — quindi il tetto era tarato sulla risorsa che avanza e lasciava
+       scoperta quella che finisce. La regola generale, ed e' quella che il
+       test fissa adesso: chi ha meno scorta deve avere il tetto piu basso. */
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
-    const mail = Number((worker.match(/RL_MAX_LOOKUPS\s*=\s*(\d+)/) || [])[1]);
-    const turn = Number((worker.match(/RL_TURN_MAX\s*=\s*(\d+)/) || [])[1]);
-    assert.ok(mail > 0 && turn > 0, 'both budgets must be set');
-    assert.ok(turn < mail, `credentials (${turn}) should be metered tighter than lookups (${mail})`);
+    const num = re => Number((worker.match(re) || [])[1]);
+    const letture   = num(/RL_MAX_READS\s*=\s*(\d+)/);
+    const scritture = num(/RL_MAX_WRITES\s*=\s*(\d+)/);
+    const turn      = num(/RL_TURN_MAX\s*=\s*(\d+)/);
+    assert.ok(letture > 0 && scritture > 0 && turn > 0,
+      'letture, scritture e credenziali devono avere ognuna il proprio tetto');
+    assert.ok(turn < letture, `credenziali (${turn}) devono essere piu strette delle letture (${letture})`);
+    assert.ok(scritture < letture,
+      `scritture (${scritture}) devono essere piu strette delle letture (${letture}): ` +
+      'sul piano gratuito sono cento volte piu scarse');
+
+    /* E il fondo del secchio deve esistere: senza, cambiare indirizzo — cosa
+       che una rete mobile fa da sola — aggira ogni limite per indirizzo. */
+    assert.ok(/GLOBAL_MAX_WRITES\s*=\s*\d+/.test(worker) && /overGlobal\s*\(/.test(worker),
+      'deve esistere un tetto che non guarda l indirizzo di chi chiede');
   });
 });
 
