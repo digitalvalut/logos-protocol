@@ -5244,13 +5244,72 @@ async function sha256Hex2(str){ return hex(await crypto.subtle.digest('SHA-256',
    The cost is paid once, by each of the two people, on a phone: invisible.
    The same cost paid a million times over is what makes sweeping the code space
    impractical, and the Worker's own attempt limit closes the rest of that door. */
-async function quickSecrets(code){
+/* ---- il segreto lungo che viaggia nel link ------------------------------
+   H-01 dell'analisi esterna: sei cifre sono un milione di combinazioni, e
+   PBKDF2 le rende lente da provare ma non le moltiplica. Chi puo' osservare le
+   caselle del servizio puo', in teoria, provarle tutte.
+
+   La correzione non e' rendere il codice piu' lungo: e' TOGLIERGLI IL SECONDO
+   LAVORO. Oggi le sei cifre dicono due cose insieme — DOVE incontrarsi e COME
+   aprire la busta. Da qui in poi:
+
+     le sei cifre  →  dicono solo DOVE. Restano corte perche' vanno dettate.
+     questo segreto →  dice COME aprire. Non lo detta nessuno: sta nel link.
+
+   Chi indovina le sei cifre trova la casella giusta e dentro una busta che non
+   sa aprire.
+
+   ⚠️ Chi detta a voce non guadagna niente, e va detto invece di lasciarlo
+   credere: senza il segreto lungo si ricade sulla protezione di prima. Migliora
+   la strada del link, che e' quella che si usa quasi sempre. */
+const QUICK_SECRET_BYTES = 16;   /* 128 bit: la soglia che l'analisi indica */
+function makeQuickSecret(){
+  const a = new Uint8Array(QUICK_SECRET_BYTES);
+  crypto.getRandomValues(a);
+  /* Base64 senza caratteri che un URL debba travestire, cosi' il link resta
+     leggibile e incollabile a mano senza rompersi. */
+  return btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+
+async function quickSecrets(code, lungo){
+  /* ⚠️ IL PUNTO PIU' DELICATO DI TUTTA QUESTA CORREZIONE, e sbagliarlo rompe
+     le connessioni invece di proteggerle.
+
+     Il codice produce DUE cose: dove incontrarsi (`seed`) e come aprire la
+     busta (`key`). Il segreto lungo deve entrare SOLO nella seconda.
+
+     Se entrasse anche nella prima, sposterebbe la casella dell'appuntamento:
+     chi ha una versione vecchia continuerebbe a cercare dove ha sempre
+     cercato, chi ha la nuova lascerebbe il biglietto altrove, e i due non si
+     troverebbero mai piu'. Sarebbe la v17 daccapo — un difetto invisibile ai
+     test e devastante sui telefoni.
+
+     Quindi: PBKDF2 gira sul solo codice, esattamente come prima e con lo
+     stesso costo, e da' un `seed` IDENTICO a quello di sempre. Il segreto
+     lungo viene mescolato dopo, e solo nella chiave, con HKDF — che e' veloce,
+     quindi il tempo di attesa non cambia di un millisecondo. */
   const base = await crypto.subtle.importKey('raw', new TextEncoder().encode('logos-quick-v3:' + code), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits(
     { name:'PBKDF2', salt: SIGNAL_SALT, iterations: QUICK_ITER, hash:'SHA-256' }, base, 512);
   const raw = new Uint8Array(bits);
-  const key = await crypto.subtle.importKey('raw', raw.slice(0, 32), { name:'AES-GCM' }, false, ['encrypt','decrypt']);
-  return { key, seed: hex(raw.slice(32, 64)) };
+  const seed = hex(raw.slice(32, 64));
+
+  /* Senza segreto lungo — invito vecchio, o codice dettato a voce — la chiave
+     resta identica byte per byte a quella di prima. E' questo che permette a
+     una versione nuova e a una vecchia di incontrarsi ancora. */
+  if (!lungo){
+    const key = await crypto.subtle.importKey('raw', raw.slice(0, 32), { name:'AES-GCM' }, false, ['encrypt','decrypt']);
+    return { key, seed };
+  }
+
+  /* Col segreto lungo, indovinare le sei cifre non basta piu': serve anche lui,
+     e lui non si indovina. */
+  const hk = await crypto.subtle.importKey('raw', raw.slice(0, 32), 'HKDF', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name:'HKDF', hash:'SHA-256', salt: new TextEncoder().encode(lungo),
+      info: new TextEncoder().encode('logos-quick-link-v1') },
+    hk, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
+  return { key, seed };
 }
 /* The fingerprints two people already hold for each other are 256-bit values,
    not a short code — there is nothing to guess, so no stretching is needed and
@@ -6637,7 +6696,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.91';
+const APP_VERSION = 'logos-modifica-3.92';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -7513,6 +7572,9 @@ async function startQuickShare(existingCode, quiet){
   try{
   stopQuickPump();
   const code = existingCode || makeQuickCode();
+  /* Nuovo a ogni invito, come il codice. Vive solo nel link: non compare sullo
+     schermo, non si detta, non si scrive a mano. */
+  quickLinkSecret = makeQuickSecret();
   $('quickCodeOut').textContent = formatQuickCode(code);
   paintQr(code).catch(()=>{}); /* the QR is a convenience: never hold the invite up for it */
   $('btnRetryQuickA').classList.add('hide');
@@ -7530,7 +7592,7 @@ async function startQuickShare(existingCode, quiet){
      the stretch either, so the person watching paid for both end to end. Now
      they overlap and the pair costs whichever is slower. Identical work and
      identical iterations: nothing is weakened to buy the time. */
-  const secReady = quickSecrets(code);
+  const secReady = quickSecrets(code, quickLinkSecret);
   secReady.catch(()=>{});   /* awaited below; this only silences the unhandled-rejection warning if the setup throws first */
   pc = await newPeerConnection();
   /* Every operation below targets this, the connection this call actually
@@ -7644,7 +7706,17 @@ async function startQuickShare(existingCode, quiet){
     stopPumpOnceSettled(myPc);
   }
 }
-function quickLink(code){ return shareBase() + '#q=' + code; }
+/* Il link porta ENTRAMBE le cose. Chi ha una versione vecchia legge solo `q=`
+   e si collega come ha sempre fatto; chi ha la nuova vede anche `s=` e la usa.
+   Nessuno resta fuori — ed e' la ragione per cui questa correzione si puo'
+   pubblicare senza spezzare in due chi usa l'app. */
+let quickLinkSecret = '';
+/* Quello letto dal link di qualcun altro, per chi entra. Separato dal proprio:
+   confonderli farebbe cifrare con la chiave sbagliata. */
+let quickJoinSecret = '';
+function quickLink(code){
+  return shareBase() + '#q=' + code + (quickLinkSecret ? '&s=' + quickLinkSecret : '');
+}
 
 /* ---------------- a QR held out in person is an authenticated channel ----------------
    Everything else here has to assume the invite travelled through something
@@ -7738,7 +7810,7 @@ async function tryQuickConnect(){
      up, waiting, and this one goes off to fetch relay credentials. Now the
      connection is built and warm before it is asked for, and the stretch runs
      alongside it instead of in front of it. */
-  const secReady = quickSecrets(code);
+  const secReady = quickSecrets(code, quickJoinSecret);
   const pcReady = newPeerConnection();
   secReady.catch(()=>{}); pcReady.catch(()=>{});
   /* held until it is either handed over to `pc` or closed: a connection warmed
@@ -7876,6 +7948,12 @@ $('btnQuickConnect').addEventListener('click', tryQuickConnect);
 $('quickCodeIn').addEventListener('input', () => {
   const v = normalizeDigits($('quickCodeIn').value).replace(/\D/g,'').slice(0,6);
   $('quickCodeIn').value = v;
+  /* ⚠️ Digitare a mano vuol dire NIENTE segreto lungo: sei cifre dettate a
+     voce e basta. Se ne restasse attaccato uno da un link aperto prima, la
+     chiave sarebbe sbagliata e il collegamento fallirebbe senza spiegazione.
+     Questo gestore scatta solo sulla digitazione vera: quando il codice arriva
+     da un link viene messo nel campo dal programma, che non lo fa scattare. */
+  quickJoinSecret = '';
   if (v.length === 6) tryQuickConnect();
 });
 
@@ -9356,6 +9434,11 @@ function autoFillFromHash(){
   const quick = location.hash.match(/[#&]q=(\d{6})\b/);
   if (quick){
     const code = quick[1];
+    /* Il segreto lungo, se il link lo porta. Un link vecchio non ce l'ha e
+       resta valido: si ricade sulla protezione di prima invece di rifiutarsi
+       di collegarsi. */
+    const lungo = location.hash.match(/[#&]s=([A-Za-z0-9_-]{20,})\b/);
+    quickJoinSecret = lungo ? lungo[1] : '';
     /* only a QR carries this, and only a QR was ever held out in person */
     const vouch = location.hash.match(/[#&]v=([0-9a-f]{8,64})\b/);
     scannedFp = vouch ? vouch[1] : null;

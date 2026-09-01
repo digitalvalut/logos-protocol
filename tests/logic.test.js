@@ -3096,6 +3096,126 @@ test.describe('le tre parole: silenzio al primo contatto, allarme se cambia', ()
 
 });
 
+test.describe('il link porta un segreto lungo (audit H-01)', () => {
+
+  /* Sei cifre sono un milione di combinazioni: chi puo osservare le caselle del
+     servizio puo, in teoria, provarle tutte. La correzione non e allungare il
+     codice — va dettato a voce — ma togliergli il SECONDO lavoro: le sei cifre
+     dicono DOVE incontrarsi, il segreto lungo dice COME aprire. */
+
+  test('IL PUNTO PIU DELICATO: il posto dell appuntamento NON cambia', () => {
+    /* Se il segreto lungo spostasse anche la casella, chi ha una versione
+       vecchia cercherebbe dove ha sempre cercato e i due non si troverebbero
+       mai piu. Sarebbe la v17 daccapo: invisibile ai test, devastante sui
+       telefoni. Il seme deve restare IDENTICO con e senza segreto. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      const senza = await quickSecrets('123456');
+      const con   = await quickSecrets('123456', 'UnSegretoLungoDiEsempio1234');
+      return JSON.stringify({ semeSenza: senza.seed, semeCon: con.seed });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.semeCon, o.semeSenza,
+        'IL SEME DEVE RESTARE IDENTICO: e il posto dove i due si incontrano');
+      app.stop();
+    });
+  });
+
+  test('ma la chiave per aprire la busta CAMBIA', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      const senza = await quickSecrets('123456');
+      const con   = await quickSecrets('123456', 'UnSegretoLungoDiEsempio1234');
+      const busta = await sealWith(con, { testo: 'ciao' });
+      /* chi ha solo le sei cifre non deve riuscire ad aprirla */
+      const conLaChiaveSbagliata = await openFrom(senza.key, busta).catch(() => null);
+      return JSON.stringify({ apertaConSbagliata: conLaChiaveSbagliata });
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(JSON.parse(x).apertaConSbagliata, null,
+        'indovinare le sei cifre non deve piu bastare ad aprire');
+      app.stop();
+    });
+  });
+
+  test('LA COMPATIBILITA: un link vecchio senza segreto funziona ancora', () => {
+    /* Chi ha la versione vecchia manda un link con le sole sei cifre. Deve
+       collegarsi lo stesso, o questa correzione spezzerebbe in due chi usa
+       l app. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      const a = await quickSecrets('654321');
+      const b = await quickSecrets('654321', '');
+      const busta = await sealWith(a, { testo: 'invito vecchio' });
+      const aperta = await openFrom(b.key, busta);
+      return JSON.stringify({ semiUguali: a.seed === b.seed, contenuto: aperta && aperta.testo });
+    })()`);
+    return r.then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.semiUguali, true, 'stessa casella');
+      assert.strictEqual(o.contenuto, 'invito vecchio', 'e la busta si apre come sempre');
+      app.stop();
+    });
+  });
+
+  test('il segreto e lungo abbastanza da non potersi indovinare', () => {
+    const app = loadApp();
+    const r = app.run(`JSON.stringify({
+      lunghezza: makeQuickSecret().length,
+      byte: QUICK_SECRET_BYTES,
+      diversi: new Set([makeQuickSecret(), makeQuickSecret(), makeQuickSecret()]).size,
+      sicuroPerUrl: /^[A-Za-z0-9_-]+$/.test(makeQuickSecret()),
+    })`);
+    return Promise.resolve(r).then(x => {
+      const o = JSON.parse(x);
+      assert.ok(o.byte >= 16, 'almeno 128 bit, come indica l analisi');
+      assert.strictEqual(o.diversi, 3, 'ogni invito ne genera uno nuovo');
+      assert.strictEqual(o.sicuroPerUrl, true, 'deve stare in un link senza travestimenti');
+      app.stop();
+    });
+  });
+
+  test('il link lo porta con se, e senza segreto resta come prima', () => {
+    const app = loadApp();
+    const r = app.run(`
+      quickLinkSecret = 'SegretoDiProvaLungoAbbastanza123';
+      const conSegreto = quickLink('112233');
+      quickLinkSecret = '';
+      JSON.stringify({ conSegreto, senza: quickLink('112233') });
+    `);
+    return Promise.resolve(r).then(x => {
+      const o = JSON.parse(x);
+      assert.match(o.conSegreto, /#q=112233&s=SegretoDiProvaLungoAbbastanza123/,
+        'il link deve portare sia il codice sia il segreto');
+      assert.match(o.senza, /#q=112233$/, 'e senza segreto deve restare il link di prima');
+      app.stop();
+    });
+  });
+
+  test('digitare a mano azzera un segreto rimasto da un link precedente', () => {
+    /* Se ne restasse uno attaccato, la chiave sarebbe sbagliata e il
+       collegamento fallirebbe senza spiegazione. */
+    const app = loadApp();
+    const r = app.run(`
+      /* Il finto browser non ha Event, quindi si chiama direttamente il
+         gestore registrato: e lo stesso codice che gira quando una persona
+         digita davvero. */
+      quickJoinSecret = 'RestoDiUnLinkApertoPrima123456';
+      tryQuickConnect = () => {};
+      $('quickCodeIn').value = '99';
+      const gestori = $('quickCodeIn').listeners && $('quickCodeIn').listeners['input'];
+      if (gestori) gestori.forEach(f => f());
+      quickJoinSecret;
+    `);
+    return Promise.resolve(r).then(x => {
+      assert.strictEqual(x, '', 'digitare a mano vuol dire nessun segreto lungo');
+      app.stop();
+    });
+  });
+
+});
+
 test.describe('pulisci tutto', () => {
 
   const pieno = `
