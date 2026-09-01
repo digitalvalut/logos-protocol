@@ -704,11 +704,50 @@ async function handleMailbox(request, env, cors, key){
   return json({ error: 'method not allowed' }, 405, cors);
 }
 
+/* ---------------- nessun guasto dello storage esce come 500 ----------------
+   Trovato misurando, non leggendo: martellando /wake sulla stessa casella, il
+   relay rispondeva **500**, non 429. KV consente circa una scrittura al secondo
+   PER CHIAVE, e quel rifiuto arrivava qui come eccezione — e nessuna delle
+   funzioni che scrivono aveva un try/catch attorno.
+
+   ⚠️ Il difetto NON era di /wake: era di TUTTE. Contate una per una, delle 13
+   operazioni sullo storage solo 2 (in handleKey) erano protette. Correggere la
+   sola /wake avrebbe lasciato in piedi lo stesso difetto in altri dieci punti —
+   ed e' precisamente il modo in cui questo progetto si e' gia' fatto male.
+
+   Un 500 non e' cosmetico. Dice al client "il server e' rotto", e un client che
+   crede il server rotto **riprova**, che e' il contrario di cio che serve quando
+   la causa e' che stiamo gia' andando troppo forte: e' cosi che nasce una
+   tempesta di ritentativi. Un 429 dice "rallenta", ed e' la verita'.
+
+   Una guardia sola, qui, invece di undici sparse: un punto solo da leggere, da
+   provare e da non dimenticare — e nessuna funzione futura potra' nascere
+   scoperta. La distinzione fra 429 e 503 e' deliberata: "rallenta" e "riprova
+   piu' tardi" sono due istruzioni diverse per chi le riceve. */
+function isKvThrottle(e){
+  const m = String((e && (e.message || e.name)) || e || '').toLowerCase();
+  return m.includes('429') || m.includes('rate limit') || m.includes('too many')
+      || m.includes('exceeded') || m.includes('limit exceeded');
+}
+
 export default {
   async fetch(request, env){
     const origin = request.headers.get('Origin') || '';
     const cors = corsHeaders(origin);
+    try{
+      return await instrada(request, env, cors);
+    }catch(e){
+      /* mai il testo dell'errore al chiamante: direbbe cose sull'interno che
+         non gli servono e a un attaccante servono */
+      if (isKvThrottle(e)) return json({ error: 'too many attempts' }, 429, cors);
+      return json({ error: 'storage unavailable' }, 503, cors);
+    }
+  },
+};
+
+async function instrada(request, env, cors){
     const url = new URL(request.url);
+    const origin = request.headers.get('Origin') || '';
 
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     /* Not real access control — a header is easy to fake — but it stops the
@@ -747,5 +786,4 @@ export default {
     }
 
     return json({ error: 'not found' }, 404, cors);
-  },
-};
+}

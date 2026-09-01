@@ -400,3 +400,83 @@ test.describe('worker: nessuno puo svuotare la quota del giorno da solo', () => 
       'se lo sono, la correzione ha spento l app invece di difenderla');
   });
 });
+
+/* ------------------------------------------------------------------------
+   UN GUASTO DELLO STORAGE NON DEVE MAI USCIRE COME 500.
+
+   Trovato misurando il relay VIVO, non leggendo il codice: martellando
+   /wake sulla stessa casella tornavano dei 500. KV consente circa una
+   scrittura al secondo per chiave, e quel rifiuto arrivava come eccezione
+   da una `env.MAILBOX.put` senza try/catch attorno.
+
+   ⚠️ Il difetto non era di /wake. Contate a mano, delle 13 operazioni sullo
+   storage del Worker solo 2 erano protette. Correggere la sola /wake avrebbe
+   lasciato il difetto in altri dieci punti.
+
+   Perché non è cosmetico: un 500 dice "il server è rotto", e un client che
+   crede il server rotto RIPROVA — moltiplicando il carico proprio quando la
+   causa è che stiamo già andando troppo forte. Un 429 dice "rallenta".
+   ------------------------------------------------------------------------ */
+test.describe('worker: lo storage che si rifiuta non diventa un 500', () => {
+
+  /* un magazzino che rifiuta come fa KV quando si scrive troppo in fretta */
+  function kvCheRifiuta(messaggio){
+    const vero = W.kvVuoto();
+    return {
+      ...vero,
+      async put(){ throw new Error(messaggio); },
+      async delete(){ throw new Error(messaggio); },
+    };
+  }
+
+  test('scrivere troppo in fretta risponde 429 (rallenta), non 500 (sono rotto)', async () => {
+    const w = W.caricaWorker({ env: { MAILBOX: kvCheRifiuta('KV PUT failed: 429 Too Many Requests') } });
+    const r = await w.chiama('PUT', '/wake/' + 'a'.repeat(64), { body: 'x' });
+    assert.strictEqual(r.status, 429,
+      'un rifiuto per eccesso di frequenza deve dire "rallenta": un 500 fa riprovare, e la tempesta si moltiplica');
+  });
+
+  test('un guasto vero dello storage risponde 503, non 500', async () => {
+    const w = W.caricaWorker({ env: { MAILBOX: kvCheRifiuta('connection reset') } });
+    const r = await w.chiama('PUT', '/wake/' + 'b'.repeat(64), { body: 'x' });
+    assert.strictEqual(r.status, 503,
+      '"riprova più tardi" e "rallenta" sono istruzioni diverse per chi le riceve');
+  });
+
+  test('la protezione copre TUTTE le rotte, non solo quella dove è stato trovato', async () => {
+    /* La regola del progetto: un difetto sistemico richiede una correzione
+       sistemica. Se un domani qualcuno aggiunge una rotta nuova, questa
+       guardia la copre senza che debba ricordarsene. */
+    const rotte = [
+      ['PUT', '/wake/'    + 'c'.repeat(64)],
+      ['PUT', '/mailbox/' + 'c'.repeat(64)],
+      ['GET', '/mailbox/' + 'c'.repeat(64)],
+      ['PUT', '/letter/'  + 'c'.repeat(64) + '/' + 'd'.repeat(16)],
+      ['GET', '/letter/'  + 'c'.repeat(64)],
+    ];
+    for (const [metodo, percorso] of rotte){
+      const w = W.caricaWorker({ env: { MAILBOX: {
+        async get(){ throw new Error('KV read failed: 429'); },
+        async put(){ throw new Error('KV write failed: 429'); },
+        async delete(){ throw new Error('KV delete failed: 429'); },
+        async list(){ throw new Error('KV list failed: 429'); },
+      } } });
+      /* una GET non può portare un corpo: Request lo rifiuta prima ancora di
+         arrivare al Worker — preso dal test, non dalla lettura */
+      const r = await w.chiama(metodo, percorso, metodo === 'GET' ? {} : { body: 'x' });
+      assert.notStrictEqual(r.status, 500,
+        `${metodo} ${percorso.slice(0, 20)}… risponde 500: questa rotta è scoperta`);
+      assert.strictEqual(r.status, 429, `${metodo} ${percorso.slice(0, 20)}… dovrebbe dire "rallenta"`);
+    }
+  });
+
+  test('il messaggio interno dell errore non trapela a chi chiama', async () => {
+    /* Un errore dello storage può nominare chiavi, host interni o versioni.
+       A chi ha causato il guasto non serve, e a un attaccante sì. */
+    const w = W.caricaWorker({ env: { MAILBOX: kvCheRifiuta('namespace a3c45b02 host internal-kv-7.cfdata.org fallito') } });
+    const r = await w.chiama('PUT', '/wake/' + 'e'.repeat(64), { body: 'x' });
+    const testo = JSON.stringify(r.corpo);
+    assert.ok(!/a3c45b02|cfdata|internal-kv/.test(testo),
+      'la risposta contiene dettagli interni: ' + testo);
+  });
+});
