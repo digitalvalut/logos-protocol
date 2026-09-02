@@ -5200,6 +5200,11 @@ async function mailboxGet(key){
     const e = await askAnyRelay(RELAY_PATH.mailbox + key, { method:'GET' });
     brokerReachable = e.risposto > 0; /* un 404 e una risposta sanissima: la casella e vuota */
     mailboxThrottled = !e.res && e.stati.indexOf(429) >= 0;
+    /* la salita dell'attesa vive qui e non in pollGap, perche' qui si sa se
+       il relay ha accettato: un rifiuto di fila la raddoppia, il primo giro
+       che passa la azzera. Contarla dentro pollGap significherebbe farla
+       salire anche mentre le cose funzionano */
+    throttleStreak = mailboxThrottled ? Math.min(throttleStreak + 1, 8) : 0;
     if (!e.res) return null;
     return await e.res.json();
   }catch(e){ brokerReachable = false; return null; }
@@ -5393,9 +5398,39 @@ const FAST_POLL_WINDOW_MS = 15000;
    better. Checked first, ahead of the fast window, on purpose: being told to
    slow down overrides being in a hurry, not the other way round. */
 const THROTTLE_BACKOFF_MS = 4000;
+/* ---- il caso, e la salita: due difetti trovati il 2 set 2026 ----
+   Fino a qui ogni attesa era un numero fisso. Sembra innocuo e non lo e',
+   per una ragione che si vede solo pensando a piu' dispositivi insieme.
+
+   (1) NIENTE CASO. Se il relay dice "rallenta" a cento dispositivi nello
+   stesso momento — ed e' proprio cosi che succede, perche' il limite scatta
+   per tutti quando la soglia viene superata — quei cento aspettano TUTTI
+   esattamente 4000 ms e ripartono TUTTI nello stesso istante. Il relay
+   riceve di nuovo la stessa raffica compatta, rifiuta di nuovo, e il ciclo
+   si richiude su se stesso. E' la tempesta di ritentativi: non la causa il
+   traffico, la causa il fatto che tutti aspettino la stessa identica cosa.
+   Rimedio: ±25% a caso su ogni attesa. La media non cambia — quindi non
+   rallenta nessuno — ma la raffica si spalma invece di ricompattarsi.
+
+   (2) ATTESA PIATTA. `THROTTLE_BACKOFF_MS` non cresceva mai: rifiutato una
+   volta o venti, si riprovava sempre dopo quattro secondi. Un'attesa che non
+   sale non e' una ritirata, e' bussare piu' piano alla stessa porta. Ora
+   raddoppia a ogni rifiuto di fila fino a un tetto, e torna a zero al primo
+   che va a buon fine.
+
+   ⚠️ Il caso si applica ANCHE quando tutto va bene, non solo sotto rifiuto,
+   ed e' voluto: due telefoni che si stanno cercando partono nello stesso
+   secondo e finirebbero a interrogare la cassetta in fila indiana per tutta
+   la stretta di mano. Media invariata, sincronia rotta. */
+const THROTTLE_MAX_MS = 20000;
+let throttleStreak = 0;
+function jitter(ms){ return Math.round(ms * (0.75 + Math.random() * 0.5)); }
 function pollGap(startedAt, normalMs){
-  if (mailboxThrottled) return Math.max(normalMs, THROTTLE_BACKOFF_MS);
-  return (Date.now() - startedAt) < FAST_POLL_WINDOW_MS ? FAST_POLL_MS : normalMs;
+  if (mailboxThrottled){
+    const salita = Math.min(THROTTLE_BACKOFF_MS * Math.pow(2, throttleStreak), THROTTLE_MAX_MS);
+    return jitter(Math.max(normalMs, salita));
+  }
+  return jitter((Date.now() - startedAt) < FAST_POLL_WINDOW_MS ? FAST_POLL_MS : normalMs);
 }
 
 /* ============ ECIES: encrypting to an address instead of with it ============
@@ -7560,11 +7595,28 @@ function candidatePump(pcObj, sec, mine, theirs){
     flushTimer = setTimeout(flush, 350); /* group the burst that always arrives together */
   });
 
+  /* ⚠️ L'ORDINE DI QUESTE DUE RIGHE E' IL PUNTO, non un dettaglio di stile.
+     Prima il tipo veniva registrato PRIMA di provare ad applicare l'indirizzo,
+     e `addIceCandidate` puo' fallire per ragioni ordinarie (un indirizzo che
+     arriva prima della descrizione remota, un duplicato, uno malformato).
+     Il catch vuoto e' giusto — quei fallimenti sono normali e non vanno
+     mostrati a nessuno — ma il risultato era che `__trickleTypes` raccoglieva
+     tipi MAI applicati, e diagLine() li stampa come "loro: host+srflx+relay".
+     Cioe' la riga diagnostica dichiarava trovata una strada che non esisteva.
+
+     Non e' un difetto cosmetico ed e' gia' costato a questo progetto: e' la
+     stessa famiglia di M7 (uno stato che mente su se stesso) e la ragione per
+     cui il 26 agosto una diagnosi e' partita da un indizio falso. Quando una
+     connessione non riesce, quella riga e' la PRIMA cosa che si guarda: se
+     mente, manda a cercare il problema dove non e'.
+
+     Adesso il tipo si registra solo dopo che l'indirizzo e' stato accettato
+     davvero, quindi la riga dice cosa e' entrato, non cosa e' arrivato. */
   const add = async c => {
     try{
+      await pcObj.addIceCandidate(c);
       const ty = /\btyp (\w+)/.exec(c.candidate || '');
       if (ty) pcObj.__trickleTypes.add(ty[1]);
-      await pcObj.addIceCandidate(c);
     }catch(e){}
   };
   const pumpStarted = Date.now();

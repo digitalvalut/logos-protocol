@@ -236,7 +236,21 @@ function buildSandbox(options = {}){
       createAnswer(){ return Promise.resolve({ type: 'answer', sdp: 'v=0\r\n' }); }
       setLocalDescription(){ this.localDescription = { sdp: 'v=0\r\n' }; return Promise.resolve(); }
       setRemoteDescription(){ this.remoteDescription = { sdp: 'v=0\r\n' }; return Promise.resolve(); }
-      addIceCandidate(){ return Promise.resolve(); }
+      /* ⚠️ QUARTA BUGIA DEL BANCO DI PROVA, trovata il 2 set 2026 con l'analisi
+         statica dei catch vuoti. Questa riga riusciva SEMPRE, quindi nessun test
+         poteva accorgersi di cosa succede quando un indirizzo di rete viene
+         rifiutato — che nel browser vero capita in continuazione, per ragioni
+         del tutto ordinarie (un indirizzo che arriva prima della descrizione
+         remota, un duplicato, uno malformato).
+         Il difetto che nascondeva: `__trickleTypes` registrava il tipo PRIMA di
+         provare ad applicarlo, quindi la riga diagnostica dichiarava trovata
+         una strada che non era mai entrata.
+         `__failIce` la fa fallire su richiesta. Sta qui e non nel test perche'
+         un finto che non sa fallire non e' un finto: e' un alibi. */
+      addIceCandidate(){
+        if (this.__failIce) return Promise.reject(new Error('candidato rifiutato'));
+        return Promise.resolve();
+      }
       getStats(){ return Promise.resolve(new Map()); }
       /* Listeners are really kept, because "has this connection finished?" is a
          question answered by an event and by nothing else. A no-op here made

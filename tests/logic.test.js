@@ -1337,18 +1337,27 @@ test.describe('what the audit found', () => {
 
   test('waiting loops check back fast at first, then settle to their normal pace', () => {
     /* v3.52 hand-tuned this once for a single wait; this is the shared helper
-       that now gives every other wait the same fast start. Reads cost
-       nothing extra on the free plan (the tight quota is on writes), so
-       there is no reason the other waits should have missed out on it. */
+       that now gives every other wait the same fast start.
+       ⚠️ RISCRITTO IL 2 SET 2026. Fissava i numeri esatti (400, 1500, 700), e
+       da quando ogni attesa porta ±25% di caso — perché cento dispositivi
+       rifiutati insieme non ripartano in sincronia — quei numeri esatti non
+       esistono più. Il test è diventato rosso pur essendo l'app MIGLIORE di
+       prima: era legato al meccanismo, non alla promessa.
+       La promessa è: svelto all'inizio, poi al passo normale di quell'attesa,
+       e mai fuori dalla banda dichiarata. */
     const app = loadApp();
-    assert.strictEqual(app.run('pollGap(Date.now(), 1500)'), 400,
-      'right at the start of a wait, the fast pace should apply');
-    assert.strictEqual(app.run('pollGap(Date.now() - 5000, 1200)'), 400,
-      'five seconds in is still inside the fast window');
-    assert.strictEqual(app.run('pollGap(Date.now() - 20000, 1500)'), 1500,
-      'once the fast window has passed, it must fall back to the normal pace given to it — not stay fast forever and spend requests for nothing');
-    assert.strictEqual(app.run('pollGap(Date.now() - 20000, 700)'), 700,
-      'the fallback is whatever pace that particular wait normally uses, not a fixed number');
+    const banda = (v, atteso, quale) => {
+      assert.ok(v >= atteso * 0.75 && v <= atteso * 1.25,
+        `${quale}: ${v} ms è fuori dal ±25% attorno a ${atteso}`);
+    };
+    banda(app.run('pollGap(Date.now(), 1500)'), 400,
+      'appena iniziata l attesa deve valere il passo svelto');
+    banda(app.run('pollGap(Date.now() - 5000, 1200)'), 400,
+      'cinque secondi dopo si è ancora dentro la finestra svelta');
+    banda(app.run('pollGap(Date.now() - 20000, 1500)'), 1500,
+      'passata la finestra svelta si torna al passo normale, non si resta svelti per sempre');
+    banda(app.run('pollGap(Date.now() - 20000, 700)'), 700,
+      'il passo di ricaduta è quello di quella attesa, non un numero fisso');
     app.stop();
   });
 
@@ -1357,15 +1366,22 @@ test.describe('what the audit found', () => {
        brokerReachable stayed true and the loop kept polling at whatever pace
        it already had, fast window included — the one moment the app was
        told to back off was the one moment it structurally could not. */
+    /* ⚠️ RISCRITTO IL 2 SET 2026, stesso motivo del test qui sopra: fissava
+       4000 e 400 esatti, e ora ogni attesa porta ±25% di caso. La promessa da
+       provare non è il numero: è che il "rallenta" vinca sempre sulla fretta,
+       e che smettere di essere rallentati faccia tornare svelti. */
     const app = loadApp();
-    app.run('mailboxThrottled = true;');
-    assert.strictEqual(app.run('pollGap(Date.now(), 1500)'), 4000,
-      'a throttled response must not be answered with the fast pace, even right at the start of a wait');
-    assert.strictEqual(app.run('pollGap(Date.now(), 700)'), 4000,
-      'the backoff floor applies even to waits whose own normal pace is already slower than it');
-    app.run('mailboxThrottled = false;');
-    assert.strictEqual(app.run('pollGap(Date.now(), 1500)'), 400,
-      'once no longer throttled, the fast start must work again — this must not get stuck on');
+    app.run('mailboxThrottled = true; throttleStreak = 0;');
+    const sottoFreno = app.run('pollGap(Date.now(), 1500)');
+    assert.ok(sottoFreno >= 4000 * 0.75,
+      `sotto freno l attesa è ${sottoFreno} ms: la fretta non deve mai vincere sul "rallenta"`);
+    const sottoFreno2 = app.run('pollGap(Date.now(), 700)');
+    assert.ok(sottoFreno2 >= 4000 * 0.75,
+      'il pavimento della ritirata vale anche per le attese già più lente di lui');
+    app.run('mailboxThrottled = false; throttleStreak = 0;');
+    const libero = app.run('pollGap(Date.now(), 1500)');
+    assert.ok(libero <= 400 * 1.25,
+      `tolto il freno l attesa è ${libero} ms: la ritirata non deve restare incastrata accesa`);
     app.stop();
   });
 
@@ -4344,4 +4360,164 @@ test.describe('la pompa dei candidati sopravvive alla stretta di mano', () => {
     app.stop();
   });
 
+});
+
+/* ------------------------------------------------------------------------
+   LA RIGA DIAGNOSTICA NON DEVE MENTIRE.
+
+   Trovata il 2 set 2026 con l'analisi statica dei catch vuoti, NON usando
+   l'app. `add()` dentro la pompa registrava il tipo dell'indirizzo di rete
+   PRIMA di provare ad applicarlo, e `addIceCandidate` fallisce per ragioni
+   del tutto ordinarie (un indirizzo che arriva prima della descrizione
+   remota, un duplicato, uno malformato). Risultato: diagLine() stampava
+   "loro: relay" anche quando quell'indirizzo non era mai entrato.
+
+   Perche' conta: quando due telefoni non si collegano, quella riga e' la
+   PRIMA cosa che si guarda. Se dichiara trovata una strada che non esiste,
+   manda a cercare il problema dove non e'. Stessa famiglia di M7: non un
+   guasto, ma uno STATO CHE MENTE SU SE STESSO.
+
+   ⚠️ Nessun test poteva prenderlo, e il motivo va ricordato: nel finto
+   browser `addIceCandidate` riusciva SEMPRE. Un finto che non sa fallire
+   non e' un finto, e' un alibi. Corretto anche quello (`__failIce`).
+   ------------------------------------------------------------------------ */
+test.describe('la diagnostica dice cosa e entrato, non cosa e arrivato', () => {
+
+  /* Guida la pompa dalla porta vera: un lotto di indirizzi sigillato che
+     arriva dalla cassetta, esattamente come in produzione. */
+  const scenario = (fallisce) => `(async () => {
+    const pc = new RTCPeerConnection();
+    pc.__failIce = ${fallisce};
+    const sec = await quickSecrets('123456');
+    const key = await slotId(sec.seed, 'trickle-b-0');
+    const busta = await sealWith(sec, { c: [
+      { candidate: 'candidate:1 1 udp 1 1.2.3.4 1 typ relay', sdpMid: '0', sdpMLineIndex: 0 }
+    ] });
+    fetch = async (u) => String(u).indexOf(key) >= 0
+      ? { ok: true, status: 200, json: async () => busta }
+      : { ok: false, status: 404, json: async () => ({}) };
+    const pompa = candidatePump(pc, sec, 'a', 'b');
+    await new Promise(r => setTimeout(r, 30));   /* il giro raccoglie il lotto */
+    await pompa.remoteReady();                   /* e lo consegna alla connessione */
+    pompa.stop();
+    return JSON.stringify({ tipi: [...(pc.__trickleTypes || [])], riga: diagLine(pc) });
+  })()`;
+
+  test('un indirizzo RIFIUTATO non viene contato come trovato', () => {
+    const app = loadApp();
+    return app.run(scenario(true)).then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.tipi, [],
+        'un indirizzo rifiutato risulta trovato: la riga diagnostica manda a cercare il problema dove non e');
+      assert.ok(!/relay/.test(o.riga),
+        'la riga dichiara una strada che non e mai entrata: ' + o.riga);
+      app.stop();
+    });
+  });
+
+  test('un indirizzo ACCETTATO viene contato', () => {
+    /* Il lato da non rompere. Se questo cede, la riga smette di dire il vero
+       nell'altro verso — e la trickle e' proprio la strada che funziona
+       meglio: senza questo conteggio l'altro lato risulterebbe sempre vuoto. */
+    const app = loadApp();
+    return app.run(scenario(false)).then(x => {
+      const o = JSON.parse(x);
+      assert.deepStrictEqual(o.tipi, ['relay'], 'un indirizzo accettato deve risultare trovato');
+      app.stop();
+    });
+  });
+});
+
+/* ------------------------------------------------------------------------
+   LA TEMPESTA DI RITENTATIVI.
+
+   Trovata il 2 set 2026 cercando `Math.random` in tutto il file: compariva
+   UNA volta sola, e per generare un id. Nessuna attesa dell'app aveva un
+   grano di caso dentro.
+
+   Perche' e' un difetto e non un dettaglio: il limite del relay scatta per
+   TUTTI nello stesso momento, perche' e' una soglia. Quindi cento
+   dispositivi ricevono "rallenta" insieme, aspettano tutti esattamente
+   4000 ms, e ripartono tutti nello stesso istante. Il relay riceve di nuovo
+   la stessa raffica compatta e rifiuta di nuovo: il ciclo si richiude su se
+   stesso, e non e' il traffico a causarlo — e' il fatto che tutti aspettino
+   la stessa identica cosa.
+
+   Secondo difetto nello stesso punto: l'attesa era PIATTA. Rifiutato una
+   volta o venti, si riprovava sempre dopo quattro secondi. Un'attesa che non
+   sale non e' una ritirata: e' bussare piu' piano alla stessa porta.
+   ------------------------------------------------------------------------ */
+test.describe('cento dispositivi non devono riprovare tutti insieme', () => {
+
+  test('due attese di seguito non sono mai identiche', () => {
+    const app = loadApp();
+    const valori = JSON.parse(app.run(`
+      mailboxThrottled = false;
+      JSON.stringify(Array.from({length: 40}, () => pollGap(Date.now() - 60000, 1200)))
+    `));
+    const distinti = new Set(valori).size;
+    assert.ok(distinti > 20,
+      `su 40 attese solo ${distinti} valori distinti: senza caso i dispositivi ripartono in sincronia`);
+    app.stop();
+  });
+
+  test('la media resta quella dichiarata: il caso non rallenta nessuno', () => {
+    /* Il lato da non rompere. Se il caso spostasse la media, ogni connessione
+       diventerebbe piu' lenta per proteggere da un problema che si vede solo
+       con molti dispositivi insieme — e sarebbe un pessimo scambio. */
+    const app = loadApp();
+    const v = JSON.parse(app.run(`
+      mailboxThrottled = false;
+      JSON.stringify(Array.from({length: 500}, () => pollGap(Date.now() - 60000, 1200)))
+    `));
+    const media = v.reduce((a, b) => a + b, 0) / v.length;
+    assert.ok(media > 1080 && media < 1320,
+      `media ${media.toFixed(0)} ms invece di ~1200: il caso non deve spostare il tempo tipico`);
+    assert.ok(Math.min(...v) >= 900 && Math.max(...v) <= 1500,
+      'il caso deve restare dentro ±25%, non trasformarsi in un ritardo qualsiasi');
+    app.stop();
+  });
+
+  test("l'attesa SALE a ogni rifiuto di fila, invece di restare piatta", () => {
+    const app = loadApp();
+    const salita = JSON.parse(app.run(`
+      mailboxThrottled = true;
+      throttleStreak = 0;  const a = pollGap(Date.now(), 700);
+      throttleStreak = 1;  const b = pollGap(Date.now(), 700);
+      throttleStreak = 3;  const c = pollGap(Date.now(), 700);
+      JSON.stringify([a, b, c]);
+    `));
+    assert.ok(salita[1] > salita[0],
+      'il secondo rifiuto di fila deve far aspettare piu del primo, o non e una ritirata');
+    assert.ok(salita[2] > salita[1], 'e cosi via');
+    app.stop();
+  });
+
+  test("ma l'attesa ha un tetto: non si sparisce per sempre", () => {
+    /* Una ritirata senza tetto e' indistinguibile da un'app che ha smesso di
+       funzionare, e chi la usa non sa che sta aspettando. */
+    const app = loadApp();
+    const v = Number(app.run(`
+      mailboxThrottled = true; throttleStreak = 8; pollGap(Date.now(), 700)
+    `));
+    assert.ok(v <= 20000 * 1.25 + 1,
+      `attesa di ${v} ms: oltre il tetto dichiarato, l'app sembrerebbe morta`);
+    app.stop();
+  });
+
+  test('un giro andato a buon fine azzera la ritirata', () => {
+    /* Senza questo, un solo rifiuto lascerebbe l'app lenta per sempre. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      throttleStreak = 5;
+      fetch = async () => ({ ok: true, status: 200, json: async () => ({}) });
+      await mailboxGet('a'.repeat(64));
+      return throttleStreak;
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(Number(x), 0,
+        'dopo un giro riuscito la ritirata deve azzerarsi, o un solo rifiuto rallenta l app per sempre');
+      app.stop();
+    });
+  });
 });

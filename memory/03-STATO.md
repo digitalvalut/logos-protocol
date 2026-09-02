@@ -1,6 +1,6 @@
 # DOVE SIAMO — leggi questo per primo
 
-*Aggiornato: 2 settembre 2026, ~00:15. Se stai riprendendo il filo — persona
+*Aggiornato: 2 settembre 2026, ~01:10. Se stai riprendendo il filo — persona
 nuova, AI nuova, o te stesso fra tre mesi — parti da qui.*
 
 ---
@@ -45,7 +45,23 @@ ponte presenti.
 - **`TURN_KEY_ID` convertito in Secret dall'autore** → la fragilità che ha causato
   **quattro disservizi** in due giorni non esiste più.
 - **Documentati**: `CAPACITY.md` (quanto regge, con i numeri misurati),
-  `INCIDENTS.md` (cosa fare quando va storto).
+  `INCIDENTS.md` (cosa fare quando va storto), `05-RISCHI-E-LIMITI.md`.
+- **notte del 2 set, analisi statica (§59)** — due difetti trovati **leggendo, non
+  usando l'app**, entrambi corretti e sabotati:
+  1. **Una diagnostica che mentiva.** `__trickleTypes` registrava il tipo
+     dell'indirizzo di rete *prima* di provare ad applicarlo: la riga che si
+     guarda per prima quando due telefoni non si collegano dichiarava trovate
+     strade mai entrate. ⚠️ **Nessun test poteva prenderlo — nel finto browser
+     `addIceCandidate` riusciva sempre. Quarta bugia del banco di prova**, corretta.
+  2. **Tempesta di ritentativi.** `Math.random` compariva *una volta sola in tutto
+     il file*, per un id: nessuna attesa aveva un grano di caso. Il limite del
+     relay è una soglia e scatta per tutti insieme, quindi cento dispositivi
+     aspettavano tutti esattamente 4.000 ms e ripartivano **nello stesso
+     istante**. Ora ±25% di caso (media invariata) e raddoppio a ogni rifiuto di
+     fila fino a 20 s, azzerato al primo giro riuscito.
+  - **288 test verdi** (erano 281). 2 test preesistenti aggiornati: fissavano i
+    millisecondi esatti, che il caso ora fa variare — *provare la garanzia, non il
+    meccanismo*. Verificato col sabotaggio che restano più forti di prima.
 
 ## Rischi attivi, in ordine
 
@@ -75,6 +91,20 @@ preferisci il blast radius minore.* Da riprendere quando ci saranno alcune
 settimane di quiete, non ora.
 
 ---
+
+## SERVE UNA TUA DECISIONE (2 cose, nessuna urgente)
+
+1. **Il saluto che può perdersi in silenzio.** Riga ~3363: `dc.send({type:'hello'})`
+   porta l'impronta per le tre parole e l'iscrizione alle notifiche, dentro un
+   `catch` vuoto. Se fallisce, **il sintomo appare sull'ALTRO dispositivo** (niente
+   tre parole da quel lato) — è la forma esatta del difetto della v22, che costò
+   giorni. Probabilità bassa, conseguenza già pagata una volta. **Rimedio: un solo
+   nuovo tentativo dopo un istante.** Non l'ho fatto da solo perché tocca un
+   cammino faticosamente stabilizzato.
+2. **Nessun tetto alla durata di un messaggio vocale.** Un telefono in tasca che
+   registra per un'ora accumula memoria e poi il file supera comunque il tetto
+   d'invio: si registra a lungo per perdere tutto. **Rimedio: tetto a 5 minuti con
+   avviso.** È una decisione di prodotto, non tecnica.
 
 ## PROSSIMA AZIONE
 
