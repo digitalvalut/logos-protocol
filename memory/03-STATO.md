@@ -22,7 +22,7 @@ regge dell'ordine di 50-100 conversazioni al giorno nel mondo.
 
 **Salute:** tutte le rotte verificate 200/404/403 come atteso, credenziali del
 ponte presenti.
-**Test:** 281 su 281 verdi — ⚠️ **con Node 22**, non col Node 18 di sistema
+**Test:** 288 su 288 verdi — ⚠️ **con Node 22**, non col Node 18 di sistema
 (vedi `INCIDENTS.md` §8).
 **Build:** riproducibile, impronta di firma `423e3094…fee190` invariata da sempre.
 **Spesa Cloudflare:** 0,00 $.
