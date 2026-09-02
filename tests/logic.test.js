@@ -4684,3 +4684,118 @@ test.describe('il polling rallenta solo quando qualcun altro sorveglia', () => {
     app.stop();
   });
 });
+
+/* ------------------------------------------------------------------------
+   LO SQUILLO CHE NON PARTIVA, E NON LO DICEVA A NESSUNO.
+
+   Trovato dall'operatore sul telefono: interruttori accesi, app chiusa,
+   nessuno squillo — e appena riapriva l'app il telefono suonava. Cioe' il
+   servizio nativo non era mai partito, e a suonare era il ripiego dentro la
+   pagina, che funziona solo ad app aperta.
+
+   Tre difetti sommati:
+   1. `watch()` in Java ingoiava il fallimento in un catch vuoto e non
+      restituiva niente: se Android rifiutava di avviare il servizio, la
+      pagina non lo sapeva e continuava a promettere "ti raggiungono anche ad
+      app chiusa". ⚠️ Android rifiuta DAVVERO: da Android 12 un servizio in
+      primo piano non si avvia mentre l'app e' gia' in secondo piano.
+   2. Accendere l'INDIRIZZO non riconsegnava la sorveglianza: chi accendeva
+      "resta in ascolto" prima dell'indirizzo restava senza niente sorvegliato.
+      L'ordine in cui si toccano due interruttori decideva se la funzione
+      esistesse.
+   3. Il rapporto "Come sta l'app" non nominava affatto lo squillo nativo,
+      quindi non c'era modo di accorgersene.
+
+   ⚠️ Una promessa falsa e' peggio di una funzione mancante: chi la legge
+   smette di stare attento, e nessuno lo avvisa.
+   ------------------------------------------------------------------------ */
+test.describe('lo squillo nativo dice la verita su se stesso', () => {
+
+  const conPonte = (rispostaDiWatch) => ({ globals: { AndroidRing: {
+    available: () => true,
+    watch: () => rispostaDiWatch,
+    stop(){},
+    canPostNotifications: () => true,
+    canTakeOverLockScreen: () => true,
+    askForLockScreen(){},
+  } } });
+
+  test('se Android RIFIUTA di avviarlo, l app lo sa', () => {
+    const app = loadApp(conPonte(false));
+    const r = app.run(`(async () => {
+      listenMode = true;
+      localStorage.setItem('dvlogos-addr-on', '1');
+      await handOverWatchToAndroid();
+      return statoAscoltoNativo;
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(x, 'rifiutato',
+        'un rifiuto di Android deve risultare: altrimenti l app promette uno squillo che non arrivera mai');
+      app.stop();
+    });
+  });
+
+  test('se parte davvero, risulta acceso', () => {
+    const app = loadApp(conPonte(true));
+    const r = app.run(`(async () => {
+      listenMode = true;
+      localStorage.setItem('dvlogos-addr-on', '1');
+      await handOverWatchToAndroid();
+      return statoAscoltoNativo;
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(x, 'si', 'un avvio riuscito deve risultare acceso');
+      app.stop();
+    });
+  });
+
+  test('una versione vecchia del ponte non viene scambiata per un rifiuto', () => {
+    /* Il ponte prima non restituiva niente. Assenza di risposta non e' un no:
+       trattarla come tale spegnerebbe la funzione dove funziona. */
+    const app = loadApp(conPonte(undefined));
+    const r = app.run(`(async () => {
+      listenMode = true;
+      localStorage.setItem('dvlogos-addr-on', '1');
+      await handOverWatchToAndroid();
+      return statoAscoltoNativo;
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(x, 'si',
+        'un ponte che non risponde non sta rifiutando: non va spento per prudenza');
+      app.stop();
+    });
+  });
+
+  test('con l interruttore spento non promette niente', () => {
+    const app = loadApp(conPonte(true));
+    const r = app.run(`(async () => {
+      listenMode = false;
+      await handOverWatchToAndroid();
+      return statoAscoltoNativo;
+    })()`);
+    return r.then(x => {
+      assert.strictEqual(x, 'off', 'spento e spento');
+      app.stop();
+    });
+  });
+
+  test('accendere l INDIRIZZO riconsegna la sorveglianza', () => {
+    /* Il difetto per cui l ordine dei due interruttori decideva se la
+       funzione esistesse. */
+    const sorgente = require('node:fs')
+      .readFileSync(require('node:path').join(__dirname, '..', 'modifica.js'), 'utf8');
+    const i = sorgente.indexOf("$('addrRow').addEventListener('click'");
+    const blocco = sorgente.slice(i, sorgente.indexOf("$('addrRow').addEventListener('keydown'"));
+    assert.ok(/handOverWatchToAndroid\(\)/.test(blocco),
+      'accendere l indirizzo cambia cosa il telefono deve sorvegliare: senza riconsegna, chi accende gli interruttori nell ordine sbagliato resta senza squillo e nessuno glielo dice');
+  });
+
+  test('la frase del rifiuto esiste in tutte e 13 le lingue', () => {
+    const sorgente = require('node:fs')
+      .readFileSync(require('node:path').join(__dirname, '..', 'modifica.js'), 'utf8');
+    for (const k of ['nativeRing', 'nativeRingOk', 'nativeRingRefused', 'nativeRingOff']){
+      const n = (sorgente.match(new RegExp('"health\\.' + k + '":', 'g')) || []).length;
+      assert.strictEqual(n, 13, `health.${k} compare ${n} volte invece di 13`);
+    }
+  });
+});

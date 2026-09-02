@@ -406,23 +406,51 @@ public class MainActivity extends Activity {
          * @param title   what a locked screen should say, in the user's language
          * @param body    the quieter line under it
          */
+        /* ⚠️ RESTITUISCE UN ESITO, DAL 2 SET 2026. Prima non restituiva niente e
+           il fallimento finiva in un `catch (Exception ignored) {}`: se Android
+           rifiutava di avviare il servizio, la pagina non lo sapeva e continuava
+           a promettere "ti raggiungono anche ad app chiusa". Una promessa falsa
+           e' peggio di una funzione mancante — chi la legge smette di stare
+           attento, e nessuno lo avvisa.
+
+           Android RIFIUTA per davvero, e non e' un caso raro: da Android 12 un
+           servizio in primo piano non puo' essere avviato mentre l'app e' gia'
+           in secondo piano (ForegroundServiceStartNotAllowedException). Se la
+           consegna viene tentata solo quando lo schermo si spegne, arriva
+           sistematicamente tardi — ed e' esattamente il difetto per cui lo
+           squillo ad app chiusa non e' mai partito sul telefono dell'autore.
+
+           Il permesso delle notifiche si chiede PRIMA e a parte: senza, il
+           servizio parte e viene ucciso perche' non puo' mostrare la propria
+           notifica — un fallimento che sembrerebbe tutt'altro. */
         @JavascriptInterface
-        public void watch(String keysCsv, String base, String title, String body) {
-            if (RingService.keysOf(String.valueOf(keysCsv)).isEmpty()) return;
-            if (!RingService.isSafeBase(base)) return;
+        public boolean watch(String keysCsv, String base, String title, String body) {
+            if (RingService.keysOf(String.valueOf(keysCsv)).isEmpty()) return false;
+            if (!RingService.isSafeBase(base)) return false;
+            runOnUiThread(() -> askToPostNotifications());
             Intent go = new Intent(MainActivity.this, RingService.class)
                 .setAction(RingService.ACTION_WATCH)
                 .putExtra(RingService.EXTRA_KEYS, keysCsv)
                 .putExtra(RingService.EXTRA_BASE, base)
                 .putExtra(RingService.EXTRA_TITLE, title)
                 .putExtra(RingService.EXTRA_BODY, body);
-            runOnUiThread(() -> {
-                askToPostNotifications();
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(go);
-                    else startService(go);
-                } catch (Exception ignored) {}
-            });
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(go);
+                else startService(go);
+                return true;
+            } catch (Exception e) {
+                /* il piu' delle volte: chiesto da background su Android 12+ */
+                return false;
+            }
+        }
+
+        /* Perche' la pagina possa dire la verita' invece di sperarci: il
+           permesso senza il quale il servizio viene ucciso appena parte. */
+        @JavascriptInterface
+        public boolean canPostNotifications() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true;
+            return checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                    == PackageManager.PERMISSION_GRANTED;
         }
 
         /**
