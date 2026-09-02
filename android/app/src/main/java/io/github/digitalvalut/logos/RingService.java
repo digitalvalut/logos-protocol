@@ -82,12 +82,31 @@ public class RingService extends Service {
     private static final int NOTE_WATCHING = 1;
     private static final int NOTE_RINGING  = 2;
 
-    /* The mailbox a call arrives in lives two minutes, so asking every fifteen
-       seconds cannot miss one and leaves a wide margin for a slow network. It
-       is also the number this whole feature is paid for in: every second taken
-       off it is battery spent on a phone where, most of the time, nobody is
-       calling. */
-    private static final long POLL_MS = 15000;
+    /* La cassetta in cui arriva una chiamata vive due minuti, quindi qualunque
+       intervallo sotto il minuto non puo' perderne una e lascia margine per una
+       rete lenta.
+
+       ⚠️ PORTATO DA 15 A 45 SECONDI IL 2 SET 2026, e il motivo non e' la
+       batteria: e' la quota. Questo ciclo gira SEMPRE, anche ad app chiusa —
+       che e' tutto il punto della funzione — ma vuol dire che il suo costo si
+       misura in giornate intere, non in minuti di uso. Misurato:
+
+         ogni 15 s -> 4,0 letture/min -> 5.760 al giorno per utente ->  17 utenti
+         ogni 45 s -> 1,3 letture/min -> 1.920 al giorno per utente ->  52 utenti
+
+       A quindici secondi questa funzione DA SOLA consumava tre volte la quota
+       dell'app tenuta aperta due ore al giorno, ventiquattro ore su
+       ventiquattro. Quarantacinque secondi la riportano esattamente alla
+       capacita' che il progetto ha oggi, lasciando comunque quasi tre tentativi
+       dentro la vita della cassetta.
+
+       Il prezzo, detto in chiaro: chi chiama puo' aspettare fino a 45 secondi
+       prima che il telefono squilli. Non perde la chiamata — vede "sto
+       chiamando..." e la sua procedura aspetta fino a tre minuti — arriva piu'
+       tardi. E' uno scambio fra quanto in fretta squilla e quante persone
+       possono usare Logos, e finche' il piano e' gratuito vince la seconda.
+       Vedi memory/CAPACITY.md. */
+    private static final long POLL_MS = 45000;
     private static final int CONNECT_TIMEOUT_MS = 8000;
     private static final int READ_TIMEOUT_MS = 8000;
 

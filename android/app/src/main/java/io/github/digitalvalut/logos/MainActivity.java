@@ -185,18 +185,24 @@ public class MainActivity extends Activity {
            page it is exposed to is the one inside this package, under a policy
            that refuses to run any script but its own. */
         web.addJavascriptInterface(new SaveBridge(), "AndroidSave");
-        /* Deliberately not connected yet.
+        /* ⚠️ COLLEGATO IL 2 SETTEMBRE 2026, dopo essere rimasto commentato da
+           fine agosto. Il commento di allora diceva: "una riga, e torna il
+           giorno che squilla davvero". Questo è quel commit.
 
-           The service, the call screen and the restart-after-reboot are all
-           written and all in this package, but none of it has been watched
-           ringing on a real phone. The page asks whether this bridge is here
-           and, finding it, changes what the listening switch promises: that
-           the watch carries on after you leave the screen. Registering it
-           before that promise has been seen to hold would put a claim on
-           somebody's screen on the strength of code that merely compiles.
+           Cosa cambia nel momento in cui questa riga esiste: la pagina cerca
+           `AndroidRing`, lo trova, e cambia ciò che l'interruttore "resta in
+           ascolto" PROMETTE — da "finché tieni questa schermata aperta" a
+           "anche ad app chiusa" (`listen.subApp`). È una promessa scritta sullo
+           schermo di qualcuno, ed è il motivo per cui la riga è rimasta
+           commentata: non si mette una promessa davanti a una persona sulla
+           forza di codice che si limita a compilare.
 
-           One line, and it comes back on the day it rings. */
-        // web.addJavascriptInterface(new RingBridge(), "AndroidRing");
+           ⚠️ QUELLA PROMESSA NON È ANCORA STATA VISTA MANTENERE SU UN TELEFONO
+           VERO. Il codice c'è tutto e i permessi ora ci sono, ma finché non si
+           vede un telefono squillare ad app chiusa questa resta una promessa
+           sulla parola. È la prima cosa da provare, e se non squilla la riga
+           torna commentata: meglio nessuna promessa che una falsa. */
+        web.addJavascriptInterface(new RingBridge(), "AndroidRing");
 
         /* A frame around the WebView, so the insets have something to shrink
            that the page will actually feel. */

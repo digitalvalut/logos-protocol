@@ -130,7 +130,7 @@ Object.assign(I18N.en, {
 "session.closed":"closed","session.newHint":"Create a new session to reconnect.",
 "invite.shareText":"Want to chat with me on DigitalValut Logos? Open this link: if you don't have the page ready, it opens on its own with my invite already filled in.\n\n",
 "invite.answerText":"Here's my reply for DigitalValut Logos, paste it to finish connecting:\n\n",
-"mic.recording":"Recording — tap to stop","history.cleared":"History cleared on this device.",
+"mic.recording":"Recording — tap to stop","mic.capped":"Two minutes: the voice message closed itself and is on its way.","history.cleared":"History cleared on this device.",
 "install.genericText":"<b>Install DigitalValut Logos</b> to have it as an app, with its own icon, no browser needed.",
 "install.iosText":"<b>Install DigitalValut Logos on iPhone or iPad.</b> Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.",
 "home.shareApp":"Tell someone about the app",
@@ -359,7 +359,7 @@ Object.assign(I18N.it, {
 "session.closed":"chiusa","session.newHint":"Crea una nuova sessione per riconnetterti.",
 "invite.shareText":"Ti va di chattare con me su DigitalValut Logos? Apri questo link: se non hai la pagina già pronta si apre da sola, con il mio invito già inserito.\n\n",
 "invite.answerText":"Ecco la mia risposta per DigitalValut Logos, incollala per completare la connessione:\n\n",
-"mic.recording":"Registrazione — tocca per fermare","history.cleared":"Cronologia svuotata su questo dispositivo.",
+"mic.recording":"Registrazione — tocca per fermare","mic.capped":"Due minuti: il vocale si è chiuso da solo e sta partendo.","history.cleared":"Cronologia svuotata su questo dispositivo.",
 "install.genericText":"<b>Installa DigitalValut Logos</b> per averla come app, con la sua icona, senza passare dal browser.",
 "install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.",
 "quick.titleA":"Il tuo codice","quick.helpA":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.",
@@ -510,7 +510,7 @@ Object.assign(I18N.fr, {
 "session.closed":"fermée","session.newHint":"Créez une nouvelle session pour vous reconnecter.",
 "invite.shareText":"Envie de discuter avec moi sur DigitalValut Logos ? Ouvrez ce lien : si vous n'avez pas la page prête, elle s'ouvre toute seule avec mon invitation déjà remplie.\n\n",
 "invite.answerText":"Voici ma réponse pour DigitalValut Logos, collez-la pour terminer la connexion :\n\n",
-"mic.recording":"Enregistrement — touchez pour arrêter","history.cleared":"Historique effacé sur cet appareil.",
+"mic.recording":"Enregistrement — touchez pour arrêter","mic.capped":"Deux minutes : le message vocal s'est arrêté tout seul et part.","history.cleared":"Historique effacé sur cet appareil.",
 "install.genericText":"<b>Installez DigitalValut Logos</b> pour l'avoir comme application, avec sa propre icône, sans passer par le navigateur.",
 "install.iosText":"<b>Installez DigitalValut Logos sur iPhone ou iPad.</b> Touchez <b>Partager</b> dans Safari, puis <b>Sur l'écran d'accueil</b>.",
 "home.shareApp":"Faire connaître l'appli à quelqu'un",
@@ -692,7 +692,7 @@ Object.assign(I18N.de, {
 "session.closed":"geschlossen","session.newHint":"Erstelle eine neue Sitzung, um dich erneut zu verbinden.",
 "invite.shareText":"Lust, mit mir auf DigitalValut Logos zu chatten? Öffne diesen Link: falls du die Seite nicht bereit hast, öffnet sie sich von selbst mit meiner Einladung schon ausgefüllt.\n\n",
 "invite.answerText":"Hier ist meine Antwort für DigitalValut Logos, füge sie ein, um die Verbindung abzuschließen:\n\n",
-"mic.recording":"Aufnahme läuft — zum Stoppen tippen","history.cleared":"Verlauf auf diesem Gerät gelöscht.",
+"mic.recording":"Aufnahme läuft — zum Stoppen tippen","mic.capped":"Zwei Minuten: Die Sprachnachricht hat sich selbst beendet und wird gesendet.","history.cleared":"Verlauf auf diesem Gerät gelöscht.",
 "install.genericText":"<b>Installiere DigitalValut Logos</b>, um es als App mit eigenem Symbol zu haben, ganz ohne Browser.",
 "install.iosText":"<b>Installiere DigitalValut Logos auf iPhone oder iPad.</b> Tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Home-Bildschirm</b>.",
 "home.shareApp":"Jemandem von der App erzählen",
@@ -874,7 +874,7 @@ Object.assign(I18N.es, {
 "session.closed":"cerrada","session.newHint":"Crea una nueva sesión para reconectarte.",
 "invite.shareText":"¿Te apetece chatear conmigo en DigitalValut Logos? Abre este enlace: si no tienes la página lista, se abre sola con mi invitación ya rellenada.\n\n",
 "invite.answerText":"Aquí está mi respuesta para DigitalValut Logos, pégala para terminar de conectar:\n\n",
-"mic.recording":"Grabando — toca para detener","history.cleared":"Historial borrado en este dispositivo.",
+"mic.recording":"Grabando — toca para detener","mic.capped":"Dos minutos: el mensaje de voz se cerró solo y se está enviando.","history.cleared":"Historial borrado en este dispositivo.",
 "install.genericText":"<b>Instala DigitalValut Logos</b> para tenerla como app, con su propio icono, sin necesidad de navegador.",
 "install.iosText":"<b>Instala DigitalValut Logos en iPhone o iPad.</b> Toca <b>Compartir</b> en Safari, luego <b>Añadir a inicio</b>.",
 "home.shareApp":"Contarle a alguien sobre la app",
@@ -1056,7 +1056,7 @@ Object.assign(I18N.pt, {
 "session.closed":"fechada","session.newHint":"Crie uma nova sessão para se reconectar.",
 "invite.shareText":"Apetece-lhe conversar comigo no DigitalValut Logos? Abra este link: se não tiver a página pronta, ela abre-se sozinha com o meu convite já preenchido.\n\n",
 "invite.answerText":"Aqui está a minha resposta para o DigitalValut Logos, cole-a para terminar de ligar:\n\n",
-"mic.recording":"A gravar — toque para parar","history.cleared":"Histórico apagado neste dispositivo.",
+"mic.recording":"A gravar — toque para parar","mic.capped":"Dois minutos: a mensagem de voz fechou-se sozinha e está a ser enviada.","history.cleared":"Histórico apagado neste dispositivo.",
 "install.genericText":"<b>Instale o DigitalValut Logos</b> para o ter como aplicação, com o seu próprio ícone, sem precisar do navegador.",
 "install.iosText":"<b>Instale o DigitalValut Logos no iPhone ou iPad.</b> Toque em <b>Partilhar</b> no Safari, depois em <b>Adicionar ao ecrã principal</b>.",
 "home.shareApp":"Dar a conhecer a app a alguém",
@@ -1238,7 +1238,7 @@ Object.assign(I18N.ru, {
 "session.closed":"закрыт","session.newHint":"Создайте новую сессию, чтобы переподключиться.",
 "invite.shareText":"Хочешь пообщаться со мной в DigitalValut Logos? Открой эту ссылку: если у тебя ещё не готова страница, она откроется сама с моим приглашением, уже заполненным.\n\n",
 "invite.answerText":"Вот мой ответ для DigitalValut Logos, вставь его, чтобы завершить соединение:\n\n",
-"mic.recording":"Идёт запись — нажмите, чтобы остановить","history.cleared":"История удалена на этом устройстве.",
+"mic.recording":"Идёт запись — нажмите, чтобы остановить","mic.capped":"Две минуты: голосовое сообщение остановилось само и отправляется.","history.cleared":"История удалена на этом устройстве.",
 "install.genericText":"<b>Установите DigitalValut Logos</b>, чтобы иметь его как приложение, со своей иконкой, без браузера.",
 "install.iosText":"<b>Установите DigitalValut Logos на iPhone или iPad.</b> Нажмите <b>Поделиться</b> в Safari, затем <b>На экран «Домой»</b>.",
 "home.shareApp":"Рассказать кому-то о приложении",
@@ -1420,7 +1420,7 @@ Object.assign(I18N.zh, {
 "session.closed":"已关闭","session.newHint":"创建新会话以重新连接。",
 "invite.shareText":"想在 DigitalValut Logos 上和我聊天吗？打开这个链接：如果你还没准备好页面，它会自动打开并已填好我的邀请。\n\n",
 "invite.answerText":"这是我在 DigitalValut Logos 上的回复，粘贴它以完成连接：\n\n",
-"mic.recording":"录音中——点击停止","history.cleared":"此设备上的记录已清除。",
+"mic.recording":"录音中——点击停止","mic.capped":"两分钟：语音消息已自动结束，正在发送。","history.cleared":"此设备上的记录已清除。",
 "install.genericText":"<b>安装 DigitalValut Logos</b>，将其作为一个带有独立图标的应用，无需浏览器。",
 "install.iosText":"<b>在 iPhone 或 iPad 上安装 DigitalValut Logos。</b>在 Safari 中点击<b>分享</b>，然后点击<b>添加到主屏幕</b>。",
 "home.shareApp":"告诉别人这个应用",
@@ -1602,7 +1602,7 @@ Object.assign(I18N.ar, {
 "session.closed":"مغلقة","session.newHint":"أنشئ جلسة جديدة لإعادة الاتصال.",
 "invite.shareText":"هل تودّ الدردشة معي على DigitalValut Logos؟ افتح هذا الرابط: إذا لم تكن الصفحة جاهزة لديك، ستُفتح من تلقاء نفسها مع دعوتي معبأة بالفعل.\n\n",
 "invite.answerText":"إليك ردّي على DigitalValut Logos، الصقه لإتمام الاتصال:\n\n",
-"mic.recording":"جارٍ التسجيل — اضغط للإيقاف","history.cleared":"تم مسح السجل على هذا الجهاز.",
+"mic.recording":"جارٍ التسجيل — اضغط للإيقاف","mic.capped":"دقيقتان: أُغلقت الرسالة الصوتية تلقائيًا وهي في طريقها.","history.cleared":"تم مسح السجل على هذا الجهاز.",
 "install.genericText":"<b>ثبّت DigitalValut Logos</b> لتحصل عليه كتطبيق، بأيقونته الخاصة، دون الحاجة إلى متصفح.",
 "install.iosText":"<b>ثبّت DigitalValut Logos على آيفون أو آيباد.</b> اضغط <b>مشاركة</b> في سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>.",
 "home.shareApp":"أخبر أحدهم عن التطبيق",
@@ -1784,7 +1784,7 @@ Object.assign(I18N.ur, {
 "session.closed":"بند","session.newHint":"دوبارہ رابطے کے لیے نیا سیشن بنائیں۔",
 "invite.shareText":"کیا آپ DigitalValut Logos پر مجھ سے بات کرنا چاہیں گے؟ یہ لنک کھولیں: اگر صفحہ تیار نہیں ہے، تو یہ خود بخود کھل جائے گا اور میری دعوت پہلے سے بھری ہوگی۔\n\n",
 "invite.answerText":"یہ ہے DigitalValut Logos کے لیے میرا جواب، کنکشن مکمل کرنے کے لیے اسے پیسٹ کریں:\n\n",
-"mic.recording":"ریکارڈنگ جاری — روکنے کے لیے ٹچ کریں","history.cleared":"اس ڈیوائس پر تاریخ صاف کر دی گئی۔",
+"mic.recording":"ریکارڈنگ جاری — روکنے کے لیے ٹچ کریں","mic.capped":"دو منٹ: صوتی پیغام خود بند ہو گیا اور بھیجا جا رہا ہے۔","history.cleared":"اس ڈیوائس پر تاریخ صاف کر دی گئی۔",
 "install.genericText":"<b>DigitalValut Logos انسٹال کریں</b> تاکہ یہ اپنے آئیکن کے ساتھ ایک ایپ کے طور پر ہو، بغیر براؤزر کی ضرورت کے۔",
 "install.iosText":"<b>آئی فون یا آئی پیڈ پر DigitalValut Logos انسٹال کریں۔</b> سفاری میں <b>شیئر</b> پر ٹچ کریں، پھر <b>ہوم اسکرین پر شامل کریں</b>۔",
 "home.shareApp":"کسی کو ایپ کے بارے میں بتائیں",
@@ -1966,7 +1966,7 @@ Object.assign(I18N.hi, {
 "session.closed":"बंद","session.newHint":"फिर से जुड़ने के लिए एक नया सत्र बनाएं।",
 "invite.shareText":"DigitalValut Logos पर मुझसे चैट करना चाहेंगे? यह लिंक खोलें: अगर आपके पास पेज तैयार नहीं है, तो यह अपने आप खुल जाएगा और मेरा निमंत्रण पहले से भरा होगा।\n\n",
 "invite.answerText":"यह रहा DigitalValut Logos के लिए मेरा जवाब, कनेक्शन पूरा करने के लिए इसे पेस्ट करें:\n\n",
-"mic.recording":"रिकॉर्डिंग हो रही है — रोकने के लिए टैप करें","history.cleared":"इस डिवाइस पर इतिहास साफ़ कर दिया गया।",
+"mic.recording":"रिकॉर्डिंग हो रही है — रोकने के लिए टैप करें","mic.capped":"दो मिनट: वॉइस संदेश अपने आप बंद हो गया और भेजा जा रहा है।","history.cleared":"इस डिवाइस पर इतिहास साफ़ कर दिया गया।",
 "install.genericText":"<b>DigitalValut Logos इंस्टॉल करें</b> ताकि यह अपने आइकन के साथ एक ऐप की तरह हो, बिना ब्राउज़र की ज़रूरत के।",
 "install.iosText":"<b>iPhone या iPad पर DigitalValut Logos इंस्टॉल करें।</b> Safari में <b>शेयर</b> टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b>।",
 "home.shareApp":"किसी को ऐप के बारे में बताएं",
@@ -2148,7 +2148,7 @@ Object.assign(I18N.bn, {
 "session.closed":"বন্ধ","session.newHint":"আবার সংযোগের জন্য একটি নতুন সেশন তৈরি করুন।",
 "invite.shareText":"DigitalValut Logos-এ আমার সাথে চ্যাট করতে চান? এই লিঙ্কটি খুলুন: যদি আপনার পৃষ্ঠা প্রস্তুত না থাকে, এটি নিজে থেকেই খুলবে এবং আমার আমন্ত্রণ আগে থেকেই পূরণ করা থাকবে।\n\n",
 "invite.answerText":"এই রইল DigitalValut Logos-এর জন্য আমার উত্তর, সংযোগ শেষ করতে এটি পেস্ট করুন:\n\n",
-"mic.recording":"রেকর্ডিং চলছে — থামাতে ট্যাপ করুন","history.cleared":"এই ডিভাইসে ইতিহাস মুছে ফেলা হয়েছে।",
+"mic.recording":"রেকর্ডিং চলছে — থামাতে ট্যাপ করুন","mic.capped":"দুই মিনিট: ভয়েস বার্তাটি নিজেই বন্ধ হয়ে গেছে এবং পাঠানো হচ্ছে।","history.cleared":"এই ডিভাইসে ইতিহাস মুছে ফেলা হয়েছে।",
 "install.genericText":"<b>DigitalValut Logos ইনস্টল করুন</b> যাতে এটি নিজস্ব আইকন সহ একটি অ্যাপ হিসেবে থাকে, ব্রাউজারের প্রয়োজন ছাড়াই।",
 "install.iosText":"<b>iPhone বা iPad-এ DigitalValut Logos ইনস্টল করুন।</b> Safari-তে <b>শেয়ার</b>-এ ট্যাপ করুন, তারপর <b>হোম স্ক্রিনে যোগ করুন</b>।",
 "home.shareApp":"কাউকে অ্যাপ সম্পর্কে বলুন",
@@ -2330,7 +2330,7 @@ Object.assign(I18N.id, {
 "session.closed":"ditutup","session.newHint":"Buat sesi baru untuk menyambung kembali.",
 "invite.shareText":"Ingin mengobrol dengan saya di DigitalValut Logos? Buka tautan ini: jika Anda belum siap dengan halamannya, tautan akan terbuka sendiri dengan undangan saya yang sudah terisi.\n\n",
 "invite.answerText":"Ini balasan saya untuk DigitalValut Logos, tempel untuk menyelesaikan koneksi:\n\n",
-"mic.recording":"Sedang merekam — ketuk untuk berhenti","history.cleared":"Riwayat dihapus di perangkat ini.",
+"mic.recording":"Sedang merekam — ketuk untuk berhenti","mic.capped":"Dua menit: pesan suara berhenti sendiri dan sedang dikirim.","history.cleared":"Riwayat dihapus di perangkat ini.",
 "install.genericText":"<b>Pasang DigitalValut Logos</b> agar memilikinya sebagai aplikasi, dengan ikonnya sendiri, tanpa perlu browser.",
 "install.iosText":"<b>Pasang DigitalValut Logos di iPhone atau iPad.</b> Ketuk <b>Bagikan</b> di Safari, lalu <b>Tambah ke Layar Utama</b>.",
 "home.shareApp":"Beri tahu seseorang tentang aplikasi ini",
@@ -3360,7 +3360,32 @@ function wireDataChannel(channel, ownerPc){
     enterChat();
     const fp = await myFingerprintHex();
     const push = notifyPref() ? await ensurePushSubscription() : null;
-    try{ dc.send(JSON.stringify({ type: 'hello', nick: myNick(), fp, push })); }catch(e){}
+    /* ⚠️ QUESTO SALUTO NON E' UN SALUTO. Porta l'impronta su cui l'altro lato
+       calcola le tre parole di sicurezza, e l'iscrizione con cui potra'
+       raggiungerti ad app chiusa. Perderlo non si vede: la conversazione parte
+       lo stesso, e il sintomo compare SULL'ALTRO TELEFONO — niente tre parole
+       da quel lato, e nessun modo di richiamarti piu' tardi.
+
+       Era dentro un catch vuoto. Trovato il 2 set 2026 con l'analisi statica,
+       non usando l'app: e' esattamente la forma del difetto della v22, dove le
+       parole comparivano da una parte sola e la diagnosi costo' giorni proprio
+       perche' il lato che sbagliava non era quello che mostrava il sintomo.
+
+       `send` puo' lanciare per una ragione sola e passeggera: il canale si e'
+       chiuso, o si e' riempito, nell'istante fra il controllo e l'invio. Un
+       secondo tentativo poco dopo la copre tutta. Se fallisce anche quello il
+       canale non c'e' piu' davvero, e non c'e' niente da dire a nessuno: la
+       conversazione e' gia' finita per conto suo. */
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push });
+    const provaSaluto = (ancora) => {
+      try{
+        if (dc.readyState !== 'open') throw new Error('canale non aperto');
+        dc.send(salutoVero);
+      }catch(e){
+        if (ancora > 0) setTimeout(() => provaSaluto(ancora - 1), 400);
+      }
+    };
+    provaSaluto(1);
     if (pendingSharedFiles.length){
       const files = pendingSharedFiles; pendingSharedFiles = [];
       sendFilesQueue(files);
@@ -6105,13 +6130,41 @@ async function addrCheckOnce(){
 const ADDR_FAST_MS = 5000;
 const ADDR_SLOW_MS = 15000;
 const WATCH_FAST_WINDOW_MS = 30000;
+/* ---- quando a sorvegliare e' il telefono, la pagina fa solo da rete ----
+   Acceso l'ascolto nativo (2 set 2026), l'indirizzo viene interrogato dal
+   servizio Android ogni 45 secondi, anche ad app chiusa. Se ANCHE la pagina
+   continuasse a interrogarlo ogni 15, le due sorveglianze farebbero lo stesso
+   lavoro due volte e la quota la pagherebbe due volte.
+
+   ⚠️ Ma la pagina non si spegne del tutto, e il motivo va ricordato: il
+   servizio nativo puo' essere stato fermato dal sistema per risparmio
+   energetico, ucciso da un gestore di memoria, o non essere mai partito
+   perche' manca un permesso. In tutti quei casi nessuno lo dice alla pagina.
+   Sessanta secondi sono la rete sotto il trapezio: dentro i due minuti di
+   vita della cassetta, quindi una chiamata non si perde comunque, e a un
+   costo di una lettura al minuto invece di quattro.
+
+   ⚠️ Vale SOLO per l'indirizzo. Il giro della rubrica NON e' sorvegliato dal
+   servizio nativo — quello guarda solo gli slot dell'indirizzo — quindi
+   rallentarlo lascerebbe scoperto un cammino senza niente che lo copra.
+   Estendere la sorveglianza nativa ai contatti moltiplicherebbe il costo
+   sempre-acceso per il numero di contatti: e' un passo separato, e va
+   misurato prima, non dato per fatto. */
+const ADDR_FALLBACK_MS = 60000;
 let addrWatchStarted = 0;
+/* vero solo se il ponte c'e' E l'interruttore e' acceso: il ponte da solo dice
+   che potremmo, non che stiamo */
+function ascoltoNativoAttivo(){
+  try{ return !!(androidRing && listenMode); }catch(_){ return false; }
+}
 function startAddrPolling(){
   if (addrPollTimer || !activeSlots().length || document.visibilityState === 'hidden') return;
   addrWatchStarted = Date.now();
   const giro = () => {
     addrCheckOnce();
-    const atteso = (Date.now() - addrWatchStarted) < WATCH_FAST_WINDOW_MS ? ADDR_FAST_MS : ADDR_SLOW_MS;
+    const atteso = ascoltoNativoAttivo()
+      ? ADDR_FALLBACK_MS
+      : ((Date.now() - addrWatchStarted) < WATCH_FAST_WINDOW_MS ? ADDR_FAST_MS : ADDR_SLOW_MS);
     /* riprogrammato ogni volta invece di setInterval: e' l'unico modo perche'
        l'intervallo possa cambiare da solo strada facendo */
     addrPollTimer = setTimeout(giro, atteso);
@@ -6768,7 +6821,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.95';
+const APP_VERSION = 'logos-modifica-3.96';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8446,7 +8499,22 @@ $('chatArea').addEventListener('drop', ev => {
 });
 
 /* voice messages */
-let mediaRecorder = null, recordedChunks = [];
+/* ---- il vocale ha una fine, e la dice prima ----
+   Fino al 2 set 2026 la registrazione non aveva alcun tetto: andava avanti
+   finche' qualcuno toccava stop. Un telefono finito in tasca con il microfono
+   acceso accumulava tutto in memoria, e alla fine il file superava comunque il
+   tetto dell'invio: si registrava a lungo per poi perdere tutto.
+
+   Due minuti non sono un numero scelto a caso: e' piu' di quanto duri
+   qualunque messaggio vocale che qualcuno ascolti davvero fino in fondo, e
+   sta largamente sotto il tetto di un file inviabile — quindi il vocale che
+   si ferma da solo e' sempre un vocale che parte, mai uno da buttare.
+
+   ⚠️ Si ferma da solo, NON butta via: quello che hai detto fino a li' viene
+   mandato. Una registrazione interrotta che sparisce sarebbe la stessa
+   perdita silenziosa di prima, con un nome piu' gentile. */
+const VOICE_MAX_MS = 120000;
+let mediaRecorder = null, recordedChunks = [], voiceCapTimer = null;
 $('btnMic').addEventListener('click', async () => {
   if (mediaRecorder && mediaRecorder.state === 'recording'){ mediaRecorder.stop(); return; }
   let stream;
@@ -8457,12 +8525,20 @@ $('btnMic').addEventListener('click', async () => {
   mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
   mediaRecorder.ondataavailable = ev => { if (ev.data.size > 0) recordedChunks.push(ev.data); };
   mediaRecorder.onstop = () => {
+    clearTimeout(voiceCapTimer); voiceCapTimer = null;
     stream.getTracks().forEach(tr => tr.stop());
     setIcon('btnMic','mic');
     const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
     sendFile(new File([blob], 'vocale.webm', { type: blob.type }));
   };
   mediaRecorder.start();
+  clearTimeout(voiceCapTimer);
+  voiceCapTimer = setTimeout(() => {
+    if (mediaRecorder && mediaRecorder.state === 'recording'){
+      mediaRecorder.stop();   /* onstop manda quello che c'e' */
+      toast(t('mic.capped','Due minuti: il vocale si è chiuso da solo e sta partendo.'));
+    }
+  }, VOICE_MAX_MS);
   $('btnMic').textContent = '⏹';
   toast(t('mic.recording'));
 });

@@ -27,6 +27,12 @@ const SOURCE = fs.readFileSync(path.join(ROOT, 'modifica.js'), 'utf8');
 /* One loaded app per test, so nothing carries over from the last one. */
 function loadApp(options){
   const sandbox = buildSandbox(options);
+  /* Un telefono con il ponte nativo dell'Android e' uno stato che esiste in
+     produzione, quindi il banco di prova deve saperlo rappresentare: senza
+     questo, `androidRing` e' una const decisa al caricamento e nessun test
+     puo' vedere cosa succede quando c'e'. §33: il finto deve poter dire il
+     vero anche quando il vero e' scomodo. */
+  if (options && options.globals) Object.assign(sandbox, options.globals);
   vm.createContext(sandbox);
   vm.runInContext(SOURCE, sandbox, { filename: 'modifica.js' });
   const run = expr => vm.runInContext(expr, sandbox);
@@ -4519,5 +4525,162 @@ test.describe('cento dispositivi non devono riprovare tutti insieme', () => {
         'dopo un giro riuscito la ritirata deve azzerarsi, o un solo rifiuto rallenta l app per sempre');
       app.stop();
     });
+  });
+});
+
+/* ------------------------------------------------------------------------
+   IL SALUTO CHE PORTA LE TRE PAROLE.
+
+   `dc.send({type:'hello'})` non e' un saluto: porta l'impronta su cui
+   l'altro lato calcola le tre parole di sicurezza, e l'iscrizione con cui
+   potra' raggiungerti ad app chiusa. Perderlo non si vede da questo lato —
+   la conversazione parte lo stesso — e il sintomo compare SULL'ALTRO
+   TELEFONO. E' esattamente la forma del difetto della v22, dove le parole
+   comparivano da una parte sola e la diagnosi costo' giorni proprio perche'
+   il lato che sbagliava non era quello che mostrava il sintomo.
+
+   Stava dentro un catch vuoto. Trovato il 2 set 2026 con l'analisi statica.
+   ------------------------------------------------------------------------ */
+test.describe('il saluto non si perde in silenzio', () => {
+
+  const conCanale = (fallimenti) => `(async () => {
+    let tentativi = 0, arrivati = [];
+    const canale = {
+      readyState: 'open',
+      addEventListener(){}, close(){},
+      send(m){ tentativi++; if (tentativi <= ${fallimenti}) throw new Error('canale pieno'); arrivati.push(m); },
+    };
+    const conn = new RTCPeerConnection();
+    /* readyState 'open' -> wireDataChannel saluta da se': chiamare anche
+       onopen a mano manderebbe due saluti per colpa del test, non del codice */
+    wireDataChannel(canale, conn);
+    await new Promise(r => setTimeout(r, 1200));   /* il tempo del nuovo tentativo */
+    return JSON.stringify({ tentativi, saluti: arrivati.filter(m => /"hello"/.test(m)).length });
+  })()`;
+
+  test('se il primo invio fallisce, il saluto viene ritentato e arriva', () => {
+    const app = loadApp();
+    return app.run(conCanale(1)).then(x => {
+      const o = JSON.parse(x);
+      assert.ok(o.tentativi >= 2,
+        `un solo tentativo (${o.tentativi}): un saluto perso lascia l altro telefono senza tre parole e senza modo di richiamarti`);
+      assert.strictEqual(o.saluti, 1, 'dopo il nuovo tentativo il saluto deve essere arrivato, una volta sola');
+      app.stop();
+    });
+  });
+
+  test('se va bene al primo colpo non si ripete: nessun saluto doppio', () => {
+    /* Il lato da non rompere: due saluti significano due volte l impronta e
+       due volte l iscrizione, cioe rumore su un canale che ne ha poco. */
+    const app = loadApp();
+    return app.run(conCanale(0)).then(x => {
+      const o = JSON.parse(x);
+      assert.strictEqual(o.tentativi, 1, 'con il canale sano il saluto parte una volta e basta');
+      assert.strictEqual(o.saluti, 1, 'e deve essere arrivato');
+      app.stop();
+    });
+  });
+
+  test('se il canale e morto davvero, si smette invece di ritentare per sempre', () => {
+    /* Una ritentata senza fine su un canale chiuso non recupera niente: gira
+       a vuoto e tiene in vita oggetti che dovrebbero essere gia spariti. */
+    const app = loadApp();
+    return app.run(conCanale(99)).then(x => {
+      const o = JSON.parse(x);
+      assert.ok(o.tentativi <= 2,
+        `${o.tentativi} tentativi: su un canale morto si deve smettere, non insistere`);
+      app.stop();
+    });
+  });
+});
+
+/* ------------------------------------------------------------------------
+   IL VOCALE HA UNA FINE.
+
+   Fino al 2 set 2026 la registrazione non aveva alcun tetto. Un telefono
+   finito in tasca col microfono acceso accumulava tutto in memoria, e alla
+   fine il file superava comunque il tetto dell'invio: si registrava a lungo
+   per poi perdere tutto.
+   ------------------------------------------------------------------------ */
+test.describe('il vocale si ferma da solo dopo due minuti', () => {
+
+  test('a due minuti la registrazione si chiude', () => {
+    const app = loadApp();
+    assert.strictEqual(app.run('VOICE_MAX_MS'), 120000,
+      'il tetto dichiarato deve essere due minuti');
+    app.stop();
+  });
+
+  test('quello che si e detto NON viene buttato: parte', () => {
+    /* La parte che conta davvero. Una registrazione che si interrompe e
+       sparisce sarebbe la stessa perdita silenziosa di prima con un nome piu
+       gentile: il tetto deve MANDARE quello che c'e, non cancellarlo. */
+    const app = loadApp();
+    const sorgente = app.run('String($("btnMic").listeners ? 1 : 1)') && require('node:fs')
+      .readFileSync(require('node:path').join(__dirname, '..', 'modifica.js'), 'utf8');
+    const blocco = sorgente.slice(sorgente.indexOf('const VOICE_MAX_MS'),
+                                 sorgente.indexOf("toast(t('mic.recording'))"));
+    assert.ok(/mediaRecorder\.stop\(\)/.test(blocco),
+      'il tetto deve fermare il registratore, cosi onstop manda quello che c e');
+    assert.ok(!/recordedChunks\s*=\s*\[\]/.test(blocco.slice(blocco.indexOf('voiceCapTimer = setTimeout'))),
+      'il tetto non deve svuotare quello che si e gia detto: mandarlo, non cancellarlo');
+    assert.ok(/mic\.capped/.test(blocco),
+      'chi registra deve sapere perche si e fermato, o pensera che l app si sia rotta');
+    app.stop();
+  });
+
+  test('la frase esiste in tutte e 13 le lingue', () => {
+    const sorgente = require('node:fs')
+      .readFileSync(require('node:path').join(__dirname, '..', 'modifica.js'), 'utf8');
+    const quante = (sorgente.match(/"mic\.capped":/g) || []).length;
+    assert.strictEqual(quante, 13,
+      `mic.capped compare ${quante} volte invece di 13: qualcuno la leggerebbe in inglese`);
+  });
+});
+
+/* ------------------------------------------------------------------------
+   QUANDO SORVEGLIA IL TELEFONO, LA PAGINA FA SOLO DA RETE.
+
+   Acceso l'ascolto nativo, l'indirizzo lo interroga il servizio Android ogni
+   45 secondi anche ad app chiusa. Se anche la pagina continuasse ogni 15, la
+   stessa sorveglianza si pagherebbe due volte.
+   ------------------------------------------------------------------------ */
+test.describe('il polling rallenta solo quando qualcun altro sorveglia', () => {
+
+  test('senza ascolto nativo il passo resta quello di prima', () => {
+    /* Il lato da non rompere: sul web e su un telefono senza il servizio
+       attivo, rallentare a 60 s vorrebbe dire perdere chiamate senza che
+       nulla le raccolga al posto nostro. */
+    const app = loadApp();
+    assert.strictEqual(app.run('ascoltoNativoAttivo()'), false,
+      'nel browser non c e nessun servizio nativo: la pagina deve restare quella di prima');
+    app.stop();
+  });
+
+  test("il ponte da solo non basta: serve che l'interruttore sia acceso", () => {
+    /* Il ponte dice che POTREMMO sorvegliare, non che stiamo sorvegliando.
+       Confonderli farebbe rallentare la pagina mentre nessuno guarda. */
+    const app = loadApp({ globals: {
+      AndroidRing: { available: () => true, watch(){}, stop(){} },
+    } });
+    const r = app.run(`
+      listenMode = false;  const spento = ascoltoNativoAttivo();
+      listenMode = true;   const acceso = ascoltoNativoAttivo();
+      JSON.stringify([spento, acceso]);
+    `);
+    assert.deepStrictEqual(JSON.parse(r), [false, true],
+      'con l interruttore spento il telefono non sta sorvegliando niente: la pagina non deve rallentare');
+    app.stop();
+  });
+
+  test('la rete di sicurezza resta dentro la vita della cassetta', () => {
+    /* Se il fallback superasse i due minuti di vita della cassetta, una
+       chiamata potrebbe scadere fra un giro e l altro — e la rete non
+       prenderebbe piu niente. */
+    const app = loadApp();
+    const fallback = app.run('ADDR_FALLBACK_MS');
+    assert.ok(fallback <= 120000 / 2,
+      `rete di sicurezza a ${fallback} ms: serve almeno un doppio giro dentro i due minuti della cassetta`);
+    app.stop();
   });
 });

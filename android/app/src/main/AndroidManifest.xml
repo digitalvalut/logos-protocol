@@ -38,13 +38,45 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
-    <!-- Nothing here for ringing while the app is closed. That feature is built
-         and its classes are in this package, but the one line that would let the
-         page reach them is commented out until it has been seen to work, so the
-         six permissions it needs — foreground service, notifications, full
-         screen intent, wake lock, boot — are not asked for either. Declaring
-         them now would put six requests in front of somebody for something that
-         does nothing. They come back in the same commit the feature does. -->
+    <!-- ============ squillo ad app chiusa — ACCESO IL 2 SETTEMBRE 2026 ============
+         Fino alla v31 questa sezione era vuota di proposito: le classi c'erano
+         ma la riga che le collega alla pagina era commentata, e senza quella
+         nessuno di questi permessi aveva senso da chiedere.
+
+         ⚠️ DA SAPERE PRIMA DI INSTALLARE, perché è già successo: la v5 portava
+         sette permessi e quattro componenti per questo stesso squillo — che era
+         spento — e su alcuni telefoni NON SI INSTALLAVA ("App non installata").
+         La v6 li tolse tutti, insieme ad androidx.core, che iniettava di suo un
+         DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION. La causa non fu mai riprodotta
+         su emulatore: androidx.core resta l'ipotesi migliore, e oggi non c'è più
+         (vedi le dipendenze in build.gradle). Ma è un'ipotesi, non una certezza:
+         se questa versione non si installa su un telefono dove la v31 si
+         installava, la causa è quasi certamente qui sotto.
+
+         Perché ciascuno, uno per uno — un permesso che non si sa spiegare è un
+         permesso da togliere:
+           FOREGROUND_SERVICE + _SPECIAL_USE : il servizio che resta in ascolto ad
+                                               app chiusa si dichiara al sistema, e
+                                               da Android 14 deve dire di che tipo è
+           POST_NOTIFICATIONS                : da Android 13 la notifica va chiesta;
+                                               è come si vede lo squillo
+           USE_FULL_SCREEN_INTENT            : fa comparire la schermata di chiamata
+                                               sopra il blocco, come una vera telefonata
+           WAKE_LOCK                         : tiene sveglio il processore mentre aspetta
+           VIBRATE                           : lo squillo vibra
+           RECEIVE_BOOT_COMPLETED            : dopo un riavvio l'ascolto riparte da solo,
+                                               altrimenti il telefono resta muto senza dirlo
+
+         Nessun servizio esterno, nessun account, nessun Google: ad aspettare è il
+         telefono stesso. È la ragione per cui questa strada esiste al posto delle
+         notifiche push, che su Android passerebbero comunque da Firebase. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- Declared, but not required: a phone with no camera still does messages,
          files and voice, and should not be told the app is unavailable. -->
@@ -71,10 +103,47 @@
             </intent-filter>
         </activity>
 
-        <!-- CallActivity, RingService and BootReceiver are written and are in
-             the source, but they are not declared here while the feature that
-             drives them is switched off. An undeclared component cannot start,
-             so leaving them in would only mean carrying their permissions. -->
+        <!-- La schermata che compare quando il telefono squilla. Deve poter
+             apparire sopra il blocco, come una telefonata vera: il resto lo fa
+             CallActivity da sé con setShowWhenLocked/setTurnScreenOn.
+             `exported=false`: la lancia solo il nostro servizio, nessun'altra
+             app può farla comparire sullo schermo di qualcuno. -->
+        <activity
+            android:name=".CallActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+
+        <!-- Il servizio che resta in ascolto ad app chiusa.
+             ⚠️ `specialUse` NON è una scorciatoia: da Android 14 un servizio in
+             primo piano deve dichiarare a cosa serve, e nessuno dei tipi
+             predefiniti descrive "aspettare che qualcuno chiami su un canale
+             cifrato senza passare da un servizio push". Il sottotipo qui sotto
+             è obbligatorio con specialUse e va scritto in chiaro: è quello che
+             leggerà chi revisiona l'app. -->
+        <service
+            android:name=".RingService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Waits for incoming peer-to-peer calls without any push service, account or third-party infrastructure. The wait is done by the device itself." />
+        </service>
+
+        <!-- Dopo un riavvio l'ascolto riparte da solo. Senza questo il telefono
+             resterebbe muto senza dirlo a nessuno, che è il modo peggiore in cui
+             una funzione può smettere di funzionare. -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
