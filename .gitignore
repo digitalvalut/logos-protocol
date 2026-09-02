@@ -55,3 +55,12 @@ CLASSIFICA-SICUREZZA-*.md
 # Gli APK compilati: vivono nelle Release di GitHub, non nella storia di git.
 *.apk
 *.idsig
+
+# ---- documenti che descrivono difetti ANCORA APERTI ----
+# Stessa ragione per cui REPORT-AUDIT.md e INVARIANTI.md sono esclusi qui sopra.
+# Il codice si pubblica sempre — se la sicurezza dipendesse dal nasconderlo non
+# sarebbe sicurezza. Ma un elenco dei difetti non ancora corretti, con le misure
+# che dicono quanto costa sfruttarli, non e' documentazione: sono istruzioni.
+# Nessun progetto serio lo fa: si pubblica DOPO aver corretto (vedi SECURITY.md).
+# Restano sul computer dell'autore, dove servono.
+memory/
