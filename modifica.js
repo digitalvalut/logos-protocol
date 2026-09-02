@@ -6872,7 +6872,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.99';
+const APP_VERSION = 'logos-modifica-4.00';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -7004,11 +7004,36 @@ async function runHealth(){
             : statoAscoltoNativo === 'rifiutato' ? ['bad', t('health.nativeRing'), t('health.nativeRingRefused')]
             : ['off', t('health.nativeRing'), t('health.nativeRingOff')]);
   }
+  /* ⚠️ QUESTA RIGA PARLA DELLE NOTIFICHE WEB, e dentro l'app Android quelle non
+     esistono: una WebView non ha il Push del browser, quindi l'interruttore
+     "avvisami quando qualcuno mi cerca" li' e' proprio nascosto. Eppure la riga
+     compariva lo stesso, arancione, dicendo "accendi gli avvisi qui sopra" —
+     mandando a cercare un interruttore che in quella schermata NON C'E'.
+
+     Peggio dal 2 set 2026: con lo squillo nativo che finalmente funziona, la
+     riga CONTRADDICEVA quella sopra. Una diceva "il telefono squilla anche ad
+     app chiusa", l'altra "non ti raggiungono". Chi legge non puo' sapere quale
+     credere, e fra le due vince sempre la piu' allarmante.
+
+     Quindi: dove c'e' lo squillo nativo e' LUI la risposta alla domanda "mi
+     raggiungono ad app chiusa?", e questa riga non serve. E dove il Push non
+     esiste proprio, dire "accendi gli avvisi" e' peggio del silenzio: non c'e'
+     niente da accendere. Un rapporto che indica un rimedio inesistente fa
+     sentire in difetto chi lo legge per un guasto che non ha.
+
+     L'eccezione e' l'iPhone prima di aggiungere l'app alla schermata: li' un
+     rimedio C'E' davvero, ed e' l'unico caso in cui vale la pena dirlo. */
   const closed = reachableWhenClosed();
-  rows.push(closed === 'ok' ? ['ok', t('health.closed'), t('health.closedOk')]
-          : closed === 'ios' ? ['warn', t('health.closed'), t('health.closedIos')]
-          : closed === 'denied' ? ['bad', t('health.closed'), t('health.closedDenied')]
-          : ['warn', t('health.closed'), t('health.closedOff')]);
+  if (!androidRing){
+    if (pushSupported()){
+      rows.push(closed === 'ok' ? ['ok', t('health.closed'), t('health.closedOk')]
+              : closed === 'ios' ? ['warn', t('health.closed'), t('health.closedIos')]
+              : closed === 'denied' ? ['bad', t('health.closed'), t('health.closedDenied')]
+              : ['warn', t('health.closed'), t('health.closedOff')]);
+    } else if (closed === 'ios'){
+      rows.push(['warn', t('health.closed'), t('health.closedIos')]);
+    }
+  }
 
   /* 5 — being able to speak */
   const mic = await micHealth();

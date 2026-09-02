@@ -1108,18 +1108,33 @@ test.describe('what the audit found', () => {
        cambia il PASSO invece che la PROMESSA sta misurando il meccanismo, non
        cio' che conta: la promessa e' "nessuno viene dimenticato", e quanti
        giri servano e' un dettaglio che il test puo' ricavarsi da solo. */
+    /* ⚠️ RESO ROBUSTO IL 2 SET 2026, dopo due fallimenti a intermittenza.
+       Faceva un numero FISSO di giri e poi contava. Ma `checkInboxOnce` ha una
+       guardia anti-rientro (`inboxScanning`): se un giro e' ancora in corso il
+       successivo si salta, ed e' giusto che sia cosi' — sotto carico (la suite
+       che gira mentre si compila l'APK) qualche giro spariva e il test
+       diventava rosso pur essendo la promessa intatta.
+       Un test che dipende da quanto e' scarico il computer non sta misurando il
+       codice. La promessa e' "nessuno viene dimenticato SE si lascia girare
+       abbastanza", non "esattamente in dodici giri": quindi si gira finche'
+       servono, con un tetto generoso, e si controlla che ci si arrivi. */
     const perGiro = Number(app.run('INBOX_PER_GIRO'));
     assert.ok(perGiro > 0, 'INBOX_PER_GIRO deve esistere');
-    const giri = Math.ceil(40 / perGiro) + 2;
+    const massimo = Math.ceil(40 / perGiro) * 4;
+    const quantiVisti = () =>
+      Object.keys(JSON.parse(app.run('JSON.stringify(window.__viste)'))).length;
     let p = Promise.resolve();
-    for (let giro = 0; giro < giri; giro++){
-      p = p.then(() => { app.run('window.__g = checkInboxOnce();'); return app.run('window.__g'); })
-           .then(() => new Promise(r => setTimeout(r, 5)));
+    for (let giro = 0; giro < massimo; giro++){
+      p = p.then(() => {
+        if (quantiVisti() >= 40) return null;      /* gia' arrivati: basta */
+        app.run('window.__g = checkInboxOnce();');
+        return app.run('window.__g');
+      }).then(() => new Promise(r => setTimeout(r, 5)));
     }
     return p.then(() => {
-      const viste = Object.keys(JSON.parse(app.run('JSON.stringify(window.__viste)'))).length;
+      const viste = quantiVisti();
       assert.strictEqual(viste, 40,
-        `dopo ${giri} giri sono stati guardati solo ${viste} contatti su 40: girando a turno non si deve perdere nessuno`);
+        `dopo ${massimo} giri sono stati guardati solo ${viste} contatti su 40: girando a turno non si deve perdere nessuno`);
       app.stop();
     });
   });
@@ -4881,6 +4896,85 @@ test.describe('l ascolto si ricorda e il rapporto non tace', () => {
     return r.then(x => {
       assert.ok(!/Squillo ad app chiusa/.test(x),
         'nel browser quello squillo non esiste: nominarlo sarebbe una promessa falsa');
+      app.stop();
+    });
+  });
+});
+
+/* ------------------------------------------------------------------------
+   IL RAPPORTO NON DEVE CONTRADDIRSI, NE MANDARE A CERCARE COSE CHE NON CI SONO.
+
+   Nel rapporto della v35, con lo squillo nativo funzionante, comparivano due
+   righe che dicevano il contrario l'una dell'altra:
+     [ok]   Squillo ad app chiusa — il telefono squilla anche ad app chiusa
+     [warn] Con l'app chiusa     — Non ti raggiungono. Accendi gli avvisi.
+   Chi legge non puo' sapere quale credere, e fra due risposte vince sempre
+   la piu' allarmante.
+
+   In piu' quel rimedio NON ESISTE dentro l'app Android: le notifiche web li'
+   non funzionano (una WebView non ha il Push del browser) e l'interruttore
+   che la riga suggerisce di accendere e' proprio nascosto.
+   ⚠️ Un rapporto che indica un rimedio inesistente fa sentire in difetto chi
+   lo legge per un guasto che non ha.
+   ------------------------------------------------------------------------ */
+test.describe('il rapporto non si contraddice', () => {
+
+  const ponte = { globals: { AndroidRing: {
+    available: () => true, watch: () => true, stop(){},
+    canPostNotifications: () => true,
+    canTakeOverLockScreen: () => true, askForLockScreen(){},
+  } } };
+
+  test('con lo squillo nativo, la riga delle notifiche web sparisce', () => {
+    const app = loadApp(ponte);
+    const r = app.run(`(async () => {
+      listenMode = true;
+      localStorage.setItem('dvlogos-addr-on', '1');
+      await runHealth();
+      return healthReport();
+    })()`);
+    return r.then(x => {
+      assert.ok(/Squillo ad app chiusa/.test(x), 'lo squillo nativo deve essere riportato');
+      assert.ok(!/Non ti raggiungono/.test(x),
+        'due righe che si contraddicono: chi legge non puo sapere quale credere, e vince la piu allarmante');
+      app.stop();
+    });
+  });
+
+  test('senza Push e senza ponte non si suggerisce un interruttore che non c e', () => {
+    /* Il caso di una WebView o di un browser senza notifiche: dire "accendi
+       gli avvisi" manda a cercare qualcosa che in quella schermata non esiste. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      window.PushManager = undefined; delete window.PushManager;
+      await runHealth();
+      return healthReport();
+    })()`);
+    return r.then(x => {
+      assert.ok(!/Accendi gli avvisi/.test(x),
+        'un rimedio inesistente e peggio del silenzio: fa sentire in difetto per un guasto che non c e');
+      app.stop();
+    });
+  });
+
+  test('ma nel browser dove le notifiche ESISTONO la riga resta', () => {
+    /* Il lato da non rompere: sul web quella riga e l unica cosa che dice a
+       una persona perche nessuno la raggiunge quando ha l app chiusa.
+       ⚠️ Il finto browser nasce SENZA notifiche (Notification: undefined,
+       nessun PushManager), quindi da solo non sa rappresentare un browser
+       normale — e senza questi due il test proverebbe il contrario di cio'
+       che dice. §33: il banco di prova deve poter dire il vero. */
+    const app = loadApp({ globals: {
+      PushManager: class {},
+      Notification: Object.assign(function(){}, { permission: 'granted' }),
+    } });
+    const r = app.run(`(async () => {
+      await runHealth();
+      return healthReport();
+    })()`);
+    return r.then(x => {
+      assert.ok(/Con l'app chiusa/.test(x),
+        'nel browser la riga serve: e l unica che spiega perche non ti raggiungono');
       app.stop();
     });
   });
