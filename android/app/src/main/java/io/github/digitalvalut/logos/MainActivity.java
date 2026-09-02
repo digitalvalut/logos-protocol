@@ -97,6 +97,24 @@ public class MainActivity extends Activity {
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
+        /* ⚠️ AGGIUNTO IL 2 SET 2026, DOPO UN AGGIORNAMENTO CHE NON SI VEDEVA.
+           L'operatore ha installato la v32 e l'app continuava a dichiararsi
+           3.95. Il pacchetto era giusto — verificato aprendolo: dentro c'era
+           3.96 — ma la WebView serviva la propria copia vecchia della pagina.
+
+           Senza questa riga vale LOAD_DEFAULT, cioe' la WebView applica la
+           cache HTTP a ciò che le serve WebViewAssetLoader. Ma qui non c'e'
+           nessuna rete da risparmiare: la pagina e' un file dentro il
+           pacchetto, a un centimetro di distanza. Metterla in cache non fa
+           guadagnare niente e fa perdere l'unica cosa che conta — che dopo un
+           aggiornamento si veda il codice aggiornato.
+
+           E' la stessa famiglia del difetto gia' pagato sul web a fine agosto:
+           il browser cercava la versione nuova GUARDANDO LA PROPRIA COPIA
+           VECCHIA. Superficie diversa, errore identico.
+           ⚠️ Un aggiornamento che non si vede e' peggio di un aggiornamento
+           mancato: chi lo installa crede di avere le correzioni e non le ha. */
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
         /* localStorage holds the conversation history and IndexedDB holds the
            device's own key pair — the thing an address *is*. Without this the app
            would come up with no identity every single time. */
@@ -216,6 +234,28 @@ public class MainActivity extends Activity {
                 && getIntent().getBooleanExtra(CallActivity.EXTRA_ANSWERED, false)) {
             answeredPending = true;
         }
+        /* ⚠️ La riga qui sopra (setCacheMode) impedisce che ricapiti, ma non
+           ripulisce quello che una versione precedente ha gia' messo da parte:
+           chi aggiorna DA una versione senza quella riga si porterebbe dietro
+           la pagina vecchia comunque. Una volta sola, quando il numero di
+           versione del pacchetto cambia, si butta via tutto il conservato.
+           Costa un caricamento leggermente piu' lento al primo avvio dopo un
+           aggiornamento, ed e' esattamente il momento in cui si vuole essere
+           sicuri di guardare il codice nuovo. */
+        try {
+            android.content.SharedPreferences p =
+                getSharedPreferences("dvlogos-app", MODE_PRIVATE);
+            long installata = getPackageManager()
+                .getPackageInfo(getPackageName(), 0).getLongVersionCode();
+            if (p.getLong("vistaVersione", -1) != installata) {
+                web.clearCache(true);
+                p.edit().putLong("vistaVersione", installata).apply();
+                /* uno stato salvato appartiene alla versione che l'ha scritto:
+                   ripartire dalla pagina, non da com'era prima */
+                state = null;
+            }
+        } catch (Exception e) { /* nel dubbio si carica normalmente */ }
+
         if (state != null) web.restoreState(state);
         else web.loadUrl(START);
     }
