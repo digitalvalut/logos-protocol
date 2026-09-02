@@ -5034,6 +5034,14 @@ function paintListenMode(on){
 }
 $('listenRow').addEventListener('click', () => {
   listenMode = !listenMode;
+  /* ⚠️ RICORDATO DAL 2 SET 2026. Prima `listenMode` era una variabile e basta:
+     riapri l'app e l'ascolto risultava spento, ogni volta. Su una funzione che
+     esiste APPOSTA per quando l'app non e' aperta, e' un controsenso — e
+     peggio, il servizio Android i suoi indirizzi se li ricorda per conto suo
+     (SharedPreferences, in RingService). Quindi i due potevano divergere:
+     servizio acceso che sorveglia, interruttore che dice spento. Chi guardava
+     l'app vedeva una cosa e il telefono ne faceva un'altra. */
+  try{ localStorage.setItem('dvlogos-listen', listenMode ? '1' : '0'); }catch(_){}
   paintListenMode(listenMode);
   if (listenMode) keepScreenAwake();
   else if (callState !== 'active') letScreenSleep();   /* una chiamata in corso ha la priorità sullo spegnimento */
@@ -5080,6 +5088,25 @@ if (androidRing){
    'rifiutato' = Android ha rifiutato di avviarlo. È il caso che prima finiva
                  in un catch vuoto, e mentre l'app continuava a promettere. */
 let statoAscoltoNativo = 'no';
+/* ⚠️ All'avvio si RIPRENDE quello che si era scelto, e si ricalcola lo stato
+   vero della sorveglianza. Senza questa riga il rapporto "Come sta l'app" non
+   poteva dire niente sullo squillo nativo: `statoAscoltoNativo` restava al suo
+   valore iniziale finche' qualcuno non toccava un interruttore, e la riga
+   spariva del tutto — che e' esattamente cio' che l'operatore ha visto il
+   2 set 2026, e che sembrava un ponte non agganciato mentre era solo uno stato
+   mai calcolato.
+   ⚠️ Farlo QUI, all'apertura, e' anche l'unico momento in cui Android lascia
+   avviare il servizio: da Android 12 non si puo' farlo partire quando l'app e'
+   gia' in secondo piano. */
+try{
+  if (localStorage.getItem('dvlogos-listen') === '1'){
+    listenMode = true;
+    paintListenMode(true);
+    keepScreenAwake();
+  }
+}catch(_){}
+if (androidRing) handOverWatchToAndroid();
+
 async function handOverWatchToAndroid(){
   if (!androidRing){ statoAscoltoNativo = 'no'; return; }
   try{
@@ -6845,7 +6872,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-3.98';
+const APP_VERSION = 'logos-modifica-3.99';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -6963,12 +6990,19 @@ async function runHealth(){
      qui sotto continuava a parlare solo delle notifiche.
      'rifiutato' e' il caso che e' successo davvero il 2 set 2026, e va detto in
      chiaro: una funzione che non parte e tace e' peggio di una che manca. */
-  if (statoAscoltoNativo === 'si'){
-    rows.push(['ok', t('health.nativeRing'), t('health.nativeRingOk')]);
-  } else if (statoAscoltoNativo === 'rifiutato'){
-    rows.push(['bad', t('health.nativeRing'), t('health.nativeRingRefused')]);
-  } else if (statoAscoltoNativo === 'off' && androidRing){
-    rows.push(['off', t('health.nativeRing'), t('health.nativeRingOff')]);
+  /* ⚠️ Dove il ponte esiste la riga c'e' SEMPRE, qualunque sia lo stato.
+     Prima mancava nel caso 'no', e il 2 set 2026 e' costato un'ora: una riga
+     assente si legge come "questa cosa non esiste", non come "non lo so" —
+     e sembrava un ponte rotto mentre era solo uno stato mai calcolato.
+     Un rapporto che tace su una funzione presente e' peggio di uno che dice
+     "non lo so": il silenzio lo si scambia per una risposta. */
+  if (androidRing){
+    /* se nessuno l'ha ancora calcolato, lo si calcola adesso invece di
+       riportare un valore iniziale che non vuol dire niente */
+    if (statoAscoltoNativo === 'no') await handOverWatchToAndroid();
+    rows.push(statoAscoltoNativo === 'si' ? ['ok', t('health.nativeRing'), t('health.nativeRingOk')]
+            : statoAscoltoNativo === 'rifiutato' ? ['bad', t('health.nativeRing'), t('health.nativeRingRefused')]
+            : ['off', t('health.nativeRing'), t('health.nativeRingOff')]);
   }
   const closed = reachableWhenClosed();
   rows.push(closed === 'ok' ? ['ok', t('health.closed'), t('health.closedOk')]

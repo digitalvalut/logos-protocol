@@ -4119,8 +4119,20 @@ test.describe('il telefono che squilla anche ad app chiusa', () => {
     });
   });
 
+  /* ⚠️ AGGIORNATI IL 2 SET 2026. Contavano le consegne DALL'AVVIO dell'app, e
+     dalla v35 ce n'e' una in piu': all'apertura la pagina riprende la scelta
+     salvata e ricalcola subito lo stato della sorveglianza — che e' proprio la
+     correzione, non un effetto collaterale (senza, il rapporto non sapeva dire
+     niente sullo squillo, e da Android 12 quello e' anche l'unico momento in
+     cui il servizio si puo' avviare).
+     I test erano legati al MECCANISMO — quante volte in totale — invece che
+     alla garanzia: che GESTO fa QUALE consegna. Azzerare il registro prima
+     dell'azione misura esattamente quello, ed e' piu' forte di prima. */
+  const azzera = app => { app.sandbox.__androidRingCalls.length = 0; };
+
   test('acceso, consegna le caselle da sorvegliare, il relay e le parole giuste', () => {
     const app = withAndroid();
+    azzera(app);
     app.run('listenMode = true; window.__p = handOverWatchToAndroid();');
     return app.run('window.__p').then(() => {
       const c = calls(app);
@@ -4137,6 +4149,7 @@ test.describe('il telefono che squilla anche ad app chiusa', () => {
 
   test('spento, il servizio va fermato — non semplicemente lasciato andare', () => {
     const app = withAndroid();
+    azzera(app);
     app.run('listenMode = false; window.__p = handOverWatchToAndroid();');
     return app.run('window.__p').then(() => {
       const c = calls(app);
@@ -4149,6 +4162,7 @@ test.describe('il telefono che squilla anche ad app chiusa', () => {
   test('senza nessun indirizzo attivo non si tiene acceso un servizio a guardare il nulla', () => {
     const app = withAndroid();
     app.run('activeSlots = function(){ return []; };');
+    azzera(app);
     app.run('listenMode = true; window.__p = handOverWatchToAndroid();');
     return app.run('window.__p').then(() => {
       assert.deepStrictEqual(calls(app).map(x => x.what), ['stop'],
@@ -4797,5 +4811,77 @@ test.describe('lo squillo nativo dice la verita su se stesso', () => {
       const n = (sorgente.match(new RegExp('"health\\.' + k + '":', 'g')) || []).length;
       assert.strictEqual(n, 13, `health.${k} compare ${n} volte invece di 13`);
     }
+  });
+});
+
+/* ------------------------------------------------------------------------
+   L'ASCOLTO SI RICORDA, E IL RAPPORTO NON TACE.
+
+   Due difetti trovati il 2 set 2026 dal rapporto mandato dall'operatore:
+   la riga sullo squillo nativo NON COMPARIVA AFFATTO, e sembrava un ponte
+   rotto. Non lo era: lo stato veniva calcolato solo toccando un
+   interruttore, quindi all'apertura restava al valore iniziale e la riga
+   spariva. ⚠️ Una riga assente si legge come "questa cosa non esiste", non
+   come "non lo so": il silenzio viene scambiato per una risposta.
+
+   Nello stesso giro: `listenMode` non era ricordato fra un avvio e l'altro.
+   Su una funzione che esiste APPOSTA per quando l'app e' chiusa e' un
+   controsenso — e il servizio Android i suoi indirizzi se li ricorda per
+   conto suo, quindi i due potevano divergere: servizio che sorveglia,
+   interruttore che dice spento.
+   ------------------------------------------------------------------------ */
+test.describe('l ascolto si ricorda e il rapporto non tace', () => {
+
+  const ponte = { globals: { AndroidRing: {
+    available: () => true, watch: () => true, stop(){},
+    canPostNotifications: () => true,
+    canTakeOverLockScreen: () => true, askForLockScreen(){},
+  } } };
+
+  test('l interruttore acceso viene ritrovato acceso alla riapertura', () => {
+    const app = loadApp(ponte);
+    app.run(`localStorage.setItem('dvlogos-listen', '1');`);
+    const dopo = loadApp(Object.assign({}, ponte, {
+      storage: app.run('JSON.stringify(Object.fromEntries(Object.entries(localStorage).filter(([k])=>k.indexOf("dvlogos")===0)))'),
+    }));
+    app.stop();
+    /* la riapertura vera si prova sul comportamento del codice, non sul
+       finto magazzino: quello che conta e' che la scelta venga LETTA */
+    const sorgente = require('node:fs')
+      .readFileSync(require('node:path').join(__dirname, '..', 'modifica.js'), 'utf8');
+    assert.ok(/localStorage\.setItem\('dvlogos-listen'/.test(sorgente),
+      'la scelta di restare in ascolto deve essere scritta, o si perde a ogni riavvio');
+    assert.ok(/localStorage\.getItem\('dvlogos-listen'\)\s*===\s*'1'/.test(sorgente),
+      'e deve essere riletta all avvio, o l app dice spento mentre il telefono sorveglia');
+    dopo.stop();
+  });
+
+  test('la riga del rapporto compare anche prima che qualcuno tocchi niente', () => {
+    /* Il difetto esatto: nessuno aveva toccato interruttori, lo stato era
+       quello iniziale, e la riga spariva. */
+    const app = loadApp(ponte);
+    const r = app.run(`(async () => {
+      statoAscoltoNativo = 'no';          /* come all apertura */
+      await runHealth();
+      return healthReport();
+    })()`);
+    return r.then(x => {
+      assert.ok(/Squillo ad app chiusa/.test(x),
+        'col ponte presente la riga deve esserci sempre: una riga assente si legge come "non esiste"');
+      app.stop();
+    });
+  });
+
+  test('senza ponte la riga NON compare: non si promette cio che non c e', () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      await runHealth();
+      return healthReport();
+    })()`);
+    return r.then(x => {
+      assert.ok(!/Squillo ad app chiusa/.test(x),
+        'nel browser quello squillo non esiste: nominarlo sarebbe una promessa falsa');
+      app.stop();
+    });
   });
 });
