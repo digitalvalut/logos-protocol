@@ -32,20 +32,20 @@ PRESENTATION.md
 # Built by build-single-file.py on demand — never committed, so nobody can
 # download a stale copy of the app believing it is the current one.
 digitalvalut-logos.html
-AUDIT-PRIVATO-*.md
+documenti-privati/
 
 # Audit ostile di agosto 2026. Il report elenca difetti NON corretti con le
 # sequenze esatte per riprodurli, e mutanti/ contiene diciassette copie
 # dell'app con altrettante falle rimesse dentro apposta. Pubblicarli sarebbe
 # consegnare a chiunque sia la mappa sia gli attrezzi. Stessa regola di
-# AUDIT-PRIVATO-*.md, e per lo stesso motivo.
-REPORT-AUDIT.md
+# documenti-privati/, e per lo stesso motivo.
+
 mutanti/
 # Anche gli invarianti: la sezione "come lo violerei" di ognuno descrive il
 # vettore d'attacco, e diversi di quei vettori sono ancora aperti. Un elenco
 # ordinato per promettenza è una mappa, non una nota di metodo.
-INVARIANTI.md
-CLASSIFICA-SICUREZZA-*.md
+
+
 
 # La chiave che firma l app Android: se finisce online, chiunque puo
 # pubblicare aggiornamenti che i telefoni accettano come autentici.
@@ -57,7 +57,7 @@ CLASSIFICA-SICUREZZA-*.md
 *.idsig
 
 # ---- documenti che descrivono difetti ANCORA APERTI ----
-# Stessa ragione per cui REPORT-AUDIT.md e INVARIANTI.md sono esclusi qui sopra.
+# Stessa ragione per cui  e  sono esclusi qui sopra.
 # Il codice si pubblica sempre — se la sicurezza dipendesse dal nasconderlo non
 # sarebbe sicurezza. Ma un elenco dei difetti non ancora corretti, con le misure
 # che dicono quanto costa sfruttarli, non e' documentazione: sono istruzioni.
