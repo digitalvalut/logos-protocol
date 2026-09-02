@@ -1,6 +1,6 @@
 # DOVE SIAMO — leggi questo per primo
 
-*Aggiornato: 2 settembre 2026, ~01:10. Se stai riprendendo il filo — persona
+*Aggiornato: 2 settembre 2026, ~02:20. Se stai riprendendo il filo — persona
 nuova, AI nuova, o te stesso fra tre mesi — parti da qui.*
 
 ---
@@ -22,7 +22,7 @@ regge dell'ordine di 50-100 conversazioni al giorno nel mondo.
 
 **Salute:** tutte le rotte verificate 200/404/403 come atteso, credenziali del
 ponte presenti.
-**Test:** 288 su 288 verdi — ⚠️ **con Node 22**, non col Node 18 di sistema
+**Test:** 297 su 297 verdi — ⚠️ **con Node 22**, non col Node 18 di sistema
 (vedi `INCIDENTS.md` §8).
 **Build:** riproducibile, impronta di firma `423e3094…fee190` invariata da sempre.
 **Spesa Cloudflare:** 0,00 $.
@@ -92,19 +92,37 @@ settimane di quiete, non ora.
 
 ---
 
+## ⚠️ IN ATTESA DI PROVA SUL TELEFONO — v32 FIRMATA, NON PUBBLICATA
+
+APK sul Desktop: **`DigitalValut-Logos-v32-DA-PROVARE.apk`**. Impronta di firma
+invariata, quindi si installa sopra la v31 senza perdere niente.
+
+**Non pubblicare finché l'autore non ha provato.** Cosa contiene:
+1. **Squillo ad app chiusa acceso** — la riga commentata da fine agosto.
+   ⚠️ **Due rischi noti**: (a) la v5 con questi stessi permessi non si installava
+   su alcuni telefoni (causa mai riprodotta, androidx.core l'ipotesi migliore, oggi
+   assente); (b) la promessa *"anche ad app chiusa"* compare a schermo **appena la
+   riga esiste**, e non è ancora stata vista mantenere. **Se non squilla, la riga
+   torna commentata**: meglio nessuna promessa che una falsa.
+2. **Ascolto nativo a 45 s invece di 15** — a 15 s costava 5.760 letture/giorno per
+   utente 24 ore su 24 (17 utenti in tutto); a 45 s ne costa 1.920 (52 utenti,
+   quanto oggi). Prezzo: fino a 45 s prima che squilli.
+3. **Polling dell'indirizzo a 60 s** solo quando il servizio nativo sorveglia
+   davvero. La rubrica **non** è sorvegliata dal servizio, quindi resta com'era.
+4. **Saluto ritentato una volta** se il primo invio fallisce.
+5. **Vocale con tetto di 2 minuti**, che manda quello che c'è invece di buttarlo.
+
 ## SERVE UNA TUA DECISIONE (2 cose, nessuna urgente)
 
-1. **Il saluto che può perdersi in silenzio.** Riga ~3363: `dc.send({type:'hello'})`
-   porta l'impronta per le tre parole e l'iscrizione alle notifiche, dentro un
-   `catch` vuoto. Se fallisce, **il sintomo appare sull'ALTRO dispositivo** (niente
-   tre parole da quel lato) — è la forma esatta del difetto della v22, che costò
-   giorni. Probabilità bassa, conseguenza già pagata una volta. **Rimedio: un solo
-   nuovo tentativo dopo un istante.** Non l'ho fatto da solo perché tocca un
-   cammino faticosamente stabilizzato.
-2. **Nessun tetto alla durata di un messaggio vocale.** Un telefono in tasca che
-   registra per un'ora accumula memoria e poi il file supera comunque il tetto
-   d'invio: si registra a lungo per perdere tutto. **Rimedio: tetto a 5 minuti con
-   avviso.** È una decisione di prodotto, non tecnica.
+~~1. Il saluto che può perdersi~~ — **fatto nella v32.**
+~~2. Nessun tetto al messaggio vocale~~ — **fatto nella v32** (2 minuti, non 5).
+
+1. **Estendere l'ascolto nativo anche ai contatti.** Oggi il servizio sorveglia solo
+   gli slot dell'indirizzo, non la rubrica: chi ti richiama da un contatto salvato
+   non ti fa squillare ad app chiusa. Tecnicamente basta aggiungere le chiavi alla
+   lista, **senza toccare il Java** — ma moltiplicherebbe il costo sempre-acceso per
+   il numero di contatti (5 contatti ≈ 5× le letture, 24 ore su 24). **Da misurare
+   prima, non da dare per fatto.**
 
 ## PROSSIMA AZIONE
 
