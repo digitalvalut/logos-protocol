@@ -1,0 +1,5 @@
+Il link di un invito ora apre l'app invece del browser: l'indirizzo si salva dove serve, e non ti ritrovi piu con due indirizzi diversi senza capire perche.
+
+Corretto: quando richiami un contatto che non e online, l'app diceva "ecco il codice da mandare a mano" e il codice non compariva. C'era, ma restava nascosto.
+
+E la schermata "Resta in ascolto" dice la verita: lo squillo ad app chiusa vale per chi ti chiama al tuo indirizzo.

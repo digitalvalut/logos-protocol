@@ -187,7 +187,7 @@ Object.assign(I18N.en, {
 "notify.sub":"A notification if a contact tries to reach you and you don't have the app open — no name, no message, just a heads-up.",
 "notify.iosHint":"On iPhone this only works once you've added the app to your Home Screen first: tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>, and open the app from there.",
 "listen.title":"Stay listening for calls","listen.sub":"The phone really rings, like a real call, for as long as you keep this screen open. Uses more battery; no outside service is involved.","listen.status":"Listening — if you switch screen or app, it stops until you come back here.",
-"listen.subApp":"The phone really rings, like a real call, even with the app closed. The waiting is done by the phone itself: no account, no push service, nothing outside. Uses more battery.","listen.statusApp":"Listening — the phone stays reachable even with the app closed.",
+"listen.subApp":"The phone really rings, like a real call, even with the app closed, for anyone who calls you at your address. The waiting is done by the phone itself: no account, no push service, nothing outside. Uses more battery.","listen.statusApp":"Listening — calls to your address reach you even with the app closed.",
 "notify.blocked":"Notifications blocked by the browser. Check the site's settings.",
 "sas.title":"Security check",
 "sas.lead":"Optional: say these three words to each other out loud. If you both see the same ones, nobody has come in between — but you can keep chatting without doing this.",
@@ -247,7 +247,7 @@ Object.assign(I18N.en, {
 "health.brokerOk":"Answering.",
 "health.brokerBad":"Not answering. The long codes still work: they go through no server at all.",
 "health.brokerOrigin":"This copy of the app is at an address the service doesn't recognise: it won't work from here. Open the official one.",
-"health.closed":"With the app closed","health.nativeRing":"Ringing with the app closed","health.nativeRingOk":"Working: your phone rings even with the app closed.","health.nativeRingRefused":"Android refused to start it. Reopen the app, then switch it off and on again.","health.nativeRingOff":"Off. Turn on your address and \u00abstay listening\u00bb above.",
+"health.closed":"With the app closed","health.nativeRing":"Ringing with the app closed","health.nativeRingOk":"Working: calls to your address ring your phone even with the app closed.","health.nativeRingRefused":"Android refused to start it. Reopen the app, then switch it off and on again.","health.nativeRingOff":"Off. Turn on your address and \u00abstay listening\u00bb above.",
 "health.closedOk":"They can make your phone ring.",
 "health.closedOff":"They can't reach you. Turn on notifications above.",
 "health.closedDenied":"The browser is blocking notifications: with the app closed, nobody reaches you.",
@@ -376,7 +376,7 @@ Object.assign(I18N.it, {
 "notify.sub":"Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.",
 "notify.iosHint":"Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.",
 "listen.title":"Resta in ascolto delle chiamate","listen.sub":"Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.","listen.status":"In ascolto — se cambi schermata o app, si ferma finché non torni qui.",
-"listen.subApp":"Il telefono squilla davvero, come una chiamata vera, anche ad app chiusa. Ad aspettare è il telefono stesso: nessun account, nessun servizio push, niente di esterno. Consuma più batteria.","listen.statusApp":"In ascolto — il telefono resta raggiungibile anche ad app chiusa.",
+"listen.subApp":"Il telefono squilla davvero, come una chiamata vera, anche ad app chiusa, per chi ti chiama al tuo indirizzo. Ad aspettare è il telefono stesso: nessun account, nessun servizio push, niente di esterno. Consuma più batteria.","listen.statusApp":"In ascolto — le chiamate al tuo indirizzo ti raggiungono anche ad app chiusa.",
 "notify.blocked":"Notifiche bloccate dal browser. Controlla le impostazioni del sito.",
 "sas.title":"Controllo di sicurezza",
 "sas.lead":"Facoltativo: ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo — ma potete continuare a scrivere anche senza.",
@@ -436,7 +436,7 @@ Object.assign(I18N.it, {
 "health.brokerOk":"Risponde.",
 "health.brokerBad":"Non risponde. Restano i codici lunghi, che non passano da nessun server.",
 "health.brokerOrigin":"Questa copia dell'app è su un indirizzo che il servizio non riconosce: da qui non funzionerà. Apri quella ufficiale.",
-"health.closed":"Con l'app chiusa","health.nativeRing":"Squillo ad app chiusa","health.nativeRingOk":"Funziona: il telefono squilla anche con l'app chiusa.","health.nativeRingRefused":"Android ha rifiutato di avviarlo. Riapri l'app, poi spegni e riaccendi l'interruttore.","health.nativeRingOff":"Spento. Accendi il tuo indirizzo e \u00abresta in ascolto\u00bb qui sopra.",
+"health.closed":"Con l'app chiusa","health.nativeRing":"Squillo ad app chiusa","health.nativeRingOk":"Funziona: le chiamate al tuo indirizzo ti fanno squillare anche con l'app chiusa.","health.nativeRingRefused":"Android ha rifiutato di avviarlo. Riapri l'app, poi spegni e riaccendi l'interruttore.","health.nativeRingOff":"Spento. Accendi il tuo indirizzo e \u00abresta in ascolto\u00bb qui sopra.",
 "health.closedOk":"Ti possono far squillare il telefono.",
 "health.closedOff":"Non ti raggiungono. Accendi gli avvisi qui sopra.",
 "health.closedDenied":"Il browser blocca gli avvisi: con l'app chiusa non ti raggiunge nessuno.",
@@ -558,7 +558,7 @@ Object.assign(I18N.fr, {
 "notify.sub":"Une notification si un contact essaie de vous joindre et que vous n'avez pas l'appli ouverte — aucun nom, aucun message, juste un signal.",
 "notify.iosHint":"Sur iPhone, cela ne fonctionne que si vous avez d'abord ajouté l'appli à votre écran d'accueil : touchez <b>Partager</b> dans Safari, puis <b>Sur l'écran d'accueil</b>, et ouvrez l'appli depuis là.",
 "listen.title":"Rester à l'écoute des appels","listen.sub":"Le téléphone sonne vraiment, comme un appel réel, tant que vous gardez cet écran ouvert. Consomme plus de batterie ; aucun service extérieur n'est impliqué.","listen.status":"À l'écoute — si vous changez d'écran ou d'appli, ça s'arrête jusqu'à votre retour ici.",
-"listen.subApp":"Le téléphone sonne vraiment, comme un appel réel, même appli fermée. C'est le téléphone lui-même qui attend : aucun compte, aucun service de notification, rien d'extérieur. Consomme plus de batterie.","listen.statusApp":"À l'écoute — le téléphone reste joignable même appli fermée.",
+"listen.subApp":"Le téléphone sonne vraiment, comme un appel réel, même appli fermée, pour qui vous appelle à votre adresse. C'est le téléphone lui-même qui attend : aucun compte, aucun service de notification, rien d'extérieur. Consomme plus de batterie.","listen.statusApp":"À l'écoute — les appels à votre adresse vous parviennent même appli fermée.",
 "notify.blocked":"Notifications bloquées par le navigateur. Vérifiez les paramètres du site.",
 "sas.title":"Contrôle de sécurité",
 "sas.lead":"Facultatif : dites-vous ces trois mots à voix haute. Si vous voyez tous les deux les mêmes, personne ne s'est interposé — mais vous pouvez continuer à écrire sans le faire.",
@@ -618,7 +618,7 @@ Object.assign(I18N.fr, {
 "health.brokerOk":"Répond.",
 "health.brokerBad":"Ne répond pas. Les codes longs fonctionnent encore : ils ne passent par aucun serveur.",
 "health.brokerOrigin":"Cette copie de l'application est à une adresse que le service ne reconnaît pas : elle ne marchera pas d'ici. Ouvrez l'officielle.",
-"health.closed":"Application fermée","health.nativeRing":"Sonnerie application fermée","health.nativeRingOk":"Fonctionne : le téléphone sonne même application fermée.","health.nativeRingRefused":"Android a refusé de le démarrer. Rouvrez l'application, puis éteignez et rallumez l'interrupteur.","health.nativeRingOff":"Éteint. Activez votre adresse et « rester à l'écoute » ci-dessus.",
+"health.closed":"Application fermée","health.nativeRing":"Sonnerie application fermée","health.nativeRingOk":"Fonctionne : les appels à votre adresse font sonner le téléphone même application fermée.","health.nativeRingRefused":"Android a refusé de le démarrer. Rouvrez l'application, puis éteignez et rallumez l'interrupteur.","health.nativeRingOff":"Éteint. Activez votre adresse et « rester à l'écoute » ci-dessus.",
 "health.closedOk":"Ils peuvent faire sonner votre téléphone.",
 "health.closedOff":"Ils ne vous joignent pas. Activez les notifications ci-dessus.",
 "health.closedDenied":"Le navigateur bloque les notifications : application fermée, personne ne vous joint.",
@@ -740,7 +740,7 @@ Object.assign(I18N.de, {
 "notify.sub":"Eine Benachrichtigung, wenn ein Kontakt versucht dich zu erreichen und du die App nicht offen hast — kein Name, keine Nachricht, nur ein Hinweis.",
 "notify.iosHint":"Auf dem iPhone funktioniert das nur, wenn du die App zuerst zum Home-Bildschirm hinzugefügt hast: tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Home-Bildschirm</b>, und öffne die App von dort.",
 "listen.title":"Auf Anrufe lauschen","listen.sub":"Das Telefon klingelt wirklich, wie bei einem echten Anruf, solange dieser Bildschirm geöffnet bleibt. Verbraucht mehr Akku; kein externer Dienst ist beteiligt.","listen.status":"In Bereitschaft — wechselst du Bildschirm oder App, stoppt es, bis du hierher zurückkehrst.",
-"listen.subApp":"Das Telefon klingelt wirklich, wie bei einem echten Anruf, auch bei geschlossener App. Das Warten übernimmt das Telefon selbst: kein Konto, kein Push-Dienst, nichts Externes. Verbraucht mehr Akku.","listen.statusApp":"In Bereitschaft — das Telefon bleibt auch bei geschlossener App erreichbar.",
+"listen.subApp":"Das Telefon klingelt wirklich, wie bei einem echten Anruf, auch bei geschlossener App – für alle, die dich unter deiner Adresse anrufen. Das Warten übernimmt das Telefon selbst: kein Konto, kein Push-Dienst, nichts Externes. Verbraucht mehr Akku.","listen.statusApp":"In Bereitschaft — Anrufe an deine Adresse erreichen dich auch bei geschlossener App.",
 "notify.blocked":"Benachrichtigungen vom Browser blockiert. Prüfe die Einstellungen der Seite.",
 "sas.title":"Sicherheitsprüfung",
 "sas.lead":"Optional: Sagt euch diese drei Wörter laut. Wenn ihr beide dieselben seht, hat sich niemand dazwischengeschaltet — ihr könnt aber auch ohne das weiterschreiben.",
@@ -800,7 +800,7 @@ Object.assign(I18N.de, {
 "health.brokerOk":"Antwortet.",
 "health.brokerBad":"Antwortet nicht. Die langen Codes gehen weiter: sie laufen über keinen Server.",
 "health.brokerOrigin":"Diese Kopie der App liegt auf einer Adresse, die der Dienst nicht kennt: von hier aus geht es nicht. Öffne die offizielle.",
-"health.closed":"Bei geschlossener App","health.nativeRing":"Klingeln bei geschlossener App","health.nativeRingOk":"Funktioniert: Das Telefon klingelt auch bei geschlossener App.","health.nativeRingRefused":"Android hat den Start verweigert. App neu öffnen, dann Schalter aus- und wieder einschalten.","health.nativeRingOff":"Aus. Aktiviere oben deine Adresse und „auf Anrufe lauschen“.",
+"health.closed":"Bei geschlossener App","health.nativeRing":"Klingeln bei geschlossener App","health.nativeRingOk":"Funktioniert: Anrufe an deine Adresse lassen das Telefon auch bei geschlossener App klingeln.","health.nativeRingRefused":"Android hat den Start verweigert. App neu öffnen, dann Schalter aus- und wieder einschalten.","health.nativeRingOff":"Aus. Aktiviere oben deine Adresse und „auf Anrufe lauschen“.",
 "health.closedOk":"Sie können dein Telefon klingeln lassen.",
 "health.closedOff":"Sie erreichen dich nicht. Schalte oben die Hinweise ein.",
 "health.closedDenied":"Der Browser blockiert Hinweise: bei geschlossener App erreicht dich niemand.",
@@ -922,7 +922,7 @@ Object.assign(I18N.es, {
 "notify.sub":"Una notificación si un contacto intenta contactarte y no tienes la app abierta — sin nombre, sin mensaje, solo un aviso.",
 "notify.iosHint":"En iPhone esto solo funciona si primero añadiste la app a tu pantalla de inicio: toca <b>Compartir</b> en Safari, luego <b>Añadir a inicio</b>, y abre la app desde ahí.",
 "listen.title":"Quedarse a la escucha de llamadas","listen.sub":"El teléfono suena de verdad, como una llamada real, mientras mantengas esta pantalla abierta. Consume más batería; no interviene ningún servicio externo.","listen.status":"Escuchando — si cambias de pantalla o de app, se detiene hasta que vuelvas aquí.",
-"listen.subApp":"El teléfono suena de verdad, como una llamada real, incluso con la app cerrada. Quien espera es el propio teléfono: sin cuenta, sin servicio de notificaciones, nada externo. Consume más batería.","listen.statusApp":"Escuchando — el teléfono sigue localizable incluso con la app cerrada.",
+"listen.subApp":"El teléfono suena de verdad, como una llamada real, incluso con la app cerrada, para quien te llama a tu dirección. Quien espera es el propio teléfono: sin cuenta, sin servicio de notificaciones, nada externo. Consume más batería.","listen.statusApp":"Escuchando — las llamadas a tu dirección te llegan incluso con la app cerrada.",
 "notify.blocked":"Notificaciones bloqueadas por el navegador. Comprueba los ajustes del sitio.",
 "sas.title":"Comprobación de seguridad",
 "sas.lead":"Opcional: decíos estas tres palabras en voz alta. Si ambos veis las mismas, nadie se ha interpuesto — pero podéis seguir escribiendo sin hacerlo.",
@@ -982,7 +982,7 @@ Object.assign(I18N.es, {
 "health.brokerOk":"Responde.",
 "health.brokerBad":"No responde. Quedan los códigos largos, que no pasan por ningún servidor.",
 "health.brokerOrigin":"Esta copia de la aplicación está en una dirección que el servicio no reconoce: desde aquí no funcionará. Abre la oficial.",
-"health.closed":"Con la aplicación cerrada","health.nativeRing":"Timbre con la app cerrada","health.nativeRingOk":"Funciona: el teléfono suena incluso con la app cerrada.","health.nativeRingRefused":"Android se negó a iniciarlo. Vuelve a abrir la app y apaga y enciende el interruptor.","health.nativeRingOff":"Apagado. Activa tu dirección y «quedarse a la escucha» arriba.",
+"health.closed":"Con la aplicación cerrada","health.nativeRing":"Timbre con la app cerrada","health.nativeRingOk":"Funciona: las llamadas a tu dirección hacen sonar el teléfono incluso con la app cerrada.","health.nativeRingRefused":"Android se negó a iniciarlo. Vuelve a abrir la app y apaga y enciende el interruptor.","health.nativeRingOff":"Apagado. Activa tu dirección y «quedarse a la escucha» arriba.",
 "health.closedOk":"Pueden hacer sonar tu teléfono.",
 "health.closedOff":"No te localizan. Activa los avisos aquí arriba.",
 "health.closedDenied":"El navegador bloquea los avisos: con la aplicación cerrada no te localiza nadie.",
@@ -1104,7 +1104,7 @@ Object.assign(I18N.pt, {
 "notify.sub":"Uma notificação se um contacto tentar chegar até si e não tiver a app aberta — sem nome, sem mensagem, apenas um aviso.",
 "notify.iosHint":"No iPhone isto só funciona se primeiro adicionar a app ao seu ecrã principal: toque em <b>Partilhar</b> no Safari, depois em <b>Adicionar ao ecrã principal</b>, e abra a app a partir daí.",
 "listen.title":"Ficar à escuta de chamadas","listen.sub":"O telemóvel toca mesmo, como uma chamada real, enquanto mantiver este ecrã aberto. Consome mais bateria; nenhum serviço externo está envolvido.","listen.status":"À escuta — se mudar de ecrã ou de app, para até voltar aqui.",
-"listen.subApp":"O telemóvel toca mesmo, como uma chamada real, mesmo com a app fechada. Quem espera é o próprio telemóvel: sem conta, sem serviço de notificações, nada externo. Consome mais bateria.","listen.statusApp":"À escuta — o telemóvel continua contactável mesmo com a app fechada.",
+"listen.subApp":"O telemóvel toca mesmo, como uma chamada real, mesmo com a app fechada, para quem lhe liga para o seu endereço. Quem espera é o próprio telemóvel: sem conta, sem serviço de notificações, nada externo. Consome mais bateria.","listen.statusApp":"À escuta — as chamadas para o seu endereço chegam-lhe mesmo com a app fechada.",
 "notify.blocked":"Notificações bloqueadas pelo navegador. Verifique as definições do site.",
 "sas.title":"Verificação de segurança",
 "sas.lead":"Opcional: digam estas três palavras um ao outro em voz alta. Se ambos virem as mesmas, ninguém se interpôs — mas podem continuar a escrever sem o fazer.",
@@ -1164,7 +1164,7 @@ Object.assign(I18N.pt, {
 "health.brokerOk":"Responde.",
 "health.brokerBad":"Não responde. Restam os códigos longos, que não passam por nenhum servidor.",
 "health.brokerOrigin":"Esta cópia da aplicação está num endereço que o serviço não reconhece: daqui não vai funcionar. Abra a oficial.",
-"health.closed":"Com a aplicação fechada","health.nativeRing":"Toque com a aplicação fechada","health.nativeRingOk":"Funciona: o telefone toca mesmo com a aplicação fechada.","health.nativeRingRefused":"O Android recusou iniciá-lo. Reabra a aplicação e desligue e ligue o interruptor.","health.nativeRingOff":"Desligado. Ative o seu endereço e «ficar à escuta» acima.",
+"health.closed":"Com a aplicação fechada","health.nativeRing":"Toque com a aplicação fechada","health.nativeRingOk":"Funciona: as chamadas para o seu endereço fazem o telefone tocar mesmo com a aplicação fechada.","health.nativeRingRefused":"O Android recusou iniciá-lo. Reabra a aplicação e desligue e ligue o interruptor.","health.nativeRingOff":"Desligado. Ative o seu endereço e «ficar à escuta» acima.",
 "health.closedOk":"Podem fazer o seu telemóvel tocar.",
 "health.closedOff":"Não o alcançam. Ative os avisos aqui em cima.",
 "health.closedDenied":"O navegador bloqueia os avisos: com a aplicação fechada, ninguém o alcança.",
@@ -1286,7 +1286,7 @@ Object.assign(I18N.ru, {
 "notify.sub":"Уведомление, если контакт пытается связаться с вами, а приложение у вас не открыто — ни имени, ни сообщения, только сигнал.",
 "notify.iosHint":"На iPhone это работает только если вы сначала добавили приложение на главный экран: нажмите <b>Поделиться</b> в Safari, затем <b>На экран «Домой»</b>, и открывайте приложение оттуда.",
 "listen.title":"Оставаться на связи для звонков","listen.sub":"Телефон звонит по-настоящему, как настоящий вызов, пока этот экран открыт. Расходует больше заряда; никакой внешний сервис не задействован.","listen.status":"На связи — если переключитесь на другой экран или приложение, приём остановится до возвращения сюда.",
-"listen.subApp":"Телефон звонит по-настоящему, как настоящий вызов, даже когда приложение закрыто. Ждёт сам телефон: без учётной записи, без службы уведомлений, без чего-либо внешнего. Расходует больше заряда.","listen.statusApp":"На связи — телефон остаётся доступен даже при закрытом приложении.",
+"listen.subApp":"Телефон звонит по-настоящему, как настоящий вызов, даже когда приложение закрыто — для тех, кто звонит вам на ваш адрес. Ждёт сам телефон: без учётной записи, без службы уведомлений, без чего-либо внешнего. Расходует больше заряда.","listen.statusApp":"На связи — вызовы на ваш адрес доходят даже при закрытом приложении.",
 "notify.blocked":"Уведомления заблокированы браузером. Проверьте настройки сайта.",
 "sas.title":"Проверка безопасности",
 "sas.lead":"Необязательно: произнесите друг другу эти три слова вслух. Если вы оба видите одинаковые, никто не вклинился — но можно продолжать переписку и без этого.",
@@ -1346,7 +1346,7 @@ Object.assign(I18N.ru, {
 "health.brokerOk":"Отвечает.",
 "health.brokerBad":"Не отвечает. Остаются длинные коды — они не проходят ни через один сервер.",
 "health.brokerOrigin":"Эта копия приложения находится по адресу, который служба не признаёт: отсюда работать не будет. Откройте официальную.",
-"health.closed":"При закрытом приложении","health.nativeRing":"Звонок при закрытом приложении","health.nativeRingOk":"Работает: телефон звонит даже при закрытом приложении.","health.nativeRingRefused":"Android отказался его запустить. Откройте приложение и выключите и включите переключатель.","health.nativeRingOff":"Выключено. Включите свой адрес и «оставаться на связи» выше.",
+"health.closed":"При закрытом приложении","health.nativeRing":"Звонок при закрытом приложении","health.nativeRingOk":"Работает: вызовы на ваш адрес заставляют телефон звонить даже при закрытом приложении.","health.nativeRingRefused":"Android отказался его запустить. Откройте приложение и выключите и включите переключатель.","health.nativeRingOff":"Выключено. Включите свой адрес и «оставаться на связи» выше.",
 "health.closedOk":"Они могут заставить ваш телефон зазвонить.",
 "health.closedOff":"Они до вас не достучатся. Включите уведомления выше.",
 "health.closedDenied":"Браузер блокирует уведомления: при закрытом приложении до вас никто не достучится.",
@@ -1468,7 +1468,7 @@ Object.assign(I18N.zh, {
 "notify.sub":"当联系人试图联系你而你没有打开应用时发送通知——没有姓名，没有消息内容，只是一个提醒。",
 "notify.iosHint":"在 iPhone 上，只有先将应用添加到主屏幕后才能使用此功能：在 Safari 中点击<b>分享</b>，然后点击<b>添加到主屏幕</b>，并从那里打开应用。",
 "listen.title":"保持接听等待","listen.sub":"只要这个屏幕保持打开，手机就会像真正的电话一样响铃。会更耗电；不涉及任何外部服务。","listen.status":"正在等待来电——切换到其他屏幕或应用会暂停，回到这里才会恢复。",
-"listen.subApp":"即使应用已关闭，手机也会像真正的电话一样响铃。等待由手机自己完成：没有账号，没有推送服务，不涉及任何外部服务。会更耗电。","listen.statusApp":"正在等待来电——即使应用关闭，手机依然可以被找到。",
+"listen.subApp":"即使应用已关闭，手机也会像真正的电话一样响铃——针对通过你的地址呼叫你的人。等待由手机自己完成：没有账号，没有推送服务，不涉及任何外部服务。会更耗电。","listen.statusApp":"正在等待来电——即使应用关闭，拨打你地址的来电也能找到你。",
 "notify.blocked":"通知被浏览器阻止。请检查网站设置。",
 "sas.title":"安全检查",
 "sas.lead":"可选：互相大声说出这三个词。如果你们看到的一样，说明没有人插入其中——不这样做也可以继续聊天。",
@@ -1528,7 +1528,7 @@ Object.assign(I18N.zh, {
 "health.brokerOk":"有回应。",
 "health.brokerBad":"没有回应。长代码仍然可用：它们不经过任何服务器。",
 "health.brokerOrigin":"这份应用副本所在的地址不被服务认可：从这里无法工作。请打开官方的那个。",
-"health.closed":"应用关闭时","health.nativeRing":"应用关闭时响铃","health.nativeRingOk":"正常：即使应用关闭，手机也会响铃。","health.nativeRingRefused":"Android 拒绝启动它。请重新打开应用，然后关闭再打开开关。","health.nativeRingOff":"已关闭。请在上方开启你的地址和「保持接听」。",
+"health.closed":"应用关闭时","health.nativeRing":"应用关闭时响铃","health.nativeRingOk":"正常：即使应用关闭，拨打你地址的来电也会让手机响铃。","health.nativeRingRefused":"Android 拒绝启动它。请重新打开应用，然后关闭再打开开关。","health.nativeRingOff":"已关闭。请在上方开启你的地址和「保持接听」。",
 "health.closedOk":"他们能让你的手机响起来。",
 "health.closedOff":"他们找不到你。请在上面打开通知。",
 "health.closedDenied":"浏览器阻止了通知：应用关闭时没人能找到你。",
@@ -1650,7 +1650,7 @@ Object.assign(I18N.ar, {
 "notify.sub":"إشعار إذا حاول أحد جهات اتصالك الوصول إليك ولم يكن التطبيق مفتوحًا لديك — بلا اسم، بلا رسالة، مجرد تنبيه.",
 "notify.iosHint":"على آيفون، يعمل هذا فقط بعد إضافة التطبيق إلى شاشتك الرئيسية أولًا: اضغط <b>مشاركة</b> في سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>، وافتح التطبيق من هناك.",
 "listen.title":"ابقَ بانتظار المكالمات","listen.sub":"يرن الهاتف فعلًا كأنها مكالمة حقيقية، طالما أبقيت هذه الشاشة مفتوحة. يستهلك بطارية أكثر؛ لا يشارك أي خدمة خارجية.","listen.status":"بانتظار — إذا بدّلت الشاشة أو التطبيق، يتوقف حتى تعود إلى هنا.",
-"listen.subApp":"يرن الهاتف فعلاً، مثل مكالمة حقيقية، حتى والتطبيق مغلق. الهاتف نفسه هو من ينتظر: بلا حساب، بلا خدمة إشعارات، ولا شيء خارجي. يستهلك بطارية أكثر.","listen.statusApp":"قيد الاستماع — يبقى الهاتف قابلاً للوصول حتى والتطبيق مغلق.",
+"listen.subApp":"يرن الهاتف فعلاً، مثل مكالمة حقيقية، حتى والتطبيق مغلق، لمن يتصل بك على عنوانك. الهاتف نفسه هو من ينتظر: بلا حساب، بلا خدمة إشعارات، ولا شيء خارجي. يستهلك بطارية أكثر.","listen.statusApp":"قيد الاستماع — المكالمات إلى عنوانك تصلك حتى والتطبيق مغلق.",
 "notify.blocked":"حظر المتصفح الإشعارات. تحقق من إعدادات الموقع.",
 "sas.title":"فحص الأمان",
 "sas.lead":"اختياري: انطقا هذه الكلمات الثلاث لبعضكما بصوت عالٍ. إذا رأيتما نفس الكلمات، فلم يتدخّل أحد — لكن يمكنكما الاستمرار في الكتابة دون فعل ذلك.",
@@ -1710,7 +1710,7 @@ Object.assign(I18N.ar, {
 "health.brokerOk":"يستجيب.",
 "health.brokerBad":"لا يستجيب. تبقى الرموز الطويلة، وهي لا تمر بأي خادم.",
 "health.brokerOrigin":"هذه النسخة من التطبيق على عنوان لا تعرفه الخدمة: لن تعمل من هنا. افتح النسخة الرسمية.",
-"health.closed":"والتطبيق مغلق","health.nativeRing":"الرنين والتطبيق مغلق","health.nativeRingOk":"يعمل: يرن هاتفك حتى والتطبيق مغلق.","health.nativeRingRefused":"رفض أندرويد تشغيله. أعد فتح التطبيق ثم أطفئ المفتاح وأعده.","health.nativeRingOff":"مغلق. فعّل عنوانك و«ابقَ منصتًا» بالأعلى.",
+"health.closed":"والتطبيق مغلق","health.nativeRing":"الرنين والتطبيق مغلق","health.nativeRingOk":"يعمل: المكالمات إلى عنوانك تجعل هاتفك يرن حتى والتطبيق مغلق.","health.nativeRingRefused":"رفض أندرويد تشغيله. أعد فتح التطبيق ثم أطفئ المفتاح وأعده.","health.nativeRingOff":"مغلق. فعّل عنوانك و«ابقَ منصتًا» بالأعلى.",
 "health.closedOk":"يمكنهم جعل هاتفك يرن.",
 "health.closedOff":"لا يصلون إليك. فعّل التنبيهات في الأعلى.",
 "health.closedDenied":"المتصفح يحجب التنبيهات: والتطبيق مغلق لن يصل إليك أحد.",
@@ -1832,7 +1832,7 @@ Object.assign(I18N.ur, {
 "notify.sub":"اگر کوئی رابطہ آپ تک پہنچنے کی کوشش کرے اور آپ کی ایپ کھلی نہ ہو تو ایک اطلاع — کوئی نام نہیں، کوئی پیغام نہیں، بس ایک اشارہ۔",
 "notify.iosHint":"آئی فون پر یہ صرف اس وقت کام کرتا ہے جب آپ پہلے ایپ کو اپنی ہوم اسکرین پر شامل کر چکے ہوں: سفاری میں <b>شیئر</b> پر ٹچ کریں، پھر <b>ہوم اسکرین پر شامل کریں</b>، اور وہاں سے ایپ کھولیں۔",
 "listen.title":"کالز کے لیے سنتے رہیں","listen.sub":"جب تک آپ یہ اسکرین کھلی رکھیں، فون واقعی بجتا ہے، جیسے ایک اصل کال۔ زیادہ بیٹری استعمال ہوتی ہے؛ کوئی بیرونی سروس شامل نہیں۔","listen.status":"سن رہے ہیں — اگر آپ اسکرین یا ایپ بدلیں تو یہ رک جاتا ہے جب تک آپ یہاں واپس نہ آئیں۔",
-"listen.subApp":"ایپ بند ہونے پر بھی فون واقعی بجتا ہے، ایک حقیقی کال کی طرح۔ انتظار فون خود کرتا ہے: نہ کوئی اکاؤنٹ، نہ پش سروس، نہ کوئی بیرونی چیز۔ بیٹری زیادہ خرچ ہوتی ہے۔","listen.statusApp":"سن رہا ہے — ایپ بند ہونے پر بھی فون تک پہنچا جا سکتا ہے۔",
+"listen.subApp":"ایپ بند ہونے پر بھی فون واقعی بجتا ہے، ایک حقیقی کال کی طرح — ان لوگوں کے لیے جو آپ کو آپ کے پتے پر کال کرتے ہیں۔ انتظار فون خود کرتا ہے: نہ کوئی اکاؤنٹ، نہ پش سروس، نہ کوئی بیرونی چیز۔ بیٹری زیادہ خرچ ہوتی ہے۔","listen.statusApp":"سن رہا ہے — آپ کے پتے پر آنے والی کالیں ایپ بند ہونے پر بھی آپ تک پہنچتی ہیں۔",
 "notify.blocked":"براؤزر نے اطلاعات بلاک کر دیں۔ سائٹ کی سیٹنگز چیک کریں۔",
 "sas.title":"سیکیورٹی چیک",
 "sas.lead":"اختیاری: یہ تین الفاظ ایک دوسرے کو بلند آواز میں بتائیں۔ اگر آپ دونوں ایک جیسے الفاظ دیکھیں، تو کسی نے مداخلت نہیں کی — لیکن آپ اس کے بغیر بھی لکھنا جاری رکھ سکتے ہیں۔",
@@ -1892,7 +1892,7 @@ Object.assign(I18N.ur, {
 "health.brokerOk":"جواب دے رہی ہے۔",
 "health.brokerBad":"جواب نہیں دے رہی۔ لمبے کوڈ اب بھی کام کرتے ہیں: وہ کسی سرور سے نہیں گزرتے۔",
 "health.brokerOrigin":"ایپ کی یہ نقل ایسے پتے پر ہے جسے سروس نہیں پہچانتی: یہاں سے کام نہیں کرے گی۔ سرکاری والی کھولیں۔",
-"health.closed":"ایپ بند ہونے پر","health.nativeRing":"ایپ بند ہونے پر گھنٹی","health.nativeRingOk":"کام کر رہا ہے: ایپ بند ہونے پر بھی فون بجتا ہے۔","health.nativeRingRefused":"اینڈرائیڈ نے اسے شروع کرنے سے انکار کیا۔ ایپ دوبارہ کھولیں، پھر سوئچ بند کر کے آن کریں۔","health.nativeRingOff":"بند ہے۔ اوپر اپنا پتہ اور «سنتے رہیں» آن کریں۔",
+"health.closed":"ایپ بند ہونے پر","health.nativeRing":"ایپ بند ہونے پر گھنٹی","health.nativeRingOk":"کام کر رہا ہے: آپ کے پتے پر آنے والی کالیں ایپ بند ہونے پر بھی فون بجاتی ہیں۔","health.nativeRingRefused":"اینڈرائیڈ نے اسے شروع کرنے سے انکار کیا۔ ایپ دوبارہ کھولیں، پھر سوئچ بند کر کے آن کریں۔","health.nativeRingOff":"بند ہے۔ اوپر اپنا پتہ اور «سنتے رہیں» آن کریں۔",
 "health.closedOk":"وہ آپ کا فون بجا سکتے ہیں۔",
 "health.closedOff":"وہ آپ تک نہیں پہنچ سکتے۔ اوپر اطلاعات آن کریں۔",
 "health.closedDenied":"براؤزر اطلاعات روک رہا ہے: ایپ بند ہو تو کوئی آپ تک نہیں پہنچے گا۔",
@@ -2014,7 +2014,7 @@ Object.assign(I18N.hi, {
 "notify.sub":"अगर कोई संपर्क आपसे जुड़ने की कोशिश करे और आपका ऐप खुला न हो तो एक सूचना — कोई नाम नहीं, कोई संदेश नहीं, बस एक इशारा।",
 "notify.iosHint":"iPhone पर यह तभी काम करता है जब आपने पहले ऐप को अपनी होम स्क्रीन पर जोड़ा हो: Safari में <b>शेयर</b> टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b>, और वहां से ऐप खोलें।",
 "listen.title":"कॉल के लिए सुनते रहें","listen.sub":"जब तक आप यह स्क्रीन खुली रखते हैं, फ़ोन सच में बजता है, असली कॉल की तरह। बैटरी ज़्यादा खर्च होती है; कोई बाहरी सेवा शामिल नहीं है।","listen.status":"सुन रहे हैं — अगर आप स्क्रीन या ऐप बदलते हैं, तो यह तब तक रुक जाता है जब तक आप यहाँ वापस नहीं आते।",
-"listen.subApp":"ऐप बंद होने पर भी फ़ोन सचमुच बजता है, एक असली कॉल की तरह। इंतज़ार फ़ोन खुद करता है: कोई खाता नहीं, कोई पुश सेवा नहीं, बाहर का कुछ नहीं। बैटरी ज़्यादा लगती है।","listen.statusApp":"सुन रहा है — ऐप बंद होने पर भी फ़ोन तक पहुँचा जा सकता है।",
+"listen.subApp":"ऐप बंद होने पर भी फ़ोन सचमुच बजता है, एक असली कॉल की तरह — उनके लिए जो आपको आपके पते पर कॉल करते हैं। इंतज़ार फ़ोन खुद करता है: कोई खाता नहीं, कोई पुश सेवा नहीं, बाहर का कुछ नहीं। बैटरी ज़्यादा लगती है।","listen.statusApp":"सुन रहा है — आपके पते पर आने वाली कॉल ऐप बंद होने पर भी आप तक पहुँचती हैं।",
 "notify.blocked":"ब्राउज़र ने सूचनाएं ब्लॉक कर दीं। साइट की सेटिंग्स जांचें।",
 "sas.title":"सुरक्षा जांच",
 "sas.lead":"वैकल्पिक: एक-दूसरे को ये तीन शब्द ज़ोर से बताएं। अगर आप दोनों एक जैसे शब्द देखें, तो किसी ने दखल नहीं दिया — लेकिन आप इसके बिना भी लिखना जारी रख सकते हैं।",
@@ -2074,7 +2074,7 @@ Object.assign(I18N.hi, {
 "health.brokerOk":"जवाब दे रही है।",
 "health.brokerBad":"जवाब नहीं दे रही। लंबे कोड अब भी चलते हैं: वे किसी सर्वर से नहीं गुज़रते।",
 "health.brokerOrigin":"ऐप की यह नकल ऐसे पते पर है जिसे सेवा नहीं पहचानती: यहाँ से काम नहीं करेगी। आधिकारिक वाली खोलें।",
-"health.closed":"ऐप बंद होने पर","health.nativeRing":"ऐप बंद होने पर घंटी","health.nativeRingOk":"काम कर रहा है: ऐप बंद होने पर भी फ़ोन बजता है।","health.nativeRingRefused":"Android ने इसे शुरू करने से मना कर दिया। ऐप फिर से खोलें, फिर स्विच बंद करके चालू करें।","health.nativeRingOff":"बंद है। ऊपर अपना पता और «सुनते रहें» चालू करें।",
+"health.closed":"ऐप बंद होने पर","health.nativeRing":"ऐप बंद होने पर घंटी","health.nativeRingOk":"काम कर रहा है: आपके पते पर आने वाली कॉल ऐप बंद होने पर भी फ़ोन बजाती हैं।","health.nativeRingRefused":"Android ने इसे शुरू करने से मना कर दिया। ऐप फिर से खोलें, फिर स्विच बंद करके चालू करें।","health.nativeRingOff":"बंद है। ऊपर अपना पता और «सुनते रहें» चालू करें।",
 "health.closedOk":"वे आपका फ़ोन बजा सकते हैं।",
 "health.closedOff":"वे आप तक नहीं पहुँच सकते। ऊपर सूचनाएं चालू करें।",
 "health.closedDenied":"ब्राउज़र सूचनाएं रोक रहा है: ऐप बंद होने पर कोई आप तक नहीं पहुँचेगा।",
@@ -2196,7 +2196,7 @@ Object.assign(I18N.bn, {
 "notify.sub":"কোনো পরিচিতি আপনার কাছে পৌঁছানোর চেষ্টা করলে এবং আপনার অ্যাপ খোলা না থাকলে একটি বিজ্ঞপ্তি — কোনো নাম নেই, কোনো বার্তা নেই, শুধু একটি ইঙ্গিত।",
 "notify.iosHint":"iPhone-এ এটি তখনই কাজ করে যখন আপনি প্রথমে অ্যাপটি আপনার হোম স্ক্রিনে যোগ করেছেন: Safari-তে <b>শেয়ার</b>-এ ট্যাপ করুন, তারপর <b>হোম স্ক্রিনে যোগ করুন</b>, এবং সেখান থেকে অ্যাপ খুলুন।",
 "listen.title":"কলের জন্য শুনতে থাকুন","listen.sub":"যতক্ষণ আপনি এই স্ক্রিন খোলা রাখবেন, ফোন সত্যিই বাজবে, আসল কলের মতো। বেশি ব্যাটারি খরচ হয়; কোনো বাইরের সেবা জড়িত নেই।","listen.status":"শুনছে — স্ক্রিন বা অ্যাপ পাল্টালে, আপনি এখানে ফিরে না আসা পর্যন্ত থেমে যাবে।",
-"listen.subApp":"অ্যাপ বন্ধ থাকলেও ফোন সত্যিই বাজে, একটি আসল কলের মতো। অপেক্ষাটা ফোন নিজেই করে: কোনো অ্যাকাউন্ট নেই, কোনো পুশ সেবা নেই, বাইরের কিছুই নেই। ব্যাটারি বেশি খরচ হয়।","listen.statusApp":"শুনছে — অ্যাপ বন্ধ থাকলেও ফোনে পৌঁছানো যায়।",
+"listen.subApp":"অ্যাপ বন্ধ থাকলেও ফোন সত্যিই বাজে, একটি আসল কলের মতো — যাঁরা আপনার ঠিকানায় কল করেন তাঁদের জন্য। অপেক্ষাটা ফোন নিজেই করে: কোনো অ্যাকাউন্ট নেই, কোনো পুশ সেবা নেই, বাইরের কিছুই নেই। ব্যাটারি বেশি খরচ হয়।","listen.statusApp":"শুনছে — আপনার ঠিকানায় আসা কল অ্যাপ বন্ধ থাকলেও আপনার কাছে পৌঁছায়।",
 "notify.blocked":"ব্রাউজার বিজ্ঞপ্তি ব্লক করেছে। সাইটের সেটিংস পরীক্ষা করুন।",
 "sas.title":"নিরাপত্তা পরীক্ষা",
 "sas.lead":"ঐচ্ছিক: একে অপরকে এই তিনটি শব্দ জোরে বলুন। আপনারা দুজনেই একই শব্দ দেখলে, কেউ ঢুকে পড়েনি — তবে এটি না করেও আপনি লেখা চালিয়ে যেতে পারেন।",
@@ -2256,7 +2256,7 @@ Object.assign(I18N.bn, {
 "health.brokerOk":"সাড়া দিচ্ছে।",
 "health.brokerBad":"সাড়া দিচ্ছে না। লম্বা কোডগুলো এখনও চলে: সেগুলো কোনো সার্ভার দিয়ে যায় না।",
 "health.brokerOrigin":"অ্যাপের এই কপিটি এমন ঠিকানায় আছে যা সেবাটি চেনে না: এখান থেকে কাজ করবে না। আসলটি খুলুন।",
-"health.closed":"অ্যাপ বন্ধ থাকলে","health.nativeRing":"অ্যাপ বন্ধ থাকলে রিং","health.nativeRingOk":"কাজ করছে: অ্যাপ বন্ধ থাকলেও ফোন বাজে।","health.nativeRingRefused":"Android এটি চালু করতে অস্বীকার করেছে। অ্যাপ আবার খুলুন, তারপর সুইচ বন্ধ করে চালু করুন।","health.nativeRingOff":"বন্ধ। উপরে আপনার ঠিকানা ও «শুনতে থাকুন» চালু করুন।",
+"health.closed":"অ্যাপ বন্ধ থাকলে","health.nativeRing":"অ্যাপ বন্ধ থাকলে রিং","health.nativeRingOk":"কাজ করছে: আপনার ঠিকানায় আসা কল অ্যাপ বন্ধ থাকলেও ফোন বাজায়।","health.nativeRingRefused":"Android এটি চালু করতে অস্বীকার করেছে। অ্যাপ আবার খুলুন, তারপর সুইচ বন্ধ করে চালু করুন।","health.nativeRingOff":"বন্ধ। উপরে আপনার ঠিকানা ও «শুনতে থাকুন» চালু করুন।",
 "health.closedOk":"তাঁরা আপনার ফোন বাজাতে পারেন।",
 "health.closedOff":"তাঁরা আপনার কাছে পৌঁছাতে পারবেন না। উপরে বিজ্ঞপ্তি চালু করুন।",
 "health.closedDenied":"ব্রাউজার বিজ্ঞপ্তি আটকাচ্ছে: অ্যাপ বন্ধ থাকলে কেউ আপনার কাছে পৌঁছাবে না।",
@@ -2378,7 +2378,7 @@ Object.assign(I18N.id, {
 "notify.sub":"Notifikasi jika kontak mencoba menghubungi Anda dan Anda tidak membuka aplikasi — tanpa nama, tanpa pesan, hanya sebuah tanda.",
 "notify.iosHint":"Di iPhone ini hanya berfungsi jika Anda sudah menambahkan aplikasi ke Layar Utama terlebih dahulu: ketuk <b>Bagikan</b> di Safari, lalu <b>Tambah ke Layar Utama</b>, dan buka aplikasi dari sana.",
 "listen.title":"Tetap mendengarkan panggilan","listen.sub":"Ponsel benar-benar berdering, seperti panggilan sungguhan, selama Anda membuka layar ini. Menghabiskan lebih banyak baterai; tidak ada layanan luar yang terlibat.","listen.status":"Mendengarkan — jika Anda beralih layar atau aplikasi, ini berhenti sampai Anda kembali ke sini.",
-"listen.subApp":"Ponsel benar-benar berdering, seperti panggilan sungguhan, bahkan saat aplikasi tertutup. Yang menunggu adalah ponselnya sendiri: tanpa akun, tanpa layanan push, tanpa apa pun dari luar. Lebih boros baterai.","listen.statusApp":"Mendengarkan — ponsel tetap bisa dihubungi meski aplikasi tertutup.",
+"listen.subApp":"Ponsel benar-benar berdering, seperti panggilan sungguhan, bahkan saat aplikasi tertutup, untuk siapa pun yang menghubungi Anda di alamat Anda. Yang menunggu adalah ponselnya sendiri: tanpa akun, tanpa layanan push, tanpa apa pun dari luar. Lebih boros baterai.","listen.statusApp":"Mendengarkan — panggilan ke alamat Anda tetap sampai meski aplikasi tertutup.",
 "notify.blocked":"Notifikasi diblokir oleh browser. Periksa pengaturan situs.",
 "sas.title":"Pemeriksaan keamanan",
 "sas.lead":"Opsional: ucapkan tiga kata ini satu sama lain dengan suara keras. Jika Anda berdua melihat kata yang sama, tidak ada yang menyisip — tetapi Anda tetap bisa melanjutkan chat tanpa melakukannya.",
@@ -2438,7 +2438,7 @@ Object.assign(I18N.id, {
 "health.brokerOk":"Menjawab.",
 "health.brokerBad":"Tidak menjawab. Kode panjang masih bisa: itu tidak melewati server mana pun.",
 "health.brokerOrigin":"Salinan aplikasi ini ada di alamat yang tidak dikenali layanan: dari sini tidak akan jalan. Buka yang resmi.",
-"health.closed":"Saat aplikasi tertutup","health.nativeRing":"Dering saat aplikasi tertutup","health.nativeRingOk":"Berfungsi: ponsel berdering meski aplikasi tertutup.","health.nativeRingRefused":"Android menolak menjalankannya. Buka lagi aplikasi, lalu matikan dan nyalakan sakelarnya.","health.nativeRingOff":"Mati. Aktifkan alamat Anda dan «tetap mendengarkan» di atas.",
+"health.closed":"Saat aplikasi tertutup","health.nativeRing":"Dering saat aplikasi tertutup","health.nativeRingOk":"Berfungsi: panggilan ke alamat Anda membuat ponsel berdering meski aplikasi tertutup.","health.nativeRingRefused":"Android menolak menjalankannya. Buka lagi aplikasi, lalu matikan dan nyalakan sakelarnya.","health.nativeRingOff":"Mati. Aktifkan alamat Anda dan «tetap mendengarkan» di atas.",
 "health.closedOk":"Mereka bisa membunyikan ponsel Anda.",
 "health.closedOff":"Mereka tidak bisa menghubungi Anda. Nyalakan pemberitahuan di atas.",
 "health.closedDenied":"Peramban memblokir pemberitahuan: saat aplikasi tertutup, tidak ada yang bisa menghubungi Anda.",
@@ -6872,7 +6872,7 @@ $('btnAddrIgnore').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.00';
+const APP_VERSION = 'logos-modifica-4.01';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -7102,6 +7102,20 @@ async function sealOrEncodeOffer(pcObj){
   return b64encode(JSON.stringify(payload));
 }
 function revealInviteCode(code){
+  /* ⚠️ ANCHE IL CONTENITORE, e non e' una riga di troppo.
+     `offerOut` e `offerBlock` stanno DENTRO `manualInviteCard`, che
+     showContactReconnectLayout nasconde apposta mentre il ricollegamento a un
+     contatto e' in corso — giustamente, perche' li' non si sta creando un
+     invito nuovo. Ma quando il contatto non risponde si finisce proprio qui, a
+     offrire il codice da mandare a mano: scoprire il figlio lasciando chiuso il
+     padre significa scrivere il codice davvero e non farlo vedere a nessuno.
+     Chi legge trova "Ecco il codice da mandare a mano" e sotto il vuoto — una
+     riga che dice di fare una cosa senza dare il mezzo per farla.
+     Trovato dall'operatore sul telefono, non dai test: nel finto browser
+     nascondere un padre non nasconde niente, quindi nessun test poteva vederlo.
+     REGOLA: una funzione che si chiama "mostra X" non puo' dipendere dal fatto
+     che qualcun altro abbia lasciato aperto il contenitore di X. */
+  $('manualInviteCard').classList.remove('hide');
   $('offerOut').textContent = code;
   $('offerBlock').classList.remove('hide');
   $('pasteAnswerCard').classList.remove('hide');

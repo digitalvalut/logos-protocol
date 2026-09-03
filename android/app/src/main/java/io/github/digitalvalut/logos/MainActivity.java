@@ -45,6 +45,8 @@ import android.widget.Toast;
 
 import androidx.webkit.WebViewAssetLoader;
 
+import org.json.JSONObject;
+
 import java.io.OutputStream;
 
 /**
@@ -256,8 +258,35 @@ public class MainActivity extends Activity {
             }
         } catch (Exception e) { /* nel dubbio si carica normalmente */ }
 
-        if (state != null) web.restoreState(state);
+        String invite = inviteFragmentFrom(getIntent());
+        if (invite != null) web.loadUrl(START + "#" + invite);
+        else if (state != null) web.restoreState(state);
         else web.loadUrl(START);
+    }
+
+    /* ------------------------------------------------------------------
+       An invite or address link tapped in another app.
+
+       The links are https://digitalvalut.github.io/logos-protocol/modifica.html
+       with the code carried after the '#': #a=<address>, #q=<six digits>, or the
+       older #i=<invite>. A fragment is never sent to a server and the bundled
+       page already handles all three (autoFillFromHash in modifica.js), so all
+       that is needed on this side is to carry the fragment across to the page
+       that is actually served — appassets.androidplatform.net/assets/logos.html.
+
+       Only those three shapes are passed on. Anything else on the domain just
+       opens the app on its normal screen rather than acting on the address bar. */
+    private static String inviteFragmentFrom(Intent intent) {
+        if (intent == null || !Intent.ACTION_VIEW.equals(intent.getAction())) return null;
+        Uri u = intent.getData();
+        if (u == null) return null;
+        String frag = u.getEncodedFragment();     /* the part after '#', without it */
+        if (frag == null || frag.isEmpty()) return null;
+        if (frag.startsWith("a=") || frag.startsWith("q=") || frag.startsWith("i=")
+                || frag.contains("&a=") || frag.contains("&q=") || frag.contains("&i=")) {
+            return frag;
+        }
+        return null;
     }
 
     /**
@@ -519,6 +548,15 @@ public class MainActivity extends Activity {
         if (intent != null && intent.getBooleanExtra(CallActivity.EXTRA_ANSWERED, false)) {
             answeredPending = true;
             tellPageACallIsWaiting();
+        }
+        /* An invite tapped while the app is already open. Changing only
+           location.hash is exactly what that tap does in a browser, and the
+           page listens for hashchange and runs the same handler — no reload,
+           so whatever screen the person was on is not thrown away. */
+        String invite = inviteFragmentFrom(intent);
+        if (invite != null && web != null) {
+            web.evaluateJavascript(
+                "location.hash = " + JSONObject.quote("#" + invite) + ";", null);
         }
     }
 

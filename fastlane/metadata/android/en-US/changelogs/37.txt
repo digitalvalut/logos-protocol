@@ -1,0 +1,5 @@
+An invite link now opens the app instead of the browser, so the address is saved where it belongs.
+
+Fixed: when you call back a contact who is not online, the app said "here is the code to send by hand" and no code appeared. It was there, just kept hidden.
+
+And the "Stay listening" screen tells the truth: ringing with the app closed covers calls to your address.

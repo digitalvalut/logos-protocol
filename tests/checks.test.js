@@ -66,6 +66,69 @@ test('no element is declared twice', () => {
   assert.deepStrictEqual([...twice].sort(), [], `duplicate ids: ${[...twice].join(', ')}`);
 });
 
+/* Scoprire un elemento che sta dentro un contenitore ancora nascosto non
+   mostra niente, e non fallisce: la riga gira, la classe viene tolta davvero,
+   e la persona guarda uno spazio vuoto.
+
+   E' successo. Toccando un contatto, showContactReconnectLayout nasconde
+   `manualInviteCard` — giusto, li' non si sta creando un invito. Ma se quel
+   contatto non risponde si finisce a offrire il codice da mandare a mano, e
+   revealInviteCode scopriva `offerBlock` senza riaprire il padre: il codice
+   veniva scritto e restava invisibile, sotto la frase che diceva "Ecco il
+   codice da mandare a mano". Trovato dall'operatore sul telefono.
+
+   ⚠️ Nessun test di comportamento poteva prenderlo: nel finto browser
+   nascondere un padre non nasconde il figlio. Solo la struttura vera della
+   pagina lo dice, ed e' per questo che il controllo sta qui e non fra i test
+   che eseguono il codice. */
+function ancestorsOf(id){
+  /* risale la catena dei contenitori leggendo l'HTML come testo: apre e chiude
+     i tag contando l'annidamento, e tiene gli id dei blocchi ancora aperti nel
+     punto in cui `id` compare */
+  const target = HTML.indexOf(`id="${id}"`);
+  if (target < 0) return [];
+  const open = [], out = [];
+  const tag = /<(\/?)([a-zA-Z]+)\b([^>]*)>/g;
+  let m;
+  while ((m = tag.exec(HTML)) && m.index < target){
+    const [, slash, name, attrs] = m;
+    if (/\/\s*$/.test(attrs) || /^(br|img|input|meta|link|hr|source|path|circle|rect|line|polyline|polygon|use|stop|ellipse)$/i.test(name)) continue;
+    if (slash) open.pop();
+    else open.push((attrs.match(/id="([A-Za-z0-9_-]+)"/) || [])[1] || null);
+  }
+  for (const a of open) if (a && a !== id) out.push(a);
+  return out;
+}
+
+function corpoDi(nome){
+  const da = JS.indexOf(`function ${nome}(`);
+  assert.ok(da >= 0, `${nome} non trovata`);
+  return JS.slice(da, JS.indexOf('\n}', da) + 2);
+}
+const nascondeIn = nome => new Set([...corpoDi(nome).matchAll(/\$\('([A-Za-z0-9_-]+)'\)\.classList\.add\('hide'\)/g)].map(m => m[1]));
+const scopreIn   = nome => new Set([...corpoDi(nome).matchAll(/\$\('([A-Za-z0-9_-]+)'\)\.classList\.remove\('hide'\)/g)].map(m => m[1]));
+const toccaIn    = nome => new Set([...corpoDi(nome).matchAll(/\$\('([A-Za-z0-9_-]+)'\)/g)].map(m => m[1]));
+
+/* Le due funzioni girano una dopo l'altra sullo stesso schermo: si tocca un
+   contatto -> showContactReconnectLayout prepara la schermata, e se quel
+   contatto non risponde -> revealInviteCode offre il codice da mandare a mano.
+   Quindi cio' che la prima chiude, la seconda deve riaprirlo, o mostra il nulla. */
+test('il codice da mandare a mano non resta chiuso dentro un contenitore che il ricollegamento ha nascosto', () => {
+  const chiusiPrima = nascondeIn('showContactReconnectLayout');
+  const riaperti    = scopreIn('revealInviteCode');
+  const daMostrare  = toccaIn('revealInviteCode');
+  assert.ok(daMostrare.size > 0 && chiusiPrima.size > 0, 'funzioni non lette');
+
+  const guai = [];
+  for (const id of daMostrare){
+    for (const contenitore of [id, ...ancestorsOf(id)]){
+      if (chiusiPrima.has(contenitore) && !riaperti.has(contenitore))
+        guai.push(`${id}: showContactReconnectLayout chiude ${contenitore} e revealInviteCode non lo riapre`);
+    }
+  }
+  assert.deepStrictEqual(guai.sort(), [], guai.join(' | '));
+});
+
 /* ------------------------------------------------------------ the languages -- */
 /* Thirteen languages is a promise to thirteen groups of people, and a missing
    key does not crash — it quietly shows Italian to somebody who does not read

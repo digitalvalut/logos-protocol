@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.digitalvalut.logos",
+      "sha256_cert_fingerprints": [
+        "42:3E:30:94:89:0B:D7:EE:31:E4:43:8B:68:7B:F0:CC:DC:41:DB:A4:4A:2F:51:2E:BA:27:D7:E5:33:FE:E1:90"
+      ]
+    }
+  }
+]

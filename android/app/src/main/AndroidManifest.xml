@@ -101,6 +101,32 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Un invito o un indirizzo toccato in un'altra app (WhatsApp,
+                 email, messaggi) apre Logos QUI DENTRO, non il browser. Senza
+                 questo, chi ha l'app installata e tocca il link finisce lo
+                 stesso su Logos web, che ha un'identità e un indirizzo separati
+                 da quelli dell'app: l'indirizzo salvato lì non si vede
+                 nell'app, ed è il difetto che questa modifica chiude.
+
+                 `autoVerify` fa controllare ad Android il file
+                 https://digitalvalut.github.io/.well-known/assetlinks.json, che
+                 deve contenere l'impronta della chiave di firma. FINCHÉ QUEL
+                 FILE NON C'È la verifica non passa e il link torna al browser
+                 esattamente come adesso — nessuna regressione, si attiva da sé
+                 quando il file è online e l'app viene reinstallata o aggiornata.
+
+                 La pagina impacchettata sa già cosa fare col frammento
+                 (#a= / #q= / #i=, vedi autoFillFromHash in modifica.js):
+                 MainActivity glielo passa e basta. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                      android:host="digitalvalut.github.io"
+                      android:pathPrefix="/logos-protocol/" />
+            </intent-filter>
         </activity>
 
         <!-- La schermata che compare quando il telefono squilla. Deve poter
