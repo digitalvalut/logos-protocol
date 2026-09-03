@@ -3376,7 +3376,28 @@ function wireDataChannel(channel, ownerPc){
        secondo tentativo poco dopo la copre tutta. Se fallisce anche quello il
        canale non c'e' piu' davvero, e non c'e' niente da dire a nessuno: la
        conversazione e' gia' finita per conto suo. */
-    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push });
+    /* ⚠️ L'INDIRIZZO VIAGGIA QUI DENTRO DAL 3 SET 2026, ed e' un baratto
+       deliberato — scritto in memory/04-DECISIONI.md come D-13.
+
+       Il problema che chiude: `contact.addr` e' cio' che fa scattare
+       `dialAddress` quando si tocca un nome in "Contatti recenti", ed e'
+       l'unica strada che sveglia un telefono ad app chiusa. Ma finora si
+       riempiva SOLO con `dialedAddress`, cioe' solo per chi aveva COMPOSTO
+       l'indirizzo dell'altro. Chi rispondeva non imparava niente. Risultato
+       misurato sui due telefoni dell'operatore: Antonella -> Giuseppe squilla,
+       Giuseppe -> Antonella no. Stessa coppia, stessa app, direzione opposta.
+
+       Il prezzo, detto chiaro: questo indirizzo e' DICHIARATO, non provato.
+       `dialedAddress` resta la fonte migliore e ha la precedenza. Perche' e'
+       accettabile lo stesso: `push` — che e' esattamente la stessa cosa, un
+       modo per raggiungerti — arriva gia' da questo saluto ed e' gia' preso
+       per buono; e un indirizzo falso non passa inosservato, perche' alla
+       chiamata successiva l'impronta non torna e scatta "questo contatto e'
+       cambiato". Il danno e' limitato e soprattutto SI VEDE.
+       Solo il permanente e solo se acceso: un usa-e-getta dato come recapito
+       stabile smetterebbe di essere usa-e-getta. */
+    const addr = addrOn() ? await myAddress(0) : null;
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr });
     const provaSaluto = (ancora) => {
       try{
         if (dc.readyState !== 'open') throw new Error('canale non aperto');
@@ -8804,7 +8825,22 @@ function onDcMessage(ev){
         $('peerNameLbl').textContent = peerNick;
         $('peerAvatar').textContent = initials(peerNick);
         loadHistoryFor(peerNick);
-        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push), dialedAddress);
+        /* `dialedAddress` PRIMA, sempre: se questo lato ha composto l'indirizzo,
+           quello e' provato crittograficamente e vince su qualunque cosa
+           l'altro dichiari. Il ripiego serve al lato che ha solo risposto, che
+           altrimenti non imparerebbe mai come richiamare — vedi la nota sul
+           saluto e D-13.
+           ⚠️ IL `typeof` NON E' DECORAZIONE, e il test lo ha dimostrato prima
+           che uscisse: `parseAddress` comincia con `String(s || '')`, quindi un
+           oggetto qualunque diventa "[object Object]", che ripulito dei
+           caratteri non ammessi da OBJECTOBJECT — dodici caratteri — e piegando
+           le O sugli zeri esce `0BJECT0BJECT`, un indirizzo di forma
+           perfettamente valida nato dal nulla. E' la stessa famiglia del
+           difetto gia' pagato su `nick`, l'unico altro campo che arrivava di
+           qui senza essere tipizzato. Cio' che manda l'altro lato non e' una
+           stringa perche' lo speriamo: lo e' se lo abbiamo controllato. */
+        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push),
+                     dialedAddress || (typeof msg.addr === 'string' ? parseAddress(msg.addr) : null));
         sysLine(peerNick + ' ' + t('call.joined'));
       }
       hadRealChat = true; /* someone is genuinely at the other end */

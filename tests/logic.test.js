@@ -499,6 +499,63 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test("chi ha solo RISPOSTO impara comunque l'indirizzo, o si richiamano in una direzione sola", () => {
+    /* Misurato sui due telefoni dell'operatore il 3 set 2026, non dedotto:
+       Antonella compone l'indirizzo di Giuseppe, il suo telefono squilla ad app
+       chiusa, tutto bene. Poi Giuseppe tocca Antonella in "Contatti recenti" e
+       non succede niente. Stessa coppia, stessa app, direzione opposta.
+
+       Il motivo: `contact.addr` e' cio' che fa scattare dialAddress — l'unica
+       strada che sveglia un telefono chiuso — e si riempiva SOLO con
+       `dialedAddress`, che esiste solo per chi ha composto. Chi rispondeva non
+       imparava niente e restava capace di essere chiamato ma non di chiamare.
+
+       ⚠️ Questo indirizzo e' DICHIARATO, non provato (D-13): il baratto e'
+       scritto per esteso accanto al saluto in modifica.js. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection();
+      dialedAddress = null;   /* questo lato ha solo risposto: non ha composto niente */
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Antonella', fp: 'abc123', addr: 'AAAABBBBCCCC' }) });
+    `);
+    const saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(saved.length, 1);
+    assert.strictEqual(saved[0].addr, 'AAAABBBBCCCC',
+      'chi risponde deve imparare l indirizzo dal saluto, o non potra mai richiamare');
+    app.stop();
+  });
+
+  test("l'indirizzo provato batte quello dichiarato, e uno malformato non entra in rubrica", () => {
+    /* Le due garanzie che rendono accettabile il baratto di D-13: cio' che
+       questo lato ha composto e provato non viene mai scavalcato da cio' che
+       l'altro racconta, e cio' che l'altro racconta passa comunque da
+       parseAddress, che rende null qualunque cosa non abbia la forma giusta —
+       stringa o no. */
+    const app = loadApp();
+    app.run(`
+      pc = new RTCPeerConnection();
+      dialedAddress = 'DV-AAAA-BBBB-CCCC';
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Marco', fp: 'abc123', addr: 'ZZZZZZZZZZZZ' }) });
+    `);
+    let saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(saved[0].addr, 'DV-AAAA-BBBB-CCCC',
+      'un indirizzo dichiarato non deve poter scavalcare quello provato da questo lato');
+
+    app.run(`
+      pc = null; pc = new RTCPeerConnection();
+      dialedAddress = null;
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Spazzatura', fp: 'ff00', addr: { non: 'una stringa' } }) });
+      onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'Corta', fp: 'ff01', addr: 'ABC' }) });
+    `);
+    saved = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    for (const nome of ['Spazzatura', 'Corta']){
+      const c = saved.find(x => x.nick === nome);
+      assert.ok(c, `${nome} doveva comunque essere salvata`);
+      assert.strictEqual(c.addr, null, `un indirizzo malformato di ${nome} e finito in rubrica`);
+    }
+    app.stop();
+  });
+
   test('a contact known two ways keeps both, instead of the second overwriting the first', () => {
     /* Someone reconnected to by invite (fingerprint only) and someone reached
        by dialling their address are not different people the second time
@@ -2876,6 +2933,60 @@ test.describe('il saluto che fa partire le tre parole', () => {
       const o = JSON.parse(x);
       assert.deepStrictEqual(o.inviati, ['hello'], 'il saluto deve partire anche se il canale era gia aperto');
       assert.strictEqual(o.entrato, true, 'e la chat deve aprirsi');
+      app.stop();
+    });
+  });
+
+  /* ⚠️ QUESTI DUE ESISTONO PERCHE' UN SABOTAGGIO NON HA ATTACCATO.
+     Il test che prova che chi RISPONDE impara l'indirizzo inietta il saluto
+     gia' confezionato, quindi copre solo il lato che riceve: togliendo `addr`
+     dal saluto in PARTENZA restava tutto verde. Meta' del lavoro non era
+     sorvegliata da niente, ed e' esattamente la definizione di test decorativo.
+     Questi guardano cosa parte davvero. */
+  const saluto = (indirizzoAcceso) => `
+    window.__salut = null;
+    const conn = { close(){}, connectionState: 'connected' };
+    pc = conn;
+    enterChat = () => {};
+    myFingerprintHex = async () => 'aabb';
+    notifyPref = () => false;
+    addrOn = () => ${indirizzoAcceso};
+    myAddress = async () => 'AAAABBBBCCCC';
+    const canale = {
+      binaryType: '', readyState: 'open', onopen: null,
+      send(x){ const m = JSON.parse(x); if (m.type === 'hello') window.__salut = m; },
+    };
+    wireDataChannel(canale, conn);
+  `;
+
+  test("il saluto porta l'indirizzo, o chi risponde non potra' mai richiamare", () => {
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${saluto(true)}
+      await new Promise(r => setTimeout(r, 60));
+      return JSON.stringify(window.__salut);
+    })()`);
+    return r.then(x => {
+      const m = JSON.parse(x);
+      assert.strictEqual(m.addr, 'AAAABBBBCCCC',
+        'senza l indirizzo nel saluto chi riceve resta chiamabile ma incapace di chiamare');
+      app.stop();
+    });
+  });
+
+  test("a indirizzo spento il saluto non se ne inventa uno", () => {
+    /* Chi non ha acceso il proprio indirizzo non ne ha uno da dare, e mandare
+       comunque qualcosa significherebbe promettere un recapito che non
+       risponde. */
+    const app = loadApp();
+    const r = app.run(`(async () => {
+      ${saluto(false)}
+      await new Promise(r => setTimeout(r, 60));
+      return JSON.stringify(window.__salut);
+    })()`);
+    return r.then(x => {
+      const m = JSON.parse(x);
+      assert.strictEqual(m.addr, null, 'a indirizzo spento non si annuncia nessun recapito');
       app.stop();
     });
   });

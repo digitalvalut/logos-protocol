@@ -1,5 +1,7 @@
-An invite link now opens the app instead of the browser, so the address is saved where it belongs.
+Calling a contact back from your list now rings their phone with the app closed, the same as calling their address did. Before, it only worked in one direction.
+
+An invite link opens the app instead of the browser, so the address is saved where it belongs.
 
 Fixed: when you call back a contact who is not online, the app said "here is the code to send by hand" and no code appeared. It was there, just kept hidden.
 
-And the "Stay listening" screen tells the truth: ringing with the app closed covers calls to your address.
+And the "Stay listening" screen tells the truth about what reaches you with the app closed.
