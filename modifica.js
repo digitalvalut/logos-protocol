@@ -132,7 +132,7 @@ Object.assign(I18N.en, {
 "invite.answerText":"Here's my reply for DigitalValut Logos, paste it to finish connecting:\n\n",
 "mic.recording":"Recording — tap to stop","mic.capped":"Two minutes: the voice message closed itself and is on its way.","history.cleared":"History cleared on this device.",
 "install.genericText":"<b>Install DigitalValut Logos</b> to have it as an app, with its own icon, no browser needed.",
-"install.iosText":"<b>Install DigitalValut Logos on iPhone or iPad.</b> Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.",
+"install.iosText":"<b>Install DigitalValut Logos on iPhone or iPad.</b> Tap <b>Share</b> in Safari, then <b>Add to Home Screen</b>.","install.always":"Put Logos on your screen","install.macText":"<b>Install DigitalValut Logos on your Mac.</b> In Safari tap <b>Share</b>, then <b>Add to Dock</b>.",
 "home.shareApp":"Tell someone about the app",
 "start.s1":"Send the invite",
 "start.s1help":"Press the orange button. The app prepares the invite and lets you choose how to send it: WhatsApp, a message, email \u2014 whatever you normally use.",
@@ -361,7 +361,7 @@ Object.assign(I18N.it, {
 "invite.answerText":"Ecco la mia risposta per DigitalValut Logos, incollala per completare la connessione:\n\n",
 "mic.recording":"Registrazione — tocca per fermare","mic.capped":"Due minuti: il vocale si è chiuso da solo e sta partendo.","history.cleared":"Cronologia svuotata su questo dispositivo.",
 "install.genericText":"<b>Installa DigitalValut Logos</b> per averla come app, con la sua icona, senza passare dal browser.",
-"install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.",
+"install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.","install.always":"Metti Logos sulla schermata","install.macText":"<b>Installa DigitalValut Logos su Mac.</b> In Safari tocca <b>Condividi</b>, poi <b>Aggiungi al Dock</b>.",
 "quick.titleA":"Il tuo codice","quick.helpA":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.",
 "quick.orType":"Oppure apri l'app e scrivi questo codice:",
 "quick.qrHint":"Oppure inquadralo con la fotocamera del telefono",
@@ -512,7 +512,7 @@ Object.assign(I18N.fr, {
 "invite.answerText":"Voici ma réponse pour DigitalValut Logos, collez-la pour terminer la connexion :\n\n",
 "mic.recording":"Enregistrement — touchez pour arrêter","mic.capped":"Deux minutes : le message vocal s'est arrêté tout seul et part.","history.cleared":"Historique effacé sur cet appareil.",
 "install.genericText":"<b>Installez DigitalValut Logos</b> pour l'avoir comme application, avec sa propre icône, sans passer par le navigateur.",
-"install.iosText":"<b>Installez DigitalValut Logos sur iPhone ou iPad.</b> Touchez <b>Partager</b> dans Safari, puis <b>Sur l'écran d'accueil</b>.",
+"install.iosText":"<b>Installez DigitalValut Logos sur iPhone ou iPad.</b> Touchez <b>Partager</b> dans Safari, puis <b>Sur l'écran d'accueil</b>.","install.always":"Mettez Logos sur votre écran","install.macText":"<b>Installez DigitalValut Logos sur votre Mac.</b> Dans Safari, touchez <b>Partager</b>, puis <b>Ajouter au Dock</b>.",
 "home.shareApp":"Faire connaître l'appli à quelqu'un",
 "start.s1":"Envoyez l'invitation",
 "start.s1help":"Appuyez sur le bouton orange. L'appli prépare l'invitation et vous laisse choisir comment l'envoyer : WhatsApp, un message, un e-mail — ce que vous utilisez d'habitude.",
@@ -694,7 +694,7 @@ Object.assign(I18N.de, {
 "invite.answerText":"Hier ist meine Antwort für DigitalValut Logos, füge sie ein, um die Verbindung abzuschließen:\n\n",
 "mic.recording":"Aufnahme läuft — zum Stoppen tippen","mic.capped":"Zwei Minuten: Die Sprachnachricht hat sich selbst beendet und wird gesendet.","history.cleared":"Verlauf auf diesem Gerät gelöscht.",
 "install.genericText":"<b>Installiere DigitalValut Logos</b>, um es als App mit eigenem Symbol zu haben, ganz ohne Browser.",
-"install.iosText":"<b>Installiere DigitalValut Logos auf iPhone oder iPad.</b> Tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Home-Bildschirm</b>.",
+"install.iosText":"<b>Installiere DigitalValut Logos auf iPhone oder iPad.</b> Tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Home-Bildschirm</b>.","install.always":"Logos auf den Bildschirm legen","install.macText":"<b>Installiere DigitalValut Logos auf dem Mac.</b> Tippe in Safari auf <b>Teilen</b>, dann auf <b>Zum Dock hinzufügen</b>.",
 "home.shareApp":"Jemandem von der App erzählen",
 "start.s1":"Einladung senden",
 "start.s1help":"Drücke den orangen Button. Die App bereitet die Einladung vor und lässt dich wählen, wie du sie sendest: WhatsApp, eine Nachricht, E-Mail — was auch immer du normalerweise benutzt.",
@@ -876,7 +876,7 @@ Object.assign(I18N.es, {
 "invite.answerText":"Aquí está mi respuesta para DigitalValut Logos, pégala para terminar de conectar:\n\n",
 "mic.recording":"Grabando — toca para detener","mic.capped":"Dos minutos: el mensaje de voz se cerró solo y se está enviando.","history.cleared":"Historial borrado en este dispositivo.",
 "install.genericText":"<b>Instala DigitalValut Logos</b> para tenerla como app, con su propio icono, sin necesidad de navegador.",
-"install.iosText":"<b>Instala DigitalValut Logos en iPhone o iPad.</b> Toca <b>Compartir</b> en Safari, luego <b>Añadir a inicio</b>.",
+"install.iosText":"<b>Instala DigitalValut Logos en iPhone o iPad.</b> Toca <b>Compartir</b> en Safari, luego <b>Añadir a inicio</b>.","install.always":"Pon Logos en tu pantalla","install.macText":"<b>Instala DigitalValut Logos en tu Mac.</b> En Safari toca <b>Compartir</b> y luego <b>Añadir al Dock</b>.",
 "home.shareApp":"Contarle a alguien sobre la app",
 "start.s1":"Envía la invitación",
 "start.s1help":"Pulsa el botón naranja. La app prepara la invitación y te deja elegir cómo enviarla: WhatsApp, un mensaje, correo — lo que uses normalmente.",
@@ -1058,7 +1058,7 @@ Object.assign(I18N.pt, {
 "invite.answerText":"Aqui está a minha resposta para o DigitalValut Logos, cole-a para terminar de ligar:\n\n",
 "mic.recording":"A gravar — toque para parar","mic.capped":"Dois minutos: a mensagem de voz fechou-se sozinha e está a ser enviada.","history.cleared":"Histórico apagado neste dispositivo.",
 "install.genericText":"<b>Instale o DigitalValut Logos</b> para o ter como aplicação, com o seu próprio ícone, sem precisar do navegador.",
-"install.iosText":"<b>Instale o DigitalValut Logos no iPhone ou iPad.</b> Toque em <b>Partilhar</b> no Safari, depois em <b>Adicionar ao ecrã principal</b>.",
+"install.iosText":"<b>Instale o DigitalValut Logos no iPhone ou iPad.</b> Toque em <b>Partilhar</b> no Safari, depois em <b>Adicionar ao ecrã principal</b>.","install.always":"Ponha o Logos no seu ecrã","install.macText":"<b>Instale o DigitalValut Logos no seu Mac.</b> No Safari toque em <b>Partilhar</b> e depois em <b>Adicionar à Dock</b>.",
 "home.shareApp":"Dar a conhecer a app a alguém",
 "start.s1":"Envie o convite",
 "start.s1help":"Prima o botão laranja. A app prepara o convite e deixa-o escolher como enviá-lo: WhatsApp, uma mensagem, e-mail — o que costuma usar.",
@@ -1240,7 +1240,7 @@ Object.assign(I18N.ru, {
 "invite.answerText":"Вот мой ответ для DigitalValut Logos, вставь его, чтобы завершить соединение:\n\n",
 "mic.recording":"Идёт запись — нажмите, чтобы остановить","mic.capped":"Две минуты: голосовое сообщение остановилось само и отправляется.","history.cleared":"История удалена на этом устройстве.",
 "install.genericText":"<b>Установите DigitalValut Logos</b>, чтобы иметь его как приложение, со своей иконкой, без браузера.",
-"install.iosText":"<b>Установите DigitalValut Logos на iPhone или iPad.</b> Нажмите <b>Поделиться</b> в Safari, затем <b>На экран «Домой»</b>.",
+"install.iosText":"<b>Установите DigitalValut Logos на iPhone или iPad.</b> Нажмите <b>Поделиться</b> в Safari, затем <b>На экран «Домой»</b>.","install.always":"Поместите Logos на экран","install.macText":"<b>Установите DigitalValut Logos на Mac.</b> В Safari нажмите <b>Поделиться</b>, затем <b>Добавить в Dock</b>.",
 "home.shareApp":"Рассказать кому-то о приложении",
 "start.s1":"Отправьте приглашение",
 "start.s1help":"Нажмите оранжевую кнопку. Приложение подготовит приглашение и даст выбрать, как его отправить: WhatsApp, сообщение, почта — что вы обычно используете.",
@@ -1422,7 +1422,7 @@ Object.assign(I18N.zh, {
 "invite.answerText":"这是我在 DigitalValut Logos 上的回复，粘贴它以完成连接：\n\n",
 "mic.recording":"录音中——点击停止","mic.capped":"两分钟：语音消息已自动结束，正在发送。","history.cleared":"此设备上的记录已清除。",
 "install.genericText":"<b>安装 DigitalValut Logos</b>，将其作为一个带有独立图标的应用，无需浏览器。",
-"install.iosText":"<b>在 iPhone 或 iPad 上安装 DigitalValut Logos。</b>在 Safari 中点击<b>分享</b>，然后点击<b>添加到主屏幕</b>。",
+"install.iosText":"<b>在 iPhone 或 iPad 上安装 DigitalValut Logos。</b>在 Safari 中点击<b>分享</b>，然后点击<b>添加到主屏幕</b>。","install.always":"把 Logos 放到你的屏幕上","install.macText":"<b>在 Mac 上安装 DigitalValut Logos。</b>在 Safari 里点<b>共享</b>，然后选<b>添加到程序坞</b>。",
 "home.shareApp":"告诉别人这个应用",
 "start.s1":"发送邀请",
 "start.s1help":"按下橙色按钮。应用会准备好邀请，并让你选择发送方式：WhatsApp、短信、邮件——你平常使用的方式。",
@@ -1604,7 +1604,7 @@ Object.assign(I18N.ar, {
 "invite.answerText":"إليك ردّي على DigitalValut Logos، الصقه لإتمام الاتصال:\n\n",
 "mic.recording":"جارٍ التسجيل — اضغط للإيقاف","mic.capped":"دقيقتان: أُغلقت الرسالة الصوتية تلقائيًا وهي في طريقها.","history.cleared":"تم مسح السجل على هذا الجهاز.",
 "install.genericText":"<b>ثبّت DigitalValut Logos</b> لتحصل عليه كتطبيق، بأيقونته الخاصة، دون الحاجة إلى متصفح.",
-"install.iosText":"<b>ثبّت DigitalValut Logos على آيفون أو آيباد.</b> اضغط <b>مشاركة</b> في سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>.",
+"install.iosText":"<b>ثبّت DigitalValut Logos على آيفون أو آيباد.</b> اضغط <b>مشاركة</b> في سفاري، ثم <b>إضافة إلى الشاشة الرئيسية</b>.","install.always":"ضع Logos على شاشتك","install.macText":"<b>ثبّت DigitalValut Logos على الـ Mac.</b> في Safari اضغط <b>مشاركة</b>، ثم <b>إضافة إلى Dock</b>.",
 "home.shareApp":"أخبر أحدهم عن التطبيق",
 "start.s1":"أرسل الدعوة",
 "start.s1help":"اضغط الزر البرتقالي. يُجهّز التطبيق الدعوة ويتيح لك اختيار طريقة إرسالها: واتساب، رسالة، بريد إلكتروني — ما تستخدمه عادة.",
@@ -1786,7 +1786,7 @@ Object.assign(I18N.ur, {
 "invite.answerText":"یہ ہے DigitalValut Logos کے لیے میرا جواب، کنکشن مکمل کرنے کے لیے اسے پیسٹ کریں:\n\n",
 "mic.recording":"ریکارڈنگ جاری — روکنے کے لیے ٹچ کریں","mic.capped":"دو منٹ: صوتی پیغام خود بند ہو گیا اور بھیجا جا رہا ہے۔","history.cleared":"اس ڈیوائس پر تاریخ صاف کر دی گئی۔",
 "install.genericText":"<b>DigitalValut Logos انسٹال کریں</b> تاکہ یہ اپنے آئیکن کے ساتھ ایک ایپ کے طور پر ہو، بغیر براؤزر کی ضرورت کے۔",
-"install.iosText":"<b>آئی فون یا آئی پیڈ پر DigitalValut Logos انسٹال کریں۔</b> سفاری میں <b>شیئر</b> پر ٹچ کریں، پھر <b>ہوم اسکرین پر شامل کریں</b>۔",
+"install.iosText":"<b>آئی فون یا آئی پیڈ پر DigitalValut Logos انسٹال کریں۔</b> سفاری میں <b>شیئر</b> پر ٹچ کریں، پھر <b>ہوم اسکرین پر شامل کریں</b>۔","install.always":"Logos کو اپنی اسکرین پر رکھیں","install.macText":"<b>DigitalValut Logos کو Mac پر انسٹال کریں۔</b> Safari میں <b>Share</b> پر ٹیپ کریں، پھر <b>Add to Dock</b>۔",
 "home.shareApp":"کسی کو ایپ کے بارے میں بتائیں",
 "start.s1":"دعوت بھیجیں",
 "start.s1help":"نارنجی بٹن دبائیں۔ ایپ دعوت تیار کرتی ہے اور آپ کو منتخب کرنے دیتی ہے کہ اسے کیسے بھیجنا ہے: واٹس ایپ، ایک پیغام، ای میل — جو بھی آپ عام طور پر استعمال کرتے ہیں۔",
@@ -1968,7 +1968,7 @@ Object.assign(I18N.hi, {
 "invite.answerText":"यह रहा DigitalValut Logos के लिए मेरा जवाब, कनेक्शन पूरा करने के लिए इसे पेस्ट करें:\n\n",
 "mic.recording":"रिकॉर्डिंग हो रही है — रोकने के लिए टैप करें","mic.capped":"दो मिनट: वॉइस संदेश अपने आप बंद हो गया और भेजा जा रहा है।","history.cleared":"इस डिवाइस पर इतिहास साफ़ कर दिया गया।",
 "install.genericText":"<b>DigitalValut Logos इंस्टॉल करें</b> ताकि यह अपने आइकन के साथ एक ऐप की तरह हो, बिना ब्राउज़र की ज़रूरत के।",
-"install.iosText":"<b>iPhone या iPad पर DigitalValut Logos इंस्टॉल करें।</b> Safari में <b>शेयर</b> टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b>।",
+"install.iosText":"<b>iPhone या iPad पर DigitalValut Logos इंस्टॉल करें।</b> Safari में <b>शेयर</b> टैप करें, फिर <b>होम स्क्रीन पर जोड़ें</b>।","install.always":"Logos को अपनी स्क्रीन पर रखें","install.macText":"<b>DigitalValut Logos को Mac पर इंस्टॉल करें।</b> Safari में <b>Share</b> पर टैप करें, फिर <b>Add to Dock</b>।",
 "home.shareApp":"किसी को ऐप के बारे में बताएं",
 "start.s1":"निमंत्रण भेजें",
 "start.s1help":"नारंगी बटन दबाएं। ऐप निमंत्रण तैयार करता है और आपको चुनने देता है कि इसे कैसे भेजें: WhatsApp, एक संदेश, ईमेल — जो भी आप आमतौर पर उपयोग करते हैं।",
@@ -2150,7 +2150,7 @@ Object.assign(I18N.bn, {
 "invite.answerText":"এই রইল DigitalValut Logos-এর জন্য আমার উত্তর, সংযোগ শেষ করতে এটি পেস্ট করুন:\n\n",
 "mic.recording":"রেকর্ডিং চলছে — থামাতে ট্যাপ করুন","mic.capped":"দুই মিনিট: ভয়েস বার্তাটি নিজেই বন্ধ হয়ে গেছে এবং পাঠানো হচ্ছে।","history.cleared":"এই ডিভাইসে ইতিহাস মুছে ফেলা হয়েছে।",
 "install.genericText":"<b>DigitalValut Logos ইনস্টল করুন</b> যাতে এটি নিজস্ব আইকন সহ একটি অ্যাপ হিসেবে থাকে, ব্রাউজারের প্রয়োজন ছাড়াই।",
-"install.iosText":"<b>iPhone বা iPad-এ DigitalValut Logos ইনস্টল করুন।</b> Safari-তে <b>শেয়ার</b>-এ ট্যাপ করুন, তারপর <b>হোম স্ক্রিনে যোগ করুন</b>।",
+"install.iosText":"<b>iPhone বা iPad-এ DigitalValut Logos ইনস্টল করুন।</b> Safari-তে <b>শেয়ার</b>-এ ট্যাপ করুন, তারপর <b>হোম স্ক্রিনে যোগ করুন</b>।","install.always":"Logos আপনার স্ক্রিনে রাখুন","install.macText":"<b>Mac-এ DigitalValut Logos ইনস্টল করুন।</b> Safari-তে <b>Share</b> চাপুন, তারপর <b>Add to Dock</b>।",
 "home.shareApp":"কাউকে অ্যাপ সম্পর্কে বলুন",
 "start.s1":"আমন্ত্রণ পাঠান",
 "start.s1help":"কমলা বোতাম চাপুন। অ্যাপটি আমন্ত্রণ প্রস্তুত করে এবং আপনাকে বেছে নিতে দেয় কীভাবে এটি পাঠাবেন: WhatsApp, একটি বার্তা, ইমেল — আপনি সাধারণত যা ব্যবহার করেন।",
@@ -2332,7 +2332,7 @@ Object.assign(I18N.id, {
 "invite.answerText":"Ini balasan saya untuk DigitalValut Logos, tempel untuk menyelesaikan koneksi:\n\n",
 "mic.recording":"Sedang merekam — ketuk untuk berhenti","mic.capped":"Dua menit: pesan suara berhenti sendiri dan sedang dikirim.","history.cleared":"Riwayat dihapus di perangkat ini.",
 "install.genericText":"<b>Pasang DigitalValut Logos</b> agar memilikinya sebagai aplikasi, dengan ikonnya sendiri, tanpa perlu browser.",
-"install.iosText":"<b>Pasang DigitalValut Logos di iPhone atau iPad.</b> Ketuk <b>Bagikan</b> di Safari, lalu <b>Tambah ke Layar Utama</b>.",
+"install.iosText":"<b>Pasang DigitalValut Logos di iPhone atau iPad.</b> Ketuk <b>Bagikan</b> di Safari, lalu <b>Tambah ke Layar Utama</b>.","install.always":"Taruh Logos di layar Anda","install.macText":"<b>Pasang DigitalValut Logos di Mac.</b> Di Safari ketuk <b>Bagikan</b>, lalu <b>Add to Dock</b>.",
 "home.shareApp":"Beri tahu seseorang tentang aplikasi ini",
 "start.s1":"Kirim undangan",
 "start.s1help":"Tekan tombol oranye. Aplikasi menyiapkan undangan dan membiarkan Anda memilih cara mengirimkannya: WhatsApp, pesan, email — apa pun yang biasa Anda gunakan.",
@@ -2705,6 +2705,56 @@ $('installClose').addEventListener('click', () => {
    the toolbar, not just read about. */
 const IOS_SHARE_ICON = '<svg class="shareicon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.5V4"/><path d="M7.5 8.5L12 4l4.5 4.5"/><path d="M4.5 12.5v7a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-7"/></svg>';
 if (isIOS && !isStandalone && location.protocol.startsWith('http')) showInstallBar(IOS_SHARE_ICON + t('install.iosText'), false);
+
+/* ============ la stessa cosa, ma da un posto che non si puo' perdere ============
+   La striscia qui sopra ha una ✕, e quella ✕ scrive `dvlogos-install-dismissed`:
+   da quel momento non ricompare mai piu'. Prima della v39 era l'UNICO modo di
+   installare l'app, quindi chi l'aveva chiusa una volta — anche per sbaglio,
+   anche prima di leggerla — restava senza icona e senza capire perche'. E'
+   esattamente la forma del difetto del pulsante "Ignora": un tocco, per sempre,
+   senza ritorno.
+   Questa voce nelle impostazioni non guarda quel segno. E' sempre li'.
+
+   ⚠️ E su iPhone il pulsante NON PUO' ESISTERE, per una ragione che non e'
+   nostra: `beforeinstallprompt` e' un'invenzione di Chrome, e Apple non l'ha
+   mai implementata. Nessun sito al mondo puo' far comparire "Aggiungi a Home"
+   su iOS — lo si puo' solo spiegare, che e' perche' li' si disegna l'icona vera
+   di Condividi invece di nominarla soltanto. Su Mac in Safari vale lo stesso,
+   con "Aggiungi al Dock" al posto di "Aggiungi a Home". */
+const isMacSafari = !isIOS
+  && /Mac/.test((navigator.userAgent || '') + ' ' + (navigator.platform || ''))
+  && /Safari/.test(navigator.userAgent || '')
+  && !/Chrome|Chromium|Edg\//.test(navigator.userAgent || '');
+function paintInstallCard(){
+  const card = $('installCard');
+  if (!card) return;
+  /* gia' installata: non c'e' niente da proporre, e una voce che dice di fare
+     una cosa gia' fatta e' solo un dubbio in piu' */
+  if (isStandalone || !location.protocol.startsWith('http')){
+    card.classList.add('hide');
+    return;
+  }
+  card.classList.remove('hide');
+  $('installCardText').innerHTML =
+      isIOS       ? IOS_SHARE_ICON + t('install.iosText')
+    : isMacSafari ? IOS_SHARE_ICON + t('install.macText','<b>Installa DigitalValut Logos su Mac.</b> In Safari tocca <b>Condividi</b>, poi <b>Aggiungi al Dock</b>.')
+    :               t('install.genericText');
+  /* il pulsante solo dove il browser lo consente davvero: offrirlo dove non
+     funziona sarebbe promettere una cosa che non succede */
+  $('installCardBtn').classList.toggle('hide', !deferredPrompt);
+}
+$('installCardBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt(); try{ await deferredPrompt.userChoice; }catch(e){}
+  deferredPrompt = null;
+  $('installBar').classList.add('hide');
+  paintInstallCard();
+});
+/* Chrome puo' far scattare `beforeinstallprompt` molto dopo il caricamento:
+   quando succede, questa voce deve accorgersene e far comparire il pulsante,
+   invece di restare com'era al momento in cui la pagina si e' aperta. */
+window.addEventListener('beforeinstallprompt', () => paintInstallCard());
+window.addEventListener('appinstalled', () => { deferredPrompt = null; paintInstallCard(); });
 /* Il pezzo che tiene l'app in memoria per farla funzionare senza rete.
 
    NON su Android: li' l'applicazione e' gia' tutta dentro il pacchetto, un file
@@ -6961,7 +7011,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.02';
+const APP_VERSION = 'logos-modifica-4.03';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -9807,6 +9857,7 @@ setIcon('btnMenu','dots');
 initLang();
 renderContacts();
 renderBlocked();
+paintInstallCard();
 initNotifyUI();
 paintAddrCard();
 renderLetters();

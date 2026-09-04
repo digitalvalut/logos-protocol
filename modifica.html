@@ -382,6 +382,20 @@
       </div>
     </div>
 
+    <!-- La striscia in cima alla home resta, per chi arriva la prima volta. Ma
+         non puo' essere l'UNICA strada: la sua ✕ scrive
+         `dvlogos-install-dismissed` e da quel momento non ricompare mai piu',
+         e prima della v39 non c'era nessun altro posto da cui installare. Chi
+         l'aveva chiusa una volta — anche per sbaglio, anche senza leggerla —
+         restava senza icona e senza sapere perche'. Stessa famiglia del
+         pulsante "Ignora": una decisione presa in un tocco, per sempre, senza
+         ritorno. Questa voce non guarda quel segno: e' sempre qui. -->
+    <div class="card hide" id="installCard">
+      <label class="fieldlabel" data-i18n="install.always">Metti Logos sulla schermata</label>
+      <div class="helptext" id="installCardText"></div>
+      <button class="btn mt10 hide" id="installCardBtn" data-i18n="install.btn">Installa</button>
+    </div>
+
     <div class="card" id="easyCard">
       <div class="switchrow" id="easyRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 10.2h.01M15.5 10.2h.01"/><path d="M8.3 14.2a5 5 0 0 0 7.4 0"/></svg></span>

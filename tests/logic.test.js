@@ -592,6 +592,29 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test("l'invito a installare non si perde chiudendo la striscia", () => {
+    /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
+       da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella
+       era l'UNICA strada per installare l'app: chi la chiudeva una volta —
+       anche per sbaglio, anche prima di leggerla — restava senza icona e senza
+       sapere perche'. Stessa forma del pulsante «Ignora»: un tocco, per sempre,
+       senza ritorno.
+       La voce nelle impostazioni non deve guardare quel segno. */
+    const app = loadApp();
+    app.run(`
+      localStorage.setItem('dvlogos-install-dismissed','1');
+      paintInstallCard();
+    `);
+    assert.strictEqual(app.run("$('installCard').classList.contains('hide')"), false,
+      'la voce nelle impostazioni non deve sparire perche qualcuno ha chiuso la striscia');
+    /* e la striscia, invece, quel segno lo deve rispettare: chi l'ha chiusa non
+       se la ritrova addosso a ogni apertura */
+    app.run("$('installBar').classList.add('hide'); showInstallBar('x', true);");
+    assert.strictEqual(app.run("$('installBar').classList.contains('hide')"), true,
+      'la striscia chiusa non deve tornare da sola');
+    app.stop();
+  });
+
   test('a contact known two ways keeps both, instead of the second overwriting the first', () => {
     /* Someone reconnected to by invite (fingerprint only) and someone reached
        by dialling their address are not different people the second time
