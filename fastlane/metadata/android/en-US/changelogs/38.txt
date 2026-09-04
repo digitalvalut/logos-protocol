@@ -1,0 +1,5 @@
+The button next to "Accept" said "Ignore", but it blocked that person FOREVER: one tap, while the phone was ringing, without saying so and with no way back.
+
+It now says "Refuse", and it refuses the call, that's all. Blocking is a second, separate tap on a button that says what it does — and in settings, under your address, there is now a list of who you have blocked, with a button to undo it.
+
+If someone suddenly could not reach you any more, this is almost certainly why: look in that list.

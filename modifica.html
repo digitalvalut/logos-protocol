@@ -129,7 +129,20 @@
     <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
     <div class="toolsrow">
       <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
-      <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Ignora</button>
+      <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Rifiuta</button>
+    </div>
+  </div>
+
+  <!-- Compare SOLO dopo aver rifiutato. Bloccare qualcuno per sempre non puo'
+       essere una cosa che succede premendo il pulsante ovvio mentre il telefono
+       sta squillando: fino alla v37 era esattamente cosi' — "Ignora" chiamava
+       blockFp(), il blocco non scadeva mai, non c'era nessun elenco che lo
+       mostrasse e nessun modo di toglierlo. Ora sono due tocchi separati, e il
+       secondo dice cosa fa. -->
+  <div class="card hide" id="addrRefused">
+    <span class="lead" data-i18n="addr.refusedNote">Chiamata rifiutata. Se questa persona ti dà fastidio puoi impedirle di farti squillare ancora — lo togli quando vuoi dalle impostazioni.</span>
+    <div class="toolsrow">
+      <button class="btn" id="btnAddrBlock" data-i18n="addr.blockThis">Blocca questa persona</button>
     </div>
   </div>
 
@@ -348,6 +361,17 @@
         <div class="status" id="burnerStatus"></div>
       </div>
 
+      <!-- Nascosto finche' non serve: chi non ha mai bloccato nessuno non deve
+           nemmeno sapere che questa cosa esiste. Ma chi ha bloccato DEVE poterlo
+           vedere e disfare — fino alla v37 il blocco era per sempre, invisibile,
+           e l'unico modo di toglierlo era "Pulisci tutto", che cancella anche
+           contatti e conversazioni. Un interruttore che non si puo' rimettere a
+           posto non e' un interruttore, e' una trappola. -->
+      <div class="blocked hide" id="blockedWrap">
+        <label class="fieldlabel" data-i18n="block.title">Persone bloccate</label>
+        <div class="helptext" data-i18n="block.help">Non ti fanno più squillare. Puoi rimetterle a posto quando vuoi.</div>
+        <div id="blockedList"></div>
+      </div>
 
       <div class="addrdial">
         <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>

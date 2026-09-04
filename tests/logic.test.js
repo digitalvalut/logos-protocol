@@ -556,6 +556,42 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('rifiutare rifiuta e basta: non cancella nessuno per sempre', () => {
+    /* Fino alla v37 il pulsante accanto ad «Accetta» si chiamava «Ignora» e
+       chiamava blockFp(): UN TOCCO, nel momento in cui il telefono squilla, e
+       quella persona era bloccata per sempre. Il blocco non scadeva, nessun
+       elenco lo mostrava, e nel codice non esisteva una riga per toglierlo —
+       l'unico modo era «Pulisci tutto», che cancella anche contatti e
+       conversazioni.
+       Il sintomo, dal di fuori: l'altro chiama e il telefono resta muto,
+       mentre il colpetto push (che passa da un'altra strada, e il blocco non la
+       guarda) arriva lo stesso. Impossibile da capire per chiunque dei due.
+       Trovato dall'operatore provando l'app col proprio PC — e bloccandoselo
+       da solo senza sapere di averlo fatto. */
+    const app = loadApp();
+    app.run(`
+      addrPending = { msg: { fp: 'aabbccdd' } };
+      $('btnAddrIgnore').listeners.click[0]();
+    `);
+    assert.strictEqual(app.run('JSON.stringify(addrBlocked())'), '[]',
+      'rifiutare una chiamata non deve bloccare nessuno');
+    assert.strictEqual(app.run("isBlockedFp('aabbccdd')"), false,
+      'chi e stato rifiutato deve poter richiamare');
+
+    /* bloccare resta possibile — e deve restarlo, un indirizzo dato in giro e
+       un indirizzo che ha anche chi rompe — ma come SECONDO tocco, separato,
+       su un pulsante che dice cosa fa */
+    app.run("$('btnAddrBlock').listeners.click[0]();");
+    assert.strictEqual(app.run("isBlockedFp('aabbccdd')"), true,
+      'il secondo tocco deve bloccare davvero, o la difesa non esiste');
+
+    /* e si deve poter tornare indietro: prima era impossibile */
+    app.run("unblockFp('aabbccdd')");
+    assert.strictEqual(app.run("isBlockedFp('aabbccdd')"), false,
+      'un blocco che non si puo togliere non e un interruttore, e una trappola');
+    app.stop();
+  });
+
   test('a contact known two ways keeps both, instead of the second overwriting the first', () => {
     /* Someone reconnected to by invite (fingerprint only) and someone reached
        by dialling their address are not different people the second time
