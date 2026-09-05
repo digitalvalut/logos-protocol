@@ -57,8 +57,8 @@ const MUTANTI = [
   {
     id: 'M03', origine: 'H2-aggregato (v3.62)',
     cosa: 'il tetto complessivo sulla memoria sparisce: torna solo quello per trasferimento',
-    da: `      if (pledgedIncomingBytes() + Math.min(declared, MAX_INCOMING_BYTES) > MAX_INCOMING_TOTAL) return;`,
-    a:  ``,
+    da: `+ Math.min(declared, MAX_INCOMING_BYTES) > MAX_INCOMING_TOTAL){`,
+    a:  `+ Math.min(declared, MAX_INCOMING_BYTES) > Infinity){`,
   },
   {
     id: 'M04', origine: 'H2-inattivi (v3.62)',
@@ -75,9 +75,9 @@ const MUTANTI = [
   {
     id: 'M06', origine: 'M1-pump (v3.62)',
     cosa: 'il pump della cassetta non viene fermato quando dialAddress fallisce',
-    da: `    dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
+    da: `dialedAddrProven = false; }
     stopStrayPump(myPc);`,
-    a:  `    dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;`,
+    a:  `dialedAddrProven = false; }`,
   },
   {
     id: 'M07', origine: 'M2-nick (v3.62)',
@@ -107,8 +107,11 @@ const MUTANTI = [
   {
     id: 'M09', origine: 'M4-dialed (v3.62)',
     cosa: 'dialedAddress non viene azzerato uscendo: falso allarme MITM sulla connessione successiva',
-    da: `    const giveUpDial = () => { dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; pump.stop(); };`,
-    a:  `    const giveUpDial = () => { pump.stop(); };`,
+    da: `      dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
+      pump.stop();
+      withdrawOffer(offerKey);`,
+    a:  `      pump.stop();
+      withdrawOffer(offerKey);`,
   },
   {
     id: 'M10', origine: 'M5-rubrica (v3.62)',
@@ -172,8 +175,8 @@ const MUTANTI_WORKER = [
   {
     id: 'W04', origine: 'limiti di frequenza',
     cosa: 'nessuna richiesta viene mai considerata oltre il limite',
-    da: `function overLimit(request, bucket, max){`,
-    a:  `function overLimit(request, bucket, max){ return false;`,
+    da: `function overLimit(request, bucket, max, cost){`,
+    a:  `function overLimit(request, bucket, max, cost){ return false;`,
   },
 ];
 
