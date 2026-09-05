@@ -3281,7 +3281,36 @@ const PUMP_BACKSTOP_MS = 60000;
 function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
   setStatus(statusEl, t('connect.waiting','In attesa della connessione…'));
   let settled = false, detto = false, failTimer = null, backstop = null;
-  const tick = () => { if (diagEl && !settled) diagEl.textContent = diagLine(pcObj); };
+  /* ⚠️ UNA SORVEGLIANZA ABBANDONATA DEVE TACERE. Riportato dall'operatore il
+     5 set 2026: sul suo PC compariva «Non è stato possibile collegarsi…
+     createne uno nuovo» accanto a un codice d'invito nato due secondi prima.
+     La prova che non parlava di quello: la riga diagnostica diceva
+     `ICE new · new`, cioe' una connessione appena creata che non aveva ancora
+     tentato niente.
+     Era il verdetto di un TENTATIVO PRECEDENTE. Questa funzione tiene i propri
+     orologi accesi apposta — «detto, non deciso», perche' una connessione puo'
+     riuscire un attimo dopo aver dichiarato fallimento — ma nessuno poteva
+     fermarla da fuori, e `quickStatusA` e' lo stesso elemento che il nuovo
+     invito riusa. Cosi' il passato scriveva sul presente, e chi legge non ha
+     nessun modo di sapere che quel rosso non lo riguarda.
+     Regola: chi scrive su un pezzo di schermo deve POSSEDERLO. Ogni
+     sorveglianza timbra l'elemento come suo appena nasce; quando un'altra lo
+     rileva, la vecchia si accorge di non possederlo piu' e tace.
+     ⚠️ Il primo tentativo confrontava con la connessione globale `pc`, ed era
+     SBAGLIATO: questa funzione viene chiamata anche con connessioni che
+     globali non sono, e quella guardia avrebbe zittito pure sorveglianze
+     legittime — peggio del difetto che chiudeva. Quattro test l'hanno presa
+     in pieno. Il possesso dell'elemento e' la cosa che descrive davvero il
+     conflitto: due che scrivono nello stesso posto. */
+  if (statusEl) statusEl.__proprietaria = pcObj;
+  const superata = () => !!statusEl && statusEl.__proprietaria !== pcObj;
+  const zittisci = () => {
+    settled = true;                       /* niente piu' scritte, da nessun ramo */
+    if (diagTimer) clearInterval(diagTimer);
+    clearTimeout(failTimer); clearTimeout(backstop);
+    if (diagEl) diagEl.classList.add('hide');
+  };
+  const tick = () => { if (diagEl && !settled && !superata()) diagEl.textContent = diagLine(pcObj); };
   const diagTimer = diagEl ? setInterval(tick, 1200) : null;
   if (diagEl){ diagEl.classList.remove('hide'); tick(); }
   const stop = () => {
@@ -3290,6 +3319,9 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
     if (pump) pump.stop();
   };
   const onChange = () => {
+    /* soppiantata: un'altra connessione ha preso il posto di questa, e tutto
+       cio' che questa avrebbe da dire riguarda ormai il passato */
+    if (superata()){ zittisci(); return; }
     const st = pcObj.connectionState;
 
     /* IL SUCCESSO HA SEMPRE L'ULTIMA PAROLA, anche se un attimo prima si era
@@ -3317,7 +3349,7 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
       if (detto) return;
       clearTimeout(failTimer);
       failTimer = setTimeout(() => {
-        if (settled || connectionWorking(pcObj)) return;
+        if (settled || superata() || connectionWorking(pcObj)) return;
         /* DETTO, NON DECISO: si avvisa chi guarda, ma la sorveglianza resta
            accesa e i candidati continuano a partire. Prima qui si fermava
            tutto — cioe' si toglieva alla connessione proprio la cosa che le
@@ -3333,7 +3365,7 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
         setStatus(statusEl, t('connect.stillTrying','Ci sto ancora provando — a volte servono un po\' di secondi. Non chiudere.'));
         clearTimeout(backstop);
         backstop = setTimeout(() => {
-          if (settled || connectionWorking(pcObj)) return;
+          if (settled || superata() || connectionWorking(pcObj)) return;
           if (pump) pump.stop();
           settled = true; stop();
           setStatus(statusEl, t('connect.failed','Non è stato possibile collegarsi. Controllate di essere online entrambi, poi create un invito nuovo — i vecchi codici non si possono riusare.'), 'bad');
@@ -7141,7 +7173,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.07';
+const APP_VERSION = 'logos-modifica-4.08';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8131,6 +8163,11 @@ async function startQuickShare(existingCode, quiet){
      Se qualcosa va storto si prosegue senza: un invito senza riserva e'
      esattamente l'invito di prima, mai peggio. */
   quickLinkAddr = await ensureFallbackAddress();
+  /* Questo pezzo di schermo torna libero: da qui in poi parla di QUESTO
+     invito. Una sorveglianza rimasta accesa su un tentativo precedente si
+     accorge di non possederlo piu' e tace, invece di scriverci sopra il
+     proprio verdetto ottanta secondi dopo. */
+  $('quickStatusA').__proprietaria = null;
   $('inviteAddrNote').classList.toggle('hide', !addrAccesaPerInvito);
   $('quickCodeOut').textContent = formatQuickCode(code);
   paintQr(code).catch(()=>{}); /* the QR is a convenience: never hold the invite up for it */

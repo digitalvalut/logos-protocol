@@ -788,6 +788,49 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('il verdetto di un tentativo vecchio non si scrive su un invito nuovo', async () => {
+    /* Riportato dall'operatore il 5 set 2026, dal suo PC: accanto a un codice
+       d'invito appena creato compariva in rosso «Non è stato possibile
+       collegarsi... createne uno nuovo». La prova che non parlava di QUEL
+       codice era nella riga diagnostica: `ICE new · new`, cioe' una
+       connessione appena nata che non aveva ancora tentato niente.
+       Era il verdetto di un tentativo PRECEDENTE. watchHandshakeProgress
+       tiene i propri orologi accesi apposta («detto, non deciso»: una
+       connessione puo' riuscire un attimo dopo aver dichiarato fallimento),
+       ma nessuno poteva fermarla da fuori — e `quickStatusA` e' lo stesso
+       elemento che il nuovo invito riusa. Il passato scriveva sul presente. */
+    const app = loadApp();
+    app.run(`
+      const vecchia = new RTCPeerConnection();
+      pc = vecchia;
+      watchHandshakeProgress(vecchia, $('quickStatusA'), $('diagQuickA'), null, function(){});
+      /* un invito nuovo si prende quel pezzo di schermo: da qui in poi la
+         sorveglianza della vecchia parla del passato */
+      $('quickStatusA').__proprietaria = null;
+      setStatus($('quickStatusA'), 'In attesa che l\\'altra persona digiti il codice…');
+      /* la vecchia fallisce, in ritardo, come nella segnalazione */
+      vecchia.__become('failed');
+    `);
+    await app.run('new Promise(r => setTimeout(r, 30))');
+
+    /* ⚠️ Il verdetto rosso vero arriva dopo FAIL_GRACE_MS + PUMP_BACKSTOP_MS,
+       cioe' OTTANTA SECONDI: aspettarlo qui e' impossibile, e un test che
+       aspetta trenta millisecondi e poi si dichiara soddisfatto non prova
+       niente — infatti il primo sabotaggio non lo attaccava. Si guarda invece
+       cio' che il rimedio fa SUBITO: la sorveglianza soppiantata si spegne, e
+       la sua riga diagnostica sparisce. Se resta accesa, sta ancora
+       lavorando su una connessione morta e prima o poi parlera'. */
+    assert.strictEqual(app.run("$('diagQuickA').classList.contains('hide')"), true,
+      'la sorveglianza soppiantata deve spegnersi subito, non restare in agguato');
+
+    const scritto = app.run("$('quickStatusA').textContent");
+    assert.ok(!/stato possibile collegarsi/.test(scritto),
+      'e non deve scrivere il proprio verdetto sull\'invito nuovo: ' + scritto);
+    assert.ok(/digiti il codice/.test(scritto),
+      'il messaggio dell\'invito nuovo deve restare al suo posto');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella
