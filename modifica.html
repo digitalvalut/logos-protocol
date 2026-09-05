@@ -530,6 +530,14 @@
         <span class="ic" aria-hidden="true">💤</span>
         <span data-i18n="wake.waitsNote">Puoi chiudere l'app: quando aprono l'invito ti avviso io.</span>
       </div>
+      <!-- Un invito vive quindici minuti e solo con l'app in primo piano. Il
+           link porta anche l'indirizzo permanente come riserva, e per averlo
+           l'indirizzo va acceso: se non lo era, lo accendiamo qui. Non si fa di
+           nascosto - questa riga lo dice, e l'interruttore resta suo. -->
+      <div class="waitsnote hide" id="inviteAddrNote">
+        <span class="ic" aria-hidden="true">🔑</span>
+        <span data-i18n="quick.addrOnNote">Ho acceso il tuo indirizzo permanente, così ti trovano anche se l'invito scade. Puoi spegnerlo dalle impostazioni.</span>
+      </div>
       <div class="status" id="quickStatusA"></div>
       <div class="diagline hide" id="diagQuickA"></div>
       <button class="btn hide mt10" id="btnRetryQuickA"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2.5 20 5.5 17 8.5"/><path d="M4 12a8 8 0 0 1 13.9-5.4L20 5.5"/><path d="M7 21.5 4 18.5 7 15.5"/><path d="M20 12a8 8 0 0 1-13.9 5.4L4 18.5"/></svg></span><span data-i18n="quick.newCode">Genera un nuovo codice</span></button>

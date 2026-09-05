@@ -180,7 +180,7 @@ Object.assign(I18N.en, {
 "quick.titleB":"Type the code","quick.helpB":"Ask whoever invited you for the code \u2014 6 digits, said out loud or written \u2014 and type it here.",
 "quick.codePh":"000000","quick.connect":"Connect",
 "quick.waiting":"Waiting for the other person to type the code\u2026","quick.expired":"The code expired with no answer. Generate a new one.",
-"quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.",
+"quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.","quick.tryingAddr":"Trying the other way…","quick.tryingAddrHint":"That invite had expired, but whoever sent it has an address that never does. Calling there now.","quick.nobodyWaiting":"I didn't find anyone waiting. Either the code is wrong, or the person who sent it no longer has the app open: ask them to reopen it, or ask for their permanent address, which never expires.","quick.addrOnNote":"I switched on your permanent address, so people can still find you after the invite expires. You can switch it off in settings.",
 "quick.shareText":"Here's the link to talk to me on DigitalValut Logos. Tap it and we're connected:",
 "quick.share":"Send the invitation",
 "notify.title":"Let me know when someone's looking for me",
@@ -369,7 +369,7 @@ Object.assign(I18N.it, {
 "quick.titleB":"Digita il codice","quick.helpB":"Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.",
 "quick.codePh":"000000","quick.connect":"Connetti",
 "quick.waiting":"In attesa che l'altra persona digiti il codice…","quick.expired":"Il codice è scaduto senza risposta. Generane uno nuovo.",
-"quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.",
+"quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.","quick.tryingAddr":"Provo dall'altra parte…","quick.tryingAddrHint":"L'invito non era più valido, ma chi te l'ha mandato ha un indirizzo che non scade. Sto chiamando lì.","quick.nobodyWaiting":"Non ho trovato nessuno in attesa. O il codice è sbagliato, oppure chi te l'ha mandato non ha più l'app aperta: chiedigli di riaprirla, o fatti dare il suo indirizzo permanente, che non scade mai.","quick.addrOnNote":"Ho acceso il tuo indirizzo permanente, così ti trovano anche se l'invito scade. Puoi spegnerlo dalle impostazioni.",
 "quick.shareText":"Ecco il link per parlare con me su DigitalValut Logos. Toccalo e siamo connessi:",
 "quick.share":"Manda l'invito",
 "notify.title":"Avvisami quando qualcuno mi cerca",
@@ -551,7 +551,7 @@ Object.assign(I18N.fr, {
 "quick.helpB":"Demandez le code à la personne qui vous a invité — 6 chiffres, dits à voix haute ou écrits — et tapez-le ici.",
 "quick.codePh":"000000","quick.connect":"Connecter",
 "quick.waiting":"En attente que l'autre personne tape le code…","quick.expired":"Le code a expiré sans réponse. Générez-en un nouveau.",
-"quick.notFound":"Code expiré ou incorrect. Vérifiez-le avec la personne qui vous l'a donné.",
+"quick.notFound":"Code expiré ou incorrect. Vérifiez-le avec la personne qui vous l'a donné.","quick.tryingAddr":"J'essaie par l'autre chemin…","quick.tryingAddrHint":"Cette invitation n'était plus valable, mais la personne qui vous l'a envoyée a une adresse qui n'expire jamais. J'appelle là.","quick.nobodyWaiting":"Je n'ai trouvé personne en attente. Soit le code est faux, soit la personne qui vous l'a envoyé n'a plus l'application ouverte : demandez-lui de la rouvrir, ou demandez son adresse permanente, qui n'expire jamais.","quick.addrOnNote":"J'ai activé votre adresse permanente, pour qu'on vous trouve même après l'expiration de l'invitation. Vous pouvez la désactiver dans les réglages.",
 "quick.shareText":"Voici le lien pour discuter avec moi sur DigitalValut Logos. Touchez-le et nous sommes connectés :",
 "quick.share":"Envoyer l'invitation",
 "notify.title":"Prévenez-moi quand quelqu'un me cherche",
@@ -733,7 +733,7 @@ Object.assign(I18N.de, {
 "quick.helpB":"Frag die Person, die dich eingeladen hat, nach dem Code — 6 Ziffern, laut gesagt oder geschrieben — und gib ihn hier ein.",
 "quick.codePh":"000000","quick.connect":"Verbinden",
 "quick.waiting":"Warte darauf, dass die andere Person den Code eingibt…","quick.expired":"Der Code ist ohne Antwort abgelaufen. Erzeuge einen neuen.",
-"quick.notFound":"Code abgelaufen oder falsch. Prüfe ihn mit der Person, die ihn dir gegeben hat.",
+"quick.notFound":"Code abgelaufen oder falsch. Prüfe ihn mit der Person, die ihn dir gegeben hat.","quick.tryingAddr":"Ich versuche den anderen Weg…","quick.tryingAddrHint":"Diese Einladung war abgelaufen, aber wer sie geschickt hat, hat eine Adresse, die nie abläuft. Ich rufe dort an.","quick.nobodyWaiting":"Ich habe niemanden gefunden, der wartet. Entweder ist der Code falsch, oder die Person hat die App nicht mehr offen: bitte sie, sie wieder zu öffnen, oder frag nach ihrer dauerhaften Adresse, die nie abläuft.","quick.addrOnNote":"Ich habe deine dauerhafte Adresse eingeschaltet, damit man dich auch nach Ablauf der Einladung findet. Du kannst sie in den Einstellungen ausschalten.",
 "quick.shareText":"Hier ist der Link, um mit mir auf DigitalValut Logos zu sprechen. Tippe ihn an, und wir sind verbunden:",
 "quick.share":"Einladung senden",
 "notify.title":"Benachrichtige mich, wenn mich jemand sucht",
@@ -915,7 +915,7 @@ Object.assign(I18N.es, {
 "quick.helpB":"Pide el código a quien te invitó — 6 dígitos, dichos en voz alta o escritos — y escríbelo aquí.",
 "quick.codePh":"000000","quick.connect":"Conectar",
 "quick.waiting":"Esperando a que la otra persona escriba el código…","quick.expired":"El código expiró sin respuesta. Genera uno nuevo.",
-"quick.notFound":"Código expirado o incorrecto. Compruébalo con quien te lo dio.",
+"quick.notFound":"Código expirado o incorrecto. Compruébalo con quien te lo dio.","quick.tryingAddr":"Pruebo por el otro lado…","quick.tryingAddrHint":"Esa invitación ya no era válida, pero quien te la envió tiene una dirección que no caduca. Estoy llamando allí.","quick.nobodyWaiting":"No he encontrado a nadie esperando. O el código está mal, o la persona que te lo mandó ya no tiene la app abierta: pídele que la vuelva a abrir, o pídele su dirección permanente, que no caduca nunca.","quick.addrOnNote":"He activado tu dirección permanente, para que te encuentren aunque caduque la invitación. Puedes desactivarla en los ajustes.",
 "quick.shareText":"Aquí tienes el enlace para hablar conmigo en DigitalValut Logos. Tócalo y estaremos conectados:",
 "quick.share":"Enviar la invitación",
 "notify.title":"Avísame cuando alguien me busque",
@@ -1097,7 +1097,7 @@ Object.assign(I18N.pt, {
 "quick.helpB":"Peça o código a quem o convidou — 6 dígitos, ditos em voz alta ou escritos — e escreva-o aqui.",
 "quick.codePh":"000000","quick.connect":"Ligar",
 "quick.waiting":"A aguardar que a outra pessoa escreva o código…","quick.expired":"O código expirou sem resposta. Gere um novo.",
-"quick.notFound":"Código expirado ou errado. Verifique-o com quem lho deu.",
+"quick.notFound":"Código expirado ou errado. Verifique-o com quem lho deu.","quick.tryingAddr":"Tento pelo outro lado…","quick.tryingAddrHint":"Esse convite já não era válido, mas quem o enviou tem um endereço que não expira. Estou a ligar para lá.","quick.nobodyWaiting":"Não encontrei ninguém à espera. Ou o código está errado, ou quem o enviou já não tem a app aberta: peça-lhe para a reabrir, ou peça o endereço permanente, que nunca expira.","quick.addrOnNote":"Liguei o seu endereço permanente, para o encontrarem mesmo depois de o convite expirar. Pode desligá-lo nas definições.",
 "quick.shareText":"Aqui está o link para falar comigo no DigitalValut Logos. Toque nele e ficamos ligados:",
 "quick.share":"Enviar o convite",
 "notify.title":"Avise-me quando alguém me procurar",
@@ -1279,7 +1279,7 @@ Object.assign(I18N.ru, {
 "quick.helpB":"Спросите код у того, кто вас пригласил — 6 цифр, сказанных вслух или написанных — и введите его здесь.",
 "quick.codePh":"000000","quick.connect":"Соединиться",
 "quick.waiting":"Ожидание, пока собеседник введёт код…","quick.expired":"Срок кода истёк без ответа. Создайте новый.",
-"quick.notFound":"Код истёк или неверен. Проверьте его у того, кто вам его дал.",
+"quick.notFound":"Код истёк или неверен. Проверьте его у того, кто вам его дал.","quick.tryingAddr":"Пробую с другой стороны…","quick.tryingAddrHint":"Приглашение уже не действовало, но у отправителя есть адрес, который не истекает. Звоню туда.","quick.nobodyWaiting":"Я никого не нашёл в ожидании. Либо код неверный, либо у отправителя больше не открыто приложение: попросите его снова открыть, или попросите постоянный адрес — он не истекает.","quick.addrOnNote":"Я включил ваш постоянный адрес, чтобы вас нашли и после истечения приглашения. Отключить можно в настройках.",
 "quick.shareText":"Вот ссылка, чтобы поговорить со мной в DigitalValut Logos. Нажмите на неё, и мы будем на связи:",
 "quick.share":"Отправить приглашение",
 "notify.title":"Сообщите мне, когда меня кто-то ищет",
@@ -1461,7 +1461,7 @@ Object.assign(I18N.zh, {
 "quick.helpB":"向邀请你的人索要代码——6位数字，口头告知或写下——然后在此输入。",
 "quick.codePh":"000000","quick.connect":"连接",
 "quick.waiting":"正在等待对方输入代码…","quick.expired":"代码已过期且无人应答。请生成一个新代码。",
-"quick.notFound":"代码已过期或错误。请向给你代码的人核实。",
+"quick.notFound":"代码已过期或错误。请向给你代码的人核实。","quick.tryingAddr":"换一条路试试…","quick.tryingAddrHint":"这个邀请已经失效了，但发给你的人有一个永不过期的地址。正在拨那边。","quick.nobodyWaiting":"没有找到在等待的人。可能是代码不对，也可能是对方已经关掉了应用：请他重新打开，或者问他要永不过期的永久地址。","quick.addrOnNote":"我打开了你的永久地址，这样邀请过期后别人也能找到你。可以在设置里关掉。",
 "quick.shareText":"这是在 DigitalValut Logos 上和我聊天的链接。点击它，我们就连接上了：",
 "quick.share":"发送邀请",
 "notify.title":"有人找我时通知我",
@@ -1643,7 +1643,7 @@ Object.assign(I18N.ar, {
 "quick.helpB":"اطلب الرمز ممن دعاك — 6 أرقام، منطوقة بصوت عالٍ أو مكتوبة — واكتبه هنا.",
 "quick.codePh":"٠٠٠٠٠٠","quick.connect":"اتصال",
 "quick.waiting":"في انتظار أن يكتب الشخص الآخر الرمز…","quick.expired":"انتهت صلاحية الرمز بلا رد. أنشئ رمزًا جديدًا.",
-"quick.notFound":"الرمز منتهي الصلاحية أو خاطئ. تحقق منه مع من أعطاك إياه.",
+"quick.notFound":"الرمز منتهي الصلاحية أو خاطئ. تحقق منه مع من أعطاك إياه.","quick.tryingAddr":"أجرّب من الجهة الأخرى…","quick.tryingAddrHint":"لم تعد تلك الدعوة صالحة، لكن من أرسلها لديه عنوان لا ينتهي. أتصل هناك الآن.","quick.nobodyWaiting":"لم أجد أحدًا في الانتظار. إما أن الرمز خاطئ، أو أن من أرسله لم يعد التطبيق مفتوحًا لديه: اطلب منه إعادة فتحه، أو اطلب عنوانه الدائم الذي لا ينتهي أبدًا.","quick.addrOnNote":"شغّلت عنوانك الدائم كي يجدك الناس حتى بعد انتهاء الدعوة. يمكنك إيقافه من الإعدادات.",
 "quick.shareText":"إليك الرابط للتحدث معي على DigitalValut Logos. المسه وسنكون متصلَين:",
 "quick.share":"إرسال الدعوة",
 "notify.title":"أعلمني عندما يبحث عني أحد",
@@ -1825,7 +1825,7 @@ Object.assign(I18N.ur, {
 "quick.helpB":"جس نے آپ کو مدعو کیا اس سے کوڈ مانگیں — 6 ہندسے، بلند آواز میں بتائے گئے یا لکھے گئے — اور یہاں ٹائپ کریں۔",
 "quick.codePh":"000000","quick.connect":"کنیکٹ کریں",
 "quick.waiting":"دوسرے شخص کے کوڈ ٹائپ کرنے کا انتظار ہو رہا ہے…","quick.expired":"کوڈ بغیر جواب کے ختم ہو گیا۔ ایک نیا بنائیں۔",
-"quick.notFound":"کوڈ ختم ہو گیا یا غلط ہے۔ جس نے آپ کو دیا اس سے چیک کریں۔",
+"quick.notFound":"کوڈ ختم ہو گیا یا غلط ہے۔ جس نے آپ کو دیا اس سے چیک کریں۔","quick.tryingAddr":"دوسری طرف سے کوشش کر رہا ہوں…","quick.tryingAddrHint":"وہ دعوت اب درست نہیں رہی، لیکن بھیجنے والے کے پاس ایسا پتہ ہے جو کبھی ختم نہیں ہوتا۔ وہاں کال کر رہا ہوں۔","quick.nobodyWaiting":"مجھے کوئی انتظار کرتا نہیں ملا۔ یا تو کوڈ غلط ہے، یا بھیجنے والے نے ایپ بند کر دی ہے: اُن سے دوبارہ کھولنے کو کہیں، یا اُن کا مستقل پتہ مانگ لیں جو کبھی ختم نہیں ہوتا۔","quick.addrOnNote":"میں نے آپ کا مستقل پتہ آن کر دیا ہے، تاکہ دعوت ختم ہونے کے بعد بھی لوگ آپ کو ڈھونڈ سکیں۔ ترتیبات سے بند کر سکتے ہیں۔",
 "quick.shareText":"یہ ہے DigitalValut Logos پر مجھ سے بات کرنے کا لنک۔ اسے ٹچ کریں اور ہم منسلک ہو جائیں گے:",
 "quick.share":"دعوت بھیجیں",
 "notify.title":"مجھے بتائیں جب کوئی مجھے ڈھونڈے",
@@ -2007,7 +2007,7 @@ Object.assign(I18N.hi, {
 "quick.helpB":"जिसने आपको आमंत्रित किया उससे कोड मांगें — 6 अंक, ज़ोर से बोले या लिखे गए — और यहाँ टाइप करें।",
 "quick.codePh":"000000","quick.connect":"कनेक्ट करें",
 "quick.waiting":"दूसरे व्यक्ति के कोड टाइप करने का इंतज़ार हो रहा है…","quick.expired":"कोड बिना जवाब के समाप्त हो गया। एक नया बनाएं।",
-"quick.notFound":"कोड समाप्त हो गया या ग़लत है। जिसने आपको दिया उससे जांचें।",
+"quick.notFound":"कोड समाप्त हो गया या ग़लत है। जिसने आपको दिया उससे जांचें।","quick.tryingAddr":"दूसरे रास्ते से कोशिश कर रहा हूँ…","quick.tryingAddrHint":"वह निमंत्रण अब मान्य नहीं था, लेकिन भेजने वाले के पास एक पता है जो कभी खत्म नहीं होता। वहाँ कॉल कर रहा हूँ।","quick.nobodyWaiting":"मुझे कोई प्रतीक्षा करता नहीं मिला। या तो कोड गलत है, या भेजने वाले ने ऐप बंद कर दी है: उनसे दोबारा खोलने को कहें, या उनका स्थायी पता माँगें, जो कभी खत्म नहीं होता।","quick.addrOnNote":"मैंने आपका स्थायी पता चालू कर दिया है, ताकि निमंत्रण खत्म होने के बाद भी लोग आपको ढूँढ सकें। सेटिंग्स से बंद कर सकते हैं।",
 "quick.shareText":"यह रहा DigitalValut Logos पर मुझसे बात करने का लिंक। इसे टैप करें और हम जुड़ जाएंगे:",
 "quick.share":"निमंत्रण भेजें",
 "notify.title":"जब कोई मुझे ढूंढे तो बताएं",
@@ -2189,7 +2189,7 @@ Object.assign(I18N.bn, {
 "quick.helpB":"যিনি আপনাকে আমন্ত্রণ জানিয়েছেন তার কাছে কোড চান — ৬টি সংখ্যা, জোরে বলা বা লেখা — এবং এখানে টাইপ করুন।",
 "quick.codePh":"000000","quick.connect":"সংযোগ করুন",
 "quick.waiting":"অন্য ব্যক্তি কোড টাইপ করার অপেক্ষায়…","quick.expired":"কোডের মেয়াদ উত্তর ছাড়াই শেষ হয়ে গেছে। একটি নতুন তৈরি করুন।",
-"quick.notFound":"কোডের মেয়াদ শেষ বা ভুল। যিনি আপনাকে দিয়েছেন তার সাথে এটি পরীক্ষা করুন।",
+"quick.notFound":"কোডের মেয়াদ শেষ বা ভুল। যিনি আপনাকে দিয়েছেন তার সাথে এটি পরীক্ষা করুন।","quick.tryingAddr":"অন্য দিক দিয়ে চেষ্টা করছি…","quick.tryingAddrHint":"সেই আমন্ত্রণ আর বৈধ ছিল না, কিন্তু যিনি পাঠিয়েছেন তাঁর একটি ঠিকানা আছে যা কখনও শেষ হয় না। সেখানে কল করছি।","quick.nobodyWaiting":"অপেক্ষা করছেন এমন কাউকে পাইনি। হয় কোডটি ভুল, নয়তো যিনি পাঠিয়েছেন তাঁর অ্যাপ আর খোলা নেই: তাঁকে আবার খুলতে বলুন, বা তাঁর স্থায়ী ঠিকানা চান, যা কখনও শেষ হয় না।","quick.addrOnNote":"আমি আপনার স্থায়ী ঠিকানা চালু করেছি, যাতে আমন্ত্রণ শেষ হলেও লোকে আপনাকে খুঁজে পায়। সেটিংস থেকে বন্ধ করতে পারেন।",
 "quick.shareText":"DigitalValut Logos-এ আমার সাথে কথা বলার লিঙ্ক এই রইল। এটি ট্যাপ করুন এবং আমরা সংযুক্ত হয়ে যাব:",
 "quick.share":"আমন্ত্রণ পাঠান",
 "notify.title":"কেউ আমাকে খুঁজলে আমাকে জানান",
@@ -2371,7 +2371,7 @@ Object.assign(I18N.id, {
 "quick.helpB":"Minta kode dari orang yang mengundang Anda — 6 angka, diucapkan dengan suara keras atau ditulis — dan ketik di sini.",
 "quick.codePh":"000000","quick.connect":"Sambungkan",
 "quick.waiting":"Menunggu orang lain mengetik kode…","quick.expired":"Kode kedaluwarsa tanpa jawaban. Buat yang baru.",
-"quick.notFound":"Kode kedaluwarsa atau salah. Periksa dengan orang yang memberikannya kepada Anda.",
+"quick.notFound":"Kode kedaluwarsa atau salah. Periksa dengan orang yang memberikannya kepada Anda.","quick.tryingAddr":"Mencoba lewat jalan lain…","quick.tryingAddrHint":"Undangan itu sudah tidak berlaku, tapi pengirimnya punya alamat yang tidak pernah kedaluwarsa. Sedang menghubungi ke sana.","quick.nobodyWaiting":"Saya tidak menemukan siapa pun yang menunggu. Entah kodenya salah, atau pengirimnya sudah tidak membuka aplikasi: minta dia membukanya lagi, atau minta alamat permanennya yang tidak pernah kedaluwarsa.","quick.addrOnNote":"Saya menyalakan alamat permanen Anda, supaya orang tetap menemukan Anda setelah undangan kedaluwarsa. Bisa dimatikan di pengaturan.",
 "quick.shareText":"Ini tautan untuk berbicara dengan saya di DigitalValut Logos. Ketuk dan kita akan tersambung:",
 "quick.share":"Kirim undangan",
 "notify.title":"Beri tahu saya saat seseorang mencari saya",
@@ -7141,7 +7141,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.06';
+const APP_VERSION = 'logos-modifica-4.07';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8122,6 +8122,16 @@ async function startQuickShare(existingCode, quiet){
   /* Nuovo a ogni invito, come il codice. Vive solo nel link: non compare sullo
      schermo, non si detta, non si scrive a mano. */
   quickLinkSecret = makeQuickSecret();
+  /* La rete di sicurezza dell'invito, preparata qui perche' il link si
+     costruisce subito dopo. Chi invita vuole essere raggiunto — e' l'unica
+     cosa che sta chiedendo — quindi se non ha ancora un indirizzo glielo si
+     accende: senza, l'invito resta l'unica strada, e quella strada muore in
+     quindici minuti. Non e' silenzioso: la scheda dell'invito lo dice, e
+     l'interruttore resta suo da spegnere quando vuole.
+     Se qualcosa va storto si prosegue senza: un invito senza riserva e'
+     esattamente l'invito di prima, mai peggio. */
+  quickLinkAddr = await ensureFallbackAddress();
+  $('inviteAddrNote').classList.toggle('hide', !addrAccesaPerInvito);
   $('quickCodeOut').textContent = formatQuickCode(code);
   paintQr(code).catch(()=>{}); /* the QR is a convenience: never hold the invite up for it */
   $('btnRetryQuickA').classList.add('hide');
@@ -8277,9 +8287,45 @@ let quickLinkSecret = '';
 /* Quello letto dal link di qualcun altro, per chi entra. Separato dal proprio:
    confonderli farebbe cifrare con la chiave sbagliata. */
 let quickJoinSecret = '';
+/* L'indirizzo permanente di chi crea l'invito, dentro il link. E' la rete che
+   mancava: l'invito vive quindici minuti e SOLO con l'app in primo piano,
+   mentre l'indirizzo non scade mai e — con l'app Android — fa squillare il
+   telefono anche chiuso. Senza questo, chi apriva il link un minuto dopo
+   trovava «Codice scaduto o sbagliato» e andava a controllare l'unica cosa che
+   non era il problema. Vedi quickFallbackAddr. */
 function quickLink(code){
-  return shareBase() + '#q=' + code + (quickLinkSecret ? '&s=' + quickLinkSecret : '');
+  return shareBase() + '#q=' + code
+       + (quickLinkSecret ? '&s=' + quickLinkSecret : '')
+       + (quickLinkAddr ? '&a=' + quickLinkAddr : '');
 }
+/* il proprio, messo nel link che si manda */
+let quickLinkAddr = '';
+/* Acceso solo da qui, e solo per chi sta invitando qualcuno: restituisce
+   l'indirizzo da mettere nel link, accendendolo se manca. Se era gia' acceso
+   non tocca niente. Se qualcosa fallisce torna stringa vuota e il link parte
+   senza riserva — cioe' esattamente com'era prima, mai peggio. */
+let addrAccesaPerInvito = false;
+async function ensureFallbackAddress(){
+  try{
+    if (!addrOn()){
+      setAddrOn(true);
+      addrAccesaPerInvito = true;
+      /* il servizio nativo sorveglia gli slot dell'indirizzo: accenderne uno
+         cambia proprio cio' che deve guardare, e va ridetto adesso */
+      try{ handOverWatchToAndroid(); }catch(e){}
+    }
+    /* ⚠️ La chiave va pubblicata o quell'indirizzo non lo può comporre
+       nessuno — e allora metterlo nel link è peggio che non metterlo: chi
+       apre l'invito verrebbe mandato su una strada morta e leggerebbe
+       «indirizzo non più attivo», che è un'altra diagnosi sbagliata al posto
+       di quella onesta. Riserva solo se la riserva c'è davvero. */
+    if (!await publishAddrKeys()) return '';
+    const a = await myAddress(0);
+    return a || '';
+  }catch(e){ return ''; }
+}
+/* quello letto dal link di un altro, da chiamare se l'invito non c'e' piu' */
+let quickJoinAddr = '';
 
 /* ---------------- a QR held out in person is an authenticated channel ----------------
    Everything else here has to assume the invite travelled through something
@@ -8453,10 +8499,36 @@ async function tryQuickConnect(){
       if (connectionWorking(pc)) return;
       /* the code was never the problem if there was nothing there to ask */
       if (!brokerReachable){ brokerDownFallback('B'); return; }
+
+      /* ⚠️ LA RISERVA, e la ragione per cui esiste.
+         L'invito vive quindici minuti e SOLO mentre l'app di chi l'ha creato
+         sta in primo piano; il servizio nativo di Android sorveglia soltanto
+         gli slot dell'indirizzo, non gli inviti. Quindi bastava che l'altro
+         mettesse via il telefono perche' qui non ci fosse piu' niente — e
+         l'app rispondeva «Codice scaduto o sbagliato», mandando tutti e due a
+         controllare l'unica cosa che non era il problema.
+         L'indirizzo permanente non scade, e con l'app Android fa squillare il
+         telefono anche chiuso. Se il link lo porta, si chiama quello invece di
+         arrendersi: chi ha toccato il link non deve fare niente di diverso. */
+      if (quickJoinAddr){
+        const rete = quickJoinAddr;
+        quickJoinAddr = '';   /* una sola volta: se fallisce anche questa, si dice com'e' */
+        setBigConnectingText('B',
+          t('quick.tryingAddr','Provo dall\'altra parte…'),
+          t('quick.tryingAddrHint','L\'invito non era più valido, ma chi te l\'ha mandato ha un indirizzo che non scade. Sto chiamando lì.'));
+        await dialAddress(rete);
+        return;
+      }
+
       hideBigConnectingB(true);
+      /* ⚠️ NON SI ACCUSA PIU' IL CODICE. Qui non si sa se il codice sia
+         sbagliato o se dall'altra parte non ci sia semplicemente nessuno in
+         attesa — e il secondo caso e' di gran lunga il piu' comune. Dire
+         «codice sbagliato» era una diagnosi inventata, e mandava due persone a
+         ricontrollare una cosa giusta. Adesso si dice cosa si sa e cosa fare. */
       setStatus($('quickStatusB'), knocked
         ? t('wake.noAnswer','L\'ho avvisata ma non ha ancora aperto l\'app. Riprova più tardi.')
-        : t('quick.notFound','Codice scaduto o sbagliato. Controllalo con chi te l\'ha dato.'), 'bad');
+        : t('quick.nobodyWaiting','Non ho trovato nessuno in attesa. O il codice è sbagliato, oppure chi te l\'ha mandato non ha più l\'app aperta: chiedigli di riaprirla, o fatti dare il suo indirizzo permanente, che non scade mai.'), 'bad');
       return;
     }
     /* back to the ordinary wording for the handshake that is about to run */
@@ -10030,8 +10102,15 @@ startInboxPolling();
 })();
 
 function autoFillFromHash(){
-  /* an address QR scanned, or an address link tapped */
-  const dial = location.hash.match(/[#&]a=([0-9A-Za-z]{12})\b/);
+  /* an address QR scanned, or an address link tapped.
+     ⚠️ `q=` PRIMA di `a=`: da quando il link di un invito porta anche
+     l'indirizzo come rete di sicurezza, un link contiene tutti e due, e
+     guardare `a=` per primo avrebbe scavalcato l'invito ogni volta —
+     buttando via il segreto lungo che viaggia con `s=`. L'indirizzo li' e'
+     una RISERVA, non la strada principale. */
+  const dial = /[#&]q=\d{6}\b/.test(location.hash)
+    ? null
+    : location.hash.match(/[#&]a=([0-9A-Za-z]{12})\b/);
   if (dial){
     const a = parseAddress(dial[1]);
     try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
@@ -10048,6 +10127,10 @@ function autoFillFromHash(){
     /* only a QR carries this, and only a QR was ever held out in person */
     const vouch = location.hash.match(/[#&]v=([0-9a-f]{8,64})\b/);
     scannedFp = vouch ? vouch[1] : null;
+    /* la riserva: se l'invito non c'e' piu', si chiama qui invece di accusare
+       il codice. Un link vecchio non ce l'ha e si comporta come prima. */
+    const ind = location.hash.match(/[#&]a=([0-9A-Za-z]{12})\b/);
+    quickJoinAddr = ind ? (parseAddress(ind[1]) || '') : '';
     try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
     showScreen('screenJoin');
     showQuickLayoutB();

@@ -750,6 +750,44 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('un invito scaduto non accusa piu il codice, e porta la sua riserva', async () => {
+    /* Riportato dall'operatore il 5 set 2026: un amico gli manda un invito, lui
+       lo apre e vede in rosso «Codice scaduto o sbagliato». Il codice era
+       giusto. Due volte, con due dispositivi diversi.
+       La causa: l'invito vive 15 minuti e SOLO mentre l'app di chi l'ha creato
+       sta in primo piano, e il servizio nativo di Android sorveglia soltanto
+       gli slot dell'indirizzo — non gli inviti. Bastava che l'altro mettesse
+       via il telefono. E `publishWakeSlot` scrive il modo per svegliarlo solo
+       se le notifiche sono ACCESE (`if (!notifyPref()) return false;`), che
+       quasi nessuno ha: senza sveglia si finiva sul ramo che accusa il codice.
+       Due persone mandate a ricontrollare l'unica cosa che non era il problema. */
+    const app = loadApp();
+
+    /* il link che si manda deve portare la riserva */
+    app.run(`quickLinkSecret = 'sss'; quickLinkAddr = 'AAAABBBBCCCC';`);
+    const link = app.run("quickLink('123456')");
+    assert.ok(/[#&]a=AAAABBBBCCCC\b/.test(link),
+      'il link deve portare l\'indirizzo come riserva: ' + link);
+    assert.ok(/#q=123456\b/.test(link), 'e deve restare un invito normale');
+
+    /* e chi lo apre deve leggerla SENZA che l'indirizzo scavalchi l'invito:
+       il segreto lungo viaggia con il codice, saltarlo lo butterebbe via */
+    app.run(`
+      globalThis.__dial = null;
+      dialAddress = async (a) => { globalThis.__dial = a; };
+      tryQuickConnect = () => { globalThis.__quick = true; };
+      location.hash = '#q=123456&s=sssssssssssssssssssss&a=AAAABBBBCCCC';
+      autoFillFromHash();
+    `);
+    assert.strictEqual(app.run('globalThis.__quick'), true,
+      'deve partire l\'invito, non la chiamata all\'indirizzo');
+    assert.strictEqual(app.run('globalThis.__dial'), null,
+      'l\'indirizzo e una RISERVA: non deve scavalcare il codice');
+    assert.strictEqual(app.run('quickJoinAddr'), 'AAAABBBBCCCC',
+      'ma va tenuto da parte per quando l\'invito non c\'e piu');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella
