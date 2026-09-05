@@ -3023,7 +3023,19 @@ function tellAllRelays(percorso, opts, ms){
   })).then(esiti => ({ riusciti: esiti.filter(Boolean).length, stati, risposto }));
 }
 
-const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' } ] };
+/* ⚠️ ERANO GLI STUN DI GOOGLE, fino al 5 set 2026, e il punto non e' che siano
+   cattivi: e' che questo ripiego scatta ESATTAMENTE quando il relay non
+   risponde, cioe' nello scenario di censura per cui l'app esiste. In quel
+   momento il telefono contattava Google, che imparava indirizzo IP e istante
+   del tentativo — la stessa cosa che il progetto dichiara pubblicamente di non
+   fare («no Play Services, no push service, no third party at any point» nella
+   candidatura F-Droid). Sul CODICE la promessa reggeva — da Google non si
+   caricava niente — ma il contatto di rete c'era, e nessuno lo diceva.
+   Adesso il ripiego e' lo STUN di CLOUDFLARE: e' la stessa azienda che gia'
+   ospita il relay e vede gia' questo traffico, quindi NON aggiunge nessun
+   terzo. Verificato che risponda davvero (binding success su 3478) invece di
+   fidarsi che l'indirizzo esista. */
+const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.cloudflare.com:3478' } ] };
 /* TURN_BROKER_URL non esiste piu': l'indirizzo lo costruisce askAnyRelay. */
 
 let cachedIceServers = null;
@@ -7173,7 +7185,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.08';
+const APP_VERSION = 'logos-modifica-4.09';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
