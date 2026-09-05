@@ -923,6 +923,53 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('un pump abbandonato muore da solo invece di svuotare la quota di tutti', async () => {
+    /* TROVATO IL 5 SET 2026 dalla campagna delle corse — mai eseguita prima.
+       Interrompendo dialAddress a uno dei suoi punti di attesa, la campagna
+       trovava «pump della cassetta ancora vivo» in 16 punti su 21. Il ciclo
+       era `while (!stopped)` e basta: nessuna scadenza propria, si fermava
+       solo se qualcuno lo fermava. Un pump orfano interrogava il relay PER
+       SEMPRE, una lettura ogni 700 ms — circa 123.000 al giorno, contro un
+       tetto di 100.000 per l'INTERO account. Un solo tentativo interrotto
+       poteva spegnere Logos a tutti.
+       ⚠️ La scadenza deve essere piu' lunga del percorso legittimo piu' lungo:
+       l'invito che aspetta tiene la porta aperta quindici minuti. */
+    const app = loadApp();
+
+    assert.ok(app.run('PUMP_MAX_MS') > 15 * 60 * 1000,
+      'la scadenza non deve tagliare le gambe all\'invito che aspetta quindici minuti');
+
+    app.run(`
+      globalThis.__letti = 0;
+      slotId = async (s, n) => n;
+      mailboxGetSealed = async () => { globalThis.__letti++; return null; };
+      globalThis.__pump = candidatePump(new RTCPeerConnection(), { key:{}, seed:'s' }, 'ac', 'ab');
+    `);
+    await app.run('new Promise(r => setTimeout(r, 20))');
+    assert.strictEqual(app.run('__pump.isRunning()'), true, 'appena nato deve girare');
+
+    /* nessuno lo ferma: e' esattamente il caso dell'orfano. Si sposta avanti
+       l'orologio oltre la scadenza invece di aspettare sedici minuti veri. */
+    app.run(`
+      const vero = Date.now;
+      Date.now = () => vero() + PUMP_MAX_MS + 1000;
+    `);
+    /* ⚠️ 900 ms e non 60: fra un giro e l'altro il ciclo DORME quanto dice
+       pollGap (700 ms fuori dalla finestra veloce), e la scadenza si controlla
+       in cima al giro. Aspettare meno del sonno significa chiedergli se e'
+       morto prima che abbia riaperto gli occhi — ed e' cosi' che questo test
+       e' fallito la prima volta, per colpa sua e non del codice. */
+    await app.run('new Promise(r => setTimeout(r, 900))');
+
+    assert.strictEqual(app.run('__pump.isRunning()'), false,
+      'passata la scadenza un pump che nessuno ha fermato deve fermarsi da solo');
+    const prima = app.run('__letti');
+    await app.run('new Promise(r => setTimeout(r, 900))');
+    assert.strictEqual(app.run('__letti'), prima,
+      'e non deve piu leggere nemmeno una volta: e la quota di tutti');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

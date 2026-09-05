@@ -7225,7 +7225,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.11';
+const APP_VERSION = 'logos-modifica-4.12';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -7485,9 +7485,20 @@ async function tryAutoReconnect(contact){
     await tryAutoReconnectInner(contact);
   }catch(e){
     stopStrayPump();
-    $('btnCreate').disabled = false;
     if (!connectionWorking(pc))
       setStatus($('statusA'), t('reconnect.failed','Non sono riuscito a ricollegarmi. Prova con un invito nuovo.'), 'bad');
+  }finally{
+    /* ⚠️ ERA NEL `catch`, e non bastava: un'uscita anticipata NON e'
+       un'eccezione. `tryAutoReconnectInner` torna indietro da parecchi punti
+       senza sollevare niente — soppiantata da un'altra connessione, impronta
+       mancante, contatto senza fp — e in tutti quei casi il `catch` non
+       scattava e il pulsante restava spento PER SEMPRE, perche' nessun
+       orologio lo rimette a posto. Chi guarda vede un pulsante morto e deve
+       ricaricare la pagina per riaverlo.
+       Trovato il 5 set 2026 dalla campagna delle corse (mai eseguita prima),
+       che lo prende in 9 punti nel modo «soppianta» — quello che esce senza
+       sollevare, cioe' proprio quello che il catch non poteva vedere. */
+    $('btnCreate').disabled = false;
   }
 }
 async function tryAutoReconnectInner(contact){
@@ -8094,6 +8105,9 @@ function hideBigConnectingB(restoreQuick){
    Each batch of addresses goes to its own numbered mailbox slot, because a slot can
    only be read once — nothing else about the mailbox, its two-minute life, or the
    privacy of what it holds changes. */
+/* Piu' lungo del percorso legittimo piu' lungo che esista: l'invito che
+   aspetta tiene la porta aperta quindici minuti. Vedi il ciclo qui sotto. */
+const PUMP_MAX_MS = 16 * 60 * 1000;
 function candidatePump(pcObj, sec, mine, theirs){
   let outN = 0, inN = 0, batch = [], flushTimer = null, stopped = false, remoteSet = false;
   const held = [];
@@ -8155,6 +8169,23 @@ function candidatePump(pcObj, sec, mine, theirs){
        not resilience. */
     try{
       while (!stopped){
+        /* ⚠️ TROVATO IL 5 SET 2026 dalla campagna delle corse — mai eseguita
+           prima. Questo ciclo era `while (!stopped)` e BASTA: nessuna scadenza
+           propria, si fermava solo se qualcuno lo fermava. Interrompendo un
+           tentativo nel punto sbagliato (la campagna ne ha trovati 16 su 21
+           solo in dialAddress) il pump restava orfano e continuava a
+           interrogare il relay PER SEMPRE.
+           Il costo, dalle costanti di questo file: una lettura ogni 700 ms
+           (`pollGap(pumpStarted, 700)`) = ~85 al minuto = ~123.000 al giorno.
+           Il tetto giornaliero dell'intero account e' 100.000. **Un solo
+           tentativo interrotto poteva spegnere Logos a tutti** — che e'
+           esattamente la classe di guasto chiusa alla v31 da un'altra porta.
+           Sedici minuti e non cinque: l'invito che aspetta tiene la porta
+           aperta quindici minuti (`deadline` in startQuickShare), e una
+           scadenza piu' corta taglierebbe le gambe a un uso legittimo. Cosi'
+           nessun percorso vero viene toccato, e un orfano muore da solo
+           costando ~1.400 letture invece di centoventimila. */
+        if (Date.now() - pumpStarted > PUMP_MAX_MS){ stop(); break; }
         const key = await slotId(sec.seed, 'trickle-' + theirs + '-' + inN);
         const msg = await mailboxGetSealed(key, sec);
         if (msg && Array.isArray(msg.c)){
@@ -8510,13 +8541,20 @@ async function tryQuickConnect(){
      alongside it instead of in front of it. */
   /* ⚠️ Ritirato insieme all'altro lato: finche' chi mostra l'invito sigilla
      col solo codice, chi entra deve aprire col solo codice. */
-  const secReady = quickSecrets(code);
-  const pcReady = newPeerConnection();
-  secReady.catch(()=>{}); pcReady.catch(()=>{});
   /* held until it is either handed over to `pc` or closed: a connection warmed
-     up for a code that turns out to be wrong must not be left open */
+     up for a code that turns out to be wrong must not be left open.
+     Dichiarato FUORI dal try perche' il `finally` lo usa. */
   let warmPc = null;
   try{
+    /* ⚠️ SPOSTATE DENTRO IL 5 SET 2026. Stavano appena sopra il `try`, e la
+       campagna delle corse le prendeva come 1ª e 2ª attesa: se una delle due
+       falliva li', il `finally` non veniva mai eseguito e il pulsante
+       «Collegati» restava spento per sempre. Aggiungere il finally non era
+       bastato — copriva tutto tranne le due righe che il difetto colpiva.
+       Due righe fuori dal recinto valgono quanto nessun recinto. */
+    const secReady = quickSecrets(code);
+    const pcReady = newPeerConnection();
+    secReady.catch(()=>{}); pcReady.catch(()=>{});
     const sec = await secReady;
     warmPc = await pcReady;
     tempiSegna('preparazione');
@@ -8668,6 +8706,17 @@ async function tryQuickConnect(){
        connection over — a wrong code, an expired one, a throw — closes it
        rather than leaving it holding a relay allocation nobody will use. */
     if (warmPc){ try{ warmPc.close(); }catch(e){} }
+    /* ⚠️ AGGIUNTO IL 5 SET 2026 dalla campagna delle corse, mai eseguita prima.
+       Il pulsante si spegneva in un punto solo e si riaccendeva in CINQUE punti
+       sparsi: bastava un'uscita anticipata che non ne toccasse nessuno e
+       restava spento PER SEMPRE, perche' nessun orologio lo rimette a posto.
+       Chi guarda vede un pulsante «Collegati» morto e non ha nessun modo di
+       capire perche' — l'unica via d'uscita e' ricaricare la pagina. La
+       campagna lo ha trovato interrompendo alla 1ª e alla 2ª attesa.
+       Qui dentro vale per OGNI uscita, eccezioni comprese: e' il punto giusto,
+       e riaccenderlo in un sesto posto sarebbe stato ripetere l'errore. */
+    quickConnecting = false;
+    $('btnQuickConnect').disabled = false;
   }
 }
 $('btnQuickConnect').addEventListener('click', tryQuickConnect);
