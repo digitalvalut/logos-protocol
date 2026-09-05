@@ -650,6 +650,49 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('chi rinuncia a chiamare si ritira anche dalla casella dell\'altro', async () => {
+    /* L'invito resta nella casella finche' non scade, e finche' c'e' fa
+       squillare. Chi rinunciava spariva dal proprio schermo e restava li':
+       dall'altra parte il telefono suonava per una chiamata che non stava piu'
+       aspettando nessuno, e chi rispondeva trovava il vuoto.
+       ⚠️ Non basta sovrascriverlo con un record «annullato»: il servizio nativo
+       di Android non legge la casella, la SBIRCIA (?peek=1), e gli basta sapere
+       che c'e' qualcosa. Va tolto. Toglierlo e' leggerselo: la casella e' a
+       lettura unica, il relay cancella il record mentre lo consegna.
+       Qui si esce per soppiantazione — un'altra chiamata prende la connessione
+       mentre questa aspetta — che e' una delle uscite «rinuncia» vere. */
+    const app = loadApp();
+    app.run(`
+      globalThis.__letti = [];
+      myAddress = async () => 'ZZZZZZZZZZZZ';
+      addrDialSecrets = async () => ({ key: {}, seed: 's', slot: 0 });
+      myFingerprintHex = async () => 'ff';
+      slotId = async (seed, nome) => nome;
+      mailboxPutSealed = async () => true;
+      mailboxGet = async (k) => { globalThis.__letti.push(k); return null; };
+      /* Mentre questa chiamata aspetta la risposta, un'altra si prende la
+         connessione: dialAddress deve accorgersene e lasciare perdere.
+         Solo sulla casella della risposta: la stessa funzione la usa anche il
+         pump per le candidate, e soppiantare li' fermava dialAddress prima
+         ancora che l'invito partisse — cioe' prima del difetto in esame. */
+      mailboxGetSealed = async (k) => {
+        if (String(k).indexOf('addr-answer-') === 0) pc = { soppiantata: true };
+        return null;
+      };
+    `);
+    await app.run("Promise.resolve(dialAddress('AAAABBBBCCCC')).catch(function(){})");
+    /* il ritiro non viene atteso da chi rinuncia — spegnere non deve far
+       aspettare nessuno — quindi qui gli si lascia il tempo di partire */
+    await app.run('new Promise(r => setTimeout(r, 5))');
+
+    const letti = JSON.parse(app.run('JSON.stringify(globalThis.__letti)'));
+    assert.ok(letti.includes('addr-offer'),
+      'rinunciando, l\'invito va tolto dalla casella: leggerlo e cancellarlo');
+    assert.strictEqual(app.run('dialedAddress'), null,
+      'e le bandiere vanno azzerate dallo stesso spegnimento, non una per volta');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

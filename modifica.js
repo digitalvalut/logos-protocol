@@ -6548,6 +6548,21 @@ let dialedAddress = null, dialedSlot = 0, dialedAddrUnvouched = false;
    anything the caller could have produced by itself. */
 let dialedAddrProven = false;
 
+/* Ritirare il proprio invito e' semplicemente leggerselo. La casella e' a
+   lettura unica — il relay cancella il record mentre lo consegna — quindi una
+   GET sul proprio slot lo toglie di mezzo, senza nessuna rotta nuova nel
+   Worker e pagando in LETTURE, che sono la risorsa abbondante: la quota
+   stretta e' quella delle scritture (mille al giorno per tutto l'account).
+   ⚠️ Perche' non basta sovrascriverlo con un record «annullato»: il servizio
+   nativo di Android non legge la casella, la SBIRCIA (`?peek=1`), e gli basta
+   sapere che li' dentro c'e' qualcosa per far squillare il telefono. Un
+   annullo scritto in quello slot lo farebbe suonare esattamente come prima.
+   Togliere e' l'unica cosa che vale per tutti e due i modi di guardare. */
+async function withdrawOffer(offerKey){
+  if (!offerKey) return;
+  try{ await mailboxGet(offerKey); }catch(e){}   /* se non c'e' piu', tanto meglio: vuol dire che l'hanno gia' preso */
+}
+
 async function dialAddress(raw, unvouched){
   const addr = parseAddress(raw);
   if (!addr){
@@ -6566,6 +6581,9 @@ async function dialAddress(raw, unvouched){
     t('addr.callingHint','Se la persona ha l\'app chiusa le faccio squillare il telefono. Può volerci qualche istante.'));
   dialing = true;
   let myPc = null;
+  /* riempito piu' sotto, appena c'e' qualcosa da spegnere: serve al catch, che
+     e' fuori dal blocco dove giveUpDial esiste */
+  let tearDown = null;
   try{
     /* Fetches the key this address is a hash of, and checks it really is. Null
        means one of two honest answers, and both have to be said out loud rather
@@ -6645,7 +6663,21 @@ async function dialAddress(raw, unvouched){
        codice" panel. A false accusation of eavesdropping, raised by an
        ordinary tap. Nothing teaches people to ignore a security warning
        faster than one that cries wolf. */
-    const giveUpDial = () => { dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; pump.stop(); };
+    /* ⚠️ L'UNICO punto in cui questa chiamata si spegne, e deve restare
+       l'unico. Prima ogni uscita puliva il suo pezzo e si dimenticava degli
+       altri — le bandiere qui, il pump la', e l'invito nella casella non lo
+       toglieva nessuno. Chi rinunciava spariva dal proprio schermo e restava
+       nella casella dell'altro fino alla scadenza: dall'altra parte il
+       telefono squillava per una chiamata che non stava piu' aspettando
+       nessuno, e chi rispondeva trovava il vuoto. Stessa radice del rifiuto
+       che non usciva dal telefono, vista dal lato di chi chiama. */
+    const giveUpDial = () => {
+      dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
+      pump.stop();
+      withdrawOffer(offerKey);
+    };
+    /* dal catch in fondo, che non vede dentro questo blocco */
+    tearDown = giveUpDial;
     while (Date.now() < until){
       if (!$('screenChat').classList.contains('hide')){ giveUpDial(); return; }
       /* something else took the connection over — accepting an incoming call,
@@ -6681,8 +6713,9 @@ async function dialAddress(raw, unvouched){
       return;
     }
     if (!got || !got.sdp){
-      dialedAddress = null; dialedSlot = 0;
-      pump.stop();
+      /* passa dallo stesso spegnimento di tutte le altre uscite: prima questa
+         si puliva per conto suo, e infatti si dimenticava dell'invito */
+      giveUpDial();
       hideBigConnectingB(true);
       showScreen('screenHome');
       setStatus($('addrDialStatus'), t('addr.noAnswer','Non ha risposto. L\'ho avvisata: riprova più tardi.'), 'warn');
@@ -6712,7 +6745,9 @@ async function dialAddress(raw, unvouched){
       if (!ok){ dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; hideBigConnectingB(true); }
     });
   }catch(e){
-    dialedAddress = null; dialedSlot = 0; dialedAddrProven = false;
+    /* stesso spegnimento unico, se si e' arrivati abbastanza avanti da avere
+       qualcosa da spegnere; altrimenti non c'era ancora nessun invito in giro */
+    if (tearDown) tearDown(); else { dialedAddress = null; dialedSlot = 0; dialedAddrProven = false; }
     stopStrayPump(myPc);
     /* same reason as everywhere else: a call that threw must not leave this
        device unreachable to the next person who tries it */
@@ -7065,7 +7100,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.04';
+const APP_VERSION = 'logos-modifica-4.05';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
