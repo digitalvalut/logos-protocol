@@ -20,15 +20,40 @@ con due indirizzi senza capire perché.
   fa scattare `hashchange`) se l'app è già aperta. La pagina ha già
   `autoFillFromHash()` che fa il resto — nessuna modifica a `modifica.js`.
 
-**Finché il file qui sotto non è online, `autoVerify` non passa e il link torna
-al browser esattamente come adesso. Nessuna regressione.**
+## ✅ FATTO — il file è online dal 5 settembre 2026
 
-## Il passo manuale: il file `assetlinks.json` sulla RADICE del dominio
+`https://digitalvalut.github.io/.well-known/assetlinks.json` risponde **200**,
+con `content-type: application/json` (che Android pretende). Verificato non solo
+caricandolo, ma interrogando **il servizio di verifica di Google**, che è lo
+stesso che usa Android:
+
+```
+curl "https://digitalassetlinks.googleapis.com/v1/statements:list\
+?source.web.site=https%3A%2F%2Fdigitalvalut.github.io\
+&relation=delegate_permission%2Fcommon.handle_all_urls"
+```
+
+→ nessun errore, nessun avviso, `io.github.digitalvalut.logos` autorizzata.
+
+L'impronta nel file è stata verificata **contro l'APK pubblicato**
+(`apksigner verify --print-certs`), non copiata a memoria: un carattere sbagliato
+lì dentro non dà nessun errore visibile, la funzione semplicemente non parte e
+nessuno capisce perché.
+
+⚠️ **`.nojekyll` non è decorativo.** GitHub Pages scarta ogni cartella che inizia
+con un punto — compresa `.well-known/`. Senza quel file il caricamento riesce, la
+pagina risponde 404, e il fallimento è completamente muto.
+
+⚠️ **Android controlla all'installazione, non a ogni tocco.** Un telefono che
+aveva già l'app installata *prima* del 5 settembre ha già fatto il controllo, e
+gli è andato male. Su quei telefoni serve **reinstallare/aggiornare l'app**,
+oppure attivarlo a mano: Impostazioni → App → DigitalValut Logos → *Apri per
+impostazione predefinita* → *Aggiungi link*.
+
+## Il file `assetlinks.json` sulla RADICE del dominio (com'è stato messo)
 
 Android controlla `https://digitalvalut.github.io/.well-known/assetlinks.json` —
-sulla **radice** `digitalvalut.github.io`, non sotto `/logos-protocol/`. Quel
-repository di GitHub Pages **non esiste ancora** (`digitalvalut.github.io/` dà
-"Site not found").
+sulla **radice** `digitalvalut.github.io`, non sotto `/logos-protocol/`.
 
 ### Come metterlo online (gratis, ~3 minuti su github.com)
 
