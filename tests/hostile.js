@@ -353,7 +353,7 @@ function loadHostile(options){
 function wrongTypes(rng){
   const list = [
     {}, [], 0, -1, 1.5, NaN, true, false, null,
-    '', ' ', ' ', '\\', '"', "'", '</script>',
+    '', ' ', '\u0000', '\\', '"', "'", '</script>',
     { toString(){ throw new Error('toString ostile'); } },
     { length: 1e9 },
     [[[[[[[[[['annidato']]]]]]]]]],

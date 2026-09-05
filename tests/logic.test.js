@@ -875,6 +875,54 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('chi e connesso non puo far morire l\'app riempiendola di messaggi', async () => {
+    /* TROVATO IL 5 SET 2026 dalla campagna ostile «dimensioni» — quella che
+       esisteva da settimane e non era MAI STATA ESEGUITA. Due mancanze che si
+       moltiplicavano:
+       (1) `msg.text` finiva a schermo senza nessun tetto di lunghezza;
+       (2) `renderMsg` faceva solo appendChild, e niente in tutto il file
+           toglieva mai una bolla vecchia.
+       Chi era connesso poteva mandare messaggi enormi a raffica e far crescere
+       la memoria finche' l'app moriva. Misurato prima della correzione: 176 KB
+       per messaggio, crescita lineare — 12.000 messaggi = 2,1 GB.
+       La cronologia su DISCO era gia' protetta (300 voci, 256 KB): era lo
+       schermo a non avere nessun limite. */
+    const app = loadApp();
+    app.run(`peerNick = 'Ostile'; dc = { readyState:'open', send(){} };`);
+
+    /* (1) un messaggio lunghissimo viene tagliato — e lo dice.
+       ⚠️ La taglia e' un NUMERO FISSO, non `MAX_TEXT_CHARS + qualcosa`: chiedere
+       all'app quanto sia il proprio tetto e poi mandarle quel tetto rende la
+       prova circolare, e alzando la costante il test continuerebbe a passare.
+       Il primo tentativo faceva cosi' e infatti il sabotaggio non lo attaccava. */
+    app.run(`onDcMessage({ data: JSON.stringify({ type:'text', text: 'A'.repeat(60000) }) });`);
+    /* ⚠️ Si guarda innerHTML e NON textContent: in questo banco sono due
+       stringhe scollegate (il finto non interpreta l'HTML, ed e' una
+       semplificazione dichiarata), quindi `textContent` qui e' sempre vuoto e
+       un'asserzione su di esso passerebbe SEMPRE — per il motivo sbagliato.
+       Il primo tentativo di questo test faceva esattamente quello. */
+    const primaBolla = app.run("$('msgs').children[0].children[0].innerHTML");
+    assert.ok(primaBolla.length < 40000,
+      'un testo di 60.000 caratteri non deve finire tutto a schermo, invece la bolla e lunga ' + primaBolla.length);
+    assert.ok(/troppo lungo|too long/i.test(primaBolla),
+      'e va DETTO che e stato tagliato: mostrarne meno in silenzio sarebbe una bugia');
+
+    /* (2) la raffica non fa crescere lo schermo all'infinito */
+    app.run(`for (let i = 0; i < 500; i++){
+      onDcMessage({ data: JSON.stringify({ type:'text', text: 'riempimento ' + i }) });
+    }`);
+    const bolle = app.run("$('msgs').children.length");
+    assert.ok(bolle <= app.run('MAX_BUBBLES'),
+      'lo schermo deve fermarsi al tetto, invece tiene ' + bolle + ' bolle');
+
+    /* e devono restare le ULTIME, non le prime: buttare via i messaggi nuovi
+       invece dei vecchi sarebbe un rimedio peggiore del difetto */
+    const ultima = app.run("$('msgs').children[$('msgs').children.length-1].children[0].innerHTML");
+    assert.ok(/riempimento 499/.test(ultima),
+      'l\'ultimo messaggio arrivato deve essere ancora li, invece c\'e: ' + ultima.slice(0, 80));
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

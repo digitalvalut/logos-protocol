@@ -78,6 +78,12 @@ class FakeElement {
   append(...c){ c.forEach(x => { x.parentNode = this; }); this.children.push(...c); }
   prepend(...c){ c.forEach(x => { x.parentNode = this; }); this.children.unshift(...c); }
   removeChild(c){ this.children = this.children.filter(x => x !== c); c.parentNode = null; return c; }
+  /* §33: il finto deve poter dire il vero. Mancavano tutte e due, e la loro
+     assenza avrebbe nascosto qualunque difetto in un codice che le usa: e
+     successo davvero il 5 set 2026 con la potatura delle bolle, dove il test
+     falliva per il banco e non per il codice. */
+  get firstChild(){ return this.children[0] || null; }
+  get lastChild(){ return this.children[this.children.length - 1] || null; }
   /* Real replaceWith needs to find itself in a parent's own child list, which
      is why parentNode above is tracked at all — nothing else here reads it. */
   replaceWith(node){

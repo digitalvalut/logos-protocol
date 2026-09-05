@@ -703,3 +703,8 @@
    illeggibili se non ci passavi sopra col mouse. Il pulsante qui sotto usa
    .btn.danger com'e' gia' definito piu' su, e va bene cosi': deve somigliare
    agli altri pulsanti pericolosi dell'app, non distinguersene. */
+
+/* La riga che dice che un messaggio in arrivo e' stato tagliato perche'
+   superava MAX_TEXT_CHARS. Non deve somigliare al testo: e' l'app che parla,
+   non la persona. */
+.bub .cut{margin-top:6px;font-size:.85em;opacity:.65;font-style:italic}

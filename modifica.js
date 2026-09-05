@@ -99,7 +99,7 @@ Object.assign(I18N.en, {
 "nav.back":"Back",
 "start.share":"Send the invite","btn.copyCode":"Copy the code",
 "join.sendAnswer":"Send the reply",
-"chat.someone":"Someone","chat.connected":"connected","chat.typePh":"Write a message…","chat.dropHere":"Drop them here to send",
+"chat.someone":"Someone","chat.tooLong":"[message too long: only the first part is shown]","chat.connected":"connected","chat.typePh":"Write a message…","chat.dropHere":"Drop them here to send",
 "call.hangup":"End","call.accept":"Answer","call.decline":"Decline",
 "menu.title":"Tools","menu.arm":"Self-destruct","menu.disarm":"Cancel",
 "menu.clearHistory":"Clear history","menu.endChat":"End chat",
@@ -311,7 +311,7 @@ Object.assign(I18N.it, {
 "nav.back":"Indietro",
 "start.share":"Manda l'invito","btn.copyCode":"Copia il codice",
 "join.sendAnswer":"Manda la risposta",
-"chat.someone":"Qualcuno","chat.connected":"connessa","chat.typePh":"Scrivi un messaggio…","chat.dropHere":"Lascia qui per mandarli",
+"chat.someone":"Qualcuno","chat.tooLong":"[messaggio troppo lungo: mostrata solo la prima parte]","chat.connected":"connessa","chat.typePh":"Scrivi un messaggio…","chat.dropHere":"Lascia qui per mandarli",
 "call.hangup":"Chiudi","call.accept":"Rispondi","call.decline":"Rifiuta",
 "menu.title":"Strumenti","menu.arm":"Autodistruzione","menu.disarm":"Annulla",
 "menu.clearHistory":"Svuota cronologia","menu.endChat":"Termina chat",
@@ -479,7 +479,7 @@ Object.assign(I18N.fr, {
 "start.pastePh":"Collez la réponse ici…","btn.connect":"Entrer dans la discussion",
 "join.pastePh":"Collez l'invitation ici…","join.generate":"Ouvrir l'invitation",
 "join.sendAnswer":"Envoyer la réponse",
-"chat.someone":"Quelqu'un","chat.connected":"connecté(e)","chat.typePh":"Écrivez un message…","chat.dropHere":"Déposez-les ici pour les envoyer",
+"chat.someone":"Quelqu'un","chat.tooLong":"[message trop long : seule la première partie est affichée]","chat.connected":"connecté(e)","chat.typePh":"Écrivez un message…","chat.dropHere":"Déposez-les ici pour les envoyer",
 "call.hangup":"Terminer","call.accept":"Répondre","call.decline":"Refuser",
 "menu.title":"Outils","menu.arm":"Autodestruction","menu.disarm":"Annuler",
 "menu.clearHistory":"Effacer l'historique","menu.endChat":"Terminer la discussion",
@@ -661,7 +661,7 @@ Object.assign(I18N.de, {
 "start.pastePh":"Antwort hier einfügen…","btn.connect":"In den Chat gehen",
 "join.pastePh":"Einladung hier einfügen…","join.generate":"Einladung öffnen",
 "join.sendAnswer":"Antwort senden",
-"chat.someone":"Jemand","chat.connected":"verbunden","chat.typePh":"Nachricht schreiben…","chat.dropHere":"Hier ablegen, um sie zu senden",
+"chat.someone":"Jemand","chat.tooLong":"[Nachricht zu lang: nur der erste Teil wird angezeigt]","chat.connected":"verbunden","chat.typePh":"Nachricht schreiben…","chat.dropHere":"Hier ablegen, um sie zu senden",
 "call.hangup":"Beenden","call.accept":"Annehmen","call.decline":"Ablehnen",
 "menu.title":"Werkzeuge","menu.arm":"Selbstzerstörung","menu.disarm":"Abbrechen",
 "menu.clearHistory":"Verlauf löschen","menu.endChat":"Chat beenden",
@@ -843,7 +843,7 @@ Object.assign(I18N.es, {
 "start.pastePh":"Pega aquí la respuesta…","btn.connect":"Entrar en el chat",
 "join.pastePh":"Pega aquí la invitación…","join.generate":"Abrir la invitación",
 "join.sendAnswer":"Enviar la respuesta",
-"chat.someone":"Alguien","chat.connected":"conectado","chat.typePh":"Escribe un mensaje…","chat.dropHere":"Suéltalos aquí para enviarlos",
+"chat.someone":"Alguien","chat.tooLong":"[mensaje demasiado largo: solo se muestra la primera parte]","chat.connected":"conectado","chat.typePh":"Escribe un mensaje…","chat.dropHere":"Suéltalos aquí para enviarlos",
 "call.hangup":"Terminar","call.accept":"Responder","call.decline":"Rechazar",
 "menu.title":"Herramientas","menu.arm":"Autodestrucción","menu.disarm":"Cancelar",
 "menu.clearHistory":"Borrar historial","menu.endChat":"Terminar chat",
@@ -1025,7 +1025,7 @@ Object.assign(I18N.pt, {
 "start.pastePh":"Cole aqui a resposta…","btn.connect":"Entrar na conversa",
 "join.pastePh":"Cole aqui o convite…","join.generate":"Abrir o convite",
 "join.sendAnswer":"Enviar a resposta",
-"chat.someone":"Alguém","chat.connected":"ligado","chat.typePh":"Escreva uma mensagem…","chat.dropHere":"Largue-os aqui para enviar",
+"chat.someone":"Alguém","chat.tooLong":"[mensagem demasiado longa: mostrada apenas a primeira parte]","chat.connected":"ligado","chat.typePh":"Escreva uma mensagem…","chat.dropHere":"Largue-os aqui para enviar",
 "call.hangup":"Terminar","call.accept":"Atender","call.decline":"Recusar",
 "menu.title":"Ferramentas","menu.arm":"Autodestruição","menu.disarm":"Cancelar",
 "menu.clearHistory":"Limpar histórico","menu.endChat":"Terminar conversa",
@@ -1207,7 +1207,7 @@ Object.assign(I18N.ru, {
 "start.pastePh":"Вставьте ответ сюда…","btn.connect":"Войти в чат",
 "join.pastePh":"Вставьте приглашение сюда…","join.generate":"Открыть приглашение",
 "join.sendAnswer":"Отправить ответ",
-"chat.someone":"Кто-то","chat.connected":"на связи","chat.typePh":"Напишите сообщение…","chat.dropHere":"Перетащите сюда, чтобы отправить",
+"chat.someone":"Кто-то","chat.tooLong":"[сообщение слишком длинное: показана только первая часть]","chat.connected":"на связи","chat.typePh":"Напишите сообщение…","chat.dropHere":"Перетащите сюда, чтобы отправить",
 "call.hangup":"Завершить","call.accept":"Ответить","call.decline":"Отклонить",
 "menu.title":"Инструменты","menu.arm":"Самоуничтожение","menu.disarm":"Отмена",
 "menu.clearHistory":"Очистить историю","menu.endChat":"Завершить чат",
@@ -1389,7 +1389,7 @@ Object.assign(I18N.zh, {
 "start.pastePh":"在此粘贴回复…","btn.connect":"进入聊天",
 "join.pastePh":"在此粘贴邀请…","join.generate":"打开邀请",
 "join.sendAnswer":"发送回复",
-"chat.someone":"某人","chat.connected":"已连接","chat.typePh":"写一条消息…","chat.dropHere":"拖到这里发送",
+"chat.someone":"某人","chat.tooLong":"[消息太长：只显示了开头部分]","chat.connected":"已连接","chat.typePh":"写一条消息…","chat.dropHere":"拖到这里发送",
 "call.hangup":"结束","call.accept":"接听","call.decline":"拒绝",
 "menu.title":"工具","menu.arm":"自毁","menu.disarm":"取消",
 "menu.clearHistory":"清除记录","menu.endChat":"结束聊天",
@@ -1571,7 +1571,7 @@ Object.assign(I18N.ar, {
 "start.pastePh":"الصق الرد هنا…","btn.connect":"ادخل إلى المحادثة",
 "join.pastePh":"الصق الدعوة هنا…","join.generate":"فتح الدعوة",
 "join.sendAnswer":"إرسال الرد",
-"chat.someone":"شخص ما","chat.connected":"متصل","chat.typePh":"اكتب رسالة…","chat.dropHere":"أفلتها هنا لإرسالها",
+"chat.someone":"شخص ما","chat.tooLong":"[الرسالة طويلة جدًا: يظهر الجزء الأول فقط]","chat.connected":"متصل","chat.typePh":"اكتب رسالة…","chat.dropHere":"أفلتها هنا لإرسالها",
 "call.hangup":"إنهاء","call.accept":"رد","call.decline":"رفض",
 "menu.title":"أدوات","menu.arm":"تدمير ذاتي","menu.disarm":"إلغاء",
 "menu.clearHistory":"مسح السجل","menu.endChat":"إنهاء المحادثة",
@@ -1753,7 +1753,7 @@ Object.assign(I18N.ur, {
 "start.pastePh":"جواب یہاں پیسٹ کریں…","btn.connect":"چیٹ میں جائیں",
 "join.pastePh":"دعوت یہاں پیسٹ کریں…","join.generate":"دعوت کھولیں",
 "join.sendAnswer":"جواب بھیجیں",
-"chat.someone":"کوئی","chat.connected":"منسلک","chat.typePh":"ایک پیغام لکھیں…","chat.dropHere":"بھیجنے کے لیے یہاں چھوڑیں",
+"chat.someone":"کوئی","chat.tooLong":"[پیغام بہت طویل ہے: صرف پہلا حصہ دکھایا گیا ہے]","chat.connected":"منسلک","chat.typePh":"ایک پیغام لکھیں…","chat.dropHere":"بھیجنے کے لیے یہاں چھوڑیں",
 "call.hangup":"ختم کریں","call.accept":"جواب دیں","call.decline":"مسترد کریں",
 "menu.title":"ٹولز","menu.arm":"خود کار تباہی","menu.disarm":"منسوخ کریں",
 "menu.clearHistory":"تاریخ صاف کریں","menu.endChat":"چیٹ ختم کریں",
@@ -1935,7 +1935,7 @@ Object.assign(I18N.hi, {
 "start.pastePh":"जवाब यहाँ पेस्ट करें…","btn.connect":"चैट में जाएं",
 "join.pastePh":"निमंत्रण यहाँ पेस्ट करें…","join.generate":"निमंत्रण खोलें",
 "join.sendAnswer":"जवाब भेजें",
-"chat.someone":"कोई","chat.connected":"जुड़ा हुआ","chat.typePh":"एक संदेश लिखें…","chat.dropHere":"भेजने के लिए यहाँ छोड़ें",
+"chat.someone":"कोई","chat.tooLong":"[संदेश बहुत लंबा है: केवल पहला भाग दिखाया गया है]","chat.connected":"जुड़ा हुआ","chat.typePh":"एक संदेश लिखें…","chat.dropHere":"भेजने के लिए यहाँ छोड़ें",
 "call.hangup":"समाप्त करें","call.accept":"जवाब दें","call.decline":"अस्वीकार करें",
 "menu.title":"उपकरण","menu.arm":"स्व-विनाश","menu.disarm":"रद्द करें",
 "menu.clearHistory":"इतिहास साफ़ करें","menu.endChat":"चैट समाप्त करें",
@@ -2117,7 +2117,7 @@ Object.assign(I18N.bn, {
 "start.pastePh":"উত্তর এখানে পেস্ট করুন…","btn.connect":"চ্যাটে প্রবেশ করুন",
 "join.pastePh":"আমন্ত্রণ এখানে পেস্ট করুন…","join.generate":"আমন্ত্রণ খুলুন",
 "join.sendAnswer":"উত্তর পাঠান",
-"chat.someone":"কেউ একজন","chat.connected":"সংযুক্ত","chat.typePh":"একটি বার্তা লিখুন…","chat.dropHere":"পাঠাতে এখানে ছাড়ুন",
+"chat.someone":"কেউ একজন","chat.tooLong":"[বার্তাটি খুব দীর্ঘ: শুধু প্রথম অংশ দেখানো হয়েছে]","chat.connected":"সংযুক্ত","chat.typePh":"একটি বার্তা লিখুন…","chat.dropHere":"পাঠাতে এখানে ছাড়ুন",
 "call.hangup":"শেষ করুন","call.accept":"উত্তর দিন","call.decline":"প্রত্যাখ্যান করুন",
 "menu.title":"সরঞ্জাম","menu.arm":"স্ব-ধ্বংস","menu.disarm":"বাতিল করুন",
 "menu.clearHistory":"ইতিহাস মুছুন","menu.endChat":"চ্যাট শেষ করুন",
@@ -2299,7 +2299,7 @@ Object.assign(I18N.id, {
 "start.pastePh":"Tempel balasan di sini…","btn.connect":"Masuk ke obrolan",
 "join.pastePh":"Tempel undangan di sini…","join.generate":"Buka undangan",
 "join.sendAnswer":"Kirim balasan",
-"chat.someone":"Seseorang","chat.connected":"tersambung","chat.typePh":"Tulis pesan…","chat.dropHere":"Lepaskan di sini untuk mengirim",
+"chat.someone":"Seseorang","chat.tooLong":"[pesan terlalu panjang: hanya bagian pertama yang ditampilkan]","chat.connected":"tersambung","chat.typePh":"Tulis pesan…","chat.dropHere":"Lepaskan di sini untuk mengirim",
 "call.hangup":"Akhiri","call.accept":"Jawab","call.decline":"Tolak",
 "menu.title":"Alat","menu.arm":"Penghancuran diri","menu.disarm":"Batal",
 "menu.clearHistory":"Hapus riwayat","menu.endChat":"Akhiri obrolan",
@@ -7225,7 +7225,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.10';
+const APP_VERSION = 'logos-modifica-4.11';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8686,11 +8686,29 @@ $('quickCodeIn').addEventListener('input', () => {
 /* ============================== chat: text + files ============================== */
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function timeNow(){ return new Date().toLocaleTimeString(CURLANG==='it'?'it-IT':'en-US', {hour:'2-digit', minute:'2-digit'}); }
+/* ⚠️ TROVATO IL 5 SET 2026 dalla campagna ostile «dimensioni», che non era mai
+   stata eseguita: questa funzione APPENDEVA E BASTA, e niente in tutto il file
+   toglieva mai una bolla vecchia. Con un testo in arrivo senza tetto (vedi
+   MAX_TEXT_CHARS) chi era connesso poteva mandare messaggi enormi a raffica e
+   far crescere la memoria finche' l'app moriva. Misurato: 176 KB per messaggio,
+   crescita perfettamente lineare — mille messaggi 197 MB, dodicimila 2,1 GB.
+   La cronologia su disco era gia' protetta (300 voci, 256 KB); lo SCHERMO no.
+   Stesso numero della cronologia, per non inventarne un secondo: cio' che si
+   vede e cio' che si conserva restano d'accordo. */
+const MAX_BUBBLES = 300;
+/* Qualche pagina fitta: nessuno scrive tanto di seguito, e un incollato
+   enorme resta leggibile per la parte che conta. Vedi il ramo 'text'. */
+const MAX_TEXT_CHARS = 20000;
 function renderMsg(bodyHtml, mine, persist){
   const row = document.createElement('div'); row.className = 'row ' + (mine ? 'me' : 'them');
   const bub = document.createElement('div'); bub.className = 'bub'; bub.innerHTML = bodyHtml;
   row.appendChild(bub);
-  $('msgs').appendChild(row);
+  const msgs = $('msgs');
+  msgs.appendChild(row);
+  /* Le piu' vecchie escono dallo schermo, non dalla cronologia: riaprendo la
+     conversazione si rileggono da li'. Un `while` e non un `if` perche' una
+     rilettura puo' averne messe dentro parecchie in un colpo solo. */
+  while (msgs.children.length > MAX_BUBBLES) msgs.removeChild(msgs.children[0]);
   $('msgs').scrollTop = $('msgs').scrollHeight;
   if (persist !== false) saveToHistory(peerNick, bodyHtml, mine);
   return bub;   /* callers that only send text never look at this; a transfer
@@ -9260,7 +9278,20 @@ function onDcMessage(ev){
       showConnectedFlash(peerNick).then(() => checkSafetyFor(peerNick));
     } else if (msg.type === 'text'){
       const label = peerNick ? '<span class="who">'+esc(peerNick)+'</span>' : '';
-      renderMsg(label + esc(msg.text) + '<div class="meta">' + timeNow() + '</div>', false);
+      /* ⚠️ Prima non c'era NESSUN tetto: `msg.text` finiva a schermo per quanto
+         fosse lungo, e dieci megabyte alla volta erano la meta' del modo per
+         far morire l'app (l'altra meta' era che le bolle non si toglievano
+         mai, vedi MAX_BUBBLES). Ventimila caratteri sono qualche pagina fitta:
+         nessuna persona vera li supera scrivendo, e un incollato enorme resta
+         leggibile per la parte che conta.
+         E si DICE che e' stato tagliato. Mostrare in silenzio meno di quello
+         che e' arrivato sarebbe la stessa bugia di tutta la giornata: chi
+         legge crederebbe di aver visto tutto. */
+      const grezzo = typeof msg.text === 'string' ? msg.text : String(msg.text == null ? '' : msg.text);
+      const tagliato = grezzo.length > MAX_TEXT_CHARS;
+      const corpo = esc(tagliato ? grezzo.slice(0, MAX_TEXT_CHARS) : grezzo)
+        + (tagliato ? '<div class="cut">' + esc(t('chat.tooLong','[messaggio troppo lungo: mostrata solo la prima parte]')) + '</div>' : '');
+      renderMsg(label + corpo + '<div class="meta">' + timeNow() + '</div>', false);
     } else if (msg.type === 'file-start'){
       /* The other side declares what it is about to send. Until now nothing
          ever checked that declaration against what actually arrived: a peer
