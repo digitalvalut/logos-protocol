@@ -831,6 +831,50 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('una busta vecchia rimessa in circolo non fa piu squillare nessuno', async () => {
+    /* Trovata dalla rassegna contro le classi note degli altri messenger
+       (5 set 2026). Una busta sigillata non portava NIENTE che dicesse quando
+       era nata, e chi la riceve non ne guardava l'eta'. Chi ne cattura una
+       poteva rimetterla nella cassetta settimane dopo: non riesce ad aprirla
+       — resta sigillata verso la chiave del destinatario — ma quel telefono
+       squillava lo stesso, per un chiamante che non c'e'.
+       L'orario sta DENTRO la busta: fuori sarebbe modificabile da chiunque. */
+    const app = loadApp();
+
+    /* 1. ogni busta che parte deve portarsi dietro l'ora, senza che nessun
+          chiamante debba ricordarsene */
+    app.run(`
+      globalThis.__sigillato = null;
+      sealWith = async (sec, obj) => { globalThis.__sigillato = obj; return { e: 'finta' }; };
+      mailboxPut = async () => true;
+      globalThis.__p = mailboxPutSealed('k', { seed: 's' }, { sdp: 'v=0', rid: 'R1' });
+    `);
+    await app.run('globalThis.__p');
+    const inviata = JSON.parse(app.run('JSON.stringify(globalThis.__sigillato)'));
+    assert.strictEqual(typeof inviata.ts, 'number', 'la busta deve portare l\'ora dentro di se');
+    assert.ok(Math.abs(Date.now() - inviata.ts) < 5000, 'e deve essere l\'ora vera');
+    assert.strictEqual(inviata.sdp, 'v=0', 'senza perdere il contenuto');
+
+    /* 2. il giudizio sull'eta' */
+    assert.strictEqual(app.run('bustaFresca({ ts: Date.now() })'), true,
+      'una busta appena nata passa');
+    assert.strictEqual(app.run('bustaFresca({ ts: Date.now() - 7 * 24 * 3600 * 1000 })'), false,
+      'una di una settimana fa e un riuso, e va rifiutata');
+    assert.strictEqual(app.run('bustaFresca({ ts: Date.now() + 7 * 24 * 3600 * 1000 })'), false,
+      'e nemmeno una datata nel futuro: guardare da una parte sola sarebbe il modo ovvio di aggirare');
+
+    /* 3. gli orologi storti non devono diventare irraggiungibili: due telefoni
+          non sono sincronizzati, e stringere qui barattava un fastidio con un guasto */
+    assert.strictEqual(app.run('bustaFresca({ ts: Date.now() - 120000 })'), true,
+      'due minuti di scarto fra due telefoni sono normali e devono passare');
+
+    /* 4. e chi ha una versione precedente, che l'ora non la manda, non deve
+          restare tagliato fuori a meta aggiornamento */
+    assert.strictEqual(app.run('bustaFresca({ sdp: "v=0" })'), true,
+      'una busta senza ora e di una versione vecchia: spezzare in due chi usa l\'app sarebbe peggio');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

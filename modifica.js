@@ -5556,7 +5556,41 @@ async function sealWith(sec, obj){
   if (sec.epk) env.e = sec.epk;
   return env;
 }
-async function mailboxPutSealed(key, sec, obj){ return mailboxPut(key, await sealWith(sec, obj)); }
+/* ⚠️ FRESCHEZZA — aggiunta il 5 set 2026 dalla rassegna contro le classi di
+   vulnerabilita' note degli altri messenger.
+   Una busta sigillata non portava NIENTE che dicesse quando era nata, e chi la
+   riceve non ne guardava l'eta'. Chi ne cattura una puo' rimetterla nella
+   cassetta mesi dopo: non riesce ad aprirla — resta sigillata verso la chiave
+   del destinatario — ma il telefono di quel destinatario squilla lo stesso,
+   per un chiamante che non c'e'. Molestia e batteria a costo zero.
+   L'orario sta DENTRO la busta, non accanto: fuori sarebbe modificabile da
+   chiunque, dentro e' coperto dalla stessa cifratura del resto.
+   Messo qui, che e' l'unico punto da cui passa ogni busta di questa app:
+   nessun chiamante deve ricordarsi di aggiungerlo. */
+async function mailboxPutSealed(key, sec, obj){
+  const conOra = (obj && typeof obj === 'object' && !Array.isArray(obj))
+    ? Object.assign({ ts: Date.now() }, obj)
+    : obj;
+  return mailboxPut(key, await sealWith(sec, conOra));
+}
+/* Dieci minuti, e la larghezza e' voluta. Il tetto vero della casella e' due
+   minuti (MAILBOX_TTL_SECONDS nel Worker), quindi qualunque finestra piu'
+   stretta di quella non aggiungerebbe niente — mentre una piu' larga regge gli
+   orologi sbagliati. Due telefoni non sono sincronizzati fra loro, e un
+   telefono con l'ora storta di qualche minuto e' una cosa che capita davvero:
+   stringere qui vorrebbe dire rendere IRRAGGIUNGIBILE chi ha l'orologio
+   indietro, cioe' barattare un fastidio con un guasto. Dieci minuti uccidono
+   il riuso che conta — quello a giorni o settimane — e non rompono nessuno. */
+const FRESHNESS_MS = 600000;
+/* Una busta senza orario e' di una versione precedente e passa: rifiutarla
+   spezzerebbe in due chi usa l'app durante l'aggiornamento, e l'app Android e'
+   ferma alla 4.02 apposta per F-Droid. Si guarda anche il futuro, non solo il
+   passato: un orario molto avanti e' altrettanto sospetto, e sarebbe il modo
+   ovvio di aggirare un controllo che guardasse da una parte sola. */
+function bustaFresca(obj){
+  if (!obj || typeof obj.ts !== 'number' || !isFinite(obj.ts)) return true;
+  return Math.abs(Date.now() - obj.ts) <= FRESHNESS_MS;
+}
 async function mailboxGetSealed(key, sec){
   const env = await mailboxGet(key);
   if (!env) return null;
@@ -6296,6 +6330,9 @@ async function addrCheckOnce(){
     if (!got) continue;   /* not sealed to us, or not sealed at all */
     const { obj: msg, sec } = got;
     if (!msg || !msg.sdp || !msg.rid) continue;
+    /* una busta rimessa in circolo da chi l'aveva catturata: non e' apribile da
+       lui, ma farebbe squillare questo telefono per un chiamante che non c'e' */
+    if (!bustaFresca(msg)) continue;
     /* a caller already turned away stays turned away, and is not announced again */
     if (isBlockedFp(msg.fp)) continue;
     /* e nemmeno questa singola chiamata, a cui si e' gia' risposto di no */
@@ -6774,6 +6811,9 @@ async function dialAddress(raw, unvouched){
          risposta vera. Trattato qui e non dopo il ciclo perche' altrimenti un
          record senza `sdp` non fermava niente: si continuava a girare a vuoto
          fino ai tre minuti, cioe' il difetto che questo chiude. */
+      /* vale anche per la risposta: una vecchia rimessa qui dirotterebbe questa
+         chiamata su una descrizione morta, e la connessione non salirebbe mai */
+      if (got && !bustaFresca(got)) got = null;
       if (got && got.refused === true) break;
       if (got && got.sdp) break;
       if (pc !== myPc){ giveUpDial(); return; }   /* superseded while waiting on the mailbox */
@@ -7185,7 +7225,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.09';
+const APP_VERSION = 'logos-modifica-4.10';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
