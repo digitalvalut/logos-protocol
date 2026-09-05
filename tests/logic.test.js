@@ -693,6 +693,63 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('chi sta guardando lo schermo non aspetta come chi se n\'e andato', () => {
+    /* Il ritmo con cui si guardava se qualcuno sta chiamando era deciso da
+       «da quanto e' aperta l'app»: svelto i primi 30 secondi, lento per sempre
+       dopo. Il commento diceva «da li in poi nessuno sta guardando lo schermo
+       aspettando» — un'IPOTESI, non una misura, e falsa proprio nel caso che
+       conta di piu': chi ha aperto l'app apposta perche' sa che lo stanno per
+       chiamare, e sta li'. Dopo mezzo minuto diventava il piu' lento di tutti.
+       Adesso il segnale e' «da quanto la persona l'ha toccata», che si misura
+       invece di indovinarla. */
+    const app = loadApp();
+
+    app.run('addrAwakeSince = Date.now();');
+    assert.strictEqual(app.run('addrGap()'), app.run('ADDR_FAST_MS'),
+      'appena toccato lo schermo si guarda spesso');
+
+    /* il difetto vero, in una riga: mezzo minuto di app aperta non vuol dire
+       che la persona se ne sia andata */
+    app.run('addrAwakeSince = Date.now() - 31000;');
+    assert.strictEqual(app.run('addrGap()'), app.run('ADDR_FAST_MS'),
+      'dopo 31 secondi chi guarda lo schermo deve essere ancora svelto');
+
+    app.run('addrAwakeSince = Date.now() - (WATCH_FAST_WINDOW_MS + 5000);');
+    assert.strictEqual(app.run('addrGap()'), app.run('ADDR_SLOW_MS'),
+      'chi non tocca lo schermo da un pezzo se n\'e andato, e li si risparmia');
+
+    /* e un tocco non deve solo segnare l'ora: se e' gia' partita un'attesa
+       lunga, quella finirebbe quando deve, lasciando lento proprio il momento
+       in cui la persona e' tornata */
+    app.run('addrNextDueAt = Date.now() + 60000; addrPollTimer = setTimeout(function(){}, 60000);');
+    app.run('addrSegnoDiVita();');
+    const manca = app.run('addrNextDueAt - Date.now()');
+    assert.ok(manca <= app.run('ADDR_FAST_MS') + 100,
+      'tornando, il controllo va anticipato, non lasciato scadere: mancavano ' + manca + 'ms');
+    app.stop();
+  });
+
+  test('con l\'ascolto nativo acceso, chi guarda lo schermo vince lo stesso', () => {
+    /* L'ascolto nativo e' la rete per quando l'app e' CHIUSA, e i suoi 45
+       secondi sono giusti li'. Ma la pagina si adeguava sempre — anche mentre
+       qualcuno stava guardando lo schermo in quel momento, che e' il caso in
+       cui l'attesa si nota di piu' e costa di meno, perche' dura quanto la
+       persona resta. */
+    const app = loadApp({ globals: {
+      AndroidRing: { available: () => true, watch(){ return true; }, stop(){} },
+    }});
+    app.run('listenMode = true;');
+
+    app.run('addrAwakeSince = Date.now();');
+    assert.strictEqual(app.run('addrGap()'), app.run('ADDR_FAST_MS'),
+      'con la persona davanti allo schermo non si aspettano 60 secondi');
+
+    app.run('addrAwakeSince = Date.now() - (WATCH_FAST_WINDOW_MS + 5000);');
+    assert.strictEqual(app.run('addrGap()'), app.run('ADDR_FALLBACK_MS'),
+      'ma appena se n\'e andata, il lavoro torna al servizio nativo e si risparmia');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

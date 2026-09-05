@@ -6299,9 +6299,24 @@ async function addrCheckOnce(){
    nessuno sta guardando lo schermo aspettando, e quindici secondi non li
    distingue nessuno da cinque. Stessa idea di pollGap(), applicata al
    guardare invece che all'aspettare. */
-const ADDR_FAST_MS = 5000;
+/* ⚠️ CORRETTO IL 5 SET 2026. Il ragionamento qui sopra ha un buco, e sta in
+   una riga sola: «da li in poi nessuno sta guardando lo schermo aspettando».
+   E' un'ipotesi, non una misura — ed e' falsa proprio nel caso che conta di
+   piu': la persona che ha aperto l'app APPOSTA perche' sa che la stanno per
+   chiamare, e sta li ad aspettare. Dopo trenta secondi diventava la piu' lenta
+   di tutte, quando era quella che guardava con piu' attenzione.
+   Il segnale giusto non e' «da quanto e' aperta l'app», che e' un indovinello,
+   ma «da quanto la persona l'ha TOCCATA», che si misura. Chi tocca lo schermo
+   e' li'; chi non lo tocca da tre minuti se n'e' andato, e paga il prezzo
+   lento senza accorgersene.
+   Il costo resta piccolo perche' resta LIMITATO: la finestra svelta riparte a
+   ogni tocco e muore da sola tre minuti dopo l'ultimo. Un uso attivo di dieci
+   minuti costa ~300 letture, su un tetto giornaliero di centomila — e le
+   letture sono la risorsa abbondante, mentre la quota stretta (mille
+   scritture) qui non viene toccata affatto. */
+const ADDR_FAST_MS = 2000;
 const ADDR_SLOW_MS = 15000;
-const WATCH_FAST_WINDOW_MS = 30000;
+const WATCH_FAST_WINDOW_MS = 180000;
 /* ---- quando a sorvegliare e' il telefono, la pagina fa solo da rete ----
    Acceso l'ascolto nativo (2 set 2026), l'indirizzo viene interrogato dal
    servizio Android ogni 45 secondi, anche ad app chiusa. Se ANCHE la pagina
@@ -6323,25 +6338,51 @@ const WATCH_FAST_WINDOW_MS = 30000;
    sempre-acceso per il numero di contatti: e' un passo separato, e va
    misurato prima, non dato per fatto. */
 const ADDR_FALLBACK_MS = 60000;
-let addrWatchStarted = 0;
+/* l'ultimo momento in cui qualcuno ha dato segno di essere davvero li' */
+let addrAwakeSince = 0;
+/* quando e' previsto il prossimo controllo: serve per anticiparlo se la
+   persona si rifa' viva mentre e' in corso un'attesa lunga */
+let addrNextDueAt = 0;
 /* vero solo se il ponte c'e' E l'interruttore e' acceso: il ponte da solo dice
    che potremmo, non che stiamo */
 function ascoltoNativoAttivo(){
   try{ return !!(androidRing && listenMode); }catch(_){ return false; }
 }
+/* Chi e' sveglio davanti allo schermo vince su tutto il resto, compreso
+   l'ascolto nativo: quello e' la rete per quando l'app e' CHIUSA, e i suoi
+   45 secondi sono giusti li'. Farli pagare a chi sta guardando lo schermo in
+   questo momento e' il baratto sbagliato — e' il caso in cui l'attesa si nota
+   di piu' e costa di meno, perche' dura quanto la persona resta. */
+function addrGap(){
+  if ((Date.now() - addrAwakeSince) < WATCH_FAST_WINDOW_MS) return ADDR_FAST_MS;
+  return ascoltoNativoAttivo() ? ADDR_FALLBACK_MS : ADDR_SLOW_MS;
+}
+/* riprogrammato ogni volta invece di setInterval: e' l'unico modo perche'
+   l'intervallo possa cambiare da solo strada facendo */
+function giroAddr(){
+  addrCheckOnce();
+  const atteso = addrGap();
+  addrNextDueAt = Date.now() + atteso;
+  addrPollTimer = setTimeout(giroAddr, atteso);
+}
+/* Un tocco, un tasto: qualcuno c'e'. Non basta segnare l'ora — se siamo in
+   mezzo a un'attesa da quindici o sessanta secondi, quella attesa e' gia'
+   partita e finirebbe comunque quando deve, lasciando lento proprio il momento
+   in cui la persona e' tornata. Quindi si anticipa il controllo. */
+function addrSegnoDiVita(){
+  addrAwakeSince = Date.now();
+  if (addrPollTimer && (addrNextDueAt - addrAwakeSince) > ADDR_FAST_MS){
+    clearTimeout(addrPollTimer);
+    addrNextDueAt = addrAwakeSince + ADDR_FAST_MS;
+    addrPollTimer = setTimeout(giroAddr, ADDR_FAST_MS);
+  }
+}
+document.addEventListener('pointerdown', addrSegnoDiVita, { passive: true });
+document.addEventListener('keydown', addrSegnoDiVita, { passive: true });
 function startAddrPolling(){
   if (addrPollTimer || !activeSlots().length || document.visibilityState === 'hidden') return;
-  addrWatchStarted = Date.now();
-  const giro = () => {
-    addrCheckOnce();
-    const atteso = ascoltoNativoAttivo()
-      ? ADDR_FALLBACK_MS
-      : ((Date.now() - addrWatchStarted) < WATCH_FAST_WINDOW_MS ? ADDR_FAST_MS : ADDR_SLOW_MS);
-    /* riprogrammato ogni volta invece di setInterval: e' l'unico modo perche'
-       l'intervallo possa cambiare da solo strada facendo */
-    addrPollTimer = setTimeout(giro, atteso);
-  };
-  giro();
+  addrAwakeSince = Date.now();
+  giroAddr();
 }
 function stopAddrPolling(){ clearTimeout(addrPollTimer); addrPollTimer = null; }
 /* Reachable on whichever screen is open, not only Home — sending the address
@@ -7100,7 +7141,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.05';
+const APP_VERSION = 'logos-modifica-4.06';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
