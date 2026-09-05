@@ -592,6 +592,64 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('un rifiuto esce dal telefono, e la stessa chiamata non torna a squillare', async () => {
+    /* Rifiutare era un gesto che non usciva da qui: non veniva scritto niente,
+       da nessuna parte. Due conseguenze che sembravano difetti diversi.
+       (1) Chi chiamava non lo sapeva: restava tre minuti su «Sto chiamando» e
+           poi leggeva «Non ha risposto» — falso, aveva risposto di no.
+       (2) L'invito NON sparisce dalla casella quando lo rifiuti, e chi chiama
+           lo riscrive ogni ottanta secondi: il controllo successivo lo
+           ritrovava tale e quale e lo riannunciava. Si rifiutava e ricominciava
+           a squillare, per tre minuti.
+       Il (2) era nascosto dal difetto della v37: «Ignora» bloccava per sempre,
+       e un bloccato non viene piu' annunciato. Togliendo il blocco (v38) e'
+       rimasto scoperto — una correzione che ne ha svelata un'altra sotto. */
+    const app = loadApp();
+    app.run(`
+      globalThis.__scritto = [];
+      activeSlots = () => [0];
+      myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+      addrSlotSeed = async () => 'semenza';
+      slotId = async (seed, nome) => nome;
+      mailboxGet = async () => ({ busta: 1 });
+      mailboxPutSealed = async (key, sec, obj) => { globalThis.__scritto.push({ key, obj }); return true; };
+      addrOpenIncoming = async () => ({
+        obj: { sdp: 'v=0', rid: 'RID-1', nick: 'Antonella', fp: 'aabbccdd' },
+        sec: { seed: 'semenza', slot: 0 }
+      });
+    `);
+
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run("$('addrIncoming').classList.contains('hide')"), false,
+      'la chiamata in arrivo deve annunciarsi, o non c\'e niente da rifiutare');
+
+    app.run("$('btnAddrIgnore').listeners.click[0]();");
+    await app.run('new Promise(r => setTimeout(r, 0))');
+
+    /* (1) l'altro lo deve venire a sapere */
+    const scritto = JSON.parse(app.run('JSON.stringify(globalThis.__scritto)'));
+    const rifiuto = scritto.find(w => w.key === 'addr-answer-RID-1');
+    assert.ok(rifiuto, 'il rifiuto deve finire nella casella dove chi chiama sta gia aspettando');
+    assert.strictEqual(rifiuto.obj.refused, true, 'il record deve dire proprio che e un rifiuto');
+    assert.ok(!rifiuto.obj.sdp, 'un rifiuto non deve portarsi dietro una risposta vera');
+
+    /* (2) e la stessa chiamata non deve tornare da sola */
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run("$('addrIncoming').classList.contains('hide')"), true,
+      'una chiamata rifiutata non deve riannunciarsi: era il «rifiuto e ricomincia a squillare»');
+
+    /* ma un'altra chiamata, con un rid diverso, deve passare: non abbiamo
+       ricreato il blocco per sempre sotto un altro nome */
+    app.run(`addrOpenIncoming = async () => ({
+      obj: { sdp: 'v=0', rid: 'RID-2', nick: 'Antonella', fp: 'aabbccdd' },
+      sec: { seed: 'semenza', slot: 0 }
+    });`);
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run("$('addrIncoming').classList.contains('hide')"), false,
+      'chi e stato rifiutato una volta deve poter richiamare');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella
