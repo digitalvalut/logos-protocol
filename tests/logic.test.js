@@ -1008,6 +1008,46 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('dalla rubrica si puo scrivere, non solo chiamare', async () => {
+    /* La rubrica sapeva fare UNA COSA SOLA: chiamare. Per mandare due righe a
+       una persona che era li' in elenco bisognava ripescarne l'indirizzo da
+       qualche altra parte e riscriverlo a mano. Chiesto dall'operatore il
+       6 set 2026: «le persone che contatti sempre ce l'hai li, basta un tasto
+       o chiami o mandi un messaggio». */
+    const app = loadApp();
+    app.run(`
+      globalThis.__chiamato = null;
+      dialAddress = async (a) => { globalThis.__chiamato = a; };
+      saveContacts([{ nick: 'Antonella', addr: 'AAAABBBBCCCC', lastSeen: Date.now() }]);
+      renderContacts();
+    `);
+
+    const riga = app.run("$('contactsList').innerHTML");
+    assert.ok(/data-note="Antonella"/.test(riga),
+      'ogni contatto con un indirizzo deve avere anche il tasto per scrivere');
+
+    /* toccare la busta scrive, NON chiama: la busta sta DENTRO la riga, e se
+       il gestore guardasse prima la riga il tocco finirebbe in una chiamata */
+    /* ⚠️ Il tocco si finge cosi', e non cercando il nodo dentro l'elenco: in
+       questo banco `innerHTML` resta una STRINGA e non diventa mai un albero
+       di nodi, quindi li dentro non c'e' niente da cercare. E' lo stesso modo
+       usato dagli altri test della rubrica in questo file. */
+    app.run(`
+      $('contactsList').listeners.click[0]({ target: {
+        closest: sel => sel === '[data-note]'
+          ? { getAttribute: () => 'Antonella' }
+          : null
+      }});
+    `);
+    assert.strictEqual(app.run("$('leaveLetter').classList.contains('hide')"), false,
+      'deve aprirsi il riquadro per scrivere');
+    assert.strictEqual(app.run('letterTarget'), 'AAAABBBBCCCC',
+      'e puntare alla persona giusta');
+    assert.strictEqual(app.run('globalThis.__chiamato'), null,
+      'e soprattutto NON deve partire una chiamata: era il tasto per scrivere');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

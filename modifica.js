@@ -81,7 +81,7 @@ Object.assign(I18N.en, {
 "listen.needLockScreen":"To ring on a locked screen, Android needs one more permission. Opening the page where it is given.",
 "android.ringTitle":"Someone is calling",
 "android.ringBody":"Open DigitalValut Logos to answer.",
-"contacts.sameLookVerified":"verified by voice",
+"contacts.sameLookVerified":"verified by voice","contacts.write":"Write them a couple of lines",
 "contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
 "install.btn":"Install",
@@ -270,7 +270,7 @@ Object.assign(I18N.it, {
 "listen.needLockScreen":"Per squillare a schermo bloccato, Android chiede un permesso in più. Ti porto sulla pagina dove si concede.",
 "android.ringTitle":"Qualcuno ti sta chiamando",
 "android.ringBody":"Apri DigitalValut Logos per rispondere.",
-"contacts.sameLookVerified":"verificato a voce",
+"contacts.sameLookVerified":"verificato a voce","contacts.write":"Scrivigli due righe",
 "contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
 "install.btn":"Installa",
@@ -460,7 +460,7 @@ Object.assign(I18N.fr, {
 "listen.needLockScreen":"Pour sonner sur un écran verrouillé, Android demande une autorisation de plus. Ouverture de la page où l'accorder.",
 "android.ringTitle":"Quelqu’un vous appelle",
 "android.ringBody":"Ouvrez DigitalValut Logos pour répondre.",
-"contacts.sameLookVerified":"vérifié de vive voix",
+"contacts.sameLookVerified":"vérifié de vive voix","contacts.write":"Écrivez-lui deux lignes",
 "contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
 "install.btn":"Installer",
@@ -642,7 +642,7 @@ Object.assign(I18N.de, {
 "listen.needLockScreen":"Um bei gesperrtem Bildschirm zu klingeln, verlangt Android eine weitere Berechtigung. Die Seite dafür wird geöffnet.",
 "android.ringTitle":"Jemand ruft an",
 "android.ringBody":"Öffne DigitalValut Logos, um abzunehmen.",
-"contacts.sameLookVerified":"mündlich bestätigt",
+"contacts.sameLookVerified":"mündlich bestätigt","contacts.write":"Schreib zwei Zeilen",
 "contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
 "install.btn":"Installieren",
@@ -824,7 +824,7 @@ Object.assign(I18N.es, {
 "listen.needLockScreen":"Para sonar con la pantalla bloqueada, Android pide un permiso más. Abriendo la página donde se concede.",
 "android.ringTitle":"Alguien te está llamando",
 "android.ringBody":"Abre DigitalValut Logos para responder.",
-"contacts.sameLookVerified":"verificado de viva voz",
+"contacts.sameLookVerified":"verificado de viva voz","contacts.write":"Escríbele dos líneas",
 "contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
 "install.btn":"Instalar",
@@ -1006,7 +1006,7 @@ Object.assign(I18N.pt, {
 "listen.needLockScreen":"Para tocar com o ecrã bloqueado, o Android pede mais uma permissão. A abrir a página onde se concede.",
 "android.ringTitle":"Alguém está a ligar",
 "android.ringBody":"Abre o DigitalValut Logos para atender.",
-"contacts.sameLookVerified":"verificado por voz",
+"contacts.sameLookVerified":"verificado por voz","contacts.write":"Escreva-lhe duas linhas",
 "contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
 "install.btn":"Instalar",
@@ -1188,7 +1188,7 @@ Object.assign(I18N.ru, {
 "listen.needLockScreen":"Чтобы звонить на заблокированном экране, Android требует ещё одно разрешение. Открываю страницу, где его выдают.",
 "android.ringTitle":"Вам звонят",
 "android.ringBody":"Откройте DigitalValut Logos, чтобы ответить.",
-"contacts.sameLookVerified":"подтверждён голосом",
+"contacts.sameLookVerified":"подтверждён голосом","contacts.write":"Написать пару строк",
 "contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
 "install.btn":"Установить",
@@ -1370,7 +1370,7 @@ Object.assign(I18N.zh, {
 "listen.needLockScreen":"要在锁屏时响铃，Android 还需要一项权限。正在打开授予该权限的页面。",
 "android.ringTitle":"有人正在呼叫你",
 "android.ringBody":"打开 DigitalValut Logos 接听。",
-"contacts.sameLookVerified":"已通过语音验证",
+"contacts.sameLookVerified":"已通过语音验证","contacts.write":"给他写两行字",
 "contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
 "install.btn":"安装",
@@ -1552,7 +1552,7 @@ Object.assign(I18N.ar, {
 "listen.needLockScreen":"كي يرن الهاتف والشاشة مقفلة، يطلب أندرويد إذناً إضافياً. يجري فتح الصفحة التي يُمنح فيها.",
 "android.ringTitle":"هناك من يتصل بك",
 "android.ringBody":"افتح DigitalValut Logos للرد.",
-"contacts.sameLookVerified":"تم التحقق صوتيًّا",
+"contacts.sameLookVerified":"تم التحقق صوتيًّا","contacts.write":"اكتب له سطرين",
 "contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
 "install.btn":"تثبيت",
@@ -1734,7 +1734,7 @@ Object.assign(I18N.ur, {
 "listen.needLockScreen":"مقفل اسکرین پر بجنے کے لیے اینڈرائیڈ کو ایک اور اجازت درکار ہے۔ وہ صفحہ کھولا جا رہا ہے جہاں یہ دی جاتی ہے۔",
 "android.ringTitle":"کوئی آپ کو کال کر رہا ہے",
 "android.ringBody":"جواب دینے کے لیے DigitalValut Logos کھولیں۔",
-"contacts.sameLookVerified":"زبانی تصدیق شدہ",
+"contacts.sameLookVerified":"زبانی تصدیق شدہ","contacts.write":"دو سطریں لکھیں",
 "contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
 "install.btn":"انسٹال کریں",
@@ -1916,7 +1916,7 @@ Object.assign(I18N.hi, {
 "listen.needLockScreen":"लॉक स्क्रीन पर बजने के लिए Android को एक और अनुमति चाहिए। वह पृष्ठ खोला जा रहा है जहाँ यह दी जाती है।",
 "android.ringTitle":"कोई आपको कॉल कर रहा है",
 "android.ringBody":"उत्तर देने के लिए DigitalValut Logos खोलें।",
-"contacts.sameLookVerified":"आवाज़ से सत्यापित",
+"contacts.sameLookVerified":"आवाज़ से सत्यापित","contacts.write":"दो पंक्तियाँ लिखें",
 "contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
 "install.btn":"इंस्टॉल करें",
@@ -2098,7 +2098,7 @@ Object.assign(I18N.bn, {
 "listen.needLockScreen":"লক স্ক্রিনে বাজতে হলে Android-এর আরও একটি অনুমতি লাগে। যেখানে তা দেওয়া যায় সেই পাতা খোলা হচ্ছে।",
 "android.ringTitle":"কেউ আপনাকে ডাকছে",
 "android.ringBody":"উত্তর দিতে DigitalValut Logos খুলুন।",
-"contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা",
+"contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা","contacts.write":"দুই লাইন লিখুন",
 "contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
 "install.btn":"ইনস্টল করুন",
@@ -2280,7 +2280,7 @@ Object.assign(I18N.id, {
 "listen.needLockScreen":"Untuk berdering saat layar terkunci, Android meminta satu izin lagi. Membuka halaman tempat izin itu diberikan.",
 "android.ringTitle":"Ada yang menelepon",
 "android.ringBody":"Buka DigitalValut Logos untuk menjawab.",
-"contacts.sameLookVerified":"diverifikasi lewat suara",
+"contacts.sameLookVerified":"diverifikasi lewat suara","contacts.write":"Tulis dua baris",
 "contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
 "install.btn":"Pasang",
@@ -4950,6 +4950,7 @@ function renderContacts(){
     <div class="contactrow" data-nick="${esc(c.nick)}">
       <div class="av">${esc(initials(c.nick))}</div>
       <div class="info"><b>${esc(c.nick)}</b><span>${esc(relTime(c.lastSeen))}${mark}</span></div>
+      ${c.addr ? `<button class="cact" data-note="${esc(c.nick)}" title="${esc(t('contacts.write','Scrivigli due righe'))}" aria-label="${esc(t('contacts.write','Scrivigli due righe'))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></button>` : ''}
       <button class="rm" data-rm="${esc(c.nick)}" title="Rimuovi" aria-label="Rimuovi">×</button>
     </div>`;
   }).join('');
@@ -4959,6 +4960,17 @@ $('contactsList').addEventListener('click', ev => {
   if (rm){
     saveContacts(loadContacts().filter(c => c.nick !== rm.getAttribute('data-rm')));
     renderContacts();
+    return;
+  }
+  /* ⚠️ Prima di `closest('.contactrow')`, o il tocco sulla busta finisce per
+     chiamare invece che scrivere: la busta STA DENTRO la riga.
+     Perche' esiste: la rubrica sapeva fare una cosa sola, chiamare. Per
+     mandare due righe a una persona che era li' davanti bisognava ripescarne
+     l'indirizzo da qualche parte e riscriverlo a mano — avendola in elenco. */
+  const scrivi = ev.target.closest('[data-note]');
+  if (scrivi){
+    const c = loadContacts().find(x => x.nick === scrivi.getAttribute('data-note'));
+    if (c && c.addr){ outgoingIntro = ''; offerToLeaveLetter(c.addr, true); }
     return;
   }
   const row = ev.target.closest('.contactrow');
@@ -7254,7 +7266,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.13';
+const APP_VERSION = 'logos-modifica-4.14';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

@@ -708,3 +708,11 @@
    superava MAX_TEXT_CHARS. Non deve somigliare al testo: e' l'app che parla,
    non la persona. */
 .bub .cut{margin-top:6px;font-size:.85em;opacity:.65;font-style:italic}
+
+/* La busta accanto a ogni contatto: tocchi il nome e chiami, tocchi qui e
+   scrivi. Stessa taglia e stesso peso della × che c'era gia', per non
+   inventare un secondo linguaggio dentro la stessa riga. */
+.contactrow .cact{background:none;border:0;padding:6px;margin-inline-start:auto;cursor:pointer;color:inherit;opacity:.55;border-radius:8px;line-height:0}
+.contactrow .cact:hover,.contactrow .cact:focus-visible{opacity:1;background:rgba(127,127,127,.16)}
+.contactrow .cact svg{width:19px;height:19px}
+.contactrow .rm{margin-inline-start:4px}
