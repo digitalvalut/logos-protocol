@@ -1086,6 +1086,57 @@ test.describe('what the audit found', () => {
     }
   });
 
+  test('un messaggio che non puo partire non dice «riprova»', async () => {
+    /* Trovato il 6 set 2026 PROVANDO il giro completo sul relay vero, non
+       leggendo il codice: `letterPut` falliva per due ragioni opposte e le
+       riportava tutte e due come `false`, quindi l'app diceva sempre
+       «Non sono riuscito. Riprova.»
+       Ma se quell'indirizzo non ha una chiave pubblicata — un indirizzo
+       vecchio di chi nel frattempo l'ha spento, o ha svuotato l'app —
+       riprovare NON funzionera' mai. Non manca la rete: manca la persona.
+       Dire «riprova» a chi non ha niente da riprovare e' farlo girare a vuoto,
+       ed e' la stessa bugia di «codice scaduto o sbagliato» su un codice
+       giusto. */
+    const app = loadApp();
+
+    /* (1) l'indirizzo non ha chiave: guasto PERMANENTE */
+    app.run(`
+      addrDialSecrets = async () => null;
+      letterTarget = 'AAAABBBBCCCC';
+      $('leaveLetter').classList.remove('hide');
+      $('letterText').value = 'ci vediamo domani';
+      $('btnLeaveLetter').listeners.click[0]();
+    `);
+    await app.run('new Promise(r => setTimeout(r, 60))');
+    const permanente = app.run("$('letterStatus').textContent");
+    /* ⚠️ NON si controlla l'assenza della parola «riprova»: la frase giusta la
+       contiene — dice «riprovare NON servirebbe», ed e' proprio quello il
+       punto. La prima stesura di questo test cercava la parola e bocciava la
+       frase corretta. Si guarda il SIGNIFICATO: deve nominare la causa vera. */
+    assert.ok(/attivo|rimandartelo|active|send it to you/i.test(permanente),
+      'deve dire cosa e successo e cosa fare davvero: "' + permanente + '"');
+    assert.ok(/non serv|not help|nutzt nichts|no servir|nao adiant|бесполезно|没有用/i.test(permanente),
+      'e deve dire che riprovare NON serve, invece di invitare a farlo: "' + permanente + '"');
+    assert.strictEqual(app.run("$('leaveLetter').classList.contains('hide')"), false,
+      'il riquadro resta aperto: il messaggio NON e partito');
+
+    /* (2) la rete non risponde: guasto TEMPORANEO, li riprovare ha senso */
+    app.run(`
+      addrDialSecrets = async () => ({ key:{}, seed:'s', slot:0 });
+      sealWith = async () => ({ e:'x', c:'y' });
+      tellAllRelays = async () => ({ riusciti: 0, stati: [], risposto: 0 });
+      $('letterText').value = 'ci vediamo domani';
+      $('btnLeaveLetter').listeners.click[0]();
+    `);
+    await app.run('new Promise(r => setTimeout(r, 60))');
+    const temporaneo = app.run("$('letterStatus').textContent");
+    assert.ok(/riprova|try again|erneut|vuelve|tente|снова|重试|أعد|دوبارہ|फिर|আবার|coba/i.test(temporaneo),
+      'quando e la rete a mancare, riprovare ha senso e va detto: "' + temporaneo + '"');
+    assert.notStrictEqual(temporaneo, permanente,
+      'due guasti diversi non possono dare la stessa identica frase');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella
@@ -4182,7 +4233,10 @@ test.describe('le lettere sigillate su piu relay', () => {
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
-      assert.strictEqual(o.ok, true, 'il deposito deve riuscire');
+      /* ⚠️ Da 6 set 2026 letterPut restituisce il MOTIVO, non un si/no:
+         'ok', 'senzachiave' (permanente) o 'rete' (temporaneo). Prima le due
+         forme di guasto tornavano identiche e l'app diceva sempre «riprova». */
+      assert.strictEqual(o.ok, 'ok', 'il deposito deve riuscire');
       assert.deepStrictEqual(o.quante, [1,1,1], 'la lettera deve esserci su tutti e tre');
       assert.strictEqual(o.identiche, true,
         'la busta deve essere IDENTICA ovunque: sigillata una volta sola, non una per relay');
@@ -4265,7 +4319,7 @@ test.describe('le lettere sigillate su piu relay', () => {
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
-      assert.strictEqual(o.ok, true, 'due relay vivi bastano per depositare');
+      assert.strictEqual(o.ok, 'ok', 'due relay vivi bastano per depositare');
       assert.strictEqual(o.quante, 1);
       assert.strictEqual(o.testo, 'passa lo stesso');
       app.stop();
@@ -4311,7 +4365,11 @@ test.describe('le lettere sigillate su piu relay', () => {
     })()`);
     return r.then(x => {
       const o = JSON.parse(x);
-      assert.strictEqual(o.ok, false, 'senza chiave verificata deve rifiutarsi');
+      /* ⚠️ 'senzachiave' e non un semplice falso: da 6 set 2026 letterPut dice
+         PERCHE ha fallito, perche senza chiave riprovare non servira mai
+         mentre con la rete giu ha senso. Prima erano lo stesso valore e l app
+         diceva «riprova» anche a chi non aveva niente da riprovare. */
+      assert.strictEqual(o.ok, 'senzachiave', 'senza chiave verificata deve rifiutarsi, e dire perche');
       assert.strictEqual(o.relayScritti, 0, 'e non deve aver scritto NIENTE da nessuna parte');
       app.stop();
     });
