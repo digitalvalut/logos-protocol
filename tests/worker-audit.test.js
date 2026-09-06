@@ -32,15 +32,45 @@ test.describe('worker: chi può bussare', () => {
     assert.notStrictEqual(r.status, 403, 'l\'origine ufficiale non deve mai essere respinta');
   });
 
-  test('una richiesta SENZA origine passa — e questo è deliberato, non una svista', async () => {
+  test('una richiesta SENZA origine passa sulle CASELLE — e questo è deliberato, non una svista', async () => {
     /* `curl` non manda Origin, e nemmeno la copia dell'app aperta da file://
        o servita da una chiavetta, che è un caso che questo progetto sostiene
-       apposta. Il commento nel Worker dice che il controllo non è vero
-       controllo d'accesso: questo test lo fissa come comportamento voluto,
-       così nessuno lo "corregge" un giorno rompendo il file unico. */
+       apposta. Ma soprattutto: il servizio Android che squilla ad app chiusa
+       interroga /mailbox da codice Java, che un header Origin non lo manda.
+       Questo test fissa che le caselle restano aperte a una richiesta senza
+       Origin, così nessuno lo "corregge" un giorno spegnendo lo squillo. */
     const w = W.caricaWorker();
     const r = await w.chiama('GET', '/mailbox/' + 'a'.repeat(64));
     assert.notStrictEqual(r.status, 403);
+  });
+
+  test('ma /turn SENZA origine viene respinto: regala credenziali che costano soldi veri', async () => {
+    /* ⚠️ Confermato sul relay pubblicato il 6 set 2026: `curl .../turn` senza
+       header Origin rispondeva 200 e consegnava le credenziali. Le credenziali
+       valgono dieci minuti di banda VERA del relay, fatturata all'account, ed
+       è l'unica cosa nel Worker che costa denaro. I programmi che scandagliano
+       Internet in cerca di relay aperti l'avevano trovato (URL nel codice
+       pubblico). Le caselle restano aperte alle richieste senza Origin per il
+       servizio Android; /turn no, perché nessun pezzo nostro lo chiama senza
+       browser, e un browser cross-origin manda SEMPRE l'Origin. */
+    const w = W.caricaWorker();
+    for (const rotta of ['/turn', '/']){
+      const senza = await w.chiama('GET', rotta);
+      assert.strictEqual(senza.status, 403, rotta + ' senza Origin deve prendere 403, non le credenziali');
+      const finta = await w.chiama('GET', rotta, { origin: 'https://evil.example' });
+      assert.strictEqual(finta.status, 403, rotta + ' con origine sbagliata deve restare 403');
+    }
+  });
+
+  test('/turn con l\'origine giusta continua a funzionare', async () => {
+    /* Il lato da non rompere: stringere il controllo non deve chiudere fuori
+       l'app vera. `handleTurn` chiama la rete, che in questa stanza non c'è —
+       quindi il segnale che è passato il controllo è "non 403 e non 405":
+       arriva fino al punto in cui proverebbe a chiedere le credenziali. */
+    const w = W.caricaWorker();
+    const r = await w.chiama('GET', '/turn', { origin: ORIGINE_BUONA });
+    assert.notStrictEqual(r.status, 403, 'l\'origine ufficiale deve passare il controllo');
+    assert.notStrictEqual(r.status, 405);
   });
 });
 
@@ -193,11 +223,13 @@ test.describe('worker: i limiti di frequenza', () => {
   });
 
   test('le credenziali del relay sono metrate più strette delle letture', async () => {
-    /* È l'unica rotta che spende denaro vero. */
+    /* È l'unica rotta che spende denaro vero. Serve l'origine giusta: da quando
+       /turn respinge le richieste senza Origin (i robot), senza di quella si
+       fermerebbe a 403 prima ancora di arrivare al conteggio. */
     const w = W.caricaWorker();
     let ok = 0;
     for (let i = 0; i < 200; i++){
-      const r = await w.chiama('GET', '/turn', { ip: '198.51.100.10' });
+      const r = await w.chiama('GET', '/turn', { ip: '198.51.100.10', origin: ORIGINE_BUONA });
       if (r.status !== 429) ok++;
     }
     assert.ok(ok <= 130, `passate ${ok} richieste di credenziali: il budget dichiarato è 120`);

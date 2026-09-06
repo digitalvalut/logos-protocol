@@ -758,9 +758,29 @@ async function instrada(request, env, cors){
 
     if (url.pathname === '/' || url.pathname === '/turn'){
       if (request.method !== 'GET') return json({ error: 'method not allowed' }, 405, cors);
+      /* ⚠️ Qui l'origine è controllata PIÙ STRETTA che altrove: non basta "non
+         essere un'origine sbagliata", bisogna essere una di quelle giuste.
+         Le caselle (/mailbox, /wake, /key, /letter) accettano di proposito una
+         richiesta senza Origin — il servizio Android che fa squillare il
+         telefono ad app chiusa le interroga da codice Java, che un header
+         Origin non lo manda, ed è un caso che va sostenuto. /turn no: nessun
+         pezzo nostro lo chiama senza browser. La copia dell'app, ovunque sia
+         servita, fa una fetch CROSS-ORIGIN verso questo Worker, e una fetch
+         cross-origin porta sempre l'Origin. Un GET senza Origin qui è un
+         `curl` — ed è esattamente quello da fermare: /turn regala credenziali
+         che valgono dieci minuti di banda VERA del relay, fatturata a questo
+         account, ed è l'unica cosa qui dentro che costa soldi davvero. I
+         programmi che scandagliano Internet in cerca di relay aperti da
+         sfruttare l'avevano già trovato (URL del Worker in chiaro nel codice).
+         Sul relay pubblicato, il 6 set 2026: senza Origin rispondeva 200 e
+         consegnava le credenziali. Se un client legittimo finisse respinto per
+         sbaglio, l'app se ne accorge e ripiega da sola sul collegamento
+         diretto: il costo dell'errore è basso, quello di lasciarlo aperto si
+         paga in euro. */
+      if (ALLOWED_ORIGINS.indexOf(origin) < 0) return json({ error: 'Forbidden' }, 403, cors);
       /* The one route that was never metered, and the only one that spends
-         money when it is. Credentials handed out here are usable for a day by
-         whoever holds them. */
+         money when it is. Credentials handed out here are valid for ten
+         minutes (TURN_TTL_SECONDS) for whoever holds them. */
       if (overTurnLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
       return handleTurn(env, cors);
     }

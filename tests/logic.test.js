@@ -2422,9 +2422,17 @@ test.describe('what the audit found', () => {
        of real relay capacity, billed to this account. */
     const worker = fs.readFileSync(path.join(ROOT, 'turn-worker', 'worker.js'), 'utf8');
     const turnRoute = worker.slice(worker.indexOf("url.pathname === '/turn'"));
-    const untilNextRoute = turnRoute.slice(0, turnRoute.indexOf('mailbox'));
+    /* fino all'inizio VERO della rotta successiva, non alla prima parola
+       "mailbox" che capita — da quando il commento di /turn nomina le caselle
+       per spiegare perché lì il controllo è diverso, quella parola compare
+       prima della fine del blocco */
+    const untilNextRoute = turnRoute.slice(0, turnRoute.search(/const m = url\.pathname\.match/));
     assert.match(untilNextRoute, /overTurnLimit\(request\)/,
       'harvesting TURN credentials must cost the harvester something');
+    /* e da adesso vale anche: senza un'origine RICONOSCIUTA non si arriva
+       nemmeno a chiedere le credenziali — un GET senza Origin è un robot */
+    assert.match(untilNextRoute, /ALLOWED_ORIGINS\.indexOf\(origin\) < 0\) return json\(\{ error: 'Forbidden' \}/,
+      'una richiesta senza Origin deve essere respinta da /turn prima di spendere');
     assert.match(worker, /RL_TURN_MAX\s*=\s*\d+/, 'the credentials budget is gone');
   });
 
