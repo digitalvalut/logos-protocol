@@ -1048,6 +1048,44 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('i riquadri richiamabili da ovunque non stanno dentro una schermata', () => {
+    /* ⚠️ IL DIFETTO CHE HA TROVATO L'OPERATORE IN DUE MINUTI, e che 331 test
+       non avevano visto. `leaveLetter` viveva dentro <section id="screenJoin">,
+       mentre la rubrica sta in screenHome: toccando «Scrivi» accanto a un
+       contatto il codice faceva classList.remove('hide') sul riquadro — quindi
+       si credeva di averlo mostrato — ma la SEZIONE che lo conteneva era
+       nascosta, e l'utente non vedeva NIENTE.
+       Nessun test poteva prenderlo, perche' tutti guardavano la classe 'hide'
+       dell'elemento e non se fosse davvero sullo schermo. Questo guarda la
+       struttura del file, che e' dove sta il difetto.
+       Regola: un riquadro che si apre da piu' schermate deve vivere FUORI da
+       tutte, come knockCard. */
+    const fs = require('node:fs');
+    const path = require('node:path');
+    /* ⚠️ I COMMENTI VANNO VIA PRIMA DI CONTARE. La prima stesura contava
+       `<section` sul file grezzo e dichiarava il difetto ancora presente su un
+       file corretto: il `<section>` che trovava era una PAROLA dentro un
+       commento, scritta da me poche righe sopra. Il DOM vero diceva il
+       contrario, ed era il DOM ad avere ragione. */
+    const html = fs.readFileSync(path.join(__dirname, '..', 'modifica.html'), 'utf8')
+      .replace(/<!--[\s\S]*?-->/g, '');
+
+    const dentroUnaSezione = (id) => {
+      const at = html.indexOf('id="' + id + '"');
+      assert.ok(at > 0, id + ' non esiste piu nel file');
+      const prima = html.slice(0, at);
+      const aperte = (prima.match(/<section\b/g) || []).length;
+      const chiuse = (prima.match(/<\/section>/g) || []).length;
+      return aperte > chiuse;
+    };
+
+    for (const id of ['leaveLetter', 'knockCard']){
+      assert.strictEqual(dentroUnaSezione(id), false,
+        `#${id} si apre da piu schermate: se vive dentro una <section> resta ` +
+        `invisibile quando quella schermata e nascosta, e il codice crede di averlo mostrato`);
+    }
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella

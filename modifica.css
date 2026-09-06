@@ -709,13 +709,6 @@
    non la persona. */
 .bub .cut{margin-top:6px;font-size:.85em;opacity:.65;font-style:italic}
 
-/* La busta accanto a ogni contatto: tocchi il nome e chiami, tocchi qui e
-   scrivi. Stessa taglia e stesso peso della × che c'era gia', per non
-   inventare un secondo linguaggio dentro la stessa riga. */
-.contactrow .cact{background:none;border:0;padding:6px;margin-inline-start:auto;cursor:pointer;color:inherit;opacity:.55;border-radius:8px;line-height:0}
-.contactrow .cact:hover,.contactrow .cact:focus-visible{opacity:1;background:rgba(127,127,127,.16)}
-.contactrow .cact svg{width:19px;height:19px}
-.contactrow .rm{margin-inline-start:4px}
 
 /* I titoli che dividono le impostazioni in tre gruppi. Prima erano nove
    schede tutte allo stesso livello: chi scorreva non sapeva quando fosse
@@ -734,3 +727,16 @@
 .advbox>summary::after{content:"›";float:inline-end;transform:rotate(90deg);display:inline-block;opacity:.6}
 .advbox[open]>summary::after{transform:rotate(-90deg)}
 .advbox>summary:hover,.advbox>summary:focus-visible{opacity:1;background:rgba(127,127,127,.12)}
+
+/* La scheda di un contatto: il nome sopra, e sotto DUE PULSANTI LARGHI con
+   la parola scritta. La prima stesura aveva due iconcine accanto alla × che
+   cancella — bersagli piccoli, uno distruttivo, nessuna scritta. Chi sbaglia
+   mira non deve poter cancellare una persona per errore. */
+.contactcard{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:10px 12px 12px;margin-bottom:10px}
+.contactcard .contactrow{background:none;border:0;padding:0;margin:0}
+.contactcard .rm{margin-inline-start:auto;opacity:.45;font-size:1.15rem;line-height:1;
+  background:none;border:0;color:inherit;cursor:pointer;padding:4px 6px;border-radius:8px}
+.contactcard .rm:hover,.contactcard .rm:focus-visible{opacity:1;background:rgba(127,127,127,.16)}
+.cbtns{display:flex;gap:8px;margin-top:10px}
+.cbtns .btn{flex:1;justify-content:center;padding-block:11px}

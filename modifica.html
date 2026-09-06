@@ -124,6 +124,28 @@
     <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
   </div>
 
+  <!-- ⚠️ SPOSTATO QUI IL 6 SET 2026. Stava dentro la sezione screenJoin,
+       e la rubrica sta in screenHome: toccando la busta accanto a un contatto
+       il codice scopriva questo riquadro (classList.remove('hide')) ma
+       l'utente non vedeva NIENTE, perche' la sezione che lo conteneva era
+       nascosta. Trovato dall'operatore in due minuti sull'app vera.
+       Qui fuori da ogni <section> e' raggiungibile da qualunque schermata,
+       esattamente come knockCard poco sopra. -->
+    <div class="card hide" id="leaveLetter">
+      <!-- Il titolo cambia a seconda di come ci si arriva: dopo una chiamata a
+           vuoto dice che non ha risposto nessuno, arrivandoci apposta dal
+           pulsante «Scrivigli due righe» quella frase sarebbe falsa. -->
+      <b id="letterTitle" data-i18n="letter.noneTitle">Non risponde nessuno adesso.</b>
+      <span class="lead" id="letterSub" data-i18n="letter.noneSub">Puoi lasciare un messaggio: lo troverà appena apre l'app.</span>
+      <input type="text" id="letterText" class="sans-input" maxlength="300"
+             data-i18n-ph="letter.ph" placeholder="Scrivi qui il tuo messaggio">
+      <div class="toolsrow">
+        <button class="btn primary" id="btnLeaveLetter"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="letter.leave">Lascia il messaggio</span></button>
+        <button class="btn" id="btnLeaveCancel" data-i18n="letter.cancel">Lascia perdere</button>
+      </div>
+      <div class="status" id="letterStatus"></div>
+    </div>
+
   <!-- Someone is calling the public address. Nothing is answered until this
        is answered, because an address anyone may hold is an address anyone
        may ring. -->
@@ -585,20 +607,6 @@
 
     <!-- Nobody answered. Rather than an error and a lost errand, the thing the
          person came here to say can still be left. -->
-    <div class="card hide" id="leaveLetter">
-      <!-- Il titolo cambia a seconda di come ci si arriva: dopo una chiamata a
-           vuoto dice che non ha risposto nessuno, arrivandoci apposta dal
-           pulsante «Scrivigli due righe» quella frase sarebbe falsa. -->
-      <b id="letterTitle" data-i18n="letter.noneTitle">Non risponde nessuno adesso.</b>
-      <span class="lead" id="letterSub" data-i18n="letter.noneSub">Puoi lasciare un messaggio: lo troverà appena apre l'app.</span>
-      <input type="text" id="letterText" class="sans-input" maxlength="300"
-             data-i18n-ph="letter.ph" placeholder="Scrivi qui il tuo messaggio">
-      <div class="toolsrow">
-        <button class="btn primary" id="btnLeaveLetter"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="letter.leave">Lascia il messaggio</span></button>
-        <button class="btn" id="btnLeaveCancel" data-i18n="letter.cancel">Lascia perdere</button>
-      </div>
-      <div class="status" id="letterStatus"></div>
-    </div>
 
     <div class="card" id="quickJoinCard">
       <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleB">Digita il codice</div></div>
