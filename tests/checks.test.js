@@ -129,6 +129,54 @@ test('il codice da mandare a mano non resta chiuso dentro un contenitore che il 
   assert.deepStrictEqual(guai.sort(), [], guai.join(' | '));
 });
 
+/* ---------------------------------------------------- cosa sta in prima pagina -- */
+/* ⚠️ Questo controllo esiste per una ragione sola, ed e' successa due volte in
+   un giorno: la prima pagina si riempie da sola. Ogni cosa aggiunta qui aveva
+   un buon motivo — la rubrica per chiamare in fretta, il pulsante per far
+   conoscere l'app, il riquadro «ha funzionato, passalo a qualcuno» — e messe
+   insieme erano sei cose, di cui una sola era quella per cui uno l'app l'aveva
+   aperta. L'operatore l'ha detto guardandola: «troppa carne al fuoco».
+   La prima pagina deve rispondere a tre domande: ho l'indirizzo di qualcuno?
+   voglio invitare qualcuno? mi hanno mandato un codice? Il resto sta dietro la
+   rotellina, che e' un posto dove si mette ordine e non dove si agisce.
+   Un buon motivo non basta piu': se una cosa nuova deve stare qui, si toglie
+   questo controllo APPOSTA, sapendo cosa si sta facendo. */
+const SEZIONI = Object.fromEntries(
+  [...HTML.matchAll(/<section id="(screen[A-Za-z]+)"[^>]*>([\s\S]*?)<\/section>/g)]
+    .map(m => [m[1], m[2]]));
+
+test('la prima pagina non si riprende le cose che sono state spostate nella rotellina', () => {
+  assert.ok(SEZIONI.screenHome && SEZIONI.screenSettings, 'le due schermate non sono state lette');
+  /* id -> perche' non deve stare in prima pagina */
+  const SFRATTATI = {
+    contactsCard: 'la rubrica lunga: avatar, date e una × che cancella, letta prima di tutto e utile per ultima',
+    contactsList: 'idem — l\'elenco vero e proprio',
+    btnShareApp:  'far conoscere l\'app si fa una volta ogni tanto, non ogni volta che si apre',
+  };
+  const guai = [];
+  for (const [id, perche] of Object.entries(SFRATTATI)){
+    if (new RegExp(`id="${id}"`).test(SEZIONI.screenHome))
+      guai.push(`#${id} e' tornato in prima pagina — ${perche}`);
+    if (!new RegExp(`id="${id}"`).test(SEZIONI.screenSettings))
+      guai.push(`#${id} non e' nelle impostazioni: spostato o cancellato?`);
+  }
+  assert.deepStrictEqual(guai, [], guai.join(' | '));
+});
+
+test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ordine giusto', () => {
+  /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
+     che rimescolavano questa pagina sono state tolte apposta, perche' chi legge
+     il codice e chi usa l'app devono vedere la stessa pagina. */
+  const ATTESI = ['lettersCard', 'addrDialIn', 'addrPeople', 'goStart', 'goJoin'];
+  const dove = ATTESI.map(id => [id, SEZIONI.screenHome.indexOf(`id="${id}"`)]);
+  for (const [id, pos] of dove) assert.notStrictEqual(pos, -1, `#${id} non e' piu' in prima pagina`);
+  const fuoriPosto = dove.filter(([, pos], i) => i > 0 && pos < dove[i - 1][1]);
+  assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [],
+    'l\'ordine atteso e\': messaggi lasciati, campo dell\'indirizzo, nomi, poi i due pulsantoni — ' +
+    'i nomi DOPO il campo perche\' sono cio\' che lo riempie, e il campo PRIMA dei pulsantoni ' +
+    'perche\' chi ha gia\' un indirizzo non deve passare da «Parla con qualcuno»');
+});
+
 /* ------------------------------------------------------------ the languages -- */
 /* Thirteen languages is a promise to thirteen groups of people, and a missing
    key does not crash — it quietly shows Italian to somebody who does not read

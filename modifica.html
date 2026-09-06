@@ -195,16 +195,52 @@
       <p data-i18n="home.sub">Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.</p>
     </div>
 
-    <!-- Only ever after a conversation that actually happened, and only until
-         it is waved away once. Asking someone to pass an app on before they
-         have seen it work is asking them to vouch for something they do not
-         know yet. -->
-    <div class="card viral hide" id="viralCard">
-      <button class="x" id="viralClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <b data-i18n="viral.title">Ha funzionato.</b>
-      <span data-i18n="viral.sub">Se è stato utile, passalo a qualcun altro: è gratis, non chiede account e non tiene niente di nessuno.</span>
-      <button class="btn primary mt12" id="btnViralShare">
-        <span class="ic"><svg class="btnicon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="7.5" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="24" cy="24.5" r="4"/><path d="M11.6 14.1 20.4 9.6M11.6 17.9l8.8 4.5"/></svg></span><span data-i18n="viral.btn">Fallo sapere a qualcuno</span></button>
+    <!-- ⚠️ RIFATTA IL 6 SET 2026, la seconda volta in un giorno. Qui sopra
+         stavano anche: un riquadro «Ha funzionato, passalo a qualcuno», una
+         rubrica con avatar e due pulsanti per riga, e un pulsante per
+         condividere l'app. Sei cose su una schermata sola, di cui una sola
+         era quello per cui uno l'app l'aveva aperta.
+         Adesso la prima pagina risponde a tre domande e basta: ho l'indirizzo
+         di qualcuno? voglio invitare qualcuno? mi hanno mandato un codice?
+         Non c'e' una quarta domanda, e le cose tolte non sono sparite: la
+         rubrica e la condivisione stanno dietro la rotellina, dove si
+         gestiscono e non intralciano. -->
+
+    <!-- Messaggi lasciati mentre non c'eri. In cima a tutto quando ce ne
+         sono — e' l'unica cosa urgente che questa pagina possa avere — e
+         invisibile quando non ce ne sono, che e' quasi sempre. -->
+    <div class="card hide" id="lettersCard">
+      <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
+      <div id="lettersList"></div>
+    </div>
+
+    <!-- ⚠️ PORTATO QUI DALLE IMPOSTAZIONI IL 6 SET 2026. Comporre l indirizzo
+         di qualcuno e L AZIONE PRINCIPALE dell app, e viveva sepolta dentro la
+         rotellina sotto sei altre schede: come tenere il pedale del gas nel
+         cassetto del cruscotto. Sta prima dei due pulsanti grandi perche chi ha
+         gia un indirizzo in mano non deve passare da «Parla con qualcuno», che
+         serve a creare un invito per chi non ce l ha. -->
+    <div class="addrdial">
+      <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
+      <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
+             data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
+      <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
+      <!-- ⚠️ QUESTA NON E' UNA RUBRICA, ed e' la differenza che conta.
+           Prima qui sotto c'era un elenco vero: avatar, «3 giorni fa», una ×
+           che cancella e due pulsanti per riga. Sembrava la rubrica del
+           telefono, e chi apriva l'app si fermava a leggerla invece di fare
+           la cosa per cui era entrato.
+           Questa e' la stessa cosa che fa il telefono quando ti suggerisce
+           l'ultimo numero: e' il CAMPO che si ricorda, non un elenco di
+           persone. Nessun avatar, nessuna data, nessuna × — chi vuole
+           mettere ordine lo fa dalla rotellina, dove l'elenco completo e'
+           rimasto per intero.
+           Un tocco fa partire la chiamata come prima, perche' e' l'unica
+           cosa che uno vuole fare toccando un nome; se non risponde, l'app
+           offre da sola di lasciargli due righe (vedi offerToLeaveLetter),
+           quindi il vecchio pulsante «Scrivi» non serve piu' a nessuno. -->
+      <div class="people hide" id="addrPeople"></div>
+      <div class="status" id="addrDialStatus"></div>
     </div>
 
     <!-- The whole home, in two verbs. Everything that used to sit around
@@ -242,25 +278,8 @@
 
 
 
-    <!-- Same shape and same width as the two above, so it is a real target for
-         a real finger — but flat rather than raised, because it is not what
-         anyone opened the app to do and it should not compete with the two
-         things that are. -->
-    <div class="sharerow">
-      <button class="bigchoice quiet" id="btnShareApp">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
-               stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="24" cy="7.5" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="24" cy="24.5" r="4"/>
-            <path d="M11.6 14.1 20.4 9.6M11.6 17.9l8.8 4.5"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
-      </button>
-    </div>
-
-    <!-- Quiet on purpose, and placed after the two real choices and the share
-         row rather than between them: the same strip used for every other
+    <!-- Quiet on purpose, and placed after the two real choices rather than
+         between them: the same strip used for every other
          passing notice in the app (a blocked microphone, the licence line),
          not a card built to compete with "Parla con qualcuno" for a first-time
          visitor's thumb in the first few seconds. It earns a glance, not a
@@ -287,47 +306,6 @@
       </span>
     </div>
 
-    <!-- Left while nobody was here. Collected once, then kept on this device
-         only: the server no longer has them to give again. -->
-
-    <!-- ⚠️ PORTATO QUI DALLE IMPOSTAZIONI IL 6 SET 2026. Comporre l indirizzo
-         di qualcuno e L AZIONE PRINCIPALE dell app, e viveva sepolta dentro la
-         rotellina sotto sei altre schede: come tenere il pedale del gas nel
-         cassetto del cruscotto. Sta prima della rubrica perche chi ha gia un
-         indirizzo in mano non deve passare da «Parla con qualcuno», che serve
-         a creare un invito per chi non ce l ha. -->
-      <div class="addrdial">
-        <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
-        <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
-               data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
-        <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
-        <div class="status" id="addrDialStatus"></div>
-      </div>
-    <div class="card hide" id="lettersCard">
-      <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
-      <div id="lettersList"></div>
-    </div>
-
-    <div class="card hide" id="contactsCard">
-      <h3 data-i18n="contacts.title">Contatti recenti</h3>
-      <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
-        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
-      <div id="contactsList"></div>
-
-      <!-- Il pannello che compare toccando il lucchetto su un contatto. Dice
-           tutto PRIMA del pulsante, non dopo: quello che sparisce, che le foto
-           non vengono cancellate, che una parola dimenticata non si recupera, e
-           fin dove arriva questa protezione. Chi conferma deve aver gia' letto
-           l'unica cosa che non si puo' disfare. -->
-    </div>
-
-    
-
-    
-
-    
-
-    
   </section>
 
 
@@ -455,6 +433,25 @@
       <div class="helptext mt10 hide" id="listenStatus" data-i18n="listen.status">In ascolto — se cambi schermata o app, si ferma finché non torni qui.</div>
     </div>
 
+    <!-- ⚠️ PORTATA QUI DALLA PRIMA PAGINA IL 6 SET 2026, dopo che l'operatore
+         l'ha vista con i propri occhi: «la rubrica sopra cosa c'entra? troppa
+         carne al fuoco». Aveva ragione — un elenco di persone in cima alla
+         home e' la prima cosa che si legge e l'ultima che serve a chi ha
+         appena aperto l'app.
+         NON e' stata cancellata: cancellarla avrebbe tolto l'unico posto dove
+         si puo' togliere qualcuno dall'elenco, e quel gesto conta — e' come si
+         butta fuori un nome quasi identico a un altro (vedi il segno «mai
+         verificato» qui sotto), che e' una difesa, non una comodita'.
+         Sta qui perche' questo e' un posto dove si METTE ORDINE, non dove si
+         agisce di fretta. Chi vuole solo chiamare qualcuno lo fa dalla prima
+         pagina, toccando il suo nome sotto il campo dell'indirizzo. -->
+    <div class="card hide" id="contactsCard">
+      <h3 data-i18n="contacts.title">Contatti recenti</h3>
+      <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
+        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
+      <div id="contactsList"></div>
+    </div>
+
     <h3 class="setgroup" data-i18n="set.grpLook">Come si vede e si usa</h3>
     <div class="card" id="easyCard">
       <div class="switchrow" id="easyRow" role="button" tabindex="0" aria-pressed="false">
@@ -478,6 +475,24 @@
       <label class="fieldlabel" data-i18n="install.always">Metti Logos sulla schermata</label>
       <div class="helptext" id="installCardText"></div>
       <button class="btn mt10 hide" id="installCardBtn" data-i18n="install.btn">Installa</button>
+    </div>
+
+    <!-- ⚠️ PORTATO QUI DALLA PRIMA PAGINA IL 6 SET 2026. Far conoscere l'app
+         a qualcuno e' una cosa che si fa una volta ogni tanto, e stava su una
+         schermata che deve rispondere a una domanda sola: come parlo con
+         questa persona, adesso. Qui non da' fastidio a nessuno e si trova
+         quando la si cerca. -->
+    <div class="sharerow">
+      <button class="bigchoice quiet" id="btnShareApp">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="24" cy="7.5" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="24" cy="24.5" r="4"/>
+            <path d="M11.6 14.1 20.4 9.6M11.6 17.9l8.8 4.5"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
+      </button>
     </div>
 
     <details class="advbox">

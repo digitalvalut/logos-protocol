@@ -4688,6 +4688,154 @@ test.describe('due nomi che sembrano lo stesso nome', () => {
 });
 
 /* ------------------------------------------------------------------------
+   4.22 — i nomi sotto il campo dell'indirizzo.
+   L'operatore ha guardato la prima pagina della 4.21 e ha detto: «la rubrica
+   sopra cosa c'entra? troppa carne al fuoco». Aveva ragione: un elenco di
+   persone con avatar, date, una × che cancella e due pulsanti per riga era la
+   prima cosa che si leggeva aprendo l'app, e l'ultima che serviva.
+   L'elenco e' andato nella rotellina; al suo posto, sotto il campo
+   dell'indirizzo, e' rimasta una riga sola di nomi. Questi controlli
+   sorvegliano le tre cose che quella sostituzione poteva rompere: che i nomi
+   ci siano, che facciano davvero la stessa cosa dell'elenco (rifiuto quando
+   si e' occupati compreso), e che l'avviso sull'omonimo mai verificato — che
+   e' una difesa, non un ornamento — non sia rimasto indietro nella rotellina
+   mentre la strada veloce ne resta senza.
+   ------------------------------------------------------------------------ */
+test.describe('la prima pagina si ricorda chi chiami (4.22)', () => {
+
+  test('i nomi salvati compaiono sotto il campo dell\'indirizzo', () => {
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Antonella', 'fp-a', null, 'DV-AAAA-AAAA-AAAA');
+      touchContact('Marco', 'fp-m', null, null);
+      renderContacts();
+    `);
+    const html = app.run("$('addrPeople').innerHTML");
+    assert.match(html, /data-reach="Antonella"/, 'chi ha un indirizzo salvato deve comparire');
+    /* Chi ha solo l'impronta si raggiunge per un'altra strada — piu' fragile,
+       ma esiste. Toglierlo dai nomi avrebbe tolto l'unico modo di richiamare
+       qualcuno conosciuto prima che gli indirizzi esistessero. */
+    assert.match(html, /data-reach="Marco"/,
+      'anche chi ha solo l\'impronta deve comparire: e\' comunque raggiungibile');
+    assert.strictEqual(app.run("$('addrPeople').classList.contains('hide')"), false,
+      'con dei nomi salvati la riga deve essere visibile');
+    app.stop();
+  });
+
+  test('senza nessun contatto la riga dei nomi non c\'e proprio', () => {
+    /* Un contenitore vuoto ma presente lascia il suo margine sotto il
+       pulsante «Chiamalo»: uno spazio bianco che non si spiega. */
+    const app = loadApp();
+    app.run("saveContacts([]); renderContacts();");
+    assert.strictEqual(app.run("$('addrPeople').classList.contains('hide')"), true,
+      'senza nomi la riga deve sparire, non restare vuota');
+    assert.strictEqual(app.run("$('addrPeople').innerHTML"), '',
+      'e non deve restare dentro niente di una lista precedente');
+    app.stop();
+  });
+
+  test('i nomi si fermano a otto: una scorciatoia lunga torna a essere una rubrica', () => {
+    /* La rubrica tiene fino a quaranta persone. Quaranta pillole sotto un
+       campo di testo sono esattamente l'elenco che abbiamo appena tolto dalla
+       prima pagina, solo di un altro colore. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      for (var i = 0; i < 12; i++) touchContact('Tizio' + i, 'fp-' + i, null, 'DV-AAAA-AAAA-AAA' + i);
+      renderContacts();
+    `);
+    const quanti = (app.run("$('addrPeople').innerHTML").match(/data-reach=/g) || []).length;
+    assert.strictEqual(quanti, 8, 'sotto il campo ne devono comparire otto, non tutti e dodici');
+    /* e la rotellina invece li tiene tutti: il nono non e' sparito, e' altrove */
+    const inElenco = (app.run("$('contactsList').innerHTML").match(/data-nick=/g) || []).length;
+    assert.strictEqual(inElenco, 12, 'l\'elenco completo nella rotellina non deve perdere nessuno');
+    app.stop();
+  });
+
+  test('toccare un nome chiama il suo indirizzo, come toccarlo nell\'elenco', () => {
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Antonella', 'fp-a', null, 'DV-AAAA-BBBB-CCCC');
+      renderContacts();
+      window.__dialedWith = null;
+      dialAddress = function(a){ window.__dialedWith = a; };
+    `);
+    app.run(`
+      $('addrPeople').listeners.click[0]({
+        target: { closest: sel => sel === '[data-reach]' ? { getAttribute: () => 'Antonella' } : null },
+      });
+    `);
+    assert.strictEqual(app.run('window.__dialedWith'), 'DV-AAAA-BBBB-CCCC',
+      'toccare un nome deve chiamare il suo indirizzo salvato');
+    app.stop();
+  });
+
+  test('toccare un nome mentre si e occupati non butta giu quello che c\'e', () => {
+    /* La stessa protezione che l'elenco ha gia': un tocco qui crea o
+       sostituisce `pc` esattamente come «Parla con qualcuno», e senza questa
+       domanda strapperebbe via una chiamata in corso. Era il difetto che
+       l'elenco aveva prima di essere corretto — riscriverlo qui sotto un altro
+       nome sarebbe stato rimetterlo dentro. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Antonella', 'fp-a', null, 'DV-AAAA-BBBB-CCCC');
+      renderContacts();
+      window.__dialedWith = null;
+      dialAddress = function(a){ window.__dialedWith = a; };
+      dc = { readyState: 'open' };   /* una conversazione e gia aperta */
+    `);
+    app.run(`
+      $('addrPeople').listeners.click[0]({
+        target: { closest: sel => sel === '[data-reach]' ? { getAttribute: () => 'Antonella' } : null },
+      });
+    `);
+    assert.strictEqual(app.run('window.__dialedWith'), null,
+      'toccare un nome mentre una connessione e aperta non deve strapparla via');
+    app.stop();
+  });
+
+  test('l\'avviso sull\'omonimo mai verificato arriva anche sui nomi, non solo nell\'elenco', () => {
+    /* ⚠️ IL CONTROLLO PIU IMPORTANTE DI QUESTO BLOCCO. L'avviso «nome quasi
+       identico a un altro, mai verificato a voce» e' l'unica cosa che
+       distingue tua madre da chi ha scelto un nome per sembrare tua madre.
+       Se fosse rimasto solo nell'elenco dentro la rotellina, la strada che la
+       gente usa davvero — un tocco sul nome in prima pagina — sarebbe l'unica
+       senza protezione: esattamente al contrario di come deve stare. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      writeSafetyRec(safetyKeyFp('fp-vera'), 'parola parola parola');   /* verificata a voce */
+      touchContact('Mamma', 'fp-vera', null, 'DV-AAAA-AAAA-AAAA');
+      touchContact('Mаmmа', 'fp-attaccante', null, 'DV-BBBB-BBBB-BBBB');
+      renderContacts();
+    `);
+    const html = app.run("$('addrPeople').innerHTML");
+    assert.match(html, /chip warn/, 'l\'omonimo mai verificato deve portare il segno anche qui');
+    /* e uno solo dei due: segnarli tutti e due non direbbe quale evitare */
+    assert.strictEqual((html.match(/chip warn/g) || []).length, 1,
+      'solo quello mai verificato va segnato, o il segno non dice piu niente');
+    app.stop();
+  });
+
+  test('senza collisione nessun nome porta il segno', () => {
+    /* Un segno su ogni pillola sarebbe tappezzeria entro una settimana. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]);
+      touchContact('Mamma', 'fp-vera', null, 'DV-AAAA-AAAA-AAAA');
+      touchContact('Marco', 'fp-m', null, 'DV-BBBB-BBBB-BBBB');
+      renderContacts();
+    `);
+    assert.doesNotMatch(app.run("$('addrPeople').innerHTML"), /warn/,
+      'senza omonimi non c\'e niente da segnalare');
+    app.stop();
+  });
+});
+
+/* ------------------------------------------------------------------------
    M4-M7 — i reperti MEDIO dell'audit ostile.
    Nessuno di questi rompe la cifratura o perde messaggi: sono uno stato che
    mente, una contabilita che non conta, un tetto tarato su una macchina che

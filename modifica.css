@@ -94,10 +94,6 @@
   .card h3{margin:0 0 6px;font-size:0.75rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;font-weight:700}
   .card .lead{color:var(--dim);font-size:0.9375rem;margin:2px 0 16px;line-height:1.6}
 
-  /* shown once, after a conversation that worked, and gone for good once waved
-     away — it earns its place by arriving after the proof, not before it */
-  .card.viral{position:relative;border-color:rgba(61,220,151,0.3);
-    background:linear-gradient(180deg,rgba(61,220,151,0.07),var(--bg2))}
   /* the address itself: meant to be read aloud down a phone and copied off a
      screen, so it gets the monospace treatment and room to breathe */
   .addrbox{font-family:var(--mono);font-size:1.375rem;letter-spacing:.06em;text-align:center;
@@ -142,6 +138,40 @@
     padding-inline-start:11px;border-inline-start:3px solid var(--line);overflow-wrap:anywhere}
 
   .addrdial{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+
+  /* ⚠️ I nomi sotto il campo dell indirizzo. NON e una rubrica: e il campo che
+     si ricorda chi chiami di solito — vedi #addrPeople nella pagina.
+     Sta o cade su una cosa sola: deve pesare MENO dei due pulsantoni sotto,
+     o abbiamo rimesso in cima alla prima pagina lo stesso elenco che ne
+     abbiamo appena tolto. Per questo sono pillole basse, senza sfondo pieno,
+     senza avatar e senza date: si vedono se le cerchi, non si impongono.
+     44 px di altezza minima: sotto quella misura un pollice manca il bersaglio
+     e finisce sul pulsante accanto, che qui vuol dire chiamare la persona
+     sbagliata. */
+  .people{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .people .chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;
+    padding:0 15px;border-radius:22px;cursor:pointer;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    font:inherit;font-size:0.9375rem;font-weight:600;
+    max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .people .chip:hover,.people .chip:focus-visible{border-color:var(--accent);color:var(--accent2)}
+  /* Il nome che si scontra con un altro e non e mai stato verificato a voce.
+     Il segno sta PRIMA del nome e dentro il pulsante: e l unico posto dove
+     lo si legge prima di toccare, e un avviso letto dopo non e un avviso.
+     Vedi contactCollisions() — la stessa regola dell elenco completo. */
+  /* ⚠️ ROSSO, non ambra, e non e' una scelta estetica: l'elenco completo nella
+     rotellina segna lo stesso identico fatto con --bad (vedi .ctrust.bad), e
+     due schermate che colorano la stessa cosa in due modi raccontano due
+     storie diverse su una persona sola.
+     E soprattutto NON arancione: l'arancione qui e' il colore di «Parla con
+     qualcuno», cioe' del pulsante che si vuole far premere. Un avviso dipinto
+     del colore dell'invito si legge come «questo e' quello consigliato» —
+     esattamente il contrario di quello che deve dire. */
+  .people .chip.warn{border-color:var(--bad);color:var(--bad)}
+  .people .chip.warn:hover,.people .chip.warn:focus-visible{border-color:var(--bad);color:var(--bad)}
+  .people .chip .wm{display:inline-flex;align-items:center;justify-content:center;
+    width:18px;height:18px;border-radius:50%;flex:none;
+    background:var(--bad);color:#fff;font-size:0.75rem;font-weight:800}
   input.mono{font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
   #addrIncoming b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
   @media(min-width:520px){ .addrbox{font-size:1.625rem} }
@@ -151,14 +181,6 @@
   .mediasteps{margin:0 0 16px;padding-inline-start:22px;color:var(--dim);font-size:0.9062rem;line-height:1.7}
   .mediasteps li{margin-bottom:7px}
   .mediasteps b{color:var(--ink);font-weight:650}
-
-  .card.viral > b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
-  /* direct children only: an unrestricted `span` here also caught the labels
-     inside the button, turning them grey on orange */
-  .card.viral > span{display:block;color:var(--dim);font-size:0.9062rem;line-height:1.6;padding-inline-end:18px}
-  .card.viral .x{position:absolute;top:10px;inset-inline-end:12px;background:none;border:none;
-    color:var(--faint);font-size:1.25rem;line-height:1;padding:4px 6px;cursor:pointer}
-  .card.viral .x:hover{color:var(--dim)}
 
   label.fieldlabel{display:block;font-size:0.9375rem;color:var(--dim);margin:0 0 8px;font-weight:650}
   input[type=text],textarea{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);
@@ -750,21 +772,16 @@
    deve vedere i due pulsantoni. Chi i contatti ce li ha vuole loro, subito.
    Quindi non si sposta niente nel documento: cambia solo l ORDINE A SCHERMO,
    e solo per chi ha gia qualcuno in rubrica. */
-  body.hascontacts #screenHome{display:flex;flex-direction:column}
-  /* ⚠️ I nomi veri, letti dal DOM e non indovinati: bigchoices, sharerow e
-     addrdial sono CLASSI, non id, e in mezzo ci sono banner e messaggi che
-     devono restare dove sono. Tutto cio che non e elencato qui prende order 0
-     e resta in cima: per questo il titolo e i banner sono elencati anche loro. */
-  body.hascontacts #screenHome > .hero{order:1}
-  body.hascontacts #screenHome > #viralCard{order:2}
-  body.hascontacts #screenHome > #installBar{order:3}
-  body.hascontacts #screenHome > #easyHintBar{order:4}
-  body.hascontacts #screenHome > #lettersCard{order:5}
-  body.hascontacts #screenHome > #contactsCard{order:6}
-  body.hascontacts #screenHome > .addrdial{order:7}
-  body.hascontacts #screenHome > .bigchoices{order:8}
-  body.hascontacts #screenHome > .sharerow{order:9}
-  /* con dei contatti in elenco il titolo ha gia spiegato tutto: si stringe e
+  /* ⚠️ QUI STAVANO NOVE REGOLE `order:` CHE RIMESCOLAVANO LA PRIMA PAGINA.
+     Sono state tolte il 6 set 2026, e non perche' fossero sbagliate: perche'
+     adesso il documento e' gia' nell ordine giusto per tutti. Rimescolare a
+     schermo un ordine sbagliato nel documento significa che chi legge il
+     codice vede una pagina e chi la usa ne vede un altra — e la seconda volta
+     che si tocca qualcosa, una delle due si dimentica.
+     La prima pagina adesso e corta per chiunque: intestazione, messaggi
+     lasciati (solo se ce ne sono), il campo dell indirizzo coi nomi sotto, i
+     due pulsantoni. La rubrica lunga e la condivisione sono nella rotellina. */
+  /* con dei contatti salvati il titolo ha gia spiegato tutto: si stringe e
      restituisce quattrocento pixel a chi usa l app davvero */
   body.hascontacts .hero{padding:6px 10px 0}
   body.hascontacts .hero img{width:38px;height:38px}
