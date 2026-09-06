@@ -288,34 +288,17 @@
        where it buried the two things that are. -->
   <section id="screenSettings" class="hide">
     <button class="btn ghost" id="backFromSettings">‹ <span data-i18n="nav.back">Indietro</span></button>
-
-    <!-- The licence and who owns this. It was the first thing a new person met
-         on the home screen, six lines of it, above the only two things they
-         could do — and the footer already says the same on every screen, so it
-         was six lines of duplicate standing in the way. Nothing is lost by it
-         living here. -->
     <div class="banner accent" id="onboardBanner">
       <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0),
         di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
         Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
     </div>
 
-    <div class="card">
-      <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
-      <select id="langSel" aria-label="Language"></select>
-      <label class="fieldlabel mt16" data-i18n="set.textsize">Dimensione del testo</label>
-      <div class="textsize" role="group" aria-label="Dimensione del testo">
-      <button type="button" data-ts="" title="Testo normale">A</button>
-      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
-      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
-    </div>
-    </div>
-
+    <h3 class="setgroup" data-i18n="set.grpYou">Chi sei</h3>
     <div class="card">
       <label class="fieldlabel" data-i18n="home.nameLabel">Come ti chiami</label>
       <input type="text" id="nickInput" class="sans-input" maxlength="30" spellcheck="true" autocapitalize="words" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
     </div>
-
     <div class="card" id="addrCard">
       <div class="switchrow" id="addrRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><circle cx="8.3" cy="12.3" r="2"/><path d="M13 10.3h5M13 14.3h3.5"/></svg></span>
@@ -388,20 +371,41 @@
       </div>
     </div>
 
-    <!-- La striscia in cima alla home resta, per chi arriva la prima volta. Ma
-         non puo' essere l'UNICA strada: la sua ✕ scrive
-         `dvlogos-install-dismissed` e da quel momento non ricompare mai piu',
-         e prima della v39 non c'era nessun altro posto da cui installare. Chi
-         l'aveva chiusa una volta — anche per sbaglio, anche senza leggerla —
-         restava senza icona e senza sapere perche'. Stessa famiglia del
-         pulsante "Ignora": una decisione presa in un tocco, per sempre, senza
-         ritorno. Questa voce non guarda quel segno: e' sempre qui. -->
-    <div class="card hide" id="installCard">
-      <label class="fieldlabel" data-i18n="install.always">Metti Logos sulla schermata</label>
-      <div class="helptext" id="installCardText"></div>
-      <button class="btn mt10 hide" id="installCardBtn" data-i18n="install.btn">Installa</button>
+    <h3 class="setgroup" data-i18n="set.grpFind">Come ti trovano</h3>
+    <div class="card hide" id="notifyCard">
+      <div class="switchrow" id="notifyRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a5.5 5.5 0 0 0-5.5 5.5v3.2c0 .7-.2 1.4-.7 2l-1 1.3c-.5.7 0 1.7.9 1.7h12.6c.9 0 1.4-1 .9-1.7l-1-1.3c-.5-.6-.7-1.3-.7-2V9a5.5 5.5 0 0 0-5.5-5.5z"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg></span>
+        <div class="txt">
+          <b data-i18n="notify.title">Avvisami quando qualcuno mi cerca</b>
+          <span data-i18n="notify.sub">Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="helptext hide" id="notifyIosHint" data-i18n="notify.iosHint">Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.</div>
+    </div>
+    <div class="card" id="listenCard">
+      <div class="switchrow" id="listenRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span>
+        <div class="txt">
+          <b data-i18n="listen.title">Resta in ascolto delle chiamate</b>
+          <span data-i18n="listen.sub">Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="helptext mt10 hide" id="listenStatus" data-i18n="listen.status">In ascolto — se cambi schermata o app, si ferma finché non torni qui.</div>
     </div>
 
+    <h3 class="setgroup" data-i18n="set.grpLook">Come si vede e si usa</h3>
+    <div class="card">
+      <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
+      <select id="langSel" aria-label="Language"></select>
+      <label class="fieldlabel mt16" data-i18n="set.textsize">Dimensione del testo</label>
+      <div class="textsize" role="group" aria-label="Dimensione del testo">
+      <button type="button" data-ts="" title="Testo normale">A</button>
+      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
+      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
+    </div>
+    </div>
     <div class="card" id="easyCard">
       <div class="switchrow" id="easyRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 10.2h.01M15.5 10.2h.01"/><path d="M8.3 14.2a5 5 0 0 0 7.4 0"/></svg></span>
@@ -420,35 +424,14 @@
         <div class="sw" aria-hidden="true"></div>
       </div>
     </div>
-
-    <div class="card hide" id="notifyCard">
-      <div class="switchrow" id="notifyRow" role="button" tabindex="0" aria-pressed="false">
-        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a5.5 5.5 0 0 0-5.5 5.5v3.2c0 .7-.2 1.4-.7 2l-1 1.3c-.5.7 0 1.7.9 1.7h12.6c.9 0 1.4-1 .9-1.7l-1-1.3c-.5-.6-.7-1.3-.7-2V9a5.5 5.5 0 0 0-5.5-5.5z"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg></span>
-        <div class="txt">
-          <b data-i18n="notify.title">Avvisami quando qualcuno mi cerca</b>
-          <span data-i18n="notify.sub">Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.</span>
-        </div>
-        <div class="sw" aria-hidden="true"></div>
-      </div>
-      <div class="helptext hide" id="notifyIosHint" data-i18n="notify.iosHint">Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.</div>
+    <div class="card hide" id="installCard">
+      <label class="fieldlabel" data-i18n="install.always">Metti Logos sulla schermata</label>
+      <div class="helptext" id="installCardText"></div>
+      <button class="btn mt10 hide" id="installCardBtn" data-i18n="install.btn">Installa</button>
     </div>
 
-    <!-- L'altra metà della coppia con notifyCard, deliberatamente vicina: quella
-         sopra avvisa con l'app chiusa (passa dal sistema del telefono); questa
-         fa squillare per davvero, ma solo finché questa schermata resta aperta
-         — nessun sistema esterno coinvolto, per chi lo preferisce così. -->
-    <div class="card" id="listenCard">
-      <div class="switchrow" id="listenRow" role="button" tabindex="0" aria-pressed="false">
-        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span>
-        <div class="txt">
-          <b data-i18n="listen.title">Resta in ascolto delle chiamate</b>
-          <span data-i18n="listen.sub">Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.</span>
-        </div>
-        <div class="sw" aria-hidden="true"></div>
-      </div>
-      <div class="helptext mt10 hide" id="listenStatus" data-i18n="listen.status">In ascolto — se cambi schermata o app, si ferma finché non torni qui.</div>
-    </div>
-
+    <details class="advbox">
+      <summary data-i18n="set.grpAdv">Impostazioni avanzate</summary>
     <div class="card" id="autocleanCard">
       <div class="switchrow" id="autocleanRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span>
@@ -483,13 +466,6 @@
         <div class="status" id="wipeStatus"></div>
       </div>
     </div>
-
-    <!-- The app saying, in plain words, whether it is actually working.
-         Written after a bug that made this device unreachable by every route
-         at once and stayed invisible for days: nothing on any screen could
-         have told anyone, and the only symptom was other people saying "non
-         ti trovo". Every line here answers one question a person would
-         actually ask, and every red line says what to do about it. -->
     <div class="card" id="healthCard">
       <h3 data-i18n="health.title">Come sta l'app</h3>
       <div class="helptext" data-i18n="health.sub">Se qualcuno non riesce a raggiungerti, qui sotto c'è il motivo.</div>
@@ -499,17 +475,6 @@
         <button class="btn" id="btnHealthCopy" data-i18n="health.copy">Copia il resoconto</button>
       </div>
     </div>
-
-    <details class="legal">
-      <summary data-i18n="home.legalSummary">Come funziona, in tre righe tecniche</summary>
-      <div class="body" data-i18n="home.legalBody">Serve che siate online tutti e due nello stesso momento, altrimenti non
-        arriva nulla; e su reti molto filtrate le chiamate possono non collegarsi.</div>
-      <div class="body" data-i18n="home.legalGraph">Il servizio che fa incontrare i due telefoni vede quali caselle vengono
-        controllate: può sapere chi parla con chi e quanto spesso — non cosa si dicono.</div>
-      <div class="body" data-i18n="home.legalShort">Il codice a sei cifre è corto: chi riuscisse a registrare le caselle degli
-        inviti potrebbe provarle tutte e leggere ciò che contengono. Per questo durano due minuti e valgono una volta sola.</div>
-      <div class="body" data-i18n="home.legalNoLock">Senza il lucchetto opzionale, l'invito lungo attraversa il canale su cui lo
-        mandi leggibile da chi lo trasporta. I messaggi no: quelli non ci passano mai.</div>
     </details>
   </section>
 

@@ -716,3 +716,21 @@
 .contactrow .cact:hover,.contactrow .cact:focus-visible{opacity:1;background:rgba(127,127,127,.16)}
 .contactrow .cact svg{width:19px;height:19px}
 .contactrow .rm{margin-inline-start:4px}
+
+/* I titoli che dividono le impostazioni in tre gruppi. Prima erano nove
+   schede tutte allo stesso livello: chi scorreva non sapeva quando fosse
+   arrivato in fondo ne dove cercare. */
+.setgroup{margin:26px 4px 8px;font-size:.82em;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;opacity:.55}
+.setgroup:first-of-type{margin-top:14px}
+
+/* Il cassetto delle avanzate: <details> nativo, nessun JavaScript. Dentro ci
+   sta cio che il 95% delle persone non aprira mai — ma chi lo cerca lo trova. */
+.advbox{margin-top:26px;border-top:1px solid rgba(127,127,127,.22);padding-top:6px}
+.advbox>summary{cursor:pointer;list-style:none;padding:12px 4px;font-size:.9em;font-weight:600;
+  opacity:.62;border-radius:10px;user-select:none}
+.advbox>summary::-webkit-details-marker{display:none}
+.advbox>summary::before{content:"⚙";margin-inline-end:8px;opacity:.8}
+.advbox>summary::after{content:"›";float:inline-end;transform:rotate(90deg);display:inline-block;opacity:.6}
+.advbox[open]>summary::after{transform:rotate(-90deg)}
+.advbox>summary:hover,.advbox>summary:focus-visible{opacity:1;background:rgba(127,127,127,.12)}
