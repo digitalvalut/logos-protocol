@@ -1,0 +1,145 @@
+# Working notes for Logos
+
+Read this before changing anything. It is for whoever edits the code — a person or an
+AI — and it is deliberately short. The [README](README.md) explains what Logos *is*
+and who it is for; this file explains how it is built and what must not be broken.
+
+---
+
+## The one sentence
+
+Two browsers find each other through a small stateless relay, then talk **directly**,
+end-to-end encrypted. Once they are connected the relay is out of the picture, and
+nothing either side says has ever passed through it.
+
+Everything in this file exists to protect that sentence.
+
+---
+
+## The rules that are not up for discussion
+
+**1. No server ever holds a key or a plaintext message.** This is the whole point of
+the project, not a feature of it. Any change that puts conversation content — text,
+audio, video, files — through a server we run is wrong no matter how much it improves
+performance or scale. That specifically rules out an SFU or any media-mixing server:
+they exist to receive your video, which is the thing this project promises never
+happens.
+
+**2. No third-party code at runtime.** Zero dependencies, zero `node_modules`, zero
+CDN, in the app *and* in its tests. There is no `npm install` step because there is
+nothing to install. The strongest claim Logos makes is that a single person can read
+all of it; a dependency tree ends that claim quietly. A hand-written 150-line fake
+browser (`tests/fake-browser.js`) exists instead of jsdom for exactly this reason.
+
+**3. `modifica.js` is one large file on purpose.** ~10,000 lines, all the app logic.
+Do not "modernise" it into modules. The app ships to Android as one bundled HTML file,
+and being auditable end to end by one reader is worth more here than tidy structure.
+Add code where it belongs in the existing flow.
+
+**4. Every test must be sabotage-verified.** A test that cannot fail is decoration.
+When you add one, break the real behaviour it watches and confirm it goes red — break
+the *behaviour*, not the syntax. If it stays green it is not looking where you think.
+
+**5. Never publish a description of an unfixed defect.** Fix first, describe after.
+`memory/` is git-ignored for this reason and must stay that way; so are the compiled
+APKs, the signing keystore, and the mutant builds. Publishing the code is mandatory;
+publishing a map of what is still open is not the same thing.
+
+**6. Never invent a number.** Test counts, quota limits, timings, line counts — measure
+them, or do not state them. Several of this project's worst hours came from a
+confidently wrong figure.
+
+---
+
+## Where things are
+
+| what | file | roughly |
+|---|---|---|
+| The whole app: crypto, connection, UI, 13 languages | `modifica.js` | 10,500 lines |
+| Its page and its stylesheet | `modifica.html`, `modifica.css` | 900 + 800 |
+| Offline cache, web push, Android share target | `modifica-sw.js` | 170 |
+| The relay (Cloudflare Worker) | `turn-worker/worker.js` | 800 |
+| Android wrapper: bundles the app, rings when closed | `android/` | 4 Java classes |
+| Tests | `tests/` | 9,000 lines |
+
+`build-single-file.py` bundles the web app into `android/app/src/main/assets/logos.html`.
+That output is **never committed** — a stale copy of build output in the source tree is
+how a build stops being reproducible.
+
+---
+
+## The relay, in one table
+
+It is stateless and has no idea who anyone is. Everything it stores is already sealed
+before it arrives.
+
+| route | lives | consumed by reading? |
+|---|---|---|
+| `/` · `/turn` | — | — |
+| `/mailbox/:key` | 2 minutes | **yes** |
+| `/wake/:key` | 24 hours | no |
+| `/key/:key` | 365 days | no |
+| `/letter/:key` | 7 days | **yes** |
+| `/knock` | — | — |
+
+The "consumed by reading" column is the most important thing on this page. A mailbox
+that empties when read cannot be replicated across relays, and forgetting that has
+already cost this project a release.
+
+It runs on a free plan with a hard daily write allowance. Before adding anything that
+writes or polls, work out what it costs per user per day — a loop with no deadline is
+the classic way to turn a working relay into an exhausted one.
+
+---
+
+## Running the tests
+
+```bash
+node --test
+```
+
+Node 22. No arguments needed — Node finds the files. 333 tests, 52 suites, about two
+and a half minutes. They also run on every push.
+
+Beyond the suite there are campaigns you run by hand when you have changed something
+structural: `tests/mutanti.js` (puts real defects back and checks they get caught),
+`tests/fuzz.js`, `tests/races.js`, `tests/hostile.js`.
+
+**What the tests cannot see, ever:** real calls (audio, video, speaker, camera
+switching), how the page actually looks, and iPhone/Safari. Those still need hands and
+a real phone. Do not report a call feature as working because the suite is green.
+
+---
+
+## Conventions that have teeth
+
+- **13 languages, always all 13.** Add a string in one and the tests fail until it
+  exists in every one, placeholders included.
+- **`APP_VERSION` in `modifica.js` must equal `CACHE` in `modifica-sw.js`.** A test
+  enforces it. When they drift, users get old code and it looks like your fix failed.
+- **Every element the code reaches for must exist in the page.** Also enforced —
+  including that nothing is declared twice.
+- **The CSP is not to be loosened,** and no inline styles: it would block them anyway.
+- Comments here explain *why*, and are written for a reader who was not in the room.
+  Match that; do not strip them.
+
+---
+
+## Things that look like bugs and are not
+
+- **The private key cannot be read back out.** Deliberate: it is created
+  non-extractable, so no code — including this code — can export it.
+- **A `blob:` URL cannot be re-fetched from script.** That is the CSP doing its job.
+  Use the app's own accounting (`heldMediaBytes()`) to verify a transfer instead.
+- **The relay's origin allow-list means nothing works from `localhost`.** Also
+  deliberate. Test against the deployed origin, not by widening the list.
+- **`wrangler deploy` wipes the Worker's secrets.** Re-set them after every deploy.
+
+---
+
+## Before you publish
+
+Green tests are the floor, not the ceiling. Ask what the change does when the network
+is slow, when the other side never answers, when someone hostile sends it something it
+did not expect — and if it touches calling or the interface, say plainly that it still
+needs to be tried on a real phone, because from here it does.
