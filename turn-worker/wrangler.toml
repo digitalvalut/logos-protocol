@@ -1,0 +1,27 @@
+# Configurazione di deploy del relay. Ricostruita il 6 set 2026 leggendo la
+# versione VIVA (`wrangler versions view`), non a memoria: prima non c'era, ed
+# è il motivo per cui ogni deploy era un salto nel buio e un paio di volte ha
+# cancellato dei binding.
+#
+# ⚠️ Il deploy si fa così, e SOLO così:
+#     cd turn-worker && npx wrangler deploy --keep-vars
+#
+# `--keep-vars` è obbligatorio: senza, wrangler cancella le variabili impostate
+# dal pannello. I quattro Secret (TURN_API_TOKEN, TURN_KEY_ID, VAPID_PRIVATE_JWK,
+# VAPID_PUBLIC_KEY) restano comunque — wrangler 4.x non li tocca — ma controlla
+# sempre `npx wrangler secret list --name digitalvalut-turn` subito dopo.
+#
+# Il login OAuth è dell'operatore, nel suo browser. Nessun token sta qui dentro.
+
+name = "digitalvalut-turn"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# La cassetta postale. `id` preso dalla versione viva 2e0b1830: è la namespace
+# intitolata " mailbox" (con lo spazio davvero), NON "logos-mailbox-2", che
+# sull'account esiste ma questo Worker non la usa. Non cambiare senza sapere
+# perché — puntare alla namespace sbagliata è una cassetta vuota che sembra
+# funzionare.
+[[kv_namespaces]]
+binding = "MAILBOX"
+id = "a3c45b0252984101bd5d02f36a6070a1"

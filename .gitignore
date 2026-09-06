@@ -64,3 +64,6 @@ mutanti/
 # Nessun progetto serio lo fa: si pubblica DOPO aver corretto (vedi SECURITY.md).
 # Restano sul computer dell'autore, dove servono.
 memory/
+
+# Cache locale di wrangler — stato di macchina, non del progetto
+.wrangler/
