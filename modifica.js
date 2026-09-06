@@ -2604,6 +2604,21 @@ for (const id of ['easyRow','voiceRow']){
    the first thing offered on the home screen starts a new connection, which
    really would have ended it. */
 let settingsCameFrom = 'screenHome';
+/* Il mappamondo apre le impostazioni e porta la persona dritta sulla lingua,
+   che li' dentro e' gia' la prima voce. Non duplica il selettore: uno solo,
+   in un posto solo, raggiunto da due strade — un secondo elenco di lingue da
+   tenere allineato sarebbe una bugia in attesa di succedere.
+   Chi non sa leggere la lingua in cui e' l'app non deve capire NIENTE per
+   arrivarci: riconosce il disegno e basta. */
+$('btnLang').addEventListener('click', () => {
+  $('btnSettings').click();
+  setTimeout(() => {
+    try{
+      $('langSel').scrollIntoView({ block: 'center', behavior: 'smooth' });
+      $('langSel').focus({ preventScroll: true });
+    }catch(e){}
+  }, 60);
+});
 $('btnSettings').addEventListener('click', () => {
   settingsCameFrom = ['screenHome','screenStart','screenJoin','screenChat']
     .find(s => !$(s).classList.contains('hide')) || 'screenHome';
@@ -7305,7 +7320,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.19';
+const APP_VERSION = 'logos-modifica-4.20';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
