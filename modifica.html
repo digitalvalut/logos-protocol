@@ -324,6 +324,24 @@
        where it buried the two things that are. -->
   <section id="screenSettings" class="hide">
     <button class="btn ghost" id="backFromSettings">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <!-- ⚠️ RIMESSA IN CIMA IL 6 SET 2026. Riorganizzando le impostazioni
+         l'avevo spinta nel terzo gruppo, a SEIMILACINQUECENTO pixel dal bordo:
+         venti schermate di scorrimento. Chi apre l'app in una lingua che non
+         sa leggere non la trova MAI — ed e' l'unica cosa che deve trovare
+         prima di tutte le altre, perche' senza quella non capisce nemmeno i
+         titoli dei gruppi. Sta fuori dai gruppi apposta: non e' una
+         preferenza fra le altre, e' la via d'uscita. -->
+    <div class="card">
+      <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
+      <select id="langSel" aria-label="Language"></select>
+      <label class="fieldlabel mt16" data-i18n="set.textsize">Dimensione del testo</label>
+      <div class="textsize" role="group" aria-label="Dimensione del testo">
+      <button type="button" data-ts="" title="Testo normale">A</button>
+      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
+      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
+    </div>
+    </div>
     <div class="banner accent" id="onboardBanner">
       <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0),
         di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
@@ -425,16 +443,6 @@
     </div>
 
     <h3 class="setgroup" data-i18n="set.grpLook">Come si vede e si usa</h3>
-    <div class="card">
-      <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
-      <select id="langSel" aria-label="Language"></select>
-      <label class="fieldlabel mt16" data-i18n="set.textsize">Dimensione del testo</label>
-      <div class="textsize" role="group" aria-label="Dimensione del testo">
-      <button type="button" data-ts="" title="Testo normale">A</button>
-      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
-      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
-    </div>
-    </div>
     <div class="card" id="easyCard">
       <div class="switchrow" id="easyRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 10.2h.01M15.5 10.2h.01"/><path d="M8.3 14.2a5 5 0 0 0 7.4 0"/></svg></span>

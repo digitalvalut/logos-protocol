@@ -740,3 +740,33 @@
 .contactcard .rm:hover,.contactcard .rm:focus-visible{opacity:1;background:rgba(127,127,127,.16)}
 .cbtns{display:flex;gap:8px;margin-top:10px}
 .cbtns .btn{flex:1;justify-content:center;padding-block:11px}
+
+/* ⚠️ LA PRIMA PAGINA, RIMESSA IN ORDINE IL 6 SET 2026.
+   Misurato su schermo di telefono (alto ~800 px): il titolo grande occupava
+   548 px, e le cose che una persona usa OGNI GIORNO finivano sotto —
+   «Hai l indirizzo di qualcuno?» a 1384 px, i contatti a 1632. Bisognava
+   scorrere due schermate per chiamare qualcuno che senti tutti i giorni.
+   Chi e appena arrivato non ha contatti, e per lui l ordine di prima va bene:
+   deve vedere i due pulsantoni. Chi i contatti ce li ha vuole loro, subito.
+   Quindi non si sposta niente nel documento: cambia solo l ORDINE A SCHERMO,
+   e solo per chi ha gia qualcuno in rubrica. */
+  body.hascontacts #screenHome{display:flex;flex-direction:column}
+  /* ⚠️ I nomi veri, letti dal DOM e non indovinati: bigchoices, sharerow e
+     addrdial sono CLASSI, non id, e in mezzo ci sono banner e messaggi che
+     devono restare dove sono. Tutto cio che non e elencato qui prende order 0
+     e resta in cima: per questo il titolo e i banner sono elencati anche loro. */
+  body.hascontacts #screenHome > .hero{order:1}
+  body.hascontacts #screenHome > #viralCard{order:2}
+  body.hascontacts #screenHome > #installBar{order:3}
+  body.hascontacts #screenHome > #easyHintBar{order:4}
+  body.hascontacts #screenHome > #lettersCard{order:5}
+  body.hascontacts #screenHome > #contactsCard{order:6}
+  body.hascontacts #screenHome > .addrdial{order:7}
+  body.hascontacts #screenHome > .bigchoices{order:8}
+  body.hascontacts #screenHome > .sharerow{order:9}
+  /* con dei contatti in elenco il titolo ha gia spiegato tutto: si stringe e
+     restituisce quattrocento pixel a chi usa l app davvero */
+  body.hascontacts .hero{padding:6px 10px 0}
+  body.hascontacts .hero img{width:38px;height:38px}
+  body.hascontacts .hero h1{font-size:1.05rem;margin:7px 0 3px}
+  body.hascontacts .hero p{display:none}

@@ -4920,6 +4920,10 @@ function relTime(ts){
 function renderContacts(){
   const list = loadContacts();
   $('contactsCard').classList.toggle('hide', list.length === 0);
+  /* Chi ha gia' qualcuno in rubrica vuole vedere LORO appena apre, non mezzo
+     schermo di titolo. La riga qui sotto accende la regola che rimette in
+     ordine la prima pagina — vedi body.hascontacts nel foglio di stile. */
+  document.body.classList.toggle('hascontacts', list.length > 0);
   /* Two entries that read the same on screen are the whole point of the
      impersonation, so the suffix alone was never going to be enough: "Mamma"
      and "Mamma (2)" says there are two of them, not which one is your mother.
@@ -7301,7 +7305,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.18';
+const APP_VERSION = 'logos-modifica-4.19';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
