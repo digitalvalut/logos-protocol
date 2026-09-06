@@ -970,6 +970,44 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('si possono lasciare due righe senza aspettare tre minuti di rotellina', async () => {
+    /* Il riquadro per lasciare due righe ESISTEVA GIA' e funzionava, ma
+       `offerToLeaveLetter` era raggiungibile da UN SOLO punto in tutto il file:
+       dentro il ramo «non ha risposto» di dialAddress, cioe' dopo fino a TRE
+       MINUTI di rotellina. Una funzione raggiungibile solo cosi' e' una
+       funzione che non esiste: nessuno aspetta tre minuti per scrivere due
+       righe, chiude l'app prima.
+       Chiesto dall'operatore il 6 set 2026: «e se una persona vuole mandare un
+       messaggio sul momento, chi ha solo il codice permanente?» */
+    const app = loadApp();
+    app.run(`
+      myAddress = async () => 'ZZZZZZZZZZZZ';
+      showKnockCard('AAAABBBBCCCC');
+      $('knockMsg').value = 'ti cercavo per il preventivo';
+      $('btnKnockNote').listeners.click[0]();
+    `);
+
+    assert.strictEqual(app.run("$('leaveLetter').classList.contains('hide')"), false,
+      'il riquadro per scrivere deve aprirsi subito, senza passare da una chiamata');
+    assert.strictEqual(app.run('letterTarget'), 'AAAABBBBCCCC',
+      'e deve puntare alla persona giusta');
+    assert.strictEqual(app.run("$('letterText').value"), 'ti cercavo per il preventivo',
+      'la frase gia scritta non si butta via: e quasi sempre quello che si voleva dire');
+    assert.strictEqual(app.run("$('knockCard').classList.contains('hide')"), true,
+      'e la scheda della chiamata si chiude: un solo stato alla volta');
+
+    /* ⚠️ E il riquadro non deve MENTIRE. Arrivandoci di proposito nessuno ha
+       chiamato, quindi «non risponde nessuno adesso» sarebbe falso — la stessa
+       famiglia di «codice scaduto o sbagliato» su un codice giusto. */
+    const titolo = app.run("$('letterTitle').textContent");
+    assert.ok(!/non risponde|nessuno adesso/i.test(titolo),
+      'non puo dire che non ha risposto nessuno se nessuno ha chiamato: "' + titolo + '"');
+    const sotto = app.run("$('letterSub').textContent");
+    assert.ok(/300/.test(sotto) && /foto/i.test(sotto),
+      'e deve dire cosa e davvero — solo testo, 300 caratteri, niente foto: "' + sotto + '"');
+    app.stop();
+  });
+
   test("l'invito a installare non si perde chiudendo la striscia", () => {
     /* La ✕ della striscia in cima alla home scrive dvlogos-install-dismissed, e
        da quel momento la striscia non ricompare mai piu'. Fino alla v39 quella
