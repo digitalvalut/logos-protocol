@@ -1,0 +1,33 @@
+LE SCHERMATE — cosa metterci dentro
+====================================
+
+Servono a F-Droid e a IzzyOnDroid per la scheda dell'app. Oggi non ci sono, e
+sono l'unica cosa che manca ai vostri metadati: titolo, descrizioni, icona e
+changelog ci sono gia' tutti.
+
+COME SI FANNO (due minuti, dal telefono vero)
+---------------------------------------------
+Sul telefono, con l'app aperta, fai uno screenshot di queste quattro schermate.
+In quest'ordine: e' l'ordine in cui verranno mostrate.
+
+  1.png   La prima pagina  (i due pulsantoni)
+  2.png   «Parla con qualcuno» -> il codice e il QR
+  3.png   Una conversazione aperta, con qualche messaggio
+  4.png   Le impostazioni, aperte sull'indirizzo permanente
+
+⚠️ PRIMA DI FARLE, TRE COSE
+  - usa la MODALITA' DI PROVA (.../logos-protocol/prova/) NO: usa l'app vera,
+    ma con dati finti. La copia di prova ha la fascia rossa e non va bene qui.
+  - niente nomi veri, niente indirizzi veri, niente messaggi veri: quelle
+    immagini finiscono pubbliche per sempre. Usa nomi inventati.
+  - chiudi la striscia «Installa» prima di scattare, se compare.
+
+DOVE METTERLE
+-------------
+Qui dentro, per l'inglese:
+  fastlane/metadata/android/en-US/images/phoneScreenshots/
+E le stesse (o quelle in italiano) qui:
+  fastlane/metadata/android/it-IT/images/phoneScreenshots/
+
+Formato: PNG. Vanno bene le dimensioni native del telefono.
+Poi cancella questo file e fai un commit.
