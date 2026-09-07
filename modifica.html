@@ -599,6 +599,21 @@
       <div class="helptext mt10" data-i18n="first.nameWhy">Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.</div>
     </div>
 
+    <!-- ⚠️ AGGIUNTA IL 7 SET 2026. L'operatore, dopo la 4.25: «CLICCO PARLA
+         CON QUALCUNO, MI ESCE REGOLARMENTE IL MIO CODICE, MANDA INVITO, MA NON
+         MI DICE CHI SONO, METTI IL TUO NOME? PERCHE?».
+         Perche' il nome ce l'aveva gia' — la scheda qui sopra compare solo
+         quando manca — e quindi non gli diceva NIENTE. Aveva ragione lo
+         stesso: prima di mandare un invito uno vuole sapere come si
+         presentera', e «non chiedere» non e' la stessa cosa che «non dire».
+         Una riga sola, quieta: il nome che partira', e come cambiarlo. La
+         scheda grande resta per chi il nome non ce l'ha ancora. -->
+    <div class="nameis hide" id="nameIsRow">
+      <span data-i18n="first.youAre">Chi apre l'invito ti vedrà come</span>
+      <b id="nameIsWho"></b>
+      <button class="linkbtn" id="btnChangeName" data-i18n="first.change">cambia</button>
+    </div>
+
     <div class="card" id="quickStartCard">
       <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo codice</div></div>
       <div class="helptext" id="quickHelpA" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.</div>

@@ -4824,12 +4824,68 @@ test.describe('la prima volta in assoluto (4.25)', () => {
     app.stop();
   });
 
-  test('e non lo richiede mai piu\' una volta che c\'e\'', () => {
+  test('e non lo richiede mai piu\' una volta che c\'e\' — ma te lo DICE', () => {
+    /* ⚠️ Segnalato dall'operatore: «clicco parla con qualcuno, mi esce
+       regolarmente il mio codice, manda invito, ma non mi dice chi sono,
+       metti il tuo nome? perche?». Perche' il nome ce l'aveva gia'. Aveva
+       ragione lo stesso: NON CHIEDERE non e' la stessa cosa che NON DIRE, e
+       prima di mandare un invito uno vuole sapere come si presentera'. */
     const app = loadApp();
     app.run("$('nickInput').value = 'Giuseppe';");
     app.run("$('goStart').listeners.click[0]();");
     assert.strictEqual(app.run("$('askNameCard').classList.contains('hide')"), true,
       'dalla seconda volta in poi devono restare i due tocchi di prima');
+    assert.strictEqual(app.run("$('nameIsRow').classList.contains('hide')"), false,
+      'ma la riga che dice come ti presenterai deve esserci sempre');
+    assert.strictEqual(app.run("$('nameIsWho').textContent"), 'Giuseppe',
+      'e deve dire il nome VERO, non una frase generica');
+    app.stop();
+  });
+
+  test('«cambia» riapre il campo col nome di adesso gia\' dentro', () => {
+    const app = loadApp();
+    app.run("$('nickInput').value = 'Giuseppe';");
+    app.run("$('goStart').listeners.click[0]();");
+    app.run("$('btnChangeName').listeners.click[0]();");
+    assert.strictEqual(app.run("$('askNameCard').classList.contains('hide')"), false,
+      '«cambia» deve aprire il campo, non solo esistere');
+    assert.strictEqual(app.run("$('nameIsRow').classList.contains('hide')"), true,
+      'e la riga sparisce, o dicono la stessa cosa in due modi uno sopra l\'altro');
+    assert.strictEqual(app.run("$('firstNameIn').value"), 'Giuseppe',
+      'col nome di adesso gia\' dentro: cambiarlo e\' correggere una parola, non riscriverla');
+    app.stop();
+  });
+
+  test('la riga si aggiorna mentre scrivi, non alla prossima apertura', () => {
+    const app = loadApp();
+    app.run("$('nickInput').value = 'Giuseppe';");
+    app.run("$('goStart').listeners.click[0]();");
+    app.run("$('firstNameIn').value = 'Peppe'; $('firstNameIn').listeners.input[0]();");
+    assert.strictEqual(app.run("$('nameIsWho').textContent"), 'Peppe',
+      'la riga guarda lo stesso dato del campo: deve seguirlo subito');
+    app.stop();
+  });
+
+  test('«fai conoscere l\'app» manda alla pagina che SPIEGA, non dentro l\'app', () => {
+    /* ⚠️ Segnalato dall'operatore: «manca dove invia a un utente che non la
+       conosce la possibilita' di leggere il sito o scaricarsi l'app».
+       Un invito va dentro l'app col codice attaccato — chi lo riceve deve
+       collegarsi adesso. Ma chi riceve «fai conoscere l'app» NON SA COSA SIA:
+       gli arrivava un link che apriva direttamente una chat vuota. */
+    const app = loadApp();
+    app.run(`
+      window.__testo = '';
+      navigator.share = undefined;
+      window.copyOrSelect = function(t){ window.__testo = t; return Promise.resolve(); };
+    `);
+    app.run("$('btnShareApp').listeners.click[0]();");
+    const testo = app.run('window.__testo');
+    assert.ok(!/modifica\.html/.test(testo),
+      'il link non deve puntare all\'app: chi lo riceve non sa ancora cosa sia');
+    assert.match(testo, /logos-protocol\/(\s|$)/m,
+      'deve puntare alla pagina d\'ingresso, quella che spiega');
+    assert.match(testo, /\.apk/,
+      'e deve restare anche il modo di scaricare l\'app Android');
     app.stop();
   });
 

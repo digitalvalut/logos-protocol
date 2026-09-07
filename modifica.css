@@ -155,6 +155,13 @@
   /* una riga di stato vuota lascerebbe comunque il suo margine sopra la riga
      dell'indirizzo: uno spazio bianco che non si spiega, e c'e' quasi sempre */
   #addrDialStatus:empty{display:none}
+
+  /* «Chi apre l'invito ti vedrà come Giuseppe · cambia». Una riga, non una
+     scheda: dire chi sei prima di mandare un invito e' una conferma, e una
+     conferma che pesa quanto un modulo da compilare e' un modulo. */
+  .nameis{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;
+    margin:0 2px 14px;font-size:0.9062rem;color:var(--dim);line-height:1.5}
+  .nameis b{color:var(--ink);font-weight:700;overflow-wrap:anywhere}
   #showAddrDial{display:block;margin:20px auto 0;text-align:center;
     font-size:0.9062rem;color:var(--dim);text-decoration:none;
     border-bottom:1px dashed var(--line);padding-bottom:3px}

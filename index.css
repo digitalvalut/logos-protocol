@@ -66,6 +66,14 @@ h1{font-size:clamp(1.9rem, 6vw, 3rem);line-height:1.15;margin:22px auto 0;
   transition:transform .12s ease, box-shadow .12s ease}
 .cta:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(255,145,77,.38)}
 .cta:active{transform:translateY(0)}
+/* «Scarica l'app per Android»: stesso bersaglio, meno peso. La versione nel
+   browser non chiede niente e funziona subito, quindi resta lei quella piena;
+   questa e' per chi vuole tenersela, e non deve mettersi in gara con la
+   prima cosa da provare. Margine piu' stretto perche' segue una riga di
+   testo, non un blocco. */
+.cta.ghost{margin-top:14px;background:none;color:var(--accent2);
+  border:1.5px solid rgba(255,145,77,.45);box-shadow:none;font-size:1rem;padding:13px 30px}
+.cta.ghost:hover{border-color:var(--accent);box-shadow:none;background:rgba(255,145,77,.08)}
 
 /* ---------------------------------------------------------------- cards -- */
 .cards{display:grid;gap:16px;margin:46px 0 0}

@@ -94,7 +94,7 @@ Object.assign(I18N.en, {
 "install.btn":"Install",
 "home.title":"Talk to anyone, wherever they are",
 "home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
-"home.nameLabel":"Your name","first.nameWhy":"Only so the person who opens your invite sees your name instead of \"Someone\". It stays on this phone.","first.nameNudge":"Write your name first, so whoever opens the invite knows it is you.","addr.haveOne":"Has someone given you their address?",
+"home.nameLabel":"Your name","first.nameWhy":"Only so the person who opens your invite sees your name instead of \"Someone\". It stays on this phone.","first.youAre":"Whoever opens the invite will see you as","first.change":"change","first.nameNudge":"Write your name first, so whoever opens the invite knows it is you.","addr.haveOne":"Has someone given you their address?",
 "home.namePh":"Your name",
 
 
@@ -283,7 +283,7 @@ Object.assign(I18N.it, {
 "install.btn":"Installa",
 "home.title":"Parla con chi vuoi, ovunque sia",
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
-"home.nameLabel":"Come ti chiami","first.nameWhy":"Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.","first.nameNudge":"Scrivi prima come ti chiami, così chi apre l'invito sa che sei tu.","addr.haveOne":"Ti hanno dato un indirizzo?","home.namePh":"Il tuo nome",
+"home.nameLabel":"Come ti chiami","first.nameWhy":"Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.","first.youAre":"Chi apre l'invito ti vedrà come","first.change":"cambia","first.nameNudge":"Scrivi prima come ti chiami, così chi apre l'invito sa che sei tu.","addr.haveOne":"Ti hanno dato un indirizzo?","home.namePh":"Il tuo nome",
 "home.legalSummary":"Come funziona, in tre righe tecniche",
 "home.legalBody":"Serve che siate online tutti e due nello stesso momento, altrimenti non arriva nulla; e su reti molto filtrate le chiamate possono non collegarsi.",
 "home.legalGraph":"Il servizio che fa incontrare i due telefoni vede quali caselle vengono controllate: può sapere chi parla con chi e quanto spesso — non cosa si dicono.",
@@ -473,7 +473,7 @@ Object.assign(I18N.fr, {
 "install.btn":"Installer",
 "home.title":"Parlez à qui vous voulez, où qu'il soit",
 "home.sub":"Messages, photos, vidéos, appels. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
-"home.nameLabel":"Votre nom","first.nameWhy":"Uniquement pour que la personne qui ouvre votre invitation voie votre nom au lieu de « Quelqu'un ». Il reste sur ce téléphone.","first.nameNudge":"Écrivez d'abord votre nom, pour que la personne qui ouvre l'invitation sache que c'est vous.","addr.haveOne":"On vous a donné une adresse ?","home.namePh":"Votre nom",
+"home.nameLabel":"Votre nom","first.nameWhy":"Uniquement pour que la personne qui ouvre votre invitation voie votre nom au lieu de « Quelqu'un ». Il reste sur ce téléphone.","first.youAre":"La personne qui ouvre l'invitation vous verra comme","first.change":"modifier","first.nameNudge":"Écrivez d'abord votre nom, pour que la personne qui ouvre l'invitation sache que c'est vous.","addr.haveOne":"On vous a donné une adresse ?","home.namePh":"Votre nom",
 
 
 "home.legalSummary":"Comment ça marche, en trois lignes techniques",
@@ -655,7 +655,7 @@ Object.assign(I18N.de, {
 "install.btn":"Installieren",
 "home.title":"Sprich mit jedem, wo immer er ist",
 "home.sub":"Nachrichten, Fotos, Video, Anrufe. Keine Anmeldung, keine Telefonnummer, für immer kostenlos.",
-"home.nameLabel":"Dein Name","first.nameWhy":"Nur damit die Person, die deine Einladung öffnet, deinen Namen sieht statt „Jemand“. Er bleibt auf diesem Handy.","first.nameNudge":"Schreib zuerst deinen Namen, damit die Person, die die Einladung öffnet, weiß, dass du es bist.","addr.haveOne":"Hat dir jemand eine Adresse gegeben?","home.namePh":"Dein Name",
+"home.nameLabel":"Dein Name","first.nameWhy":"Nur damit die Person, die deine Einladung öffnet, deinen Namen sieht statt „Jemand“. Er bleibt auf diesem Handy.","first.youAre":"Wer die Einladung öffnet, sieht dich als","first.change":"ändern","first.nameNudge":"Schreib zuerst deinen Namen, damit die Person, die die Einladung öffnet, weiß, dass du es bist.","addr.haveOne":"Hat dir jemand eine Adresse gegeben?","home.namePh":"Dein Name",
 
 
 "home.legalSummary":"Wie es funktioniert, in drei technischen Zeilen",
@@ -837,7 +837,7 @@ Object.assign(I18N.es, {
 "install.btn":"Instalar",
 "home.title":"Habla con quien quieras, esté donde esté",
 "home.sub":"Mensajes, fotos, vídeo, llamadas. Sin registro, sin número de teléfono, gratis para siempre.",
-"home.nameLabel":"Tu nombre","first.nameWhy":"Solo para que quien abra tu invitación vea tu nombre en lugar de «Alguien». Se queda en este teléfono.","first.nameNudge":"Escribe antes tu nombre, así quien abra la invitación sabe que eres tú.","addr.haveOne":"¿Te han dado una dirección?","home.namePh":"Tu nombre",
+"home.nameLabel":"Tu nombre","first.nameWhy":"Solo para que quien abra tu invitación vea tu nombre en lugar de «Alguien». Se queda en este teléfono.","first.youAre":"Quien abra la invitación te verá como","first.change":"cambiar","first.nameNudge":"Escribe antes tu nombre, así quien abra la invitación sabe que eres tú.","addr.haveOne":"¿Te han dado una dirección?","home.namePh":"Tu nombre",
 
 
 "home.legalSummary":"Cómo funciona, en tres líneas técnicas",
@@ -1019,7 +1019,7 @@ Object.assign(I18N.pt, {
 "install.btn":"Instalar",
 "home.title":"Fale com quem quiser, onde quer que esteja",
 "home.sub":"Mensagens, fotos, vídeo, chamadas. Sem registo, sem número de telefone, grátis para sempre.",
-"home.nameLabel":"O seu nome","first.nameWhy":"Só para que quem abrir o teu convite veja o teu nome em vez de «Alguém». Fica neste telemóvel.","first.nameNudge":"Escreve primeiro o teu nome, assim quem abrir o convite sabe que és tu.","addr.haveOne":"Deram-te um endereço?","home.namePh":"O seu nome",
+"home.nameLabel":"O seu nome","first.nameWhy":"Só para que quem abrir o teu convite veja o teu nome em vez de «Alguém». Fica neste telemóvel.","first.youAre":"Quem abrir o convite vai ver-te como","first.change":"alterar","first.nameNudge":"Escreve primeiro o teu nome, assim quem abrir o convite sabe que és tu.","addr.haveOne":"Deram-te um endereço?","home.namePh":"O seu nome",
 
 
 "home.legalSummary":"Como funciona, em três linhas técnicas",
@@ -1201,7 +1201,7 @@ Object.assign(I18N.ru, {
 "install.btn":"Установить",
 "home.title":"Говорите с кем хотите, где бы они ни были",
 "home.sub":"Сообщения, фото, видео, звонки. Без регистрации, без номера телефона, бесплатно навсегда.",
-"home.nameLabel":"Ваше имя","first.nameWhy":"Только чтобы тот, кто откроет приглашение, увидел ваше имя, а не «Кто-то». Оно остаётся на этом телефоне.","first.nameNudge":"Сначала напишите своё имя, чтобы тот, кто откроет приглашение, знал, что это вы.","addr.haveOne":"Вам дали чей-то адрес?","home.namePh":"Ваше имя",
+"home.nameLabel":"Ваше имя","first.nameWhy":"Только чтобы тот, кто откроет приглашение, увидел ваше имя, а не «Кто-то». Оно остаётся на этом телефоне.","first.youAre":"Тот, кто откроет приглашение, увидит вас как","first.change":"изменить","first.nameNudge":"Сначала напишите своё имя, чтобы тот, кто откроет приглашение, знал, что это вы.","addr.haveOne":"Вам дали чей-то адрес?","home.namePh":"Ваше имя",
 
 
 "home.legalSummary":"Как это работает, в трёх технических строках",
@@ -1383,7 +1383,7 @@ Object.assign(I18N.zh, {
 "install.btn":"安装",
 "home.title":"随时随地，和你想聊的人聊天",
 "home.sub":"消息、照片、视频、通话。无需注册，无需电话号码，永久免费。",
-"home.nameLabel":"你的名字","first.nameWhy":"只是让打开你邀请的人看到你的名字，而不是「某人」。它只留在这台手机上。","first.nameNudge":"先写上你的名字，这样打开邀请的人就知道是你。","addr.haveOne":"有人给了你一个地址吗？","home.namePh":"你的名字",
+"home.nameLabel":"你的名字","first.nameWhy":"只是让打开你邀请的人看到你的名字，而不是「某人」。它只留在这台手机上。","first.youAre":"打开邀请的人会看到你是","first.change":"修改","first.nameNudge":"先写上你的名字，这样打开邀请的人就知道是你。","addr.haveOne":"有人给了你一个地址吗？","home.namePh":"你的名字",
 
 
 "home.legalSummary":"工作原理，三句技术说明",
@@ -1565,7 +1565,7 @@ Object.assign(I18N.ar, {
 "install.btn":"تثبيت",
 "home.title":"تحدّث مع من تريد، أينما كان",
 "home.sub":"رسائل، صور، فيديو، مكالمات. بلا تسجيل، بلا رقم هاتف، مجانًا للأبد.",
-"home.nameLabel":"اسمك","first.nameWhy":"فقط لكي يرى من يفتح دعوتك اسمك بدل «شخص ما». يبقى على هذا الهاتف.","first.nameNudge":"اكتب اسمك أولًا، ليعرف من يفتح الدعوة أنك أنت.","addr.haveOne":"هل أعطاك أحدهم عنوانه؟","home.namePh":"اسمك",
+"home.nameLabel":"اسمك","first.nameWhy":"فقط لكي يرى من يفتح دعوتك اسمك بدل «شخص ما». يبقى على هذا الهاتف.","first.youAre":"من يفتح الدعوة سيراك باسم","first.change":"تغيير","first.nameNudge":"اكتب اسمك أولًا، ليعرف من يفتح الدعوة أنك أنت.","addr.haveOne":"هل أعطاك أحدهم عنوانه؟","home.namePh":"اسمك",
 
 
 "home.legalSummary":"كيف يعمل هذا، في ثلاثة أسطر تقنية",
@@ -1747,7 +1747,7 @@ Object.assign(I18N.ur, {
 "install.btn":"انسٹال کریں",
 "home.title":"جس سے چاہیں بات کریں، وہ جہاں بھی ہو",
 "home.sub":"پیغامات، تصاویر، ویڈیو، کالز۔ کوئی سائن اپ نہیں، کوئی فون نمبر نہیں، ہمیشہ کے لیے مفت۔",
-"home.nameLabel":"آپ کا نام","first.nameWhy":"صرف اس لیے کہ جو آپ کی دعوت کھولے وہ «کوئی» کے بجائے آپ کا نام دیکھے۔ یہ اسی فون پر رہتا ہے۔","first.nameNudge":"پہلے اپنا نام لکھیں، تاکہ جو دعوت کھولے اُسے پتہ ہو کہ یہ آپ ہیں۔","addr.haveOne":"کیا کسی نے آپ کو اپنا پتہ دیا ہے؟","home.namePh":"آپ کا نام",
+"home.nameLabel":"آپ کا نام","first.nameWhy":"صرف اس لیے کہ جو آپ کی دعوت کھولے وہ «کوئی» کے بجائے آپ کا نام دیکھے۔ یہ اسی فون پر رہتا ہے۔","first.youAre":"جو دعوت کھولے گا وہ آپ کو اس نام سے دیکھے گا","first.change":"تبدیل کریں","first.nameNudge":"پہلے اپنا نام لکھیں، تاکہ جو دعوت کھولے اُسے پتہ ہو کہ یہ آپ ہیں۔","addr.haveOne":"کیا کسی نے آپ کو اپنا پتہ دیا ہے؟","home.namePh":"آپ کا نام",
 
 
 "home.legalSummary":"یہ کیسے کام کرتا ہے، تین تکنیکی سطروں میں",
@@ -1929,7 +1929,7 @@ Object.assign(I18N.hi, {
 "install.btn":"इंस्टॉल करें",
 "home.title":"जिससे चाहें बात करें, वे कहीं भी हों",
 "home.sub":"संदेश, फ़ोटो, वीडियो, कॉल। कोई साइन-अप नहीं, कोई फ़ोन नंबर नहीं, हमेशा के लिए मुफ़्त।",
-"home.nameLabel":"आपका नाम","first.nameWhy":"बस इसलिए कि जो आपका निमंत्रण खोले उसे «कोई» के बजाय आपका नाम दिखे। यह इसी फ़ोन पर रहता है।","first.nameNudge":"पहले अपना नाम लिखें, ताकि जो निमंत्रण खोले उसे पता हो कि यह आप हैं।","addr.haveOne":"क्या किसी ने आपको अपना पता दिया है?","home.namePh":"आपका नाम",
+"home.nameLabel":"आपका नाम","first.nameWhy":"बस इसलिए कि जो आपका निमंत्रण खोले उसे «कोई» के बजाय आपका नाम दिखे। यह इसी फ़ोन पर रहता है।","first.youAre":"जो निमंत्रण खोलेगा वह आपको इस नाम से देखेगा","first.change":"बदलें","first.nameNudge":"पहले अपना नाम लिखें, ताकि जो निमंत्रण खोले उसे पता हो कि यह आप हैं।","addr.haveOne":"क्या किसी ने आपको अपना पता दिया है?","home.namePh":"आपका नाम",
 
 
 "home.legalSummary":"यह कैसे काम करता है, तीन तकनीकी पंक्तियों में",
@@ -2111,7 +2111,7 @@ Object.assign(I18N.bn, {
 "install.btn":"ইনস্টল করুন",
 "home.title":"যার সাথে চান কথা বলুন, তিনি যেখানেই থাকুন",
 "home.sub":"বার্তা, ছবি, ভিডিও, কল। কোনো সাইন-আপ নেই, কোনো ফোন নম্বর নেই, চিরকালের জন্য বিনামূল্যে।",
-"home.nameLabel":"আপনার নাম","first.nameWhy":"শুধু যাতে যিনি আপনার আমন্ত্রণ খুলবেন তিনি «কেউ একজন»-এর বদলে আপনার নাম দেখেন। এটি এই ফোনেই থাকে।","first.nameNudge":"আগে আপনার নাম লিখুন, যাতে যিনি আমন্ত্রণ খোলেন তিনি বুঝতে পারেন এটি আপনি।","addr.haveOne":"কেউ কি আপনাকে তার ঠিকানা দিয়েছে?","home.namePh":"আপনার নাম",
+"home.nameLabel":"আপনার নাম","first.nameWhy":"শুধু যাতে যিনি আপনার আমন্ত্রণ খুলবেন তিনি «কেউ একজন»-এর বদলে আপনার নাম দেখেন। এটি এই ফোনেই থাকে।","first.youAre":"যিনি আমন্ত্রণ খুলবেন তিনি আপনাকে দেখবেন","first.change":"বদলান","first.nameNudge":"আগে আপনার নাম লিখুন, যাতে যিনি আমন্ত্রণ খোলেন তিনি বুঝতে পারেন এটি আপনি।","addr.haveOne":"কেউ কি আপনাকে তার ঠিকানা দিয়েছে?","home.namePh":"আপনার নাম",
 
 
 "home.legalSummary":"এটি কীভাবে কাজ করে, তিনটি প্রযুক্তিগত লাইনে",
@@ -2293,7 +2293,7 @@ Object.assign(I18N.id, {
 "install.btn":"Pasang",
 "home.title":"Bicara dengan siapa pun yang Anda mau, di mana pun mereka berada",
 "home.sub":"Pesan, foto, video, panggilan. Tanpa pendaftaran, tanpa nomor telepon, gratis selamanya.",
-"home.nameLabel":"Nama Anda","first.nameWhy":"Hanya supaya orang yang membuka undanganmu melihat namamu, bukan \"Seseorang\". Namanya tetap di ponsel ini.","first.nameNudge":"Tulis dulu namamu, supaya yang membuka undangan tahu itu kamu.","addr.haveOne":"Ada yang memberimu sebuah alamat?","home.namePh":"Nama Anda",
+"home.nameLabel":"Nama Anda","first.nameWhy":"Hanya supaya orang yang membuka undanganmu melihat namamu, bukan \"Seseorang\". Namanya tetap di ponsel ini.","first.youAre":"Yang membuka undangan akan melihatmu sebagai","first.change":"ubah","first.nameNudge":"Tulis dulu namamu, supaya yang membuka undangan tahu itu kamu.","addr.haveOne":"Ada yang memberimu sebuah alamat?","home.namePh":"Nama Anda",
 
 
 "home.legalSummary":"Cara kerjanya, dalam tiga baris teknis",
@@ -2678,6 +2678,12 @@ function chiediIlNomeSeManca(){
   const manca = !nickSet();
   nomeGiaChiesto = false;
   $('askNameCard').classList.toggle('hide', !manca);
+  /* ⚠️ E se il nome C'E', lo si DICE lo stesso. «Non chiedere» non e' la
+     stessa cosa che «non dire»: prima di mandare un invito uno vuole sapere
+     come si presentera', e con la sola scheda-quando-manca chi il nome ce
+     l'aveva gia' non leggeva niente. */
+  $('nameIsRow').classList.toggle('hide', manca);
+  if (!manca) $('nameIsWho').textContent = myNick();
   if (manca){
     syncFirstName();
     /* dopo il cambio schermata, o il fuoco finisce su una scheda ancora
@@ -2685,6 +2691,16 @@ function chiediIlNomeSeManca(){
     setTimeout(() => { try{ $('firstNameIn').focus(); }catch(_){} }, 60);
   }
 }
+/* «cambia»: apre la scheda grande e ci mette dentro il cursore, con il nome
+   di adesso gia' scritto — cambiarlo e' correggere una parola, non riscriverla
+   da capo. La riga sparisce mentre la scheda e' aperta, o direbbero la stessa
+   cosa in due modi uno sopra l'altro. */
+$('btnChangeName').addEventListener('click', () => {
+  $('nameIsRow').classList.add('hide');
+  $('askNameCard').classList.remove('hide');
+  syncFirstName();
+  try{ $('firstNameIn').focus(); }catch(_){}
+});
 $('goJoin').addEventListener('click', () => {
   if (busyElsewhere()) return;
   showScreen('screenJoin'); showQuickLayoutB(); $('quickCodeIn').value = ''; $('quickCodeIn').focus();
@@ -2722,6 +2738,9 @@ function syncFirstName(){
 $('firstNameIn').addEventListener('input', () => {
   $('nickInput').value = $('firstNameIn').value;
   try{ localStorage.setItem('logos-modifica-nick', $('nickInput').value.trim()); }catch(e){}
+  /* la riga «ti vedra' come» sta guardando lo stesso dato: se e' visibile
+     deve cambiare mentre si scrive, non alla prossima apertura */
+  if (!$('nameIsRow').classList.contains('hide')) $('nameIsWho').textContent = myNick();
 });
 
 /* ============================== install banner ==============================
@@ -4355,7 +4374,9 @@ async function copyOrSelect(text, boxEl){
 
 /* Sharing the app itself — not an invite to a chat, just "here's where to get it" */
 async function shareTheApp(){
-  const link = shareBase();
+  /* siteBase e non shareBase: chi riceve questo non sa cosa sia Logos, e
+     deve poter LEGGERE prima di entrare. Vedi la nota su siteBase(). */
+  const link = siteBase();
   /* Both, always, and never one or the other. The person sharing has no idea
      what the person receiving is holding, and the two links are not rivals:
      the first works on anything, in three seconds, with nothing to install —
@@ -5522,6 +5543,24 @@ function shareBase(){
   return location.origin === APP_PACKAGE_ORIGIN
     ? PUBLIC_APP_URL
     : location.origin + location.pathname;
+}
+/* ⚠️ La pagina che SPIEGA cos'e', non l'app. Sono due cose diverse e vanno
+   mandate a due persone diverse:
+   - un INVITO va dentro l'app, con il codice attaccato: chi lo riceve deve
+     collegarsi adesso, non leggere. Quello resta shareBase() qui sopra;
+   - «fai conoscere l'app» va a qualcuno che NON SA COSA SIA. Fino al 7 set
+     2026 gli arrivava un link che apriva direttamente l'app: uno sconosciuto
+     si ritrovava dentro una chat vuota senza aver letto una riga su cosa
+     fosse. Segnalato dall'operatore: «manca dove invia a un utente che non la
+     conosce la possibilita' di leggere il sito o scaricarsi l'app».
+   Qui si toglie il nome del file e resta la cartella, che e' la pagina
+   d'ingresso — quella con «Fatti chiamare senza dare il numero», il pulsante
+   per entrare nell'app e la spiegazione. */
+const PUBLIC_SITE_URL = 'https://digitalvalut.github.io/logos-protocol/';
+function siteBase(){
+  return location.origin === APP_PACKAGE_ORIGIN
+    ? PUBLIC_SITE_URL
+    : location.origin + location.pathname.replace(/[^/]*$/, '');
 }
 
 async function myFingerprintHex(){
@@ -7483,7 +7522,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.26';
+const APP_VERSION = 'logos-modifica-4.27';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
