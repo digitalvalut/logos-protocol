@@ -138,16 +138,16 @@ const MUTANTI = [
        soltanto SE qualcosa veniva cancellato — taceva. Il difetto storico è
        che la cancellazione non raggiunge i media: vanno tolte entrambe. */
     da: `  const keyNow = historyKeyNow(nick);
-  try{ localStorage.removeItem(keyNow); }catch(e){}
+  try{ MEM.removeItem(keyNow); }catch(e){}
   mediaDeleteByConv(keyNow);
   if (nick){
-    try{ localStorage.removeItem(historyKey(nick)); }catch(e){}
+    try{ MEM.removeItem(historyKey(nick)); }catch(e){}
     mediaDeleteByConv(historyKey(nick));
   }`,
     a:  `  const keyNow = historyKeyNow(nick);
-  try{ localStorage.removeItem(keyNow); }catch(e){}
+  try{ MEM.removeItem(keyNow); }catch(e){}
   if (nick){
-    try{ localStorage.removeItem(historyKey(nick)); }catch(e){}
+    try{ MEM.removeItem(historyKey(nick)); }catch(e){}
   }`,
   },
 ];

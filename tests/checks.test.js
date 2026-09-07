@@ -391,6 +391,75 @@ test('every line the code or the page asks for has been written', () => {
   assert.deepStrictEqual(unknown, [], `asked for but never written: ${unknown.join(', ')}`);
 });
 
+/* ------------------------------------ il CONTENUTO delle traduzioni -- */
+/* ⚠️ I controlli qui sopra guardano che tutte e 13 le lingue abbiano le stesse
+   VOCI. Nessuno guardava che il testo fosse nella lingua giusta — e il 7 set
+   2026 e' uscita in produzione una pagina italiana con dentro una frase in
+   inglese, con la suite tutta verde. La riga sbagliata era IDENTICA, carattere
+   per carattere, a quella inglese: bastava chiederselo.
+   Due regole, tarate misurando i falsi allarmi sul codice sano prima di
+   scriverle. Un controllo che grida al lupo viene ignorato entro due
+   settimane, ed e' il modo piu' comune in cui muore un collaudo. */
+
+/* Sotto la soglia le coincidenze sono vere e normali: «Video», «OK», e fra
+   spagnolo e portoghese frasi corte davvero identiche («Código copiado»).
+   Misurato: a >=20 caratteri e >=3 parole i falsi allarmi sono ZERO in
+   entrambi i dizionari. La frase che sfuggi' era lunga 83 caratteri. */
+const GEMELLE_CARATTERI = 20, GEMELLE_PAROLE = 3;
+
+function frasiGemelle(diz){
+  const lingue = Object.keys(diz);
+  const chiavi = new Set();
+  for (const l of lingue) for (const k of Object.keys(diz[l] || {})) chiavi.add(k);
+  const guai = [];
+  for (const k of chiavi){
+    const visto = new Map();
+    for (const l of lingue){
+      const v = diz[l] && diz[l][k];
+      if (typeof v !== 'string' || v.length < GEMELLE_CARATTERI) continue;
+      if (v.trim().split(/\s+/).length < GEMELLE_PAROLE) continue;
+      if (visto.has(v)) guai.push(`${k}: ${visto.get(v)} e ${l} hanno la stessa identica frase — «${v.slice(0, 70)}»`);
+      else visto.set(v, l);
+    }
+  }
+  return guai.sort();
+}
+
+test('nessuna lingua porta la frase esatta di un\'altra', () => {
+  assert.deepStrictEqual(frasiGemelle(loadDictionaries()), [],
+    'due lingue con la stessa frase lunga: quasi sempre vuol dire che una porta il testo dell\'altra');
+});
+
+/* La seconda regola prende anche il caso che la prima non vede: una frase
+   latina finita in arabo senza essere copiata da nessuno. Vale solo dove
+   l'alfabeto e' inequivocabile — fra italiano, spagnolo e portoghese nessun
+   alfabeto le distingue, e fingere il contrario sarebbe un controllo che
+   mente. */
+const ALFABETI = {
+  ru: /[Ѐ-ӿ]/, zh: /[一-鿿]/, ar: /[؀-ۿ]/,
+  ur: /[؀-ۿ]/, hi: /[ऀ-ॿ]/, bn: /[ঀ-৿]/,
+};
+
+function alfabetoSbagliato(diz){
+  /* tolti i segnaposto e tutto cio' che non e' lettera: «DV-XXXX-XXXX-XXXX» e
+     «{sent} / {total}» sono uguali in tutte le lingue di proposito, e senza
+     questo sarebbero sei falsi allarmi fissi. Misurato: cosi' sono zero. */
+  const nudo = v => v.replace(/\{[^}]*\}/g, '').replace(/[^\p{L}]/gu, '');
+  const guai = [];
+  for (const [lg, alfabeto] of Object.entries(ALFABETI)){
+    for (const [k, v] of Object.entries(diz[lg] || {})){
+      if (typeof v !== 'string' || !/\s/.test(v) || nudo(v).length < 8) continue;
+      if (!alfabeto.test(v)) guai.push(`${lg} / ${k}: frase senza una sola lettera di quell'alfabeto — «${v.slice(0, 70)}»`);
+    }
+  }
+  return guai.sort();
+}
+
+test('una lingua che si scrive con un altro alfabeto lo usa davvero', () => {
+  assert.deepStrictEqual(alfabetoSbagliato(loadDictionaries()), [],
+    'una frase in caratteri latini dentro il dizionario arabo, russo o cinese non e\' una traduzione');
+});
+
 test('a placeholder in one language is a placeholder in all of them', () => {
   /* {name} written in Italian and forgotten in Urdu shows a reader the raw
      word "{name}" — or worse, drops the only useful part of the sentence. */
@@ -549,6 +618,34 @@ function homeDictionaries(){
   }
   return out;
 }
+
+/* ⚠️ Le stesse voci, ma col TESTO. Serve alle due regole sul contenuto qui
+   sotto — e serve proprio qui: la frase inglese finita su una pagina italiana,
+   il 7 set 2026, era in QUESTO file. ⚠️ E l'ordine delle lingue in index.js
+   (`it, en, fr, …`) NON e' lo stesso di modifica.js (`en, it, fr, …`): e'
+   esattamente la trappola in cui sono caduto. */
+function homeTesti(){
+  const out = {};
+  for (const m of HOME_JS.matchAll(/^T\.(\w+) = \{([\s\S]*?)^\};/gm)){
+    const d = {};
+    for (const k of m[2].matchAll(/^\s*'([^']+)':\s*"((?:[^"\\]|\\.)*)"/gm)) d[k[1]] = k[2];
+    out[m[1]] = d;
+  }
+  return out;
+}
+
+test('sulla pagina d\'ingresso nessuna lingua porta la frase di un\'altra', () => {
+  /* ⚠️ E' QUI che e' successo davvero: `hero.apkNote` in italiano conteneva
+     la frase inglese, identica carattere per carattere, ed e' andata online.
+     Questo controllo l'avrebbe fermata. */
+  assert.deepStrictEqual(frasiGemelle(homeTesti()), [],
+    'la pagina d\'ingresso ha due lingue con la stessa identica frase');
+});
+
+test('e usa davvero l\'alfabeto di ogni lingua', () => {
+  assert.deepStrictEqual(alfabetoSbagliato(homeTesti()), [],
+    'la pagina d\'ingresso ha una frase in caratteri latini dentro un dizionario che non li usa');
+});
 
 test('the front door speaks the same thirteen languages as the app', () => {
   const dicts = homeDictionaries();

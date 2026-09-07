@@ -1734,6 +1734,44 @@ test.describe('what the audit found', () => {
     });
   });
 
+  test('e nemmeno un guasto dentro CHI CHIAMA lascia la cassetta interrogata per sempre', async () => {
+    /* ⚠️ IL BUCO TROVATO DAL MUTANTE M06, il 7 set 2026, al primo giro del
+       grilletto. Il test qui sopra prova esattamente questa proprieta' — ma
+       su `acceptAddrCall`, cioe' su CHI RISPONDE. Su `dialAddress`, CHI
+       CHIAMA, non la provava nessuno: si poteva cancellare `stopStrayPump`
+       dal suo catch e i 366 controlli restavano tutti verdi.
+
+       Perche' conta piu' di quanto sembri: un pump abbandonato interroga il
+       relay due o tre volte al secondo, per sempre. Misurato nella 4.12:
+       ~123.000 letture al giorno contro un tetto di 100.000 per TUTTO
+       l'account. Un solo tentativo di chiamata andato storto, su un solo
+       telefono, e Logos si spegne per tutti — ed e' la ragione per cui questo
+       difetto ha un mutante suo.
+
+       ⚠️ Il guasto si inietta in `mailboxPutSealed`, non nel pump: il pump
+       viene creato DUE righe prima, e romperlo li' farebbe uscire
+       `dialAddress` prima del difetto in esame — lo stesso errore gia' fatto
+       una volta e annotato nel test poco piu' su. */
+    const app = loadApp();
+    app.run(`
+      myAddress = async () => 'ZZZZZZZZZZZZ';
+      addrDialSecrets = async () => ({ key: {}, seed: 's', slot: 0 });
+      myFingerprintHex = async () => 'ff';
+      slotId = async (seed, nome) => nome;
+      window.__err = null;
+      /* dopo che il pump esiste ed e' stato assegnato a quickPump */
+      mailboxPutSealed = async () => { throw new Error('guasto dopo la creazione del pump'); };
+    `);
+    await app.run("Promise.resolve(dialAddress('AAAABBBBCCCC')).catch(function(e){ window.__err = String(e && e.message || e); })");
+    await app.run('new Promise(r => setTimeout(r, 20))');
+
+    assert.strictEqual(app.run('window.__err'), null,
+      'il catch stesso non deve sollevare: se solleva, inghiotte l\'errore vero e non ripulisce niente');
+    assert.strictEqual(app.run('quickPump === null'), true,
+      'il pump e\' rimasto acceso: interroghera\' il relay per sempre, e la quota del piano gratuito e\' di tutti');
+    app.stop();
+  });
+
   test('checking the inbox twice at once does not double the requests', () => {
     /* Senza guardia di rientro, una passata più lenta dei quattro secondi del
        timer si sovrappone alla successiva e ogni sovrapposizione aggiunge una
