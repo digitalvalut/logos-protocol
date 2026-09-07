@@ -35,6 +35,7 @@ const T = {};
 T.it = {
   'hero.apk': "Scarica l'app per Android",
   'hero.apkNote': "Continua a funzionare anche quando questo sito è irraggiungibile, e il tuo indirizzo non si perde.",
+  'hero.apkUpdate': "Vuoi che si aggiorni da solo? Installalo con Obtainium.",
   'hero.title': "Fatti chiamare senza dare il numero.",
   'hero.sub': "Messaggi, foto e videochiamate direttamente fra due telefoni. Senza registrarsi, senza numero di telefono, gratis per sempre.",
   'hero.cta': "Apri l'app",
@@ -70,6 +71,7 @@ T.it = {
 T.en = {
   'hero.apk': "Download the Android app",
   'hero.apkNote': "Keeps working even when this site cannot be reached, and your address is not lost.",
+  'hero.apkUpdate': "Want it to keep itself up to date? Install it with Obtainium.",
   'hero.title': "Be reachable without giving out your number.",
   'hero.sub': "Messages, photos and video calls straight between two phones. No sign-up, no phone number, free forever.",
   'hero.cta': "Open the app",
@@ -105,6 +107,7 @@ T.en = {
 T.fr = {
   'hero.apk': "Télécharger l'application Android",
   'hero.apkNote': "Continue de fonctionner même si ce site est inaccessible, et votre adresse n'est pas perdue.",
+  'hero.apkUpdate': "Vous voulez qu'elle se mette à jour toute seule ? Installez-la avec Obtainium.",
   'hero.title': "Soyez joignable sans donner votre numéro.",
   'hero.sub': "Messages, photos et appels vidéo directement entre deux téléphones. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
   'hero.cta': "Ouvrir l'application",
@@ -140,6 +143,7 @@ T.fr = {
 T.de = {
   'hero.apk': "Android-App herunterladen",
   'hero.apkNote': "Funktioniert auch, wenn diese Seite nicht erreichbar ist, und deine Adresse geht nicht verloren.",
+  'hero.apkUpdate': "Soll sie sich von selbst aktualisieren? Dann installiere sie mit Obtainium.",
   'hero.title': "Erreichbar sein, ohne deine Nummer herzugeben.",
   'hero.sub': "Nachrichten, Fotos und Videoanrufe direkt zwischen zwei Telefonen. Ohne Anmeldung, ohne Telefonnummer, für immer kostenlos.",
   'hero.cta': "App öffnen",
@@ -175,6 +179,7 @@ T.de = {
 T.es = {
   'hero.apk': "Descargar la app para Android",
   'hero.apkNote': "Sigue funcionando aunque este sitio no sea accesible, y tu dirección no se pierde.",
+  'hero.apkUpdate': "¿Quieres que se actualice sola? Instálala con Obtainium.",
   'hero.title': "Que te localicen sin dar tu número.",
   'hero.sub': "Mensajes, fotos y videollamadas directamente entre dos teléfonos. Sin registrarse, sin número de teléfono, gratis para siempre.",
   'hero.cta': "Abrir la aplicación",
@@ -210,6 +215,7 @@ T.es = {
 T.pt = {
   'hero.apk': "Descarregar a app para Android",
   'hero.apkNote': "Continua a funcionar mesmo quando este site está inacessível, e o teu endereço não se perde.",
+  'hero.apkUpdate': "Queres que se atualize sozinha? Instala-a com o Obtainium.",
   'hero.title': "Seja contactado sem dar o seu número.",
   'hero.sub': "Mensagens, fotografias e videochamadas diretamente entre dois telemóveis. Sem registo, sem número de telefone, grátis para sempre.",
   'hero.cta': "Abrir a aplicação",
@@ -245,6 +251,7 @@ T.pt = {
 T.ru = {
   'hero.apk': "Скачать приложение для Android",
   'hero.apkNote': "Продолжает работать, даже если сайт недоступен, и ваш адрес не теряется.",
+  'hero.apkUpdate': "Хотите, чтобы приложение обновлялось само? Установите его через Obtainium.",
   'hero.title': "Будьте на связи, не давая свой номер.",
   'hero.sub': "Сообщения, фотографии и видеозвонки напрямую между двумя телефонами. Без регистрации, без номера телефона, бесплатно навсегда.",
   'hero.cta': "Открыть приложение",
@@ -280,6 +287,7 @@ T.ru = {
 T.zh = {
   'hero.apk': "下载安卓应用",
   'hero.apkNote': "即使本站无法访问也照常工作，你的地址不会丢失。",
+  'hero.apkUpdate': "想让它自动保持最新？用 Obtainium 安装。",
   'hero.title': "不给号码，也能被联系到。",
   'hero.sub': "消息、照片和视频通话，直接在两部手机之间传递。无需注册，无需电话号码，永久免费。",
   'hero.cta': "打开应用",
@@ -315,6 +323,7 @@ T.zh = {
 T.ar = {
   'hero.apk': "نزّل تطبيق أندرويد",
   'hero.apkNote': "يواصل العمل حتى عندما يتعذّر الوصول إلى هذا الموقع، ولا يضيع عنوانك.",
+  'hero.apkUpdate': "تريد أن يبقى التطبيق محدَّثًا من تلقاء نفسه؟ ثبّته عبر Obtainium.",
   'hero.title': "كن قابلًا للوصول دون أن تعطي رقمك.",
   'hero.sub': "رسائل وصور ومكالمات فيديو مباشرة بين هاتفين. بلا تسجيل، بلا رقم هاتف، مجانًا إلى الأبد.",
   'hero.cta': "افتح التطبيق",
@@ -350,6 +359,7 @@ T.ar = {
 T.ur = {
   'hero.apk': "اینڈرائیڈ ایپ ڈاؤن لوڈ کریں",
   'hero.apkNote': "یہ اُس وقت بھی کام کرتا ہے جب یہ سائٹ دستیاب نہ ہو، اور آپ کا پتہ ضائع نہیں ہوتا۔",
+  'hero.apkUpdate': "چاہتے ہیں کہ یہ خود بخود اپ ڈیٹ ہوتا رہے؟ اسے Obtainium کے ذریعے انسٹال کریں۔",
   'hero.title': "اپنا نمبر دیے بغیر قابلِ رسائی رہیں۔",
   'hero.sub': "پیغامات، تصاویر اور ویڈیو کالیں براہِ راست دو فونوں کے درمیان۔ بغیر رجسٹریشن، بغیر فون نمبر، ہمیشہ کے لیے مفت۔",
   'hero.cta': "ایپ کھولیں",
@@ -385,6 +395,7 @@ T.ur = {
 T.hi = {
   'hero.apk': "एंड्रॉइड ऐप डाउनलोड करें",
   'hero.apkNote': "यह तब भी काम करता है जब यह साइट न पहुँचे, और आपका पता खोता नहीं।",
+  'hero.apkUpdate': "चाहते हैं कि यह अपने आप अपडेट होता रहे? इसे Obtainium से इंस्टॉल करें।",
   'hero.title': "अपना नंबर दिए बिना संपर्क में रहें।",
   'hero.sub': "संदेश, तस्वीरें और वीडियो कॉल सीधे दो फ़ोनों के बीच। बिना रजिस्ट्रेशन, बिना फ़ोन नंबर, हमेशा के लिए मुफ़्त।",
   'hero.cta': "ऐप खोलें",
@@ -420,6 +431,7 @@ T.hi = {
 T.bn = {
   'hero.apk': "অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন",
   'hero.apkNote': "এই সাইটে পৌঁছানো না গেলেও এটি কাজ করে, আর আপনার ঠিকানা হারায় না।",
+  'hero.apkUpdate': "চান এটি নিজে থেকেই হালনাগাদ থাকুক? Obtainium দিয়ে ইনস্টল করুন।",
   'hero.title': "নিজের নম্বর না দিয়েই যোগাযোগযোগ্য থাকুন।",
   'hero.sub': "বার্তা, ছবি আর ভিডিও কল সরাসরি দুটি ফোনের মধ্যে। নিবন্ধন ছাড়া, ফোন নম্বর ছাড়া, চিরকাল বিনামূল্যে।",
   'hero.cta': "অ্যাপ খুলুন",
@@ -455,6 +467,7 @@ T.bn = {
 T.id = {
   'hero.apk': "Unduh aplikasi Android",
   'hero.apkNote': "Tetap bekerja meski situs ini tidak bisa dijangkau, dan alamatmu tidak hilang.",
+  'hero.apkUpdate': "Ingin aplikasinya memperbarui dirinya sendiri? Pasang lewat Obtainium.",
   'hero.title': "Bisa dihubungi tanpa memberikan nomor Anda.",
   'hero.sub': "Pesan, foto, dan panggilan video langsung antara dua ponsel. Tanpa mendaftar, tanpa nomor telepon, gratis selamanya.",
   'hero.cta': "Buka aplikasi",

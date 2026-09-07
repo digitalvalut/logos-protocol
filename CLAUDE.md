@@ -128,7 +128,7 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. No arguments needed — Node finds the files. 365 tests, 54 suites, about two
+Node 22. No arguments needed — Node finds the files. 373 tests, 54 suites, about two
 and a half minutes. They also run on every push. (That count is measured, and goes
 stale — rule 6 applies to this line too: re-run before quoting it.)
 

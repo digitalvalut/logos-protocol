@@ -57,6 +57,11 @@ h1{font-size:clamp(1.9rem, 6vw, 3rem);line-height:1.15;margin:22px auto 0;
 .lede{color:var(--dim);font-size:clamp(1rem, 2.4vw, 1.1875rem);
   margin:16px auto 0;max-width:32em}
 .under{color:var(--faint);font-size:0.875rem;margin:14px 0 0}
+/* ⚠️ Il riquadro alto e i margini negativi non sono decorazione: un dito ha
+   bisogno di 44px, e una riga di testo da 0.875rem ne e' alta meno di venti.
+   Il margine negativo restituisce esattamente lo spazio che il riempimento
+   ha preso, cosi' il bersaglio cresce e la pagina non si muove di un pixel. */
+.undera{color:var(--accent2);display:inline-block;padding:13px 2px;margin:-13px 0}
 
 .cta{display:inline-block;margin-top:26px;
   background:linear-gradient(180deg,var(--accent2),var(--accent));
