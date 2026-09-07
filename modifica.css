@@ -46,6 +46,17 @@
   a{color:var(--accent2)}
   button{font-family:inherit}
 
+  /* ⚠️ La fascia della copia di prova. Deliberatamente sgradevole: rossa, larga
+     tutta la pagina, senza x per chiuderla. Non e' un avviso da cui difendersi
+     — e' l'unica cosa che impedisce a qualcuno di parlare dentro una copia
+     credendo che sia l'app vera, e di perdere quello che scrive. Se un giorno
+     sembrasse troppo invadente, la risposta e' spegnere la copia di prova,
+     non addolcire la fascia. */
+  .provabar{background:var(--bad);color:#fff;text-align:center;
+    padding:9px 14px;margin:-22px -16px 16px;line-height:1.4}
+  .provabar b{display:block;font-size:0.8125rem;font-weight:800;letter-spacing:.14em}
+  .provabar span{display:block;font-size:0.8125rem;opacity:.92;max-width:44em;margin:2px auto 0}
+
   /* ---------------------------------- top bar ---------------------------------- */
   .topbar{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
   .topbar img{width:34px;height:34px;border-radius:50%;flex-shrink:0}

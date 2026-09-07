@@ -75,6 +75,17 @@
 <body>
 <div class="wrap">
 
+  <!-- ⚠️ La fascia della copia di prova. Sta in cima a tutto e non si chiude:
+       una copia di prova che non si annuncia e' peggio di non averla, perche'
+       qualcuno ci parla dentro credendo di usare l'app vera — e i due mondi
+       hanno memorie separate, quindi i suoi contatti e la sua identita' li'
+       dentro non esistono da nessun'altra parte.
+       Accesa da JS solo quando l'indirizzo contiene /prova/ (vedi IN_PROVA). -->
+  <div class="provabar hide" id="provaBar">
+    <b data-i18n="prova.title">COPIA DI PROVA</b>
+    <span data-i18n="prova.sub">Non è l'app vera. Serve a controllare le modifiche prima che arrivino a tutti: quello che fai qui resta qui.</span>
+  </div>
+
   <div class="topbar">
     <img src="modifica-icon-512.png" alt="">
     <div class="name">DigitalValut Logos</div>

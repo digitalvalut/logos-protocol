@@ -67,6 +67,55 @@ function svgIcon(name, cls){
 }
 function setIcon(id, name){ const el = $(id); if (el) el.innerHTML = svgIcon(name); }
 
+/* ============================== la copia di prova ==============================
+   ⚠️ AGGIUNTA IL 7 SET 2026, ed e' la cosa piu' importante di tutta la giornata,
+   anche se non si vede.
+
+   Fino a oggi ogni modifica andava dal computer di chi scrive DIRETTAMENTE al
+   sito che usa la gente. Nessun posto dove guardarla prima. In un giorno solo
+   sono uscite sei versioni e sei difetti li ha trovati l'operatore usando
+   l'app pubblicata: era lui il collaudo, e non e' il suo mestiere.
+
+   Adesso esiste una copia gemella dell'app sotto `/prova/`. Stesso sito —
+   e serve che sia lo stesso, o il relay la rifiuterebbe come rifiuta
+   `localhost` (vedi ALLOWED_ORIGINS nel Worker) e non si potrebbe provare
+   niente di quello che conta.
+
+   ⚠️ MA LO STESSO SITO VUOL DIRE LA STESSA MEMORIA. Il browser lega quello che
+   un'app salva al SITO, non alla cartella: senza quanto segue, la copia di
+   prova userebbe la TUA identita' e i TUOI contatti veri, e una prova
+   sbagliata potrebbe cancellarti la cronologia vera. Era il rischio che
+   rendeva pericolosa l'idea, ed e' l'unico motivo per cui esiste questo
+   blocco.
+
+   Quindi: quando l'app si accorge di girare dalla copia di prova, TUTTO
+   quello che salva prende un nome diverso. Non e' una gentilezza, e' cio' che
+   separa due mondi che vivono nella stessa casa.
+
+   ⚠️ E si passa da QUI, da un punto solo. Un test (`checks.test.js`) vieta di
+   chiamare `localStorage` direttamente da qualunque altra parte: bastava una
+   sola chiamata dimenticata per rimettere in comunicazione le due memorie, e
+   una separazione che dipende dal ricordarsi non e' una separazione. */
+const IN_PROVA = /(^|\/)prova\//.test(String((typeof location !== 'undefined' && location.pathname) || ''));
+const PFX_PROVA = IN_PROVA ? 'prova--' : '';
+/* ⚠️ TRASPARENTE: cambia il NOME e non tocca nient'altro. In particolare NON
+   ingoia gli errori. La prima stesura aveva un `try/catch` qui dentro, e due
+   test sono diventati rossi subito: ogni chiamante ha gia' il suo, e alcuni
+   sul fallimento DEVONO agire — «memoria piena» va registrato una volta e non
+   ritentato a ogni messaggio, e «l'ascolto e' acceso» va saputo se non si e'
+   riuscito a scriverlo. Un guscio che si mangia le eccezioni le rende
+   invisibili a chi le sa gestire, e trasforma un guasto rumoroso in uno muto. */
+const MEM = {
+  getItem(k){ return localStorage.getItem(PFX_PROVA + k); },
+  setItem(k, v){ localStorage.setItem(PFX_PROVA + k, v); },
+  removeItem(k){ localStorage.removeItem(PFX_PROVA + k); },
+};
+/* E lo si DICE. Una copia di prova che non si annuncia e' peggio di non
+   averla: qualcuno ci parla dentro credendo di usare l'app vera, e siccome le
+   due memorie sono separate i suoi contatti li' non esistono da nessun'altra
+   parte. La fascia sta in cima e non si chiude. */
+if (IN_PROVA){ try{ $('provaBar').classList.remove('hide'); }catch(_){} }
+
 /* ============================== i18n ==============================
    The same 13 languages LOGOS.html already ships, same codes, so the two
    apps read as one project rather than two half-translated ones. */
@@ -91,7 +140,7 @@ Object.assign(I18N.en, {
 "contacts.sameLookVerified":"verified by voice","contacts.write":"Write","contacts.call":"Call","contacts.remove":"Remove from contacts",
 "contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
-"install.btn":"Install","update.text":"There's a new version of the app.","update.btn":"Update",
+"install.btn":"Install","update.text":"There's a new version of the app.","prova.title":"TEST COPY","prova.sub":"This is not the real app. It is here to check changes before they reach everyone: what you do here stays here.","update.btn":"Update",
 "home.title":"Talk to anyone, wherever they are",
 "home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
 "home.nameLabel":"Your name","first.nameWhy":"Only so the person who opens your invite sees your name instead of \"Someone\". It stays on this phone.","first.youAre":"Whoever opens the invite will see you as","first.change":"change","first.nameNudge":"Write your name first, so whoever opens the invite knows it is you.","addr.haveOne":"Has someone given you their address?",
@@ -280,7 +329,7 @@ Object.assign(I18N.it, {
 "contacts.sameLookVerified":"verificato a voce","contacts.write":"Scrivi","contacts.call":"Chiama","contacts.remove":"Togli dalla rubrica",
 "contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
-"install.btn":"Installa","update.text":"C'è una versione nuova dell'app.","update.btn":"Aggiorna",
+"install.btn":"Installa","update.text":"C'è una versione nuova dell'app.","prova.title":"COPIA DI PROVA","prova.sub":"Non è l'app vera. Serve a controllare le modifiche prima che arrivino a tutti: quello che fai qui resta qui.","update.btn":"Aggiorna",
 "home.title":"Parla con chi vuoi, ovunque sia",
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
 "home.nameLabel":"Come ti chiami","first.nameWhy":"Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.","first.youAre":"Chi apre l'invito ti vedrà come","first.change":"cambia","first.nameNudge":"Scrivi prima come ti chiami, così chi apre l'invito sa che sei tu.","addr.haveOne":"Ti hanno dato un indirizzo?","home.namePh":"Il tuo nome",
@@ -470,7 +519,7 @@ Object.assign(I18N.fr, {
 "contacts.sameLookVerified":"vérifié de vive voix","contacts.write":"Écrire","contacts.call":"Appeler","contacts.remove":"Retirer des contacts",
 "contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
-"install.btn":"Installer","update.text":"Il y a une nouvelle version de l'application.","update.btn":"Mettre à jour",
+"install.btn":"Installer","update.text":"Il y a une nouvelle version de l'application.","prova.title":"COPIE D'ESSAI","prova.sub":"Ce n'est pas la vraie application. Elle sert à vérifier les modifications avant qu'elles n'arrivent à tous : ce que vous faites ici reste ici.","update.btn":"Mettre à jour",
 "home.title":"Parlez à qui vous voulez, où qu'il soit",
 "home.sub":"Messages, photos, vidéos, appels. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
 "home.nameLabel":"Votre nom","first.nameWhy":"Uniquement pour que la personne qui ouvre votre invitation voie votre nom au lieu de « Quelqu'un ». Il reste sur ce téléphone.","first.youAre":"La personne qui ouvre l'invitation vous verra comme","first.change":"modifier","first.nameNudge":"Écrivez d'abord votre nom, pour que la personne qui ouvre l'invitation sache que c'est vous.","addr.haveOne":"On vous a donné une adresse ?","home.namePh":"Votre nom",
@@ -652,7 +701,7 @@ Object.assign(I18N.de, {
 "contacts.sameLookVerified":"mündlich bestätigt","contacts.write":"Schreiben","contacts.call":"Anrufen","contacts.remove":"Aus Kontakten entfernen",
 "contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
-"install.btn":"Installieren","update.text":"Es gibt eine neue Version der App.","update.btn":"Aktualisieren",
+"install.btn":"Installieren","update.text":"Es gibt eine neue Version der App.","prova.title":"TESTKOPIE","prova.sub":"Das ist nicht die echte App. Sie dient dazu, Änderungen zu prüfen, bevor sie alle erreichen: Was du hier tust, bleibt hier.","update.btn":"Aktualisieren",
 "home.title":"Sprich mit jedem, wo immer er ist",
 "home.sub":"Nachrichten, Fotos, Video, Anrufe. Keine Anmeldung, keine Telefonnummer, für immer kostenlos.",
 "home.nameLabel":"Dein Name","first.nameWhy":"Nur damit die Person, die deine Einladung öffnet, deinen Namen sieht statt „Jemand“. Er bleibt auf diesem Handy.","first.youAre":"Wer die Einladung öffnet, sieht dich als","first.change":"ändern","first.nameNudge":"Schreib zuerst deinen Namen, damit die Person, die die Einladung öffnet, weiß, dass du es bist.","addr.haveOne":"Hat dir jemand eine Adresse gegeben?","home.namePh":"Dein Name",
@@ -834,7 +883,7 @@ Object.assign(I18N.es, {
 "contacts.sameLookVerified":"verificado de viva voz","contacts.write":"Escribir","contacts.call":"Llamar","contacts.remove":"Quitar de contactos",
 "contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
-"install.btn":"Instalar","update.text":"Hay una versión nueva de la app.","update.btn":"Actualizar",
+"install.btn":"Instalar","update.text":"Hay una versión nueva de la app.","prova.title":"COPIA DE PRUEBA","prova.sub":"No es la app real. Sirve para revisar los cambios antes de que lleguen a todos: lo que haces aquí se queda aquí.","update.btn":"Actualizar",
 "home.title":"Habla con quien quieras, esté donde esté",
 "home.sub":"Mensajes, fotos, vídeo, llamadas. Sin registro, sin número de teléfono, gratis para siempre.",
 "home.nameLabel":"Tu nombre","first.nameWhy":"Solo para que quien abra tu invitación vea tu nombre en lugar de «Alguien». Se queda en este teléfono.","first.youAre":"Quien abra la invitación te verá como","first.change":"cambiar","first.nameNudge":"Escribe antes tu nombre, así quien abra la invitación sabe que eres tú.","addr.haveOne":"¿Te han dado una dirección?","home.namePh":"Tu nombre",
@@ -1016,7 +1065,7 @@ Object.assign(I18N.pt, {
 "contacts.sameLookVerified":"verificado por voz","contacts.write":"Escrever","contacts.call":"Ligar","contacts.remove":"Remover dos contactos",
 "contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
-"install.btn":"Instalar","update.text":"Há uma versão nova da app.","update.btn":"Atualizar",
+"install.btn":"Instalar","update.text":"Há uma versão nova da app.","prova.title":"CÓPIA DE TESTE","prova.sub":"Não é a app verdadeira. Serve para verificar as alterações antes de chegarem a todos: o que fizeres aqui fica aqui.","update.btn":"Atualizar",
 "home.title":"Fale com quem quiser, onde quer que esteja",
 "home.sub":"Mensagens, fotos, vídeo, chamadas. Sem registo, sem número de telefone, grátis para sempre.",
 "home.nameLabel":"O seu nome","first.nameWhy":"Só para que quem abrir o teu convite veja o teu nome em vez de «Alguém». Fica neste telemóvel.","first.youAre":"Quem abrir o convite vai ver-te como","first.change":"alterar","first.nameNudge":"Escreve primeiro o teu nome, assim quem abrir o convite sabe que és tu.","addr.haveOne":"Deram-te um endereço?","home.namePh":"O seu nome",
@@ -1198,7 +1247,7 @@ Object.assign(I18N.ru, {
 "contacts.sameLookVerified":"подтверждён голосом","contacts.write":"Написать","contacts.call":"Позвонить","contacts.remove":"Убрать из контактов",
 "contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
-"install.btn":"Установить","update.text":"Есть новая версия приложения.","update.btn":"Обновить",
+"install.btn":"Установить","update.text":"Есть новая версия приложения.","prova.title":"ТЕСТОВАЯ КОПИЯ","prova.sub":"Это не настоящее приложение. Оно нужно, чтобы проверить изменения до того, как они дойдут до всех: то, что вы делаете здесь, здесь и остаётся.","update.btn":"Обновить",
 "home.title":"Говорите с кем хотите, где бы они ни были",
 "home.sub":"Сообщения, фото, видео, звонки. Без регистрации, без номера телефона, бесплатно навсегда.",
 "home.nameLabel":"Ваше имя","first.nameWhy":"Только чтобы тот, кто откроет приглашение, увидел ваше имя, а не «Кто-то». Оно остаётся на этом телефоне.","first.youAre":"Тот, кто откроет приглашение, увидит вас как","first.change":"изменить","first.nameNudge":"Сначала напишите своё имя, чтобы тот, кто откроет приглашение, знал, что это вы.","addr.haveOne":"Вам дали чей-то адрес?","home.namePh":"Ваше имя",
@@ -1380,7 +1429,7 @@ Object.assign(I18N.zh, {
 "contacts.sameLookVerified":"已通过语音验证","contacts.write":"写信","contacts.call":"通话","contacts.remove":"从联系人移除",
 "contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
-"install.btn":"安装","update.text":"有新版本的应用。","update.btn":"更新",
+"install.btn":"安装","update.text":"有新版本的应用。","prova.title":"测试副本","prova.sub":"这不是正式应用。它用来在改动发到所有人之前先做检查：你在这里做的事只留在这里。","update.btn":"更新",
 "home.title":"随时随地，和你想聊的人聊天",
 "home.sub":"消息、照片、视频、通话。无需注册，无需电话号码，永久免费。",
 "home.nameLabel":"你的名字","first.nameWhy":"只是让打开你邀请的人看到你的名字，而不是「某人」。它只留在这台手机上。","first.youAre":"打开邀请的人会看到你是","first.change":"修改","first.nameNudge":"先写上你的名字，这样打开邀请的人就知道是你。","addr.haveOne":"有人给了你一个地址吗？","home.namePh":"你的名字",
@@ -1562,7 +1611,7 @@ Object.assign(I18N.ar, {
 "contacts.sameLookVerified":"تم التحقق صوتيًّا","contacts.write":"كتابة","contacts.call":"اتصال","contacts.remove":"إزالة من جهات الاتصال",
 "contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
-"install.btn":"تثبيت","update.text":"يوجد إصدار جديد من التطبيق.","update.btn":"تحديث",
+"install.btn":"تثبيت","update.text":"يوجد إصدار جديد من التطبيق.","prova.title":"نسخة تجريبية","prova.sub":"هذا ليس التطبيق الحقيقي. إنه لفحص التغييرات قبل وصولها إلى الجميع: ما تفعله هنا يبقى هنا.","update.btn":"تحديث",
 "home.title":"تحدّث مع من تريد، أينما كان",
 "home.sub":"رسائل، صور، فيديو، مكالمات. بلا تسجيل، بلا رقم هاتف، مجانًا للأبد.",
 "home.nameLabel":"اسمك","first.nameWhy":"فقط لكي يرى من يفتح دعوتك اسمك بدل «شخص ما». يبقى على هذا الهاتف.","first.youAre":"من يفتح الدعوة سيراك باسم","first.change":"تغيير","first.nameNudge":"اكتب اسمك أولًا، ليعرف من يفتح الدعوة أنك أنت.","addr.haveOne":"هل أعطاك أحدهم عنوانه؟","home.namePh":"اسمك",
@@ -1744,7 +1793,7 @@ Object.assign(I18N.ur, {
 "contacts.sameLookVerified":"زبانی تصدیق شدہ","contacts.write":"لکھیں","contacts.call":"کال","contacts.remove":"رابطوں سے ہٹائیں",
 "contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
-"install.btn":"انسٹال کریں","update.text":"ایپ کا نیا ورژن موجود ہے۔","update.btn":"اپ ڈیٹ کریں",
+"install.btn":"انسٹال کریں","update.text":"ایپ کا نیا ورژن موجود ہے۔","prova.title":"آزمائشی نقل","prova.sub":"یہ اصل ایپ نہیں ہے۔ یہ تبدیلیاں سب تک پہنچنے سے پہلے جانچنے کے لیے ہے: جو آپ یہاں کرتے ہیں وہ یہیں رہتا ہے۔","update.btn":"اپ ڈیٹ کریں",
 "home.title":"جس سے چاہیں بات کریں، وہ جہاں بھی ہو",
 "home.sub":"پیغامات، تصاویر، ویڈیو، کالز۔ کوئی سائن اپ نہیں، کوئی فون نمبر نہیں، ہمیشہ کے لیے مفت۔",
 "home.nameLabel":"آپ کا نام","first.nameWhy":"صرف اس لیے کہ جو آپ کی دعوت کھولے وہ «کوئی» کے بجائے آپ کا نام دیکھے۔ یہ اسی فون پر رہتا ہے۔","first.youAre":"جو دعوت کھولے گا وہ آپ کو اس نام سے دیکھے گا","first.change":"تبدیل کریں","first.nameNudge":"پہلے اپنا نام لکھیں، تاکہ جو دعوت کھولے اُسے پتہ ہو کہ یہ آپ ہیں۔","addr.haveOne":"کیا کسی نے آپ کو اپنا پتہ دیا ہے؟","home.namePh":"آپ کا نام",
@@ -1926,7 +1975,7 @@ Object.assign(I18N.hi, {
 "contacts.sameLookVerified":"आवाज़ से सत्यापित","contacts.write":"लिखें","contacts.call":"कॉल","contacts.remove":"संपर्कों से हटाएँ",
 "contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
-"install.btn":"इंस्टॉल करें","update.text":"ऐप का नया संस्करण उपलब्ध है।","update.btn":"अपडेट करें",
+"install.btn":"इंस्टॉल करें","update.text":"ऐप का नया संस्करण उपलब्ध है।","prova.title":"परीक्षण प्रति","prova.sub":"यह असली ऐप नहीं है। यह बदलावों को सबके पास पहुँचने से पहले जाँचने के लिए है: यहाँ आप जो करते हैं वह यहीं रहता है।","update.btn":"अपडेट करें",
 "home.title":"जिससे चाहें बात करें, वे कहीं भी हों",
 "home.sub":"संदेश, फ़ोटो, वीडियो, कॉल। कोई साइन-अप नहीं, कोई फ़ोन नंबर नहीं, हमेशा के लिए मुफ़्त।",
 "home.nameLabel":"आपका नाम","first.nameWhy":"बस इसलिए कि जो आपका निमंत्रण खोले उसे «कोई» के बजाय आपका नाम दिखे। यह इसी फ़ोन पर रहता है।","first.youAre":"जो निमंत्रण खोलेगा वह आपको इस नाम से देखेगा","first.change":"बदलें","first.nameNudge":"पहले अपना नाम लिखें, ताकि जो निमंत्रण खोले उसे पता हो कि यह आप हैं।","addr.haveOne":"क्या किसी ने आपको अपना पता दिया है?","home.namePh":"आपका नाम",
@@ -2108,7 +2157,7 @@ Object.assign(I18N.bn, {
 "contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা","contacts.write":"লিখুন","contacts.call":"কল","contacts.remove":"পরিচিতি থেকে সরান",
 "contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
-"install.btn":"ইনস্টল করুন","update.text":"অ্যাপের নতুন সংস্করণ এসেছে।","update.btn":"আপডেট করুন",
+"install.btn":"ইনস্টল করুন","update.text":"অ্যাপের নতুন সংস্করণ এসেছে।","prova.title":"পরীক্ষামূলক কপি","prova.sub":"এটি আসল অ্যাপ নয়। পরিবর্তনগুলো সবার কাছে পৌঁছানোর আগে যাচাই করতে এটি আছে: এখানে যা করবেন তা এখানেই থাকে।","update.btn":"আপডেট করুন",
 "home.title":"যার সাথে চান কথা বলুন, তিনি যেখানেই থাকুন",
 "home.sub":"বার্তা, ছবি, ভিডিও, কল। কোনো সাইন-আপ নেই, কোনো ফোন নম্বর নেই, চিরকালের জন্য বিনামূল্যে।",
 "home.nameLabel":"আপনার নাম","first.nameWhy":"শুধু যাতে যিনি আপনার আমন্ত্রণ খুলবেন তিনি «কেউ একজন»-এর বদলে আপনার নাম দেখেন। এটি এই ফোনেই থাকে।","first.youAre":"যিনি আমন্ত্রণ খুলবেন তিনি আপনাকে দেখবেন","first.change":"বদলান","first.nameNudge":"আগে আপনার নাম লিখুন, যাতে যিনি আমন্ত্রণ খোলেন তিনি বুঝতে পারেন এটি আপনি।","addr.haveOne":"কেউ কি আপনাকে তার ঠিকানা দিয়েছে?","home.namePh":"আপনার নাম",
@@ -2290,7 +2339,7 @@ Object.assign(I18N.id, {
 "contacts.sameLookVerified":"diverifikasi lewat suara","contacts.write":"Tulis","contacts.call":"Telepon","contacts.remove":"Hapus dari kontak",
 "contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
-"install.btn":"Pasang","update.text":"Ada versi baru aplikasi ini.","update.btn":"Perbarui",
+"install.btn":"Pasang","update.text":"Ada versi baru aplikasi ini.","prova.title":"SALINAN UJI COBA","prova.sub":"Ini bukan aplikasi yang sebenarnya. Gunanya memeriksa perubahan sebelum sampai ke semua orang: apa yang kamu lakukan di sini tetap di sini.","update.btn":"Perbarui",
 "home.title":"Bicara dengan siapa pun yang Anda mau, di mana pun mereka berada",
 "home.sub":"Pesan, foto, video, panggilan. Tanpa pendaftaran, tanpa nomor telepon, gratis selamanya.",
 "home.nameLabel":"Nama Anda","first.nameWhy":"Hanya supaya orang yang membuka undanganmu melihat namamu, bukan \"Seseorang\". Namanya tetap di ponsel ini.","first.youAre":"Yang membuka undangan akan melihatmu sebagai","first.change":"ubah","first.nameNudge":"Tulis dulu namamu, supaya yang membuka undangan tahu itu kamu.","addr.haveOne":"Ada yang memberimu sebuah alamat?","home.namePh":"Nama Anda",
@@ -2478,7 +2527,7 @@ function initLang(){
   LANGS.forEach(([code,name]) => { const o=document.createElement('option'); o.value=code; o.textContent=name; sel.appendChild(o); });
   sel.addEventListener('change', () => applyLang(sel.value));
   let want = null;
-  try{ want = localStorage.getItem('dvlogos-lang'); }catch(e){}
+  try{ want = MEM.getItem('dvlogos-lang'); }catch(e){}
   if (!want){
     const codes = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language||'it'];
     for (const c of codes){ const base = String(c).toLowerCase().split('-')[0]; if (LANGS.some(l=>l[0]===base)){ want = base; break; } }
@@ -2495,7 +2544,7 @@ function applyLang(code){
     if (orig.phKey){ const v = dict[orig.phKey]; el.setAttribute('placeholder', v !== undefined ? v : orig.ph); }
   });
   $('langSel').value = code;
-  try{ localStorage.setItem('dvlogos-lang', code); }catch(e){}
+  try{ MEM.setItem('dvlogos-lang', code); }catch(e){}
   /* its own icon+text are painted by state, not by the generic pass above —
      repainted here so a language switch mid-chat keeps the real state (say,
      "codice cambiato") instead of reverting to the generic default */
@@ -2549,8 +2598,8 @@ const SPEECH_LANG = {
   it:'it-IT', en:'en-US', ar:'ar-SA', bn:'bn-BD', de:'de-DE', es:'es-ES', fr:'fr-FR',
   hi:'hi-IN', id:'id-ID', pt:'pt-PT', ru:'ru-RU', ur:'ur-PK', zh:'zh-CN',
 };
-function voicePref(){ try{ return localStorage.getItem('dvlogos-voice') === '1'; }catch(e){ return false; } }
-function easyPref(){ try{ return localStorage.getItem('dvlogos-easy') === '1'; }catch(e){ return false; } }
+function voicePref(){ try{ return MEM.getItem('dvlogos-voice') === '1'; }catch(e){ return false; } }
+function easyPref(){ try{ return MEM.getItem('dvlogos-easy') === '1'; }catch(e){ return false; } }
 
 function speak(text){
   if (!voicePref() || !text) return;
@@ -2587,12 +2636,12 @@ if (typeof speechSynthesis === 'undefined') $('voiceRow').classList.add('hide');
 
 $('easyRow').addEventListener('click', () => {
   const on = !$('easyRow').classList.contains('on');
-  try{ localStorage.setItem('dvlogos-easy', on ? '1' : '0'); }catch(e){}
+  try{ MEM.setItem('dvlogos-easy', on ? '1' : '0'); }catch(e){}
   applyEasy(on);
 });
 $('voiceRow').addEventListener('click', () => {
   const on = !$('voiceRow').classList.contains('on');
-  try{ localStorage.setItem('dvlogos-voice', on ? '1' : '0'); }catch(e){}
+  try{ MEM.setItem('dvlogos-voice', on ? '1' : '0'); }catch(e){}
   paintVoiceToggle(on);
   /* say something immediately: the only honest way to show what it does */
   if (on) speak(t('easy.voiceOn','Va bene. Da adesso ti dico a voce cosa fare.'));
@@ -2714,9 +2763,9 @@ $('backFromStart').addEventListener('click', () => { stopQuickPump(); $('bigConn
 $('backFromJoin').addEventListener('click', () => { stopQuickPump(); $('bigConnectingB').classList.add('hide'); showScreen('screenHome'); });
 
 /* your name, remembered on this device */
-try{ $('nickInput').value = localStorage.getItem('logos-modifica-nick') || ''; }catch(e){}
+try{ $('nickInput').value = MEM.getItem('logos-modifica-nick') || ''; }catch(e){}
 $('nickInput').addEventListener('input', () => {
-  try{ localStorage.setItem('logos-modifica-nick', $('nickInput').value.trim()); }catch(e){}
+  try{ MEM.setItem('logos-modifica-nick', $('nickInput').value.trim()); }catch(e){}
   syncFirstName();
 });
 function myNick(){ return $('nickInput').value.trim() || t('chat.someone','Qualcuno'); }
@@ -2737,7 +2786,7 @@ function syncFirstName(){
 }
 $('firstNameIn').addEventListener('input', () => {
   $('nickInput').value = $('firstNameIn').value;
-  try{ localStorage.setItem('logos-modifica-nick', $('nickInput').value.trim()); }catch(e){}
+  try{ MEM.setItem('logos-modifica-nick', $('nickInput').value.trim()); }catch(e){}
   /* la riga «ti vedra' come» sta guardando lo stesso dato: se e' visibile
      deve cambiare mentre si scrive, non alla prossima apertura */
   if (!$('nameIsRow').classList.contains('hide')) $('nameIsWho').textContent = myNick();
@@ -2755,7 +2804,7 @@ const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platfor
 let deferredPrompt = null;
 function showInstallBar(html, withButton){
   if (isStandalone) return;
-  let dismissed = false; try{ dismissed = localStorage.getItem('dvlogos-install-dismissed') === '1'; }catch(e){}
+  let dismissed = false; try{ dismissed = MEM.getItem('dvlogos-install-dismissed') === '1'; }catch(e){}
   if (dismissed) return;
   $('installText').innerHTML = html;
   $('installBtn').classList.toggle('hide', !withButton);
@@ -2777,7 +2826,7 @@ $('installBtn').addEventListener('click', async () => {
 });
 $('installClose').addEventListener('click', () => {
   $('installBar').classList.add('hide');
-  try{ localStorage.setItem('dvlogos-install-dismissed','1'); }catch(e){}
+  try{ MEM.setItem('dvlogos-install-dismissed','1'); }catch(e){}
 });
 /* ⚠️ Non c'e' la × per chiudere questa striscia, e non e' una dimenticanza:
    una versione nuova non e' un suggerimento da cui difendersi, e chi la manda
@@ -2904,21 +2953,21 @@ if ('serviceWorker' in navigator
    screen, to everyone who has not already turned it on or waved it away. */
 function maybeShowEasyHint(){
   if (easyPref()) return;
-  let dismissed = false; try{ dismissed = localStorage.getItem('dvlogos-easyhint-dismissed') === '1'; }catch(e){}
+  let dismissed = false; try{ dismissed = MEM.getItem('dvlogos-easyhint-dismissed') === '1'; }catch(e){}
   if (dismissed) return;
   if (!$('installBar').classList.contains('hide')) return;   /* one quiet notice at a time here, not two */
   $('easyHintBar').classList.remove('hide');
 }
 maybeShowEasyHint();
 $('easyHintBtn').addEventListener('click', () => {
-  try{ localStorage.setItem('dvlogos-easy', '1'); }catch(e){}
+  try{ MEM.setItem('dvlogos-easy', '1'); }catch(e){}
   applyEasy(true);
   $('easyHintBar').classList.add('hide');
-  try{ localStorage.setItem('dvlogos-easyhint-dismissed', '1'); }catch(e){}
+  try{ MEM.setItem('dvlogos-easyhint-dismissed', '1'); }catch(e){}
 });
 $('easyHintClose').addEventListener('click', () => {
   $('easyHintBar').classList.add('hide');
-  try{ localStorage.setItem('dvlogos-easyhint-dismissed', '1'); }catch(e){}
+  try{ MEM.setItem('dvlogos-easyhint-dismissed', '1'); }catch(e){}
 });
 
 /* ============================== WebRTC core ==============================
@@ -3827,7 +3876,9 @@ function remoteFpHex(){
    connect to can tell it is the same device again later. Since you only ever hand
    an invite to someone you chose, and they already know your name, that costs
    nothing here — and it is what buys real verification. */
-const ID_DB = 'dvlogos-id';
+/* col prefisso quando si gira dalla copia di prova: la chiave d'identita'
+   sta qui dentro, ed e' la cosa che NON deve mai mescolarsi fra le due */
+const ID_DB = PFX_PROVA + 'dvlogos-id';
 /* Takes the record name because there are two of them now: the DTLS
    certificate that makes the safety words stable, and the ECDH key pair the
    address is built from. Both have to outlive a reload and neither may ever
@@ -4068,8 +4119,8 @@ function paintVerifyBadge(state){
   else if (state === 'changed'){ b.classList.add('vbad'); b.innerHTML = svgIcon('warning') + t('verify.changedShort','codice cambiato'); }
   else { b.innerHTML = svgIcon('lock') + t('verify.badge','verifica'); }
 }
-function readSafetyRec(key){ try{ return JSON.parse(localStorage.getItem(key) || 'null'); }catch(e){ return null; } }
-function writeSafetyRec(key, code){ try{ localStorage.setItem(key, JSON.stringify({ code, since: Date.now() })); }catch(e){} }
+function readSafetyRec(key){ try{ return JSON.parse(MEM.getItem(key) || 'null'); }catch(e){ return null; } }
+function writeSafetyRec(key, code){ try{ MEM.setItem(key, JSON.stringify({ code, since: Date.now() })); }catch(e){} }
 
 /* Set only by opening a QR that was scanned off someone's screen in person —
    see the note above paintQr for why a link never sets it. */
@@ -4538,17 +4589,17 @@ function loadHistoryFor(nick){
   $('msgs').innerHTML = '';
   let list = [];
   const key = historyKeyNow(nick);
-  try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
+  try{ list = JSON.parse(MEM.getItem(key) || '[]'); }catch(e){}
   /* one-time carry-over from the old name-keyed form, and only for a device
      whose safety code is already the one we trust for this person — an
      impostor claiming the name gets nothing */
   if (!list.length && key !== historyKey(nick) && safetyState === 'ok'){
     try{
-      const old = JSON.parse(localStorage.getItem(historyKey(nick)) || '[]');
+      const old = JSON.parse(MEM.getItem(historyKey(nick)) || '[]');
       if (old.length){
         list = old;
-        localStorage.setItem(key, JSON.stringify(old));
-        localStorage.removeItem(historyKey(nick));
+        MEM.setItem(key, JSON.stringify(old));
+        MEM.removeItem(historyKey(nick));
         mediaMigrateConv(historyKey(nick), key);
       }
     }catch(e){}
@@ -4585,7 +4636,7 @@ function loadHistoryFor(nick){
    delete anything; mediaDeleteByConv and mediaDeleteOlderThan are called from
    exactly the same three places already responsible for the text, immediately
    below, and from nowhere else. */
-const MEDIA_DB = 'dvlogos-media', MEDIA_STORE = 'blobs';
+const MEDIA_DB = PFX_PROVA + 'dvlogos-media', MEDIA_STORE = 'blobs';
 function openMediaDB(){
   return new Promise((resolve, reject) => {
     let req;
@@ -4733,7 +4784,7 @@ function saveToHistory(nick, html, mine){
   lastHistoryTry = Date.now();
   const key = historyKeyNow(nick);
   let list = [];
-  try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){}
+  try{ list = JSON.parse(MEM.getItem(key) || '[]'); }catch(e){}
   list.push({ html, mine, t: Date.now() });
   if (list.length > 300) list = list.slice(-300);
   /* A cap counting entries says nothing about what they weigh: three hundred
@@ -4749,7 +4800,7 @@ function saveToHistory(nick, html, mine){
     if (bytes > MAX_HISTORY_BYTES && i < list.length - 1){ list = list.slice(i + 1); break; }
   }
   try{
-    localStorage.setItem(key, JSON.stringify(list));
+    MEM.setItem(key, JSON.stringify(list));
     /* Cleared on the way out, not only set on the way in. Once a single write
        had failed the health card stayed red for the rest of the visit, long
        after the phone had room again — reporting a problem that had already
@@ -4786,10 +4837,10 @@ function forgetHistoryFor(nick){
      and now the media that went with it under either form too, or
      "distrutto" would be true for the words and false for the photos */
   const keyNow = historyKeyNow(nick);
-  try{ localStorage.removeItem(keyNow); }catch(e){}
+  try{ MEM.removeItem(keyNow); }catch(e){}
   mediaDeleteByConv(keyNow);
   if (nick){
-    try{ localStorage.removeItem(historyKey(nick)); }catch(e){}
+    try{ MEM.removeItem(historyKey(nick)); }catch(e){}
     mediaDeleteByConv(historyKey(nick));
   }
 }
@@ -4828,7 +4879,7 @@ async function wipeEverything(){
   for (const k of chiavi){
     if (k.indexOf('dvlogos-') !== 0) continue;
     if (daTenere.test(k)) continue;
-    try{ localStorage.removeItem(k); }catch(e){}
+    try{ MEM.removeItem(k); }catch(e){}
   }
   /* Le foto e i video stanno in un magazzino separato, e vanno svuotati li:
      cancellare le conversazioni e lasciare le immagini sarebbe la promessa
@@ -4859,10 +4910,10 @@ $('btnWipeYes').addEventListener('click', async () => {
   st.textContent = t('wipe.done', 'Fatto. Su questo telefono non c\'e piu niente.');
 });
 
-function autocleanPref(){ try{ return localStorage.getItem('dvlogos-autoclean') === '1'; }catch(e){ return false; } }
-function setAutocleanPref(on){ try{ localStorage.setItem('dvlogos-autoclean', on ? '1' : '0'); }catch(e){} }
-function autocleanDays(){ try{ return parseInt(localStorage.getItem('dvlogos-autoclean-days'), 10) || 30; }catch(e){ return 30; } }
-function setAutocleanDays(days){ try{ localStorage.setItem('dvlogos-autoclean-days', String(days)); }catch(e){} }
+function autocleanPref(){ try{ return MEM.getItem('dvlogos-autoclean') === '1'; }catch(e){ return false; } }
+function setAutocleanPref(on){ try{ MEM.setItem('dvlogos-autoclean', on ? '1' : '0'); }catch(e){} }
+function autocleanDays(){ try{ return parseInt(MEM.getItem('dvlogos-autoclean-days'), 10) || 30; }catch(e){ return 30; } }
+function setAutocleanDays(days){ try{ MEM.setItem('dvlogos-autoclean-days', String(days)); }catch(e){} }
 
 function runAutoclean(){
   if (!autocleanPref()) return;
@@ -4872,11 +4923,11 @@ function runAutoclean(){
   for (const key of keys){
     if (key.indexOf('dvlogos-history-') !== 0) continue;
     let list;
-    try{ list = JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){ continue; }
+    try{ list = JSON.parse(MEM.getItem(key) || '[]'); }catch(e){ continue; }
     const kept = list.filter(m => m.t && m.t >= cutoff);
     try{
-      if (kept.length) localStorage.setItem(key, JSON.stringify(kept));
-      else localStorage.removeItem(key); /* nothing left worth keeping the key for */
+      if (kept.length) MEM.setItem(key, JSON.stringify(kept));
+      else MEM.removeItem(key); /* nothing left worth keeping the key for */
     }catch(e){}
   }
   /* One pass over the whole media store, not one per conversation key: every
@@ -4913,9 +4964,9 @@ runAutoclean(); /* once per app open is enough — nobody's chat needs pruning m
    below), reopening them can skip a fresh code exchange entirely; contacts saved before that
    fingerprint existed just fall back to the manual invite screen, same as always. */
 function loadContacts(){
-  try{ return JSON.parse(localStorage.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
+  try{ return JSON.parse(MEM.getItem('dvlogos-contacts') || '[]'); }catch(e){ return []; }
 }
-function saveContacts(list){ try{ localStorage.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
+function saveContacts(list){ try{ MEM.setItem('dvlogos-contacts', JSON.stringify(list)); }catch(e){} }
 /* A name is a claim, and this list was the last place still treating one as an
    identity. The safety records and the history had both already been moved
    onto the fingerprint — the thing the handshake actually proves — precisely
@@ -5273,8 +5324,8 @@ function pushSupported(){
   if (isIOS) return isStandalone && 'serviceWorker' in navigator && 'PushManager' in window;
   return 'serviceWorker' in navigator && 'PushManager' in window && typeof Notification !== 'undefined';
 }
-function notifyPref(){ try{ return localStorage.getItem('dvlogos-notify') === '1'; }catch(e){ return false; } }
-function setNotifyPref(on){ try{ localStorage.setItem('dvlogos-notify', on ? '1' : '0'); }catch(e){} }
+function notifyPref(){ try{ return MEM.getItem('dvlogos-notify') === '1'; }catch(e){ return false; } }
+function setNotifyPref(on){ try{ MEM.setItem('dvlogos-notify', on ? '1' : '0'); }catch(e){} }
 
 let myPushSub = null;
 async function ensurePushSubscription(){
@@ -5401,7 +5452,7 @@ $('listenRow').addEventListener('click', () => {
      (SharedPreferences, in RingService). Quindi i due potevano divergere:
      servizio acceso che sorveglia, interruttore che dice spento. Chi guardava
      l'app vedeva una cosa e il telefono ne faceva un'altra. */
-  try{ localStorage.setItem('dvlogos-listen', listenMode ? '1' : '0'); }catch(_){}
+  try{ MEM.setItem('dvlogos-listen', listenMode ? '1' : '0'); }catch(_){}
   paintListenMode(listenMode);
   if (listenMode) keepScreenAwake();
   else if (callState !== 'active') letScreenSleep();   /* una chiamata in corso ha la priorità sullo spegnimento */
@@ -5459,7 +5510,7 @@ let statoAscoltoNativo = 'no';
    avviare il servizio: da Android 12 non si puo' farlo partire quando l'app e'
    gia' in secondo piano. */
 try{
-  if (localStorage.getItem('dvlogos-listen') === '1'){
+  if (MEM.getItem('dvlogos-listen') === '1'){
     listenMode = true;
     paintListenMode(true);
     keepScreenAwake();
@@ -6201,8 +6252,8 @@ async function letterGet(addr){
   }catch(e){ return []; }
 }
 
-function storedLetters(){ try{ return JSON.parse(localStorage.getItem('dvlogos-letters') || '[]'); }catch(e){ return []; } }
-function saveLetters(l){ try{ localStorage.setItem('dvlogos-letters', JSON.stringify(l.slice(-40))); }catch(e){} }
+function storedLetters(){ try{ return JSON.parse(MEM.getItem('dvlogos-letters') || '[]'); }catch(e){ return []; } }
+function saveLetters(l){ try{ MEM.setItem('dvlogos-letters', JSON.stringify(l.slice(-40))); }catch(e){} }
 function dropLetter(id){ saveLetters(storedLetters().filter(x => x.id !== id)); }
 
 /* Only ever written if this device can actually be reached — an invite that
@@ -6224,17 +6275,17 @@ async function publishWakeSlot(sec){
 const PENDING_KEY = 'dvlogos-pending-invite';
 const PENDING_MAX_AGE = 24 * 3600 * 1000; /* matches the wake slot's own life */
 function savePendingInvite(code){
-  try{ localStorage.setItem(PENDING_KEY, JSON.stringify({ code, at: Date.now() })); }catch(e){}
+  try{ MEM.setItem(PENDING_KEY, JSON.stringify({ code, at: Date.now() })); }catch(e){}
 }
 function readPendingInvite(){
   try{
-    const p = JSON.parse(localStorage.getItem(PENDING_KEY) || 'null');
+    const p = JSON.parse(MEM.getItem(PENDING_KEY) || 'null');
     if (!p || !p.code || !p.at) return null;
     if (Date.now() - p.at > PENDING_MAX_AGE){ clearPendingInvite(); return null; }
     return p;
   }catch(e){ return null; }
 }
-function clearPendingInvite(){ try{ localStorage.removeItem(PENDING_KEY); }catch(e){} }
+function clearPendingInvite(){ try{ MEM.removeItem(PENDING_KEY); }catch(e){} }
 
 /* ============================== the permanent address ==============================
    Everything above reaches someone you are already talking to, or someone you
@@ -6327,8 +6378,8 @@ async function myAddress(slot){
    be thrown away: one for the sofa you are selling, deleted the day it is
    sold, and the person who bought it never had anything else. */
 const BURNER_MAX = 8;
-function burners(){ try{ return JSON.parse(localStorage.getItem('dvlogos-burners') || '[]'); }catch(e){ return []; } }
-function saveBurners(l){ try{ localStorage.setItem('dvlogos-burners', JSON.stringify(l)); }catch(e){} }
+function burners(){ try{ return JSON.parse(MEM.getItem('dvlogos-burners') || '[]'); }catch(e){ return []; } }
+function saveBurners(l){ try{ MEM.setItem('dvlogos-burners', JSON.stringify(l)); }catch(e){} }
 function addBurner(name){
   const l = burners();
   if (l.length >= BURNER_MAX) return null;
@@ -6368,13 +6419,13 @@ function parseAddress(s){
    that actually seals them, and addrWakeSecrets for the one slot that still has
    to be readable by whoever holds the address, with the reasons written there. */
 
-function addrOn(){ try{ return localStorage.getItem('dvlogos-addr-on') === '1'; }catch(e){ return false; } }
-function setAddrOn(on){ try{ localStorage.setItem('dvlogos-addr-on', on ? '1' : '0'); }catch(e){} }
-function addrBlocked(){ try{ return JSON.parse(localStorage.getItem('dvlogos-addr-blocked') || '[]'); }catch(e){ return []; } }
+function addrOn(){ try{ return MEM.getItem('dvlogos-addr-on') === '1'; }catch(e){ return false; } }
+function setAddrOn(on){ try{ MEM.setItem('dvlogos-addr-on', on ? '1' : '0'); }catch(e){} }
+function addrBlocked(){ try{ return JSON.parse(MEM.getItem('dvlogos-addr-blocked') || '[]'); }catch(e){ return []; } }
 function blockFp(fp){
   if (!fp) return;
   const l = addrBlocked();
-  if (l.indexOf(fp) < 0){ l.push(fp); try{ localStorage.setItem('dvlogos-addr-blocked', JSON.stringify(l)); }catch(e){} }
+  if (l.indexOf(fp) < 0){ l.push(fp); try{ MEM.setItem('dvlogos-addr-blocked', JSON.stringify(l)); }catch(e){} }
 }
 function isBlockedFp(fp){ return !!fp && addrBlocked().indexOf(fp) >= 0; }
 /* ⚠️ NON ESISTEVA FINO ALLA v37, e la sua assenza era il difetto peggiore di
@@ -6390,7 +6441,7 @@ function isBlockedFp(fp){ return !!fp && addrBlocked().indexOf(fp) >= 0; }
    Un interruttore che non si puo' rimettere a posto non e' un interruttore. */
 function unblockFp(fp){
   const l = addrBlocked().filter(x => x !== fp);
-  try{ localStorage.setItem('dvlogos-addr-blocked', JSON.stringify(l)); }catch(e){}
+  try{ MEM.setItem('dvlogos-addr-blocked', JSON.stringify(l)); }catch(e){}
 }
 /* Il nome se lo conosciamo, altrimenti le prime cifre dell'impronta: qualcosa
    che si possa riconoscere, senza inventare un'identita' che non abbiamo. */
@@ -7556,7 +7607,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.28';
+const APP_VERSION = 'logos-modifica-4.29';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -9404,7 +9455,7 @@ async function checkForSharedFiles(){
   try{ history.replaceState(null, '', location.pathname + location.hash); }catch(e){}
   if (!('caches' in window)) return;
   try{
-    const cache = await caches.open('logos-modifica-share-temp');
+    const cache = await caches.open(PFX_PROVA + 'logos-modifica-share-temp');
     const keys = await cache.keys();
     for (const req of keys){
       if (req.url.indexOf('/__shared/') === -1) continue;
@@ -10348,8 +10399,8 @@ function attachRemoteStream(stream){
    loudspeaker only when someone chooses it. The button only ever appears where it can
    actually do something — no dead control on a phone that cannot use it. */
 let speakerOn = false;
-function speakerPref(){ try{ return localStorage.getItem('dvlogos-speaker') === '1'; }catch(e){ return false; } }
-function setSpeakerPref(on){ try{ localStorage.setItem('dvlogos-speaker', on ? '1' : '0'); }catch(e){} }
+function speakerPref(){ try{ return MEM.getItem('dvlogos-speaker') === '1'; }catch(e){ return false; } }
+function setSpeakerPref(on){ try{ MEM.setItem('dvlogos-speaker', on ? '1' : '0'); }catch(e){} }
 
 /* Phones label these differently and most do not expose them at all, so both
    lookups are allowed to come back empty and the caller falls back to whatever
@@ -10572,12 +10623,12 @@ function applyTextSize(cls){
   for (const b of document.querySelectorAll('.textsize button')){
     b.classList.toggle('on', (b.dataset.ts || '') === (cls || ''));
   }
-  try{ localStorage.setItem('dvlogos-textsize', cls || ''); }catch(e){}
+  try{ MEM.setItem('dvlogos-textsize', cls || ''); }catch(e){}
 }
 for (const b of document.querySelectorAll('.textsize button')){
   b.addEventListener('click', () => applyTextSize(b.dataset.ts || ''));
 }
-applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || ''; }catch(e){ return ''; } })());
+applyTextSize((() => { try{ return MEM.getItem('dvlogos-textsize') || ''; }catch(e){ return ''; } })());
 
 /* static icons that never toggle — set once, here, rather than baked into the
    HTML, so the markup and the icon set stay defined in exactly one place */
