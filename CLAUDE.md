@@ -136,9 +136,28 @@ Beyond the suite there are campaigns you run by hand when you have changed somet
 structural: `tests/mutanti.js` (puts real defects back and checks they get caught),
 `tests/fuzz.js`, `tests/races.js`, `tests/hostile.js`.
 
-**What the tests cannot see, ever:** real calls (audio, video, speaker, camera
-switching), how the page actually looks, and iPhone/Safari. Those still need hands and
-a real phone. Do not report a call feature as working because the suite is green.
+Two more run **in a real browser**, because what they check cannot exist in the
+hand-written fake one. Load them as a file — the CSP forbids running code pasted
+into the console, and that is the protection working, not an obstacle:
+
+```js
+document.head.appendChild(Object.assign(
+  document.createElement('script'), { src: 'tests/aspetto.js' }));   // or isolamento.js
+```
+
+- `tests/aspetto.js` — the eyes. Nothing overflows sideways, every visible target is
+  at least 44px, no text is clipped, nothing pressable is covered, nothing grew more
+  lines than expected. It measures **numbers, not pixels**: comparing images would
+  need a library this project will not load, and would cry wolf at every font change.
+  Rules are absolute, so there is no baseline to keep updating — a target is either
+  big enough for a finger or it is not.
+- `tests/isolamento.js` — the eight checks that the test copy and the real app cannot
+  see each other's data.
+
+**What no test can see, ever:** real calls (audio, video, speaker, camera
+switching), whether a screen is *understandable*, and iPhone/Safari. Those still need
+hands and a real phone. Do not report a call feature as working because the suite is
+green.
 
 ---
 

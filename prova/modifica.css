@@ -173,9 +173,19 @@
   .nameis{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;
     margin:0 2px 14px;font-size:0.9062rem;color:var(--dim);line-height:1.5}
   .nameis b{color:var(--ink);font-weight:700;overflow-wrap:anywhere}
-  #showAddrDial{display:block;margin:20px auto 0;text-align:center;
+  /* ⚠️ `min-height` e il riempimento non sono estetica: senza, questa riga
+     era alta 27 px — sotto i 44 che questo progetto si e' dato per un dito.
+     Trovato da tests/aspetto.js al primo giro, il 7 set 2026, su una riga che
+     avevo aggiunto io lo stesso giorno. Eredita `.linkbtn`, che azzera
+     l'altezza minima apposta per i collegamenti dentro una frase: qui non
+     siamo dentro una frase, siamo un bersaglio da premere. */
+  /* stessa storia di #showAddrDial: eredita `.linkbtn`, che azzera l'altezza
+     minima per i collegamenti dentro una frase — ma questo e' un bersaglio */
+  #toggleLongInviteA{min-height:44px;padding:12px 10px}
+  #showAddrDial{display:block;margin:14px auto 0;text-align:center;
     font-size:0.9062rem;color:var(--dim);text-decoration:none;
-    border-bottom:1px dashed var(--line);padding-bottom:3px}
+    min-height:44px;padding:12px 14px;
+    border-bottom:1px dashed var(--line)}
   #showAddrDial:hover{color:var(--accent2);border-bottom-color:var(--accent)}
   .addrdial{margin-top:22px}
   #addrDialIn{border-radius:14px;padding:16px;font-size:1.125rem!important;
@@ -553,6 +563,14 @@
   .chatheader .who b{font-size:1.0625rem;display:block;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap}
   .chatheader .who span{font-size:0.8125rem;color:var(--ok)}
+  /* ⚠️ «verifica» era alto 15 px, ed e' il controllo di SICUREZZA — quello
+     che dice se stai parlando con chi credi. Il bersaglio piu' importante
+     dell'app era il piu' piccolo.
+     Il riempimento con margine negativo uguale e contrario e' il modo di
+     ingrandire l'area premibile SENZA muovere una virgola del disegno: la
+     riga «connessa · verifica» resta esattamente dov'era, ma il dito ha 44 px
+     da colpire. Trovato da tests/aspetto.js. */
+  #btnVerify{padding:14px 10px;margin:-14px -10px;min-height:44px}
   .linkbtn{background:none;border:none;color:var(--dim);font-size:0.8125rem;padding:0;cursor:pointer;
     text-decoration:underline;font-family:inherit;min-height:0}
   .linkbtn:hover{color:var(--accent)}
@@ -800,8 +818,13 @@
   /* ---------------------------------- text size ---------------------------------- */
   .textsize{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:99px;
     overflow:hidden;flex-shrink:0}
-  .textsize button{background:none;border:none;color:var(--dim);cursor:pointer;padding:5px 10px;
-    font-weight:800;line-height:1;min-height:0}
+  /* ⚠️ Erano 29×28. Trovati da tests/aspetto.js il 7 set 2026, e l'ironia
+     merita di restare scritta: i pulsanti che INGRANDISCONO IL TESTO per chi
+     ci vede poco erano loro stessi troppo piccoli da premere. `min-height:0`
+     spegneva la regola dei 44 px del progetto proprio qui. */
+  .textsize button{background:none;border:none;color:var(--dim);cursor:pointer;
+    padding:0 16px;min-height:44px;min-width:44px;
+    font-weight:800;line-height:1}
   .textsize button:nth-child(1){font-size:0.75rem}
   .textsize button:nth-child(2){font-size:0.9375rem}
   .textsize button:nth-child(3){font-size:1.125rem}
@@ -816,7 +839,15 @@
   .choices{margin-top:14px;display:flex;flex-direction:column;gap:10px}
   .jsb{justify-content:space-between}
   .inlinebtns{display:flex;gap:8px;flex-shrink:0}
-  .faintlink{color:var(--faint)}
+  /* ⚠️ Erano alti 12 px. Sono collegamenti di servizio in fondo alla pagina —
+     licenza e codice sorgente — quindi la tentazione era di esentarli dalla
+     regola dei 44. Non e' stato fatto, e il motivo e' l'unico che conta qui:
+     questa app e' pensata anche per chi ha ottant'anni, e un bersaglio di
+     dodici pixel per lui non esiste. Una regola con le eccezioni smette di
+     essere una regola alla seconda eccezione. Il piede della pagina diventa
+     un po' piu' alto, e va benissimo cosi'. */
+  .faintlink{color:var(--faint);display:inline-block;min-height:44px;
+    padding:14px 2px;line-height:1.25}
   .filelink{color:inherit;display:inline-flex;align-items:center;gap:6px}
 
   /* A transfer used to show nothing at all while it ran — a 500MB video sat
