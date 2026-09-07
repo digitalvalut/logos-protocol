@@ -221,7 +221,21 @@
          cassetto del cruscotto. Sta prima dei due pulsanti grandi perche chi ha
          gia un indirizzo in mano non deve passare da «Parla con qualcuno», che
          serve a creare un invito per chi non ce l ha. -->
-    <div class="addrdial">
+    <!-- ⚠️ NASCOSTA A CHI E' APPENA ARRIVATO, dal 7 set 2026. L'operatore:
+         «se io sono uno dei primi a usare l'app e mi trovo davanti "hai
+         l'indirizzo di qualcuno" — cosa cazzo ne so? mi confondo».
+         Aveva ragione: l'indirizzo permanente e' un concetto che esiste solo
+         DOPO che qualcuno te ne ha dato uno. Metterlo davanti a chi apre
+         l'app la prima volta gli chiede di capire una cosa prima di poterla
+         usare, ed e' il contrario di «prima si impara a camminare».
+         Compare da sola appena serve: quando c'e' almeno una persona salvata
+         (e allora sotto ci sono i suoi nomi da toccare) o quando si accende
+         il proprio indirizzo. Chi invece un indirizzo ce l'ha in mano il
+         primo giorno — glielo hanno detto a voce o scritto su un foglio — la
+         apre con la riga qui sopra, che costa un tocco e non confonde
+         nessuno perche' e' una domanda, non un campo vuoto. -->
+    <button class="btn ghost linkbtn hide" id="showAddrDial" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</button>
+    <div class="addrdial hide" id="addrDial">
       <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
       <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
              data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
@@ -555,6 +569,25 @@
       <div class="spinner" aria-hidden="true"></div>
       <div class="bigTitle" id="bigTitleA" data-i18n="connect.bigTitle">Connessione in corso…</div>
       <div class="bigHint" id="bigHintA" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+    </div>
+
+    <!-- ⚠️ AGGIUNTA IL 7 SET 2026. L'operatore, sulla prima volta in assoluto:
+         «sulla parola manda l'invito dovrebbe esserci la prima volta scrivi il
+         tuo nome, così quando dall'altra parte ricevono l'invito sanno chi è,
+         non "qualcuno"».
+         Era esattamente cosi': il nome viveva SOLO dentro la rotellina, sotto
+         «Chi sei», dove chi apre l'app per la prima volta non passa mai — e
+         `myNick()` ripiegava su «Qualcuno». Quindi la primissima conversazione
+         di ogni persona cominciava con uno sconosciuto senza nome.
+         Sta QUI e non nella rotellina perche' questo e' il momento in cui
+         serve, ed e' l'unico momento in cui una persona capisce PERCHE' serve.
+         Compare solo se il nome non c'e' ancora: dalla seconda volta in poi
+         questa scheda non esiste e restano i due tocchi di prima. -->
+    <div class="card hide" id="askNameCard">
+      <label class="fieldlabel" for="firstNameIn" data-i18n="home.nameLabel">Come ti chiami</label>
+      <input type="text" id="firstNameIn" class="sans-input" maxlength="30" spellcheck="false"
+             autocapitalize="words" autocomplete="off" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
+      <div class="helptext mt10" data-i18n="first.nameWhy">Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.</div>
     </div>
 
     <div class="card" id="quickStartCard">

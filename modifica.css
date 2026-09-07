@@ -147,6 +147,15 @@
      Sono due azioni diverse e devono sembrarlo. Adesso è scuro con il bordo e
      la scritta arancioni: si vede che è il pulsante DI QUEL CAMPO, e i due
      pulsantoni sotto restano gli unici blocchi pieni della pagina. */
+  /* La riga che apre il campo dell'indirizzo per chi non ce l'ha ancora in
+     prima pagina. Centrata e discreta: e' una DOMANDA a cui quasi nessuno,
+     il primo giorno, risponde di si', e deve pesare meno dei due pulsantoni
+     che stanno subito sotto. Sta dove comparira' il campo, non altrove, o
+     aprendola il contenuto salterebbe da un punto all'altro della pagina. */
+  #showAddrDial{display:block;margin:20px auto 0;text-align:center;
+    font-size:0.9062rem;color:var(--dim);text-decoration:none;
+    border-bottom:1px dashed var(--line);padding-bottom:3px}
+  #showAddrDial:hover{color:var(--accent2);border-bottom-color:var(--accent)}
   .addrdial{margin-top:22px}
   #addrDialIn{border-radius:14px;padding:16px;font-size:1.125rem!important;
     letter-spacing:.06em;text-align:center;background:#0a0c10}

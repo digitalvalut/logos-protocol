@@ -4728,6 +4728,129 @@ test.describe('due nomi che sembrano lo stesso nome', () => {
 });
 
 /* ------------------------------------------------------------------------
+   4.25 — la prima volta in assoluto.
+   L'operatore, sulla persona che apre Logos per la prima volta: «se io sono
+   uno dei primi a usare l'app e voglio semplicità assoluta e mi trovo davanti
+   "hai indirizzo di qualcuno" — cosa cazzo ne so? mi confondo»; e «sulla
+   parola manda l'invito dovrebbe esserci la prima volta scrivi il tuo nome,
+   così dall'altra parte sanno chi è, non "qualcuno"».
+   Due difetti veri, tutti e due sulla PRIMA volta e invisibili a chi l'app la
+   conosce gia': un campo che chiede di capire un concetto prima di poterlo
+   usare, e un nome che viveva solo dentro la rotellina — dove chi apre l'app
+   la prima volta non passa mai — quindi la prima conversazione di ognuno
+   cominciava con uno sconosciuto senza nome.
+   ------------------------------------------------------------------------ */
+test.describe('la prima volta in assoluto (4.25)', () => {
+
+  test('chi apre l\'app la prima volta NON vede il campo dell\'indirizzo', () => {
+    const app = loadApp();
+    app.run("saveContacts([]); renderContacts();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
+      'un indirizzo permanente e\' un concetto che nasce dopo che qualcuno te ne ha dato uno: ' +
+      'metterlo davanti a chi arriva adesso gli chiede di capirlo per poterlo usare');
+    assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), false,
+      'ma la strada deve restare aperta in un tocco per chi un indirizzo ce l\'ha in mano davvero');
+  });
+
+  test('ma chi ce l\'ha in mano lo apre in un tocco', () => {
+    const app = loadApp();
+    app.run("saveContacts([]); renderContacts();");
+    app.run("$('showAddrDial').listeners.click[0]();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false,
+      'la riga deve aprire il campo, non solo esistere');
+    assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), true,
+      'e sparire lei, o restano la domanda e la risposta una sopra l\'altra');
+  });
+
+  test('il campo compare da solo appena c\'e\' qualcuno in rubrica', () => {
+    /* ⚠️ Il segnale e' avere il contatto di QUALCUN ALTRO, non avere acceso il
+       PROPRIO indirizzo — errore fatto al primo tentativo e visto misurando il
+       primo avvio: l'app accende il tuo indirizzo da sola quando crei il primo
+       invito, e il campo ricompariva addosso a una persona che ancora non
+       sapeva cosa fosse. */
+    const app = loadApp();
+    app.run("saveContacts([]); setAddrOn(true); renderContacts();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
+      'aver acceso il proprio indirizzo non dice niente su quello degli altri');
+    app.run("touchContact('Antonella','fp-a',null,'DV-AAAA-BBBB-CCCC');");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false,
+      'con una persona salvata il campo ha senso: sotto ci sono i suoi nomi da toccare');
+    assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), true,
+      'e la riga che lo apriva non serve piu\'');
+  });
+
+  test('la prima volta che si crea un invito, l\'app chiede come ti chiami', () => {
+    const app = loadApp();
+    app.run("$('nickInput').value = '';");
+    app.run("$('goStart').listeners.click[0]();");
+    assert.strictEqual(app.run("$('askNameCard').classList.contains('hide')"), false,
+      'senza nome, chi riceve l\'invito legge «Qualcuno»: va chiesto qui, dove si capisce a cosa serve');
+    app.stop();
+  });
+
+  test('e non lo richiede mai piu\' una volta che c\'e\'', () => {
+    const app = loadApp();
+    app.run("$('nickInput').value = 'Giuseppe';");
+    app.run("$('goStart').listeners.click[0]();");
+    assert.strictEqual(app.run("$('askNameCard').classList.contains('hide')"), true,
+      'dalla seconda volta in poi devono restare i due tocchi di prima');
+    app.stop();
+  });
+
+  test('«Manda l\'invito» col nome vuoto spinge una volta, poi manda lo stesso', () => {
+    /* Una spinta, non un muro: chi non vuole scrivere il proprio nome ha il
+       diritto di non scriverlo, e un invito bloccato per sempre sarebbe un
+       difetto peggiore di quello che questo rimedio corregge. */
+    const app = loadApp();
+    app.run(`
+      $('nickInput').value = '';
+      window.__mandati = 0;
+      navigator.share = undefined;
+      window.copyOrSelect = function(){ window.__mandati++; return Promise.resolve(); };
+    `);
+    app.run("$('goStart').listeners.click[0]();");
+    app.run("$('btnShareQuick').listeners.click[0]();");
+    assert.strictEqual(app.run('window.__mandati'), 0,
+      'il primo tocco col nome vuoto non deve mandare niente: deve chiedere il nome');
+    app.run("$('btnShareQuick').listeners.click[0]();");
+    assert.strictEqual(app.run('window.__mandati'), 1,
+      'il secondo tocco deve mandare comunque, anche se il nome e\' rimasto vuoto');
+    app.stop();
+  });
+
+  test('la scheda del nome non resta appesa sopra un ricollegamento', () => {
+    /* ⚠️ screenStart si raggiunge anche toccando un nome in prima pagina, e
+       per quella strada nessuno chiama chiediIlNomeSeManca(): la scheda aperta
+       da un invito precedente restava li' sopra un ricollegamento a qualcuno
+       che ti conosce gia', dove non c'entra niente. */
+    const app = loadApp();
+    app.run("$('nickInput').value = '';");
+    app.run("$('goStart').listeners.click[0]();");
+    assert.strictEqual(app.run("$('askNameCard').classList.contains('hide')"), false,
+      'partenza: la scheda c\'e\', come deve');
+    app.run('showContactReconnectLayout();');
+    assert.strictEqual(app.run("$('askNameCard').classList.contains('hide')"), true,
+      'ricollegandosi a qualcuno la scheda del nome non c\'entra e deve sparire');
+    app.stop();
+  });
+
+  test('il nome scritto sull\'invito e\' lo stesso della rotellina', () => {
+    /* Due campi, un dato solo. Due copie che si separano sarebbero un nome
+       nelle impostazioni e un altro negli inviti. */
+    const app = loadApp();
+    app.run("$('firstNameIn').value = 'Giuseppe'; $('firstNameIn').listeners.input[0]();");
+    assert.strictEqual(app.run("$('nickInput').value"), 'Giuseppe',
+      'scrivendo sull\'invito deve aggiornarsi anche il campo delle impostazioni');
+    assert.strictEqual(app.run('myNick()'), 'Giuseppe',
+      'ed e\' questo il nome che l\'altra persona vede');
+    app.run("$('nickInput').value = 'Peppe'; $('nickInput').listeners.input[0]();");
+    assert.strictEqual(app.run("$('firstNameIn').value"), 'Peppe',
+      'e vale anche al contrario, o i due si separano alla prima modifica');
+    app.stop();
+  });
+});
+
+/* ------------------------------------------------------------------------
    4.22 — i nomi sotto il campo dell'indirizzo.
    L'operatore ha guardato la prima pagina della 4.21 e ha detto: «la rubrica
    sopra cosa c'entra? troppa carne al fuoco». Aveva ragione: un elenco di
