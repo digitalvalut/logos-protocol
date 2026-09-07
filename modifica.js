@@ -53,6 +53,13 @@ const ICONS = {
   warning:'<path d="M12 3.5 21.5 20h-19z"/><path d="M12 9.5v5M12 17.5h.01"/>',
   dots:'<circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/>',
   screen:'<rect x="2.5" y="4.5" width="19" height="13" rx="1.8"/><path d="M8 20.5h8M12 17.5v3"/>',
+  /* «Riattacca». La cornetta di `phone` ruotata di 135 gradi piu' due archi
+     sotto: e' il disegno che tutto il mondo legge come «chiudi», e non si
+     confonde con una freccia «indietro». Costruita ruotando la stessa cornetta
+     invece di ridisegnarne un'altra, cosi' le due icone restano identiche di
+     spessore e di peso — due cornette disegnate a mano separatamente non si
+     assomigliano mai abbastanza. */
+  hangup:'<g transform="rotate(135 12 12)"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></g><path d="M3.6 16.4a12 12 0 0 1 16.8 0"/>',
 };
 function svgIcon(name, cls){
   return '<svg class="btnicon' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
@@ -7395,7 +7402,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.23';
+const APP_VERSION = 'logos-modifica-4.24';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -9342,6 +9349,19 @@ document.addEventListener('click', ev => {
 /* menu panel */
 $('btnMenu').addEventListener('click', () => $('menuPanel').classList.toggle('hide'));
 
+/* ⚠️ Il tasto «riattacca» nella barra della chat, aggiunto il 7 set 2026.
+   Chiama esattamente la stessa endSession() del pulsante «Termina chat» dentro
+   il menu — NON una copia: due strade che chiudono una conversazione in due
+   modi leggermente diversi sono il genere di cosa che diverge alla prima
+   correzione e lascia mezza connessione aperta da una parte sola.
+   Il menu resta aperto o chiuso com'era? No: si chiude. Terminata la chat si
+   torna alla home, e un pannello lasciato aperto ricomparirebbe addosso alla
+   conversazione successiva. */
+$('btnEndChat').addEventListener('click', () => {
+  $('menuPanel').classList.add('hide');
+  endSession();
+});
+
 const incoming = {};
 /* Generous for anything anybody actually sends by hand, and far below what it
    takes to exhaust a phone's memory. A real transfer never approaches either. */
@@ -10392,7 +10412,7 @@ applyTextSize((() => { try{ return localStorage.getItem('dvlogos-textsize') || '
 setIcon('btnCallAudio','phone'); setIcon('btnCallVideo','video');
 setIcon('btnMuteCall','mic'); setIcon('btnCamCall','video'); setIcon('btnFlipCam','flip'); setIcon('btnScreenShare','screen');
 setIcon('btnAttach','attach'); setIcon('btnMic','mic'); setIcon('btnEmoji','smile'); setIcon('btnSend','send');
-setIcon('btnMenu','dots');
+setIcon('btnMenu','dots'); setIcon('btnEndChatIc','hangup');
 
 initLang();
 renderContacts();

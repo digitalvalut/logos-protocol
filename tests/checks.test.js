@@ -182,6 +182,27 @@ test('«fai conoscere l\'app» sta in prima pagina, ma NON come terzo pulsantone
     'non deve tornare un terzo pulsantone: sotto i due grandi, non accanto a loro');
 });
 
+test('chiudere una conversazione non e\' sepolto dentro un menu', () => {
+  /* ⚠️ Il difetto segnalato dall'operatore il 7 set 2026: per terminare una
+     chat bisognava aprire i tre pallini e poi scegliere «Termina chat».
+     `btnEndChat` deve stare nella BARRA della chat — visibile senza aprire
+     niente — e non dentro `#menuPanel`. Il controllo guarda dov'e', perche'
+     e' esattamente la cosa che si perde riordinando la pagina. */
+  const chat = SEZIONI.screenChat;
+  assert.ok(chat, 'la schermata della chat non e\' stata letta');
+  const barra = chat.match(/<div class="chatheader">([\s\S]*?)<\/div>\s*\n\s*<div id="callBox"/);
+  assert.ok(barra, 'la barra della chat non e\' stata trovata');
+  assert.match(barra[1], /id="btnEndChat"/,
+    'il tasto per terminare deve stare nella barra, non dietro i tre pallini');
+  const menu = chat.slice(chat.indexOf('id="menuPanel"'));
+  assert.doesNotMatch(menu.slice(0, menu.indexOf('</div>\n  </section>')), /id="btnEndChat"/,
+    'e non deve essere finito dentro il pannello degli strumenti');
+  /* «Termina chat» resta ANCHE nel menu, per chi ha preso quell'abitudine:
+     toglierlo sarebbe stato spostare il problema, non risolverlo */
+  assert.match(chat, /id="btnNewSession"/,
+    'la voce nel menu non va tolta: chi la usa da sempre non deve perderla');
+});
+
 test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ordine giusto', () => {
   /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
      che rimescolavano questa pagina sono state tolte apposta, perche' chi legge

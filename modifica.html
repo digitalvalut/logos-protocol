@@ -721,6 +721,25 @@
       <button class="iconbtn" id="btnCallAudio" title="Chiamata"></button>
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata"></button>
       <button class="iconbtn" id="btnMenu" title="Altro"></button>
+      <!-- ⚠️ AGGIUNTO IL 7 SET 2026, segnalato dall'operatore: «quando una
+           persona è collegata non c'è un tasto riattacca per terminare, deve
+           cliccare i tre pallini e poi Termina chat». Aveva ragione: chiudere
+           una conversazione era l'unica azione ovvia dell'app che viveva
+           dentro un menu. «Termina chat» resta anche là dentro — chi ha preso
+           quell'abitudine non la perde — ma adesso si vede.
+           Rosso e ultimo apposta: e' l'unico pulsante distruttivo della
+           barra, e il colore + la distanza dai due di chiamata sono cio' che
+           impedisce di premerlo per sbaglio al posto di «videochiamata».
+           L'etichetta sta in uno span nascosto invece che in `title=`: i
+           `title` di questa pagina sono in italiano fisso e non li traduce
+           nessuno, mentre `data-i18n` passa da applyLang e quindi il lettore
+           di schermo la sente in tutte e 13 le lingue. L'icona va in un
+           figlio suo, o setIcon cancellerebbe l'etichetta scrivendo
+           l'innerHTML del pulsante. -->
+      <button class="iconbtn end" id="btnEndChat">
+        <span class="ic" id="btnEndChatIc"></span>
+        <span class="filehide" data-i18n="menu.endChat">Termina chat</span>
+      </button>
     </div>
 
     <div id="callBox" class="hide">

@@ -421,6 +421,38 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('si puo chiudere una conversazione VIVA senza aprire nessun menu', () => {
+    /* ⚠️ Segnalato dall'operatore il 7 set 2026, guardando l'app in uso:
+       «quando una persona è collegata non c'è un tasto riattacca per
+       terminare, deve cliccare i tre pallini e poi Termina chat».
+       Aveva ragione, ed era il gemello del difetto qui sotto: quello riguardava
+       una connessione CADUTA, questo una connessione VIVA. In entrambi i casi
+       l'unica uscita stava dietro un menu che nessuno pensa di aprire.
+       Il test guarda il comportamento, non il pulsante: dopo il tocco la chat
+       deve essere chiusa DAVVERO — connessione compresa — e non solo nascosta. */
+    const app = loadApp();
+    app.run(`
+      showScreen('screenChat');
+      pc = { close(){} };
+      dc = { close(){}, readyState: 'open' };
+      /* lasciato aperto apposta: se restasse aperto ricomparirebbe addosso
+         alla conversazione successiva */
+      $('menuPanel').classList.remove('hide');
+    `);
+    app.run("$('btnEndChat').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenChat').classList.contains('hide')"), true,
+      'il tasto non ha chiuso la schermata della chat');
+    assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), false,
+      'non ha riportato nessuno alla home, dove ricomincia il giro dopo');
+    assert.strictEqual(app.run('pc'), null,
+      'la connessione e\' rimasta aperta: la chat sembrava chiusa e non lo era');
+    assert.strictEqual(app.run('dc'), null,
+      'il canale dei messaggi e\' rimasto aperto');
+    assert.strictEqual(app.run("$('menuPanel').classList.contains('hide')"), true,
+      'il pannello degli strumenti resta aperto e ricompare sulla conversazione dopo');
+    app.stop();
+  });
+
   test('a dropped connection offers a direct way back, not just a hidden menu', () => {
     /* Before this, the only way out of a dead chat was finding "..." and then
        "Termina chat" — two taps behind a menu nobody thinks to open while

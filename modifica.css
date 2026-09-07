@@ -503,11 +503,25 @@
   .selfseal{font-family:var(--mono);font-size:0.6562rem;color:var(--faint);word-break:break-all}
 
   /* ---------------------------------- chat screen ---------------------------------- */
-  .chatheader{display:flex;align-items:center;gap:11px;padding:10px 4px 14px}
-  .chatheader .avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff5f6d);
-    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.0625rem;color:#1a0e05;flex-shrink:0}
+  /* ⚠️ RIFATTA IL 7 SET 2026 per far entrare il quarto pulsante («riattacca»).
+     Misurato, non stimato: su 375 px la barra ha 343 px utili, e con avatar +
+     quattro pulsanti al nome ne restavano 87. In 87 px «● connessa · verifica»
+     va a capo, e la barra passava da 76 a 100 px con tre righe di testo
+     sfilacciate.
+     Le vie d'uscita provate a schermo: pulsanti a 38 px -> 103 px al nome, non
+     basta; via l'avatar coi pulsanti a 42 -> 135 px, non basta ancora; serviva
+     scendere sotto la misura di un dito, e quello no.
+     Quindi su schermo stretto la barra va su DUE RIGHE: nome e stato sopra a
+     tutta larghezza, i quattro pulsanti sotto allineati a destra. Stessa
+     altezza di prima (~100 px) ma pulita, e i pulsanti restano da 44. */
+  .chatheader{display:flex;align-items:center;gap:8px;padding:10px 4px 14px}
+  .chatheader .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff5f6d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#1a0e05;flex-shrink:0}
   .chatheader .who{flex:1;min-width:0}
-  .chatheader .who b{font-size:1.0625rem;display:block}
+  /* con 95 px il nome di qualcuno ci sta di rado: taglia con i puntini invece
+     di andare a capo e far crescere la barra sotto ai pulsanti */
+  .chatheader .who b{font-size:1.0625rem;display:block;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
   .chatheader .who span{font-size:0.8125rem;color:var(--ok)}
   .linkbtn{background:none;border:none;color:var(--dim);font-size:0.8125rem;padding:0;cursor:pointer;
     text-decoration:underline;font-family:inherit;min-height:0}
@@ -526,11 +540,40 @@
   .safetycode{font-family:var(--mono);font-size:1.0625rem;letter-spacing:.04em;color:var(--ink);
     background:#0d0f12;border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;
     text-align:center;line-height:1.7;margin:12px 0}
-  .chatheader .iconbtn{background:var(--panel2);border:1.5px solid var(--line);width:46px;height:46px;border-radius:50%;
+  .chatheader .iconbtn{background:var(--panel2);border:1.5px solid var(--line);width:42px;height:42px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;font-size:1.1875rem;cursor:pointer;flex-shrink:0;color:var(--ink);
-    transition:border-color .15s,transform .12s}
+    transition:border-color .15s,transform .12s,background .15s}
   .chatheader .iconbtn:active{transform:scale(.94)}
   .chatheader .iconbtn:hover{border-color:var(--accent)}
+  /* «Riattacca»: l'unico pulsante distruttivo della barra, quindi l'unico
+     rosso e l'ultimo della fila. Il colore non e' decorazione — e' cio' che
+     impedisce di premerlo credendo di premere «videochiamata», che sta due
+     posti prima. */
+  .chatheader .iconbtn.end{color:var(--bad);border-color:rgba(255,92,108,.45);
+    background:rgba(255,92,108,.10)}
+  .chatheader .iconbtn.end:hover{border-color:var(--bad);background:rgba(255,92,108,.20)}
+  .chatheader .iconbtn .ic{display:flex}
+
+  /* ⚠️ DEVE STARE DOPO `.chatheader .who{flex:1}` qui sopra, non prima.
+     Le due regole hanno la stessa specificita' — una media query non ne
+     aggiunge — quindi decide l'ordine nel file, e messa prima perdeva in
+     silenzio: la regola c'era, il browser la leggeva, e non cambiava niente.
+     Ci ho perso due giri prima di misurare `getComputedStyle` invece di
+     guardare lo schermo. */
+  @media(max-width:430px){
+    /* su due righe i margini generosi della riga singola diventano spazio
+       rubato alla conversazione: stretti qui e solo qui */
+    .chatheader{flex-wrap:wrap;row-gap:6px;padding:6px 4px 8px}
+    /* prende tutto quel che resta della prima riga accanto all'avatar, cosi'
+       i quattro pulsanti sono costretti a scendere sulla riga sotto invece di
+       stringere il nome fino a spezzarlo in tre righe.
+       ⚠️ `flex-shrink:0` (lo zero in mezzo) non e' un dettaglio: con lo shrink
+       attivo — il valore di partenza — il nome si restringeva per far stare i
+       pulsanti sulla stessa riga, cioe' esattamente il contrario. */
+    .chatheader .who{flex:1 0 calc(100% - 48px)}
+    /* e il gruppo dei quattro si incolla a destra sulla seconda riga */
+    .chatheader #btnCallAudio{margin-inline-start:auto}
+  }
 
   /* the drawn-icon set: one size rule for every button that holds one, so a
      phone icon, a mic icon and a trash icon all sit at the same visual weight
