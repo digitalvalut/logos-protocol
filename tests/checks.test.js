@@ -182,6 +182,71 @@ test('«fai conoscere l\'app» sta in prima pagina, ma NON come terzo pulsantone
     'non deve tornare un terzo pulsantone: sotto i due grandi, non accanto a loro');
 });
 
+/* ------------------------------------------- la copia di prova -- */
+/* ⚠️ La copia di prova vive nello STESSO sito dell'app vera — deve, o il relay
+   la rifiuterebbe come rifiuta localhost. Ma stesso sito vuol dire stessa
+   memoria del browser: senza separazione, provare qualcosa li' dentro
+   userebbe l'identita' e i contatti VERI dell'operatore, e una prova
+   sbagliata potrebbe cancellargli la cronologia vera.
+   La separazione la fa `PFX_PROVA`, e regge solo se NESSUNO scavalca il punto
+   di passaggio. Questi controlli esistono per quello. */
+
+test('nessuno tocca la memoria del browser scavalcando il punto di passaggio', () => {
+  /* ⚠️ IL CONTROLLO PIU IMPORTANTE DELLA COPIA DI PROVA. Bastava UNA sola
+     chiamata dimenticata a `localStorage` per rimettere in comunicazione le
+     due memorie, in silenzio, e una separazione che dipende dal ricordarsi
+     non e' una separazione. */
+  const dentroMem = JS.slice(JS.indexOf('const MEM = {'), JS.indexOf('};', JS.indexOf('const MEM = {')) + 2);
+  const fuori = JS.replace(dentroMem, '');
+  const colpevoli = fuori.split('\n')
+    .map((r, i) => [i + 1, r])
+    .filter(([, r]) => r.includes('localStorage.'));
+  assert.deepStrictEqual(colpevoli.map(([n, r]) => n + ': ' + r.trim()), [],
+    'queste righe parlano con la memoria senza passare da MEM: nella copia di prova ' +
+    'leggerebbero e scriverebbero i dati VERI');
+  /* e il punto di passaggio deve davvero mettere il prefisso */
+  assert.match(dentroMem, /localStorage\.getItem\(PFX_PROVA \+ k\)/, 'MEM legge senza prefisso');
+  assert.match(dentroMem, /localStorage\.setItem\(PFX_PROVA \+ k, v\)/, 'MEM scrive senza prefisso');
+  assert.match(dentroMem, /localStorage\.removeItem\(PFX_PROVA \+ k\)/, 'MEM cancella senza prefisso');
+});
+
+test('anche i due depositi grandi e la cache dei file condivisi sono separati', () => {
+  /* localStorage non e' l'unico posto dove l'app tiene roba: la CHIAVE
+     D'IDENTITA' sta in un database, e i file ricevuti in un altro. Quelli
+     mescolati sarebbero il danno peggiore di tutti. */
+  assert.match(JS, /const ID_DB = PFX_PROVA \+ 'dvlogos-id';/,
+    'il deposito dell\'identita\' non e\' separato: la copia di prova userebbe la tua chiave vera');
+  assert.match(JS, /const MEDIA_DB = PFX_PROVA \+ 'dvlogos-media'/,
+    'il deposito di foto e file non e\' separato');
+  assert.match(JS, /caches\.open\(PFX_PROVA \+ 'logos-modifica-share-temp'\)/,
+    'la cache dei file condivisi non e\' separata');
+});
+
+test('la copia di prova si annuncia, e non si puo\' chiudere', () => {
+  /* Una copia che non si annuncia e' peggio di non averla: qualcuno ci parla
+     dentro credendo sia l'app vera, e siccome le memorie sono separate i suoi
+     contatti li' non esistono da nessun'altra parte. */
+  assert.match(HTML, /id="provaBar"/, 'la fascia che avverte non c\'e\' piu\'');
+  const fascia = HTML.match(/<div class="provabar hide" id="provaBar">[\s\S]*?<\/div>/);
+  assert.ok(fascia, 'la fascia non ha piu\' la forma attesa');
+  assert.doesNotMatch(fascia[0], /class="x"|aria-label="close"/,
+    'la fascia non deve avere una x: chi la chiudesse continuerebbe a parlare in una copia');
+  assert.match(JS, /if \(IN_PROVA\)\{ try\{ \$\('provaBar'\)\.classList\.remove\('hide'\)/,
+    'niente accende la fascia quando si gira dalla copia di prova');
+  /* e nell'app vera resta spenta */
+  assert.match(HTML, /<div class="provabar hide"/, 'la fascia deve partire nascosta');
+});
+
+test('lo strumento che genera la copia le da\' un deposito offline suo', () => {
+  /* Due copie che condividono il nome della cache si servono i file a
+     vicenda: la prova mostrerebbe pezzi dell'app vera e viceversa. */
+  const tool = read('tools/prova.js');
+  assert.match(tool, /const CACHE = 'prova--logos-modifica-\$1';/,
+    'la copia di prova userebbe lo stesso deposito offline dell\'app vera');
+  assert.match(tool, /noindex/,
+    'una copia di prova che finisce sui motori di ricerca ci manda dentro estranei');
+});
+
 test('quando arriva una versione nuova, l\'app lo DICE', () => {
   /* ⚠️ Il difetto che ha fatto perdere piu' tempo a tutti: l'operatore
      pubblicava, apriva computer e telefono, e non vedeva niente di nuovo —

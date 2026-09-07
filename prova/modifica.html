@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="it">
+<!--
+  Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- generato da tools/prova.js — non modificare a mano -->
+  <meta name="robots" content="noindex, nofollow">
+<title>DigitalValut Logos</title>
+<meta name="description" content="Software libero e open source di DigitalValut APS ETS: chat, chiamate e videochiamate dirette tra due browser, gratis per sempre, senza account.">
+<meta name="theme-color" content="#0b0d10">
+<meta name="color-scheme" content="dark">
+
+<!-- How the link looks when it lands in WhatsApp, Telegram, Signal or a post.
+     An invite arrives as a bare address otherwise, which reads like something
+     you should not tap — and an invite nobody taps is an invite that failed.
+
+     Worth being clear about what this deliberately does NOT do: it says nothing
+     about *who* invited you. The code in an invite travels after the '#', and a
+     fragment is never sent to any server — not to GitHub, not to the app, not
+     to WhatsApp's preview fetcher. So the preview cannot be personalised, and
+     that is exactly right: the personal half ("Marco wants to talk to you") is
+     written into the message text on the sender's own phone, where it stays
+     between the two of them. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DigitalValut Logos">
+<meta property="og:locale" content="it_IT">
+<meta property="og:url" content="https://digitalvalut.github.io/logos-protocol/modifica.html">
+<meta property="og:title" content="Parla in privato, senza account">
+<meta property="og:description" content="Messaggi, foto e videochiamate direttamente tra due telefoni. Nessun numero di telefono, nessun server in mezzo, gratis per sempre.">
+<meta property="og:image" content="https://digitalvalut.github.io/logos-protocol/modifica-preview.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DigitalValut Logos — parla in privato, senza account">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Parla in privato, senza account">
+<meta name="twitter:description" content="Messaggi, foto e videochiamate direttamente tra due telefoni. Nessun numero di telefono, nessun server in mezzo, gratis per sempre.">
+<meta name="twitter:image" content="https://digitalvalut.github.io/logos-protocol/modifica-preview.jpg">
+<link rel="manifest" href="modifica-manifest.webmanifest">
+<link rel="icon" href="modifica-icon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="modifica-icon-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="modifica-apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DV Logos">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self';
+  style-src 'self';
+  img-src 'self' blob: data:;
+  media-src 'self' blob:;
+  connect-src 'self' stun: turn: https://stun.cloudflare.com https://digitalvalut-turn.burbeng78.workers.dev;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  manifest-src 'self';
+">
+<link rel="stylesheet" href="modifica.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ⚠️ La fascia della copia di prova. Sta in cima a tutto e non si chiude:
+       una copia di prova che non si annuncia e' peggio di non averla, perche'
+       qualcuno ci parla dentro credendo di usare l'app vera — e i due mondi
+       hanno memorie separate, quindi i suoi contatti e la sua identita' li'
+       dentro non esistono da nessun'altra parte.
+       Accesa da JS solo quando l'indirizzo contiene /prova/ (vedi IN_PROVA). -->
+  <div class="provabar hide" id="provaBar">
+    <b data-i18n="prova.title">COPIA DI PROVA</b>
+    <span data-i18n="prova.sub">Non è l'app vera. Serve a controllare le modifiche prima che arrivino a tutti: quello che fai qui resta qui.</span>
+  </div>
+
+  <div class="topbar">
+    <img src="modifica-icon-512.png" alt="">
+    <div class="name">DigitalValut Logos</div>
+    <div class="spacer"></div>
+    <!-- ⚠️ IL MAPPAMONDO, AGGIUNTO IL 6 SET 2026. Chi apre l'app in una lingua
+         che non sa leggere non puo' nemmeno capire cosa voglia dire
+         «impostazioni»: l'ingranaggio non aiuta chi non sa cosa ci trovera'
+         dentro. Un mappamondo lo riconosce chiunque, in qualunque lingua,
+         senza leggere una parola. Porta dritto alla lingua, che nelle
+         impostazioni e' gia' la prima voce. -->
+    <button class="gear" id="btnLang" aria-label="Lingua / Language" title="Lingua / Language">
+      <svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/>
+        <path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>
+      </svg>
+    </button>
+    <button class="gear" id="btnSettings" aria-label="Impostazioni" title="Impostazioni">
+      <svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="3.1"/>
+        <path d="M19.2 14.4a1.6 1.6 0 0 0 .32 1.77l.06.06a1.94 1.94 0 1 1-2.75 2.75l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47v.17a1.94 1.94 0 1 1-3.88 0v-.09a1.6 1.6 0 0 0-1.05-1.47 1.6 1.6 0 0 0-1.77.32l-.06.06a1.94 1.94 0 1 1-2.75-2.75l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-.97h-.17a1.94 1.94 0 1 1 0-3.88h.09a1.6 1.6 0 0 0 1.47-1.05 1.6 1.6 0 0 0-.32-1.77l-.06-.06a1.94 1.94 0 1 1 2.75-2.75l.06.06a1.6 1.6 0 0 0 1.77.32h.08a1.6 1.6 0 0 0 .97-1.47v-.17a1.94 1.94 0 1 1 3.88 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a1.94 1.94 0 1 1 2.75 2.75l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97h.17a1.94 1.94 0 1 1 0 3.88h-.09a1.6 1.6 0 0 0-1.47.97z"/>
+      </svg>
+      <!-- Lights up only while a message or file has arrived somewhere the
+           person is not currently looking at (they navigated to Impostazioni
+           mid-conversation) — the connection itself was already kept alive
+           across that trip, only the "something happened" part was silent
+           until now. Clears the moment they go back to the chat, same place
+           settingsCameFrom already knows to return them to. -->
+      <span class="notice hide" id="settingsNotice" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <!-- ⚠️ AGGIUNTA IL 7 SET 2026, dopo che l'operatore ha pubblicato una
+       versione nuova, ha aperto il computer e il telefono, e non l'ha vista:
+       «la web app non è stata aggiornata? perché non vedo la versione nuova?».
+       L'app si aggiornava per davvero — misurato — ma AL CARICAMENTO DOPO, e
+       in silenzio: chi stava guardando lo schermo non aveva modo di saperlo,
+       e l'unico posto dove leggerlo era «Come sta l'app», dentro la rotellina,
+       che nessuno va a cercare.
+       Adesso, quando il codice nuovo prende il posto del vecchio, lo dice e
+       offre di ricaricare. Fuori da ogni schermata come le due schede qui
+       sotto, e per lo stesso motivo: un aggiornamento arriva mentre stai
+       facendo qualsiasi cosa, non solo mentre guardi la prima pagina. -->
+  <div class="banner accent hide jsb" id="updateBar">
+    <span class="f1" data-i18n="update.text">C'è una versione nuova dell'app.</span>
+    <span class="inlinebtns">
+      <button class="btn mini" id="btnUpdateNow" data-i18n="update.btn">Aggiorna</button>
+    </span>
+  </div>
+
+  <!-- These two live outside every screen section on purpose: a call can be
+       started from Settings (typing an address) and can arrive while any
+       screen at all is open, not only Home. Nested inside one screen, either
+       card would stay invisible — un-hidden in the DOM but sitting inside a
+       section CSS was hiding — while whoever it was for sat looking at
+       something else entirely. -->
+  <!-- Arriving by address used to drop someone straight into a call before
+       they had said who they were, so the other end got "Qualcuno" and no
+       reason. One screen, three things, one big button. -->
+  <div class="card knock hide" id="knockCard">
+    <div class="knocktitle" data-i18n="knock.title">Stai contattando</div>
+    <div class="knockwho" id="knockWho">DV-····-····-····</div>
+    <label class="fieldlabel mt16" for="knockName" data-i18n="knock.nameLabel">Come ti chiami?</label>
+    <input type="text" id="knockName" class="sans-input" maxlength="30" autocapitalize="words"
+           data-i18n-ph="knock.namePh" placeholder="Il tuo nome">
+    <label class="fieldlabel mt12" for="knockMsg" data-i18n="knock.msgLabel">Cosa ti serve? (se vuoi)</label>
+    <input type="text" id="knockMsg" class="sans-input" maxlength="140"
+           data-i18n-ph="knock.msgPh" placeholder="es. Avete le scarpe numero 42?">
+    <button class="btn primary big mt16" id="btnKnockGo">
+      <span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="knock.go">Chiama</span></button>
+    <!-- Il riquadro per lasciare due righe ESISTEVA GIA' e funzionava, ma era
+         raggiungibile da UN SOLO punto in tutto il programma: dopo che una
+         chiamata era fallita, cioe' dopo un massimo di tre minuti di rotellina.
+         Nessuno aspetta tre minuti per scrivere due righe. Qui e' subito. -->
+    <button class="btn ghost mt8" id="btnKnockNote">
+      <span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="knock.note2">Scrivigli due righe invece</span></button>
+    <div class="helptext mt12" data-i18n="knock.note">Il tuo nome e questa frase li vede solo la persona che stai chiamando. Nessun server può leggerli.</div>
+  </div>
+
+  <!-- ⚠️ SPOSTATO QUI IL 6 SET 2026. Stava dentro la sezione screenJoin,
+       e la rubrica sta in screenHome: toccando la busta accanto a un contatto
+       il codice scopriva questo riquadro (classList.remove('hide')) ma
+       l'utente non vedeva NIENTE, perche' la sezione che lo conteneva era
+       nascosta. Trovato dall'operatore in due minuti sull'app vera.
+       Qui fuori da ogni <section> e' raggiungibile da qualunque schermata,
+       esattamente come knockCard poco sopra. -->
+    <div class="card hide" id="leaveLetter">
+      <!-- Il titolo cambia a seconda di come ci si arriva: dopo una chiamata a
+           vuoto dice che non ha risposto nessuno, arrivandoci apposta dal
+           pulsante «Scrivigli due righe» quella frase sarebbe falsa. -->
+      <b id="letterTitle" data-i18n="letter.noneTitle">Non risponde nessuno adesso.</b>
+      <span class="lead" id="letterSub" data-i18n="letter.noneSub">Puoi lasciare un messaggio: lo troverà appena apre l'app.</span>
+      <input type="text" id="letterText" class="sans-input" maxlength="300"
+             data-i18n-ph="letter.ph" placeholder="Scrivi qui il tuo messaggio">
+      <div class="toolsrow">
+        <button class="btn primary" id="btnLeaveLetter"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="letter.leave">Lascia il messaggio</span></button>
+        <button class="btn" id="btnLeaveCancel" data-i18n="letter.cancel">Lascia perdere</button>
+      </div>
+      <div class="status" id="letterStatus"></div>
+    </div>
+
+  <!-- Someone is calling the public address. Nothing is answered until this
+       is answered, because an address anyone may hold is an address anyone
+       may ring. -->
+  <div class="card hide" id="addrIncoming">
+    <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
+    <span class="whichaddr hide" id="addrIncomingWhich"></span>
+    <div class="whoknocks" id="addrIncomingWho"></div>
+    <div class="whyknocks hide" id="addrIncomingMsg"></div>
+    <span class="lead" data-i18n="addr.incomingSub">Il nome e il motivo li ha scritti chi ti cerca: fino a quando non accetti, nessuno può dimostrare di essere davvero quella persona.</span>
+    <div class="toolsrow">
+      <button class="btn primary" id="btnAddrAccept" data-i18n="addr.accept">Accetta</button>
+      <button class="btn" id="btnAddrIgnore" data-i18n="addr.ignore">Rifiuta</button>
+    </div>
+  </div>
+
+  <!-- Compare SOLO dopo aver rifiutato. Bloccare qualcuno per sempre non puo'
+       essere una cosa che succede premendo il pulsante ovvio mentre il telefono
+       sta squillando: fino alla v37 era esattamente cosi' — "Ignora" chiamava
+       blockFp(), il blocco non scadeva mai, non c'era nessun elenco che lo
+       mostrasse e nessun modo di toglierlo. Ora sono due tocchi separati, e il
+       secondo dice cosa fa. -->
+  <div class="card hide" id="addrRefused">
+    <span class="lead" data-i18n="addr.refusedNote">Chiamata rifiutata. Se questa persona ti dà fastidio puoi impedirle di farti squillare ancora — lo togli quando vuoi dalle impostazioni.</span>
+    <div class="toolsrow">
+      <button class="btn" id="btnAddrBlock" data-i18n="addr.blockThis">Blocca questa persona</button>
+    </div>
+  </div>
+
+  <!-- ============================ HOME ============================ -->
+  <section id="screenHome">
+    <div class="hero">
+      <img src="modifica-icon-512.png" alt="DigitalValut Logos">
+      <h1 data-i18n="home.title">Parla con chi vuoi, ovunque sia</h1>
+      <p data-i18n="home.sub">Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.</p>
+    </div>
+
+    <!-- ⚠️ RIFATTA IL 6 SET 2026, tre volte in un giorno. La prima pagina
+         risponde a tre domande e basta: ho l'indirizzo di qualcuno? voglio
+         invitare qualcuno? mi hanno mandato un codice?
+         La RUBRICA lunga (avatar, date, la × che cancella) è dietro la
+         rotellina — lì si mette ordine, non si agisce di fretta; qui sotto
+         resta solo la riga di nomi che il campo dell'indirizzo si ricorda.
+         «Fai conoscere l'app» era passata dietro la rotellina anche lei, ma
+         l'operatore l'ha rivoluta in prima pagina: «è un tasto importante».
+         Torna, ma NON come terzo pulsantone — orizzontale, icona piccola,
+         sotto i due grandi: importante e visibile senza mettersi in gara con
+         le due azioni che sono il motivo per cui uno ha aperto l'app. -->
+
+    <!-- Messaggi lasciati mentre non c'eri. In cima a tutto quando ce ne
+         sono — e' l'unica cosa urgente che questa pagina possa avere — e
+         invisibile quando non ce ne sono, che e' quasi sempre. -->
+    <div class="card hide" id="lettersCard">
+      <h3 data-i18n="letter.title">Messaggi lasciati per te</h3>
+      <div id="lettersList"></div>
+    </div>
+
+    <!-- ⚠️ PORTATO QUI DALLE IMPOSTAZIONI IL 6 SET 2026. Comporre l indirizzo
+         di qualcuno e L AZIONE PRINCIPALE dell app, e viveva sepolta dentro la
+         rotellina sotto sei altre schede: come tenere il pedale del gas nel
+         cassetto del cruscotto. Sta prima dei due pulsanti grandi perche chi ha
+         gia un indirizzo in mano non deve passare da «Parla con qualcuno», che
+         serve a creare un invito per chi non ce l ha. -->
+    <!-- ⚠️ QUESTA NON E' UNA RUBRICA, ed e' la differenza che conta.
+         Prima qui c'era un elenco vero: avatar, «3 giorni fa», una × che
+         cancella e due pulsanti per riga. Sembrava la rubrica del telefono, e
+         chi apriva l'app si fermava a leggerla invece di fare la cosa per cui
+         era entrato.
+         Questa e' la stessa cosa che fa il telefono quando ti suggerisce
+         l'ultimo numero. Nessun avatar, nessuna data, nessuna × — chi vuole
+         mettere ordine lo fa dalla rotellina, dove l'elenco completo e'
+         rimasto per intero.
+         Un tocco fa partire la chiamata, perche' e' l'unica cosa che uno vuole
+         fare toccando un nome; se non risponde, l'app offre da sola di
+         lasciargli due righe (vedi offerToLeaveLetter).
+         ⚠️ STA FUORI dal blocco richiudibile qui sotto, dal 7 set 2026:
+         toccare un nome e' il modo NORMALE di richiamare qualcuno, scrivere
+         un indirizzo a mano e' il caso raro. Tenerli insieme voleva dire
+         chiudere il primo per nascondere il secondo. -->
+    <div class="people hide" id="addrPeople"></div>
+
+    <!-- ⚠️ FUORI ANCH'ESSA, e non e' un dettaglio: qui ci finiscono «Ha
+         rifiutato la chiamata», «Non ha risposto», «Questo indirizzo non e'
+         scritto bene». Lasciata dentro al blocco richiuso, la risposta a una
+         chiamata appena tentata sarebbe stata invisibile — il difetto peggiore
+         di tutta questa riorganizzazione, e il piu' facile da non vedere. -->
+    <div class="status" id="addrDialStatus"></div>
+
+    <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026. Prima era nascosto solo a chi
+         era appena arrivato (l'operatore: «mi trovo davanti "hai l'indirizzo
+         di qualcuno" — cosa cazzo ne so? mi confondo»), e ricompariva aperto
+         appena si aveva qualcuno in rubrica.
+         Poi la sua osservazione piu' giusta: «quando gia' c'e' il primo
+         scambio, il telefono si connette sempre con la stessa persona e si
+         trova subito» — cioe': se hai gia' parlato con qualcuno tocchi il suo
+         NOME, non riscrivi sedici caratteri. Scrivere un indirizzo a mano
+         serve solo quando qualcuno te lo detta o te lo scrive su un foglio.
+         Quindi resta chiuso sempre, per chiunque: la prima pagina e' identica
+         per chi arriva oggi e per chi usa l'app da un anno, e chi l'indirizzo
+         ce l'ha davvero in mano lo apre con un tocco. Una domanda, non un
+         campo vuoto da interpretare. -->
+    <button class="btn ghost linkbtn" id="showAddrDial" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</button>
+    <div class="addrdial hide" id="addrDial">
+      <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
+      <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
+             data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
+      <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
+    </div>
+
+    <!-- The whole home, in two verbs. Everything that used to sit around
+         these — the name, the address, the switches, the small print — is one
+         tap away behind the gear, because none of it is what someone opening
+         this app came to do. -->
+    <!-- Drawn rather than typed: an emoji is a different picture on every
+         phone, at a size and weight nobody chose, and two of them side by side
+         never look like they belong to the same app. These are the same stroke
+         weight and the same size wherever they land. -->
+    <div class="bigchoices">
+      <button class="bigchoice primary" id="goStart">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M27 18.5a3 3 0 0 1-3 3H11l-6 5V8a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3z"/>
+            <path d="M11.5 13.2h.01M16 13.2h.01M20.5 13.2h.01"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.bigStart">Parla con qualcuno</span>
+        <span class="d" data-i18n="home.bigStartD">Crea un invito da mandare</span>
+      </button>
+      <button class="bigchoice enter" id="goJoin">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="21.5" cy="10.5" r="5.5"/>
+            <path d="M17.6 14.4 5 27v0h4.5v-3.5H13V20l4.6-4.6"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.bigJoin">Ho un codice</span>
+        <span class="d" data-i18n="home.bigJoinD">Mi hanno mandato un invito</span>
+      </button>
+    </div>
+
+    <!-- ⚠️ RIMESSO IN PRIMA PAGINA IL 6 SET 2026 su richiesta dell'operatore
+         («è un tasto importante»), dopo che nella 4.22 l'avevo spostato dietro
+         la rotellina. Orizzontale e non un terzo pulsantone: icona piccola a
+         sinistra, testo accanto, tutta larghezza per essere un bersaglio vero.
+         Verde come le altre cose che «passano avanti qualcosa», sotto i due
+         grandi perché resta un gradino sotto «Parla con qualcuno». -->
+    <div class="sharerow">
+      <button class="sharebtn" id="btnShareApp">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5.5" r="2.8"/><circle cx="6" cy="12" r="2.8"/><circle cx="18" cy="18.5" r="2.8"/>
+            <path d="M8.5 10.6 15.5 6.9M8.5 13.4l7 3.7"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
+        <span class="go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- Quiet on purpose, and placed after the two real choices rather than
+         between them: the same strip used for every other
+         passing notice in the app (a blocked microphone, the licence line),
+         not a card built to compete with "Parla con qualcuno" for a first-time
+         visitor's thumb in the first few seconds. It earns a glance, not a
+         stare — someone who wants it will read it; someone who does not can
+         look straight past a single quiet line. -->
+    <div class="banner accent hide jsb" id="installBar">
+      <span class="f1" id="installText"></span>
+      <span class="inlinebtns">
+        <button class="btn mini hide" id="installBtn" data-i18n="install.btn">Installa</button>
+        <button class="x" id="installClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </span>
+    </div>
+
+    <!-- Same quiet strip as the install banner just above, and shown one at a
+         time with it on purpose — two notices stacked here would be exactly
+         the stare this area was designed to avoid. Aimed at whoever the two
+         big buttons above were already too much for, without asking them to
+         find Impostazioni first to discover it exists. -->
+    <div class="banner accent hide jsb" id="easyHintBar">
+      <span class="f1" data-i18n="easyhint.text">C'è anche una modalità con due soli pulsanti, per chi preferisce non pensarci.</span>
+      <span class="inlinebtns">
+        <button class="btn mini" id="easyHintBtn" data-i18n="easyhint.btn">Attiva</button>
+        <button class="x" id="easyHintClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </span>
+    </div>
+
+  </section>
+
+
+  <!-- ============================ SETTINGS ============================
+       Everything that is a choice rather than an action. Nothing here is
+       needed to use the app; all of it used to be stacked on the home screen,
+       where it buried the two things that are. -->
+  <section id="screenSettings" class="hide">
+    <button class="btn ghost" id="backFromSettings">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <!-- ⚠️ RIMESSA IN CIMA IL 6 SET 2026. Riorganizzando le impostazioni
+         l'avevo spinta nel terzo gruppo, a SEIMILACINQUECENTO pixel dal bordo:
+         venti schermate di scorrimento. Chi apre l'app in una lingua che non
+         sa leggere non la trova MAI — ed e' l'unica cosa che deve trovare
+         prima di tutte le altre, perche' senza quella non capisce nemmeno i
+         titoli dei gruppi. Sta fuori dai gruppi apposta: non e' una
+         preferenza fra le altre, e' la via d'uscita. -->
+    <div class="card">
+      <label class="fieldlabel" for="langSel2" data-i18n="set.lang">Lingua</label>
+      <select id="langSel" aria-label="Language"></select>
+      <label class="fieldlabel mt16" data-i18n="set.textsize">Dimensione del testo</label>
+      <div class="textsize" role="group" aria-label="Dimensione del testo">
+      <button type="button" data-ts="" title="Testo normale">A</button>
+      <button type="button" data-ts="ts-l" title="Testo grande">A</button>
+      <button type="button" data-ts="ts-xl" title="Testo molto grande">A</button>
+    </div>
+    </div>
+    <div class="banner accent" id="onboardBanner">
+      <div class="f1" data-i18n="onboard.text"><b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0),
+        di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore.
+        Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.</div>
+    </div>
+
+    <h3 class="setgroup" data-i18n="set.grpYou">Chi sei</h3>
+    <div class="card">
+      <label class="fieldlabel" data-i18n="home.nameLabel">Come ti chiami</label>
+      <input type="text" id="nickInput" class="sans-input" maxlength="30" spellcheck="true" autocapitalize="words" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
+    </div>
+    <div class="card" id="addrCard">
+      <div class="switchrow" id="addrRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><circle cx="8.3" cy="12.3" r="2"/><path d="M13 10.3h5M13 14.3h3.5"/></svg></span>
+        <div class="txt">
+          <b data-i18n="addr.title">Il tuo indirizzo permanente</b>
+          <span data-i18n="addr.sub">Da dare al posto del numero di telefono. Chi ce l'ha può cercarti quando vuole, senza sapere il tuo nome né il tuo numero. Spento di base.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+
+      <div class="hide" id="addrOn">
+        <div class="addrbox" id="addrMine">DV-····-····-····</div>
+        <div class="qrbox hide" id="addrQr">
+          <canvas id="addrQrCanvas" aria-label="Codice QR del tuo indirizzo"></canvas>
+          <div class="qrhint" data-i18n="addr.qrHint">Chi lo inquadra ti chiama direttamente</div>
+        </div>
+        <div class="toolsrow">
+          <button class="btn primary" id="btnAddrShare"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="addr.share">Manda il tuo indirizzo</span></button>
+          <button class="btn" id="btnAddrQr"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/></svg></span><span data-i18n="addr.showQr">Mostra il QR</span></button>
+        </div>
+        <div class="helptext mt12" id="addrReachNote" data-i18n="addr.reachNote">Perché ti possano raggiungere anche con l'app chiusa, accendi gli avvisi qui sotto.</div>
+        <!-- Said plainly, in the same place the address itself lives, rather
+             than buried in a diagnostic screen: this is not forever. A
+             certificate this address is derived from renews itself once a
+             year for security, which changes the address too — better said
+             here, up front, than discovered as "nobody answers any more". -->
+        <div class="helptext mt8" id="addrLifespan"></div>
+      </div>
+
+      <!-- The ones meant to be thrown away. An address given to a stranger is a
+           stranger who can reach you forever unless you can take it back. -->
+      <div class="burners">
+        <label class="fieldlabel" data-i18n="burn.title">Indirizzi usa e getta</label>
+        <div class="helptext" data-i18n="burn.help">Uno per ogni annuncio o sconosciuto. Quando hai finito lo cancelli e quella persona non ti trova più — il tuo indirizzo vero non l'ha mai avuto.</div>
+        <!-- Detto qui perche' "usa e getta" da solo lascia credere una cosa che non
+             e' vera: cambia l'indirizzo, non il certificato del dispositivo, quindi
+             il codice di sicurezza a tre parole resta lo stesso. Chi ti ha gia'
+             verificato ti riconosce. Scoperto da chi usava l'app, che si e' ritrovato
+             la vecchia conversazione dentro un contatto nuovo e giustamente non
+             capiva. Meglio saperlo prima di darlo a qualcuno da cui si vuole restare
+             separati. -->
+        <div class="helptext mt8" data-i18n="burn.sameYou">Un indirizzo usa e getta nasconde qual è il tuo indirizzo — non ti rende un estraneo. Chi ha già letto con te le tre parole di sicurezza ritrova qui le stesse tre parole, e capisce che sei tu.</div>
+        <div id="burnerList"></div>
+        <div class="burnernew">
+          <input type="text" id="burnerName" class="sans-input" maxlength="40" autocomplete="off"
+                 data-i18n-ph="burn.namePh" placeholder="Per cosa? es. Divano usato">
+          <button class="btn mt10" id="btnBurnerAdd"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v15M4.5 12h15"/></svg></span><span data-i18n="burn.add">Crea</span></button>
+        </div>
+        <div class="status" id="burnerStatus"></div>
+      </div>
+
+      <!-- Nascosto finche' non serve: chi non ha mai bloccato nessuno non deve
+           nemmeno sapere che questa cosa esiste. Ma chi ha bloccato DEVE poterlo
+           vedere e disfare — fino alla v37 il blocco era per sempre, invisibile,
+           e l'unico modo di toglierlo era "Pulisci tutto", che cancella anche
+           contatti e conversazioni. Un interruttore che non si puo' rimettere a
+           posto non e' un interruttore, e' una trappola. -->
+      <div class="blocked hide" id="blockedWrap">
+        <label class="fieldlabel" data-i18n="block.title">Persone bloccate</label>
+        <div class="helptext" data-i18n="block.help">Non ti fanno più squillare. Puoi rimetterle a posto quando vuoi.</div>
+        <div id="blockedList"></div>
+      </div>
+
+    </div>
+
+    <h3 class="setgroup" data-i18n="set.grpFind">Come ti trovano</h3>
+    <div class="card hide" id="notifyCard">
+      <div class="switchrow" id="notifyRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a5.5 5.5 0 0 0-5.5 5.5v3.2c0 .7-.2 1.4-.7 2l-1 1.3c-.5.7 0 1.7.9 1.7h12.6c.9 0 1.4-1 .9-1.7l-1-1.3c-.5-.6-.7-1.3-.7-2V9a5.5 5.5 0 0 0-5.5-5.5z"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg></span>
+        <div class="txt">
+          <b data-i18n="notify.title">Avvisami quando qualcuno mi cerca</b>
+          <span data-i18n="notify.sub">Una notifica se un contatto prova a raggiungerti e non hai l'app aperta — nessun nome, nessun messaggio, solo un avviso.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="helptext hide" id="notifyIosHint" data-i18n="notify.iosHint">Su iPhone funziona solo se prima aggiungi l'app alla schermata Home: tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>, e apri l'app da lì.</div>
+    </div>
+    <div class="card" id="listenCard">
+      <div class="switchrow" id="listenRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span>
+        <div class="txt">
+          <b data-i18n="listen.title">Resta in ascolto delle chiamate</b>
+          <span data-i18n="listen.sub">Il telefono squilla davvero, come una chiamata vera, finché tieni questa schermata aperta. Consuma più batteria; nessun servizio esterno è coinvolto.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="helptext mt10 hide" id="listenStatus" data-i18n="listen.status">In ascolto — se cambi schermata o app, si ferma finché non torni qui.</div>
+    </div>
+
+    <!-- ⚠️ PORTATA QUI DALLA PRIMA PAGINA IL 6 SET 2026, dopo che l'operatore
+         l'ha vista con i propri occhi: «la rubrica sopra cosa c'entra? troppa
+         carne al fuoco». Aveva ragione — un elenco di persone in cima alla
+         home e' la prima cosa che si legge e l'ultima che serve a chi ha
+         appena aperto l'app.
+         NON e' stata cancellata: cancellarla avrebbe tolto l'unico posto dove
+         si puo' togliere qualcuno dall'elenco, e quel gesto conta — e' come si
+         butta fuori un nome quasi identico a un altro (vedi il segno «mai
+         verificato» qui sotto), che e' una difesa, non una comodita'.
+         Sta qui perche' questo e' un posto dove si METTE ORDINE, non dove si
+         agisce di fretta. Chi vuole solo chiamare qualcuno lo fa dalla prima
+         pagina, toccando il suo nome sotto il campo dell'indirizzo. -->
+    <div class="card hide" id="contactsCard">
+      <h3 data-i18n="contacts.title">Contatti recenti</h3>
+      <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
+        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
+      <div id="contactsList"></div>
+    </div>
+
+    <h3 class="setgroup" data-i18n="set.grpLook">Come si vede e si usa</h3>
+    <div class="card" id="easyCard">
+      <div class="switchrow" id="easyRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 10.2h.01M15.5 10.2h.01"/><path d="M8.3 14.2a5 5 0 0 0 7.4 0"/></svg></span>
+        <div class="txt">
+          <b data-i18n="easy.title">Modalità semplice</b>
+          <span data-i18n="easy.sub">Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="switchrow" id="voiceRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.3L12 18V6L7.3 9.5H4z"/><path d="M16 8.2a5.8 5.8 0 0 1 0 7.6M18.6 6.2a9.4 9.4 0 0 1 0 11.6"/></svg></span>
+        <div class="txt">
+          <b data-i18n="easy.voiceTitle">Dillo ad alta voce</b>
+          <span data-i18n="easy.voiceSub">L'app dice a voce cosa fare, nella tua lingua. Serve a chi fa fatica a leggere lo schermo.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="card hide" id="installCard">
+      <label class="fieldlabel" data-i18n="install.always">Metti Logos sulla schermata</label>
+      <div class="helptext" id="installCardText"></div>
+      <button class="btn mt10 hide" id="installCardBtn" data-i18n="install.btn">Installa</button>
+    </div>
+
+    <details class="advbox">
+      <summary data-i18n="set.grpAdv">Impostazioni avanzate</summary>
+    <div class="card" id="autocleanCard">
+      <div class="switchrow" id="autocleanRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span>
+        <div class="txt">
+          <b data-i18n="autoclean.title">Pulizia automatica</b>
+          <span data-i18n="autoclean.sub">Cancella da sola le conversazioni più vecchie di tot giorni, per non far crescere lo spazio occupato sul telefono. Spenta di base: senza attivarla, non si cancella mai nulla da solo.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
+      <div class="autocleanOpts hide" id="autocleanOpts">
+        <label for="autocleanDays" data-i18n="autoclean.after">Cancella le conversazioni più vecchie di:</label>
+        <select id="autocleanDays" class="pill">
+          <option value="7" data-i18n="autoclean.d7">7 giorni</option>
+          <option value="30" selected data-i18n="autoclean.d30">30 giorni</option>
+          <option value="90" data-i18n="autoclean.d90">90 giorni</option>
+          <option value="365" data-i18n="autoclean.d365">1 anno</option>
+        </select>
+      </div>
+
+      <!-- Un pulsante solo, e una domanda sola. Niente parole da ricordare,
+           niente da sbagliare a meta': quello che sparisce, sparisce. -->
+      <div class="wipebox">
+        <div class="helptext" data-i18n="wipe.help">Vuoi far sparire foto, video e conversazioni da questo telefono? Non si possono recuperare.</div>
+        <button class="btn danger mt10" id="btnWipe"><span data-i18n="wipe.btn">Pulisci tutto</span></button>
+        <div class="wipeconfirm hide" id="wipeConfirm">
+          <div class="helptext" data-i18n="wipe.sure"><b>Sicuro?</b> Spariscono i messaggi, i contatti, le foto e i video. Il tuo indirizzo resta il tuo, e chi ce l'ha continua a trovarti.</div>
+          <div class="btnrow mt10">
+            <button class="btn danger" id="btnWipeYes"><span data-i18n="wipe.yes">Sì, cancella tutto</span></button>
+            <button class="btn ghost" id="btnWipeNo"><span data-i18n="wipe.no">No, lascia stare</span></button>
+          </div>
+        </div>
+        <div class="status" id="wipeStatus"></div>
+      </div>
+    </div>
+    <div class="card" id="healthCard">
+      <h3 data-i18n="health.title">Come sta l'app</h3>
+      <div class="helptext" data-i18n="health.sub">Se qualcuno non riesce a raggiungerti, qui sotto c'è il motivo.</div>
+      <div id="healthList"></div>
+      <div class="toolsrow">
+        <button class="btn" id="btnHealthCheck" data-i18n="health.recheck">Controlla di nuovo</button>
+        <button class="btn" id="btnHealthCopy" data-i18n="health.copy">Copia il resoconto</button>
+      </div>
+    </div>
+    </details>
+  </section>
+
+  <!-- ============================ START ============================ -->
+  <section id="screenStart" class="hide">
+    <button class="btn ghost" id="backFromStart">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <div class="card bigconnecting hide" id="bigConnectingA">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="bigTitle" id="bigTitleA" data-i18n="connect.bigTitle">Connessione in corso…</div>
+      <div class="bigHint" id="bigHintA" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+    </div>
+
+    <!-- ⚠️ AGGIUNTA IL 7 SET 2026. L'operatore, sulla prima volta in assoluto:
+         «sulla parola manda l'invito dovrebbe esserci la prima volta scrivi il
+         tuo nome, così quando dall'altra parte ricevono l'invito sanno chi è,
+         non "qualcuno"».
+         Era esattamente cosi': il nome viveva SOLO dentro la rotellina, sotto
+         «Chi sei», dove chi apre l'app per la prima volta non passa mai — e
+         `myNick()` ripiegava su «Qualcuno». Quindi la primissima conversazione
+         di ogni persona cominciava con uno sconosciuto senza nome.
+         Sta QUI e non nella rotellina perche' questo e' il momento in cui
+         serve, ed e' l'unico momento in cui una persona capisce PERCHE' serve.
+         Compare solo se il nome non c'e' ancora: dalla seconda volta in poi
+         questa scheda non esiste e restano i due tocchi di prima. -->
+    <div class="card hide" id="askNameCard">
+      <label class="fieldlabel" for="firstNameIn" data-i18n="home.nameLabel">Come ti chiami</label>
+      <input type="text" id="firstNameIn" class="sans-input" maxlength="30" spellcheck="false"
+             autocapitalize="words" autocomplete="off" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
+      <div class="helptext mt10" data-i18n="first.nameWhy">Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.</div>
+    </div>
+
+    <!-- ⚠️ AGGIUNTA IL 7 SET 2026. L'operatore, dopo la 4.25: «CLICCO PARLA
+         CON QUALCUNO, MI ESCE REGOLARMENTE IL MIO CODICE, MANDA INVITO, MA NON
+         MI DICE CHI SONO, METTI IL TUO NOME? PERCHE?».
+         Perche' il nome ce l'aveva gia' — la scheda qui sopra compare solo
+         quando manca — e quindi non gli diceva NIENTE. Aveva ragione lo
+         stesso: prima di mandare un invito uno vuole sapere come si
+         presentera', e «non chiedere» non e' la stessa cosa che «non dire».
+         Una riga sola, quieta: il nome che partira', e come cambiarlo. La
+         scheda grande resta per chi il nome non ce l'ha ancora. -->
+    <div class="nameis hide" id="nameIsRow">
+      <span data-i18n="first.youAre">Chi apre l'invito ti vedrà come</span>
+      <b id="nameIsWho"></b>
+      <button class="linkbtn" id="btnChangeName" data-i18n="first.change">cambia</button>
+    </div>
+
+    <div class="card" id="quickStartCard">
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo codice</div></div>
+      <div class="helptext" id="quickHelpA" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.</div>
+      <div class="quickcode" id="quickCodeOut">······</div>
+      <div class="qrbox hide" id="quickQr">
+        <canvas id="quickQrCanvas" aria-label="Codice QR dell'invito"></canvas>
+        <div class="qrhint" data-i18n="quick.qrHint">Oppure inquadralo con la fotocamera del telefono</div>
+      </div>
+      <button class="btn primary big" id="btnShareQuick"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="quick.share">Manda l'invito</span></button>
+      <div class="waitsnote hide" id="inviteWaitsNote">
+        <span class="ic" aria-hidden="true">💤</span>
+        <span data-i18n="wake.waitsNote">Puoi chiudere l'app: quando aprono l'invito ti avviso io.</span>
+      </div>
+      <!-- Un invito vive quindici minuti e solo con l'app in primo piano. Il
+           link porta anche l'indirizzo permanente come riserva, e per averlo
+           l'indirizzo va acceso: se non lo era, lo accendiamo qui. Non si fa di
+           nascosto - questa riga lo dice, e l'interruttore resta suo. -->
+      <div class="waitsnote hide" id="inviteAddrNote">
+        <span class="ic" aria-hidden="true">🔑</span>
+        <span data-i18n="quick.addrOnNote">Ho acceso il tuo indirizzo permanente, così ti trovano anche se l'invito scade. Puoi spegnerlo dalle impostazioni.</span>
+      </div>
+      <div class="status" id="quickStatusA"></div>
+      <div class="diagline hide" id="diagQuickA"></div>
+      <button class="btn hide mt10" id="btnRetryQuickA"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2.5 20 5.5 17 8.5"/><path d="M4 12a8 8 0 0 1 13.9-5.4L20 5.5"/><path d="M7 21.5 4 18.5 7 15.5"/><path d="M20 12a8 8 0 0 1-13.9 5.4L4 18.5"/></svg></span><span data-i18n="quick.newCode">Genera un nuovo codice</span></button>
+    </div>
+    <button class="btn ghost linkbtn mt10" id="toggleLongInviteA" data-i18n="quick.useLong">Preferisci il codice lungo?</button>
+
+    <div class="hide" id="longInviteWrapA">
+      <!-- Hidden as a whole, not just disabled, when this screen is showing a
+           reconnect to someone already known rather than a brand new invite:
+           none of "send this code", the passphrase toggle or "prepare the
+           invite" mean anything there, and a disabled-but-visible button still
+           reads as something to try. -->
+      <div class="card mt10" id="manualInviteCard">
+        <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="start.s1">Manda l'invito</div></div>
+        <div class="helptext" data-i18n="start.s1help">Premi il pulsante arancione. L'app prepara l'invito e ti fa scegliere
+          come mandarlo: WhatsApp, messaggio, email — quello che usi di solito.</div>
+        <div class="switchrow" id="lockRow" role="button" tabindex="0" aria-pressed="false">
+          <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span>
+          <div class="txt">
+            <b data-i18n="lock.title">Protezione extra</b>
+            <span data-i18n="lock.sub">Chiude l'invito con una parola d'ordine che dirai a voce. Serve se il codice passa da WhatsApp o email.</span>
+          </div>
+          <div class="sw" aria-hidden="true"></div>
+        </div>
+        <button class="btn primary big" id="btnCreate"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M4 6.5l8 6.5 8-6.5"/></svg></span><span data-i18n="start.create">Prepara l'invito</span></button>
+        <div id="offerBlock" class="hide mt16">
+          <div class="passbox hide" id="passBox">
+            <div class="cap" data-i18n="lock.passCap">Parola d'ordine</div>
+            <div class="word" id="passWord"></div>
+            <div class="hint" data-i18n="lock.passHint">Dilla a voce, o su un canale diverso da quello dove mandi il codice. Senza di questa il codice non si apre.</div>
+          </div>
+          <button class="btn primary big" id="btnShareOffer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="start.share">Manda l'invito</span></button>
+          <div class="btnrow">
+            <button class="btn" id="btnCopyOffer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+          </div>
+          <details class="showcode" id="offerDetails">
+            <summary data-i18n="btn.showCode">Mostra il codice</summary>
+            <div class="codebox" id="offerOut"></div>
+          </details>
+          <div class="status" id="shareHint"></div>
+        </div>
+      </div>
+      <div class="card hide" id="pasteAnswerCard">
+        <!-- Everything above the status line only makes sense while manually
+             pairing with a stranger's code. Reconnecting to somebody already
+             in the address book hides this part and keeps only the two lines
+             below it: there is nothing here to paste, and no invite step to
+             read about, while the app is doing that quietly on its own. -->
+        <div id="pasteAnswerForm">
+          <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="start.s2">Incolla la sua risposta</div></div>
+          <div class="helptext" data-i18n="start.s2help">L'altra persona ti rimanderà un messaggio. Copialo, torna qui e premi
+            <b>Incolla</b>. Poi entrate insieme nella chat.</div>
+          <textarea id="answerIn" data-i18n-ph="start.pastePh" placeholder="Incolla qui la risposta…"></textarea>
+          <div class="pasteline">
+            <button class="btn" id="btnPasteAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
+          </div>
+          <button class="btn primary big mt10" id="btnConnectAsA" data-i18n="btn.connect">Entra nella chat</button>
+        </div>
+        <div class="status" id="statusA"></div>
+        <div class="diagline hide" id="diagA"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ JOIN ============================ -->
+  <section id="screenJoin" class="hide">
+    <button class="btn ghost" id="backFromJoin">‹ <span data-i18n="nav.back">Indietro</span></button>
+
+    <div class="card bigconnecting hide" id="bigConnectingB">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="bigTitle" id="bigTitleB" data-i18n="connect.bigTitle">Connessione in corso…</div>
+      <div class="bigHint" id="bigHintB" data-i18n="connect.bigHint">Non chiudere l'app — ci vogliono pochi secondi.</div>
+      <!-- La via d'uscita, subito e non dopo tre minuti di rotellina. Compare
+           solo quando si sta chiamando un indirizzo, perche' solo li' c'e' una
+           cassetta dove lasciare qualcosa. Serve proprio quando la promessa
+           non si puo' mantenere: chi chiama non puo' sapere se dall'altra
+           parte squillera' davvero, e allora deve avere sotto il dito una
+           cosa che funziona comunque. -->
+      <button class="btn ghost mt12 hide" id="btnCallNote" data-i18n="addr.leaveInstead">Lascia due righe invece di aspettare</button>
+    </div>
+
+    <!-- Nobody answered. Rather than an error and a lost errand, the thing the
+         person came here to say can still be left. -->
+
+    <div class="card" id="quickJoinCard">
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleB">Digita il codice</div></div>
+      <div class="helptext" data-i18n="quick.helpB">Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.</div>
+      <input type="text" class="quickinput" id="quickCodeIn" inputmode="numeric" autocomplete="off"
+             data-i18n-ph="quick.codePh" placeholder="000000" maxlength="6">
+      <button class="btn primary big mt10" id="btnQuickConnect" data-i18n="quick.connect">Connetti</button>
+      <div class="status" id="quickStatusB"></div>
+      <div class="diagline hide" id="diagQuickB"></div>
+    </div>
+    <button class="btn ghost linkbtn mt10" id="toggleLongInviteB" data-i18n="quick.useLong">Preferisci il codice lungo?</button>
+
+    <div class="hide" id="longInviteWrapB">
+      <div class="card mt10">
+        <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="join.s1">Apri l'invito</div></div>
+        <div class="helptext" id="joinLead" data-i18n="join.s1help">Se hai aperto il link che ti hanno mandato, è già tutto pronto:
+          premi il pulsante arancione. Altrimenti premi <b>Incolla</b>.</div>
+        <textarea id="offerIn" data-i18n-ph="join.pastePh" placeholder="Incolla qui l'invito…"></textarea>
+        <div class="pasteline">
+          <button class="btn" id="btnPasteOffer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
+        </div>
+        <div id="passAsk" class="hide mt12">
+          <div class="helptext wicon mb8"><span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span><span data-i18n="lock.ask">Questo invito è chiuso a chiave. Scrivi la parola d'ordine che ti hanno detto a voce.</span></div>
+          <input type="text" class="sans-input" id="passIn" autocomplete="off" autocapitalize="off" spellcheck="false"
+                 data-i18n-ph="lock.askPh" placeholder="parola d'ordine">
+        </div>
+        <button class="btn primary big mt10" id="btnCreateAnswer" data-i18n="join.generate">Apri l'invito</button>
+        <div id="answerBlock" class="hide mt16">
+          <div class="step now"><div class="n">2</div><div class="lbl" data-i18n="join.s2">Manda la risposta</div></div>
+          <div class="helptext" data-i18n="join.s2help">Ultimo passo: rimanda questo alla persona che ti ha invitato,
+            e siete connessi.</div>
+          <button class="btn primary big" id="btnShareAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="join.sendAnswer">Manda la risposta</span></button>
+          <div class="btnrow">
+            <button class="btn" id="btnCopyAnswer"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.copyCode">Copia il codice</span></button>
+          </div>
+          <details class="showcode" id="answerDetails">
+            <summary data-i18n="btn.showCode">Mostra il codice</summary>
+            <div class="codebox" id="answerOut"></div>
+          </details>
+        </div>
+        <div class="status" id="statusB"></div>
+        <div class="diagline hide" id="diagB"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CHAT ============================ -->
+  <section id="screenChat" class="hide">
+    <div class="chatheader">
+      <div class="avatar" id="peerAvatar">?</div>
+      <!-- What the connection is actually doing, at a glance and without
+           reading: green means the two phones are talking directly, amber
+           means a hostile network forced the encrypted relay, red means it
+           has stopped. Read from the connection's own statistics, never
+           guessed. -->
+      <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span class="cdot" id="connDot" role="img"></span><span id="connState" data-i18n="chat.connected">connessa</span>
+        · <button id="btnVerify" class="linkbtn">verifica</button></div>
+      <button class="iconbtn" id="btnCallAudio" title="Chiamata"></button>
+      <button class="iconbtn" id="btnCallVideo" title="Videochiamata"></button>
+      <button class="iconbtn" id="btnMenu" title="Altro"></button>
+      <!-- ⚠️ AGGIUNTO IL 7 SET 2026, segnalato dall'operatore: «quando una
+           persona è collegata non c'è un tasto riattacca per terminare, deve
+           cliccare i tre pallini e poi Termina chat». Aveva ragione: chiudere
+           una conversazione era l'unica azione ovvia dell'app che viveva
+           dentro un menu. «Termina chat» resta anche là dentro — chi ha preso
+           quell'abitudine non la perde — ma adesso si vede.
+           Rosso e ultimo apposta: e' l'unico pulsante distruttivo della
+           barra, e il colore + la distanza dai due di chiamata sono cio' che
+           impedisce di premerlo per sbaglio al posto di «videochiamata».
+           L'etichetta sta in uno span nascosto invece che in `title=`: i
+           `title` di questa pagina sono in italiano fisso e non li traduce
+           nessuno, mentre `data-i18n` passa da applyLang e quindi il lettore
+           di schermo la sente in tutte e 13 le lingue. L'icona va in un
+           figlio suo, o setIcon cancellerebbe l'etichetta scrivendo
+           l'innerHTML del pulsante. -->
+      <button class="iconbtn end" id="btnEndChat">
+        <span class="ic" id="btnEndChatIc"></span>
+        <span class="filehide" data-i18n="menu.endChat">Termina chat</span>
+      </button>
+    </div>
+
+    <div id="callBox" class="hide">
+      <video id="remoteVideo" autoplay playsinline></video>
+      <!-- A voice call is not a video playing. Attaching the far end's audio to
+           a <video> element told the phone this was media, and media comes out
+           of the loudspeaker — so a private conversation was played to the
+           whole room by default. Voice-only calls get their own audio element.
+           Whether a given phone then uses the earpiece is the phone's decision,
+           not something a web page can command, but this at least stops asking
+           it for the wrong thing. -->
+      <audio id="remoteAudio" autoplay playsinline></audio>
+      <video id="localVideo" autoplay playsinline muted></video>
+      <div id="callStatus"></div>
+      <div class="callctrl">
+        <button id="btnMuteCall" title="Muto"></button>
+        <button id="btnCamCall" title="Camera"></button>
+        <!-- Only ever shown during a video call on a phone that actually has a
+             second camera — asked of the device, not assumed. -->
+        <button id="btnFlipCam" class="hide" title="Gira la fotocamera"></button>
+        <!-- Only where the browser actually offers getDisplayMedia — desktop
+             Chrome/Firefox/Safari and recent Android Chrome; not shown where
+             asking would just fail. -->
+        <button id="btnScreenShare" class="hide" title="Condividi schermo"></button>
+        <button id="btnSpeakerCall" class="hide" title="Altoparlante"></button>
+        <button class="hangup" id="btnHangup" data-i18n="call.hangup">Chiudi</button>
+      </div>
+    </div>
+
+    <div class="card hide" id="sasPanel">
+      <h3 data-i18n="sas.title">Controllo di sicurezza</h3>
+      <div class="lead" id="sasLead" data-i18n="sas.lead">Ditevi queste tre parole a voce. Se le vedete uguali tutti e due, nessuno si è messo in mezzo.</div>
+      <div class="saswords" id="sasWords"></div>
+      <button class="btn primary big" id="btnSasYes"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span data-i18n="sas.yes">Sì, sono uguali</span></button>
+      <button class="btn danger mt10" id="btnSasNo"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span data-i18n="sas.no">No, sono diverse</span></button>
+      <div class="lead mt12" data-i18n="sas.note">Serve solo la prima volta con questa persona: dopo, l'app se lo ricorda.</div>
+    </div>
+
+    <div class="card hide" id="verifyPanel">
+      <h3 data-i18n="verify.title">Codice di sicurezza</h3>
+      <div class="lead" data-i18n="verify.lead">Confrontalo con l'altra persona — a voce, per telefono, o su un altro
+        canale che non sia quello con cui vi siete scambiati il codice d'invito. Se i due codici non combaciano
+        esattamente, qualcuno potrebbe essersi inserito nella connessione: non fidarti di quella chat.</div>
+      <div class="safetycode" id="safetyCodeText">…</div>
+      <div class="verifynote" id="verifyNote"></div>
+      <div class="btns">
+        <button class="btn" id="btnCloseVerify" data-i18n="verify.close">Chiudi</button>
+        <button class="btn danger hide" id="btnAcceptSafety" data-i18n="verify.accept">Accetta il nuovo codice</button>
+      </div>
+    </div>
+
+    <!-- When the microphone or camera will not open. Previously this was one
+         small line in the chat, which is exactly where a person in the middle
+         of a failing call does not look. The steps below are per-browser
+         because "allow it in the settings" helps nobody: on iOS the switch is
+         in the Settings app, on desktop it is behind the padlock in the
+         address bar, and they are nothing like each other. -->
+    <div class="card hide" id="mediaHelp">
+      <h3 data-i18n="media.title">Microfono e fotocamera</h3>
+      <div class="mediawhat" id="mediaWhat"></div>
+      <ol class="mediasteps" id="mediaSteps"></ol>
+      <div class="btns">
+        <button class="btn primary" id="btnMediaRetry" data-i18n="media.retry">Riprova</button>
+        <button class="btn" id="btnMediaClose" data-i18n="media.close">Chiudi</button>
+      </div>
+    </div>
+
+    <!-- Shown on arriving in a chat when the browser has already been told no,
+         so it is found while there is time to fix it rather than while someone
+         is ringing. -->
+    <div class="banner accent hide jsb" id="mediaWarn">
+      <span class="f1" data-i18n="media.warnDenied">Microfono bloccato da questo browser: non potrai fare né ricevere chiamate.</span>
+      <button class="btn mini" id="btnMediaWarnFix" data-i18n="media.warnFix">Come si sistema</button>
+    </div>
+
+    <div class="banner hide jsb" id="incomingCall">
+      <span id="incomingCallText"></span>
+      <span class="inlinebtns">
+        <button class="btn primary" id="btnAcceptCall" data-i18n="call.accept">Rispondi</button>
+        <button class="btn" id="btnDeclineCall" data-i18n="call.decline">Rifiuta</button>
+      </span>
+    </div>
+
+    <div id="chatArea">
+      <div id="msgs"></div>
+      <!-- Desktop only in practice — a touch device has no drag gesture to
+           catch — shown only while something is actually being dragged over
+           the chat, never sitting there as a hint nobody asked for. -->
+      <div id="dropOverlay" class="hide">
+        <div class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 9.5 12 5l4.5 4.5"/><path d="M5 15.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2.5"/></svg></div>
+        <span data-i18n="chat.dropHere">Lascia qui per mandarli</span>
+      </div>
+      <div id="composer">
+        <button class="iconbtn" id="btnEmoji" title="Emoji"></button>
+        <div id="emojiPop" class="hide"></div>
+        <button class="iconbtn" id="btnAttach" title="Allega"></button>
+        <input type="file" id="fileInput" class="filehide" tabindex="-1" aria-hidden="true" multiple>
+        <button class="iconbtn" id="btnMic" title="Vocale"></button>
+        <input type="text" id="msgInput" spellcheck="true" autocapitalize="sentences" autocomplete="off" data-i18n-ph="chat.typePh" placeholder="Scrivi un messaggio…">
+        <button id="btnSend" title="Invia"></button>
+      </div>
+    </div>
+
+    <div class="card hide" id="menuPanel">
+      <h3 data-i18n="menu.title">Strumenti</h3>
+      <div class="miniform">
+        <select id="destructMinutes" class="pill">
+          <option value="1">1 min</option>
+          <option value="5" selected>5 min</option>
+          <option value="15">15 min</option>
+          <option value="60">1 h</option>
+        </select>
+        <button class="btn" id="btnArmDestruct"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5c1 3 3.5 3.6 3.5 7a3.5 3.5 0 0 1-7 0c0-1 .3-1.6.8-2.3.4.9 1.2 1.3 1.2 1.3-.6-2.5.3-4 1.5-6z"/><path d="M8.3 12.5a5.7 5.7 0 0 0 7.4 5.4A6 6 0 0 0 19 12.8c0-1.6-.5-2.6-1.2-3.6.1 1.6-.5 2.6-1.3 3.2"/></svg></span><span data-i18n="menu.arm">Autodistruzione</span></button>
+        <span class="status ok hide m0" id="destructCountdown"></span>
+        <button class="btn hide" id="btnDisarmDestruct" data-i18n="menu.disarm">Annulla</button>
+      </div>
+      <div class="toolsrow">
+        <button class="btn" id="btnClearHistory"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span><span data-i18n="menu.clearHistory">Svuota cronologia</span></button>
+        <button class="btn danger" id="btnNewSession"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span data-i18n="menu.endChat">Termina chat</span></button>
+      </div>
+      <div class="lead mt12" data-i18n="menu.historyNote">La cronologia resta solo su questo dispositivo,
+        legata al nome della persona con cui parli. Nessun server la conserva.</div>
+    </div>
+  </section>
+
+  <!-- Six lines of credits and two pages of hashes sat under every screen,
+       which on a phone is most of a scroll of nothing anyone came for. It is
+       all still here, and still one tap from anywhere — just folded, so the
+       screen ends where the app ends. -->
+  <footer>
+    <details id="footerMore">
+      <summary>
+        <span>DigitalValut Logos</span>
+        <span class="ell" data-i18n="footer.text">software libero e open source (licenza Apache 2.0), un progetto di DigitalValut APS ETS.</span>
+      </summary>
+      <div class="more">
+        <span data-i18n="footer.noserver">Nessun server: la connessione è diretta tra i due browser via WebRTC.</span><br>
+        <span data-i18n="footer.author">Ideato dal Dott. Giuseppe Falsone per DigitalValut. © 2026 DigitalValut e il Team DigitalValut.</span><br>
+        <a href="LICENSE" data-i18n="footer.license" class="faintlink">Leggi la licenza open source</a> ·
+        <a href="https://github.com/digitalvalut/logos-protocol" class="faintlink" data-i18n="footer.source">Codice sorgente su GitHub</a>
+        <div id="sealLine" class="selfseal hide mt10"></div>
+      </div>
+    </details>
+  </footer>
+</div>
+
+<!-- The instant two people actually connect. Every line on it is measured, not
+     claimed: the route comes from the connection's own statistics, the time from
+     a clock started when the attempt began. Tap anywhere to skip it. -->
+<div class="flash hide" id="connectedFlash" role="status" aria-live="polite">
+  <div class="flashcard">
+    <svg class="flashcheck" viewBox="0 0 52 52" aria-hidden="true">
+      <circle class="fc-ring" cx="26" cy="26" r="23"/>
+      <path class="fc-tick" d="M15 26.5 L22.5 34 L37 19.5"/>
+    </svg>
+    <div class="flashtitle" id="flashTitle">Connessi</div>
+    <div class="flashfacts">
+      <div class="ff" id="flashRoute"><span class="ic" aria-hidden="true"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 14.5 14.5 9.5"/><path d="M11 6.5l1.3-1.3a3.7 3.7 0 0 1 5.2 5.2L16 12"/><path d="M13 17.5l-1.3 1.3a3.7 3.7 0 0 1-5.2-5.2L8 12"/></svg></span><span></span></div>
+      <div class="ff"><span class="ic" aria-hidden="true"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span><span data-i18n="flash.noserver">Nessun server può leggere quello che vi dite</span></div>
+      <div class="ff hide" id="flashTime"><span class="ic" aria-hidden="true"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 3 5 13.5h5.5L11 21l7.5-10.5H13z"/></svg></span><span></span></div>
+    </div>
+  </div>
+</div>
+
+<script src="modifica.js"></script>
+</body>
+</html>

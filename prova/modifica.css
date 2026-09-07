@@ -1,0 +1,913 @@
+/*
+ * Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+  :root{
+    --bg:#08090b; --bg2:#0d0f13; --panel:#15181e; --panel2:#1c2028; --line:#2a3039;
+    --ink:#f4f6f8; --dim:#a4aeb9; --faint:#6b747f;
+    --ok:#3ddc97; --bad:#ff5c6c; --warn:#ffb648;
+    --accent:#ff914d; --accent2:#ffab73; --accent-ink:#1a0e05;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;
+    --r:18px; --r-sm:13px; --r-lg:24px;
+    --shadow:0 10px 34px rgba(0,0,0,.40);
+    --glow:0 8px 26px rgba(255,145,77,.30);
+  }
+  *{box-sizing:border-box}
+  /* All text scales from the root, so "bigger text" is one change here and
+     everything follows — including anyone whose phone is already set larger. */
+  html{font-size:16px}
+  html.ts-l{font-size:18.5px}
+  html.ts-xl{font-size:21px}
+  html,body{margin:0;padding:0}
+  body{background:
+      radial-gradient(1100px 560px at 50% -8%, rgba(255,145,77,.13), transparent 62%),
+      radial-gradient(800px 500px at 88% 8%, rgba(255,95,109,.06), transparent 60%),
+      var(--bg);
+    color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;
+    min-height:100vh}
+  .wrap{max-width:640px;margin:0 auto;padding:22px 16px calc(50px + env(safe-area-inset-bottom))}
+  /* nothing should ever be smaller than the finger trying to press it */
+  button,.choicecard,.contactrow,.switchrow{min-height:44px}
+  :focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  ::selection{background:rgba(255,145,77,.35)}
+  a{color:var(--accent2)}
+  button{font-family:inherit}
+
+  /* ⚠️ La fascia della copia di prova. Deliberatamente sgradevole: rossa, larga
+     tutta la pagina, senza x per chiuderla. Non e' un avviso da cui difendersi
+     — e' l'unica cosa che impedisce a qualcuno di parlare dentro una copia
+     credendo che sia l'app vera, e di perdere quello che scrive. Se un giorno
+     sembrasse troppo invadente, la risposta e' spegnere la copia di prova,
+     non addolcire la fascia. */
+  .provabar{background:var(--bad);color:#fff;text-align:center;
+    padding:9px 14px;margin:-22px -16px 16px;line-height:1.4}
+  .provabar b{display:block;font-size:0.8125rem;font-weight:800;letter-spacing:.14em}
+  .provabar span{display:block;font-size:0.8125rem;opacity:.92;max-width:44em;margin:2px auto 0}
+
+  /* ---------------------------------- top bar ---------------------------------- */
+  .topbar{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+  .topbar img{width:34px;height:34px;border-radius:50%;flex-shrink:0}
+  .topbar .name{font-weight:700;font-size:0.9688rem;letter-spacing:.01em}
+  .topbar .name small{display:block;font-weight:400;color:var(--dim);font-size:0.7188rem;letter-spacing:.02em}
+  .topbar .spacer{flex:1}
+  #langSel{background:var(--panel);color:var(--dim);border:1px solid var(--line);border-radius:99px;
+    padding:7px 12px;font-size:0.8125rem;font-family:inherit;cursor:pointer;flex-shrink:0}
+
+  /* ---------------------------------- banners ---------------------------------- */
+  .banner{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--r-sm);padding:12px 14px;margin:14px 0;font-size:0.7812rem;color:var(--dim);
+    box-shadow:var(--shadow)}
+  .banner.accent{border-left:3px solid var(--accent)}
+  .banner b{color:var(--ink)}
+  .shareicon{display:inline-block;vertical-align:-5px;margin-inline-end:6px;color:var(--accent)}
+  .banner button.mini{flex-shrink:0;background:var(--ink);color:#0b0d10;border:none;padding:8px 14px;
+    border-radius:99px;font-weight:700;font-size:0.75rem;cursor:pointer}
+  .banner .x{background:none;border:none;color:var(--faint);font-size:1.125rem;padding:2px 6px;cursor:pointer}
+
+  details.legal{margin:14px 0;font-size:0.75rem;color:var(--faint)}
+  details.legal summary{cursor:pointer;color:var(--dim);list-style:none;display:flex;align-items:center;gap:6px}
+  details.legal summary::-webkit-details-marker{display:none}
+  details.legal summary::before{content:"›";display:inline-block;transition:transform .15s;font-size:0.875rem}
+  details.legal[open] summary::before{transform:rotate(90deg)}
+  details.legal .body{padding:10px 2px 2px;line-height:1.65}
+
+  /* ---------------------------------- hero ---------------------------------- */
+  /* Compact on purpose. The old hero was tall enough that on an ordinary phone
+     the second of the two buttons fell below the fold, which defeats the whole
+     point of having exactly two. */
+  .hero{text-align:center;padding:12px 10px 0}
+  .hero img{width:58px;height:58px;border-radius:18px;
+    box-shadow:0 12px 30px rgba(255,145,77,.22),0 3px 10px rgba(0,0,0,.35)}
+  .hero h1{font-size:1.25rem;letter-spacing:-.02em;margin:12px 0 5px;font-weight:800;line-height:1.2}
+  /* deliberately quiet: it explains, it does not compete with the two buttons */
+  .hero p{color:var(--faint);font-size:0.8438rem;margin:0 auto;max-width:22em;line-height:1.5}
+  @media(min-height:760px){
+    .hero{padding:22px 10px 0}
+    .hero img{width:70px;height:70px;border-radius:21px}
+    .hero h1{font-size:1.4375rem}
+    .hero p{font-size:0.875rem}
+  }
+
+  .card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
+    border-radius:var(--r);padding:22px;margin-top:16px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 6px;font-size:0.75rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;font-weight:700}
+  .card .lead{color:var(--dim);font-size:0.9375rem;margin:2px 0 16px;line-height:1.6}
+
+  /* the address itself: meant to be read aloud down a phone and copied off a
+     screen, so it gets the monospace treatment and room to breathe */
+  .addrbox{font-family:var(--mono);font-size:1.375rem;letter-spacing:.06em;text-align:center;
+    color:var(--accent2);background:var(--bg2);border:1px solid var(--line);
+    border-radius:var(--r-sm);padding:16px 12px;margin:16px 0 12px;word-break:break-all;
+    -webkit-user-select:all;user-select:all}
+  /* the one screen someone arriving from a QR or a link actually sees first */
+  .card.knock{border-color:var(--accent);
+    background:linear-gradient(180deg,rgba(255,145,77,0.08),var(--bg2))}
+  .knocktitle{font-size:0.75rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;font-weight:700}
+  .knockwho{font-family:var(--mono);font-size:1.25rem;letter-spacing:.05em;color:var(--accent2);margin-top:6px;word-break:break-all}
+
+  .burners{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+  .burners .helptext{margin-bottom:12px}
+  .burnerrow{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:8px;
+    background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm)}
+  .burnerrow .who{flex:1;min-width:0}
+  .burnerrow .who b{display:block;color:var(--ink);font-size:0.9375rem;font-weight:650;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .burnerrow .who code{display:block;font-family:var(--mono);font-size:0.8125rem;color:var(--accent2);
+    letter-spacing:.03em;margin-top:2px;-webkit-user-select:all;user-select:all}
+  .burnerrow button{flex:none;background:none;border:1px solid var(--line);border-radius:99px;
+    color:var(--dim);font-size:0.9375rem;padding:6px 11px;cursor:pointer}
+  .burnerrow button:hover{color:var(--ink);border-color:var(--dim)}
+  .burnerrow button.kill:hover{color:var(--bad);border-color:var(--bad)}
+  .burnernew{display:flex;flex-direction:column}
+  .whichaddr{display:block;color:var(--accent2);font-size:0.875rem;margin-bottom:4px}
+  .whoknocks{color:var(--ink);font-size:1.125rem;font-weight:650;margin:8px 0 2px;
+    overflow-wrap:anywhere}
+  #leaveLetter b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
+  .letterrow{padding:12px 14px;margin-bottom:10px;background:var(--bg2);
+    border:1px solid var(--line);border-radius:var(--r-sm)}
+  .letterrow .top{display:flex;align-items:baseline;gap:8px;margin-bottom:5px}
+  .letterrow .top b{color:var(--ink);font-size:0.9375rem;font-weight:650;overflow-wrap:anywhere}
+  .letterrow .top time{color:var(--faint);font-size:0.75rem;margin-inline-start:auto;flex:none}
+  .letterrow p{margin:0 0 10px;color:var(--dim);font-size:0.9375rem;line-height:1.55;overflow-wrap:anywhere}
+  .letterrow .acts{display:flex;gap:8px;flex-wrap:wrap}
+  .letterrow .acts button{background:none;border:1px solid var(--line);border-radius:99px;
+    color:var(--dim);font-size:0.8125rem;padding:6px 13px;cursor:pointer}
+  .letterrow .acts button.go{border-color:var(--accent);color:var(--accent2)}
+  .whyknocks{color:var(--dim);font-size:0.9375rem;line-height:1.55;margin-bottom:8px;
+    padding-inline-start:11px;border-inline-start:3px solid var(--line);overflow-wrap:anywhere}
+
+  /* Il campo dell'indirizzo e il suo pulsante come UN modulo solo: campo, poi
+     «Chiamalo» attaccato sotto. Niente riga divisoria sopra — lo stacco lo fa
+     lo spazio, non un tratto grigio.
+     ⚠️ «Chiamalo» NON è pieno d'arancione, ed è una correzione fatta guardando
+     lo schermo: pieno com'era, finiva appiccicato sopra «Parla con qualcuno»,
+     che è arancione anche lui, e i due si leggevano come UNA macchia sola.
+     Sono due azioni diverse e devono sembrarlo. Adesso è scuro con il bordo e
+     la scritta arancioni: si vede che è il pulsante DI QUEL CAMPO, e i due
+     pulsantoni sotto restano gli unici blocchi pieni della pagina. */
+  /* La riga che apre il campo dell'indirizzo per chi non ce l'ha ancora in
+     prima pagina. Centrata e discreta: e' una DOMANDA a cui quasi nessuno,
+     il primo giorno, risponde di si', e deve pesare meno dei due pulsantoni
+     che stanno subito sotto. Sta dove comparira' il campo, non altrove, o
+     aprendola il contenuto salterebbe da un punto all'altro della pagina. */
+  /* una riga di stato vuota lascerebbe comunque il suo margine sopra la riga
+     dell'indirizzo: uno spazio bianco che non si spiega, e c'e' quasi sempre */
+  #addrDialStatus:empty{display:none}
+
+  /* «Chi apre l'invito ti vedrà come Giuseppe · cambia». Una riga, non una
+     scheda: dire chi sei prima di mandare un invito e' una conferma, e una
+     conferma che pesa quanto un modulo da compilare e' un modulo. */
+  .nameis{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;
+    margin:0 2px 14px;font-size:0.9062rem;color:var(--dim);line-height:1.5}
+  .nameis b{color:var(--ink);font-weight:700;overflow-wrap:anywhere}
+  #showAddrDial{display:block;margin:20px auto 0;text-align:center;
+    font-size:0.9062rem;color:var(--dim);text-decoration:none;
+    border-bottom:1px dashed var(--line);padding-bottom:3px}
+  #showAddrDial:hover{color:var(--accent2);border-bottom-color:var(--accent)}
+  .addrdial{margin-top:22px}
+  #addrDialIn{border-radius:14px;padding:16px;font-size:1.125rem!important;
+    letter-spacing:.06em;text-align:center;background:#0a0c10}
+  #btnAddrDial{width:100%;margin-top:9px;padding:14px 20px;border-radius:14px;
+    font-size:1.0625rem;font-weight:750;color:var(--accent2);
+    background:rgba(255,145,77,.09);border:1.5px solid rgba(255,145,77,.42)}
+  #btnAddrDial:hover{border-color:var(--accent);background:rgba(255,145,77,.15);
+    transform:translateY(-1px)}
+  #btnAddrDial .ic{color:var(--accent2);opacity:.9}
+
+  /* ⚠️ I nomi sotto il campo dell indirizzo. NON e una rubrica: e il campo che
+     si ricorda chi chiami di solito — vedi #addrPeople nella pagina.
+     Sta o cade su una cosa sola: deve pesare MENO dei due pulsantoni sotto,
+     o abbiamo rimesso in cima alla prima pagina lo stesso elenco che ne
+     abbiamo appena tolto. Per questo sono pillole basse, senza sfondo pieno,
+     senza avatar e senza date: si vedono se le cerchi, non si impongono.
+     44 px di altezza minima: sotto quella misura un pollice manca il bersaglio
+     e finisce sul pulsante accanto, che qui vuol dire chiamare la persona
+     sbagliata. */
+  .people{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .people .chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;
+    padding:0 15px;border-radius:22px;cursor:pointer;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    font:inherit;font-size:0.9375rem;font-weight:600;
+    max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .people .chip:hover,.people .chip:focus-visible{border-color:var(--accent);color:var(--accent2)}
+  /* Il nome che si scontra con un altro e non e mai stato verificato a voce.
+     Il segno sta PRIMA del nome e dentro il pulsante: e l unico posto dove
+     lo si legge prima di toccare, e un avviso letto dopo non e un avviso.
+     Vedi contactCollisions() — la stessa regola dell elenco completo. */
+  /* ⚠️ ROSSO, non ambra, e non e' una scelta estetica: l'elenco completo nella
+     rotellina segna lo stesso identico fatto con --bad (vedi .ctrust.bad), e
+     due schermate che colorano la stessa cosa in due modi raccontano due
+     storie diverse su una persona sola.
+     E soprattutto NON arancione: l'arancione qui e' il colore di «Parla con
+     qualcuno», cioe' del pulsante che si vuole far premere. Un avviso dipinto
+     del colore dell'invito si legge come «questo e' quello consigliato» —
+     esattamente il contrario di quello che deve dire. */
+  .people .chip.warn{border-color:var(--bad);color:var(--bad)}
+  .people .chip.warn:hover,.people .chip.warn:focus-visible{border-color:var(--bad);color:var(--bad)}
+  .people .chip .wm{display:inline-flex;align-items:center;justify-content:center;
+    width:18px;height:18px;border-radius:50%;flex:none;
+    background:var(--bad);color:#fff;font-size:0.75rem;font-weight:800}
+  input.mono{font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
+  #addrIncoming b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
+  @media(min-width:520px){ .addrbox{font-size:1.625rem} }
+
+  /* what is wrong, then what to do about it, in that order and in that weight */
+  .mediawhat{color:var(--ink);font-size:0.9688rem;line-height:1.6;margin:2px 0 14px}
+  .mediasteps{margin:0 0 16px;padding-inline-start:22px;color:var(--dim);font-size:0.9062rem;line-height:1.7}
+  .mediasteps li{margin-bottom:7px}
+  .mediasteps b{color:var(--ink);font-weight:650}
+
+  label.fieldlabel{display:block;font-size:0.9375rem;color:var(--dim);margin:0 0 8px;font-weight:650}
+  input[type=text],textarea{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:15px 16px;font-family:var(--mono);font-size:0.875rem;resize:vertical;
+    transition:border-color .15s,box-shadow .15s}
+  input[type=text].sans, .sans-input{font-family:var(--sans)!important;font-size:1.0625rem!important}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,145,77,.15)}
+  textarea{min-height:78px}
+
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .btn{appearance:none;border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);
+    padding:14px 20px;border-radius:99px;font-weight:650;font-size:0.9375rem;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    transition:transform .12s,border-color .15s,background .15s,filter .15s}
+  .btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent2),var(--accent) 45%,#ff7526);color:var(--accent-ink);
+    border:none;box-shadow:var(--glow);font-weight:750}
+  .btn.primary:hover{filter:brightness(1.06)}
+  .btn.big{width:100%;justify-content:center;padding:19px 20px;font-size:1.0625rem;border-radius:var(--r);
+    font-weight:750;letter-spacing:.005em}
+  .btn.ghost{background:none;border:none;color:var(--dim);text-decoration:underline;padding:6px 2px}
+  .btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .btn .ic{font-size:1.125rem;line-height:1}
+
+  .choicecard{display:block;width:100%;text-align:left;background:var(--panel2);border:1.5px solid var(--line);
+    border-radius:var(--r);padding:20px;cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s;
+    display:flex;align-items:center;gap:16px;color:var(--ink)}
+  .choicecard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .choicecard .ic{font-size:1.75rem;flex-shrink:0;width:54px;height:54px;border-radius:16px;
+    background:rgba(255,145,77,.15);display:flex;align-items:center;justify-content:center}
+  .choicecard .t{font-weight:750;font-size:1.0625rem}
+  .choicecard .d{color:var(--dim);font-size:0.875rem;margin-top:3px;line-height:1.5}
+
+  /* ---------------- the home, in two verbs ----------------
+     The old home stacked thirteen blocks and put the only two things anyone
+     came to do somewhere in the middle of them, where they carried no weight
+     at all. These are meant to be the first thing seen and the only thing
+     that needs deciding — big enough to hit without aiming, and readable
+     across a room. */
+  /* 26 px sopra e 11 fra loro: lo stacco piu grande separa il modulo
+     dell'indirizzo dalle due scelte, quello piccolo tiene le due scelte
+     insieme come un gruppo. Spazi uguali avrebbero fatto sembrare tutto un
+     elenco di quattro pulsanti uguali. */
+  .bigchoices{display:grid;gap:11px;margin:26px 0 0}
+  .bigchoice{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:0;width:100%;padding:17px 20px 15px;cursor:pointer;color:var(--ink);
+    background:var(--panel2);border:1px solid var(--line);border-radius:20px;
+    transition:transform .12s ease,box-shadow .18s ease,border-color .18s ease,filter .15s ease;
+    text-align:center}
+  .bigchoice:hover{transform:translateY(-2px)}
+  .bigchoice:active{transform:translateY(0) scale(.994)}
+  .bigchoice .ic{display:block;width:30px;height:30px;margin-bottom:8px;color:var(--dim)}
+  .bigchoice .ic svg{width:100%;height:100%;display:block}
+  .bigchoice .t{font-weight:800;font-size:1.3125rem;letter-spacing:-.02em;line-height:1.15}
+  .bigchoice .d{color:var(--dim);font-size:0.9062rem;line-height:1.4;margin-top:3px}
+
+  /* A colour each, so which is which is answered before anything is read.
+     Orange starts something; blue opens something you were given; green passes
+     it on. Filled rather than merely tinted — a hesitant button is the same as
+     no button at all — and the text on each is dark, which is what keeps it
+     readable on a bright fill. The inset white hairline on top and the deep
+     coloured shadow are what give these weight without size — the "wow" is in
+     the light, not in the height. */
+  .bigchoice.primary{background:linear-gradient(158deg,#ffb680,var(--accent) 52%,#f4732b);
+    border-color:transparent;color:var(--accent-ink);
+    box-shadow:0 14px 32px rgba(255,145,77,.34),inset 0 1px 0 rgba(255,255,255,.28)}
+  .bigchoice.primary:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(255,145,77,.42),inset 0 1px 0 rgba(255,255,255,.28)}
+  .bigchoice.primary .ic{color:var(--accent-ink);opacity:.9}
+  .bigchoice.primary .d{color:rgba(26,14,5,.74)}
+
+  .bigchoice.enter{background:linear-gradient(158deg,#6ec0ff,#2e86f5 55%,#1f6fe0);
+    border-color:transparent;color:#08142e;
+    box-shadow:0 14px 32px rgba(46,134,245,.36),inset 0 1px 0 rgba(255,255,255,.30)}
+  .bigchoice.enter:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(46,134,245,.44),inset 0 1px 0 rgba(255,255,255,.30)}
+  .bigchoice.enter .ic{color:#08142e;opacity:.9}
+  .bigchoice.enter .d{color:rgba(8,20,46,.72)}
+
+  .bigchoice:not(.primary):not(.enter):hover{border-color:var(--dim)}
+
+  /* Stacked at every width, on purpose. Side by side would put the two on the
+     same footing and ask which one first; one above the other answers that
+     before anyone has to wonder, and gives the finger a bigger thing to hit. */
+  @media(min-width:560px){
+    .bigchoices{gap:13px}
+    .bigchoice{padding:24px 22px 22px}
+    .bigchoice .ic{width:34px;height:34px;margin-bottom:11px}
+    .bigchoice .t{font-size:1.4375rem}
+  }
+
+  /* the state of the line, without a word of jargon */
+  .cdot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;
+    margin-inline-end:6px;background:var(--faint);vertical-align:baseline}
+  .cdot.direct{background:var(--ok);box-shadow:0 0 0 3px rgba(61,220,151,.18)}
+  .cdot.relay{background:var(--warn);box-shadow:0 0 0 3px rgba(255,182,72,.18)}
+  .cdot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(255,92,108,.18)}
+
+
+  /* «Fai conoscere l'app». Importante ma non un terzo pulsantone: orizzontale,
+     icona piccola a sinistra, testo, una freccia a destra che scivola al
+     passaggio. Tutta larghezza — un bersaglio vero per un pollice — verde come
+     le altre cose che «passano avanti qualcosa», un gradino sotto i due grandi.
+     Non ha classe `.bigchoice`: la forma è diversa apposta, e riusare quella
+     classe l'avrebbe trascinato di nuovo verso il pulsantone. */
+  .sharerow{margin-top:11px}
+  .sharebtn{display:flex;align-items:center;gap:12px;width:100%;
+    padding:14px 16px;cursor:pointer;text-align:start;font:inherit;color:var(--ok);
+    border-radius:16px;border:1.5px solid rgba(61,220,151,.42);
+    background:linear-gradient(180deg,rgba(61,220,151,.13),rgba(61,220,151,.04));
+    transition:transform .12s ease,border-color .15s ease,box-shadow .18s ease}
+  .sharebtn:hover{transform:translateY(-1px);border-color:var(--ok);
+    box-shadow:0 12px 28px rgba(61,220,151,.18)}
+  .sharebtn:active{transform:translateY(0)}
+  .sharebtn .ic{width:22px;height:22px;flex:none}
+  .sharebtn .ic svg,.sharebtn .go svg{width:100%;height:100%;display:block}
+  .sharebtn .t{flex:1;font-size:1rem;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+  .sharebtn .go{width:17px;height:17px;flex:none;opacity:.65;transition:transform .15s ease,opacity .15s ease}
+  .sharebtn:hover .go{transform:translateX(3px);opacity:1}
+  .gear{background:none;border:1px solid var(--line);border-radius:50%;color:var(--dim);
+    width:38px;height:38px;padding:0;cursor:pointer;flex:none;position:relative;
+    display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
+  .gear svg{width:18px;height:18px;display:block}
+  .gear:hover{color:var(--ink);border-color:var(--dim)}
+  .gear .notice{position:absolute;top:1px;right:1px;width:10px;height:10px;
+    border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+
+  /* ---------------- simple mode ----------------
+     Everything that is not "start a chat" or "open the one I was sent" gets out
+     of the way, and what is left gets big enough to hit without aiming. Nothing
+     is removed from the app — the settings are all still there the moment it is
+     switched off again — so this costs nobody anything.
+     The switch that turns it off deliberately stays on screen: a mode that
+     hides its own exit is a trap, however well meant. */
+  html.easy .hero p,
+  html.easy #onboardBanner,
+  html.easy #contactsCard .helptext,
+  html.easy #notifyCard,
+  html.easy #autocleanCard,
+  html.easy .legal,
+  /* «Modalità semplice» = due pulsanti e nient'altro attorno: qui il tasto
+     «fai conoscere l'app» è proprio il tipo di cosa in più che questa modalità
+     esiste per togliere. */
+  html.easy .sharerow,
+  html.easy #easyCard .switchrow .txt span{display:none}
+  html.easy .hero h1{font-size:1.5rem}
+  html.easy .choicecard{padding:30px 24px;gap:20px;border-width:2px}
+  html.easy .choicecard .ic{font-size:2.5rem;width:78px;height:78px;border-radius:22px}
+  html.easy .choicecard .t{font-size:1.5rem;line-height:1.3}
+  html.easy .choicecard .d{font-size:1.0625rem;margin-top:6px}
+  html.easy .choices{gap:16px}
+  html.easy #easyCard{opacity:.75}
+  html.easy .quickcode{font-size:2.6rem;letter-spacing:.14em}
+  html.easy .quickinput{font-size:2.2rem}
+  html.easy .btn.big{padding:20px;font-size:1.25rem}
+
+  .contactrow{display:flex;align-items:center;gap:13px;padding:13px 6px;border-bottom:1px solid var(--line);
+    cursor:pointer;transition:background .12s;border-radius:12px}
+  .contactrow:hover{background:var(--panel2)}
+  .contactrow:last-child{border-bottom:none}
+  .contactrow .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff5f6d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8125rem;color:#1a0e05;flex-shrink:0}
+  .contactrow .info{flex:1;min-width:0}
+  .contactrow .info b{font-size:1rem;display:block}
+  .contactrow .info span{font-size:0.8125rem;color:var(--faint)}
+  /* Shown only on the rows whose names read the same, so it is never wallpaper:
+     on the day it appears it is the only thing answering "which of these two is
+     actually her?". Never colour alone — the words carry it too, for anyone who
+     cannot tell green from red. */
+  .contactrow .ctrust{display:block;font-style:normal;font-weight:600;margin-top:2px}
+  .contactrow .ctrust.ok{color:var(--ok)}
+  .contactrow .ctrust.bad{color:var(--bad)}
+  .contactrow .rm{background:none;border:none;color:var(--faint);font-size:1rem;padding:6px;cursor:pointer;flex-shrink:0}
+  .contactrow .rm:hover{color:var(--bad)}
+
+  /* the app's own state, said out loud. A row is readable at a glance by the
+     colour of its dot and readable properly by anyone who cannot tell those
+     colours apart, because the state is also written in words. */
+  .healthrow{display:flex;align-items:flex-start;gap:11px;padding:12px 2px;
+    border-bottom:1px solid var(--line)}
+  .healthrow:last-child{border-bottom:none}
+  .healthdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;background:var(--faint)}
+  .healthdot.ok{background:var(--ok);box-shadow:0 0 0 3px rgba(61,220,151,.18)}
+  .healthdot.warn{background:var(--warn);box-shadow:0 0 0 3px rgba(255,182,72,.18)}
+  .healthdot.bad{background:var(--bad);box-shadow:0 0 0 3px rgba(255,92,108,.18)}
+  .healthrow .ht{flex:1;min-width:0}
+  .healthrow .ht b{display:block;font-size:0.9375rem;font-weight:700;color:var(--ink)}
+  .healthrow .ht span{display:block;font-size:0.875rem;color:var(--dim);line-height:1.55;margin-top:2px}
+  .healthrow.bad .ht span{color:var(--bad)}
+
+  /* visually hidden but still "present" — display:none on a file input breaks
+     the native picker in some installed-app (standalone PWA) contexts on iOS */
+  .filehide{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  .status{font-size:0.9062rem;color:var(--dim);margin-top:12px;line-height:1.6}
+  .status.ok{color:var(--ok)} .status.bad{color:var(--bad)} .status.warn{color:var(--warn)}
+  /* technical detail during a stuck handshake — small on purpose, but visible
+     and copyable, so a failure can be photographed or read out loud instead of
+     staying an unexplained blank screen */
+  .diagline{font-family:var(--mono);font-size:0.75rem;color:var(--faint);margin-top:8px;line-height:1.6}
+  /* only ever shown once the invite really can outlive this screen — it is a
+     promise the app has already checked it can keep */
+  .waitsnote{display:flex;align-items:center;gap:9px;margin-top:14px;padding:11px 13px;
+    background:rgba(122,162,255,0.09);border:1px solid rgba(122,162,255,0.28);
+    border-radius:var(--r-sm);color:var(--dim);font-size:0.875rem;line-height:1.5}
+  .waitsnote .ic{font-size:1.05rem;flex:none}
+  .hide{display:none!important}
+  .codebox{font-family:var(--mono);font-size:0.6875rem;background:#0d0f12;border:1px solid var(--line);
+    border-radius:var(--r-sm);padding:10px 12px;color:var(--dim);word-break:break-all;max-height:80px;
+    overflow-y:auto}
+  .backlink{margin-top:16px;text-align:center}
+
+  /* ---- the safety check: the one thing worth reading on this screen ---- */
+  #sasPanel{border-color:var(--accent)}
+  #sasPanel.warn{border-color:var(--bad)}
+  .saswords{font-family:var(--mono);font-size:1.75rem;font-weight:700;letter-spacing:.04em;
+    text-align:center;color:var(--ink);background:#0d0f12;border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:20px 12px;margin:14px 0;word-spacing:.5em;line-height:1.5}
+  #sasPanel.warn .saswords{border-color:var(--bad)}
+
+  /* ---- quick connect: a short number instead of a long code to paste ---- */
+  .quickcode{font-family:var(--mono);font-size:2.375rem;font-weight:700;letter-spacing:.12em;
+    text-align:center;color:var(--ink);background:#0d0f12;border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:18px 10px;margin:14px 0}
+  /* white regardless of the theme: scanners need the contrast, and a QR
+     inverted to suit a dark page is one most cameras will not read */
+  .qrbox{background:#fff;border-radius:var(--r-sm);padding:14px 14px 10px;margin:0 0 14px;text-align:center}
+  .qrbox canvas{width:100%;max-width:260px;height:auto;image-rendering:pixelated;display:block;margin:0 auto}
+  .qrhint{color:#4a4a4a;font-size:0.8125rem;margin-top:10px;line-height:1.5}
+  .quickinput{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:16px 14px;font-family:var(--mono);font-size:1.75rem;
+    font-weight:700;letter-spacing:.3em;text-align:center}
+  .quickinput:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,145,77,.15)}
+
+  /* ---- a connection in progress looks like one, unmistakably ----
+     Replaces the whole form — code box, button, everything — so there is
+     nothing left on screen to press, tap twice, or wonder about. A small
+     status line under a button reads as "maybe stuck"; this doesn't. */
+  .bigconnecting{text-align:center;padding:44px 20px}
+  .bigconnecting .spinner{width:56px;height:56px;margin:0 auto 22px;border-radius:50%;
+    border:4px solid var(--line);border-top-color:var(--accent);
+    animation:dvspin 0.9s linear infinite}
+  @keyframes dvspin{to{transform:rotate(360deg)}}
+  .bigconnecting .bigTitle{font-size:1.25rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+  .bigconnecting .bigHint{font-size:0.875rem;color:var(--faint)}
+
+  /* ---- the moment it connects ----
+     Two seconds, then it gets out of the way. It exists because "it worked" is
+     the one thing this app has to say that nothing else can, and saying it
+     plainly — direct, encrypted, this fast — is worth more than any wording on
+     the home screen. Everything on it is measured before it is shown. */
+  .flash{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
+    padding:24px;background:rgba(5,6,8,0.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    animation:flashIn .22s ease-out}
+  .flash.out{animation:flashOut .3s ease-in forwards}
+  @keyframes flashIn{from{opacity:0}to{opacity:1}}
+  @keyframes flashOut{to{opacity:0}}
+  .flashcard{width:100%;max-width:380px;text-align:center;background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--r);padding:34px 26px 28px;
+    box-shadow:0 24px 60px rgba(0,0,0,.55);animation:flashPop .34s cubic-bezier(.2,.9,.3,1.25)}
+  @keyframes flashPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .flashcheck{width:76px;height:76px;display:block;margin:0 auto 18px;overflow:visible}
+  .flashcheck .fc-ring{fill:none;stroke:var(--ok);stroke-width:2.5;opacity:.35;
+    stroke-dasharray:145;stroke-dashoffset:145;animation:fcRing .5s ease-out .05s forwards}
+  .flashcheck .fc-tick{fill:none;stroke:var(--ok);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:34;stroke-dashoffset:34;animation:fcTick .34s ease-out .32s forwards}
+  @keyframes fcRing{to{stroke-dashoffset:0}}
+  @keyframes fcTick{to{stroke-dashoffset:0}}
+  .flashtitle{font-size:1.375rem;font-weight:700;color:var(--ink);margin-bottom:18px;line-height:1.3}
+  .flashfacts{display:flex;flex-direction:column;gap:10px;text-align:start}
+  .flashfacts .ff{display:flex;align-items:flex-start;gap:10px;font-size:0.875rem;
+    color:var(--dim);line-height:1.45}
+  .flashfacts .ff .ic{flex:none;font-size:0.9375rem;line-height:1.4}
+  /* the one line that is the whole point of the app, said once, in full colour */
+  .flashfacts .ff.direct span:last-child{color:var(--ok);font-weight:600}
+
+  /* ---- optional extra protection: off by default, one tap to turn on ---- */
+  .switchrow{display:flex;align-items:center;gap:14px;background:#0b0d11;border:1.5px solid var(--line);
+    border-radius:var(--r-sm);padding:16px;margin-bottom:16px;cursor:pointer;user-select:none;
+    transition:border-color .15s}
+  /* the section's own icon, drawn in the same line-set as everywhere else in the
+     app — dim until the switch is on, same as the two big home-screen icons */
+  .switchrow > .ic{width:22px;height:22px;flex-shrink:0;color:var(--faint);transition:color .15s}
+  .switchrow.on > .ic{color:var(--accent2)}
+  .switchrow .txt{flex:1;min-width:0}
+  .switchrow .txt b{font-size:1rem;display:block}
+  .switchrow .txt span{font-size:0.8125rem;color:var(--faint);line-height:1.55;display:block;margin-top:4px}
+  .sw{width:46px;height:27px;border-radius:99px;background:#2a2f36;border:1px solid var(--line);
+    position:relative;flex-shrink:0;transition:background .18s}
+  .sw::after{content:'';position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;
+    background:var(--ink);transition:transform .18s}
+  .switchrow.on{border-color:var(--accent)}
+  .switchrow.on .sw{background:var(--accent)}
+  .switchrow.on .sw::after{transform:translateX(19px)}
+  .passbox{background:rgba(255,145,77,.07);border:1px solid var(--accent);border-radius:var(--r-sm);
+    padding:15px 14px;margin-top:14px;text-align:center}
+  .passbox .cap{font-size:0.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .passbox .word{font-family:var(--mono);font-size:1.375rem;font-weight:700;color:var(--accent2);
+    word-break:break-word;margin:10px 0 10px;line-height:1.4}
+  .passbox .hint{font-size:0.875rem;color:var(--dim);line-height:1.6}
+  .selfseal{font-family:var(--mono);font-size:0.6562rem;color:var(--faint);word-break:break-all}
+
+  /* ---------------------------------- chat screen ---------------------------------- */
+  /* ⚠️ RIFATTA IL 7 SET 2026 per far entrare il quarto pulsante («riattacca»).
+     Misurato, non stimato: su 375 px la barra ha 343 px utili, e con avatar +
+     quattro pulsanti al nome ne restavano 87. In 87 px «● connessa · verifica»
+     va a capo, e la barra passava da 76 a 100 px con tre righe di testo
+     sfilacciate.
+     Le vie d'uscita provate a schermo: pulsanti a 38 px -> 103 px al nome, non
+     basta; via l'avatar coi pulsanti a 42 -> 135 px, non basta ancora; serviva
+     scendere sotto la misura di un dito, e quello no.
+     Quindi su schermo stretto la barra va su DUE RIGHE: nome e stato sopra a
+     tutta larghezza, i quattro pulsanti sotto allineati a destra. Stessa
+     altezza di prima (~100 px) ma pulita, e i pulsanti restano da 44. */
+  .chatheader{display:flex;align-items:center;gap:8px;padding:10px 4px 14px}
+  .chatheader .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff5f6d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#1a0e05;flex-shrink:0}
+  .chatheader .who{flex:1;min-width:0}
+  /* con 95 px il nome di qualcuno ci sta di rado: taglia con i puntini invece
+     di andare a capo e far crescere la barra sotto ai pulsanti */
+  .chatheader .who b{font-size:1.0625rem;display:block;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .chatheader .who span{font-size:0.8125rem;color:var(--ok)}
+  .linkbtn{background:none;border:none;color:var(--dim);font-size:0.8125rem;padding:0;cursor:pointer;
+    text-decoration:underline;font-family:inherit;min-height:0}
+  .linkbtn:hover{color:var(--accent)}
+  /* drawn instead of a raw emoji, sized to sit on the same line as the text it
+     labels — .btnicon is display:block by default, which inside an otherwise
+     plain inline button would drop to its own line instead of sitting beside
+     the text, so that is overridden here specifically */
+  .linkbtn .btnicon{display:inline-block;width:13px;height:13px;vertical-align:-2px;margin-inline-end:3px}
+  /* the verify badge carries the state at a glance, so nobody has to open a panel
+     to find out the connection is not the one they had last time */
+  .linkbtn.vok{color:var(--ok);text-decoration:none}
+  .linkbtn.vnew{color:var(--dim)}
+  .linkbtn.vbad{color:var(--bad);font-weight:700;text-decoration:none}
+  .verifynote{font-size:0.7812rem;color:var(--dim);line-height:1.6;margin-top:12px}
+  .safetycode{font-family:var(--mono);font-size:1.0625rem;letter-spacing:.04em;color:var(--ink);
+    background:#0d0f12;border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;
+    text-align:center;line-height:1.7;margin:12px 0}
+  .chatheader .iconbtn{background:var(--panel2);border:1.5px solid var(--line);width:42px;height:42px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:1.1875rem;cursor:pointer;flex-shrink:0;color:var(--ink);
+    transition:border-color .15s,transform .12s,background .15s}
+  .chatheader .iconbtn:active{transform:scale(.94)}
+  .chatheader .iconbtn:hover{border-color:var(--accent)}
+  /* «Riattacca»: l'unico pulsante distruttivo della barra, quindi l'unico
+     rosso e l'ultimo della fila. Il colore non e' decorazione — e' cio' che
+     impedisce di premerlo credendo di premere «videochiamata», che sta due
+     posti prima. */
+  .chatheader .iconbtn.end{color:var(--bad);border-color:rgba(255,92,108,.45);
+    background:rgba(255,92,108,.10)}
+  .chatheader .iconbtn.end:hover{border-color:var(--bad);background:rgba(255,92,108,.20)}
+  .chatheader .iconbtn .ic{display:flex}
+
+  /* ⚠️ DEVE STARE DOPO `.chatheader .who{flex:1}` qui sopra, non prima.
+     Le due regole hanno la stessa specificita' — una media query non ne
+     aggiunge — quindi decide l'ordine nel file, e messa prima perdeva in
+     silenzio: la regola c'era, il browser la leggeva, e non cambiava niente.
+     Ci ho perso due giri prima di misurare `getComputedStyle` invece di
+     guardare lo schermo. */
+  @media(max-width:430px){
+    /* su due righe i margini generosi della riga singola diventano spazio
+       rubato alla conversazione: stretti qui e solo qui */
+    .chatheader{flex-wrap:wrap;row-gap:6px;padding:6px 4px 8px}
+    /* prende tutto quel che resta della prima riga accanto all'avatar, cosi'
+       i quattro pulsanti sono costretti a scendere sulla riga sotto invece di
+       stringere il nome fino a spezzarlo in tre righe.
+       ⚠️ `flex-shrink:0` (lo zero in mezzo) non e' un dettaglio: con lo shrink
+       attivo — il valore di partenza — il nome si restringeva per far stare i
+       pulsanti sulla stessa riga, cioe' esattamente il contrario. */
+    .chatheader .who{flex:1 0 calc(100% - 48px)}
+    /* e il gruppo dei quattro si incolla a destra sulla seconda riga */
+    .chatheader #btnCallAudio{margin-inline-start:auto}
+  }
+
+  /* the drawn-icon set: one size rule for every button that holds one, so a
+     phone icon, a mic icon and a trash icon all sit at the same visual weight
+     wherever they turn up */
+  .btnicon{width:20px;height:20px;display:block;flex:none}
+  /* a class, not a style attribute: this app's own Content-Security-Policy
+     blocks inline styles, so sizing an icon that way silently did nothing */
+  .btnicon.sm{width:16px;height:16px}
+  .chatheader .iconbtn .btnicon{width:21px;height:21px}
+  .callctrl button .btnicon{width:20px;height:20px}
+  #callBox.voice .callctrl button .btnicon{width:23px;height:23px}
+  #composer .iconbtn .btnicon{width:22px;height:22px}
+  #btnSend .btnicon{width:21px;height:21px}
+  .btn .ic svg.btnicon{width:18px;height:18px}
+
+  #callBox{background:#000;border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:12px;box-shadow:var(--shadow)}
+  #remoteVideo{width:100%;max-height:360px;display:block;background:#000}
+  #remoteAudio{display:none}
+  /* Top-right, not bottom-right. The call controls live bottom-left, and on a
+     phone-width video that row (mic, camera, flip, speaker, and the hangup
+     pill itself — never fewer than three, sometimes all five) can run past
+     the point where the self-view thumbnail started, putting *the button this
+     whole review exists to protect* underneath a video feed instead of on top
+     of it. Top-right is never in that row's path, on any width. */
+  #localVideo{width:26%;max-width:150px;position:absolute;top:12px;right:12px;border-radius:10px;
+    border:2px solid rgba(255,255,255,.25);box-shadow:0 4px 16px rgba(0,0,0,.5)}
+  #callStatus{position:absolute;top:12px;left:12px;color:#fff;font-size:0.75rem;background:rgba(0,0,0,.55);
+    padding:5px 12px;border-radius:99px;backdrop-filter:blur(6px)}
+  .callctrl{position:absolute;bottom:12px;left:12px;display:flex;gap:8px}
+  .callctrl button{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.14);
+    color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center}
+  .callctrl button.hangup{width:auto;border-radius:99px;padding:0 18px;background:var(--bad);font-weight:700;font-size:0.8125rem}
+
+  /* ---------------- a voice call is not a video with the picture off ----------------
+     The controls sit at the bottom of the picture, which works only while there
+     is a picture holding the box open. Hiding the video for voice calls left a
+     box with nothing in it but absolutely-positioned children, so it collapsed
+     to no height and clipped its own hang-up button away — the call could not
+     be ended at all. Voice calls now get a real layout of their own instead of
+     borrowing the video's. */
+  #callBox.voice{background:var(--panel);border:1px solid var(--line);padding:16px 14px 14px;
+    display:flex;flex-direction:column;align-items:center;gap:14px}
+  #callBox.voice #callStatus{position:static;background:none;padding:0;color:var(--dim);
+    font-size:0.9375rem;backdrop-filter:none;text-align:center}
+  #callBox.voice .callctrl{position:static;justify-content:center;flex-wrap:wrap}
+  #callBox.voice .callctrl button{width:52px;height:52px;font-size:1.25rem;
+    background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    display:flex;align-items:center;justify-content:center}
+  #callBox.voice .callctrl button.hangup{width:auto;min-width:120px;background:var(--bad);
+    border-color:transparent;color:#fff;font-size:0.9375rem;padding:0 22px}
+  #callBox.voice .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+  /* on = loudspeaker active; off = whatever the phone's other output is (earpiece,
+     if the browser exposes one — not guaranteed on every device, see the JS) */
+  .callctrl button#btnSpeakerCall.on{background:var(--accent);color:var(--accent-ink)}
+  /* on = the screen, not the camera, is what the other side currently sees */
+  .callctrl button#btnScreenShare.on{background:var(--accent);color:var(--accent-ink)}
+
+  #chatArea{display:flex;flex-direction:column;height:min(62vh,560px);border:1px solid var(--line);
+    border-radius:var(--r);overflow:hidden;background:var(--panel);box-shadow:var(--shadow);position:relative}
+  #msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:3px}
+  /* Sits over the whole chat while a drag is over it, not just the composer —
+     the natural place to drop something is wherever the mouse already is, not
+     hunting for a six-pixel-tall target at the bottom of the screen. */
+  #dropOverlay{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:10px;pointer-events:none;
+    background:rgba(255,145,77,.12);border:2px dashed var(--accent);border-radius:var(--r);
+    color:var(--accent2);font-weight:700;font-size:1.0625rem;backdrop-filter:blur(2px)}
+  #dropOverlay .ic{width:38px;height:38px}
+  #dropOverlay .ic .btnicon{width:100%;height:100%}
+  .daymark{align-self:center;color:var(--faint);font-size:0.6562rem;background:var(--panel2);
+    padding:3px 12px;border-radius:99px;margin:10px 0 6px}
+  .row{display:flex;margin-top:6px}
+  .row.me{justify-content:flex-end}
+  .bub{max-width:76%;padding:11px 15px;font-size:0.9688rem;word-break:break-word;line-height:1.45}
+  .row.me .bub{background:linear-gradient(135deg,var(--accent),#ff7a2e);color:var(--accent-ink);
+    border-radius:16px 16px 4px 16px;font-weight:500}
+  .row.them .bub{background:var(--panel2);border:1px solid var(--line);border-radius:16px 16px 16px 4px}
+  .bub .who{font-size:0.6562rem;font-weight:700;opacity:.65;margin-bottom:2px;display:block}
+  .bub img,.bub video{max-width:100%;border-radius:10px;display:block;margin-top:5px}
+  .bub audio{margin-top:4px;max-width:220px}
+  .bub .meta{font-size:0.5938rem;opacity:.55;margin-top:3px;text-align:right}
+  .sysline{align-self:center;color:var(--faint);font-size:0.7188rem;margin:8px 0;text-align:center}
+  .sysline .syslineBtn{display:block;margin:8px auto 0;padding:9px 20px;border:none;border-radius:99px;
+    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:0.8125rem;
+    font-family:inherit;cursor:pointer;min-height:38px}
+  .sysline .syslineBtn:hover{background:var(--accent2)}
+
+  #composer{display:flex;align-items:flex-end;gap:6px;padding:9px;background:var(--panel2);border-top:1px solid var(--line);position:relative}
+  /* 44px, not the 38px a flat 8px padding gave the icon underneath: the same
+     minimum every other round button in the app already gets (the header's
+     circles are 46px, send is 46px) — a thumb never gets a smaller target here
+     than anywhere else in the same row. */
+  #composer .iconbtn{background:none;border:none;color:var(--dim);font-size:1.1875rem;cursor:pointer;
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
+  #composer .iconbtn:hover{background:var(--panel);color:var(--ink)}
+  #msgInput{flex:1;border-radius:22px;padding:12px 17px;font-family:var(--sans);font-size:1.0625rem;
+    background:var(--bg2);border:1.5px solid var(--line)}
+  #btnSend{width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:var(--accent-ink);
+    font-size:1.125rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--glow)}
+  #btnSend:disabled{opacity:.4}
+
+  #emojiPop{position:absolute;bottom:58px;left:8px;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--r-sm);box-shadow:var(--shadow);padding:8px;display:grid;
+    grid-template-columns:repeat(8,1fr);gap:2px;width:280px;max-height:180px;overflow-y:auto;z-index:5}
+  #emojiPop button{background:none;border:none;font-size:1.1875rem;padding:5px;cursor:pointer;border-radius:8px;line-height:1}
+  #emojiPop button:hover{background:var(--panel2)}
+
+  .toolsrow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .toolsrow .btn{flex:1;justify-content:center;font-size:0.7812rem;padding:9px 10px}
+
+  .miniform{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  select.pill{background:#0d0f12;color:var(--ink);border:1.5px solid var(--line);border-radius:99px;
+    padding:8px 12px;font-size:0.8125rem;font-family:inherit}
+  .autocleanOpts{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;
+    padding-top:14px;border-top:1px solid var(--line)}
+  .autocleanOpts label{font-size:0.8125rem;color:var(--dim)}
+
+  footer{text-align:center;color:var(--faint);font-size:0.6562rem;margin-top:32px;line-height:1.9}
+  /* one folded line instead of six unfolded ones, opened by whoever wants it */
+  #footerMore summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+    justify-content:center;gap:6px;padding:6px 4px;flex-wrap:wrap}
+  #footerMore summary::-webkit-details-marker{display:none}
+  #footerMore summary::after{content:"›";display:inline-block;transition:transform .15s;
+    font-size:0.875rem;line-height:1}
+  #footerMore[open] summary::after{transform:rotate(90deg)}
+  #footerMore summary span:first-child{color:var(--dim);font-weight:650}
+  #footerMore summary .ell{max-width:min(60vw,26em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #footerMore .more{padding-top:8px}
+
+  /* ---- Arabic and Urdu read right to left ----
+     Chat bubble sides flip on their own: flex's `justify-content:flex-end`
+     already means "the side text ends on", which is the left in RTL, exactly
+     matching what WhatsApp/Telegram do. Only the few places styled with a
+     literal `left`/`right` rather than that logical direction need a nudge. */
+  [dir="rtl"] .choicecard{text-align:right}
+  /* La freccia di «fai conoscere l'app» indica «di qua si va avanti». In arabo
+     e urdu «avanti» e' a sinistra, e una freccia che punta dalla parte
+     sbagliata dice il contrario di quello che vuole dire. Ribaltata, e il
+     piccolo scorrimento al passaggio segue anche lui (translateX dopo
+     scaleX(-1) si muove nel verso giusto da solo). */
+  [dir="rtl"] .sharebtn .go{transform:scaleX(-1)}
+  [dir="rtl"] .sharebtn:hover .go{transform:scaleX(-1) translateX(3px)}
+  [dir="rtl"] .banner.accent{border-left:none;border-right:3px solid var(--accent)}
+  [dir="rtl"] .bub .meta{text-align:left}
+  /* a code is a code in every language: force left-to-right so digits never
+     reorder or mirror inside an RTL page */
+  [dir="rtl"] .quickcode, [dir="rtl"] .quickinput, [dir="rtl"] .codebox{direction:ltr}
+
+  @media(max-width:480px){
+    /* ⚠️ Qui c'erano tre righe che RIGONFIAVANO l'intestazione (logo 76 px,
+       padding 20) proprio sugli schermi stretti — cioè quasi tutti i telefoni
+       — dove lo spazio è più prezioso. Tolte il 6 set 2026 rifacendo la home:
+       il default nuovo è già compatto, e la finestra alta (min-height:760px)
+       ci pensa da sola a dargli respiro dove c'è. */
+    .hero h1{font-size:1.1875rem}
+    .card{padding:16px}
+    #chatArea{height:min(58vh,520px)}
+    .bub{max-width:84%}
+  }
+
+  /* ---------------------------------- guided steps ----------------------------------
+     The handshake is two exchanges and no page can make it one, so instead of
+     hiding that, it is numbered and one step is asked for at a time. */
+  .step{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+  .step .n{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;
+    justify-content:center;font-weight:800;font-size:1rem;background:var(--panel2);
+    color:var(--dim);border:1.5px solid var(--line)}
+  .step.now .n{background:linear-gradient(135deg,var(--accent),#ff7a2e);color:var(--accent-ink);border:none;
+    box-shadow:var(--glow)}
+  .step.done .n{background:var(--ok);color:#06301f;border:none}
+  .step .lbl{font-weight:800;font-size:1.125rem;letter-spacing:.01em}
+  .step.waiting .lbl{color:var(--dim)}
+  .helptext{color:var(--dim);font-size:0.9375rem;line-height:1.65;margin:0 0 16px}
+  .helptext b{color:var(--ink)}
+  .helptext.warn{color:var(--warn)}
+  /* a note that leads with its own icon rather than a raw emoji, same drawn
+     line-set as every icon in the app */
+  .helptext.wicon{display:flex;align-items:flex-start;gap:10px}
+  .helptext.wicon .btnicon{flex:none;margin-top:1px;color:var(--accent2)}
+
+  /* the code itself is machinery: available, but never the thing in the way */
+  details.showcode{margin-top:14px}
+  details.showcode summary{cursor:pointer;color:var(--faint);font-size:0.8125rem;list-style:none;
+    display:inline-flex;align-items:center;gap:6px;padding:6px 0}
+  details.showcode summary::-webkit-details-marker{display:none}
+  details.showcode summary::before{content:"›";transition:transform .15s}
+  details.showcode[open] summary::before{transform:rotate(90deg)}
+
+  .pasteline{display:flex;gap:9px;margin-top:10px}
+  .pasteline .btn{flex-shrink:0}
+
+  /* ---------------------------------- text size ---------------------------------- */
+  .textsize{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:99px;
+    overflow:hidden;flex-shrink:0}
+  .textsize button{background:none;border:none;color:var(--dim);cursor:pointer;padding:5px 10px;
+    font-weight:800;line-height:1;min-height:0}
+  .textsize button:nth-child(1){font-size:0.75rem}
+  .textsize button:nth-child(2){font-size:0.9375rem}
+  .textsize button:nth-child(3){font-size:1.125rem}
+  .textsize button.on{background:var(--accent);color:var(--accent-ink)}
+
+  /* utility classes — they exist so the page needs no inline style attributes,
+     which is what lets the Content-Security-Policy drop 'unsafe-inline' */
+  .f1{flex:1}
+  .m0{margin:0}
+  .mt8{margin-top:8px} .mt10{margin-top:10px} .mt12{margin-top:12px} .mt16{margin-top:16px}
+  .mb8{margin-bottom:8px}
+  .choices{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .jsb{justify-content:space-between}
+  .inlinebtns{display:flex;gap:8px;flex-shrink:0}
+  .faintlink{color:var(--faint)}
+  .filelink{color:inherit;display:inline-flex;align-items:center;gap:6px}
+
+  /* A transfer used to show nothing at all while it ran — a 500MB video sat
+     for two minutes with no sign of life, indistinguishable from having
+     silently died. currentColor for the fill, deliberately: it inherits
+     whichever bubble it is in (dark on the sender's orange, light on the
+     other side's panel) without a second rule for each. */
+  .xferrow{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+  .xferrow .ic{flex:none;opacity:.85}
+  .xfername{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650}
+  .xferbar{width:100%;height:5px;border-radius:99px;background:rgba(127,127,127,.28);
+    overflow:hidden;margin-top:7px}
+  .xferbar>i{display:block;height:100%;width:0%;background:currentColor;
+    border-radius:99px;transition:width .15s linear;opacity:.9}
+  .xfermeta{font-size:0.75rem;opacity:.75;margin-top:4px}
+
+
+/* Pulisci tutto. Rosso solo il pulsante, non tutta la scheda: deve saltare
+   all'occhio quando lo si cerca, non spaventare chi passa di li' per altro. */
+.wipebox{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.wipeconfirm{margin-top:12px}
+.wipebox .btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.wipebox .btnrow .btn{flex:1 1 auto}
+/* ⚠️ NON ridefinire .btn.danger qui. Una regola aggiunta in fondo al foglio
+   vince su quella scritta prima, e il 31 agosto 2026 e' successo: lo stile
+   inventato per questo pulsante ha rubato il colore a "Termina" e a "Nuova
+   sessione", che da bianchi su rosso sono diventati rossi su chiaro —
+   illeggibili se non ci passavi sopra col mouse. Il pulsante qui sotto usa
+   .btn.danger com'e' gia' definito piu' su, e va bene cosi': deve somigliare
+   agli altri pulsanti pericolosi dell'app, non distinguersene. */
+
+/* La riga che dice che un messaggio in arrivo e' stato tagliato perche'
+   superava MAX_TEXT_CHARS. Non deve somigliare al testo: e' l'app che parla,
+   non la persona. */
+.bub .cut{margin-top:6px;font-size:.85em;opacity:.65;font-style:italic}
+
+
+/* I titoli che dividono le impostazioni in tre gruppi. Prima erano nove
+   schede tutte allo stesso livello: chi scorreva non sapeva quando fosse
+   arrivato in fondo ne dove cercare. */
+.setgroup{margin:26px 4px 8px;font-size:.82em;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;opacity:.55}
+.setgroup:first-of-type{margin-top:14px}
+
+/* Il cassetto delle avanzate: <details> nativo, nessun JavaScript. Dentro ci
+   sta cio che il 95% delle persone non aprira mai — ma chi lo cerca lo trova. */
+.advbox{margin-top:26px;border-top:1px solid rgba(127,127,127,.22);padding-top:6px}
+.advbox>summary{cursor:pointer;list-style:none;padding:12px 4px;font-size:.9em;font-weight:600;
+  opacity:.62;border-radius:10px;user-select:none}
+.advbox>summary::-webkit-details-marker{display:none}
+.advbox>summary::before{content:"⚙";margin-inline-end:8px;opacity:.8}
+.advbox>summary::after{content:"›";float:inline-end;transform:rotate(90deg);display:inline-block;opacity:.6}
+.advbox[open]>summary::after{transform:rotate(-90deg)}
+.advbox>summary:hover,.advbox>summary:focus-visible{opacity:1;background:rgba(127,127,127,.12)}
+
+/* La scheda di un contatto: il nome sopra, e sotto DUE PULSANTI LARGHI con
+   la parola scritta. La prima stesura aveva due iconcine accanto alla × che
+   cancella — bersagli piccoli, uno distruttivo, nessuna scritta. Chi sbaglia
+   mira non deve poter cancellare una persona per errore. */
+.contactcard{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:10px 12px 12px;margin-bottom:10px}
+.contactcard .contactrow{background:none;border:0;padding:0;margin:0}
+.contactcard .rm{margin-inline-start:auto;opacity:.45;font-size:1.15rem;line-height:1;
+  background:none;border:0;color:inherit;cursor:pointer;padding:4px 6px;border-radius:8px}
+.contactcard .rm:hover,.contactcard .rm:focus-visible{opacity:1;background:rgba(127,127,127,.16)}
+.cbtns{display:flex;gap:8px;margin-top:10px}
+.cbtns .btn{flex:1;justify-content:center;padding-block:11px}
+
+/* ⚠️ LA PRIMA PAGINA, RIMESSA IN ORDINE IL 6 SET 2026.
+   Misurato su schermo di telefono (alto ~800 px): il titolo grande occupava
+   548 px, e le cose che una persona usa OGNI GIORNO finivano sotto —
+   «Hai l indirizzo di qualcuno?» a 1384 px, i contatti a 1632. Bisognava
+   scorrere due schermate per chiamare qualcuno che senti tutti i giorni.
+   Chi e appena arrivato non ha contatti, e per lui l ordine di prima va bene:
+   deve vedere i due pulsantoni. Chi i contatti ce li ha vuole loro, subito.
+   Quindi non si sposta niente nel documento: cambia solo l ORDINE A SCHERMO,
+   e solo per chi ha gia qualcuno in rubrica. */
+  /* ⚠️ QUI STAVANO NOVE REGOLE `order:` CHE RIMESCOLAVANO LA PRIMA PAGINA.
+     Sono state tolte il 6 set 2026, e non perche' fossero sbagliate: perche'
+     adesso il documento e' gia' nell ordine giusto per tutti. Rimescolare a
+     schermo un ordine sbagliato nel documento significa che chi legge il
+     codice vede una pagina e chi la usa ne vede un altra — e la seconda volta
+     che si tocca qualcosa, una delle due si dimentica.
+     La prima pagina adesso e corta per chiunque: intestazione, messaggi
+     lasciati (solo se ce ne sono), il campo dell indirizzo coi nomi sotto, i
+     due pulsantoni e «fai conoscere l app». La rubrica lunga sta nella
+     rotellina. */
+  /* con dei contatti salvati il titolo ha gia spiegato tutto: si stringe e
+     restituisce spazio a chi usa l app davvero */
+  body.hascontacts .hero{padding:6px 10px 0}
+  body.hascontacts .hero img{width:40px;height:40px;border-radius:13px}
+  body.hascontacts .hero h1{font-size:1.0625rem;margin:8px 0 0}
+  body.hascontacts .hero p{display:none}
+  body.hascontacts .addrdial{margin-top:16px}

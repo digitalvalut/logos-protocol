@@ -5989,9 +5989,13 @@ test.describe('l ascolto si ricorda e il rapporto non tace', () => {
        finto magazzino: quello che conta e' che la scelta venga LETTA */
     const sorgente = require('node:fs')
       .readFileSync(require('node:path').join(__dirname, '..', 'modifica.js'), 'utf8');
-    assert.ok(/localStorage\.setItem\('dvlogos-listen'/.test(sorgente),
+    /* ⚠️ `MEM.` e non `localStorage.` dal 7 set 2026: da quel giorno tutto
+       quello che l'app salva passa da un punto solo, che mette un prefisso
+       diverso quando si gira dalla copia di prova. Il nome e' cambiato, la
+       cosa da garantire no — la scelta va scritta e va riletta. */
+    assert.ok(/MEM\.setItem\('dvlogos-listen'/.test(sorgente),
       'la scelta di restare in ascolto deve essere scritta, o si perde a ogni riavvio');
-    assert.ok(/localStorage\.getItem\('dvlogos-listen'\)\s*===\s*'1'/.test(sorgente),
+    assert.ok(/MEM\.getItem\('dvlogos-listen'\)\s*===\s*'1'/.test(sorgente),
       'e deve essere riletta all avvio, o l app dice spento mentre il telefono sorveglia');
     dopo.stop();
   });
