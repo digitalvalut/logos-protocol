@@ -182,6 +182,40 @@ test('«fai conoscere l\'app» sta in prima pagina, ma NON come terzo pulsantone
     'non deve tornare un terzo pulsantone: sotto i due grandi, non accanto a loro');
 });
 
+test('quando arriva una versione nuova, l\'app lo DICE', () => {
+  /* ⚠️ Il difetto che ha fatto perdere piu' tempo a tutti: l'operatore
+     pubblicava, apriva computer e telefono, e non vedeva niente di nuovo —
+     «la web app non è stata aggiornata? perché non vedo la versione nuova?».
+     L'app si aggiornava per davvero, ma AL CARICAMENTO DOPO e in silenzio: chi
+     guardava lo schermo continuava a eseguire il codice vecchio gia' in
+     memoria, e l'unico posto dove accorgersene era «Come sta l'app», dentro
+     la rotellina.
+     Tre cose devono restare vere, e questo controllo le fissa. */
+  assert.match(HTML, /id="updateBar"/,
+    'la striscia che annuncia la versione nuova non c\'e\' piu\'');
+  assert.match(HTML, /id="btnUpdateNow"/,
+    'e senza il pulsante l\'avviso sarebbe solo una frase');
+
+  /* 1 — fuori da ogni schermata: un aggiornamento arriva mentre stai facendo
+     qualsiasi cosa, non solo mentre guardi la prima pagina */
+  const dentroUnaSchermata = Object.values(SEZIONI).some(s => /id="updateBar"/.test(s));
+  assert.strictEqual(dentroUnaSchermata, false,
+    'dentro una schermata, l\'avviso resterebbe invisibile a chi sta altrove');
+
+  /* 2 — si aggancia al momento in cui il codice nuovo prende il posto del
+     vecchio, che e' l'unico in cui lo si puo' sapere */
+  assert.match(JS, /addEventListener\('controllerchange'/,
+    'senza controllerchange nessuno sa dire quando e\' cambiata la versione');
+
+  /* 3 — ⚠️ e NON lo dice alla primissima visita: li' controllerchange scatta
+     lo stesso (da nessun service worker a uno), e «c'e' una versione nuova»
+     sarebbe falso, detto proprio a chi capisce di meno */
+  assert.match(JS, /const cEraGiaUnaCopia = !!navigator\.serviceWorker\.controller;/,
+    'senza questa guardia, chi apre l\'app per la prima volta legge di un aggiornamento che non c\'e\'');
+  assert.match(JS, /if \(!cEraGiaUnaCopia\) return;/,
+    'la guardia c\'e\' ma non viene usata');
+});
+
 test('chiudere una conversazione non e\' sepolto dentro un menu', () => {
   /* ⚠️ Il difetto segnalato dall'operatore il 7 set 2026: per terminare una
      chat bisognava aprire i tre pallini e poi scegliere «Termina chat».

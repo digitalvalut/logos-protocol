@@ -108,6 +108,24 @@
     </button>
   </div>
 
+  <!-- ⚠️ AGGIUNTA IL 7 SET 2026, dopo che l'operatore ha pubblicato una
+       versione nuova, ha aperto il computer e il telefono, e non l'ha vista:
+       «la web app non è stata aggiornata? perché non vedo la versione nuova?».
+       L'app si aggiornava per davvero — misurato — ma AL CARICAMENTO DOPO, e
+       in silenzio: chi stava guardando lo schermo non aveva modo di saperlo,
+       e l'unico posto dove leggerlo era «Come sta l'app», dentro la rotellina,
+       che nessuno va a cercare.
+       Adesso, quando il codice nuovo prende il posto del vecchio, lo dice e
+       offre di ricaricare. Fuori da ogni schermata come le due schede qui
+       sotto, e per lo stesso motivo: un aggiornamento arriva mentre stai
+       facendo qualsiasi cosa, non solo mentre guardi la prima pagina. -->
+  <div class="banner accent hide jsb" id="updateBar">
+    <span class="f1" data-i18n="update.text">C'è una versione nuova dell'app.</span>
+    <span class="inlinebtns">
+      <button class="btn mini" id="btnUpdateNow" data-i18n="update.btn">Aggiorna</button>
+    </span>
+  </div>
+
   <!-- These two live outside every screen section on purpose: a call can be
        started from Settings (typing an address) and can arrive while any
        screen at all is open, not only Home. Nested inside one screen, either

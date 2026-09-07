@@ -91,7 +91,7 @@ Object.assign(I18N.en, {
 "contacts.sameLookVerified":"verified by voice","contacts.write":"Write","contacts.call":"Call","contacts.remove":"Remove from contacts",
 "contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
-"install.btn":"Install",
+"install.btn":"Install","update.text":"There's a new version of the app.","update.btn":"Update",
 "home.title":"Talk to anyone, wherever they are",
 "home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
 "home.nameLabel":"Your name","first.nameWhy":"Only so the person who opens your invite sees your name instead of \"Someone\". It stays on this phone.","first.youAre":"Whoever opens the invite will see you as","first.change":"change","first.nameNudge":"Write your name first, so whoever opens the invite knows it is you.","addr.haveOne":"Has someone given you their address?",
@@ -280,7 +280,7 @@ Object.assign(I18N.it, {
 "contacts.sameLookVerified":"verificato a voce","contacts.write":"Scrivi","contacts.call":"Chiama","contacts.remove":"Togli dalla rubrica",
 "contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
-"install.btn":"Installa",
+"install.btn":"Installa","update.text":"C'è una versione nuova dell'app.","update.btn":"Aggiorna",
 "home.title":"Parla con chi vuoi, ovunque sia",
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
 "home.nameLabel":"Come ti chiami","first.nameWhy":"Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.","first.youAre":"Chi apre l'invito ti vedrà come","first.change":"cambia","first.nameNudge":"Scrivi prima come ti chiami, così chi apre l'invito sa che sei tu.","addr.haveOne":"Ti hanno dato un indirizzo?","home.namePh":"Il tuo nome",
@@ -470,7 +470,7 @@ Object.assign(I18N.fr, {
 "contacts.sameLookVerified":"vérifié de vive voix","contacts.write":"Écrire","contacts.call":"Appeler","contacts.remove":"Retirer des contacts",
 "contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
-"install.btn":"Installer",
+"install.btn":"Installer","update.text":"Il y a une nouvelle version de l'application.","update.btn":"Mettre à jour",
 "home.title":"Parlez à qui vous voulez, où qu'il soit",
 "home.sub":"Messages, photos, vidéos, appels. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
 "home.nameLabel":"Votre nom","first.nameWhy":"Uniquement pour que la personne qui ouvre votre invitation voie votre nom au lieu de « Quelqu'un ». Il reste sur ce téléphone.","first.youAre":"La personne qui ouvre l'invitation vous verra comme","first.change":"modifier","first.nameNudge":"Écrivez d'abord votre nom, pour que la personne qui ouvre l'invitation sache que c'est vous.","addr.haveOne":"On vous a donné une adresse ?","home.namePh":"Votre nom",
@@ -652,7 +652,7 @@ Object.assign(I18N.de, {
 "contacts.sameLookVerified":"mündlich bestätigt","contacts.write":"Schreiben","contacts.call":"Anrufen","contacts.remove":"Aus Kontakten entfernen",
 "contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
-"install.btn":"Installieren",
+"install.btn":"Installieren","update.text":"Es gibt eine neue Version der App.","update.btn":"Aktualisieren",
 "home.title":"Sprich mit jedem, wo immer er ist",
 "home.sub":"Nachrichten, Fotos, Video, Anrufe. Keine Anmeldung, keine Telefonnummer, für immer kostenlos.",
 "home.nameLabel":"Dein Name","first.nameWhy":"Nur damit die Person, die deine Einladung öffnet, deinen Namen sieht statt „Jemand“. Er bleibt auf diesem Handy.","first.youAre":"Wer die Einladung öffnet, sieht dich als","first.change":"ändern","first.nameNudge":"Schreib zuerst deinen Namen, damit die Person, die die Einladung öffnet, weiß, dass du es bist.","addr.haveOne":"Hat dir jemand eine Adresse gegeben?","home.namePh":"Dein Name",
@@ -834,7 +834,7 @@ Object.assign(I18N.es, {
 "contacts.sameLookVerified":"verificado de viva voz","contacts.write":"Escribir","contacts.call":"Llamar","contacts.remove":"Quitar de contactos",
 "contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
-"install.btn":"Instalar",
+"install.btn":"Instalar","update.text":"Hay una versión nueva de la app.","update.btn":"Actualizar",
 "home.title":"Habla con quien quieras, esté donde esté",
 "home.sub":"Mensajes, fotos, vídeo, llamadas. Sin registro, sin número de teléfono, gratis para siempre.",
 "home.nameLabel":"Tu nombre","first.nameWhy":"Solo para que quien abra tu invitación vea tu nombre en lugar de «Alguien». Se queda en este teléfono.","first.youAre":"Quien abra la invitación te verá como","first.change":"cambiar","first.nameNudge":"Escribe antes tu nombre, así quien abra la invitación sabe que eres tú.","addr.haveOne":"¿Te han dado una dirección?","home.namePh":"Tu nombre",
@@ -1016,7 +1016,7 @@ Object.assign(I18N.pt, {
 "contacts.sameLookVerified":"verificado por voz","contacts.write":"Escrever","contacts.call":"Ligar","contacts.remove":"Remover dos contactos",
 "contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
-"install.btn":"Instalar",
+"install.btn":"Instalar","update.text":"Há uma versão nova da app.","update.btn":"Atualizar",
 "home.title":"Fale com quem quiser, onde quer que esteja",
 "home.sub":"Mensagens, fotos, vídeo, chamadas. Sem registo, sem número de telefone, grátis para sempre.",
 "home.nameLabel":"O seu nome","first.nameWhy":"Só para que quem abrir o teu convite veja o teu nome em vez de «Alguém». Fica neste telemóvel.","first.youAre":"Quem abrir o convite vai ver-te como","first.change":"alterar","first.nameNudge":"Escreve primeiro o teu nome, assim quem abrir o convite sabe que és tu.","addr.haveOne":"Deram-te um endereço?","home.namePh":"O seu nome",
@@ -1198,7 +1198,7 @@ Object.assign(I18N.ru, {
 "contacts.sameLookVerified":"подтверждён голосом","contacts.write":"Написать","contacts.call":"Позвонить","contacts.remove":"Убрать из контактов",
 "contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
-"install.btn":"Установить",
+"install.btn":"Установить","update.text":"Есть новая версия приложения.","update.btn":"Обновить",
 "home.title":"Говорите с кем хотите, где бы они ни были",
 "home.sub":"Сообщения, фото, видео, звонки. Без регистрации, без номера телефона, бесплатно навсегда.",
 "home.nameLabel":"Ваше имя","first.nameWhy":"Только чтобы тот, кто откроет приглашение, увидел ваше имя, а не «Кто-то». Оно остаётся на этом телефоне.","first.youAre":"Тот, кто откроет приглашение, увидит вас как","first.change":"изменить","first.nameNudge":"Сначала напишите своё имя, чтобы тот, кто откроет приглашение, знал, что это вы.","addr.haveOne":"Вам дали чей-то адрес?","home.namePh":"Ваше имя",
@@ -1380,7 +1380,7 @@ Object.assign(I18N.zh, {
 "contacts.sameLookVerified":"已通过语音验证","contacts.write":"写信","contacts.call":"通话","contacts.remove":"从联系人移除",
 "contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
-"install.btn":"安装",
+"install.btn":"安装","update.text":"有新版本的应用。","update.btn":"更新",
 "home.title":"随时随地，和你想聊的人聊天",
 "home.sub":"消息、照片、视频、通话。无需注册，无需电话号码，永久免费。",
 "home.nameLabel":"你的名字","first.nameWhy":"只是让打开你邀请的人看到你的名字，而不是「某人」。它只留在这台手机上。","first.youAre":"打开邀请的人会看到你是","first.change":"修改","first.nameNudge":"先写上你的名字，这样打开邀请的人就知道是你。","addr.haveOne":"有人给了你一个地址吗？","home.namePh":"你的名字",
@@ -1562,7 +1562,7 @@ Object.assign(I18N.ar, {
 "contacts.sameLookVerified":"تم التحقق صوتيًّا","contacts.write":"كتابة","contacts.call":"اتصال","contacts.remove":"إزالة من جهات الاتصال",
 "contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
-"install.btn":"تثبيت",
+"install.btn":"تثبيت","update.text":"يوجد إصدار جديد من التطبيق.","update.btn":"تحديث",
 "home.title":"تحدّث مع من تريد، أينما كان",
 "home.sub":"رسائل، صور، فيديو، مكالمات. بلا تسجيل، بلا رقم هاتف، مجانًا للأبد.",
 "home.nameLabel":"اسمك","first.nameWhy":"فقط لكي يرى من يفتح دعوتك اسمك بدل «شخص ما». يبقى على هذا الهاتف.","first.youAre":"من يفتح الدعوة سيراك باسم","first.change":"تغيير","first.nameNudge":"اكتب اسمك أولًا، ليعرف من يفتح الدعوة أنك أنت.","addr.haveOne":"هل أعطاك أحدهم عنوانه؟","home.namePh":"اسمك",
@@ -1744,7 +1744,7 @@ Object.assign(I18N.ur, {
 "contacts.sameLookVerified":"زبانی تصدیق شدہ","contacts.write":"لکھیں","contacts.call":"کال","contacts.remove":"رابطوں سے ہٹائیں",
 "contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
-"install.btn":"انسٹال کریں",
+"install.btn":"انسٹال کریں","update.text":"ایپ کا نیا ورژن موجود ہے۔","update.btn":"اپ ڈیٹ کریں",
 "home.title":"جس سے چاہیں بات کریں، وہ جہاں بھی ہو",
 "home.sub":"پیغامات، تصاویر، ویڈیو، کالز۔ کوئی سائن اپ نہیں، کوئی فون نمبر نہیں، ہمیشہ کے لیے مفت۔",
 "home.nameLabel":"آپ کا نام","first.nameWhy":"صرف اس لیے کہ جو آپ کی دعوت کھولے وہ «کوئی» کے بجائے آپ کا نام دیکھے۔ یہ اسی فون پر رہتا ہے۔","first.youAre":"جو دعوت کھولے گا وہ آپ کو اس نام سے دیکھے گا","first.change":"تبدیل کریں","first.nameNudge":"پہلے اپنا نام لکھیں، تاکہ جو دعوت کھولے اُسے پتہ ہو کہ یہ آپ ہیں۔","addr.haveOne":"کیا کسی نے آپ کو اپنا پتہ دیا ہے؟","home.namePh":"آپ کا نام",
@@ -1926,7 +1926,7 @@ Object.assign(I18N.hi, {
 "contacts.sameLookVerified":"आवाज़ से सत्यापित","contacts.write":"लिखें","contacts.call":"कॉल","contacts.remove":"संपर्कों से हटाएँ",
 "contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
-"install.btn":"इंस्टॉल करें",
+"install.btn":"इंस्टॉल करें","update.text":"ऐप का नया संस्करण उपलब्ध है।","update.btn":"अपडेट करें",
 "home.title":"जिससे चाहें बात करें, वे कहीं भी हों",
 "home.sub":"संदेश, फ़ोटो, वीडियो, कॉल। कोई साइन-अप नहीं, कोई फ़ोन नंबर नहीं, हमेशा के लिए मुफ़्त।",
 "home.nameLabel":"आपका नाम","first.nameWhy":"बस इसलिए कि जो आपका निमंत्रण खोले उसे «कोई» के बजाय आपका नाम दिखे। यह इसी फ़ोन पर रहता है।","first.youAre":"जो निमंत्रण खोलेगा वह आपको इस नाम से देखेगा","first.change":"बदलें","first.nameNudge":"पहले अपना नाम लिखें, ताकि जो निमंत्रण खोले उसे पता हो कि यह आप हैं।","addr.haveOne":"क्या किसी ने आपको अपना पता दिया है?","home.namePh":"आपका नाम",
@@ -2108,7 +2108,7 @@ Object.assign(I18N.bn, {
 "contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা","contacts.write":"লিখুন","contacts.call":"কল","contacts.remove":"পরিচিতি থেকে সরান",
 "contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
-"install.btn":"ইনস্টল করুন",
+"install.btn":"ইনস্টল করুন","update.text":"অ্যাপের নতুন সংস্করণ এসেছে।","update.btn":"আপডেট করুন",
 "home.title":"যার সাথে চান কথা বলুন, তিনি যেখানেই থাকুন",
 "home.sub":"বার্তা, ছবি, ভিডিও, কল। কোনো সাইন-আপ নেই, কোনো ফোন নম্বর নেই, চিরকালের জন্য বিনামূল্যে।",
 "home.nameLabel":"আপনার নাম","first.nameWhy":"শুধু যাতে যিনি আপনার আমন্ত্রণ খুলবেন তিনি «কেউ একজন»-এর বদলে আপনার নাম দেখেন। এটি এই ফোনেই থাকে।","first.youAre":"যিনি আমন্ত্রণ খুলবেন তিনি আপনাকে দেখবেন","first.change":"বদলান","first.nameNudge":"আগে আপনার নাম লিখুন, যাতে যিনি আমন্ত্রণ খোলেন তিনি বুঝতে পারেন এটি আপনি।","addr.haveOne":"কেউ কি আপনাকে তার ঠিকানা দিয়েছে?","home.namePh":"আপনার নাম",
@@ -2290,7 +2290,7 @@ Object.assign(I18N.id, {
 "contacts.sameLookVerified":"diverifikasi lewat suara","contacts.write":"Tulis","contacts.call":"Telepon","contacts.remove":"Hapus dari kontak",
 "contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
-"install.btn":"Pasang",
+"install.btn":"Pasang","update.text":"Ada versi baru aplikasi ini.","update.btn":"Perbarui",
 "home.title":"Bicara dengan siapa pun yang Anda mau, di mana pun mereka berada",
 "home.sub":"Pesan, foto, video, panggilan. Tanpa pendaftaran, tanpa nomor telepon, gratis selamanya.",
 "home.nameLabel":"Nama Anda","first.nameWhy":"Hanya supaya orang yang membuka undanganmu melihat namamu, bukan \"Seseorang\". Namanya tetap di ponsel ini.","first.youAre":"Yang membuka undangan akan melihatmu sebagai","first.change":"ubah","first.nameNudge":"Tulis dulu namamu, supaya yang membuka undangan tahu itu kamu.","addr.haveOne":"Ada yang memberimu sebuah alamat?","home.namePh":"Nama Anda",
@@ -2779,6 +2779,17 @@ $('installClose').addEventListener('click', () => {
   $('installBar').classList.add('hide');
   try{ localStorage.setItem('dvlogos-install-dismissed','1'); }catch(e){}
 });
+/* ⚠️ Non c'e' la × per chiudere questa striscia, e non e' una dimenticanza:
+   una versione nuova non e' un suggerimento da cui difendersi, e chi la manda
+   via resta a girare con codice vecchio senza piu' nessun modo di accorgersene
+   — cioe' esattamente il problema che questa striscia esiste per chiudere.
+   Sparisce da sola ricaricando, che e' l'unica cosa che deve fare. */
+$('btnUpdateNow').addEventListener('click', () => {
+  /* ricaricare senza `#`: se si sta guardando l'app dopo aver aperto un link
+     d'invito, ripetere quel pezzo rifarebbe partire il collegamento vecchio */
+  try{ location.replace(location.pathname + location.search); }
+  catch(_){ location.reload(); }
+});
 /* A translated sentence alone was easy to skim past without ever spotting
    which real icon it means — someone who does not recognise the word
    "Condividi"/"Share" has nothing else to go on. This draws Safari's actual
@@ -2855,6 +2866,29 @@ window.addEventListener('appinstalled', () => { deferredPrompt = null; paintInst
 if ('serviceWorker' in navigator
     && location.protocol.startsWith('http')
     && location.hostname !== 'appassets.androidplatform.net'){
+  /* ⚠️ AGGIUNTO IL 7 SET 2026. L'operatore ha pubblicato una versione nuova,
+     ha aperto computer e telefono, e non l'ha vista: «la web app non è stata
+     aggiornata? perché non vedo la versione nuova?».
+     L'app si aggiornava per davvero — misurato: un caricamento normale passava
+     da 4.26 a 4.27, service worker compreso — ma AL CARICAMENTO DOPO e IN
+     SILENZIO. Chi stava guardando lo schermo continuava a vedere il codice
+     vecchio gia' in memoria, e l'unico posto dove accorgersene era «Come sta
+     l'app», dentro la rotellina, dove nessuno va a guardare.
+     Il momento giusto per dirlo e' questo: `controllerchange` scatta quando il
+     service worker nuovo prende il posto del vecchio (succede subito, perche'
+     quello nuovo fa skipWaiting + clients.claim). Da li' in poi la pagina sta
+     eseguendo codice vecchio con un service worker nuovo: e' esattamente il
+     momento in cui una ricarica serve, e l'unico in cui si puo' saperlo.
+     ⚠️ `c'era gia' un controller` non e' pignoleria: alla PRIMISSIMA visita
+     controllerchange scatta lo stesso, perche' si passa da nessun service
+     worker a uno. Senza questa guardia, chi apre l'app per la prima volta in
+     vita sua leggerebbe «c'e' una versione nuova» — che e' falso e confonde
+     proprio chi capisce di meno. */
+  const cEraGiaUnaCopia = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!cEraGiaUnaCopia) return;
+    try{ $('updateBar').classList.remove('hide'); }catch(_){}
+  });
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('modifica-sw.js', { scope: './modifica.html', updateViaCache: 'none' })
@@ -7522,7 +7556,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.27';
+const APP_VERSION = 'logos-modifica-4.28';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
