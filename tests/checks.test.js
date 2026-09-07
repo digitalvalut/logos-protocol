@@ -130,28 +130,29 @@ test('il codice da mandare a mano non resta chiuso dentro un contenitore che il 
 });
 
 /* ---------------------------------------------------- cosa sta in prima pagina -- */
-/* ⚠️ Questo controllo esiste per una ragione sola, ed e' successa due volte in
-   un giorno: la prima pagina si riempie da sola. Ogni cosa aggiunta qui aveva
-   un buon motivo — la rubrica per chiamare in fretta, il pulsante per far
-   conoscere l'app, il riquadro «ha funzionato, passalo a qualcuno» — e messe
-   insieme erano sei cose, di cui una sola era quella per cui uno l'app l'aveva
-   aperta. L'operatore l'ha detto guardandola: «troppa carne al fuoco».
-   La prima pagina deve rispondere a tre domande: ho l'indirizzo di qualcuno?
-   voglio invitare qualcuno? mi hanno mandato un codice? Il resto sta dietro la
-   rotellina, che e' un posto dove si mette ordine e non dove si agisce.
-   Un buon motivo non basta piu': se una cosa nuova deve stare qui, si toglie
-   questo controllo APPOSTA, sapendo cosa si sta facendo. */
+/* ⚠️ Questo controllo esiste per una ragione sola, ed e' successa tre volte in
+   un giorno: la prima pagina si riempie da sola. Ogni cosa aggiunta li' aveva
+   un buon motivo — la rubrica per chiamare in fretta, il riquadro «ha
+   funzionato, passalo a qualcuno» — e messe insieme erano sei cose, di cui una
+   sola era quella per cui uno l'app l'aveva aperta. L'operatore l'ha detto
+   guardandola: «troppa carne al fuoco».
+   La prima pagina risponde a tre domande — ho l'indirizzo di qualcuno? voglio
+   invitare qualcuno? mi hanno mandato un codice? — piu' un'uscita di servizio,
+   «fai conoscere l'app», che l'operatore ha voluto li' («e' un tasto
+   importante») e che infatti non e' una quarta domanda: e' orizzontale e
+   piccola, sotto le tre.
+   Quello che resta fuori resta fuori. Se una cosa nuova deve entrare, si
+   modifica questo controllo APPOSTA, sapendo cosa si sta facendo. */
 const SEZIONI = Object.fromEntries(
   [...HTML.matchAll(/<section id="(screen[A-Za-z]+)"[^>]*>([\s\S]*?)<\/section>/g)]
     .map(m => [m[1], m[2]]));
 
-test('la prima pagina non si riprende le cose che sono state spostate nella rotellina', () => {
+test('la prima pagina non si riprende la rubrica lunga', () => {
   assert.ok(SEZIONI.screenHome && SEZIONI.screenSettings, 'le due schermate non sono state lette');
   /* id -> perche' non deve stare in prima pagina */
   const SFRATTATI = {
     contactsCard: 'la rubrica lunga: avatar, date e una × che cancella, letta prima di tutto e utile per ultima',
     contactsList: 'idem — l\'elenco vero e proprio',
-    btnShareApp:  'far conoscere l\'app si fa una volta ogni tanto, non ogni volta che si apre',
   };
   const guai = [];
   for (const [id, perche] of Object.entries(SFRATTATI)){
@@ -163,18 +164,37 @@ test('la prima pagina non si riprende le cose che sono state spostate nella rote
   assert.deepStrictEqual(guai, [], guai.join(' | '));
 });
 
+test('«fai conoscere l\'app» sta in prima pagina, ma NON come terzo pulsantone', () => {
+  /* ⚠️ Rimesso in home il 6 set 2026 su richiesta esplicita dell'operatore
+     («è un tasto importante») dopo che la 4.22 l'aveva spostato dietro la
+     rotellina. La parte che questo controllo protegge non e' che ci sia — e'
+     che non torni a essere un pulsantone: `.sharebtn` e' orizzontale e basso,
+     `.bigchoice` e' il blocco alto e pieno. Rimetterlo in quella classe
+     significherebbe tre blocchi pieni in fila e nessuna gerarchia. */
+  assert.match(SEZIONI.screenHome, /id="btnShareApp"/,
+    'il pulsante per far conoscere l\'app deve stare in prima pagina');
+  assert.doesNotMatch(SEZIONI.screenSettings, /id="btnShareApp"/,
+    'e in un posto solo: due copie dello stesso id romperebbero il controllo sui duplicati');
+  const riga = SEZIONI.screenHome.match(/<button[^>]*id="btnShareApp"[^>]*>/)[0];
+  assert.match(riga, /class="sharebtn"/,
+    'deve restare il pulsante orizzontale basso');
+  assert.doesNotMatch(riga, /bigchoice/,
+    'non deve tornare un terzo pulsantone: sotto i due grandi, non accanto a loro');
+});
+
 test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ordine giusto', () => {
   /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
      che rimescolavano questa pagina sono state tolte apposta, perche' chi legge
      il codice e chi usa l'app devono vedere la stessa pagina. */
-  const ATTESI = ['lettersCard', 'addrDialIn', 'addrPeople', 'goStart', 'goJoin'];
+  const ATTESI = ['lettersCard', 'addrDialIn', 'addrPeople', 'goStart', 'goJoin', 'btnShareApp'];
   const dove = ATTESI.map(id => [id, SEZIONI.screenHome.indexOf(`id="${id}"`)]);
   for (const [id, pos] of dove) assert.notStrictEqual(pos, -1, `#${id} non e' piu' in prima pagina`);
   const fuoriPosto = dove.filter(([, pos], i) => i > 0 && pos < dove[i - 1][1]);
   assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [],
-    'l\'ordine atteso e\': messaggi lasciati, campo dell\'indirizzo, nomi, poi i due pulsantoni — ' +
-    'i nomi DOPO il campo perche\' sono cio\' che lo riempie, e il campo PRIMA dei pulsantoni ' +
-    'perche\' chi ha gia\' un indirizzo non deve passare da «Parla con qualcuno»');
+    'l\'ordine atteso e\': messaggi lasciati, campo dell\'indirizzo, nomi, i due pulsantoni, ' +
+    'poi «fai conoscere l\'app» — i nomi DOPO il campo perche\' sono cio\' che lo riempie, il ' +
+    'campo PRIMA dei pulsantoni perche\' chi ha gia\' un indirizzo non deve passare da «Parla ' +
+    'con qualcuno», e la condivisione ULTIMA perche\' non e\' perche\' uno ha aperto l\'app');
 });
 
 /* ------------------------------------------------------------ the languages -- */

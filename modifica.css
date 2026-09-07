@@ -77,16 +77,17 @@
   /* Compact on purpose. The old hero was tall enough that on an ordinary phone
      the second of the two buttons fell below the fold, which defeats the whole
      point of having exactly two. */
-  .hero{text-align:center;padding:16px 10px 2px}
-  .hero img{width:64px;height:64px;border-radius:20px;box-shadow:0 8px 26px rgba(255,145,77,.20)}
-  .hero h1{font-size:1.3125rem;letter-spacing:-.015em;margin:13px 0 5px;font-weight:800;line-height:1.25}
+  .hero{text-align:center;padding:12px 10px 0}
+  .hero img{width:58px;height:58px;border-radius:18px;
+    box-shadow:0 12px 30px rgba(255,145,77,.22),0 3px 10px rgba(0,0,0,.35)}
+  .hero h1{font-size:1.25rem;letter-spacing:-.02em;margin:12px 0 5px;font-weight:800;line-height:1.2}
   /* deliberately quiet: it explains, it does not compete with the two buttons */
-  .hero p{color:var(--faint);font-size:0.875rem;margin:0 auto;max-width:25em;line-height:1.5}
+  .hero p{color:var(--faint);font-size:0.8438rem;margin:0 auto;max-width:22em;line-height:1.5}
   @media(min-height:760px){
-    .hero{padding:26px 10px 4px}
-    .hero img{width:80px;height:80px;border-radius:24px}
-    .hero h1{font-size:1.5rem}
-    .hero p{font-size:0.9062rem}
+    .hero{padding:22px 10px 0}
+    .hero img{width:70px;height:70px;border-radius:21px}
+    .hero h1{font-size:1.4375rem}
+    .hero p{font-size:0.875rem}
   }
 
   .card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
@@ -137,7 +138,24 @@
   .whyknocks{color:var(--dim);font-size:0.9375rem;line-height:1.55;margin-bottom:8px;
     padding-inline-start:11px;border-inline-start:3px solid var(--line);overflow-wrap:anywhere}
 
-  .addrdial{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+  /* Il campo dell'indirizzo e il suo pulsante come UN modulo solo: campo, poi
+     «Chiamalo» attaccato sotto. Niente riga divisoria sopra — lo stacco lo fa
+     lo spazio, non un tratto grigio.
+     ⚠️ «Chiamalo» NON è pieno d'arancione, ed è una correzione fatta guardando
+     lo schermo: pieno com'era, finiva appiccicato sopra «Parla con qualcuno»,
+     che è arancione anche lui, e i due si leggevano come UNA macchia sola.
+     Sono due azioni diverse e devono sembrarlo. Adesso è scuro con il bordo e
+     la scritta arancioni: si vede che è il pulsante DI QUEL CAMPO, e i due
+     pulsantoni sotto restano gli unici blocchi pieni della pagina. */
+  .addrdial{margin-top:22px}
+  #addrDialIn{border-radius:14px;padding:16px;font-size:1.125rem!important;
+    letter-spacing:.06em;text-align:center;background:#0a0c10}
+  #btnAddrDial{width:100%;margin-top:9px;padding:14px 20px;border-radius:14px;
+    font-size:1.0625rem;font-weight:750;color:var(--accent2);
+    background:rgba(255,145,77,.09);border:1.5px solid rgba(255,145,77,.42)}
+  #btnAddrDial:hover{border-color:var(--accent);background:rgba(255,145,77,.15);
+    transform:translateY(-1px)}
+  #btnAddrDial .ic{color:var(--accent2);opacity:.9}
 
   /* ⚠️ I nomi sotto il campo dell indirizzo. NON e una rubrica: e il campo che
      si ricorda chi chiami di solito — vedi #addrPeople nella pagina.
@@ -222,34 +240,41 @@
      at all. These are meant to be the first thing seen and the only thing
      that needs deciding — big enough to hit without aiming, and readable
      across a room. */
-  .bigchoices{display:grid;gap:12px;margin:22px 0 6px}
+  /* 26 px sopra e 11 fra loro: lo stacco piu grande separa il modulo
+     dell'indirizzo dalle due scelte, quello piccolo tiene le due scelte
+     insieme come un gruppo. Spazi uguali avrebbero fatto sembrare tutto un
+     elenco di quattro pulsanti uguali. */
+  .bigchoices{display:grid;gap:11px;margin:26px 0 0}
   .bigchoice{display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:2px;width:100%;padding:24px 20px 22px;cursor:pointer;color:var(--ink);
-    background:var(--panel2);border:1px solid var(--line);border-radius:var(--r-lg);
-    transition:transform .12s ease,box-shadow .18s ease,border-color .18s ease;text-align:center}
+    gap:0;width:100%;padding:17px 20px 15px;cursor:pointer;color:var(--ink);
+    background:var(--panel2);border:1px solid var(--line);border-radius:20px;
+    transition:transform .12s ease,box-shadow .18s ease,border-color .18s ease,filter .15s ease;
+    text-align:center}
   .bigchoice:hover{transform:translateY(-2px)}
-  .bigchoice:active{transform:translateY(0) scale(.995)}
-  .bigchoice .ic{display:block;width:38px;height:38px;margin-bottom:12px;color:var(--dim)}
+  .bigchoice:active{transform:translateY(0) scale(.994)}
+  .bigchoice .ic{display:block;width:30px;height:30px;margin-bottom:8px;color:var(--dim)}
   .bigchoice .ic svg{width:100%;height:100%;display:block}
-  .bigchoice .t{font-weight:800;font-size:1.5rem;letter-spacing:-.02em;line-height:1.15}
-  .bigchoice .d{color:var(--dim);font-size:0.9375rem;line-height:1.45;margin-top:5px}
+  .bigchoice .t{font-weight:800;font-size:1.3125rem;letter-spacing:-.02em;line-height:1.15}
+  .bigchoice .d{color:var(--dim);font-size:0.9062rem;line-height:1.4;margin-top:3px}
 
   /* A colour each, so which is which is answered before anything is read.
      Orange starts something; blue opens something you were given; green passes
      it on. Filled rather than merely tinted — a hesitant button is the same as
      no button at all — and the text on each is dark, which is what keeps it
-     readable on a bright fill. */
-  .bigchoice.primary{background:linear-gradient(160deg,var(--accent2),var(--accent));
+     readable on a bright fill. The inset white hairline on top and the deep
+     coloured shadow are what give these weight without size — the "wow" is in
+     the light, not in the height. */
+  .bigchoice.primary{background:linear-gradient(158deg,#ffb680,var(--accent) 52%,#f4732b);
     border-color:transparent;color:var(--accent-ink);
-    box-shadow:0 10px 30px rgba(255,145,77,.28)}
-  .bigchoice.primary:hover{box-shadow:0 16px 40px rgba(255,145,77,.36)}
+    box-shadow:0 14px 32px rgba(255,145,77,.34),inset 0 1px 0 rgba(255,255,255,.28)}
+  .bigchoice.primary:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(255,145,77,.42),inset 0 1px 0 rgba(255,255,255,.28)}
   .bigchoice.primary .ic{color:var(--accent-ink);opacity:.9}
-  .bigchoice.primary .d{color:rgba(26,14,5,.72)}
+  .bigchoice.primary .d{color:rgba(26,14,5,.74)}
 
-  .bigchoice.enter{background:linear-gradient(160deg,#5ab8ff,#2e86f5);
+  .bigchoice.enter{background:linear-gradient(158deg,#6ec0ff,#2e86f5 55%,#1f6fe0);
     border-color:transparent;color:#08142e;
-    box-shadow:0 10px 30px rgba(46,134,245,.34)}
-  .bigchoice.enter:hover{box-shadow:0 16px 40px rgba(46,134,245,.42)}
+    box-shadow:0 14px 32px rgba(46,134,245,.36),inset 0 1px 0 rgba(255,255,255,.30)}
+  .bigchoice.enter:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(46,134,245,.44),inset 0 1px 0 rgba(255,255,255,.30)}
   .bigchoice.enter .ic{color:#08142e;opacity:.9}
   .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
@@ -259,8 +284,10 @@
      same footing and ask which one first; one above the other answers that
      before anyone has to wonder, and gives the finger a bigger thing to hit. */
   @media(min-width:560px){
-    .bigchoices{gap:14px}
-    .bigchoice{padding:30px 22px 26px}
+    .bigchoices{gap:13px}
+    .bigchoice{padding:24px 22px 22px}
+    .bigchoice .ic{width:34px;height:34px;margin-bottom:11px}
+    .bigchoice .t{font-size:1.4375rem}
   }
 
   /* the state of the line, without a word of jargon */
@@ -271,18 +298,26 @@
   .cdot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(255,92,108,.18)}
 
 
-  /* Same size and shape as the two above — a small link was a target nobody
-     over sixty could hit — but flat and quiet, so the eye still lands on the
-     two things that matter first. */
-  .sharerow{margin-top:14px}
-  /* Green, but held back: still obviously a button and still the same width,
-     while staying behind the two that are why anyone opened the app. */
-  .bigchoice.quiet{padding:18px 20px;gap:0;
-    background:linear-gradient(180deg,rgba(61,220,151,.10),rgba(61,220,151,.03));
-    border-color:rgba(61,220,151,.34)}
-  .bigchoice.quiet .ic{width:28px;height:28px;margin-bottom:9px;color:var(--ok)}
-  .bigchoice.quiet .t{font-size:1.0625rem;font-weight:700;color:var(--ok)}
-  .bigchoice.quiet:hover{border-color:var(--ok)}
+  /* «Fai conoscere l'app». Importante ma non un terzo pulsantone: orizzontale,
+     icona piccola a sinistra, testo, una freccia a destra che scivola al
+     passaggio. Tutta larghezza — un bersaglio vero per un pollice — verde come
+     le altre cose che «passano avanti qualcosa», un gradino sotto i due grandi.
+     Non ha classe `.bigchoice`: la forma è diversa apposta, e riusare quella
+     classe l'avrebbe trascinato di nuovo verso il pulsantone. */
+  .sharerow{margin-top:11px}
+  .sharebtn{display:flex;align-items:center;gap:12px;width:100%;
+    padding:14px 16px;cursor:pointer;text-align:start;font:inherit;color:var(--ok);
+    border-radius:16px;border:1.5px solid rgba(61,220,151,.42);
+    background:linear-gradient(180deg,rgba(61,220,151,.13),rgba(61,220,151,.04));
+    transition:transform .12s ease,border-color .15s ease,box-shadow .18s ease}
+  .sharebtn:hover{transform:translateY(-1px);border-color:var(--ok);
+    box-shadow:0 12px 28px rgba(61,220,151,.18)}
+  .sharebtn:active{transform:translateY(0)}
+  .sharebtn .ic{width:22px;height:22px;flex:none}
+  .sharebtn .ic svg,.sharebtn .go svg{width:100%;height:100%;display:block}
+  .sharebtn .t{flex:1;font-size:1rem;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+  .sharebtn .go{width:17px;height:17px;flex:none;opacity:.65;transition:transform .15s ease,opacity .15s ease}
+  .sharebtn:hover .go{transform:translateX(3px);opacity:1}
   .gear{background:none;border:1px solid var(--line);border-radius:50%;color:var(--dim);
     width:38px;height:38px;padding:0;cursor:pointer;flex:none;position:relative;
     display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
@@ -304,6 +339,10 @@
   html.easy #notifyCard,
   html.easy #autocleanCard,
   html.easy .legal,
+  /* «Modalità semplice» = due pulsanti e nient'altro attorno: qui il tasto
+     «fai conoscere l'app» è proprio il tipo di cosa in più che questa modalità
+     esiste per togliere. */
+  html.easy .sharerow,
   html.easy #easyCard .switchrow .txt span{display:none}
   html.easy .hero h1{font-size:1.5rem}
   html.easy .choicecard{padding:30px 24px;gap:20px;border-width:2px}
@@ -629,6 +668,13 @@
      matching what WhatsApp/Telegram do. Only the few places styled with a
      literal `left`/`right` rather than that logical direction need a nudge. */
   [dir="rtl"] .choicecard{text-align:right}
+  /* La freccia di «fai conoscere l'app» indica «di qua si va avanti». In arabo
+     e urdu «avanti» e' a sinistra, e una freccia che punta dalla parte
+     sbagliata dice il contrario di quello che vuole dire. Ribaltata, e il
+     piccolo scorrimento al passaggio segue anche lui (translateX dopo
+     scaleX(-1) si muove nel verso giusto da solo). */
+  [dir="rtl"] .sharebtn .go{transform:scaleX(-1)}
+  [dir="rtl"] .sharebtn:hover .go{transform:scaleX(-1) translateX(3px)}
   [dir="rtl"] .banner.accent{border-left:none;border-right:3px solid var(--accent)}
   [dir="rtl"] .bub .meta{text-align:left}
   /* a code is a code in every language: force left-to-right so digits never
@@ -636,9 +682,12 @@
   [dir="rtl"] .quickcode, [dir="rtl"] .quickinput, [dir="rtl"] .codebox{direction:ltr}
 
   @media(max-width:480px){
-    .hero{padding:20px 6px 4px}
-    .hero img{width:76px;height:76px}
-    .hero h1{font-size:1.25rem}
+    /* ⚠️ Qui c'erano tre righe che RIGONFIAVANO l'intestazione (logo 76 px,
+       padding 20) proprio sugli schermi stretti — cioè quasi tutti i telefoni
+       — dove lo spazio è più prezioso. Tolte il 6 set 2026 rifacendo la home:
+       il default nuovo è già compatto, e la finestra alta (min-height:760px)
+       ci pensa da sola a dargli respiro dove c'è. */
+    .hero h1{font-size:1.1875rem}
     .card{padding:16px}
     #chatArea{height:min(58vh,520px)}
     .bub{max-width:84%}
@@ -780,10 +829,12 @@
      che si tocca qualcosa, una delle due si dimentica.
      La prima pagina adesso e corta per chiunque: intestazione, messaggi
      lasciati (solo se ce ne sono), il campo dell indirizzo coi nomi sotto, i
-     due pulsantoni. La rubrica lunga e la condivisione sono nella rotellina. */
+     due pulsantoni e «fai conoscere l app». La rubrica lunga sta nella
+     rotellina. */
   /* con dei contatti salvati il titolo ha gia spiegato tutto: si stringe e
-     restituisce quattrocento pixel a chi usa l app davvero */
+     restituisce spazio a chi usa l app davvero */
   body.hascontacts .hero{padding:6px 10px 0}
-  body.hascontacts .hero img{width:38px;height:38px}
-  body.hascontacts .hero h1{font-size:1.05rem;margin:7px 0 3px}
+  body.hascontacts .hero img{width:40px;height:40px;border-radius:13px}
+  body.hascontacts .hero h1{font-size:1.0625rem;margin:8px 0 0}
   body.hascontacts .hero p{display:none}
+  body.hascontacts .addrdial{margin-top:16px}

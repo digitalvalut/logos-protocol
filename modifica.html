@@ -195,16 +195,17 @@
       <p data-i18n="home.sub">Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.</p>
     </div>
 
-    <!-- ⚠️ RIFATTA IL 6 SET 2026, la seconda volta in un giorno. Qui sopra
-         stavano anche: un riquadro «Ha funzionato, passalo a qualcuno», una
-         rubrica con avatar e due pulsanti per riga, e un pulsante per
-         condividere l'app. Sei cose su una schermata sola, di cui una sola
-         era quello per cui uno l'app l'aveva aperta.
-         Adesso la prima pagina risponde a tre domande e basta: ho l'indirizzo
-         di qualcuno? voglio invitare qualcuno? mi hanno mandato un codice?
-         Non c'e' una quarta domanda, e le cose tolte non sono sparite: la
-         rubrica e la condivisione stanno dietro la rotellina, dove si
-         gestiscono e non intralciano. -->
+    <!-- ⚠️ RIFATTA IL 6 SET 2026, tre volte in un giorno. La prima pagina
+         risponde a tre domande e basta: ho l'indirizzo di qualcuno? voglio
+         invitare qualcuno? mi hanno mandato un codice?
+         La RUBRICA lunga (avatar, date, la × che cancella) è dietro la
+         rotellina — lì si mette ordine, non si agisce di fretta; qui sotto
+         resta solo la riga di nomi che il campo dell'indirizzo si ricorda.
+         «Fai conoscere l'app» era passata dietro la rotellina anche lei, ma
+         l'operatore l'ha rivoluta in prima pagina: «è un tasto importante».
+         Torna, ma NON come terzo pulsantone — orizzontale, icona piccola,
+         sotto i due grandi: importante e visibile senza mettersi in gara con
+         le due azioni che sono il motivo per cui uno ha aperto l'app. -->
 
     <!-- Messaggi lasciati mentre non c'eri. In cima a tutto quando ce ne
          sono — e' l'unica cosa urgente che questa pagina possa avere — e
@@ -276,7 +277,28 @@
       </button>
     </div>
 
-
+    <!-- ⚠️ RIMESSO IN PRIMA PAGINA IL 6 SET 2026 su richiesta dell'operatore
+         («è un tasto importante»), dopo che nella 4.22 l'avevo spostato dietro
+         la rotellina. Orizzontale e non un terzo pulsantone: icona piccola a
+         sinistra, testo accanto, tutta larghezza per essere un bersaglio vero.
+         Verde come le altre cose che «passano avanti qualcosa», sotto i due
+         grandi perché resta un gradino sotto «Parla con qualcuno». -->
+    <div class="sharerow">
+      <button class="sharebtn" id="btnShareApp">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5.5" r="2.8"/><circle cx="6" cy="12" r="2.8"/><circle cx="18" cy="18.5" r="2.8"/>
+            <path d="M8.5 10.6 15.5 6.9M8.5 13.4l7 3.7"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
+        <span class="go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </button>
+    </div>
 
     <!-- Quiet on purpose, and placed after the two real choices rather than
          between them: the same strip used for every other
@@ -475,24 +497,6 @@
       <label class="fieldlabel" data-i18n="install.always">Metti Logos sulla schermata</label>
       <div class="helptext" id="installCardText"></div>
       <button class="btn mt10 hide" id="installCardBtn" data-i18n="install.btn">Installa</button>
-    </div>
-
-    <!-- ⚠️ PORTATO QUI DALLA PRIMA PAGINA IL 6 SET 2026. Far conoscere l'app
-         a qualcuno e' una cosa che si fa una volta ogni tanto, e stava su una
-         schermata che deve rispondere a una domanda sola: come parlo con
-         questa persona, adesso. Qui non da' fastidio a nessuno e si trova
-         quando la si cerca. -->
-    <div class="sharerow">
-      <button class="bigchoice quiet" id="btnShareApp">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
-               stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="24" cy="7.5" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="24" cy="24.5" r="4"/>
-            <path d="M11.6 14.1 20.4 9.6M11.6 17.9l8.8 4.5"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
-      </button>
     </div>
 
     <details class="advbox">
