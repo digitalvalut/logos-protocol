@@ -4742,17 +4742,27 @@ test.describe('due nomi che sembrano lo stesso nome', () => {
    ------------------------------------------------------------------------ */
 test.describe('la prima volta in assoluto (4.25)', () => {
 
-  test('chi apre l\'app la prima volta NON vede il campo dell\'indirizzo', () => {
+  test('il campo dell\'indirizzo parte chiuso — per chiunque, non solo per chi arriva adesso', () => {
+    /* ⚠️ La regola e' cambiata due volte prima di trovare quella giusta, e la
+       storia sta nel commento di refreshAddrDial. L'osservazione che l'ha
+       decisa: chi ha gia' parlato con qualcuno tocca il suo NOME, non riscrive
+       sedici caratteri. Scrivere un indirizzo a mano e' il caso raro. */
     const app = loadApp();
     app.run("saveContacts([]); renderContacts();");
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
-      'un indirizzo permanente e\' un concetto che nasce dopo che qualcuno te ne ha dato uno: ' +
-      'metterlo davanti a chi arriva adesso gli chiede di capirlo per poterlo usare');
+      'chi arriva adesso non deve trovarsi davanti un concetto da capire per poterlo usare');
+    app.run("touchContact('Antonella','fp-a',null,'DV-AAAA-BBBB-CCCC');");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
+      'e nemmeno chi usa l\'app da un anno: la prima pagina deve essere la STESSA per tutti');
+    app.run("setAddrOn(true); renderContacts();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
+      'aver acceso il PROPRIO indirizzo non dice niente su quello DEGLI ALTRI');
     assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), false,
-      'ma la strada deve restare aperta in un tocco per chi un indirizzo ce l\'ha in mano davvero');
+      'ma la domanda che lo apre deve restare sempre li\'');
+    app.stop();
   });
 
-  test('ma chi ce l\'ha in mano lo apre in un tocco', () => {
+  test('ma chi un indirizzo ce l\'ha in mano lo apre in un tocco', () => {
     const app = loadApp();
     app.run("saveContacts([]); renderContacts();");
     app.run("$('showAddrDial').listeners.click[0]();");
@@ -4760,23 +4770,49 @@ test.describe('la prima volta in assoluto (4.25)', () => {
       'la riga deve aprire il campo, non solo esistere');
     assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), true,
       'e sparire lei, o restano la domanda e la risposta una sopra l\'altra');
+    app.stop();
   });
 
-  test('il campo compare da solo appena c\'e\' qualcuno in rubrica', () => {
-    /* ⚠️ Il segnale e' avere il contatto di QUALCUN ALTRO, non avere acceso il
-       PROPRIO indirizzo — errore fatto al primo tentativo e visto misurando il
-       primo avvio: l'app accende il tuo indirizzo da sola quando crei il primo
-       invito, e il campo ricompariva addosso a una persona che ancora non
-       sapeva cosa fosse. */
+  test('col blocco chiuso i nomi restano visibili e lo stato si legge lo stesso', () => {
+    /* ⚠️ IL CONTROLLO CHE PROTEGGE LA COSA PIU FACILE DA ROMPERE QUI.
+       In `addrDialStatus` finiscono «Ha rifiutato la chiamata», «Non ha
+       risposto», «Questo indirizzo non e' scritto bene». Se fosse rimasta
+       dentro al blocco richiuso, la risposta a una chiamata appena tentata
+       sarebbe stata invisibile — e i nomi, che sono il modo NORMALE di
+       richiamare qualcuno, sarebbero stati chiusi insieme al caso raro.
+       Dove stanno nella pagina lo controlla checks.test.js; qui si guarda che
+       il comportamento regga col blocco chiuso, che e' cio' che conta. */
     const app = loadApp();
-    app.run("saveContacts([]); setAddrOn(true); renderContacts();");
+    app.run("saveContacts([]); touchContact('Antonella','fp-a',null,'DV-AAAA-BBBB-CCCC');");
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
-      'aver acceso il proprio indirizzo non dice niente su quello degli altri');
-    app.run("touchContact('Antonella','fp-a',null,'DV-AAAA-BBBB-CCCC');");
+      'il blocco e\' chiuso, come deve');
+    assert.strictEqual(app.run("$('addrPeople').classList.contains('hide')"), false,
+      'i nomi devono restare visibili anche col blocco chiuso');
+    assert.match(app.run("$('addrPeople').innerHTML"), /data-reach="Antonella"/,
+      'e devono essere davvero toccabili, non solo presenti');
+    app.run("setStatus($('addrDialStatus'), 'Ha rifiutato la chiamata.', 'warn');");
+    assert.strictEqual(app.run("$('addrDialStatus').classList.contains('hide')"), false,
+      'la risposta a una chiamata appena tentata non deve finire dentro qualcosa di chiuso');
+    app.stop();
+  });
+
+  test('un indirizzo che arriva da un link apre il campo invece di riempirlo di nascosto', () => {
+    /* ⚠️ La prima stesura di questo test chiamava apriIlCampoIndirizzo() a
+       mano: passava sempre, anche togliendo la chiamata dal punto che conta.
+       Era decorazione, e si e' visto perche' il sabotaggio non ha attaccato.
+       Adesso entra dalla strada vera — `#a=` nell'indirizzo della pagina,
+       cioe' il link che qualcuno ti ha mandato — e passa da autoFillFromHash. */
+    const app = loadApp();
+    app.run(`
+      saveContacts([]); renderContacts();
+      location.hash = '#a=AAAABBBBCCCC';
+      autoFillFromHash();
+    `);
+    assert.notStrictEqual(app.run("$('addrDialIn').value"), '',
+      'il link deve avere scritto l\'indirizzo nel campo');
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false,
-      'con una persona salvata il campo ha senso: sotto ci sono i suoi nomi da toccare');
-    assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), true,
-      'e la riga che lo apriva non serve piu\'');
+      'scrivere in una casella chiusa vuol dire riempire qualcosa che la persona non vede');
+    app.stop();
   });
 
   test('la prima volta che si crea un invito, l\'app chiede come ti chiami', () => {

@@ -221,41 +221,50 @@
          cassetto del cruscotto. Sta prima dei due pulsanti grandi perche chi ha
          gia un indirizzo in mano non deve passare da «Parla con qualcuno», che
          serve a creare un invito per chi non ce l ha. -->
-    <!-- ⚠️ NASCOSTA A CHI E' APPENA ARRIVATO, dal 7 set 2026. L'operatore:
-         «se io sono uno dei primi a usare l'app e mi trovo davanti "hai
-         l'indirizzo di qualcuno" — cosa cazzo ne so? mi confondo».
-         Aveva ragione: l'indirizzo permanente e' un concetto che esiste solo
-         DOPO che qualcuno te ne ha dato uno. Metterlo davanti a chi apre
-         l'app la prima volta gli chiede di capire una cosa prima di poterla
-         usare, ed e' il contrario di «prima si impara a camminare».
-         Compare da sola appena serve: quando c'e' almeno una persona salvata
-         (e allora sotto ci sono i suoi nomi da toccare) o quando si accende
-         il proprio indirizzo. Chi invece un indirizzo ce l'ha in mano il
-         primo giorno — glielo hanno detto a voce o scritto su un foglio — la
-         apre con la riga qui sopra, che costa un tocco e non confonde
-         nessuno perche' e' una domanda, non un campo vuoto. -->
-    <button class="btn ghost linkbtn hide" id="showAddrDial" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</button>
+    <!-- ⚠️ QUESTA NON E' UNA RUBRICA, ed e' la differenza che conta.
+         Prima qui c'era un elenco vero: avatar, «3 giorni fa», una × che
+         cancella e due pulsanti per riga. Sembrava la rubrica del telefono, e
+         chi apriva l'app si fermava a leggerla invece di fare la cosa per cui
+         era entrato.
+         Questa e' la stessa cosa che fa il telefono quando ti suggerisce
+         l'ultimo numero. Nessun avatar, nessuna data, nessuna × — chi vuole
+         mettere ordine lo fa dalla rotellina, dove l'elenco completo e'
+         rimasto per intero.
+         Un tocco fa partire la chiamata, perche' e' l'unica cosa che uno vuole
+         fare toccando un nome; se non risponde, l'app offre da sola di
+         lasciargli due righe (vedi offerToLeaveLetter).
+         ⚠️ STA FUORI dal blocco richiudibile qui sotto, dal 7 set 2026:
+         toccare un nome e' il modo NORMALE di richiamare qualcuno, scrivere
+         un indirizzo a mano e' il caso raro. Tenerli insieme voleva dire
+         chiudere il primo per nascondere il secondo. -->
+    <div class="people hide" id="addrPeople"></div>
+
+    <!-- ⚠️ FUORI ANCH'ESSA, e non e' un dettaglio: qui ci finiscono «Ha
+         rifiutato la chiamata», «Non ha risposto», «Questo indirizzo non e'
+         scritto bene». Lasciata dentro al blocco richiuso, la risposta a una
+         chiamata appena tentata sarebbe stata invisibile — il difetto peggiore
+         di tutta questa riorganizzazione, e il piu' facile da non vedere. -->
+    <div class="status" id="addrDialStatus"></div>
+
+    <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026. Prima era nascosto solo a chi
+         era appena arrivato (l'operatore: «mi trovo davanti "hai l'indirizzo
+         di qualcuno" — cosa cazzo ne so? mi confondo»), e ricompariva aperto
+         appena si aveva qualcuno in rubrica.
+         Poi la sua osservazione piu' giusta: «quando gia' c'e' il primo
+         scambio, il telefono si connette sempre con la stessa persona e si
+         trova subito» — cioe': se hai gia' parlato con qualcuno tocchi il suo
+         NOME, non riscrivi sedici caratteri. Scrivere un indirizzo a mano
+         serve solo quando qualcuno te lo detta o te lo scrive su un foglio.
+         Quindi resta chiuso sempre, per chiunque: la prima pagina e' identica
+         per chi arriva oggi e per chi usa l'app da un anno, e chi l'indirizzo
+         ce l'ha davvero in mano lo apre con un tocco. Una domanda, non un
+         campo vuoto da interpretare. -->
+    <button class="btn ghost linkbtn" id="showAddrDial" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</button>
     <div class="addrdial hide" id="addrDial">
       <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
       <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
              data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
       <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
-      <!-- ⚠️ QUESTA NON E' UNA RUBRICA, ed e' la differenza che conta.
-           Prima qui sotto c'era un elenco vero: avatar, «3 giorni fa», una ×
-           che cancella e due pulsanti per riga. Sembrava la rubrica del
-           telefono, e chi apriva l'app si fermava a leggerla invece di fare
-           la cosa per cui era entrato.
-           Questa e' la stessa cosa che fa il telefono quando ti suggerisce
-           l'ultimo numero: e' il CAMPO che si ricorda, non un elenco di
-           persone. Nessun avatar, nessuna data, nessuna × — chi vuole
-           mettere ordine lo fa dalla rotellina, dove l'elenco completo e'
-           rimasto per intero.
-           Un tocco fa partire la chiamata come prima, perche' e' l'unica
-           cosa che uno vuole fare toccando un nome; se non risponde, l'app
-           offre da sola di lasciargli due righe (vedi offerToLeaveLetter),
-           quindi il vecchio pulsante «Scrivi» non serve piu' a nessuno. -->
-      <div class="people hide" id="addrPeople"></div>
-      <div class="status" id="addrDialStatus"></div>
     </div>
 
     <!-- The whole home, in two verbs. Everything that used to sit around

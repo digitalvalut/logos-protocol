@@ -5024,29 +5024,38 @@ function renderAddrPeople(list){
    Un indirizzo permanente e' un concetto che nasce DOPO che qualcuno te ne ha
    dato uno: prima di allora quel campo chiede di capire una cosa per poterla
    usare, che e' il contrario dell'ordine giusto.
-   Compare da solo appena ha un senso: quando c'e' almeno una persona salvata
-   — e allora sotto ci sono i suoi nomi da toccare, che e' il modo normale di
-   richiamare qualcuno. E resta raggiungibile in un tocco anche il primo
-   giorno, per chi un indirizzo ce l'ha davvero in mano perche' glielo hanno
-   detto a voce o scritto su un foglio: la riga «Ti hanno dato un indirizzo?».
-   ⚠️ NON basta `addrOn()`, ed e' un errore che avevo fatto al primo tentativo:
-   avere acceso il PROPRIO indirizzo non dice niente su quello DEGLI ALTRI, e
-   l'app lo accende da sola alla prima creazione di un invito — quindi il campo
-   ricompariva dopo un tocco, addosso a una persona che ancora non sapeva cosa
-   fosse un indirizzo. Visto misurando il primo avvio, non leggendo il codice.
+   ⚠️ RICHIUSO PER TUTTI dal 7 set 2026, non solo per chi e' appena arrivato.
+   L'osservazione dell'operatore che ha deciso la cosa: «quando gia' c'e' il
+   primo scambio, il telefono si connette sempre con la stessa persona e si
+   trova subito». Cioe': chi ha gia' parlato con qualcuno tocca il suo NOME —
+   i nomi stanno sopra, sempre visibili — e non riscrive sedici caratteri.
+   Scrivere un indirizzo a mano serve solo quando qualcuno te lo detta o te lo
+   scrive su un foglio: e' il caso raro, e paga un tocco invece di occupare
+   centocinquanta pixel a ogni singola apertura dell'app.
+   Cosi' la prima pagina e' IDENTICA per chi arriva oggi e per chi usa l'app da
+   un anno — una cosa in meno che cambia sotto i piedi.
+   ⚠️ Storia di due tentativi sbagliati prima di questo, da non rifare:
+   (1) mostrarlo sempre — confondeva chi arrivava; (2) mostrarlo a chi ha
+   `addrOn()` — ma avere acceso il PROPRIO indirizzo non dice niente su quello
+   DEGLI ALTRI, e l'app lo accende da sola al primo invito, quindi ricompariva
+   dopo un tocco addosso a chi ancora non sapeva cosa fosse.
    `apertoAMano` non viene salvato apposta: e' la scelta di questo momento, e
    alla riapertura dell'app la domanda torna a essere quella giusta. */
 let addrDialApertoAMano = false;
 function refreshAddrDial(){
-  const serve = addrDialApertoAMano || loadContacts().length > 0;
-  $('addrDial').classList.toggle('hide', !serve);
-  $('showAddrDial').classList.toggle('hide', serve);
+  $('addrDial').classList.toggle('hide', !addrDialApertoAMano);
+  $('showAddrDial').classList.toggle('hide', addrDialApertoAMano);
 }
-$('showAddrDial').addEventListener('click', () => {
+/* Aprire il campo, da qualunque strada. Serve anche fuori dal tocco sulla
+   riga: un link che porta un indirizzo dentro (`&a=` in autoFillFromHash) lo
+   SCRIVE nel campo, e scriverlo dentro qualcosa di chiuso vorrebbe dire
+   riempire una casella che la persona non vede. */
+function apriIlCampoIndirizzo(metticiIlCursore){
   addrDialApertoAMano = true;
   refreshAddrDial();
-  try{ $('addrDialIn').focus(); }catch(_){}
-});
+  if (metticiIlCursore) try{ $('addrDialIn').focus(); }catch(_){}
+}
+$('showAddrDial').addEventListener('click', () => apriIlCampoIndirizzo(true));
 
 function renderContacts(){
   const list = loadContacts();
@@ -7474,7 +7483,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.25';
+const APP_VERSION = 'logos-modifica-4.26';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -10562,7 +10571,9 @@ function autoFillFromHash(){
   if (dial){
     const a = parseAddress(dial[1]);
     try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
-    if (a){ $('addrDialIn').value = formatAddress(a); showScreen('screenHome'); showKnockCard(a); return; }
+    /* il campo e' richiuso di partenza: scriverci dentro senza aprirlo
+       riempirebbe una casella che la persona non vede */
+    if (a){ $('addrDialIn').value = formatAddress(a); apriIlCampoIndirizzo(false); showScreen('screenHome'); showKnockCard(a); return; }
   }
   const quick = location.hash.match(/[#&]q=(\d{6})\b/);
   if (quick){

@@ -203,19 +203,39 @@ test('chiudere una conversazione non e\' sepolto dentro un menu', () => {
     'la voce nel menu non va tolta: chi la usa da sempre non deve perderla');
 });
 
+test('i nomi e la riga di stato stanno FUORI dal blocco dell\'indirizzo che si richiude', () => {
+  /* ⚠️ Il blocco `#addrDial` parte chiuso per tutti (vedi refreshAddrDial).
+     Se `#addrPeople` o `#addrDialStatus` finissero dentro, si chiuderebbero
+     con lui: i nomi sono il modo NORMALE di richiamare qualcuno, e in quella
+     riga di stato compaiono «Ha rifiutato la chiamata» e «Non ha risposto» —
+     cioe' la risposta a una chiamata appena tentata diventerebbe invisibile.
+     E' il difetto piu' facile da reintrodurre riordinando questa pagina. */
+  const blocco = SEZIONI.screenHome.match(/<div class="addrdial hide" id="addrDial">([\s\S]*?)<\/div>\s*\n\s*<!--/);
+  assert.ok(blocco, 'il blocco #addrDial non e\' stato trovato');
+  for (const id of ['addrPeople', 'addrDialStatus']){
+    assert.doesNotMatch(blocco[1], new RegExp(`id="${id}"`),
+      `#${id} e' finito dentro il blocco che si richiude: si chiuderebbe insieme a lui`);
+  }
+  /* e il campo che DEVE starci dentro, per non dire il contrario per sbaglio */
+  assert.match(blocco[1], /id="addrDialIn"/,
+    'il campo per scrivere l\'indirizzo deve invece stare dentro: e\' quello che si apre');
+});
+
 test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ordine giusto', () => {
   /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
      che rimescolavano questa pagina sono state tolte apposta, perche' chi legge
      il codice e chi usa l'app devono vedere la stessa pagina. */
-  const ATTESI = ['lettersCard', 'addrDialIn', 'addrPeople', 'goStart', 'goJoin', 'btnShareApp'];
+  const ATTESI = ['lettersCard', 'addrPeople', 'addrDialStatus', 'showAddrDial', 'addrDialIn',
+                  'goStart', 'goJoin', 'btnShareApp'];
   const dove = ATTESI.map(id => [id, SEZIONI.screenHome.indexOf(`id="${id}"`)]);
   for (const [id, pos] of dove) assert.notStrictEqual(pos, -1, `#${id} non e' piu' in prima pagina`);
   const fuoriPosto = dove.filter(([, pos], i) => i > 0 && pos < dove[i - 1][1]);
   assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [],
-    'l\'ordine atteso e\': messaggi lasciati, campo dell\'indirizzo, nomi, i due pulsantoni, ' +
-    'poi «fai conoscere l\'app» — i nomi DOPO il campo perche\' sono cio\' che lo riempie, il ' +
-    'campo PRIMA dei pulsantoni perche\' chi ha gia\' un indirizzo non deve passare da «Parla ' +
-    'con qualcuno», e la condivisione ULTIMA perche\' non e\' perche\' uno ha aperto l\'app');
+    'l\'ordine atteso e\': messaggi lasciati, i NOMI, la riga di stato, la domanda «ti hanno dato ' +
+    'un indirizzo?», il campo che apre, i due pulsantoni, poi «fai conoscere l\'app». ' +
+    'I nomi PRIMA di tutto il resto perche\' toccarne uno e\' il modo normale di richiamare ' +
+    'qualcuno; il campo dell\'indirizzo DOPO perche\' scriverlo a mano e\' il caso raro; e la ' +
+    'condivisione ULTIMA perche\' non e\' il motivo per cui uno ha aperto l\'app');
 });
 
 /* ------------------------------------------------------------ the languages -- */
