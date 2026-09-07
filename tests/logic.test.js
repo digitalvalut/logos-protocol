@@ -1734,6 +1734,69 @@ test.describe('what the audit found', () => {
     });
   });
 
+  test('scrivere nel proprio telefono il codice che quel telefono mostra non fa niente', async () => {
+    /* ⚠️ Segnalato dall'operatore il 7 set 2026: «se nello stesso telefono
+       metto il codice, mi chiamo io stesso?». Sugli INDIRIZZI la difesa
+       c'era gia' (`addr.itsYou`), sui codici a sei cifre no.
+       Il danno vero non e' la confusione: la casella dell'appuntamento SI
+       SVUOTA quando la si legge, quindi il telefono si mangiava il proprio
+       invito — e la persona a cui il codice era stato mandato non poteva piu'
+       entrare, senza che nessuno dei due capisse perche'. */
+    /* ⚠️ Si entra dalla PORTA VERA: si crea davvero un invito con
+       `startQuickShare()`, si legge il codice DALLO SCHERMO e lo si riscrive
+       nel campo — come farebbe una persona. La prima stesura di questo test
+       impostava a mano la variabile che ricorda il codice, e restava verde
+       anche togliendo la riga che la riempie: era decorazione, e se n'e'
+       accorto il sabotaggio, non io. Seconda volta in un giorno. */
+    const app = loadApp();
+    app.run(`
+      window.__toccato = false;
+      ensureFallbackAddress = async () => null;
+      mailboxPutSealed = async () => true;
+      mailboxGetSealed = async () => { window.__toccato = true; return null; };
+      mailboxGet = async () => { window.__toccato = true; return null; };
+    `);
+    /* ⚠️ NON si aspetta: dentro startQuickShare c'e' un ciclo che interroga la
+       casella per quindici minuti, e attenderlo qui impiantava il collaudo —
+       provato, dieci minuti buttati. Si lascia partire, si legge il codice che
+       compare subito, e poi lo si ferma mettendo `pc` a null: e' la stessa
+       condizione che usa il ciclo vero per accorgersi di essere stato
+       soppiantato. */
+    app.run('window.__inCorso = startQuickShare().catch(function(){});');
+    await app.run('new Promise(r => setTimeout(r, 40))');
+
+    const mostrato = app.run("$('quickCodeOut').textContent.replace(/\\D/g,'')");
+    assert.strictEqual(mostrato.length, 6, 'l\'invito non ha prodotto un codice da leggere');
+
+    app.run(`pc = null; stopQuickPump(); window.__toccato = false; $('quickCodeIn').value = ${JSON.stringify(mostrato)};`);
+    await app.run('Promise.resolve(tryQuickConnect()).catch(function(){})');
+    assert.strictEqual(app.run('window.__toccato'), false,
+      'ha interrogato il relay: cosi\' si mangia il proprio invito e chi lo ha ricevuto non entra piu\'');
+    assert.match(app.run("$('quickStatusB').textContent"), /codice che stai mostrando/,
+      'e deve dirlo con parole chiare, non restare zitto');
+    assert.strictEqual(app.run('quickConnecting'), false,
+      'e non deve restare bloccato come se un tentativo fosse in corso');
+    app.stop();
+  });
+
+  test('ma lo stesso codice, su un telefono che non lo sta mostrando, si usa normalmente', async () => {
+    /* Il lato da non rompere: la guardia deve fermare SOLO chi si chiama da
+       solo. Su un altro telefono quel codice e' un invito buono. */
+    const app = loadApp();
+    app.run(`
+      window.__toccato = false;
+      mailboxGetSealed = async () => { window.__toccato = true; return null; };
+      mailboxGet = async () => { window.__toccato = true; return null; };
+      codiceCheStoMostrando = null;
+      $('quickCodeIn').value = '123456';
+    `);
+    await app.run('Promise.resolve(tryQuickConnect()).catch(function(){})');
+    await app.run('new Promise(r => setTimeout(r, 20))');
+    assert.strictEqual(app.run('window.__toccato'), true,
+      'senza un invito proprio in corso, il codice va usato come sempre');
+    app.stop();
+  });
+
   test('e nemmeno un guasto dentro CHI CHIAMA lascia la cassetta interrogata per sempre', async () => {
     /* ⚠️ IL BUCO TROVATO DAL MUTANTE M06, il 7 set 2026, al primo giro del
        grilletto. Il test qui sopra prova esattamente questa proprieta' — ma
