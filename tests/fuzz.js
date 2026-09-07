@@ -108,8 +108,13 @@ const PRELUDIO = `
   peerNick = '';
 `;
 
-function freshApp(){
-  const app = H.loadHostile();
+/* `sorgente` esiste per i mutanti (Fase F): la copia guasta arriva come
+   stringa e modifica.js su disco non viene mai toccato. La presa era gia'
+   pronta in loadHostile; qui mancava il filo che la collega alle campagne, ed
+   e' il motivo per cui i 17 mutanti sono rimasti per mesi senza nessuno che
+   li lanciasse. */
+function freshApp(sorgente){
+  const app = H.loadHostile(sorgente ? { sorgente } : undefined);
   app.run(PRELUDIO);
   return app;
 }
@@ -268,7 +273,7 @@ function runSession(nome, seed, n, opts){
   const o = opts || {};
   const ctx = { budgetPerMinuto: o.budgetPerMinuto, maxIdLen: o.maxIdLen || 256 };
   const rng = H.rngKit(seed);
-  const app = freshApp();
+  const app = freshApp(o.sorgente);
 
   const trovate = new Map();     /* id invariante -> primo ritrovamento */
   const finestra = [];           /* ultime operazioni, per il minimizzatore */

@@ -26,6 +26,24 @@ test.describe('worker: chi può bussare', () => {
     assert.strictEqual(r.corpo.error, 'Forbidden');
   });
 
+  test('e viene respinta anche sulle CASELLE, non solo su /turn', async () => {
+    /* ⚠️ BUCO TROVATO DAL MUTANTE W03 IL 7 SET 2026, e l'avevo aperto io lo
+       stesso giorno. Fino alla 4.26 il controllo dell'origine era uno solo,
+       all'ingresso, e il test qui sopra lo copriva passando da `/turn`.
+       Nella 4.27 ho dato a `/turn` un controllo PROPRIO, piu' stretto — e da
+       quel momento il test qui sopra passava anche cancellando del tutto
+       quello generale: `/turn` si difendeva da solo, e le caselle
+       (`/mailbox`, `/wake`, `/key`, `/letter`) restavano scoperte senza che
+       nessuno dicesse niente.
+       Questo controllo passa da una rotta che NON ha difese proprie, ed e'
+       l'unico modo di sorvegliare davvero quella riga. */
+    const w = W.caricaWorker();
+    const r = await w.chiama('GET', '/mailbox/' + 'a'.repeat(64), { origin: 'https://attaccante.example' });
+    assert.strictEqual(r.status, 403,
+      'la casella accetta un\'origine sconosciuta: il controllo generale non c\'e\' piu\'');
+    assert.strictEqual(r.corpo.error, 'Forbidden');
+  });
+
   test('l\'origine legittima passa', async () => {
     const w = W.caricaWorker();
     const r = await w.chiama('GET', '/mailbox/' + 'a'.repeat(64), { origin: ORIGINE_BUONA });
