@@ -670,26 +670,40 @@ test('every line the front door shows has been written', () => {
   assert.deepStrictEqual(unknown, [], `the front door asks for lines nobody wrote: ${unknown.join(', ')}`);
 });
 
-test('the front door loads nothing from anywhere else either', () => {
-  const offenders = loadsFromElsewhere(HOME_HTML);
-  assert.deepStrictEqual(offenders, [], `the front door loads from elsewhere:\n${offenders.join('\n')}`);
-});
+/* privacy.html is a plain legal page, but it is served from the same origin as
+   the app and stores link to it: it is held to the same discipline. A store
+   review that finds a tracker on the privacy page is the worst place to find
+   one. */
+const PRIVACY_HTML = read('privacy.html');
 
-test('the front door has no inline style or script the policy would block', () => {
-  assert.deepStrictEqual([...HOME_HTML.matchAll(/\sstyle="[^"]*"/g)].map(m => m[0].trim()), []);
-  assert.ok(!/<style[\s>]/i.test(HOME_HTML), 'an inline <style> block would be blocked by its own policy');
-  assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/i.test(HOME_HTML),
-    'an inline <script> would be blocked by its own policy');
-});
+for (const [label, html] of [['the front door', HOME_HTML], ['the privacy page', PRIVACY_HTML]]){
+  test(`${label} loads nothing from anywhere else`, () => {
+    const offenders = loadsFromElsewhere(html);
+    assert.deepStrictEqual(offenders, [], `${label} loads from elsewhere:\n${offenders.join('\n')}`);
+  });
+
+  test(`${label} has no inline style or script the policy would block`, () => {
+    assert.deepStrictEqual([...html.matchAll(/\sstyle="[^"]*"/g)].map(m => m[0].trim()), []);
+    assert.ok(!/<style[\s>]/i.test(html), 'an inline <style> block would be blocked by its own policy');
+    assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/i.test(html),
+      'an inline <script> would be blocked by its own policy');
+  });
+}
 
 test('no page claims protection a <meta> policy cannot give', () => {
   /* frame-ancestors is silently ignored when the policy comes from a meta tag.
      Leaving it in looks like a defence and is only a console warning. */
-  for (const [name, html] of [['index.html', HOME_HTML], ['modifica.html', HTML]]){
+  for (const [name, html] of [['index.html', HOME_HTML], ['modifica.html', HTML], ['privacy.html', PRIVACY_HTML]]){
     const csp = (html.match(/Content-Security-Policy"\s*content="([\s\S]*?)"/) || [, ''])[1];
     assert.ok(!/frame-ancestors/.test(csp),
       `${name} declares frame-ancestors in a meta tag, where browsers ignore it`);
   }
+});
+
+test('the front door links to the privacy page, and the page exists', () => {
+  assert.match(HOME_HTML, /href="privacy\.html"/, 'the front door does not link to the privacy policy');
+  assert.match(PRIVACY_HTML, /Privacy Policy/, 'privacy.html is not the privacy policy');
+  assert.match(PRIVACY_HTML, /Informativa sulla privacy/, 'privacy.html is missing the Italian text');
 });
 
 test('the front door actually leads into the app', () => {

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — DigitalValut Logos</title>
+
+<!-- Same discipline as the app and the front door: nothing is loaded from
+     anywhere else, so there is no third party to trust on this page either. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'none';
+  style-src 'self';
+  img-src 'self' data:;
+  connect-src 'none';
+  form-action 'none';
+  base-uri 'none'">
+
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<main class="legal">
+
+<h1>Privacy Policy</h1>
+<p class="legal-date">In force since 8 September 2026. This is the whole of it — there is no longer version.</p>
+
+<p><strong>Logos collects nothing about you.</strong> There is no account, no
+registration, no phone number, no email. We — the people who make Logos —
+cannot read your messages, cannot see your contacts, and cannot see who you
+talk to or when. The rest of this page explains why that is true rather than
+merely stated.</p>
+
+<h2>What stays on your device and never leaves it</h2>
+<p>Everything Logos remembers is stored locally — in your browser's storage, or
+on Android in the app's own private storage:</p>
+<ul>
+  <li>the cryptographic key pair that is your identity; the private half is
+      created so it cannot be exported by any code, including ours;</li>
+  <li>the name you chose to display, and your address or addresses;</li>
+  <li>contacts you saved, and the three security words for each;</li>
+  <li>your message history, and photos or files you received;</li>
+  <li>your settings.</li>
+</ul>
+<p>None of this is ever sent to us or to anyone else. Clearing the app's data,
+or uninstalling it, erases all of it. On your device this history is stored
+without additional encryption: someone with access to your unlocked phone can
+read it, as with most messengers.</p>
+
+<h2>What passes through the relay, and what the relay can see</h2>
+<p>To help two devices find each other at the start of a conversation, Logos
+uses a small relay — a Cloudflare Worker we operate. Once the two devices are
+connected the relay is out of the picture, and nothing either side says passes
+through it.</p>
+<p>While it is involved, the relay handles:</p>
+<ul>
+  <li><strong>Sealed envelopes</strong> — encrypted with AES-256-GCM before
+      they reach the relay. The relay holds no key and cannot read them. They
+      are deleted the moment they are read, and in any case expire within two
+      minutes (a call being set up) or seven days (a letter left for someone who
+      did not answer).</li>
+  <li><strong>Public keys</strong> — published so someone can dial your address.
+      These are public by design. They expire after one year.</li>
+  <li><strong>Wake-up subscriptions</strong> — encrypted. They expire after 24
+      hours.</li>
+  <li><strong>Your IP address</strong> — seen by the relay only in passing, to
+      limit abuse. It is held in memory, never written to storage, and
+      discarded when the process recycles. We do not log it and it is not
+      linked to anything.</li>
+</ul>
+
+<h2>Other companies involved</h2>
+<ul>
+  <li><strong>Cloudflare</strong> operates the servers the relay runs on, and
+      also hosts the promotional site at digitalvalut-logos.org. As the network
+      operator, Cloudflare processes the requests that reach it and may log IP
+      addresses at its edge, as any internet host does.</li>
+  <li><strong>GitHub</strong> hosts the application, the source code and this
+      page (GitHub Pages). Standard web-server access applies on GitHub's side
+      when you load a page.</li>
+  <li><strong>Your browser's push service</strong> — Google for Chrome, Mozilla
+      for Firefox, Apple for Safari — is involved only if you switch on the
+      optional wake-up notification in the <em>browser</em> version, and only to
+      deliver a nudge with no content in it. <strong>The Android app does not
+      use this:</strong> it contains no Google Play Services and no Firebase,
+      and rings by reading its own encrypted mailbox directly.</li>
+</ul>
+<p>There are no analytics, no telemetry, no crash reporting, no advertising
+identifiers and no tracking code anywhere in Logos — in the app or on the
+website. No third-party script or library is loaded at any point.</p>
+
+<h2>Photos</h2>
+<p>Before a JPEG or PNG is sent, Logos removes its embedded location, device
+model and software metadata on your device, without re-encoding the image.</p>
+
+<h2>Who is responsible</h2>
+<p>Associazione di Promozione Sociale DigitalValut, an Italian non-profit
+association (Ente del Terzo Settore), C.F. 90036980846. Contact:
+<a href="mailto:burbeng78@gmail.com">burbeng78@gmail.com</a>.</p>
+
+<h2>Your rights</h2>
+<p>Because we hold no data that identifies you, there is normally nothing for
+us to show you, correct or delete on request — there is nothing there. If you
+believe otherwise, write to the address above. You can erase everything Logos
+has stored at any time by clearing the app's data or uninstalling it. If you
+are in the EU and believe your rights have not been respected, you may lodge a
+complaint with your national data protection authority.</p>
+
+<h2>Children</h2>
+<p>Logos has no content feed, no discovery and no profiling, and it collects
+nothing. It is a communication tool, and a parent should supervise its use as
+with any messenger.</p>
+
+<h2>Changes</h2>
+<p>Any change to this policy is posted on this page with a new date. There is
+no mailing list to notify you through, because we do not have your email.</p>
+
+<hr>
+
+<h1 lang="it">Informativa sulla privacy</h1>
+<p class="legal-date" lang="it">In vigore dall'8 settembre 2026. Questo è tutto — non esiste una versione più lunga.</p>
+
+<p lang="it"><strong>Logos non raccoglie nulla su di te.</strong> Non c'è un
+account, non c'è registrazione, non c'è numero di telefono, non c'è email.
+Noi — le persone che fanno Logos — non possiamo leggere i tuoi messaggi, non
+possiamo vedere i tuoi contatti, non possiamo sapere con chi parli né quando.
+Il resto di questa pagina spiega perché è vero, non solo dichiarato.</p>
+
+<h2 lang="it">Cosa resta sul tuo dispositivo e non lo lascia mai</h2>
+<p lang="it">Tutto ciò che Logos ricorda è salvato in locale — nella memoria
+del browser, o su Android nella memoria privata dell'app:</p>
+<ul lang="it">
+  <li>la coppia di chiavi crittografiche che è la tua identità; la parte
+      privata è creata in modo da non poter essere esportata da nessun codice,
+      nemmeno il nostro;</li>
+  <li>il nome che hai scelto di mostrare, e il tuo indirizzo o i tuoi
+      indirizzi;</li>
+  <li>i contatti che hai salvato, e le tre parole di sicurezza di ciascuno;</li>
+  <li>la cronologia dei messaggi, e le foto o i file che hai ricevuto;</li>
+  <li>le tue impostazioni.</li>
+</ul>
+<p lang="it">Niente di tutto questo viene mai mandato a noi o a chiunque altro.
+Cancellare i dati dell'app, o disinstallarla, elimina tutto. Sul dispositivo
+questa cronologia è salvata senza cifratura aggiuntiva: chi ha accesso al tuo
+telefono sbloccato può leggerla, come nella maggior parte dei messenger.</p>
+
+<h2 lang="it">Cosa passa dal relay, e cosa il relay può vedere</h2>
+<p lang="it">Per aiutare due dispositivi a trovarsi all'inizio di una
+conversazione, Logos usa un piccolo relay — un Cloudflare Worker che gestiamo
+noi. Appena i due dispositivi sono connessi, il relay esce di scena e niente di
+ciò che le due parti si dicono passa da lì.</p>
+<p lang="it">Finché è coinvolto, il relay gestisce:</p>
+<ul lang="it">
+  <li><strong>Buste sigillate</strong> — cifrate con AES-256-GCM prima di
+      arrivare al relay. Il relay non ha nessuna chiave e non può leggerle.
+      Vengono cancellate nel momento in cui sono lette e comunque scadono entro
+      due minuti (una chiamata in fase di apertura) o sette giorni (una lettera
+      lasciata a chi non ha risposto).</li>
+  <li><strong>Chiavi pubbliche</strong> — pubblicate perché qualcuno possa
+      chiamare il tuo indirizzo. Sono pubbliche per progetto. Scadono dopo un
+      anno.</li>
+  <li><strong>Iscrizioni al risveglio</strong> — cifrate. Scadono dopo 24
+      ore.</li>
+  <li><strong>Il tuo indirizzo IP</strong> — visto dal relay solo di passaggio,
+      per limitare gli abusi. È tenuto in memoria, mai scritto su disco, e
+      scartato quando il processo si ricicla. Non lo registriamo e non è
+      collegato a nulla.</li>
+</ul>
+
+<h2 lang="it">Altre aziende coinvolte</h2>
+<ul lang="it">
+  <li><strong>Cloudflare</strong> gestisce i server su cui gira il relay, e
+      ospita anche il sito promozionale digitalvalut-logos.org. Come gestore
+      della rete, Cloudflare elabora le richieste che le arrivano e può
+      registrare indirizzi IP ai suoi margini, come qualsiasi host internet.</li>
+  <li><strong>GitHub</strong> ospita l'applicazione, il codice sorgente e
+      questa pagina (GitHub Pages). Quando carichi una pagina, dal lato di
+      GitHub si applica il normale accesso a un server web.</li>
+  <li><strong>Il servizio di notifiche del tuo browser</strong> — Google per
+      Chrome, Mozilla per Firefox, Apple per Safari — è coinvolto solo se
+      accendi la notifica di risveglio opzionale nella versione <em>browser</em>,
+      e solo per consegnare un colpetto senza contenuto. <strong>L'app Android
+      non lo usa:</strong> non contiene Google Play Services né Firebase, e
+      squilla leggendo direttamente la propria casella cifrata.</li>
+</ul>
+<p lang="it">Non ci sono analytics, né telemetria, né segnalazione di crash, né
+identificatori pubblicitari, né codice di tracciamento da nessuna parte in
+Logos — nell'app o sul sito. Nessuno script o libreria di terze parti viene
+mai caricato.</p>
+
+<h2 lang="it">Foto</h2>
+<p lang="it">Prima che un JPEG o un PNG venga inviato, Logos rimuove sul tuo
+dispositivo la posizione, il modello del telefono e i metadati del software
+incorporati, senza ricomprimere l'immagine.</p>
+
+<h2 lang="it">Chi è il responsabile</h2>
+<p lang="it">Associazione di Promozione Sociale DigitalValut, associazione
+italiana senza scopo di lucro (Ente del Terzo Settore), C.F. 90036980846.
+Contatto: <a href="mailto:burbeng78@gmail.com">burbeng78@gmail.com</a>.</p>
+
+<h2 lang="it">I tuoi diritti</h2>
+<p lang="it">Poiché non deteniamo alcun dato che ti identifichi, di norma non
+c'è nulla da mostrarti, correggere o cancellare su richiesta — non c'è niente.
+Se pensi il contrario, scrivi all'indirizzo qui sopra. Puoi cancellare tutto
+ciò che Logos ha salvato in qualsiasi momento svuotando i dati dell'app o
+disinstallandola. Se sei nell'UE e ritieni che i tuoi diritti non siano stati
+rispettati, puoi presentare reclamo all'autorità nazionale per la protezione
+dei dati (in Italia, il Garante per la protezione dei dati personali).</p>
+
+<h2 lang="it">Minori</h2>
+<p lang="it">Logos non ha un feed di contenuti, non ha scoperta e non fa
+profilazione, e non raccoglie nulla. È uno strumento di comunicazione, e un
+genitore dovrebbe vigilare sul suo uso come per qualsiasi messenger.</p>
+
+<h2 lang="it">Modifiche</h2>
+<p lang="it">Ogni modifica a questa informativa viene pubblicata su questa
+pagina con una nuova data. Non c'è una lista a cui avvisarti, perché non
+abbiamo la tua email.</p>
+
+<hr>
+
+<p><a href="./">&larr; DigitalValut Logos</a></p>
+
+</main>
+</body>
+</html>
