@@ -60,6 +60,7 @@ confidently wrong figure.
 | Offline cache, web push, Android share target | `modifica-sw.js` | 170 |
 | The relay (Cloudflare Worker) | `turn-worker/worker.js` | 800 |
 | Android wrapper: bundles the app, rings when closed | `android/` | 4 Java classes |
+| **How to publish an Android version — read it before trying** | `android/RILASCIO.md` | a checklist |
 | Tests | `tests/` | 9,000 lines |
 | The twin copy to look at before publishing | `prova/` (generated) | `tools/prova.js` |
 

@@ -16,6 +16,23 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
+> ## ⚠️⚠️ QUESTO DOCUMENTO È INDIETRO — leggi questo prima di fidarti
+>
+> **Descrive la versione `logos-modifica-3.72`, del 25 agosto 2026.** L'app
+> pubblicata oggi è la **4.31**: cinquantanove versioni più avanti. Le sezioni
+> su architettura, crittografia e vincoli (§2, §3, §5, §7) reggono ancora; §4
+> («cosa l'app fa già») e §9 («storia recente») **non sono aggiornate**, e
+> descrivono un'interfaccia che nel frattempo è stata rifatta.
+>
+> Se stai chiedendo consiglio a un'intelligenza artificiale, incolla **anche**
+> queste tre cose, che sono sempre correnti:
+> - `CLAUDE.md` — le regole del progetto e come è costruito
+> - `README.md` — cosa fa l'app oggi
+> - le ultime voci di `fastlane/metadata/android/it-IT/changelogs/`
+>
+> Senza quelle, riceverai consigli su un'app che non esiste più. È lo stesso
+> errore che questo file dice di voler evitare, commesso da questo file.
+
 *Versione descritta: `logos-modifica-3.72` — 25 agosto 2026*
 
 ---

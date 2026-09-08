@@ -35,6 +35,13 @@ all'impronta crittografica della persona, non al nome che si è scelta.
 • Le foto vengono ripulite sul dispositivo da posizione GPS, modello del
   telefono e software prima di partire, senza ricomprimere l'immagine
 • Chiamate audio e video con condivisione dello schermo
+• Il telefono squilla anche con l'app chiusa, senza Google e senza Firebase: un
+  servizio dell'app legge la propria casella cifrata, e la domanda che pone ha
+  come unica risposta possibile sì o no. Non possiede nessuna chiave e non può
+  leggere niente; chi ti cerca e cosa ti scrive li legge l'app quando la apri.
+  Il prezzo, detto subito: una chiamata può metterci fino a 45 secondi ad
+  arrivare, e consuma più batteria di una notifica push. Si accende quando vuoi
+  tu, ed è spento finché non lo accendi
 • Una lettera sigillata per chi non risponde, conservata fino a 7 giorni e
   apribile solo da chi possiede quell'indirizzo
 • Messaggi che si autodistruggono e pulizia automatica opzionale delle
@@ -58,9 +65,12 @@ sito: l'app viene aperta dalla memoria del pacchetto stesso, quindi cio che gira
 sul tuo telefono e cio che e stato costruito dal codice di questo repository, e
 continua a funzionare anche quando il sito non e raggiungibile.
 
-Non aggiunge notifiche push ne alcun servizio che non faccia gia parte
-dell'applicazione. Ogni primitiva crittografica arriva dalle API Web Crypto del
-sistema. Nessuno script, libreria o risorsa di terze parti viene mai caricato.
+Non c'e nessun servizio di notifiche push da nessuna parte: niente Play
+Services di Google, niente Firebase, nessun account. L'unico servizio in
+secondo piano e quello dell'applicazione stessa, descritto qui sopra, e non
+parla con nient'altro che lo stesso relay che l'app usa gia. Ogni primitiva
+crittografica arriva dalle API Web Crypto del sistema. Nessuno script, libreria
+o risorsa di terze parti viene mai caricato.
 
 Realizzata dall'Associazione di Promozione Sociale DigitalValut, ente del terzo
 settore italiano. Gratis per sempre, senza account e senza nulla da comprare.

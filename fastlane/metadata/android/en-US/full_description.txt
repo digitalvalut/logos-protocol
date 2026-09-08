@@ -35,6 +35,13 @@ person's cryptographic fingerprint, not to a display name.
 • Photos have their embedded GPS location, device model and software metadata
   stripped on-device before sending, without re-encoding the image
 • Audio and video calls with screen sharing
+• The phone rings even with the app closed, without Google and without Firebase:
+  a service belonging to the app reads its own encrypted mailbox, and the
+  question it asks has only yes or no for an answer. It holds no key and can
+  read nothing; who is calling, and what they wrote, are read by the app when
+  you open it. The cost, said up front: a call can take up to 45 seconds to
+  ring, and it uses more battery than a push notification would. You turn it
+  on yourself, and it is off until you do
 • A sealed letter for someone who does not answer, held up to 7 days, openable
   only by the address owner
 • Self-destructing messages and optional automatic cleanup of old conversations
@@ -55,10 +62,11 @@ website: the app is served from the package's own storage, so what runs on your
 phone is what was built from the source in this repository, and it keeps working
 when the website cannot be reached at all.
 
-It adds no push notifications and no service that is not already part of the
-application. Every cryptographic primitive comes from the system's own Web Crypto
-implementation. No third-party script, library or CDN resource is loaded at any
-point.
+There is no push notification service anywhere in it — no Google Play Services,
+no Firebase, no account. The only background service is the app's own, described
+above, and it talks to nothing but the same relay the app already uses. Every
+cryptographic primitive comes from the system's own Web Crypto implementation.
+No third-party script, library or CDN resource is loaded at any point.
 
 Built by Associazione di Promozione Sociale DigitalValut, an Italian nonprofit.
 Free forever, with no account and nothing to buy.
