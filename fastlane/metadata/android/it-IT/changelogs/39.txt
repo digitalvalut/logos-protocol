@@ -1,0 +1,9 @@
+L'app contattava Google — proprio nella situazione per cui esiste.
+
+Quando nessun relay rispondeva, il collegamento ripiegava sui server STUN di Google. Quel ripiego e' cio' che entra in funzione su una rete censurata o bloccata: nel momento peggiore possibile, il telefono consegnava a Google un indirizzo IP e l'ora del tentativo. Nessuno lo diceva. E in pubblico dicevamo il contrario. Adesso il ripiego e' Cloudflare, che gia' ospita il relay e vede gia' quel traffico: un terzo tolto, nessuno aggiunto. Se la cosa ti riguarda, aggiorna.
+
+Altri due che potevano essere usati contro di te: una busta vecchia copiata poteva far squillare il tuo telefono ogni volta che qualcuno decideva di rimetterla in circolo, e chi era gia' connesso poteva esaurire l'app riempiendola di messaggi. Chiusi entrambi.
+
+E uno che rompeva gli inviti in silenzio: scrivere, sul proprio telefono, il codice a sei cifre che quel telefono stava mostrando. Leggere quel codice lo consuma, quindi il telefono si mangiava il proprio invito e la persona a cui l'avevi mandato non riusciva piu' a entrare — senza che nessuno dei due potesse capire perche'. Adesso l'app ti ferma prima ancora di toccare il relay e ti dice di chi e' quel codice.
+
+Il resto e' l'app che diventa usabile da chi non l'ha mai vista. La prima schermata fa tre domande invece di sei. In chiamata c'e' un tasto per riattaccare, invece di un menu. La prima volta che la apri ti chiede il tuo nome, cosi' l'altra persona non vede "Qualcuno". Le impostazioni sono passate da nove schede a tre gruppi. Un mappamondo in cima trova la tua lingua senza bisogno di saper leggere. Mandare un invito, far conoscere l'app e chiamare qualcuno sono un tocco ciascuno, e ogni pulsante che un dito deve colpire adesso e' abbastanza grande da poterlo colpire.

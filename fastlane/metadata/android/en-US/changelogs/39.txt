@@ -1,0 +1,9 @@
+The app was contacting Google — in exactly the situation it exists for.
+
+When no relay answered, the connection fell back to Google's STUN servers. That fallback is what runs on a censored or blocked network, so at the worst possible moment the phone was handing Google an IP address and a timestamp. Nobody was told. We were publicly saying the opposite. The fallback is now Cloudflare, who already host the relay and already see that traffic: one third party removed, none added. If this matters to you, update.
+
+Two more that could be used against you: a copied old envelope could make your phone ring whenever someone chose to replay it, and anyone already connected could exhaust the app by flooding it with messages. Both closed.
+
+And one that silently broke invitations: typing, on your own phone, the six-digit code your own phone was showing. Reading that code empties it, so the phone ate its own invitation and the person you had sent it to could no longer get in — with neither of you able to see why. The app now stops you before it touches the relay and tells you whose phone that code is for.
+
+The rest of this release is the app becoming usable by someone who has never seen it. The first screen asks three things instead of six. There is a hang-up button in a call, instead of a menu. The first time you open it, it asks your name so the other person does not see "Somebody". Settings went from nine tabs to three groups. A globe at the top finds your language without needing to read. Sending an invitation, sharing the app, and calling someone are each one tap, and every button a finger has to hit is now big enough to hit.
