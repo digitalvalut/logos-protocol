@@ -16,25 +16,12 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
-> ## ⚠️⚠️ QUESTO DOCUMENTO È INDIETRO — leggi questo prima di fidarti
->
-> **Descrive la versione `logos-modifica-3.72`, del 25 agosto 2026.** L'app
-> pubblicata oggi è la **4.31**: cinquantanove versioni più avanti. Le sezioni
-> su architettura, crittografia e vincoli (§2, §3, §5, §7) reggono ancora; §4
-> («cosa l'app fa già») e §9 («storia recente») **non sono aggiornate**, e
-> descrivono un'interfaccia che nel frattempo è stata rifatta.
->
-> Se stai chiedendo consiglio a un'intelligenza artificiale, incolla **anche**
-> queste tre cose, che sono sempre correnti:
-> - `CLAUDE.md` — le regole del progetto e come è costruito
-> - `README.md` — cosa fa l'app oggi
-> - le ultime voci di `fastlane/metadata/android/it-IT/changelogs/`
->
-> Senza quelle, riceverai consigli su un'app che non esiste più. È lo stesso
-> errore che questo file dice di voler evitare, commesso da questo file.
+*Versione descritta: `logos-modifica-4.32` — 8 settembre 2026.*
+*App Android: `versionCode 39`, che contiene la 4.31.*
 
-*Versione descritta: `logos-modifica-3.72` — 25 agosto 2026*
-
+> Le versioni si muovono in fretta. Se stai leggendo questo file molto dopo
+> quella data, la struttura (§2, §3, §5, §7) invecchia lentamente, gli elenchi
+> di funzioni no. Il numero vero lo dice `APP_VERSION` in `modifica.js`.
 ---
 
 ## 1. Cos'è, in una riga
@@ -55,7 +42,7 @@ Due browser si collegano **direttamente** fra loro con **WebRTC**. Messaggi,
 file e chiamate viaggiano da un dispositivo all'altro senza attraversare nessun
 server intermedio.
 
-Esiste **un solo componente lato server**: un Cloudflare Worker (550 righe) che
+Esiste **un solo componente lato server**: un Cloudflare Worker (809 righe) che
 fa esclusivamente da "ufficio postale" per la fase di presentazione:
 
 | Rotta | A cosa serve | Quanto conserva |
@@ -73,11 +60,11 @@ può leggere nulla: vede solo hash a 64 caratteri e buste opache.
 
 | File | Righe | Cosa |
 |---|---|---|
-| `modifica.js` | 7.516 | Tutta la logica dell'app + 13 lingue |
-| `modifica.html` | 757 | Le schermate |
-| `modifica.css` | 683 | L'aspetto |
-| `turn-worker/worker.js` | 550 | Il Worker |
-| `index.html/js/css` | 989 | La pagina di presentazione pubblica |
+| `modifica.js` | 10.799 | Tutta la logica dell'app + 13 lingue |
+| `modifica.html` | 995 | Le schermate |
+| `modifica.css` | 944 | L'aspetto |
+| `turn-worker/worker.js` | 809 | Il Worker |
+| `index.html/js/css` | 1.120 | La pagina di presentazione pubblica |
 
 **Dipendenze esterne a runtime: ZERO.** Nessun CDN, nessun npm, nessuna
 libreria. Nessuna riga di codice scritta da altri viene caricata.
@@ -128,11 +115,19 @@ ciascuno con la propria barra di avanzamento. **Chiamate audio e video**, con
 video della fotocamera con quella dello schermo sullo stesso collegamento già
 aperto — nessun server nuovo, nessun costo aggiuntivo). Cambio fotocamera, muto,
 vivavoce, autodistruzione a tempo, pulizia automatica opzionale, svuota cronologia.
-**"Resta in ascolto delle chiamate"**: tiene lo schermo acceso e fa squillare
-il telefono per davvero (suono sintetizzato + vibrazione, già esistenti per le
-chiamate normali) nell'istante in cui qualcuno chiama l'indirizzo, invece della
-sola scheda silenziosa da notare — zero servizio esterno, si riarma da sola
-tornando sull'app dopo averla lasciata un attimo.
+**Il telefono squilla anche con l'app chiusa, senza Google e senza Firebase**
+(da versionCode 36, solo nel pacchetto Android): un servizio in primo piano
+dell'app stessa legge la propria casella cifrata sul relay ogni 45 secondi e,
+quando trova qualcosa, alza una schermata di chiamata sopra il blocco. Non
+possiede nessuna chiave e non puo' leggere niente: la domanda che pone ha come
+unica risposta possibile si o no, e chi chiama e cosa ha scritto li legge l'app
+quando la apri. I costi, detti in chiaro: fino a 45 secondi di attesa prima che
+squilli, e piu' batteria di una notifica push. E' spento finche' non lo accendi.
+⚠️ Il periodo di 45 secondi non e' arbitrario: a 15 secondi la sola funzione
+costava 5.760 letture al giorno per utente, tre volte quanto l'app spende mentre
+qualcuno la sta davvero guardando.
+Nel browser esiste invece **"resta in ascolto"**, che tiene lo schermo acceso e
+fa squillare finche' la scheda e' aperta.
 **Foto ripulite dai metadati prima di partire** (v3.69): un JPEG o PNG scattato
 con il telefono porta con sé GPS, modello del dispositivo, a volte il software
 usato per salvarlo — tolto sul dispositivo, byte a byte, prima dell'invio, senza
@@ -230,56 +225,40 @@ Altri limiti dichiarati apertamente nell'app stessa:
 
 ---
 
-## 6. Problemi noti ancora aperti
+## 6. Limiti noti, dichiarati
 
-### P2 — RISOLTO (v3.48, 17 agosto 2026)
+Qui stanno i limiti di progetto e le cose non ancora fatte. **Non** ci stanno i
+difetti aperti: una regola del progetto vieta di pubblicare la mappa di ciò che
+è ancora rotto, e pubblicare il codice non è la stessa cosa che pubblicare
+l'elenco di dove colpire. Chi trova qualcosa scriva a quanto indicato in
+`SECURITY.md`.
 
-*Questa era la falla più importante del progetto, e per un po' questo stesso
-documento la descriveva come ancora aperta — se hai letto una copia di questo
-dossier con quella sezione, era una versione vecchia (v3.45).*
-
-Il problema era reale: la chiave che cifrava le buste dirette a un indirizzo
-era ricavata **dalla sola stringa dell'indirizzo**, che è pubblica per
-definizione — chi possedeva un indirizzo poteva leggere i metadati delle
-chiamate dirette a esso. **Corretto**: l'indirizzo è ora **l'impronta di una
-chiave pubblica ECDH** invece della chiave stessa. Chi chiama scarica la chiave
-pubblica del destinatario, **verifica che il suo hash corrisponda
-all'indirizzo** (una chiave sostituita darebbe un indirizzo diverso, e viene
-rifiutata), poi cifra con ECDH verso di essa — solo chi possiede la parte
-privata può aprire. La rotta `/key` nel Worker verifica in scrittura che solo
-il vero proprietario della chiave possa pubblicarla su quello slot. Conseguenza
-collaterale positiva: l'indirizzo non dipende più dal certificato DTLS e quindi
-**non scade più** (vedi §5).
-
-### Ancora da valutare
-
-- **Le letture del Worker (KV di Cloudflare) sono eventualmente coerenti, non
-  immediate** — un valore scritto da un lato può metterci qualche secondo a
-  essere visibile dall'altro, specialmente fra regioni diverse. È quasi
-  certamente la causa residua di collegamenti lenti nei casi peggiori.
-  **Soluzione individuata ma non eseguita**: Durable Objects di Cloudflare al
-  posto di KV, solo per la rotta `/mailbox` (le altre tre — `/wake`, `/key`,
-  `/letter` — non ne hanno bisogno, non sono in un ciclo di attesa stretto).
-  Costo vero da sapere: **richiede il piano Workers a pagamento, minimo 5
-  dollari al mese fissi** — non c'è un piano gratuito che lo includa. Non
-  eseguito finché questo costo non viene accettato consapevolmente
-  dall'associazione.
-- **Nessun riavvio ICE attivo quando la connessione si degrada.** Da v3.59
-  l'app offre un pulsante di uscita rapida se lo stato resta `disconnected`
-  oltre una pausa ragionevole (§4), ma non tenta un vero riavvio con
-  rinegoziazione. Scartato deliberatamente per ora: è un intervento ad alto
-  rischio sul protocollo di segnalazione, che potrebbe rompere connessioni
-  funzionanti per guadagnare un recupero spesso comunque impossibile (i
-  candidati della vecchia rete non esistono più dopo un cambio rete vero).
-
-### Altri, minori
-- **iOS mai collaudato su dispositivo reale** (nessun iPhone disponibile)
-- Nessun **audit indipendente** esterno
-- Le connessioni abbandonate non vengono chiuse esplicitamente (misurato: nessun
-  impatto pratico, 10 tentativi di fila non degradano nulla)
-
----
-
+- **Le letture del relay (KV di Cloudflare) sono eventualmente coerenti**, non
+  immediate: un valore scritto da un lato può metterci qualche secondo a essere
+  visibile dall'altro. È la causa residua più probabile dei collegamenti lenti
+  nei casi peggiori. Soluzione individuata e **non** eseguita: Durable Objects
+  al posto di KV, solo per `/mailbox`. Costo vero: richiede il piano a pagamento,
+  **5 dollari al mese fissi**. Non si esegue finché quel costo non viene accettato
+  consapevolmente dall'associazione, che non ha entrate.
+- **Nessun riavvio ICE attivo** quando la connessione si degrada. L'app offre
+  un'uscita rapida se lo stato resta `disconnected`, ma non tenta una
+  rinegoziazione: è un intervento ad alto rischio sul protocollo di segnalazione,
+  per recuperare qualcosa che dopo un cambio di rete vero è spesso irrecuperabile
+  comunque (i candidati della vecchia rete non esistono più).
+- **iOS non è mai stato collaudato su un dispositivo reale.** Nessun iPhone
+  disponibile. Non si dichiara funzionante ciò che nessuno ha provato.
+- **Nessun audit indipendente esterno.** Due candidature a finanziamenti pubblici
+  aperte, una respinta.
+- **La cronologia dei messaggi è salvata in chiaro sul dispositivo.** Dichiarato
+  in `SECURITY.md`. Chi ha accesso al telefono sbloccato legge le conversazioni:
+  la cifratura protegge il transito, non un telefono in mano a qualcun altro.
+- **Il codice a sei cifre è un segreto corto.** Vive pochi minuti e la casella si
+  svuota alla prima lettura, ma resta l'anello più debole fra i modi di
+  collegarsi. Il QR di persona e l'indirizzo permanente non hanno questo limite.
+- **Disponibilità legata a un piano gratuito.** Il relay ha un tetto giornaliero
+  di scritture. Misurato: una chiamata costa ~4 scritture, un telefono in ascolto
+  ~1.920 letture al giorno. **Una conversazione già collegata non costa nulla al
+  relay**, perché non ci passa.
 ## 7. I vincoli veri
 
 > ⚠️ **Un consiglio che ignora questi vincoli non è realizzabile.**
@@ -328,188 +307,131 @@ collaterale positiva: l'indirizzo non dipende più dal certificato DTLS e quindi
 
 ---
 
-## 9. Storia recente (per capire il metodo)
+## 9. Come si lavora — la parte su cui giudicarci
 
-Nell'ultima sessione di lavoro sono state trovate e corrette **otto falle reali**,
-tutte verificate **provandole dal vivo**, non leggendo il codice:
+Il codice di questa applicazione è stato scritto in larghissima parte da
+un'intelligenza artificiale, diretta da una persona che non è programmatore.
+Lo diciamo per primi perché è verificabile in trenta secondi: `CLAUDE.md` nella
+radice è indirizzato a chi modifica il codice, *«una persona o un'AI»*, e i
+commit portano la firma di coautore.
 
-1. L'app diventava **irraggiungibile da tutte le strade** quando un invito
-   restava in attesa — invisibile, per giorni
-2. **L'autodistruzione non distruggeva niente**: diceva "conversazione
-   autodistrutta" e lasciava una copia intera sul telefono
-3. Un partner ostile poteva **esaurire la memoria** dichiarando un file da 10
-   byte e mandandone 25 MB
-4. Il controllo di sicurezza **non bloccava nulla** neanche quando l'app stessa
-   diceva "qualcuno potrebbe essersi messo in mezzo"
-5. La cronologia era indicizzata **per soprannome**, non per certificato
-6. Chi possedeva un indirizzo poteva **intercettare e bloccare** le chiamate
-7. Le **notifiche non arrivavano mai** se attivate dopo l'indirizzo (ordine
-   naturale per chiunque)
-8. La rotta delle credenziali TURN **non aveva nessun limite** — l'unica che
-   costa soldi veri quando abusata
+La domanda interessante quindi non è *se* sia stata usata un'AI, ma **cosa è
+stato costruito perché il risultato sia verificabile lo stesso**. Questo:
 
-**Metodo applicato**: ogni correzione è protetta da un test automatico, e ogni
-test è validato **rimettendo dentro la falla originale** per verificare che
-diventi rosso. Due test sono stati riscritti perché passavano anche col codice
-sabotato.
+### I test si sabotano, uno per uno
 
-### Da allora (v3.45 → v3.64, 16-23 agosto 2026)
+Un test che non può fallire è decorazione. Nessun test entra prima che il
+comportamento che sorveglia sia stato **rotto apposta** e il test sia stato visto
+diventare rosso — rotto il *comportamento*, non la sintassi: un test verde contro
+codice che non compila non dimostra niente.
 
-Lo stesso metodo — sabotare ogni test per verificarlo davvero, verificare dal
-vivo nel browser, non solo leggere il codice — applicato a un altro giro di
-lavoro:
+Serve davvero. In un solo giorno sono stati scoperti così due test che non
+guardavano niente: preparavano a mano lo stato invece di lasciarlo produrre al
+codice, e restavano verdi anche cancellando la riga che dovevano proteggere.
+Li ha trovati il sabotaggio, non chi li aveva scritti.
 
-- **Trasferimento file reso davvero usabile**: barra di avanzamento, più file
-  alla volta trascinabili, condivisione diretta da altre app su Android (§4)
-- **Condivisione dello schermo** nelle videochiamate — riusa il collegamento
-  già aperto, zero costo aggiuntivo
-- **Rubrica**: un indirizzo permanente chiamato con successo viene ricordato,
-  richiamarlo poi è un tocco solo
-- **Durata della chiamata**: il testo fisso "In videochiamata" diventa un
-  cronometro che scorre (`MM:SS`, `H:MM:SS` oltre l'ora), calcolato ogni tick
-  dalla differenza con l'istante di inizio — resta preciso anche se il
-  browser rallenta i timer di una scheda in background
-- **Sito vetrina** (`index.html`) rifatto: QR per aprire l'app, tabella di
-  confronto onesta con WhatsApp/Telegram, la sezione "cosa non fa" tolta dalla
-  prima pagina su richiesta esplicita — resta invece intatta in questo dossier
-  e nell'app stessa, dove il pubblico è tecnico o ha già deciso di fidarsi
-- **Un audit dedicato all'affidabilità del collegamento** (§4, "Affidabilità
-  del collegamento"): tre cause reali di fallimenti silenziosi trovate e
-  corrette, non ipotizzate
-- **Due proposte fatte e respinte nella stessa sessione**, per iscritto qui in
-  §8: instradamento Tor/VPN interno "in stile militare", e il posizionamento
-  per giornalisti/attivisti in paesi senza libertà di stampa — entrambe
-  respinte per ragioni tecniche verificabili, non per eccesso di prudenza
+### Una campagna che rimette dentro i difetti veri
 
-### La revisione esterna del 22 agosto 2026 (v3.62 → v3.64)
+`tests/mutanti.js` contiene **17 difetti che questo progetto ha realmente**
+**pubblicato in passato**. Un comando li reinserisce uno alla volta nel codice e
+verifica che la suite li riprenda tutti.
 
-Revisione indipendente commissionata dall'autore a un modello di un altro
-fornitore. Otto rilievi su nove confermati leggendo il codice, e corretti.
+⚠️ Si rifiuta di partire se prima non ha dimostrato che il codice **non** mutato
+passa: la prima versione dava «16 uccisi su 16» mentre in realtà mancavano dei
+file e la suite era rossa comunque. Un arnese che trova tutto è rotto quanto uno
+che non trova niente.
 
-Il più importante non era un errore di crittografia ma di **conclusione**: il
-bollino "verificato di persona" veniva scritto in base ad affermazioni che
-l'app non può autenticare. Il `v=` nel QR arriva identico se il link è stato
-inquadrato o toccato in una chat, quindi chiunque poteva scriverselo da sé; e
-una lettera firmata "Mamma" con dentro l'indirizzo di chi la scrive porta a una
-connessione **senza intermediari verso la persona sbagliata** — che è ciò che
-il phishing produce.
+### Una copia gemella dove provare, che non può toccare i dati veri
 
-Prima correzione: fiducia negata solo al percorso delle lettere. Sbagliata —
-quattro percorsi su cinque restavano dalla parte fidata, il link toccato fra
-questi. **Regola finale, adottata su decisione dell'autore**: nessun record di
-fiducia viene scritto senza la conferma umana delle tre parole, su nessun
-percorso. La prova ECDH resta e viene *detta*, non *scritta come fiducia*. È il
-modello di Signal: un safety number non si certifica da solo.
+Niente arriva all'app di tutti direttamente. Esiste una copia a `prova/`, sullo
+stesso sito — deve esserlo, perché il relay accetta tre origini e rifiuta tutto il
+resto, `localhost` compreso: una copia altrove non potrebbe provare inviti,
+indirizzi e chiamate, cioè le uniche cose che vale la pena provare.
 
-Corretti inoltre: memoria non limitata in aggregato (20 trasferimenti × 512 MB),
-pump della casella che non morivano nei catch (fino a metà della quota di
-lookup bruciata da un solo caso, provocabile da un peer ostile), `hello` con
-nick non-stringa che faceva sparire la verifica, rubrica dirottabile per nome,
-`call-offer-sdp` senza guardia, falsi allarmi MITM, file oltre il limite
-spediti nel vuoto, foto rotte nella cronologia. Corretto anche un commento che
-affermava una forward secrecy inesistente.
+Stesso sito significa stessa memoria del browser, quindi tutto ciò che l'app salva
+passa da **un solo punto** che rinomina i dati quando riconosce di girare nella
+copia. Un test vieta di chiamare `localStorage` da qualunque altro punto: una
+separazione che dipende dal ricordarsene non è una separazione. La copia porta una
+fascia rossa che non si può chiudere.
 
-Le tre cose che la revisione ha classificato "vere ma non dichiarate" sono ora
-scritte nella scheda dei limiti dentro l'app, in tutte le 13 lingue: il grafo
-sociale visibile a chi gestisce il Worker, la debolezza intrinseca del codice a
-sei cifre, e l'invito lungo in chiaro senza il lucchetto opzionale.
+### Occhi, non impressioni
 
-Verificata anche l'**interoperabilità 3.61 ↔ 3.64** dal vivo, due origini
-separate, invito lungo in entrambe le direzioni: messaggi, file piccolo, file
-da 600 MB, e le tre parole identiche sulle due versioni.
+`tests/aspetto.js` gira in un browser vero e misura **numeri**: niente esce
+lateralmente, ogni bersaglio toccabile è almeno 44px, nessun testo è tagliato,
+niente di premibile è coperto. Non confronta immagini — servirebbe una libreria
+che questo progetto non caricherà mai, e griderebbe al lupo a ogni cambio di
+carattere. Le regole sono assolute, quindi non c'è nessun riferimento da
+aggiornare: un bersaglio o è grande abbastanza per un dito o non lo è.
 
-### L'audit ostile del 23 agosto e le prime correzioni (v3.66)
+Ha trovato sei bersagli sotto i 44px, fra cui il controllo di sicurezza
+(60×15 px) e i tre tasti della dimensione del testo. Corretti tutti, senza
+eccezioni.
 
-Un audit condotto come attacco, non come lettura: peer ostile programmabile,
-150.000 messaggi di fuzzing con generatore seedato, rottura deterministica di
-ogni singola attesa delle sei procedure di connessione, il Worker interrogato
-su una replica locale, e diciassette difetti storici rimessi dentro apposta per
-misurare se l'attrezzatura sapesse ancora vederli (**uccisi 17 su 17**).
+### Regole che prendono ciò che un revisore umano non vede
 
-Dodici rilievi. **Il più grave era una regressione della correzione stessa**: in
-`acceptAddrCall` e `tryQuickConnect` la variabile che il gestore d'errore doveva
-leggere era dichiarata dentro il `try`, quindi il gestore sollevava un errore
-proprio invece di ripulire — inghiottendo l'errore vero e lasciando acceso
-esattamente il ciclo che doveva spegnere. I test non l'avevano vista perché il
-sabotaggio era stato fatto sul percorso felice invece che sul ramo `catch`.
+- **13 lingue, sempre tutte e 13.** Una frase aggiunta in una sola fa fallire i
+  test finché non esiste in tutte, segnaposti compresi.
+- **Due lingue non possono avere la stessa frase lunga** (soglie misurate sul
+  codice sano: 20 caratteri e 3 parole, zero falsi allarmi). Nasce da una frase
+  inglese finita nella pagina italiana e pubblicata con la suite tutta verde.
+- **Una lingua che si scrive in un altro alfabeto lo usa davvero**, dove
+  l'alfabeto è inequivocabile (russo, cinese, arabo, urdu, hindi, bengalese).
+- **Un testo che resta a schermo deve passare da `setT()`**, altrimenti si
+  congela nella prima lingua in cui è stato disegnato. Regola scritta al
+  contrario di proposito: non un elenco dei casi rotti, che invecchia, ma il
+  divieto della scorciatoia — chi la vuole deve dichiarare perché.
+- **Il numero di versione nell'app deve essere uguale a quello nella cache**, e
+  ogni elemento che il codice cerca deve esistere nella pagina.
 
-Corretti subito i cinque che pesano su un'app **gratuita**, cioè quelli che
-consumano il piano su cui gira o rendono falsa una promessa:
+### Build riproducibile, verificata da una macchina
 
-- la variabile fuori dal `try` in entrambe le funzioni, e la stessa correzione
-  applicata a `startQuickShare`, la sesta procedura che non l'aveva mai ricevuta
-- **guardia di rientro** su `checkInboxOnce`: passate sovrapposte moltiplicavano
-  le letture (misurato: N passate = N volte le richieste)
-- **rubrica a turno**: scorrere quaranta contatti ogni quattro secondi faceva
-  seicento letture al minuto contro un budget di trecento — nessun difetto, solo
-  uso, e la rubrica la riempie il peer. Ora otto per giro, 120/min, e in sei giri
-  la rubrica è coperta tutta
-- il **cancello dell'autodistruzione** spostato dentro `persistMedia`: con il
-  timer armato il testo non toccava il disco e la foto sì, mentre il codice
-  dichiarava il contrario
+Il pacchetto Android pubblicato è ricostruibile byte per byte dal codice.
+Misurato l'8 settembre 2026: due compilazioni pulite su un Mac e una su una
+macchina Linux di GitHub hanno prodotto la **stessa identica impronta**
+(`e61e44c6…`), e le 48 voci dell'archivio pubblicato corrispondono a quelle
+ricostruite. Una CI lo rifà dopo ogni pubblicazione.
 
-Rimandati per scelta, non per svista: gli **omoglifi** in rubrica (gravità alta,
-ma richiede un attaccante mirato e costa due giorni in tredici lingue) e la
-**sordità dopo un'eccezione**, dove esistono due strade e va scelta, non
-improvvisata. Il report completo resta privato: elenca difetti non ancora
-corretti con le sequenze per riprodurli.
+Significa che nessuno — gli autori compresi — può infilare qualcosa nel pacchetto
+senza che si veda. ⚠️ La chiave di firma **non** sta nella CI: la macchina
+costruisce e confronta, la firma resta sul computer di chi pubblica. Per un'app
+che promette di non affidare niente a nessuno, la chiave che dimostra «questo
+pacchetto è nostro» non si dà in custodia a un terzo.
 
-### Foto e video persistenti, per decisione dell'autore (v3.65)
+### Zero dipendenze, sul serio
 
-Fino alla v3.64 una foto o un video ricevuti vivevano solo per la durata della
-pagina: riaperta la chat il giorno dopo, restava un'icona rotta (poi una
-scritta onesta, dalla v3.63). Decisione esplicita dell'autore, dopo aver
-valutato l'alternativa più semplice ("scarica o si perde"): **i media restano
-sul dispositivo, dentro la stessa conversazione, senza nessun pulsante o
-scelta in più da fare** — la priorità dichiarata è non confondere un pubblico
-non tecnico con troppe opzioni.
+Nessun `node_modules`, nessuna CDN, nessuna libreria — **nell'app e nei suoi
+test**. Non c'è nessun `npm install` perché non c'è niente da installare. Al
+posto di jsdom c'è un finto browser scritto a mano di ~150 righe. La
+rivendicazione più forte di Logos è che una persona sola possa leggerlo tutto, e
+un albero di dipendenze la annulla in silenzio.
 
-Tenuti in IndexedDB, separati dal testo (che resta in localStorage): un file
-può pesare centinaia di megabyte, e la quota di localStorage non lo reggerebbe.
-La condizione posta fin dall'inizio della discussione: **ogni funzione che già
-promette cancellazione — autodistruzione, "svuota cronologia", pulizia
-automatica per data — doveva raggiungere anche i media, senza eccezioni**,
-proprio perché uno scarto fra "distrutto" detto e "distrutto" fatto è già
-successo una volta in questo progetto. Le tre funzioni riusano la stessa
-chiamata (`mediaDeleteByConv`/`mediaDeleteOlderThan`) già agganciata dove
-cancellavano il testo — nessuna delle tre è stata duplicata.
+### Cosa nessun collaudo qui dentro può vedere
 
-Verificato dal vivo, non solo nei test: una foto vera inviata, la chat svuotata
-e ricaricata, la foto tornata identica (stesse dimensioni); "svuota cronologia"
-cliccato per davvero e la foto sparita anche dal database, non solo dallo
-schermo; la pulizia automatica che cancella un media vecchio e lascia intatto
-uno recente.
+Detto chiaramente, perché è la parte che conta:
 
-Un limite dichiarato, non nascosto: il browser può evacuare questo spazio da
-solo sotto pressione di memoria (specialmente Safari/iOS) — l'app mostra la
-scritta onesta anche in quel caso, la stessa già usata per un media
-genuinamente perso.
+- **Le chiamate vere** — audio, video, altoparlante, cambio fotocamera. Nessun
+  test le tocca. Si provano a mano, su telefoni veri.
+- **Se una schermata si capisce.** Nessuna macchina lo sa.
+- **iPhone e Safari.**
 
-### Metadati fuori dalle foto, senza toccare i pixel (v3.69)
+I difetti peggiori di questo progetto li ha trovati una persona che guardava lo
+schermo, non la suite. L'ultimo l'8 settembre 2026: tredici frasi restavano nella
+lingua sbagliata, e i 373 test erano tutti verdi perché guardavano i dizionari,
+che erano a posto.
 
-Un JPEG scattato con un telefono porta con sé, invisibile, molto più della
-foto: coordinate GPS precise a pochi metri, modello del dispositivo, a volte
-il software che l'ha salvato. Cifrato, ma leggibile appena aperto dall'altra
-parte — una falla che vanifica il resto dell'architettura, perché rivela chi
-e dove sei anche quando il contenuto resta protetto.
+### I numeri, misurati l'8 settembre 2026
 
-Deliberatamente **non** implementato come ricompressione (che avrebbe
-contraddetto "qualità originale, non compressa", già un vanto dichiarato
-contro WhatsApp/Telegram): `stripJpegMetadata`/`stripPngMetadata` camminano
-byte per byte dentro il contenitore del file — segmenti APPn per il JPEG,
-chunk per il PNG — e ritagliano fuori solo i segmenti di metadati (APP1/EXIF,
-APP13/IPTC, COM per JPEG; tEXt/zTXt/iTXt/eXIf/tIME per PNG), lasciando i dati
-dell'immagine vera e propria byte-identici. Zero perdita di qualità, perché
-non c'è nessuna decodifica/ricodifica dei pixel in mezzo.
+| | |
+|---|---|
+| Test automatici | **375**, in 54 gruppi, ~2 minuti e mezzo |
+| Difetti storici rimessi dentro e ripresi | **17 su 17** |
+| Dipendenze di terzi, a esecuzione | **0** |
+| Lingue | **13**, tutte complete |
+| Build riproducibile | verificata su **due sistemi operativi diversi** |
 
-Applicato in `sendFile()`, ma solo per i tipi JPEG/PNG — ogni altro file
-prosegue esattamente come prima, senza nemmeno passare dall'unico punto
-asincrono in più che i due formati coperti richiedono (leggere i byte per
-poterli ispezionare). Copre JPEG e PNG; WebP e HEIC restano fuori per ora,
-dichiarato apertamente, non nascosto.
-
----
-
+⚠️ Questi numeri invecchiano. Una regola del progetto dice di non citarne mai uno
+senza averlo appena misurato: diverse delle ore peggiori di questo progetto sono
+nate da una cifra detta con sicurezza e sbagliata.
 ## 10. Domande utili da fare a un'AI
 
 Se vuoi un parere davvero utile, chiedi cose come:
