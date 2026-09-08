@@ -2516,6 +2516,32 @@ function t(key, fallback){
 function fill(str, vars){ return String(str).replace(/\{(\w+)\}/g, (m,k) => k in vars ? vars[k] : m); }
 
 const ORIGINALS = new Map();
+
+/* Writes a translated line into an element AND remembers which line it was.
+   ⚠️ Use this instead of `el.textContent = t(...)` for anything that stays on
+   screen. applyLang() repaints only what ORIGINALS knows about, which at
+   startup is every element carrying data-i18n in the page — text written
+   later by code is invisible to it, so it FREEZES in whatever language it was
+   first drawn in and never changes again.
+   Found on a real phone on 8 Sep 2026: the app switched to English, and the
+   line under the permanent address stayed in Italian. Nine places had the same
+   defect; the suite could not see any of them, because every language really
+   did have every string — the dictionaries were never the problem.
+   Registering the key here (rather than repainting each caller by hand, which
+   is what had been done for one single element) means a caller written next
+   year inherits the fix without knowing this note exists. */
+function setT(el, key, fallback, vars){
+  if (!el) return;
+  const line = vars ? fill(t(key, fallback), vars) : t(key, fallback);
+  el.textContent = line;
+  const prev = ORIGINALS.get(el) || {};
+  prev.key = key; prev.html = line;
+  /* a line built from variables cannot be repainted from the dictionary alone
+     — repainting it would drop the values — so it is deliberately left out of
+     the language pass and simply keeps the text it has */
+  if (vars) delete prev.key;
+  ORIGINALS.set(el, prev);
+}
 function initLang(){
   document.querySelectorAll('[data-i18n]').forEach(el => ORIGINALS.set(el, { key: el.getAttribute('data-i18n'), html: el.innerHTML }));
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
@@ -3736,7 +3762,7 @@ async function paintConnDot(){
   if (!pc || pc.connectionState === 'closed' || pc.connectionState === 'failed'){
     dot.classList.add('down');
     dot.setAttribute('aria-label', t('conn.down','Connessione caduta'));
-    lbl.textContent = t('conn.downShort','caduta');
+    setT(lbl, 'conn.downShort','caduta');
     return;
   }
   /* 'disconnected' is not 'failed', and the difference is worth showing. It
@@ -3748,21 +3774,21 @@ async function paintConnDot(){
   if (pc.connectionState === 'disconnected'){
     dot.classList.add('relay');   /* amber: not green, but not dead either */
     dot.setAttribute('aria-label', t('conn.wobbly','Il collegamento ha vacillato — sto riprendendolo'));
-    lbl.textContent = t('conn.wobblyShort','sto riprendendo');
+    setT(lbl, 'conn.wobblyShort','sto riprendendo');
     return;
   }
   const route = await connectionRoute();
   if (route === 'relay'){
     dot.classList.add('relay');
     dot.setAttribute('aria-label', t('conn.relay','Collegamento sicuro, attraverso un ponte cifrato'));
-    lbl.textContent = t('conn.relayShort','collegata (ponte)');
+    setT(lbl, 'conn.relayShort','collegata (ponte)');
   } else if (route === 'direct'){
     dot.classList.add('direct');
     dot.setAttribute('aria-label', t('conn.direct','Collegamento diretto fra i due telefoni'));
-    lbl.textContent = t('conn.directShort','collegata direttamente');
+    setT(lbl, 'conn.directShort','collegata direttamente');
   } else {
     dot.setAttribute('aria-label', t('conn.working','Collegamento in corso'));
-    lbl.textContent = t('chat.connected','connessa');
+    setT(lbl, 'chat.connected','connessa');
   }
 }
 
@@ -4361,7 +4387,7 @@ function enterChat(){
   $('mediaHelp').classList.add('hide');
   /* found now, while there is time to fix it, rather than while a phone rings */
   checkMicPermissionEarly();
-  $('peerNameLbl').textContent = t('chat.someone');
+  setT($('peerNameLbl'), 'chat.someone');
   $('peerAvatar').textContent = '?';
   loadHistoryPlaceholder();
 }
@@ -6466,7 +6492,7 @@ function renderBlocked(){
     nm.textContent = blockedLabel(fp);
     who.appendChild(nm);
     const undo = document.createElement('button');
-    undo.textContent = t('block.unblock','Sblocca');
+    setT(undo, 'block.unblock','Sblocca');
     undo.addEventListener('click', () => { unblockFp(fp); renderBlocked(); });
     row.appendChild(who); row.appendChild(undo);
     list.appendChild(row);
@@ -7301,12 +7327,12 @@ function renderLetters(){
     if (l.from){
       const back = document.createElement('button');
       back.className = 'go';
-      back.textContent = t('letter.callBack','Richiama');
+      setT(back, 'letter.callBack','Richiama');
       back.addEventListener('click', () => { dropLetter(l.id); renderLetters(); showKnockCard(l.from, true); });
       acts.appendChild(back);
     }
     const del = document.createElement('button');
-    del.textContent = t('letter.dismiss','Fatto');
+    setT(del, 'letter.dismiss','Fatto');
     del.addEventListener('click', () => { dropLetter(l.id); renderLetters(); });
     acts.appendChild(del);
 
@@ -7466,7 +7492,7 @@ async function paintAddrCard(){
     const life = $('addrLifespan');
     life.classList.remove('hide');
     life.classList.remove('warn');   /* nothing left to warn about: it does not expire */
-    life.textContent = t('addr.lifespan','Questo indirizzo non scade. Resta valido finché i dati dell\'app restano su questo telefono.');
+    setT(life, 'addr.lifespan','Questo indirizzo non scade. Resta valido finché i dati dell\'app restano su questo telefono.');
   } else {
     $('addrQr').classList.add('hide');
   }
@@ -7607,7 +7633,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.31';
+const APP_VERSION = 'logos-modifica-4.32';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8654,7 +8680,7 @@ async function startQuickShare(existingCode, quiet){
   /* both start from "this invite dies with the screen" and are corrected below
      only once the app has confirmed it really can ring for this person */
   $('inviteWaitsNote').classList.add('hide');
-  $('quickHelpA').textContent = t('quick.helpA');
+  setT($('quickHelpA'), 'quick.helpA');
   setStatus($('quickStatusA'), t('quick.waiting','In attesa che l\'altra persona digiti il codice…'));
 
   /* Started here rather than where its result is first needed. Stretching the
@@ -10497,7 +10523,7 @@ function destroyNow(tellPeer){
   dc = null; pc = null;
   $('destructCountdown').classList.add('hide');
   $('btnDisarmDestruct').classList.add('hide');
-  $('connState').textContent = t('session.closed');
+  setT($('connState'), 'session.closed');
   paintConnDot();
 }
 $('btnArmDestruct').addEventListener('click', () => {
@@ -10609,7 +10635,7 @@ async function sha256Hex(buf){
       const name = location.pathname.replace(/^.*\//, '') || 'index.html';
       rows.push(name + '  ' + await sha256Hex(await self.arrayBuffer()));
     }
-    $('sealLine').textContent = t('footer.seal','SHA-256: ');
+    setT($('sealLine'), 'footer.seal','SHA-256: ');
     for (const r of rows){
       const div = document.createElement('div');
       div.textContent = r;

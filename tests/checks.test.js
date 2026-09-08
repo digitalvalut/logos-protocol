@@ -704,3 +704,43 @@ test('every class the stylesheet styles for the health card is really used', () 
     assert.ok(JS.includes(cls), `.${cls} is styled but never used`);
   }
 });
+
+/* ⚠️ Trovato su un telefono vero l'8 set 2026: l'app era in inglese e la riga
+   sotto l'indirizzo permanente era in italiano. Non era una traduzione
+   mancante — tutte e 13 le lingue avevano quella frase, e infatti ogni
+   controllo sui dizionari era verde. Il difetto stava altrove: applyLang()
+   ridipinge solo cio' che ORIGINALS conosce, e ORIGINALS al lancio contiene
+   gli elementi che portano data-i18n NELLA PAGINA. Un testo scritto dopo dal
+   codice non e' li dentro, quindi si congela nella lingua in cui e' stato
+   disegnato la prima volta e non cambia piu'. Erano tredici.
+   La regola e' invertita apposta: non un elenco dei casi rotti (che invecchia
+   il giorno dopo), ma il divieto della scorciatoia. Chi scrive una riga nuova
+   deve passare da setT() — oppure dichiarare qui che e' un messaggio di
+   passaggio, e in quel momento e' costretto a chiedersi se lo e' davvero. */
+const PASSAGGIO = [
+  'wipe.done',            /* «fatto»: sostituito dalla schermata che si chiude */
+  'health.checking',      /* «controllo...»: sovrascritto appena arriva l'esito */
+  'destruct.countdown',   /* si riscrive ogni secondo da solo */
+];
+
+test('un testo che resta a schermo passa da setT, cosi il cambio lingua lo ritrova', () => {
+  const colpevoli = [];
+  JS.split('\n').forEach((riga, i) => {
+    const m = riga.match(/\.(textContent|innerHTML)\s*=\s*t\(\s*'([^']+)'/);
+    if (!m) return;
+    if (PASSAGGIO.includes(m[2])) return;
+    colpevoli.push(`riga ${i + 1}: ${m[2]}`);
+  });
+  assert.deepStrictEqual(colpevoli, [],
+    'scritto a mano invece che con setT(): al cambio lingua questa frase resta nella lingua vecchia. ' +
+    'Se e\' davvero un messaggio di passaggio, aggiungi la chiave a PASSAGGIO con il motivo.');
+});
+
+test('setT registra la chiave, altrimenti non ridipinge niente', () => {
+  const corpo = (JS.match(/function setT\([\s\S]*?\n\}/) || [''])[0];
+  assert.ok(corpo, 'setT() non esiste piu\': senza, ogni testo scritto dal codice si congela');
+  assert.ok(/ORIGINALS\.set\(/.test(corpo),
+    'setT() scrive il testo ma non lo registra in ORIGINALS: applyLang() non sapra\' che esiste');
+  assert.ok(/prev\.key\s*=\s*key/.test(corpo),
+    'setT() non memorizza la chiave: al cambio lingua non c\'e\' niente da cui ridipingere');
+});
