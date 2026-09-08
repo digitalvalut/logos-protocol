@@ -1,0 +1,114 @@
+# Ricompila l'APK dai sorgenti e verifica che sia lo stesso che avete pubblicato.
+#
+# È il controllo che fa F-Droid prima di accettare un aggiornamento. Farlo qui
+# significa scoprire un problema in cinque minuti invece che farlo scoprire a
+# un volontario in tre giorni: è già costato tre pipeline a `linsui`, e la
+# causa era una cache di Gradle vecchia — niente che un essere umano potesse
+# ricordarsi di controllare a mano ogni volta.
+#
+# Suggerita da linsui stesso sulla richiesta !46727:
+#   "Generally reproducible build should just work. You can setup a CI to make
+#    it easier."
+#
+# ⚠️ LA CHIAVE DI FIRMA NON ENTRA QUI, E NON DEVE ENTRARCI MAI.
+# GitHub la conserverebbe sui propri server, e per un'app che promette di non
+# affidare niente a nessuno la chiave che dimostra «questo pacchetto è nostro»
+# non si dà in custodia a un terzo. Questa macchina costruisce e confronta; la
+# firma resta sul computer di chi pubblica. Per questo il confronto ignora
+# META-INF/, che è la parte che la firma aggiunge.
+name: build riproducibile
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Il tag da verificare (es. android-39). Vuoto = l'ultima release."
+        required: false
+
+jobs:
+  riproducibile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # la release porta il proprio tag: si verifica il codice di QUEL
+          # momento, non quello che c'è su main adesso
+          ref: ${{ github.event.release.tag_name || inputs.tag || '' }}
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # ⚠️ La stessa versione con cui compila F-Droid. Una diversa produce un
+      # pacchetto diverso e questo controllo griderebbe al lupo a ogni giro —
+      # ed è così che un collaudo muore, ignorato entro due settimane.
+      - name: build-tools 35.0.0, le stesse di F-Droid
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;35.0.0" > /dev/null
+          echo "BT=$ANDROID_HOME/build-tools/35.0.0" >> "$GITHUB_ENV"
+
+      # `clean` e `--no-build-cache` non sono prudenza eccessiva: è esattamente
+      # una cache vecchia ad aver prodotto, il 4 settembre, un classes.dex che
+      # non corrispondeva.
+      - name: Compilo dai sorgenti
+        working-directory: android
+        run: ./gradlew clean assembleRelease --no-build-cache --no-daemon
+
+      - name: Metto da parte questa build e ne faccio un'altra da zero
+        working-directory: android
+        run: |
+          cp app/build/outputs/apk/release/app-release-unsigned.apk /tmp/prima.apk
+          ./gradlew clean assembleRelease --no-build-cache --no-daemon
+          cp app/build/outputs/apk/release/app-release-unsigned.apk /tmp/seconda.apk
+
+      # Se due compilazioni della STESSA sorgente sulla STESSA macchina danno
+      # risultati diversi, il problema è nella build e non c'è nessun confronto
+      # con l'esterno che abbia senso fare dopo.
+      - name: Due build della stessa cosa devono essere identiche
+        run: |
+          a=$(sha256sum /tmp/prima.apk | cut -d' ' -f1)
+          b=$(sha256sum /tmp/seconda.apk | cut -d' ' -f1)
+          echo "prima:   $a"
+          echo "seconda: $b"
+          if [ "$a" != "$b" ]; then
+            echo "::error::due compilazioni pulite danno pacchetti diversi: la build non è deterministica"
+            exit 1
+          fi
+
+      - name: Scarico il pacchetto che avete pubblicato
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ github.event.release.tag_name || inputs.tag }}"
+          if [ -z "$TAG" ]; then TAG=$(gh release view --json tagName -q .tagName); fi
+          N="${TAG#android-}"
+          echo "tag $TAG, versionCode $N"
+          gh release download "$TAG" -p "DigitalValut-Logos-v$N.apk" -O /tmp/pubblicato.apk
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+      # Il confronto ignora META-INF/ perché è ciò che la firma aggiunge, e qui
+      # non si firma. Tutto il resto — codice, risorse, e assets/logos.html che
+      # è l'applicazione intera — deve corrispondere voce per voce.
+      #
+      # ⚠️ Si confrontano nome, CRC e dimensione di ogni voce, NON solo l'elenco
+      # dei nomi: gli appunti del progetto registrano un caso in cui il
+      # confronto dei contenuti risultò vuoto e sembrò che combaciasse tutto,
+      # mentre non combaciava niente.
+      - name: Il pacchetto pubblicato è quello che il codice produce
+        run: |
+          voci () { unzip -v "$1" | awk 'NR>3 && NF>7 {print $8, $7, $1}' | grep -v '^META-INF/' | sort; }
+          voci /tmp/pubblicato.apk > /tmp/a.txt
+          voci /tmp/prima.apk      > /tmp/b.txt
+          echo "voci confrontate: $(wc -l < /tmp/a.txt) pubblicate, $(wc -l < /tmp/b.txt) ricostruite"
+          if [ ! -s /tmp/a.txt ]; then
+            echo "::error::il pacchetto pubblicato non ha prodotto nessuna voce da confrontare"
+            exit 1
+          fi
+          if ! diff -u /tmp/a.txt /tmp/b.txt; then
+            echo "::error::$TAG non si riproduce: il pacchetto pubblicato non corrisponde al codice di questo tag"
+            exit 1
+          fi
+          echo "$TAG si riproduce byte per byte."
