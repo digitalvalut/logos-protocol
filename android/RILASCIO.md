@@ -70,6 +70,20 @@ Esce `app/build/outputs/apk/release/app-release-unsigned.apk`.
 
 Non dopo. Se scopri dopo che non si riproduce, l'hai già fatto scoprire a loro.
 
+> **Una macchina lo rifà da sola dopo ogni pubblicazione.**
+> `.github/workflows/riproducibile.yml` ricompila due volte da zero, verifica
+> che diano lo stesso pacchetto, e lo confronta voce per voce con l'APK che
+> avete pubblicato. Si può lanciare anche a mano su un tag qualsiasi:
+> `gh workflow run riproducibile.yml -f tag=android-39`.
+> Misurato l'8 set 2026: la stessa sorgente compilata su un Mac e su una
+> macchina Linux di GitHub ha dato la stessa impronta,
+> `e61e44c6ad75f7e6faee459ad2bd0aa9e030a1873f9767e89a00597b6363b0df`.
+> ⚠️ La macchina non firma e non deve mai avere la chiave: costruisce e
+> confronta, e per questo il confronto ignora `META-INF/`.
+> Resta comunque buona pratica fare il doppio giro in locale prima di
+> pubblicare — la CI ti dice che hai sbagliato *dopo* che il pacchetto è già
+> online.
+
 Metti da parte il pacchetto, ricompila da zero con lo stesso comando, e
 confronta:
 
