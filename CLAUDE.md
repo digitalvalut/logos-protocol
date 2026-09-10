@@ -126,12 +126,29 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 ## Running the tests
 
 ```bash
-node --test
+node --test --test-force-exit
 ```
 
-Node 22. No arguments needed — Node finds the files. 375 tests, 54 suites, about two
-and a half minutes. They also run on every push. (That count is measured, and goes
-stale — rule 6 applies to this line too: re-run before quoting it.)
+Node 22. Node finds the files itself. 378 tests, 54 suites, about two and a half
+minutes. They also run on every push. (That count is measured, and goes stale —
+rule 6 applies to this line too: re-run before quoting it.)
+
+**Both flags on that line are load-bearing, and both were learned the hard way.**
+
+⚠️ **`--test-force-exit` is not optional.** When the tests finish, something still
+holds a handle open — the polling loop inside `startQuickShare()` — and plain
+`node --test` **never exits**. It prints nothing and sits there; measured at over
+seven minutes before being killed. This file used to document the plain command,
+which meant the documented way to run the tests was a command that hangs.
+
+⚠️ **Never add `--test-timeout`.** It applies to a whole *file*, not to one test.
+`logic.test.js` runs 156 seconds and `corse.test.js` more than 30, so a
+`--test-timeout=30000` kills both outright. The output then reads `fail 0` but
+`cancelled 2` — red, with not one test actually wrong. CI carried that flag for
+days: every push mailed a failure notice for a suite that was perfectly healthy,
+while the same suite was green on the machine next to it. A timeout belongs on the
+CI *job* (`timeout-minutes`), where it catches a genuine hang without strangling a
+slow test.
 
 Beyond the suite there are campaigns you run by hand when you have changed something
 structural: `tests/mutanti.js` (puts real defects back and checks they get caught),

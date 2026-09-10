@@ -15,6 +15,10 @@ on:
 jobs:
   controlli:
     runs-on: ubuntu-latest
+    # ⚠️ IL timeout va QUI, sul lavoro intero — non sui singoli test.
+    # La suite dura ~2 minuti e mezzo; 15 e' abbondante e serve solo perche'
+    # una corsa davvero appesa non bruci ore di macchina.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -23,8 +27,20 @@ jobs:
           node-version: '22'
 
       - name: I controlli statici e la logica
-        # senza argomenti: Node trova da solo i file in tests/
-        run: node --test --test-timeout=30000
+        # Node trova da solo i file in tests/.
+        #
+        # ⚠️ --test-force-exit NON e' facoltativo: a test finiti qualcosa
+        # tiene aperta una presa (il ciclo di attesa di startQuickShare) e
+        # `node --test` da solo NON TERMINA MAI. Provato: oltre sette minuti
+        # senza uscire.
+        #
+        # ⚠️ E NON rimettere --test-timeout. Quel timeout vale per l'intero
+        # FILE, non per il singolo test: logic.test.js dura 156 s e
+        # corse.test.js piu' di 30, quindi con --test-timeout=30000 venivano
+        # amazzati tutti e due. Il risultato era `fail 0` ma `cancelled 2`,
+        # cioe' rosso senza un solo test sbagliato — e per due giorni
+        # l'operatore ha ricevuto email di fallimento per una suite sana.
+        run: node --test --test-force-exit
 
       - name: Il file unico si costruisce ancora
         # also the guard that refuses to build while the two version
