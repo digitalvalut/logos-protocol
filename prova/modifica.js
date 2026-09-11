@@ -4133,12 +4133,28 @@ function onConnectionStateChange(conn){
   paintConnDot();
   if (conn.connectionState === 'disconnected'){
     if (!conn.__disconnectTimer) conn.__disconnectTimer = setTimeout(() => stillDisconnected(conn), DISCONNECT_GRACE_MS);
-    /* e intanto si prova DAVVERO a riprenderla — vedi la ripresa qui sotto */
-    if (!conn.__repairTimer) conn.__repairTimer = setTimeout(() => { conn.__repairTimer = null; startRepair(conn); }, REPAIR_START_MS);
+    /* ⚠️ RISCRITTO IL 12 SET 2026, la mattina dopo la v40, da una prova su due
+       telefoni in 5G: si collegavano a 0,6 s, poi uno perdeva il collegamento
+       e lo riprendeva 42 s dopo, mentre l'altro dichiarava il fallimento.
+       La prima stesura faceva partire la RINEGOZIAZIONE gia' su
+       'disconnected', dopo tre secondi. Su rete mobile 'disconnected' va e
+       viene di continuo, e spesso lo vede UN telefono solo: quello offriva,
+       l'altro — che si sentiva ancora collegato — non rispondeva mai, e
+       l'offerta restava appesa sopra una connessione che stava benissimo.
+       I test non potevano vederlo: li' i due lati cadono sempre insieme.
+       Adesso su 'disconnected' si fa solo la meta' innocua: chi RISPONDE si
+       mette in ascolto della casella (letture, la risorsa abbondante), cosi'
+       se l'altro lato arriva a 'failed' e offre, la risposta e' pronta.
+       Chi OFFRE aspetta 'failed', che per specifica non torna da solo e che
+       tutti e due i lati finiscono per vedere. */
+    if (!conn.__repairTimer) conn.__repairTimer = setTimeout(() => {
+      conn.__repairTimer = null;
+      if (repairBase && !repairBase.offerer) startRepair(conn);
+    }, REPAIR_START_MS);
   } else {
     if (conn.__disconnectTimer){ clearTimeout(conn.__disconnectTimer); conn.__disconnectTimer = null; }
     if (conn.__repairTimer){ clearTimeout(conn.__repairTimer); conn.__repairTimer = null; }
-    /* 'failed' non torna piu' da solo, per specifica: si parte subito */
+    /* 'failed' non torna piu' da solo, per specifica: qui si parte, da tutti e due i lati */
     if (conn.connectionState === 'failed') startRepair(conn);
   }
 }
@@ -4206,16 +4222,29 @@ function repairArmed(){ return !!repairBase; }
 async function repairSecFor(round){ return pairSecrets(repairBase.text + ':' + round); }
 async function repairOfferSlot(){ return slotId((await pairSecrets(repairBase.text)).seed, 'repair-offer'); }
 
+/* Quante volte chi risponde puo' mettersi in ascolto senza che arrivi niente:
+   e' un limite alle LETTURE (un minuto di casella a giro), non alle offerte,
+   e serve solo perche' una rete che vacilla per un'ora non lo tenga in
+   ascolto per un'ora. */
+const REPAIR_MAX_LISTENS = 10;
 async function startRepair(conn){
   if (pc !== conn || !repairBase) return;
   if (conn.connectionState === 'connected' || conn.connectionState === 'closed') return;
   if (conn.__repairing) return;                          /* una alla volta */
-  conn.__repairRounds = (conn.__repairRounds || 0) + 1;
-  if (conn.__repairRounds > REPAIR_MAX_ROUNDS) return;   /* oltre, e' la rete che non c'e': resta il pulsante */
   conn.__repairing = true;
   try{
-    if (repairBase.offerer) await repairAsOfferer(conn, conn.__repairRounds);
-    else await repairAsAnswerer(conn);
+    if (repairBase.offerer){
+      /* il tetto conta le OFFERTE, cioe' le scritture: oltre, e' la rete che non c'e' */
+      conn.__repairRounds = (conn.__repairRounds || 0) + 1;
+      if (conn.__repairRounds <= REPAIR_MAX_ROUNDS) await repairAsOfferer(conn, conn.__repairRounds);
+    } else {
+      /* chi risponde non scrive finche' non ha un'offerta in mano: mettersi
+         in ascolto non consuma il tetto delle offerte, che appartiene
+         all'altro lato — altrimenti tre vacillamenti innocui del 5G
+         esaurivano i giri e la ripresa vera, dopo, non partiva piu' */
+      conn.__repairListens = (conn.__repairListens || 0) + 1;
+      if (conn.__repairListens <= REPAIR_MAX_LISTENS) await repairAsAnswerer(conn);
+    }
   }catch(e){ /* un tentativo fallito lascia tutto com'era: il prossimo stato lo ritenta o il pulsante resta */ }
   finally{ conn.__repairing = false; }
 }
@@ -4243,6 +4272,9 @@ async function repairAsOfferer(conn, round){
      rileggersela — la casella e' a lettura unica */
   try{ await mailboxGet(offerSlot); }catch(_){}
   if (pc !== conn) return;
+  /* un'altra negoziazione e' a meta' (una chiamata che sta partendo): non si
+     mette un'offerta sopra un'offerta — si aspetta il prossimo stato */
+  if (conn.signalingState && conn.signalingState !== 'stable') return;
   if (typeof conn.restartIce === 'function') conn.restartIce();
   const offer = await conn.createOffer(typeof conn.restartIce === 'function' ? undefined : { iceRestart: true });
   if (pc !== conn) return;
@@ -4260,6 +4292,15 @@ async function repairAsOfferer(conn, round){
       return;
     }
     await new Promise(r => setTimeout(r, pollGap(started, 1200)));
+  }
+  /* ⚠️ NESSUNA RISPOSTA — e questa e' la riga che mancava il 12 set 2026.
+     Un'offerta applicata e mai risposta lascia la connessione in
+     'have-local-offer' PER SEMPRE: da li' in poi ogni createOffer — cioe'
+     ogni chiamata — fallisce con "non si e' collegata", su una conversazione
+     che magari funziona benissimo. Si torna indietro: la connessione torna
+     'stable', com'era prima del tentativo. */
+  if (pc === conn && conn.signalingState === 'have-local-offer'){
+    try{ await conn.setLocalDescription({ type: 'rollback' }); }catch(_){}
   }
 }
 
@@ -7859,7 +7900,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.33';
+const APP_VERSION = 'logos-modifica-4.34';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

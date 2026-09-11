@@ -6455,8 +6455,8 @@ test.describe('la ripresa quando la rete cambia', () => {
         restartIce: function(){ this.log.push('restartIce'); },
         createOffer: function(){ this.log.push('createOffer'); return Promise.resolve({ type: 'offer', sdp: 'v=0\\r\\no=OFFERTA-' + Math.random() + '\\r\\n' }); },
         createAnswer: function(){ this.log.push('createAnswer'); return Promise.resolve({ type: 'answer', sdp: 'v=0\\r\\no=RISPOSTA\\r\\n' }); },
-        setLocalDescription: function(d){ this.log.push('setLocal:' + d.type); this.localDescription = d; return Promise.resolve(); },
-        setRemoteDescription: function(d){ this.log.push('setRemote:' + d.type); this.remoteDescription = d; return Promise.resolve(); },
+        setLocalDescription: function(d){ this.log.push('setLocal:' + d.type); if (d.type === 'rollback'){ this.signalingState = 'stable'; return Promise.resolve(); } this.localDescription = d; this.signalingState = d.type === 'offer' ? 'have-local-offer' : 'stable'; return Promise.resolve(); },
+        setRemoteDescription: function(d){ this.log.push('setRemote:' + d.type); this.remoteDescription = d; this.signalingState = d.type === 'offer' ? 'have-remote-offer' : 'stable'; return Promise.resolve(); },
         addIceCandidate: function(){ return Promise.resolve(); },
         addEventListener: function(t, fn){ (ls[t] = ls[t] || []).push(fn); },
         removeEventListener: function(){},
@@ -6506,25 +6506,92 @@ test.describe('la ripresa quando la rete cambia', () => {
     app.stop();
   });
 
-  test('scatta dopo REPAIR_START_MS di «disconnected», non subito, e non se torna su prima', async () => {
+  test('chi OFFRE aspetta «failed»; chi RISPONDE si mette in ascolto gia su «disconnected», dopo REPAIR_START_MS', async () => {
+    /* ⚠️ RISCRITTO IL 12 SET 2026 dopo la prova su due telefoni in 5G. La
+       prima stesura faceva offrire gia' su 'disconnected': su rete mobile
+       quello stato va e viene e spesso lo vede un lato solo, che offriva
+       sopra una connessione sana mentre l'altro non rispondeva mai. */
     const app = loadApp();
     app.run(PC + `
       window.__partenze = 0;
       startRepair = function(){ window.__partenze++; };
+      repairBase = { text: 'x', offerer: true };
       pc = window.__mkpc();
       pc.addEventListener('connectionstatechange', function(){ onConnectionStateChange(pc); });
     `);
     app.run("pc.__become('disconnected')");
+    await app.run('new Promise(r => setTimeout(r, REPAIR_START_MS + 200))');
+    assert.strictEqual(app.run('window.__partenze'), 0, 'chi offre NON deve offrire su un vacillamento: e la cosa che ha rotto le chiamate in 5G');
+    app.run("pc.__become('failed')");
+    assert.strictEqual(app.run('window.__partenze'), 1, '«failed» non torna mai da solo per specifica: qui si offre');
+
+    /* l altro ruolo: mettersi in ascolto costa solo letture, quindi puo partire prima */
+    app.run("window.__partenze = 0; repairBase = { text: 'x', offerer: false }; pc.__become('connected');");
+    app.run("pc.__become('disconnected')");
     assert.strictEqual(app.run('window.__partenze'), 0, 'un ascensore, una galleria: si aspetta che torni da sola prima di scomodare il relay');
     app.run("pc.__become('connected')");
     await app.run('new Promise(r => setTimeout(r, REPAIR_START_MS + 200))');
-    assert.strictEqual(app.run('window.__partenze'), 0, 'tornata su da sola: la ripresa non deve partire');
+    assert.strictEqual(app.run('window.__partenze'), 0, 'tornata su da sola: niente');
     app.run("pc.__become('disconnected')");
     await app.run('new Promise(r => setTimeout(r, REPAIR_START_MS + 200))');
-    assert.strictEqual(app.run('window.__partenze'), 1, 'restata giu: adesso si prova');
-    app.run("pc.__become('failed')");
-    assert.strictEqual(app.run('window.__partenze'), 2, '«failed» non torna mai da solo per specifica: subito');
+    assert.strictEqual(app.run('window.__partenze'), 1, 'restata giu: chi risponde si mette in ascolto, cosi la risposta e pronta se l altro arriva a failed');
     app.stop();
+  });
+
+  test('un offerta senza risposta viene RITIRATA: la connessione torna stabile, e le chiamate dopo funzionano', async () => {
+    /* La riga che mancava il 12 set: un offerta applicata e mai risposta
+       lascia la connessione in have-local-offer per sempre, e da li ogni
+       createOffer — ogni chiamata — fallisce su una conversazione sana. */
+    const box = new Map();
+    const A = loadApp();
+    A.sandbox.__box = box;
+    A.run(PC + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      mailboxPut = async function(k, v){ window.__box.set(k, JSON.stringify(v)); return true; };
+      mailboxGet = async function(k){ var v = window.__box.get(k); if (v === undefined) return null; window.__box.delete(k); return JSON.parse(v); };
+      pc = window.__mkpc();
+      REPAIR_ROUND_MS = 300;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('startRepair(pc)');
+    assert.ok(A.run("pc.log.indexOf('setLocal:offer') !== -1"), 'ha offerto');
+    assert.ok(A.run("pc.log.indexOf('setLocal:rollback') !== -1"), 'nessuna risposta entro il giro: l offerta va ritirata');
+    assert.strictEqual(A.run('pc.signalingState'), 'stable', 'e la connessione torna stabile, pronta per la prossima negoziazione');
+    A.stop();
+  });
+
+  test('non si mette un offerta sopra un altra negoziazione in corso', async () => {
+    const A = loadApp();
+    A.run(PC + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      mailboxPut = async function(){ window.__scritto = true; return true; };
+      mailboxGet = async function(){ return null; };
+      pc = window.__mkpc(); pc.signalingState = 'have-local-offer';
+      REPAIR_ROUND_MS = 200;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('startRepair(pc)');
+    assert.strictEqual(A.run("pc.log.indexOf('restartIce')"), -1, 'una chiamata sta negoziando: la ripresa aspetta il prossimo stato');
+    assert.strictEqual(A.run('window.__scritto'), undefined, 'e non scrive niente sul relay');
+    A.stop();
+  });
+
+  test('gli ascolti di chi risponde non consumano i giri di chi offre, ma hanno un tetto loro', async () => {
+    const A = loadApp();
+    A.run(PC + `
+      window.__ascolti = 0;
+      repairBase = { text: 'x', offerer: false };
+      repairAsAnswerer = async function(){ window.__ascolti++; };
+      pc = window.__mkpc(); pc.connectionState = 'disconnected';
+    `);
+    for (let i = 0; i < 15; i++) await A.run('startRepair(pc)');
+    assert.strictEqual(A.run('window.__ascolti'), A.run('REPAIR_MAX_LISTENS'), 'un 5G che vacilla per un ora non deve tenere in ascolto per un ora');
+    assert.strictEqual(A.run('pc.__repairRounds'), undefined, 'ascoltare non e offrire: i giri di chi offre restano intatti per la ripresa vera');
+    A.stop();
   });
 
   test('due app, una cassetta in comune: A rinegozia, B risponde, tutti e due applicano', async () => {

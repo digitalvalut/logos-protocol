@@ -1,0 +1,7 @@
+La ripresa della v40 poteva rompere una chiamata che funzionava. Corretto prima che arrivasse a qualcuno.
+
+Due telefoni in 5G si collegavano in meno di un secondo; poi uno perdeva il collegamento, rinegoziava da solo e lo riprendeva quaranta secondi dopo, mentre l'altro dichiarava la chiamata fallita. La causa era nella ripresa stessa: partiva a rinegoziare appena la connessione vacillava, e su rete mobile un vacillamento spesso lo vede un lato solo. Quel lato metteva un'offerta nuova sopra una connessione che l'altro considerava sana, l'altro non rispondeva mai, e l'offerta restava appesa: da lì in poi ogni chiamata su quella conversazione falliva.
+
+Ora chi offre aspetta che la connessione sia dichiarata caduta — cosa che prima o poi vedono tutti e due i lati — e chi risponde nel frattempo si mette solo in ascolto, che non costa niente. Un'offerta senza risposta viene ritirata, così la connessione torna com'era. E una ripresa non parte mai mentre un'altra negoziazione (una chiamata che sta partendo) è in corso.
+
+Il resto della v40 è invariato; la v40 era una pre-release e non è arrivata a nessuno.

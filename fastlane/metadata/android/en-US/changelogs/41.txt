@@ -1,0 +1,7 @@
+The v40 recovery could break a call that was working. Fixed before it reached anyone.
+
+Two phones on 5G connected in under a second; then one of them lost the link, renegotiated on its own, and got it back forty seconds later — while the other declared the call failed. The cause was in the new recovery itself: it started renegotiating as soon as the connection wobbled, and on a mobile network a wobble is often seen by one side only. That side put a new offer on top of a connection the other side still considered fine, the other side never answered, and the offer stayed pending — from then on every call on that conversation would fail.
+
+Now the side that offers waits for the connection to be declared failed — which both sides eventually see — and the side that answers only listens meanwhile, which costs nothing. An offer that gets no reply is rolled back, so the connection returns to the state it was in. And a recovery never starts while another negotiation (a call being set up) is in flight.
+
+Everything else in v40 is unchanged; v40 was a pre-release and reached no one.
