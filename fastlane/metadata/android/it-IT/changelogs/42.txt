@@ -1,0 +1,7 @@
+Rispondere a una chiamata all'indirizzo apriva una seconda connessione sopra la prima.
+
+Trovato con un tablet che chiamava un telefono in 5G: il telefono squillava, la chiamata si collegava — e poi la stessa chiamata risquillava, rispondere di nuovo faceva partire un tentativo nuovo sopra quello che già funzionava, e il secondo tentativo falliva. Il tablet restava collegato al primo; il telefono restava a guardare il secondo.
+
+Due controlli della casella possono partire vicini (il ritorno nell'app, un tocco, la risposta dallo schermo bloccato). Il primo trovava l'invito e rispondeva, ma per un attimo l'app non si considerava ancora occupata, e la casella del relay — che si svuota un po' dopo la lettura — serviva lo stesso invito al secondo controllo, che lo rimetteva a schermo. Corretto due volte: l'app è occupata dall'istante in cui comincia a rispondere, e un invito a cui si è già risposto non viene più annunciato.
+
+La v40 e la v41 erano pre-release e non sono arrivate a nessuno.

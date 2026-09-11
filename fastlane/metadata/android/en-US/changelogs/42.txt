@@ -1,0 +1,7 @@
+Answering a call at the address opened a second connection on top of the first.
+
+Found on a tablet calling a phone on 5G: the phone rang, the call connected — and then the same call rang again, answering it a second time started a new attempt over the one already working, and that second attempt failed. The tablet stayed connected to the first; the phone was left staring at the second.
+
+Two checks of the mailbox can run close together (coming back to the app, a tap, the answer from the lock screen). The first found the invitation and answered it, but for a moment the app did not yet count itself as busy, and the relay's mailbox — which empties a little after it is read — served the same invitation to the second check, which put it back on screen. Fixed twice over: the app is busy from the instant it starts answering, and an invitation already answered is never announced again.
+
+v40 and v41 were pre-releases and reached no one.

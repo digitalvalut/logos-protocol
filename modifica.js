@@ -6808,6 +6808,25 @@ let addrPollTimer = null, addrPending = null;
    blocco stava nascondendo questo, ed e' rimasto scoperto quando gliel'abbiamo
    tolto. Vedi refuseAddrCall. */
 const refusedRids = new Set();
+/* ⚠️ TROVATO IL 12 SET 2026 su tablet + telefono in 5G: «si collega, spunta
+   verde, POI ricomincia a girare e fallisce; e continuava a squillare».
+   Due controlli della casella partivano vicini (il ritorno in primo piano,
+   il tocco che anticipa il giro, la risposta dallo schermo bloccato). Il
+   primo trovava la busta e accettava. Ma `acceptAddrCall` azzera
+   `addrPending` SUBITO e crea la connessione DOPO un'attesa: in quell'attimo
+   `busyWithSomeone()` non vedeva ne' una chiamata in arrivo ne' una
+   connessione, e il secondo controllo — che la casella del relay serve
+   ancora, perche' cancella in ritardo — rimetteva a schermo la STESSA busta
+   e squillava. Chi rispondeva di nuovo apriva un secondo tentativo sopra il
+   primo, che dall'altra parte era gia' collegato: il secondo non trovava
+   nessuno e finiva in rosso. Due rimedi, uno per ciascuna meta':
+   `acceptingAddr` chiude la finestra, `acceptedRids` chiude la busta. */
+let acceptingAddr = false;
+const acceptedRids = new Set();
+function rememberAcceptedRid(rid){
+  acceptedRids.add(rid);
+  if (acceptedRids.size > 200) acceptedRids.delete(acceptedRids.values().next().value);
+}
 /* the connection an invite is merely *waiting* on, "we are the caller", and
    "a known contact is being let in right now" */
 let quickSharePc = null, dialing = false, autoAccepting = false;
@@ -6852,6 +6871,7 @@ function busyWithSomeone(){
   if (addrPending) return true;                                  /* already ringing */
   if (dialing) return true;                                      /* we are the one calling */
   if (autoAccepting) return true;                                /* letting a contact in */
+  if (acceptingAddr) return true;                                /* answering: the connection is being built */
   if (!$('screenChat').classList.contains('hide')) return true;  /* talking already */
   if (dc && dc.readyState === 'open') return true;               /* talking already */
   if (!pc) return false;
@@ -6934,6 +6954,10 @@ async function addrCheckOnce(){
     if (isBlockedFp(msg.fp)) continue;
     /* e nemmeno questa singola chiamata, a cui si e' gia' risposto di no */
     if (refusedRids.has(msg.rid)) continue;
+    /* e nemmeno una a cui si e' GIA' risposto: la casella la serve ancora per
+       qualche istante dopo la lettura, e un secondo tentativo sopra il primo
+       e' esattamente cio' che rompeva la chiamata (vedi acceptedRids) */
+    if (acceptedRids.has(msg.rid)) continue;
     addrPending = { msg, sec, slot: n };
     /* who, and why — read out of the sealed envelope, which is the only place
        either could have come from: the notification itself carries nothing */
@@ -7115,6 +7139,8 @@ async function acceptAddrCall(){
   stopListenRing();
   const { msg, sec, slot } = addrPending;
   addrPending = null;
+  acceptingAddr = true;              /* da qui a connessione creata: occupati, anche se `pc` e' ancora null */
+  if (msg && msg.rid) rememberAcceptedRid(msg.rid);
   $('addrIncoming').classList.add('hide');
   showScreen('screenStart');
   showBigConnectingA();
@@ -7165,6 +7191,8 @@ async function acceptAddrCall(){
     /* a half-built connection left in the global reads as "busy" and closes this
        device off to everyone — the same line acceptIncomingAutoOffer has always had */
     if (pc === myPc){ try{ pc.close(); }catch(_){} pc = null; }
+  } finally {
+    acceptingAddr = false;           /* da qui in poi decide `pc`, come sempre */
   }
 }
 
@@ -7900,7 +7928,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.34';
+const APP_VERSION = 'logos-modifica-4.35';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

@@ -6873,3 +6873,71 @@ test.describe('la traccia remota viene fatta suonare esplicitamente', () => {
     app.stop();
   });
 });
+
+/* ============================================================================
+   Una risposta sola per chiamata — 12 settembre 2026, tablet + telefono in 5G.
+   «Si collega, spunta verde, poi ricomincia a girare e fallisce; e continuava
+   a squillare.» Due controlli della casella vicini, la casella che serve la
+   stessa busta due volte, e un secondo tentativo sopra il primo.
+   ========================================================================= */
+test.describe('una risposta sola per chiamata', () => {
+  const BANCO = `
+    stopAddrPolling();
+    window.__schede = 0; window.__squilli = 0; window.__pcCreate = 0;
+    ringForIncomingAddr = function(){ window.__squilli++; };
+    listenMode = true;
+    activeSlots = () => [0];
+    myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+    addrSlotSeed = async () => 'semenza';
+    slotId = async (seed, nome) => nome;
+    /* la casella VERA cancella in ritardo: due letture vicine prendono la stessa busta */
+    window.__letture = 0;
+    mailboxGet = async () => { const n = ++window.__letture; await new Promise(r => setTimeout(r, 5)); return n <= 2 ? { busta: 1 } : null; };   /* n PRIMA dell attesa: e quello che fa la casella vera, e senza questo la corsa non si riproduceva */
+    mailboxPutSealed = async () => true;
+    addrOpenIncoming = async () => ({ obj: { sdp: 'v=0', rid: 'RID-UNICA', nick: 'Tablet', fp: 'aabbccdd' }, sec: { seed: 'semenza', slot: 0 } });
+    newPeerConnection = async function(){ window.__pcCreate++; await new Promise(r => setTimeout(r, 30)); var p = new RTCPeerConnection(); p.setRemoteDescription = async () => {}; p.createAnswer = async () => ({ type: 'answer', sdp: 'v=0' }); p.setLocalDescription = async function(d){ this.localDescription = d; }; return p; };
+    candidatePump = function(){ return { stop(){}, remoteReady: async () => {}, isRunning: () => true }; };
+    watchHandshakeProgress = function(){};
+  `;
+
+  test('mentre si sta rispondendo, l app e occupata anche se la connessione non esiste ancora', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 10))');
+    app.run(BANCO);
+    app.run("addrPending = { msg: { sdp: 'v=0', rid: 'RID-UNICA' }, sec: { seed: 'semenza' }, slot: 0 };");
+    const p = app.run('acceptAddrCall()');
+    assert.strictEqual(app.run('addrPending'), null, 'la scheda si chiude subito');
+    assert.strictEqual(app.run('pc'), null, 'la connessione non c e ancora: e QUESTA la finestra');
+    assert.strictEqual(app.run('busyWithSomeone()'), true, 'e in quella finestra bisogna risultare occupati, o il secondo controllo rientra');
+    await p;
+    assert.strictEqual(app.run('acceptingAddr'), false, 'a connessione creata decide di nuovo pc');
+    assert.strictEqual(app.run('busyWithSomeone()'), true, 'e pc adesso c e');
+    app.stop();
+  });
+
+  test('la corsa vera: due controlli insieme, stessa busta due volte, UNA risposta e nessun secondo squillo', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 10))');
+    app.run(BANCO);
+    app.run('window.dvAndroidCall();');                 /* Rispondi dallo schermo bloccato: accetta da solo */
+    app.run('addrCheckOnce();');                        /* il giro di ascolto, un attimo dopo */
+    await app.run('new Promise(r => setTimeout(r, 400))');   /* la corsa si consuma in ~60 ms; largo, perche un test che dipende dal millisecondo e un test che mente a intermittenza */
+    assert.strictEqual(app.run('window.__pcCreate'), 1, 'UNA connessione: un secondo tentativo sopra il primo e quello che lasciava il tablet collegato a nessuno');
+    assert.strictEqual(app.run('window.__squilli'), 0, 'e la stessa busta non deve tornare a squillare');
+    assert.strictEqual(app.run('addrPending'), null, 'niente scheda rimasta appesa');
+    app.stop();
+  });
+
+  test('una busta gia risposta non viene piu annunciata nemmeno a connessione finita', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 10))');
+    app.run(BANCO);
+    app.run("addrPending = { msg: { sdp: 'v=0', rid: 'RID-UNICA' }, sec: { seed: 'semenza' }, slot: 0 };");
+    await app.run('acceptAddrCall()');           /* la risposta VERA e quella che deve ricordare la busta */
+    app.run('pc = null; window.__letture = 0;');   /* connessione finita; la casella la serve ancora */
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('window.__squilli'), 0, 'letta due volte dal relay, risposta una volta sola');
+    assert.strictEqual(app.run('addrPending'), null);
+    app.stop();
+  });
+});
