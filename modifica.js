@@ -3261,8 +3261,18 @@ const ICE_REUSE_MS = 7 * 60 * 1000;
    and nothing more: the very next attempt gets a genuine second try, on the
    reasonable chance that whatever failed a moment ago has already recovered. */
 let iceServersPromise = null;
+/* ⚠️ MISURATO L'11 SET 2026: la radice del relay — quella che genera le
+   credenziali — ha risposto in 2,7 secondi. Chi arrivava qui a cache scaduta
+   pagava quei secondi PRIMA che la chiamata cominciasse. Adesso, quando la
+   cache e' ancora buona ma sta per scadere, si risponde subito con quella e
+   si rinnova in sottofondo: la chiamata parte, e la prossima trova la cache
+   fresca. Il Worker aspetta solo chi arriva davvero a freddo. */
+const ICE_REFRESH_AHEAD_MS = 90 * 1000;
 async function fetchIceServers(){
-  if (cachedIceServers && Date.now() < iceServersUntil) return cachedIceServers;
+  if (cachedIceServers && Date.now() < iceServersUntil){
+    if (Date.now() > iceServersUntil - ICE_REFRESH_AHEAD_MS && !iceServersPromise) refreshIceServersInBackground();
+    return cachedIceServers;
+  }
   /* The promise is held, not just the result — the same fix, for the same
      reason, as myIdentity() and myKeyPair() further down. Two callers arriving
      together (the screen warming this up, and the connection that needs it a
@@ -3270,6 +3280,10 @@ async function fetchIceServers(){
      against the one budget on this Worker that costs real money. Cleared once
      this settles either way, so a later attempt is not deduplicated against a
      request that finished minutes ago. */
+  return loadIceServersNow();
+}
+/* Il rinnovo vero, condiviso fra chi aspetta e chi rinnova in sottofondo. */
+function loadIceServersNow(){
   if (iceServersPromise) return iceServersPromise;
   iceServersPromise = (async () => {
     try{
@@ -3291,6 +3305,9 @@ async function fetchIceServers(){
     }
   })();
   return iceServersPromise;
+}
+function refreshIceServersInBackground(){
+  try{ loadIceServersNow().catch(() => {}); }catch(_){}
 }
 
 let pc = null, dc = null;
@@ -3682,7 +3699,10 @@ function wireDataChannel(channel, ownerPc){
        Solo il permanente e solo se acceso: un usa-e-getta dato come recapito
        stabile smetterebbe di essere usa-e-getta. */
     const addr = addrOn() ? await myAddress(0) : null;
-    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr });
+    /* `rn`: il numero casuale di questa sessione per la ripresa (vedi
+       armRepair). Una versione vecchia dall'altra parte lo ignora, e non
+       mandandone uno suo lascia la ripresa spenta: niente si rompe. */
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce });
     const provaSaluto = (ancora) => {
       try{
         if (dc.readyState !== 'open') throw new Error('canale non aperto');
@@ -3692,6 +3712,7 @@ function wireDataChannel(channel, ownerPc){
       }
     };
     provaSaluto(1);
+    noteAndroidActivity();   /* una conversazione si e' aperta: il telefono ascolta piu' spesso per un po' */
     if (pendingSharedFiles.length){
       const files = pendingSharedFiles; pendingSharedFiles = [];
       sendFilesQueue(files);
@@ -4069,6 +4090,9 @@ async function newPeerConnection(){
   const config = { iceServers };
   if (cert) config.certificates = [cert];
   const conn = new RTCPeerConnection(config);
+  /* il numero casuale che questa sessione mettera' nel saluto, per la ripresa:
+     nato qui, dove nasce la connessione, cosi' esiste prima di qualunque saluto */
+  freshRepairNonce();
   /* Stamped here, at the one place every connection is born, precisely so that
      nothing anywhere else has to remember to do it. An attempt abandoned by an
      exception stays in state 'new' — neither closed nor failed — and used to
@@ -4109,9 +4133,170 @@ function onConnectionStateChange(conn){
   paintConnDot();
   if (conn.connectionState === 'disconnected'){
     if (!conn.__disconnectTimer) conn.__disconnectTimer = setTimeout(() => stillDisconnected(conn), DISCONNECT_GRACE_MS);
-  } else if (conn.__disconnectTimer){
-    clearTimeout(conn.__disconnectTimer);
-    conn.__disconnectTimer = null;
+    /* e intanto si prova DAVVERO a riprenderla — vedi la ripresa qui sotto */
+    if (!conn.__repairTimer) conn.__repairTimer = setTimeout(() => { conn.__repairTimer = null; startRepair(conn); }, REPAIR_START_MS);
+  } else {
+    if (conn.__disconnectTimer){ clearTimeout(conn.__disconnectTimer); conn.__disconnectTimer = null; }
+    if (conn.__repairTimer){ clearTimeout(conn.__repairTimer); conn.__repairTimer = null; }
+    /* 'failed' non torna piu' da solo, per specifica: si parte subito */
+    if (conn.connectionState === 'failed') startRepair(conn);
+  }
+}
+
+/* ---------------- la ripresa: quando la rete cambia sotto una conversazione ----------------
+   ⚠️ NATA L'11 SETTEMBRE 2026. Fino a quel giorno lo schermo diceva «sto
+   riprendendolo» e NESSUN codice riprendeva niente: `restartIce` non compariva
+   in tutto il file. Il commento sopra `onConnectionStateChange` lo ammetteva
+   gia' — «un vero cambio di rete non si riprende mai da solo» — e la risposta
+   era un pulsante «Torna alla home». Per chi la vive, quella e' una chiamata
+   che cade.
+
+   Cosa succede davvero quando il WiFi passa ai dati mobili: ogni indirizzo
+   che la connessione stava usando appartiene a una rete che non esiste piu'.
+   La cifratura e' intatta, i due si conoscono ancora, ma nessuno dei due sa
+   piu' DOVE e' l'altro. La ripresa e' esattamente questo: ridirselo. WebRTC
+   lo prevede (ICE restart): la stessa connessione, gli stessi certificati,
+   le stesse tracce audio e video, solo indirizzi nuovi. La chiamata continua
+   sullo stesso orologio; chi parla sente un buco di qualche secondo, non un
+   riattacco.
+
+   Il problema e' il canale: il canale dati e' morto insieme agli indirizzi,
+   quindi la nuova offerta deve passare dal relay, come all'inizio. Serve una
+   casella che entrambi conoscano e che nessun altro possa indovinare.
+   Dal saluto (`hello`) ogni lato conosce le impronte dei DUE certificati —
+   provate dalla stretta di mano cifrata, non dichiarate — e un numero
+   casuale che ciascuno ha generato per questa sessione (`rn`). Da tutti e
+   quattro, ordinati cosi' che i due lati facciano lo stesso conto, nasce il
+   segreto della ripresa. Il relay vede buste sigillate su caselle dal nome
+   opaco, come sempre; senza le impronte E i due numeri casuali non c'e'
+   niente da trovare.
+
+   Chi offre e chi risponde lo decide l'ordine delle impronte: mai tutti e
+   due insieme, mai nessuno dei due. Una versione vecchia dall'altra parte
+   non manda `rn`, quindi la ripresa non si arma e tutto resta esattamente
+   come prima di questa correzione: il pulsante «Torna alla home».
+
+   Quanto costa al relay: un'offerta, una risposta, e qualche pacchetto di
+   indirizzi per lato — dell'ordine di dieci scritture per ripresa — con un
+   tetto di REPAIR_MAX_ROUNDS per conversazione. Le scritture sono la quota
+   stretta (mille al giorno): dieci per salvare una chiamata sono un buon
+   affare, cento in un ciclo impazzito no, e il tetto esiste per questo. */
+const REPAIR_START_MS = 3000;          /* 'disconnected' spesso torna da solo in un paio di secondi: si aspetta quello, non oltre */
+let REPAIR_ROUND_MS = 60000;      /* `let` e non `const`: i test lo accorciano per vedere un giro scadere senza aspettare un minuto */
+const REPAIR_MAX_ROUNDS = 3;
+const REPAIR_PUMP_GRACE_MS = 20000;    /* dopo il ricongiungimento, quanto ancora ascoltare indirizzi ritardatari */
+let repairNonce = null;                /* il mio numero casuale per questa sessione, mandato nel saluto */
+let repairBase = null;                 /* la stringa da cui nascono i segreti, o null se la ripresa non e' armata */
+
+function freshRepairNonce(){ repairNonce = hex(crypto.getRandomValues(new Uint8Array(16))); return repairNonce; }
+/* Dal saluto dell'altro. Entrambi i lati arrivano qui con gli stessi quattro
+   valori, in ordini diversi: l'ordinamento e' cio' che li fa coincidere. */
+async function armRepair(theirFp, theirNonce){
+  repairBase = null;
+  if (typeof theirFp !== 'string' || typeof theirNonce !== 'string' || !repairNonce) return false;
+  if (!/^[0-9a-f]{32,128}$/i.test(theirNonce)) return false;   /* dall'altro lato: tipizzato e limitato come tutto il resto */
+  const mine = await myFingerprintHex();
+  if (!mine) return false;
+  const fps = [mine.toLowerCase(), theirFp.toLowerCase()].sort();
+  const nonces = [repairNonce, theirNonce.toLowerCase()].sort();
+  repairBase = { text: 'logos-repair-v1:' + fps.join('|') + '|' + nonces.join('|'), offerer: fps[0] === mine.toLowerCase() };
+  return true;
+}
+function repairArmed(){ return !!repairBase; }
+async function repairSecFor(round){ return pairSecrets(repairBase.text + ':' + round); }
+async function repairOfferSlot(){ return slotId((await pairSecrets(repairBase.text)).seed, 'repair-offer'); }
+
+async function startRepair(conn){
+  if (pc !== conn || !repairBase) return;
+  if (conn.connectionState === 'connected' || conn.connectionState === 'closed') return;
+  if (conn.__repairing) return;                          /* una alla volta */
+  conn.__repairRounds = (conn.__repairRounds || 0) + 1;
+  if (conn.__repairRounds > REPAIR_MAX_ROUNDS) return;   /* oltre, e' la rete che non c'e': resta il pulsante */
+  conn.__repairing = true;
+  try{
+    if (repairBase.offerer) await repairAsOfferer(conn, conn.__repairRounds);
+    else await repairAsAnswerer(conn);
+  }catch(e){ /* un tentativo fallito lascia tutto com'era: il prossimo stato lo ritenta o il pulsante resta */ }
+  finally{ conn.__repairing = false; }
+}
+
+/* Ferma la pompa quando ha finito di servire: appena la connessione e'
+   tornata su, piu' una tolleranza per gli indirizzi in ritardo; oppure alla
+   scadenza del giro. Mai lasciarla orfana — e' la lezione della v3 sul relay. */
+function retirePumpWhenSettled(conn, pump, deadline){
+  const check = () => {
+    if (pc !== conn || conn.connectionState === 'closed' || conn.connectionState === 'failed'){ pump.stop(); return; }
+    if (conn.connectionState === 'connected'){ setTimeout(() => pump.stop(), REPAIR_PUMP_GRACE_MS); return; }
+    if (Date.now() > deadline){ pump.stop(); return; }
+    setTimeout(check, 1000);
+  };
+  check();
+}
+
+async function repairAsOfferer(conn, round){
+  const started = Date.now(), deadline = started + REPAIR_ROUND_MS;
+  const rs = await repairSecFor(round);
+  const offerSlot = await repairOfferSlot();
+  const answerSlot = await slotId(rs.seed, 'repair-answer');
+  /* un'offerta di un giro precedente rimasta nella casella va tolta prima,
+     o l'altro lato la legge e risponde alla cosa sbagliata; ritirare e'
+     rileggersela — la casella e' a lettura unica */
+  try{ await mailboxGet(offerSlot); }catch(_){}
+  if (pc !== conn) return;
+  if (typeof conn.restartIce === 'function') conn.restartIce();
+  const offer = await conn.createOffer(typeof conn.restartIce === 'function' ? undefined : { iceRestart: true });
+  if (pc !== conn) return;
+  await conn.setLocalDescription(offer);
+  const pump = candidatePump(conn, rs, 'ra', 'rb');
+  retirePumpWhenSettled(conn, pump, deadline);
+  await mailboxPutSealed(offerSlot, rs, { round, sdp: conn.localDescription.sdp });
+  while (Date.now() < deadline){
+    if (pc !== conn || conn.connectionState === 'closed') return;
+    const msg = await mailboxGetSealed(answerSlot, rs);
+    if (msg && typeof msg.sdp === 'string' && bustaFresca(msg)){
+      if (pc !== conn) return;
+      await conn.setRemoteDescription({ type: 'answer', sdp: msg.sdp });
+      await pump.remoteReady();
+      return;
+    }
+    await new Promise(r => setTimeout(r, pollGap(started, 1200)));
+  }
+}
+
+async function repairAsAnswerer(conn){
+  const started = Date.now(), deadline = started + REPAIR_ROUND_MS;
+  const offerSlot = await repairOfferSlot();
+  /* L'offerta e' sigillata col segreto del SUO giro, che questo lato non
+     conosce ancora: si provano i giri possibili, dal proprio in su. Sono al
+     massimo REPAIR_MAX_ROUNDS chiavi, e la busta si apre solo con quella
+     giusta — le altre restituiscono null e non costano una lettura in piu',
+     perche' la lettura e' una sola e la si prova ad aprire in locale. */
+  const mine = conn.__repairRounds || 1;
+  while (Date.now() < deadline){
+    if (pc !== conn || conn.connectionState === 'closed') return;
+    const env = await mailboxGet(offerSlot);
+    if (env){
+      let msg = null, rs = null;
+      for (let r = 1; r <= REPAIR_MAX_ROUNDS && !msg; r++){
+        const cand = await repairSecFor(r);
+        const got = await openFrom(cand.key, env);
+        if (got && typeof got.sdp === 'string' && got.round === r && bustaFresca(got)){ msg = got; rs = cand; }
+      }
+      if (msg){
+        if (pc !== conn) return;
+        conn.__repairRounds = Math.max(mine, msg.round);
+        await conn.setRemoteDescription({ type: 'offer', sdp: msg.sdp });
+        const pump = candidatePump(conn, rs, 'rb', 'ra');
+        retirePumpWhenSettled(conn, pump, deadline);
+        const answer = await conn.createAnswer();
+        if (pc !== conn) return;
+        await conn.setLocalDescription(answer);
+        await pump.remoteReady();
+        await mailboxPutSealed(await slotId(rs.seed, 'repair-answer'), rs, { sdp: conn.localDescription.sdp });
+        return;
+      }
+    }
+    await new Promise(r => setTimeout(r, pollGap(started, 1200)));
   }
 }
 function stillDisconnected(conn){
@@ -5506,6 +5691,15 @@ const androidRing = (() => {
       ? AndroidRing : null;
   }catch(_){ return null; }
 })();
+/* «E' successo qualcosa»: il servizio Android che ascolta a telefono chiuso
+   accelera per qualche minuto (vedi il ritmo adattivo in RingService.java).
+   Detto nei momenti in cui chi ti ha appena parlato tende a richiamare: una
+   conversazione che si apre, una che si chiude. Un ponte vecchio non ha il
+   metodo, e allora non si dice niente. */
+function noteAndroidActivity(){
+  if (!androidRing || typeof androidRing.activity !== 'function') return;
+  try{ androidRing.activity(); }catch(_){}
+}
 
 /* Dentro l'app quel testo direbbe una cosa falsa: che l'ascolto finisce appena
    cambi schermata. Lì non finisce, ed è tutta la differenza — quindi si punta
@@ -5589,7 +5783,16 @@ async function handOverWatchToAndroid(){
 /* Chiamata da Android quando si risponde dallo schermo bloccato. Il servizio
    sapeva soltanto che una busta esisteva: leggerla e aprirla tocca a qui, e
    l'unica cosa che serve è farlo subito invece che al prossimo giro. */
+/* Quanto puo' essere vecchio un tocco su «Rispondi» perche' valga ancora
+   come risposta: il tempo di aprire l'app e leggere la busta, non di piu'.
+   Oltre, uno squillo che compare e' una chiamata NUOVA, e va annunciata. */
+const LOCK_ANSWER_FRESH_MS = 20000;
+let answeredOnLockScreenAt = 0;
+function answeredOnLockScreenRecently(){
+  return answeredOnLockScreenAt > 0 && (Date.now() - answeredOnLockScreenAt) < LOCK_ANSWER_FRESH_MS;
+}
 window.dvAndroidCall = function(){
+  answeredOnLockScreenAt = Date.now();
   try{ addrCheckOnce(); }catch(_){}
 };
 $('listenRow').addEventListener('keydown', e => {
@@ -6708,6 +6911,20 @@ async function addrCheckOnce(){
     $('addrRefused').classList.add('hide'); refusedFp = null;
     $('addrIncoming').classList.remove('hide');
     $('addrIncoming').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    /* ⚠️ IL DOPPIO SQUILLO — riferito dall'operatore l'11 set 2026. A telefono
+       chiuso squilla Android («qualcuno ti sta chiamando»: il servizio sa
+       solo che una busta esiste, non puo' aprirla). La persona tocca
+       RISPONDI. L'app si apre, legge la busta, trova il nome — e fino a oggi
+       ricominciava a squillare da capo, chiedendo di rispondere a una
+       chiamata a cui aveva GIA' risposto. Se il tocco su «Rispondi» e'
+       fresco, la risposta e' gia' stata data: si entra, senza squillare.
+       Se non lo e' (l'app era aperta per conto suo, o il tocco e' vecchio),
+       tutto come prima: scheda e squillo. */
+    if (answeredOnLockScreenRecently()){
+      answeredOnLockScreenAt = 0;
+      acceptAddrCall();
+      return;
+    }
     toast(t('addr.incomingToast','Qualcuno ti sta cercando al tuo indirizzo.'));
     /* la modalità "resta in ascolto" trasforma questo, che altrimenti sarebbe
        solo una scheda silenziosa da notare, in uno squillo vero */
@@ -6834,6 +7051,15 @@ document.addEventListener('visibilitychange', () => {
   }
   else {
     startAddrPolling(); startInboxPolling();
+    /* ⚠️ TROVATO L'11 SET 2026 dall'operatore, con due telefoni: una lettera
+       lasciata dal primo non compariva mai sul secondo. Il ritiro delle
+       lettere stava in un punto solo, `paintAddrCard()`, cioe' all'avvio;
+       qui, dove l'app torna davanti, si riavviava tutto TRANNE quello. E su
+       Android «aprire l'app» e' quasi sempre riportarla davanti, non farla
+       ripartire: la lettera restava sul relay finche' qualcuno non uccideva
+       l'app a mano. Costa una lettura per casella a ogni ritorno — letture,
+       la risorsa abbondante. */
+    collectLetters();
     /* The screen lock is dropped by the system every time this page is
        hidden, and is not given back on its own. Without this line the
        protection lasted only until the first glance at another app, and the
@@ -7633,7 +7859,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.32';
+const APP_VERSION = 'logos-modifica-4.33';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -9762,6 +9988,9 @@ function onDcMessage(ev){
          localStorage: a nick of a few megabytes filled the quota and every
          later save — history, contacts — failed silently. */
       peerNick = (typeof msg.nick === 'string' ? msg.nick : '').trim().slice(0, 60);
+      /* la ripresa si arma qui, con le due impronte e i due numeri casuali
+         — e non dipende dal nome, che l'altro puo' anche non mandare */
+      armRepair(msg.fp, msg.rn).catch(() => { repairBase = null; });
       if (peerNick){
         paintConnDot();
         $('peerNameLbl').textContent = peerNick;
@@ -9895,6 +10124,119 @@ function onDcMessage(ev){
 let localStream = null, callKind = null, callState = 'idle';
 let micOn = true, camOn = true;
 function sig(msg){ if (dc && dc.readyState === 'open') dc.send(JSON.stringify(msg)); }
+
+/* ---------------- il telefono durante una chiamata ----------------
+   ⚠️ NATO L'11 SETTEMBRE 2026 da una prova su due telefoni veri, tutti e due
+   su rete mobile: «si collega, ma l'audio non si sente bene; in video peggio».
+   Non era un difetto solo: erano quattro, uno sopra l'altro, e nessuno
+   toccava la rete o la cifratura. Tutti stavano nel modo in cui questa pagina
+   trattava l'audio come se fosse su un computer con una linea fissa.
+
+   1. Il telefono non sapeva di essere in chiamata. Android ha due modi di
+      trattare l'audio — «musica» e «telefonata» — e la pagina non puo'
+      sceglierlo: e' un'impostazione del telefono. Dentro l'app Android c'e'
+      un ponte (`AndroidCall`, vedi CallService.java) che lo fa; nel browser
+      non esiste e la pagina fa quello che ha sempre fatto.
+   2. Microfono e fotocamera venivano chiesti «come vengono»: nessuna
+      cancellazione dell'eco dichiarata, nessuna misura per il video. Su una
+      rete mobile la salita e' stretta, e un video senza tetto si mangia la
+      banda della voce: e' il motivo per cui in video era peggio.
+   3. Niente diceva alla connessione che la voce conta piu' dell'immagine e
+      che i pacchetti persi vanno ricostruiti (FEC). Su 4G/5G i pacchetti si
+      perdono per natura; senza FEC ogni perdita e' un buco nella voce.
+   4. Nessun servizio teneva il microfono all'app a schermo spento — anche
+      questo sta dal lato Android, nello stesso servizio.
+
+   Qui sotto: 1 (il ponte), 2 (i vincoli), 3 (la regolazione). Il 4 vive in
+   CallService.java. Nessuna di queste righe puo' essere verificata da un
+   test: la fake-browser non ha orecchie. Sono state provate sui telefoni
+   dell'operatore, ed e' li' che vanno riprovate a ogni modifica. */
+const androidCall = (() => {
+  try{
+    return (typeof AndroidCall !== 'undefined' && AndroidCall && AndroidCall.available())
+      ? AndroidCall : null;
+  }catch(_){ return null; }
+})();
+/* Detto al telefono nel momento in cui la chiamata E' collegata — non quando
+   squilla: lo squillo deve uscire come una suoneria, non come una voce. */
+function phoneEntersCall(video){
+  if (!androidCall) return;
+  try{ androidCall.started(!!video); }catch(_){}
+}
+function phoneLeavesCall(){
+  if (!androidCall) return;
+  try{ androidCall.ended(); }catch(_){}
+}
+
+/* Cosa chiedere a microfono e fotocamera. `ideal` e non `exact`: un telefono
+   che non sa dare 640×480 deve dare quello che ha, non rifiutare la chiamata.
+   24 fotogrammi bastano per un volto e costano la meta' di 30; su rete mobile
+   quella meta' e' la voce. */
+function callMediaConstraints(kind, facingMode){
+  const audio = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+  if (kind !== 'video') return { audio, video: false };
+  const video = { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 24, max: 30 } };
+  if (facingMode) video.facingMode = facingMode;
+  return { audio, video };
+}
+/* La stessa misura per la fotocamera da sola (cambio camera, ritorno dalla
+   condivisione schermo): senza, il video tornava senza tetto a meta' chiamata. */
+function cameraOnlyConstraints(videoSpec){
+  return { video: Object.assign({ width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 24, max: 30 } }, videoSpec || {}), audio: false };
+}
+
+/* Dopo che la chiamata e' negoziata: la voce ha la precedenza, il video un
+   tetto. 800 kbit/s bastano per 640×480 a 24 fps e lasciano spazio alla voce
+   anche su un 4G mediocre; senza tetto il browser sale finche' puo', e su
+   una salita da 1-2 Mbit/s «finche' puo'» vuol dire tutto. Un browser che
+   non conosce uno di questi campi lo ignora, per specifica: ogni sender e'
+   trattato da solo e un errore su uno non tocca gli altri. */
+const CALL_VIDEO_MAX_BPS = 800000;
+async function tuneSendersForMobile(conn){
+  if (!conn || typeof conn.getSenders !== 'function') return;
+  let senders;
+  try{ senders = conn.getSenders(); }catch(_){ return; }   /* chiusa nel frattempo: niente da regolare */
+  for (const s of senders){
+    const kind = s.track && s.track.kind;
+    if (!kind || typeof s.getParameters !== 'function' || typeof s.setParameters !== 'function') continue;
+    try{
+      const p = s.getParameters();
+      if (!p.encodings || !p.encodings.length) p.encodings = [{}];
+      if (kind === 'audio'){
+        p.encodings[0].priority = 'high';
+        p.encodings[0].networkPriority = 'high';
+        try{ s.track.contentHint = 'speech'; }catch(_){}
+      } else {
+        p.encodings[0].maxBitrate = CALL_VIDEO_MAX_BPS;
+        p.encodings[0].priority = 'low';
+        p.encodings[0].networkPriority = 'low';
+        p.degradationPreference = 'maintain-framerate';
+        try{ s.track.contentHint = 'motion'; }catch(_){}
+      }
+      await s.setParameters(p);
+    }catch(_){ /* questo sender resta com'era; gli altri si regolano lo stesso */ }
+  }
+}
+
+/* La correzione d'errore di Opus (FEC in banda): il pacchetto N porta una
+   copia piccola del pacchetto N-1, cosi' una perdita isolata si ricostruisce
+   senza chiedere niente a nessuno. Chrome la offre gia' di suo; questa riga
+   e' per il browser che non lo fa, ed e' idempotente: se c'e', non tocca
+   nulla. Solo sul PROPRIO SDP, mai su quello ricevuto — la descrizione
+   dell'altro non e' un posto dove scrivere. */
+function ensureOpusFec(sdp){
+  if (typeof sdp !== 'string') return sdp;
+  const m = sdp.match(/^a=rtpmap:(\d+) opus\/48000/mi);
+  if (!m) return sdp;
+  const pt = m[1];
+  const fmtp = new RegExp('^a=fmtp:' + pt + ' (.*)$', 'mi');
+  const f = sdp.match(fmtp);
+  if (f){
+    if (/useinbandfec=1/i.test(f[1])) return sdp;
+    return sdp.replace(fmtp, 'a=fmtp:' + pt + ' ' + f[1] + ';useinbandfec=1');
+  }
+  return sdp.replace(new RegExp('^(a=rtpmap:' + pt + ' opus\\/48000[^\\r\\n]*)$', 'mi'), '$1\r\na=fmtp:' + pt + ' useinbandfec=1');
+}
 function setCallStatus(text){ $('callStatus').textContent = text; }
 
 /* The badge said "In videochiamata" for the whole call and never changed —
@@ -10125,7 +10467,7 @@ function letScreenSleep(){
 async function startCall(kind){
   if (callState !== 'idle' || !dc || dc.readyState !== 'open') return;
   callKind = kind; callState = 'ringing-out';
-  try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: kind === 'video' }); }
+  try{ localStream = await navigator.mediaDevices.getUserMedia(callMediaConstraints(kind, facing)); }
   catch(e){ showMediaHelp(e); callState = 'idle'; callKind = null; return; }
   $('callBox').classList.remove('hide');
   $('callBox').classList.toggle('voice', kind !== 'video');
@@ -10156,7 +10498,7 @@ function handleCallSignal(msg){
   } else if (msg.type === 'call-accept'){ stopRing(); disarmCallTimeout(); onCallAccepted();
   } else if (msg.type === 'call-offer-sdp'){ onCallOfferSdp(msg.sdp);
   } else if (msg.type === 'call-answer-sdp'){
-    pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).catch(() => {
+    pc.setRemoteDescription({ type: 'answer', sdp: msg.sdp }).then(() => tuneSendersForMobile(pc)).catch(() => {
       /* the call already looks "active" from onCallAccepted() onward — left
          silent, a failure here meant both people staring at a live-looking
          call neither could actually hear */
@@ -10168,7 +10510,7 @@ function handleCallSignal(msg){
 $('btnAcceptCall').addEventListener('click', async () => {
   stopRing(); disarmCallTimeout();
   $('incomingCall').classList.add('hide');
-  try{ localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: callKind === 'video' }); }
+  try{ localStream = await navigator.mediaDevices.getUserMedia(callMediaConstraints(callKind, facing)); }
   catch(e){
     showMediaHelp(e);
     /* NOT 'call-decline'. Sending that told the caller "they refused you",
@@ -10188,6 +10530,7 @@ $('btnAcceptCall').addEventListener('click', async () => {
   callState = 'active';
   startCallTimer();
   keepScreenAwake();
+  phoneEntersCall(callKind === 'video');
   initSpeakerToggle();
   initFlipCam();
   initScreenShare();
@@ -10203,7 +10546,8 @@ async function onCallAccepted(){
      leaving a clock ticking over a call that never existed. */
   try{
     localStream.getTracks().forEach(tr => pc.addTrack(tr, localStream));
-    const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription({ type: 'offer', sdp: ensureOpusFec(offer.sdp) });
     sig({ type: 'call-offer-sdp', sdp: pc.localDescription.sdp });
   }catch(e){
     endCall(true);
@@ -10214,6 +10558,7 @@ async function onCallAccepted(){
   callState = 'active';
   startCallTimer();
   keepScreenAwake();
+  phoneEntersCall(callKind === 'video');
   initSpeakerToggle();
   initFlipCam();
   initScreenShare();
@@ -10226,8 +10571,10 @@ async function onCallAccepted(){
 async function onCallOfferSdp(sdp){
   try{
     await pc.setRemoteDescription({ type: 'offer', sdp });
-    const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription({ type: 'answer', sdp: ensureOpusFec(answer.sdp) });
     sig({ type: 'call-answer-sdp', sdp: pc.localDescription.sdp });
+    tuneSendersForMobile(pc);
   }catch(e){
     endCall(true);
     sysLine(t('call.connectFailed','La chiamata non si è collegata. Riprova.'));
@@ -10237,6 +10584,11 @@ function endCall(tellPeer){
   stopRing(); disarmCallTimeout();
   stopCallTimer();
   letScreenSleep();
+  /* Da qualunque strada si arrivi qui — riattacco, rifiuto, caduta, errore,
+     autodistruzione — il telefono torna in modalita' normale. Chiamarlo anche
+     quando non era mai entrato in chiamata non costa niente: dall'altra parte
+     e' un «se non sei in chiamata, non fare nulla». */
+  phoneLeavesCall();
   if (tellPeer) sig({ type: 'call-end' });
   if (localStream){ localStream.getTracks().forEach(tr => tr.stop()); localStream = null; }
   $('callBox').classList.add('hide'); $('incomingCall').classList.add('hide');
@@ -10313,6 +10665,9 @@ function flipFailReason(e){
 async function useVideoTrack(track){
   const sender = pc && pc.getSenders().find(s => s.track && s.track.kind === 'video');
   if (sender) await sender.replaceTrack(track);
+  /* il tetto di banda vive sul sender e sopravvive al cambio; il suggerimento
+     sul contenuto vive sulla traccia e va rimesso a ogni traccia nuova */
+  try{ track.contentHint = 'motion'; }catch(_){}
   for (const old of localStream.getVideoTracks()){
     if (old === track) continue;
     localStream.removeTrack(old); old.stop();
@@ -10347,7 +10702,7 @@ async function stopScreenShare(){
      itself makes, so a phone that was mid-flip when sharing started still
      lands somewhere sensible rather than on a hardcoded default */
   try{
-    const fresh = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing }, audio: false });
+    const fresh = await navigator.mediaDevices.getUserMedia(cameraOnlyConstraints({ facingMode: facing }));
     const track = fresh.getVideoTracks()[0];
     if (track) await useVideoTrack(track);
   }catch(e){ /* no camera to go back to; leave the last frame rather than crash the call */ }
@@ -10364,6 +10719,9 @@ $('btnScreenShare').addEventListener('click', async () => {
      track directly — this is the only way that route is ever noticed */
   track.onended = () => stopScreenShare();
   await useVideoTrack(track);
+  /* uno schermo e' testo e bordi netti, non un volto che si muove: al codec
+     conviene saperlo, e useVideoTrack ha appena detto il contrario */
+  try{ track.contentHint = 'detail'; }catch(_){}
   screenSharing = true;
   $('btnScreenShare').classList.add('on');
 });
@@ -10391,7 +10749,7 @@ $('btnFlipCam').addEventListener('click', async () => {
   try{
     current.stop();
     const wanted = otherId ? { deviceId: { exact: otherId } } : { facingMode: { exact: want } };
-    const fresh = await navigator.mediaDevices.getUserMedia({ video: wanted, audio: false });
+    const fresh = await navigator.mediaDevices.getUserMedia(cameraOnlyConstraints(wanted));
     const track = fresh.getVideoTracks()[0];
     if (!track) throw new Error('no camera');
     await useVideoTrack(track);
@@ -10403,10 +10761,8 @@ $('btnFlipCam').addEventListener('click', async () => {
   /* 3 — it did not work and the old camera is already gone, so take it back
      rather than leave a call with a dead picture in it. */
   try{
-    const back = await navigator.mediaDevices.getUserMedia({
-      video: before.id ? { deviceId: { exact: before.id } } : { facingMode: { ideal: before.facing } },
-      audio: false
-    });
+    const back = await navigator.mediaDevices.getUserMedia(cameraOnlyConstraints(
+      before.id ? { deviceId: { exact: before.id } } : { facingMode: { ideal: before.facing } }));
     const t2 = back.getVideoTracks()[0];
     if (t2) await useVideoTrack(t2);
   }catch(e){}
@@ -10425,11 +10781,31 @@ $('btnFlipCam').addEventListener('click', async () => {
    stop claiming to be a video, which is what was causing the wrong answer. */
 function remoteMediaEl(){ return callKind === 'video' ? $('remoteVideo') : $('remoteAudio'); }
 
+/* L'elemento a cui il browser ha rifiutato di suonare: al primo tocco
+   successivo — qualunque tocco, sul pulsante del microfono o dello schermo —
+   si riprova, perche' quel tocco e' esattamente il permesso che mancava. */
+let remotePlayBlocked = null;
+document.addEventListener('click', () => {
+  if (!remotePlayBlocked) return;
+  const el = remotePlayBlocked; remotePlayBlocked = null;
+  try{ const p = el.play && el.play(); if (p && typeof p.catch === 'function') p.catch(() => {}); }catch(_){}
+}, true);
 function attachRemoteStream(stream){
   const el = remoteMediaEl(), other = el === $('remoteVideo') ? $('remoteAudio') : $('remoteVideo');
   /* only ever one of the two holds it, or the voice arrives twice */
   if (other.srcObject) other.srcObject = null;
   if (el.srcObject !== stream) el.srcObject = stream;
+  /* ⚠️ `autoplay` e' una speranza, non una garanzia: Safari e alcune WebView
+     lo rifiutano se la pagina non ha appena ricevuto un tocco — e chi CHIAMA
+     l'ultimo tocco l'ha dato mezzo minuto prima, premendo «chiama». Il
+     risultato era una chiamata che sembrava collegata e non si sentiva.
+     Chiedere di suonare esplicitamente e' innocuo dove gia' suona e decisivo
+     dove non suonava; il rifiuto si tiene, perche' non c'e' niente da fare
+     con un rifiuto se non riprovare al prossimo tocco (vedi sotto). */
+  try{
+    const p = el.play && el.play();
+    if (p && typeof p.catch === 'function') p.catch(() => { remotePlayBlocked = el; });
+  }catch(_){}
   /* a voice call had been showing an empty black rectangle where the picture
      would be, which reads as something broken rather than as "no video".
      The box switches layout with it: without the video there is nothing to
@@ -10473,6 +10849,25 @@ async function applySpeakerChoice(){
 }
 
 async function initSpeakerToggle(){
+  /* Dentro l'app Android `setSinkId` non esiste — la WebView non lo ha mai
+     avuto — e fino all'11 set 2026 questo bastava a NASCONDERE il pulsante:
+     una videochiamata usciva dall'auricolare e una vocale dall'altoparlante,
+     e nessuno poteva cambiarlo. Li' la strada dell'audio la decide il
+     telefono, e il ponte la espone. */
+  if (androidCall){
+    $('btnSpeakerCall').classList.remove('hide');
+    /* la partenza l'ha scelta il telefono (video → altoparlante); il ricordo
+       dell'ultima volta vale solo per le chiamate vocali, dove ha senso */
+    let on = false;
+    try{ on = !!androidCall.isSpeakerOn(); }catch(_){}
+    if (callKind !== 'video' && speakerPref() && !on){
+      try{ if (androidCall.setSpeaker(true)) on = true; }catch(_){}
+    }
+    speakerOn = on;
+    $('btnSpeakerCall').classList.toggle('on', speakerOn);
+    setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
+    return;
+  }
   const supported = typeof remoteMediaEl().setSinkId === 'function';
   $('btnSpeakerCall').classList.toggle('hide', !supported);
   if (!supported) return;
@@ -10484,9 +10879,19 @@ async function initSpeakerToggle(){
   await applySpeakerChoice();
 }
 $('btnSpeakerCall').addEventListener('click', async () => {
+  const want = !speakerOn;
+  if (androidCall){
+    let ok = false;
+    try{ ok = !!androidCall.setSpeaker(want); }catch(_){}
+    if (!ok){ toast(t('call.speakerFail','Non riesco a cambiare l\'altoparlante su questo telefono.')); return; }
+    speakerOn = want;
+    setSpeakerPref(speakerOn);
+    $('btnSpeakerCall').classList.toggle('on', speakerOn);
+    setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
+    return;
+  }
   const el = remoteMediaEl();
   if (typeof el.setSinkId !== 'function') return;
-  const want = !speakerOn;
   try{
     const id = await findOutputId(want ? 'speaker' : 'earpiece');
     if (want && !id){ toast(t('call.noSpeakerFound','Non trovo un altoparlante separato su questo telefono.')); return; }
@@ -10565,6 +10970,8 @@ function endSession(){
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
   pc = null; dc = null; peerNick = '';
+  repairBase = null;   /* la ripresa apparteneva a questa conversazione */
+  noteAndroidActivity();   /* «ho appena chiuso con Mario e mi richiama»: il caso da rendere veloce */
   $('msgs').innerHTML = '';
   releaseObjectUrls();
   forgetIncoming();   /* a half-arrived file would otherwise sit in memory for the rest of the visit */

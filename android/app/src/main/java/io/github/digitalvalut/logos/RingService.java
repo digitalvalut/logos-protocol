@@ -107,6 +107,65 @@ public class RingService extends Service {
        possono usare Logos, e finche' il piano e' gratuito vince la seconda.
        Vedi memory/CAPACITY.md. */
     private static final long POLL_MS = 45000;
+
+    /* ⚠️ IL RITMO SI ADATTA, DALL'11 SETTEMBRE 2026. Riferito dall'operatore:
+       «quando chiamo ci mette troppo». Il numero sopra e' un compromesso
+       giusto in media e sbagliato in ogni singolo momento: alle quattro di
+       notte, dopo un giorno di silenzio, 45 secondi sono uno spreco; un
+       minuto dopo aver chiuso una conversazione — quando l'altro richiama,
+       che e' il caso che fa imprecare — sono un'eternita'.
+
+       Tre marce, e una sola cosa da sapere: quando e' successo qualcosa per
+       l'ultima volta (`lastActivity`: una conversazione aperta o chiusa, una
+       chiamata arrivata, l'app portata davanti — glielo dice la pagina).
+
+         entro 3 minuti dall'ultima attivita'  ->  ogni  5 s   (POLL_FAST_MS)
+         entro 1 ora                            ->  ogni 45 s   (POLL_MS, com'era)
+         oltre                                  ->  ogni 90 s   (POLL_SLOW_MS)
+
+       Il conto, con le stesse unita' del commento qui sopra, per un telefono
+       che ha un'ora di attivita' vera al giorno e dorme il resto:
+         prima:  1.920 letture/giorno
+         dopo:   ~ 23 h × 40/h (90 s)  =  920
+               +  1 h × 80/h (45 s)   =   80
+               + ~10 scatti × 36 (5 s per 3 min) = 360
+                                          ------
+                                        ~1.360 letture/giorno, cioe' MENO
+       — e nel momento che conta, nove volte piu' veloce. Il prezzo vero e'
+       detto chiaro: la chiamata A FREDDO, dopo ore di silenzio, puo' aspettare
+       fino a 90 secondi invece di 45. Il primo squillo dopo il silenzio e'
+       l'unica cosa che questo ritmo non puo' rendere veloce; per quello
+       serve una spinta (push), che questo progetto non ha per scelta.
+
+       Il ciclo dorme a fette di 5 s e a ogni fetta ricalcola la marcia: cosi'
+       un'attivita' che arriva mentre dorme viene sentita entro 5 s, senza
+       interrompere il thread (interromperlo lo uccideva). */
+    private static final long POLL_FAST_MS = 5000;
+    private static final long POLL_SLOW_MS = 90000;
+    private static final long FAST_WINDOW_MS = 3 * 60000;
+    private static final long NORMAL_WINDOW_MS = 60 * 60000;
+    private static final long SLICE_MS = 5000;
+    private static final String PREF_ACTIVITY = "lastActivity";
+
+    /** La pagina, o questo stesso servizio, dicono che e' successo qualcosa. */
+    static void noteActivity(Context c) {
+        prefs(c).edit().putLong(PREF_ACTIVITY, System.currentTimeMillis()).apply();
+    }
+
+    /** Ogni quanto chiedere, adesso. Pubblico e senza stato per poterlo provare. */
+    static long pollIntervalFor(long sinceActivityMs) {
+        if (sinceActivityMs < 0) return POLL_MS;             /* orologio tornato indietro: la marcia di sempre */
+        if (sinceActivityMs < FAST_WINDOW_MS) return POLL_FAST_MS;
+        if (sinceActivityMs < NORMAL_WINDOW_MS) return POLL_MS;
+        return POLL_SLOW_MS;
+    }
+
+    private long currentPollInterval() {
+        long last = prefs(this).getLong(PREF_ACTIVITY, 0);
+        if (last == 0) return POLL_MS;                        /* mai visto niente: come prima di questa modifica */
+        return pollIntervalFor(System.currentTimeMillis() - last);
+    }
+
     private static final int CONNECT_TIMEOUT_MS = 8000;
     private static final int READ_TIMEOUT_MS = 8000;
 
@@ -210,22 +269,37 @@ public class RingService extends Service {
         try { wake.acquire(); } catch (Exception ignored) {}
 
         worker = new Thread(() -> {
+            long lastPoll = 0;
             while (running) {
-                try {
-                    if (!ringing) {
-                        SharedPreferences p = prefs(this);
-                        String base = p.getString(EXTRA_BASE, "");
-                        for (String key : keysOf(p.getString(EXTRA_KEYS, ""))) {
-                            if (!running || ringing) break;
-                            if (somethingWaitingAt(base, key)) { ring(); break; }
+                /* la marcia si ricalcola a ogni fetta: un'attivita' appena
+                   segnata accorcia l'attesa in corso invece di aspettare che
+                   finisca quella lunga */
+                long now = System.currentTimeMillis();
+                if (now - lastPoll >= currentPollInterval() || lastPoll == 0) {
+                    lastPoll = now;
+                    try {
+                        if (!ringing) {
+                            SharedPreferences p = prefs(this);
+                            String base = p.getString(EXTRA_BASE, "");
+                            for (String key : keysOf(p.getString(EXTRA_KEYS, ""))) {
+                                if (!running || ringing) break;
+                                if (somethingWaitingAt(base, key)) {
+                                    /* una chiamata E' attivita': chi ha appena
+                                       chiamato spesso richiama, e la prossima
+                                       deve arrivare in fretta */
+                                    noteActivity(this);
+                                    ring();
+                                    break;
+                                }
+                            }
                         }
+                    } catch (Exception ignored) {
+                        /* A poll that fails is a poll that failed: no network right
+                           now, or the relay is busy. Neither is worth stopping over
+                           — the next tick tries again. */
                     }
-                } catch (Exception ignored) {
-                    /* A poll that fails is a poll that failed: no network right
-                       now, or the relay is busy. Neither is worth stopping over
-                       — the next tick tries again. */
                 }
-                try { Thread.sleep(POLL_MS); } catch (InterruptedException e) { return; }
+                try { Thread.sleep(SLICE_MS); } catch (InterruptedException e) { return; }
             }
         }, "logos-listening");
         worker.setDaemon(true);

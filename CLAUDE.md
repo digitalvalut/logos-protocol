@@ -59,7 +59,7 @@ confidently wrong figure.
 | Its page and its stylesheet | `modifica.html`, `modifica.css` | 900 + 800 |
 | Offline cache, web push, Android share target | `modifica-sw.js` | 170 |
 | The relay (Cloudflare Worker) | `turn-worker/worker.js` | 800 |
-| Android wrapper: bundles the app, rings when closed | `android/` | 4 Java classes |
+| Android wrapper: bundles the app, rings when closed, puts the phone in call mode | `android/` | 5 Java classes |
 | **How to publish an Android version — read it before trying** | `android/RILASCIO.md` | a checklist |
 | Tests | `tests/` | 9,000 lines |
 | The twin copy to look at before publishing | `prova/` (generated) | `tools/prova.js` |
@@ -126,20 +126,23 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 ## Running the tests
 
 ```bash
-node --test --test-force-exit
+node --test
 ```
 
-Node 22. Node finds the files itself. 378 tests, 54 suites, about two and a half
-minutes. They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 421 tests, 63 suites, about three
+minutes, and it exits on its own (measured: 181 s). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
-**Both flags on that line are load-bearing, and both were learned the hard way.**
+**No flags, and two flags that must not come back — both learned the hard way.**
 
-⚠️ **`--test-force-exit` is not optional.** When the tests finish, something still
-holds a handle open — the polling loop inside `startQuickShare()` — and plain
-`node --test` **never exits**. It prints nothing and sits there; measured at over
-seven minutes before being killed. This file used to document the plain command,
-which meant the documented way to run the tests was a command that hangs.
+⚠️ **Never add `--test-force-exit`.** It was there on 10–11 Sep 2026 because plain
+`node --test` did not exit: timers were being re-armed *after* a test had stopped
+its sandbox (`paintAddrCard()` runs async at startup and restarts the address
+polling when it settles). Force-exit hid that — and silently dropped nine tests in
+CI: `369` reported when there were `378`, `fail 0`, all green. Fixed at the root in
+`tests/fake-browser.js`: a stopped sandbox refuses to arm any timer. If the suite
+ever hangs again, the answer is to name the timer (instrument `setTimeout`, print
+what is still alive at the end), not to bring the flag back.
 
 ⚠️ **Never add `--test-timeout`.** It applies to a whole *file*, not to one test.
 `logic.test.js` runs 156 seconds and `corse.test.js` more than 30, so a
@@ -150,9 +153,19 @@ while the same suite was green on the machine next to it. A timeout belongs on t
 CI *job* (`timeout-minutes`), where it catches a genuine hang without strangling a
 slow test.
 
-Beyond the suite there are campaigns you run by hand when you have changed something
-structural: `tests/mutanti.js` (puts real defects back and checks they get caught),
-`tests/fuzz.js`, `tests/races.js`, `tests/hostile.js`.
+Three adversarial campaigns — `tests/fuzz.js`, `tests/races.js`, `tests/hostile.js` —
+are modules, not scripts: they run *inside* the suite through `corse.test.js` and
+`audit.test.js`, so a green suite already includes them. (This line used to say
+"run them by hand"; running one directly prints nothing and exits 0, which looks
+like a pass and is not one.) The one you do run by hand, after a structural change,
+is `tests/mutanti.js`: it puts real historical defects back and checks they get caught.
+
+`tests/android.test.js` is the contract between the page and the phone: every
+bridge method the page calls (`AndroidCall.*`, `AndroidRing.*`) must exist in
+`MainActivity.java` with `@JavascriptInterface`, the services must be in the
+manifest with the type and permissions they need. It reads the Java as text —
+there is no JVM in the tests — so it proves the bridge is *there*, not that the
+phone sounds right.
 
 Two more run **in a real browser**, because what they check cannot exist in the
 hand-written fake one. Load them as a file — the CSP forbids running code pasted

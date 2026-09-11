@@ -72,6 +72,13 @@
          notifiche push, che su Android passerebbero comunque da Firebase. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- ⚠️ AGGIUNTI L'11 SET 2026 con CallService. Da Android 14 un servizio
+         in primo piano di tipo microfono o fotocamera vuole il SUO permesso,
+         oltre a quello del microfono stesso: senza, il servizio non parte
+         (SecurityException) e il microfono viene tolto alla chiamata al primo
+         schermo spento. Sono permessi «normali»: non chiedono niente all'utente. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -158,6 +165,16 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Waits for incoming peer-to-peer calls without any push service, account or third-party infrastructure. The wait is done by the device itself." />
         </service>
+
+        <!-- Il telefono DURANTE una chiamata (dall'11 set 2026): modalita'
+             telefonata, auricolare o altoparlante, e il microfono che resta
+             all'app anche a schermo spento. Il tipo e' quello che Android
+             chiede per un microfono usato mentre non si guarda l'app; la
+             fotocamera si aggiunge solo nelle videochiamate. -->
+        <service
+            android:name=".CallService"
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera" />
 
         <!-- Dopo un riavvio l'ascolto riparte da solo. Senza questo il telefono
              resterebbe muto senza dirlo a nessuno, che è il modo peggiore in cui

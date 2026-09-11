@@ -299,11 +299,29 @@ function buildSandbox(options = {}){
      process alive for ever, so every one is remembered and can be switched
      off when the test finishes. */
   const timers = new Set();
-  sandbox.setTimeout = (fn, ms, ...a) => { const h = setTimeout(fn, ms, ...a); timers.add(h); return h; };
-  sandbox.setInterval = (fn, ms, ...a) => { const h = setInterval(fn, ms, ...a); timers.add(h); return h; };
+  /* ⚠️ TROVATO L'11 SET 2026, cercando perche' `node --test` non terminava
+     mai e la CI troncava nove test in silenzio. La diagnosi ha nominato i
+     timer ancora vivi a fine corsa: `giroAddr` (l'ascolto dell'indirizzo, che
+     si riarma ogni due secondi), le pompe degli indirizzi (700 ms per sedici
+     minuti) e `stopPumpOnceSettled` (45 s). Tutti armati DOPO che il test
+     aveva chiamato `stop()`: `paintAddrCard()` all'avvio e' asincrona, e
+     quando finisce — a test gia' chiuso — riavvia il polling. Un timer nato
+     dopo la pulizia non ha nessuno che lo pulisca, e un ciclo che si riarma
+     da solo vive per sempre.
+     La correzione sta qui e non nei 250 test: una sandbox fermata non arma
+     piu' niente. Chi chiede un timer dopo `stop()` riceve un manico finto e
+     nessuna esecuzione. E' la stessa idea di `pc !== myPc` dentro l'app —
+     un lavoro avviato da un tentativo passato non deve toccare il presente. */
+  let fermata = false;
+  sandbox.setTimeout = (fn, ms, ...a) => { if (fermata) return 0; const h = setTimeout(fn, ms, ...a); timers.add(h); return h; };
+  sandbox.setInterval = (fn, ms, ...a) => { if (fermata) return 0; const h = setInterval(fn, ms, ...a); timers.add(h); return h; };
   sandbox.clearTimeout = h => { clearTimeout(h); timers.delete(h); };
   sandbox.clearInterval = h => { clearInterval(h); timers.delete(h); };
-  sandbox.__stopAllTimers = () => { for (const h of timers){ clearTimeout(h); clearInterval(h); } timers.clear(); };
+  sandbox.__stopAllTimers = () => { fermata = true; for (const h of timers){ clearTimeout(h); clearInterval(h); } timers.clear(); };
+  /* `loadApp` chiama __stopAllTimers subito dopo il caricamento per spegnere
+     i timer di avvio, e POI il test comincia: quella fermata non deve
+     lasciare la sandbox muta per tutto il test. Riaperta esplicitamente. */
+  sandbox.__resumeTimers = () => { fermata = false; };
 
   /* the window listens too — 'beforeinstallprompt', 'hashchange', 'online' and
      friends all hang off it, and a test can fire them by hand */
@@ -328,11 +346,36 @@ function buildSandbox(options = {}){
         sandbox.__androidRingCalls.push({ what: 'watch', keys, base, title, body });
       },
       stop(){ sandbox.__androidRingCalls.push({ what: 'stop' }); },
+      /* «e' successo qualcosa»: il ritmo adattivo (11 set 2026). Un test puo'
+         toglierlo (`delete AndroidRing.activity`) per fingere un ponte vecchio. */
+      activity(){ sandbox.__androidRingCalls.push({ what: 'activity' }); },
       /* From Android 14 taking over a locked screen is granted by hand. A test
          can say it was refused and check that the app admits it instead of
          leaving somebody believing they are reachable. */
       canTakeOverLockScreen: () => options.androidLockScreen !== false,
       askForLockScreen(){ sandbox.__androidRingCalls.push({ what: 'askForLockScreen' }); },
+    };
+  }
+
+  /* Il telefono durante una chiamata — il ponte AndroidCall (CallService.java).
+     Come sopra: c'e' solo se il test lo chiede, perche' nel browser non
+     esiste. Ogni chiamata viene scritta, perche' la domanda del test e'
+     «l'app l'ha detto al telefono, e quando?», non cosa il telefono risponde.
+     `speaker` finge la strada dell'audio, cosi' il pulsante puo' essere
+     provato senza un altoparlante. */
+  if (options.androidCall){
+    sandbox.__androidCallCalls = [];
+    sandbox.__androidSpeaker = false;
+    sandbox.AndroidCall = {
+      available: () => true,
+      started(video){ sandbox.__androidCallCalls.push({ what: 'started', video: !!video }); sandbox.__androidSpeaker = !!video; return true; },
+      ended(){ sandbox.__androidCallCalls.push({ what: 'ended' }); },
+      setSpeaker(on){
+        sandbox.__androidCallCalls.push({ what: 'setSpeaker', on: !!on });
+        if (options.androidSpeakerBroken) return false;
+        sandbox.__androidSpeaker = !!on; return true;
+      },
+      isSpeakerOn: () => sandbox.__androidSpeaker,
     };
   }
 

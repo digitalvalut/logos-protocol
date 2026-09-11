@@ -108,8 +108,26 @@ function json(body, status, cors){
   return new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
 }
 
+/* ⚠️ MISURATO L'11 SET 2026: questa rotta rispondeva in 2,7 secondi, perche'
+   ogni richiesta andava a farsi generare credenziali nuove da Cloudflare.
+   Quei secondi li pagava chi stava per chiamare. Le credenziali vivono dieci
+   minuti (TURN_TTL_SECONDS): servirle uguali a chi arriva nei due minuti
+   successivi non toglie niente a nessuno — sono un lasciapassare per il
+   ponte, non un'identita' — e toglie il giro a Cloudflare dalla strada.
+   In memoria dell'isolate, come i contatori qui sotto, e per la stessa
+   ragione: KV costerebbe una scrittura ogni due minuti, cioe' quasi un terzo
+   della quota giornaliera, per risparmiare secondi.
+   ⚠️ Il conto che non si deve rompere: cache qui (2 min) + riuso nell'app
+   (ICE_REUSE_MS, 7 min) deve restare SOTTO la vita della credenziale (10 min),
+   o l'app userebbe con fiducia un lasciapassare gia' scaduto. */
+const TURN_CACHE_MS = 2 * 60 * 1000;
+let turnCache = null;   /* { body: <testo JSON>, until: <ms> } */
+
 async function handleTurn(env, cors){
   if (!env.TURN_KEY_ID || !env.TURN_API_TOKEN) return json({ error: 'TURN not configured' }, 500, cors);
+  if (turnCache && Date.now() < turnCache.until){
+    return new Response(turnCache.body, { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+  }
   try{
     const res = await fetch(
       `https://rtc.live.cloudflare.com/v1/turn/keys/${env.TURN_KEY_ID}/credentials/generate-ice-servers`,
@@ -120,7 +138,12 @@ async function handleTurn(env, cors){
       }
     );
     if (!res.ok) return json({ error: 'TURN provider error', status: res.status }, 502, cors);
-    return json(await res.json(), 200, cors);
+    const data = await res.json();
+    /* si tiene solo una risposta buona: un errore non va servito a nessun altro */
+    if (data && Array.isArray(data.iceServers) && data.iceServers.length){
+      turnCache = { body: JSON.stringify(data), until: Date.now() + TURN_CACHE_MS };
+    }
+    return json(data, 200, cors);
   }catch(e){
     return json({ error: 'Worker error' }, 500, cors);
   }

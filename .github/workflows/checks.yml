@@ -27,20 +27,24 @@ jobs:
           node-version: '22'
 
       - name: I controlli statici e la logica
-        # Node trova da solo i file in tests/.
+        # Node trova da solo i file in tests/. Nessun flag, e non e' un caso:
         #
-        # ⚠️ --test-force-exit NON e' facoltativo: a test finiti qualcosa
-        # tiene aperta una presa (il ciclo di attesa di startQuickShare) e
-        # `node --test` da solo NON TERMINA MAI. Provato: oltre sette minuti
-        # senza uscire.
+        # ⚠️ NON rimettere --test-force-exit. Dal 10 all'11 set 2026 c'era, e
+        # faceva SPARIRE nove test in silenzio: la CI diceva 369 quando erano
+        # 378, `fail 0`, tutto verde. Serviva perche' `node --test` non
+        # terminava mai — timer riarmati dopo la pulizia del banco di prova
+        # (`paintAddrCard()` all'avvio e' asincrona). Chiuso alla radice in
+        # tests/fake-browser.js: una sandbox fermata non arma piu' niente.
+        # Misurato dopo: la suite esce da sola in ~3 minuti. Se un giorno
+        # torna ad appendersi, la risposta e' trovare il timer, non il flag.
         #
         # ⚠️ E NON rimettere --test-timeout. Quel timeout vale per l'intero
-        # FILE, non per il singolo test: logic.test.js dura 156 s e
+        # FILE, non per il singolo test: logic.test.js dura ~160 s e
         # corse.test.js piu' di 30, quindi con --test-timeout=30000 venivano
         # amazzati tutti e due. Il risultato era `fail 0` ma `cancelled 2`,
         # cioe' rosso senza un solo test sbagliato — e per due giorni
         # l'operatore ha ricevuto email di fallimento per una suite sana.
-        run: node --test --test-force-exit
+        run: node --test
 
       - name: Il file unico si costruisce ancora
         # also the guard that refuses to build while the two version

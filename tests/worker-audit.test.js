@@ -530,3 +530,60 @@ test.describe('worker: lo storage che si rifiuta non diventa un 500', () => {
       'la risposta contiene dettagli interni: ' + testo);
   });
 });
+
+/* ============================================================================
+   Le credenziali del ponte non si rigenerano a ogni richiesta — 11 set 2026.
+   Misurato: 2,7 s a richiesta, pagati da chi stava per chiamare.
+   ========================================================================= */
+test.describe('worker: le credenziali TURN si riusano per due minuti', () => {
+  const ORIGINE = 'https://digitalvalut.github.io';
+  function finto(risposte){
+    const chiamate = [];
+    const fetch = async (url, init) => {
+      chiamate.push(url);
+      const r = risposte.shift() || { ok: true, body: { iceServers: [{ urls: ['stun:x'] }] } };
+      return { ok: r.ok, status: r.ok ? 200 : 500, json: async () => r.body };
+    };
+    return { fetch, chiamate };
+  }
+
+  test('due richieste vicine costano UN solo giro a Cloudflare, e ricevono la stessa risposta', async () => {
+    const f = finto([{ ok: true, body: { iceServers: [{ urls: ['turn:primo'] }] } }, { ok: true, body: { iceServers: [{ urls: ['turn:secondo'] }] } }]);
+    const w = W.caricaWorker({ fetch: f.fetch });
+    const a = await w.chiama('GET', '/turn', { origin: ORIGINE });
+    const b = await w.chiama('GET', '/turn', { origin: ORIGINE });
+    assert.strictEqual(a.status, 200); assert.strictEqual(b.status, 200);
+    assert.strictEqual(f.chiamate.length, 1, 'la seconda richiesta non deve rifare il giro: e quello che costava 2,7 secondi');
+    assert.deepStrictEqual(b.corpo.iceServers[0].urls, ['turn:primo'], 'e riceve la risposta buona gia in mano');
+  });
+
+  test('dopo due minuti si rigenera: la cache non deve sopravvivere alla credenziale', async () => {
+    const f = finto([{ ok: true, body: { iceServers: [{ urls: ['turn:primo'] }] } }, { ok: true, body: { iceServers: [{ urls: ['turn:secondo'] }] } }]);
+    const w = W.caricaWorker({ fetch: f.fetch });
+    await w.chiama('GET', '/turn', { origin: ORIGINE });
+    w.orologio.t += 2 * 60 * 1000 + 1;
+    const b = await w.chiama('GET', '/turn', { origin: ORIGINE });
+    assert.strictEqual(f.chiamate.length, 2, 'scaduta la cache si torna a Cloudflare');
+    assert.deepStrictEqual(b.corpo.iceServers[0].urls, ['turn:secondo']);
+  });
+
+  test('un errore di Cloudflare non viene messo in cache e servito agli altri', async () => {
+    const f = finto([{ ok: false, body: { error: 'x' } }, { ok: true, body: { iceServers: [{ urls: ['turn:ok'] }] } }]);
+    const w = W.caricaWorker({ fetch: f.fetch });
+    const a = await w.chiama('GET', '/turn', { origin: ORIGINE });
+    assert.strictEqual(a.status, 502);
+    const b = await w.chiama('GET', '/turn', { origin: ORIGINE });
+    assert.strictEqual(b.status, 200, 'la richiesta dopo deve avere una vera seconda possibilita');
+    assert.strictEqual(f.chiamate.length, 2);
+  });
+
+  test('il conto che non si deve rompere: cache del Worker + riuso nell app < vita della credenziale', () => {
+    const fs = require('node:fs'), path = require('node:path');
+    const worker = fs.readFileSync(path.join(__dirname, '..', 'turn-worker', 'worker.js'), 'utf8');
+    const app = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
+    const ttl = Number(worker.match(/const TURN_TTL_SECONDS = (\d+)/)[1]) * 1000;
+    const cache = worker.match(/const TURN_CACHE_MS = ([0-9 *]+);/)[1].split('*').map(Number).reduce((a, b) => a * b, 1);
+    const riuso = app.match(/const ICE_REUSE_MS = ([0-9 *]+);/)[1].split('*').map(Number).reduce((a, b) => a * b, 1);
+    assert.ok(cache + riuso < ttl, `Worker ${cache} + app ${riuso} deve restare sotto la vita ${ttl}, o l app usa con fiducia un lasciapassare scaduto`);
+  });
+});

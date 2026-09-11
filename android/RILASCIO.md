@@ -182,13 +182,46 @@ verificato *prima* di chiedere vale più di qualsiasi presentazione.
 
 ---
 
+## Se la versione tocca anche il Worker
+
+Dalla v40 (11 set 2026) il relay tiene in memoria le credenziali TURN per due
+minuti (`TURN_CACHE_MS` in `turn-worker/worker.js`): una modifica **al
+Worker**, che l'app non porta con sé. Va messa in produzione a parte:
+
+```
+cd turn-worker && wrangler deploy
+```
+
+⚠️ **`wrangler deploy` cancella i Secret del Worker.** Subito dopo vanno
+rimessi tutti (TURN_KEY_ID, TURN_API_TOKEN, VAPID_*): stanno in
+`MEMORIA-PROGETTO-PRIVATA.md`, §4, e da nessun'altra parte. Un Worker senza
+Secret risponde `500` su `/turn` e ogni chiamata parte senza ponte — cioè due
+telefoni su due reti mobili non si collegano, in silenzio. Controllo dopo il
+deploy, da terminale:
+
+```
+curl -s -H "Origin: https://digitalvalut.github.io" https://digitalvalut-turn.burbeng78.workers.dev/ | head -c 120
+```
+
+Deve cominciare con `{"iceServers":[`. Se dice `TURN not configured`, i
+Secret non ci sono.
+
+L'app funziona anche con il Worker vecchio (chiede le credenziali come ha
+sempre fatto): il deploy non è un prerequisito della release, è un pezzo di
+velocità in più.
+
+---
+
 ## Cosa non si fa mai
 
 - **Non pubblicare una release Android mentre la richiesta F-Droid è in coda**,
   a meno che nella versione ferma ci sia un difetto che non deve arrivare agli
   utenti. È successo l'8 set 2026: in coda c'era la 4.02, che nel caso di rete
   censurata contattava gli STUN di Google. In quel caso pubblicare è giusto, e
-  la ragione va scritta nel messaggio.
+  la ragione va scritta nel messaggio. **E la ricetta ha l'auto-aggiornamento
+  (`AutoUpdateMode: Version android-%v`): una versione nuova su GitHub NON
+  obbliga a toccare la richiesta in coda** — F-Droid la prende da sola dopo il
+  merge. Si aggiorna la ricetta solo se il revisore lo chiede.
 - **Non committare `app/src/main/assets/logos.html`** né
   `digitalvalut-logos.html`: sono prodotti della compilazione. Un artefatto
   vecchio nel sorgente è il modo classico in cui una build smette di essere

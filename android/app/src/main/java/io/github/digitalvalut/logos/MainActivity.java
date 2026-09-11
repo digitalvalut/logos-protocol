@@ -223,6 +223,12 @@ public class MainActivity extends Activity {
            sulla parola. È la prima cosa da provare, e se non squilla la riga
            torna commentata: meglio nessuna promessa che una falsa. */
         web.addJavascriptInterface(new RingBridge(), "AndroidRing");
+        /* Il telefono durante una chiamata — vedi CallService. La pagina lo
+           trova, e da quel momento a inizio chiamata mette il telefono in
+           modalita' telefonata e a fine chiamata lo rimette com'era. Senza
+           questo ponte la pagina non ha nessun modo di farlo: e' un'impostazione
+           del telefono, non della pagina. */
+        web.addJavascriptInterface(new CallBridge(), "AndroidCall");
 
         /* A frame around the WebView, so the insets have something to shrink
            that the page will actually feel. */
@@ -452,10 +458,19 @@ public class MainActivity extends Activity {
            Il permesso delle notifiche si chiede PRIMA e a parte: senza, il
            servizio parte e viene ucciso perche' non puo' mostrare la propria
            notifica — un fallimento che sembrerebbe tutt'altro. */
+        /** La pagina dice che e' successo qualcosa (una conversazione aperta o
+            chiusa, l'app portata davanti): il servizio accelera per un po'.
+            Vedi il ritmo adattivo in RingService. */
+        @JavascriptInterface
+        public void activity() { RingService.noteActivity(MainActivity.this); }
+
         @JavascriptInterface
         public boolean watch(String keysCsv, String base, String title, String body) {
             if (RingService.keysOf(String.valueOf(keysCsv)).isEmpty()) return false;
             if (!RingService.isSafeBase(base)) return false;
+            /* consegnare l'ascolto vuol dire che l'app era aperta un attimo fa:
+               e' attivita', e la prossima chiamata deve trovare il ritmo veloce */
+            RingService.noteActivity(MainActivity.this);
             runOnUiThread(() -> askToPostNotifications());
             Intent go = new Intent(MainActivity.this, RingService.class)
                 .setAction(RingService.ACTION_WATCH)
@@ -520,6 +535,63 @@ public class MainActivity extends Activity {
                 } catch (Exception ignored) {}
             });
         }
+    }
+
+    /* ------------------------------------------------------------------
+       Il telefono durante una chiamata.
+
+       ⚠️ NATO L'11 SET 2026 da «si collega ma non si sente bene» su due
+       telefoni in rete mobile. La pagina apre microfono e fotocamera, ma
+       non puo' dire al telefono «adesso e' una telefonata»: quella e' una
+       impostazione di sistema (AudioManager), e senza di essa l'eco non viene
+       cancellato dall'hardware, la voce esce dall'altoparlante grande e il
+       volume e' quello della musica. Tutto il lavoro sta in CallService;
+       qui c'e' solo la porta. Ogni metodo restituisce un esito, cosi' la
+       pagina puo' dire la verita' invece di sperarci.
+       ------------------------------------------------------------------ */
+    public class CallBridge {
+        @JavascriptInterface
+        public boolean available() { return true; }
+
+        /** A chiamata collegata. `video` sceglie l'altoparlante come partenza. */
+        @JavascriptInterface
+        public boolean started(boolean video) {
+            Intent go = new Intent(MainActivity.this, CallService.class)
+                .setAction(CallService.ACTION_START)
+                .putExtra(CallService.EXTRA_VIDEO, video);
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(go);
+                else startService(go);
+                return true;
+            } catch (Exception e) {
+                /* Il servizio non e' partito (di regola: app gia' in secondo
+                   piano su Android 12+). La modalita' chiamata si mette lo
+                   stesso, direttamente: si perde solo la protezione a schermo
+                   spento, non l'audio. */
+                CallService.enterCallMode(MainActivity.this, video);
+                return false;
+            }
+        }
+
+        /** A chiamata finita, da qualunque strada. Rimette il telefono com'era. */
+        @JavascriptInterface
+        public void ended() {
+            CallService.leaveCallMode(MainActivity.this);
+            runOnUiThread(() -> {
+                try {
+                    startService(new Intent(MainActivity.this, CallService.class)
+                        .setAction(CallService.ACTION_STOP));
+                } catch (Exception ignored) {}
+            });
+        }
+
+        /** Il pulsante «altoparlante» della pagina: nella WebView `setSinkId`
+            non esiste, quindi passa da qui. */
+        @JavascriptInterface
+        public boolean setSpeaker(boolean on) { return CallService.setSpeaker(MainActivity.this, on); }
+
+        @JavascriptInterface
+        public boolean isSpeakerOn() { return CallService.isSpeakerOn(MainActivity.this); }
     }
 
     /* A silent ring is not a ring. Asked for only when somebody actually turns

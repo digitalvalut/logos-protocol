@@ -38,6 +38,9 @@ function loadApp(options){
   const run = expr => vm.runInContext(expr, sandbox);
   run('stopAddrPolling(); stopInboxPolling();');
   sandbox.__stopAllTimers();
+  /* la pulizia d'avvio non deve lasciare la sandbox muta per il test: i timer
+     si riaprono, e si chiudono per sempre solo con stop() — vedi fake-browser */
+  sandbox.__resumeTimers();
   return { sandbox, run, stop: () => sandbox.__stopAllTimers() };
 }
 
@@ -6207,5 +6210,599 @@ test.describe('il rapporto non si contraddice', () => {
         'nel browser la riga serve: e l unica che spiega perche non ti raggiungono');
       app.stop();
     });
+  });
+});
+
+/* ============================================================================
+   Il telefono durante una chiamata — 11 settembre 2026.
+
+   Da una prova su due telefoni veri in rete mobile: «si collega, ma l'audio
+   non si sente bene; in video peggio». Quattro cause, tutte nel modo in cui
+   la pagina trattava l'audio come se fosse su un PC con la fibra. Nessun test
+   puo' SENTIRE la differenza: la fake-browser non ha orecchie. Questi test
+   fanno l'unica cosa possibile da qui — controllano che ogni pezzo venga
+   CHIESTO, nel momento giusto, con i numeri giusti — e ognuno e' stato
+   sabotato per vederlo rosso. Il verdetto sull'audio resta ai telefoni.
+   ========================================================================= */
+test.describe('il telefono durante una chiamata', () => {
+
+  test('microfono e fotocamera vengono chiesti con misura, non «come vengono»', () => {
+    const app = loadApp();
+    const v = app.run("callMediaConstraints('video', 'user')");
+    assert.strictEqual(v.audio.echoCancellation, true, 'senza cancellazione dell eco dichiarata, un telefono con microfono e altoparlante vicini rimbomba');
+    assert.strictEqual(v.audio.noiseSuppression, true);
+    assert.strictEqual(v.audio.autoGainControl, true);
+    assert.strictEqual(v.video.width.ideal, 640, 'un video senza tetto si mangia la banda della voce su rete mobile');
+    assert.strictEqual(v.video.height.ideal, 480);
+    assert.strictEqual(v.video.frameRate.ideal, 24, '24 fotogrammi bastano per un volto e costano la meta di 30');
+    assert.strictEqual(v.video.frameRate.max, 30);
+    assert.strictEqual(v.video.facingMode, 'user', 'la camera scelta deve restare quella scelta');
+    assert.strictEqual(v.video.width.exact, undefined, 'exact e non ideal farebbe RIFIUTARE la chiamata a un telefono che non sa dare quella misura');
+
+    const a = app.run("callMediaConstraints('audio')");
+    assert.strictEqual(a.video, false, 'una chiamata vocale non deve accendere la fotocamera');
+    assert.strictEqual(a.audio.echoCancellation, true);
+
+    /* la fotocamera riaperta a meta chiamata (cambio camera, fine condivisione
+       schermo) deve avere lo STESSO tetto: senza, tornava senza misura */
+    const c = app.run("cameraOnlyConstraints({ facingMode: { exact: 'environment' } })");
+    assert.strictEqual(c.audio, false);
+    assert.strictEqual(c.video.facingMode.exact, 'environment', 'quello che il chiamante ha chiesto va tenuto');
+    assert.strictEqual(c.video.width.ideal, 640, 'stessa misura della prima apertura, o il cambio camera toglie il tetto');
+    app.stop();
+  });
+
+  test('e la chiamata li usa davvero: chi chiama e chi risponde chiedono la stessa misura', async () => {
+    /* Le due getUserMedia della chiamata devono passare da callMediaConstraints.
+       Averle riscritte a mano in un punto e non nell altro e esattamente il
+       tipo di errore che questo test esiste per vedere. */
+    const app = loadApp();
+    app.run(`
+      window.__asked = [];
+      navigator.mediaDevices.getUserMedia = function(c){ window.__asked.push(c); return Promise.reject(new Error('stop qui')); };
+      dc = { readyState: 'open', send(){} };
+      facing = 'environment';
+    `);
+    await app.run("startCall('video')");
+    app.run("callState = 'ringing-in'; callKind = 'audio';");
+    await app.run("$('btnAcceptCall').listeners.click[0]()");
+    const asked = app.run('window.__asked');
+    assert.strictEqual(asked.length, 2, 'due aperture: chi chiama e chi risponde');
+    assert.strictEqual(asked[0].video.width.ideal, 640, 'chi chiama in video deve chiedere la misura');
+    assert.strictEqual(asked[0].video.facingMode, 'environment', 'e la camera che stava usando');
+    assert.strictEqual(asked[1].video, false, 'chi risponde a una vocale non apre la fotocamera');
+    assert.strictEqual(asked[1].audio.echoCancellation, true, 'e chiede la cancellazione dell eco come chi chiama');
+    app.stop();
+  });
+
+  test('la correzione d errore di Opus viene aggiunta se manca, e lasciata stare se c e', () => {
+    const app = loadApp();
+    const base = 'v=0\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\na=rtpmap:111 opus/48000/2\r\n';
+    /* manca: si aggiunge alla riga fmtp esistente */
+    const senza = base + 'a=fmtp:111 minptime=10\r\n';
+    const con = app.run('ensureOpusFec(' + JSON.stringify(senza) + ')');
+    assert.match(con, /a=fmtp:111 minptime=10;useinbandfec=1\r\n/, 'su 4G ogni pacchetto perso e un buco nella voce: la FEC lo ricostruisce');
+    /* c e gia: identico, non doppio */
+    assert.strictEqual(app.run('ensureOpusFec(' + JSON.stringify(con) + ')'), con, 'idempotente: due passaggi non devono scrivere useinbandfec due volte');
+    /* nessuna riga fmtp: se ne crea una */
+    const nuda = app.run('ensureOpusFec(' + JSON.stringify(base) + ')');
+    assert.match(nuda, /a=rtpmap:111 opus\/48000\/2\r\na=fmtp:111 useinbandfec=1/, 'senza fmtp va creata, subito sotto la rtpmap');
+    /* niente opus: non si tocca */
+    const altro = 'v=0\r\na=rtpmap:96 VP8/90000\r\n';
+    assert.strictEqual(app.run('ensureOpusFec(' + JSON.stringify(altro) + ')'), altro, 'un SDP senza opus non e un posto dove scrivere');
+    assert.strictEqual(app.run('ensureOpusFec(undefined)'), undefined, 'un non-testo torna com e, non esplode');
+    app.stop();
+  });
+
+  test('a chiamata negoziata la voce ha la precedenza e il video un tetto', async () => {
+    const app = loadApp();
+    app.run(`
+      window.__set = {};
+      function mk(kind){
+        return { track: { kind: kind }, getParameters: function(){ return { encodings: [{}] }; },
+                 setParameters: function(p){ window.__set[kind] = p; return Promise.resolve(); } };
+      }
+      window.__pc = { getSenders: function(){ return [mk('audio'), mk('video')]; } };
+    `);
+    await app.run('tuneSendersForMobile(window.__pc)');
+    const s = app.run('window.__set');
+    assert.strictEqual(s.video.encodings[0].maxBitrate, 800000, 'senza tetto il browser sale finche puo, e su una salita da 4G «finche puo» e tutto');
+    assert.strictEqual(s.video.encodings[0].priority, 'low');
+    assert.strictEqual(s.video.encodings[0].networkPriority, 'low');
+    assert.strictEqual(s.video.degradationPreference, 'maintain-framerate');
+    assert.strictEqual(s.audio.encodings[0].priority, 'high', 'la voce conta piu dell immagine');
+    assert.strictEqual(s.audio.encodings[0].networkPriority, 'high');
+    assert.strictEqual(s.audio.encodings[0].maxBitrate, undefined, 'il tetto e del video, non della voce');
+    app.stop();
+  });
+
+  test('un sender che rifiuta la regolazione non ferma gli altri, e una connessione chiusa non esplode', async () => {
+    const app = loadApp();
+    app.run(`
+      window.__ok = null;
+      window.__pc = { getSenders: function(){ return [
+        { track: { kind: 'audio' }, getParameters: function(){ return {}; }, setParameters: function(){ return Promise.reject(new Error('no')); } },
+        { track: { kind: 'video' }, getParameters: function(){ return { encodings: [{}] }; }, setParameters: function(p){ window.__ok = p; return Promise.resolve(); } },
+      ]; } };
+    `);
+    await app.run('tuneSendersForMobile(window.__pc)');
+    assert.ok(app.run('window.__ok'), 'il secondo sender va regolato anche se il primo ha detto di no');
+    assert.strictEqual(app.run('window.__ok').encodings[0].maxBitrate, 800000);
+    /* getSenders su una connessione chiusa lancia InvalidStateError */
+    await app.run("tuneSendersForMobile({ getSenders: function(){ throw new Error('closed'); } })");
+    await app.run('tuneSendersForMobile(null)');
+    app.stop();
+  });
+
+  test('sul telefono: la chiamata lo mette in modalita chiamata quando e collegata, e lo rimette com era alla fine', async () => {
+    /* Il momento conta. Non allo squillo — lo squillo deve uscire come una
+       suoneria — ma quando la chiamata E collegata. E alla fine SEMPRE, da
+       qualunque strada. */
+    const app = loadApp({ androidCall: true });
+    app.run(`
+      dc = { readyState: 'open', send(){} };
+      pc = { addTrack(){}, getSenders(){ return []; },
+             createOffer(){ return Promise.resolve({ type:'offer', sdp:'v=0\\r\\n' }); },
+             setLocalDescription(d){ this.localDescription = d; return Promise.resolve(); } };
+      localStream = { getTracks(){ return []; }, getVideoTracks(){ return []; }, getAudioTracks(){ return []; } };
+      callKind = 'video'; callState = 'ringing-out';
+    `);
+    assert.deepStrictEqual(app.run('window.__androidCallCalls'), [], 'allo squillo il telefono non deve ancora saperne niente');
+    await app.run('onCallAccepted()');
+    assert.deepStrictEqual(app.run('window.__androidCallCalls'), [{ what: 'started', video: true }],
+      'appena collegata, il telefono va in modalita chiamata — e in video parte dall altoparlante');
+    app.run('endCall(false)');
+    assert.deepStrictEqual(app.run('window.__androidCallCalls').slice(-1), [{ what: 'ended' }],
+      'riattaccando il telefono torna in modalita normale, o resta con il microfono acceso e nessuna chiamata');
+    app.stop();
+  });
+
+  test('sul telefono: chi risponde a una vocale mette il telefono in chiamata senza altoparlante', async () => {
+    const app = loadApp({ androidCall: true });
+    app.run(`
+      navigator.mediaDevices.getUserMedia = function(){ return Promise.resolve({ getTracks(){ return []; }, getVideoTracks(){ return []; }, getAudioTracks(){ return []; } }); };
+      pc = { addTrack(){}, getSenders(){ return []; } };
+      dc = { readyState: 'open', send(){} };
+      callState = 'ringing-in'; callKind = 'audio';
+    `);
+    await app.run("$('btnAcceptCall').listeners.click[0]()");
+    const calls = app.run('window.__androidCallCalls');
+    assert.deepStrictEqual(calls[0], { what: 'started', video: false }, 'una vocale va all orecchio, non all altoparlante');
+    app.stop();
+  });
+
+  test('nel browser nessun ponte: la chiamata non deve nemmeno provarci', async () => {
+    const app = loadApp();
+    app.run(`
+      dc = { readyState: 'open', send(){} };
+      pc = { addTrack(){}, getSenders(){ return []; },
+             createOffer(){ return Promise.resolve({ type:'offer', sdp:'v=0\\r\\n' }); },
+             setLocalDescription(d){ this.localDescription = d; return Promise.resolve(); } };
+      localStream = { getTracks(){ return []; }, getVideoTracks(){ return []; }, getAudioTracks(){ return []; } };
+      callKind = 'audio'; callState = 'ringing-out';
+    `);
+    await app.run('onCallAccepted()');
+    assert.strictEqual(app.run('callState'), 'active', 'senza ponte la chiamata va avanti esattamente come prima');
+    app.run('endCall(false)');
+    assert.strictEqual(app.run('callState'), 'idle');
+    app.stop();
+  });
+
+  test('sul telefono il pulsante altoparlante c e, e passa dal telefono invece che da setSinkId', async () => {
+    /* Fino all 11 set 2026 dentro l app Android il pulsante era NASCOSTO,
+       perche la WebView non ha setSinkId: una vocale usciva da dove capitava
+       e nessuno poteva cambiarlo. */
+    const app = loadApp({ androidCall: true });
+    app.run("callKind = 'audio'; window.__androidSpeaker = false;");
+    await app.run('initSpeakerToggle()');
+    assert.strictEqual(app.run("$('btnSpeakerCall').classList.contains('hide')"), false, 'sul telefono il pulsante deve esserci');
+    assert.strictEqual(app.run('speakerOn'), false);
+    await app.run("$('btnSpeakerCall').listeners.click[0]()");
+    assert.deepStrictEqual(app.run('window.__androidCallCalls').slice(-1), [{ what: 'setSpeaker', on: true }], 'il tocco deve arrivare al telefono');
+    assert.strictEqual(app.run('speakerOn'), true);
+    assert.strictEqual(app.run("$('btnSpeakerCall').classList.contains('on')"), true);
+    app.stop();
+  });
+
+  test('e se il telefono dice di no, il pulsante non mente', async () => {
+    const app = loadApp({ androidCall: true, androidSpeakerBroken: true });
+    app.run("callKind = 'audio';");
+    await app.run('initSpeakerToggle()');
+    await app.run("$('btnSpeakerCall').listeners.click[0]()");
+    assert.strictEqual(app.run('speakerOn'), false, 'un cambio non riuscito non deve essere mostrato come riuscito');
+    assert.strictEqual(app.run("$('btnSpeakerCall').classList.contains('on')"), false);
+    app.stop();
+  });
+
+  test('una lettera lasciata mentre l app era in sottofondo si trova al ritorno, non solo al riavvio', async () => {
+    /* Trovato dall operatore con due telefoni: la lettera non compariva mai.
+       Il ritiro stava solo all avvio; qui si controlla che il ritorno in
+       primo piano lo faccia. */
+    const app = loadApp();
+    app.run(`
+      window.__ritiri = 0;
+      collectLetters = function(){ window.__ritiri++; return Promise.resolve(); };
+      document.visibilityState = 'visible';
+      document.listeners.visibilitychange.forEach(function(fn){ fn({ type: 'visibilitychange' }); });
+    `);
+    assert.strictEqual(app.run('window.__ritiri'), 1, 'tornare davanti deve andare a guardare nella casella delle lettere');
+    app.run("document.visibilityState = 'hidden'; document.listeners.visibilitychange.forEach(function(fn){ fn({}); });");
+    assert.strictEqual(app.run('window.__ritiri'), 1, 'sparire non e un momento in cui ritirare');
+    app.stop();
+  });
+});
+
+/* ============================================================================
+   La ripresa: quando la rete cambia sotto una conversazione — 11 set 2026.
+
+   Fino a quel giorno lo schermo diceva «sto riprendendolo» e nessun codice
+   riprendeva niente. Qui si controlla che la ripresa si armi solo quando puo'
+   (due impronte, due numeri casuali), che scatti al momento giusto e non
+   prima, che chi offre e chi risponde siano UNO per parte, e — il test che
+   conta — che due app in due sandbox, con una cassetta finta in comune, si
+   ritrovino davvero: A rinegozia, B risponde, tutti e due applicano.
+   ========================================================================= */
+test.describe('la ripresa quando la rete cambia', () => {
+
+  /* Una connessione finta che sa fare le cose che la ripresa le chiede, e
+     scrive tutto quello che le viene chiesto. */
+  const PC = `
+    window.__mkpc = function(){
+      var ls = {};
+      return {
+        connectionState: 'connected', signalingState: 'stable', localDescription: null, remoteDescription: null,
+        log: [],
+        restartIce: function(){ this.log.push('restartIce'); },
+        createOffer: function(){ this.log.push('createOffer'); return Promise.resolve({ type: 'offer', sdp: 'v=0\\r\\no=OFFERTA-' + Math.random() + '\\r\\n' }); },
+        createAnswer: function(){ this.log.push('createAnswer'); return Promise.resolve({ type: 'answer', sdp: 'v=0\\r\\no=RISPOSTA\\r\\n' }); },
+        setLocalDescription: function(d){ this.log.push('setLocal:' + d.type); this.localDescription = d; return Promise.resolve(); },
+        setRemoteDescription: function(d){ this.log.push('setRemote:' + d.type); this.remoteDescription = d; return Promise.resolve(); },
+        addIceCandidate: function(){ return Promise.resolve(); },
+        addEventListener: function(t, fn){ (ls[t] = ls[t] || []).push(fn); },
+        removeEventListener: function(){},
+        __become: function(s){ this.connectionState = s; (ls.connectionstatechange || []).forEach(function(f){ f({}); }); },
+        close: function(){ this.connectionState = 'closed'; },
+      };
+    };
+  `;
+
+  test('si arma solo con le due impronte e i due numeri casuali, e i due lati fanno lo stesso conto', async () => {
+    const A = loadApp(), B = loadApp();
+    A.run("myFingerprintHex = async function(){ return 'aaaa'; }; repairNonce = '11111111111111111111111111111111';");
+    B.run("myFingerprintHex = async function(){ return 'bbbb'; }; repairNonce = '22222222222222222222222222222222';");
+    assert.strictEqual(await A.run("armRepair('bbbb', '22222222222222222222222222222222')"), true);
+    assert.strictEqual(await B.run("armRepair('aaaa', '11111111111111111111111111111111')"), true);
+    assert.strictEqual(A.run('repairBase.text'), B.run('repairBase.text'),
+      'i due lati devono ricavare LO STESSO segreto da valori ricevuti in ordine diverso, o non si trovano mai');
+    assert.strictEqual(A.run('repairBase.offerer'), true, 'l impronta minore offre');
+    assert.strictEqual(B.run('repairBase.offerer'), false, 'l altra risponde: mai tutti e due, mai nessuno');
+    /* una versione vecchia non manda rn: la ripresa resta spenta, niente si rompe */
+    assert.strictEqual(await A.run("armRepair('bbbb', undefined)"), false);
+    assert.strictEqual(A.run('repairArmed()'), false, 'senza il numero dell altro non c e segreto condiviso, quindi niente ripresa');
+    /* e un rn che non ha la forma giusta e' un dato ostile, non un segreto */
+    assert.strictEqual(await A.run("armRepair('bbbb', 'x'.repeat(40))"), false);
+    A.stop(); B.stop();
+  });
+
+  test('il saluto porta il numero casuale, e riceverlo arma la ripresa', async () => {
+    const app = loadApp();
+    app.run(`
+      window.__sent = [];
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = 'abcdefabcdefabcdefabcdefabcdefab';
+      pc = { close(){}, ontrack: null };
+      window.__ch = { binaryType: '', readyState: 'open', send: function(s){ window.__sent.push(JSON.parse(s)); }, close(){}, addEventListener(){} };
+      wireDataChannel(__ch);
+    `);
+    /* il saluto in USCITA: e' quello che l altro lato usera' per fare lo stesso conto */
+    await app.run('new Promise(r => setTimeout(r, 30))');
+    const hello = app.run('window.__sent').find(m => m.type === 'hello');
+    assert.ok(hello, 'un canale gia aperto deve produrre il saluto');
+    assert.strictEqual(hello.rn, 'abcdefabcdefabcdefabcdefabcdefab', 'senza il numero nel saluto l altro lato non puo armare la ripresa');
+    /* il saluto in ARRIVO dall altro lato */
+    app.run("onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'B', fp: 'bbbb', rn: '00000000000000000000000000000000' }) })");
+    await app.run('new Promise(r => setTimeout(r, 30))');
+    assert.strictEqual(app.run('repairArmed()'), true, 'il saluto dell altro deve armare la ripresa');
+    app.stop();
+  });
+
+  test('scatta dopo REPAIR_START_MS di «disconnected», non subito, e non se torna su prima', async () => {
+    const app = loadApp();
+    app.run(PC + `
+      window.__partenze = 0;
+      startRepair = function(){ window.__partenze++; };
+      pc = window.__mkpc();
+      pc.addEventListener('connectionstatechange', function(){ onConnectionStateChange(pc); });
+    `);
+    app.run("pc.__become('disconnected')");
+    assert.strictEqual(app.run('window.__partenze'), 0, 'un ascensore, una galleria: si aspetta che torni da sola prima di scomodare il relay');
+    app.run("pc.__become('connected')");
+    await app.run('new Promise(r => setTimeout(r, REPAIR_START_MS + 200))');
+    assert.strictEqual(app.run('window.__partenze'), 0, 'tornata su da sola: la ripresa non deve partire');
+    app.run("pc.__become('disconnected')");
+    await app.run('new Promise(r => setTimeout(r, REPAIR_START_MS + 200))');
+    assert.strictEqual(app.run('window.__partenze'), 1, 'restata giu: adesso si prova');
+    app.run("pc.__become('failed')");
+    assert.strictEqual(app.run('window.__partenze'), 2, '«failed» non torna mai da solo per specifica: subito');
+    app.stop();
+  });
+
+  test('due app, una cassetta in comune: A rinegozia, B risponde, tutti e due applicano', async () => {
+    /* La cassetta finta: un Map condiviso, a lettura unica come quella vera. */
+    const box = new Map();
+    const A = loadApp(), B = loadApp();
+    for (const [app, fp, nonce, other, onodo] of [[A, 'aaaa', '1'.repeat(32), 'bbbb', '2'.repeat(32)], [B, 'bbbb', '2'.repeat(32), 'aaaa', '1'.repeat(32)]]){
+      app.sandbox.__box = box;
+      app.run(PC + `
+        myFingerprintHex = async function(){ return '${fp}'; };
+        repairNonce = '${nonce}';
+        mailboxPut = async function(k, v){ window.__box.set(k, JSON.stringify(v)); return true; };
+        mailboxGet = async function(k){ var v = window.__box.get(k); if (v === undefined) return null; window.__box.delete(k); return JSON.parse(v); };
+        pc = window.__mkpc();
+      `);
+      await app.run(`armRepair('${other}', '${onodo}')`);
+    }
+    assert.strictEqual(A.run('repairBase.offerer'), true);
+    assert.strictEqual(B.run('repairBase.offerer'), false);
+
+    /* tutti e due perdono la rete */
+    A.run("pc.__become('failed')"); B.run("pc.__become('failed')");
+    const pa = A.run('startRepair(pc)'), pb = B.run('startRepair(pc)');
+    /* la ripresa si chiude quando la connessione torna su: gliela facciamo
+       tornare appena entrambi hanno applicato, come farebbe la rete */
+    const t0 = Date.now();
+    while (Date.now() - t0 < 15000){
+      await A.run('new Promise(r => setTimeout(r, 50))');
+      if (A.run("pc.log.indexOf('setRemote:answer') !== -1") && B.run("pc.log.indexOf('setLocal:answer') !== -1")) break;
+    }
+    A.run("pc.__become('connected')"); B.run("pc.__become('connected')");
+    await Promise.all([pa, pb]);
+
+    const la = A.run('pc.log'), lb = B.run('pc.log');
+    assert.ok(la.indexOf('restartIce') !== -1, 'A deve chiedere indirizzi nuovi: e la ripresa, non una nuova chiamata');
+    assert.ok(la.indexOf('setLocal:offer') !== -1, 'A pubblica un offerta');
+    assert.ok(lb.indexOf('setRemote:offer') !== -1, 'B la riceve dal relay e la applica');
+    assert.ok(lb.indexOf('setLocal:answer') !== -1, 'B risponde');
+    assert.ok(la.indexOf('setRemote:answer') !== -1, 'A riceve la risposta e la applica: la stessa connessione, indirizzi nuovi');
+    assert.strictEqual(lb.indexOf('restartIce'), -1, 'B non deve offrire a sua volta: uno per parte');
+    assert.strictEqual(A.run("pc.remoteDescription.sdp"), 'v=0\r\no=RISPOSTA\r\n', 'quello che A applica e proprio quello che B ha scritto');
+    A.stop(); B.stop();
+  });
+
+  test('B con una versione vecchia non risponde: A ci prova, scade, e resta il pulsante di prima', async () => {
+    const box = new Map();
+    const A = loadApp();
+    A.sandbox.__box = box;
+    A.run(PC + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      mailboxPut = async function(k, v){ window.__box.set(k, JSON.stringify(v)); return true; };
+      mailboxGet = async function(k){ var v = window.__box.get(k); if (v === undefined) return null; window.__box.delete(k); return JSON.parse(v); };
+      pc = window.__mkpc();
+      REPAIR_ROUND_MS = 300;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('startRepair(pc)');
+    assert.ok(A.run("pc.log.indexOf('setLocal:offer') !== -1"), 'ha provato');
+    assert.strictEqual(A.run("pc.log.indexOf('setRemote:answer')"), -1, 'nessuna risposta: nessuna descrizione applicata a caso');
+    assert.strictEqual(A.run('pc.__repairing'), false, 'e il giro si chiude: il prossimo stato puo ritentare');
+    A.stop();
+  });
+
+  test('non piu di REPAIR_MAX_ROUNDS giri per connessione: un ciclo impazzito costerebbe la quota a tutti', async () => {
+    const A = loadApp();
+    A.run(PC + `
+      window.__giri = 0;
+      repairBase = { text: 'x', offerer: true };
+      repairAsOfferer = async function(){ window.__giri++; };
+      pc = window.__mkpc(); pc.connectionState = 'failed';
+    `);
+    for (let i = 0; i < 6; i++) await A.run('startRepair(pc)');
+    assert.strictEqual(A.run('window.__giri'), A.run('REPAIR_MAX_ROUNDS'), 'oltre il tetto non si scrive piu sul relay');
+    A.stop();
+  });
+
+  test('una connessione sana o gia chiusa non si ripara, e senza ripresa armata non si tocca niente', async () => {
+    const A = loadApp();
+    A.run(PC + `
+      window.__giri = 0;
+      repairAsOfferer = async function(){ window.__giri++; };
+      repairAsAnswerer = async function(){ window.__giri++; };
+      pc = window.__mkpc();
+    `);
+    await A.run('startRepair(pc)');
+    assert.strictEqual(A.run('window.__giri'), 0, 'ripresa non armata (versione vecchia dall altra parte): niente');
+    A.run("repairBase = { text: 'x', offerer: true }; pc.connectionState = 'connected';");
+    await A.run('startRepair(pc)');
+    assert.strictEqual(A.run('window.__giri'), 0, 'collegata: non c e niente da riprendere');
+    A.run("pc.connectionState = 'closed';");
+    await A.run('startRepair(pc)');
+    assert.strictEqual(A.run('window.__giri'), 0, 'chiusa: finita, non caduta');
+    A.run("pc.connectionState = 'failed'; var altra = window.__mkpc(); altra.connectionState = 'failed';");
+    await A.run('startRepair(altra)');
+    assert.strictEqual(A.run('window.__giri'), 0, 'una connessione che non e piu quella globale e di un tentativo passato');
+    A.stop();
+  });
+
+  test('chiudere la conversazione spegne la ripresa', () => {
+    const A = loadApp();
+    A.run("repairBase = { text: 'x', offerer: true }; endSession();");
+    assert.strictEqual(A.run('repairArmed()'), false, 'il segreto apparteneva a quella conversazione');
+    A.stop();
+  });
+});
+
+/* ============================================================================
+   Un solo squillo — 11 settembre 2026.
+
+   A telefono chiuso squilla Android, la persona tocca RISPONDI, l'app si
+   apre, legge la busta... e ricominciava a squillare da capo. Il tocco su
+   «Rispondi» E' la risposta: se e' fresco, si entra senza squillare.
+   ========================================================================= */
+test.describe('un solo squillo, non due', () => {
+  const BANCO = `
+    stopAddrPolling();
+    window.__accettata = 0; window.__squilli = 0;
+    acceptAddrCall = async function(){ window.__accettata++; };
+    ringForIncomingAddr = function(){ window.__squilli++; };
+    listenMode = true;
+    activeSlots = () => [0];
+    myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+    addrSlotSeed = async () => 'semenza';
+    slotId = async (seed, nome) => nome;
+    mailboxGet = async () => ({ busta: 1 });
+    addrOpenIncoming = async () => ({
+      obj: { sdp: 'v=0', rid: 'RID-' + Math.random(), nick: 'Antonella', fp: 'aabbccdd' },
+      sec: { seed: 'semenza', slot: 0 }
+    });
+  `;
+
+  test('dopo «Rispondi» sullo schermo bloccato la chiamata si accetta, senza risquillare', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 10))');   /* paintAddrCard() dell avvio deve finire PRIMA degli stub, o riavvia il polling sopra il test */
+    app.run(BANCO);
+    app.run('window.dvAndroidCall()');           /* Android: la persona ha toccato Rispondi */
+    await app.run('new Promise(r => setTimeout(r, 20))');
+    assert.strictEqual(app.run('window.__accettata'), 1, 'ha gia risposto: si entra');
+    assert.strictEqual(app.run('window.__squilli'), 0, 'e NON si squilla una seconda volta');
+    /* la risposta vale una volta sola: la chiamata dopo si annuncia normalmente */
+    app.run('addrPending = null;');
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('window.__accettata'), 1, 'un tocco non vale per due chiamate');
+    assert.strictEqual(app.run('window.__squilli'), 1, 'la seconda chiamata squilla come sempre');
+    app.stop();
+  });
+
+  test('senza un tocco fresco tutto come prima: scheda e squillo', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 10))');
+    app.run(BANCO);
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('window.__accettata'), 0, 'nessuno ha risposto: non si entra da soli in una chiamata');
+    assert.strictEqual(app.run('window.__squilli'), 1);
+    app.stop();
+  });
+
+  test('un tocco vecchio non e piu una risposta', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 10))');
+    app.run(BANCO);
+    app.run('answeredOnLockScreenAt = Date.now() - LOCK_ANSWER_FRESH_MS - 1;');
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('window.__accettata'), 0, 'venti secondi dopo, uno squillo che compare e una chiamata NUOVA');
+    assert.strictEqual(app.run('window.__squilli'), 1);
+    app.stop();
+  });
+});
+
+/* ============================================================================
+   «E' successo qualcosa» — il lato pagina del ritmo adattivo (11 set 2026).
+   Il servizio Android accelera per qualche minuto quando la pagina glielo
+   dice. Qui: lo dice nei due momenti giusti, e non esplode con un ponte
+   vecchio che non ha il metodo.
+   ========================================================================= */
+test.describe('la pagina dice al telefono quando e successo qualcosa', () => {
+  test('una conversazione che si apre e una che si chiude accelerano l ascolto', async () => {
+    const app = loadApp({ androidRing: true });
+    app.run(`
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      pc = { close(){}, ontrack: null };
+      window.__ch = { binaryType: '', readyState: 'open', send(){}, close(){}, addEventListener(){} };
+      wireDataChannel(__ch);
+    `);
+    await app.run('new Promise(r => setTimeout(r, 30))');
+    const dopoApertura = app.run('window.__androidRingCalls').filter(c => c.what === 'activity').length;
+    assert.strictEqual(dopoApertura, 1, 'il saluto e il momento in cui una conversazione esiste: da li il telefono ascolta piu spesso');
+    app.run('endSession()');
+    const dopoChiusura = app.run('window.__androidRingCalls').filter(c => c.what === 'activity').length;
+    assert.strictEqual(dopoChiusura, 2, '«ho appena chiuso con Mario e mi richiama» e IL caso da rendere veloce');
+    app.stop();
+  });
+
+  test('un ponte vecchio senza activity() non rompe niente, e nel browser non c e nessun ponte', () => {
+    const app = loadApp({ androidRing: true });
+    app.run('delete AndroidRing.activity;');
+    app.run('noteAndroidActivity(); endSession();');
+    assert.strictEqual(app.run('window.__androidRingCalls').filter(c => c.what === 'activity').length, 0);
+    const web = loadApp();
+    web.run('noteAndroidActivity(); endSession();');   /* deve semplicemente non esplodere */
+    app.stop(); web.stop();
+  });
+});
+
+/* ============================================================================
+   Le credenziali del ponte si rinnovano PRIMA di scadere, in sottofondo —
+   11 set 2026. Misurato: 2,7 s a richiesta, pagati da chi stava per chiamare.
+   ========================================================================= */
+test.describe('le credenziali del ponte non fanno aspettare la chiamata', () => {
+  const BANCO = `
+    window.__giri = 0;
+    askAnyRelay = async function(){ window.__giri++; await new Promise(r => setTimeout(r, 30)); return { res: { json: async () => ({ iceServers: [{ urls: ['turn:nuovo-' + window.__giri] }] }) } }; };
+  `;
+  test('con la cache fresca non si chiede niente', async () => {
+    const app = loadApp();
+    app.run(BANCO + "cachedIceServers = [{ urls: ['turn:vecchio'] }]; iceServersUntil = Date.now() + ICE_REUSE_MS;");
+    const got = await app.run('fetchIceServers()');
+    assert.strictEqual(got[0].urls[0], 'turn:vecchio');
+    assert.strictEqual(app.run('window.__giri'), 0);
+    app.stop();
+  });
+  test('con la cache in scadenza si risponde SUBITO con quella, e si rinnova dietro', async () => {
+    const app = loadApp();
+    app.run(BANCO + "cachedIceServers = [{ urls: ['turn:vecchio'] }]; iceServersUntil = Date.now() + ICE_REFRESH_AHEAD_MS - 1000;");
+    const t0 = Date.now();
+    const got = await app.run('fetchIceServers()');
+    assert.ok(Date.now() - t0 < 25, 'la chiamata non deve aspettare il Worker: prima costava 2,7 secondi');
+    assert.strictEqual(got[0].urls[0], 'turn:vecchio', 'si parte con la credenziale ancora buona');
+    await app.run('new Promise(r => setTimeout(r, 60))');
+    assert.strictEqual(app.run('window.__giri'), 1, 'e intanto il rinnovo e partito');
+    assert.strictEqual(app.run('cachedIceServers')[0].urls[0], 'turn:nuovo-1', 'la prossima chiamata trova la cache fresca');
+    /* un secondo passaggio mentre il rinnovo e' in corso non ne fa partire un altro */
+    app.run("iceServersUntil = Date.now() + ICE_REFRESH_AHEAD_MS - 1000;");
+    app.run('fetchIceServers(); fetchIceServers();');
+    await app.run('new Promise(r => setTimeout(r, 60))');
+    assert.strictEqual(app.run('window.__giri'), 2, 'due richieste insieme = un solo rinnovo: quel giro costa denaro sul Worker');
+    app.stop();
+  });
+  test('con la cache scaduta si aspetta, come prima: meglio due secondi che un ponte senza lasciapassare', async () => {
+    const app = loadApp();
+    app.run(BANCO + "cachedIceServers = [{ urls: ['turn:vecchio'] }]; iceServersUntil = Date.now() - 1;");
+    const got = await app.run('fetchIceServers()');
+    assert.strictEqual(got[0].urls[0], 'turn:nuovo-1');
+    app.stop();
+  });
+});
+
+/* ============================================================================
+   La voce dell altro si fa suonare, non si spera — 11 set 2026.
+   `autoplay` viene rifiutato da Safari e da alcune WebView senza un tocco
+   fresco: la chiamata sembrava collegata e non si sentiva niente.
+   ========================================================================= */
+test.describe('la traccia remota viene fatta suonare esplicitamente', () => {
+  test('all arrivo della traccia si chiama play(), e un rifiuto si riprova al primo tocco', async () => {
+    const app = loadApp();
+    app.run(`
+      window.__play = 0; window.__rifiuta = true;
+      $('remoteAudio').play = function(){ window.__play++; return window.__rifiuta ? Promise.reject(new Error('NotAllowedError')) : Promise.resolve(); };
+      $('remoteVideo').play = function(){ return Promise.resolve(); };
+      callKind = 'audio';
+      attachRemoteStream({ id: 'stream' });
+    `);
+    await app.run('new Promise(r => setTimeout(r, 0))');
+    assert.strictEqual(app.run('window.__play'), 1, 'la traccia va fatta suonare, non affidata ad autoplay');
+    assert.strictEqual(app.run("remotePlayBlocked === $('remoteAudio')"), true, 'il rifiuto va ricordato, o il prossimo tocco non sa cosa riprovare');
+    app.run("window.__rifiuta = false; document.listeners.click.forEach(function(fn){ fn({ type: 'click' }); });");
+    await app.run('new Promise(r => setTimeout(r, 0))');
+    assert.strictEqual(app.run('window.__play'), 2, 'il primo tocco dopo il rifiuto e il permesso che mancava: si riprova');
+    assert.strictEqual(app.run('remotePlayBlocked'), null);
+    app.run("document.listeners.click.forEach(function(fn){ fn({ type: 'click' }); });");
+    assert.strictEqual(app.run('window.__play'), 2, 'e non si riprova a ogni tocco per sempre');
+    app.stop();
+  });
+  test('un elemento senza play() (banco vecchio, browser strano) non fa esplodere la chiamata', () => {
+    const app = loadApp();
+    app.run("callKind = 'audio'; $('remoteAudio').play = undefined; attachRemoteStream({ id: 's' });");
+    app.stop();
   });
 });

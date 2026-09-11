@@ -1,0 +1,13 @@
+Calls on mobile networks: you could hear each other, badly. Four causes, all fixed.
+
+The phone was never told a call was happening. Android treats "music" and "a phone call" differently: without being switched to call mode there is no hardware echo cancellation, the voice comes out of the loudspeaker at media volume, and a microphone next to a loudspeaker with no echo cancellation gives exactly the metallic, booming sound people reported. The app now puts the phone in call mode for the duration of a call and puts it back afterwards. Voice calls go to the earpiece, video calls to the loudspeaker, and the speaker button — previously hidden inside the Android app, because the web way of switching output does not exist in a WebView — is back and works.
+
+Video was asked for at whatever size the camera could give. On a mobile uplink that starved the voice; video calls were worse for that reason. Video is now capped, voice has priority over picture, and Opus error correction is on so a lost packet on 4G is a lost packet, not a hole in the sentence.
+
+A call now survives a change of network. When wifi hands over to mobile data every address the connection was using belongs to a network that no longer exists; the screen said "recovering" and nothing was recovering. The two phones now renegotiate their addresses through the relay — sealed, on a slot only they can derive — and the same call carries on, same clock, same encryption. If the other side runs an older version nothing changes for them.
+
+The microphone stays with the call when the screen goes off. From Android 14 that needs a declared foreground service; there was none.
+
+Two things that were slow are faster. Ringing while the app is closed adapts: for a few minutes after any activity — a conversation just ended, a call just came in — the phone checks every five seconds instead of forty-five, which is when people call back; after an hour of silence it checks less often than before, so the day's total cost goes down. And the relay's credentials, which took nearly three seconds to fetch, are renewed in the background before they expire instead of on the way into a call.
+
+Also: answering from the lock screen no longer rings a second time once the app opens. A message left for you while the app sat in the background is now found when you come back to it, not only when you restart it. And the other person's voice is explicitly asked to play rather than left to autoplay, which some browsers refuse without a fresh tap.

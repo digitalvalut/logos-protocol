@@ -238,6 +238,7 @@ function loadHostile(options){
 
   run('stopAddrPolling(); stopInboxPolling();');
   sandbox.__stopAllTimers();
+  sandbox.__resumeTimers();   /* la pulizia d'avvio non e' la fine: vedi fake-browser */
 
   /* ---- spie sulle funzioni che gli invarianti sorvegliano ----
      Sostituite, non ispezionate: il punto di I1 è cosa VIENE CHIAMATO, non

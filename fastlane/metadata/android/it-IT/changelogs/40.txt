@@ -1,0 +1,13 @@
+Chiamate su rete mobile: ci si sentiva, male. Quattro cause, tutte corrette.
+
+Al telefono non veniva mai detto che c'era una chiamata. Android tratta "musica" e "telefonata" in modo diverso: senza la modalità chiamata non c'è cancellazione dell'eco fatta dall'hardware, la voce esce dall'altoparlante grande al volume dei media, e un microfono accanto a un altoparlante senza cancellazione dell'eco dà esattamente il suono metallico e rimbombante che è stato riferito. Ora l'app mette il telefono in modalità chiamata per tutta la durata e lo rimette com'era alla fine. Le chiamate vocali vanno all'auricolare, le videochiamate all'altoparlante, e il pulsante dell'altoparlante — prima nascosto dentro l'app Android, perché il modo del web per cambiare uscita in una WebView non esiste — è tornato e funziona.
+
+Il video veniva chiesto alla misura che la fotocamera dava. Su una salita mobile toglieva la banda alla voce; le videochiamate erano peggio per questo. Ora il video ha un tetto, la voce ha la precedenza sull'immagine, e la correzione d'errore di Opus è attiva: un pacchetto perso su 4G è un pacchetto perso, non un buco nella frase.
+
+Una chiamata ora sopravvive a un cambio di rete. Quando il WiFi passa ai dati mobili ogni indirizzo che la connessione usava appartiene a una rete che non esiste più; lo schermo diceva "sto riprendendo" e niente riprendeva. I due telefoni ora rinegoziano gli indirizzi attraverso il relay — sigillati, su una casella che solo loro possono ricavare — e la stessa chiamata continua, stesso orologio, stessa cifratura. Se dall'altra parte c'è una versione precedente, per loro non cambia niente.
+
+Il microfono resta alla chiamata a schermo spento. Da Android 14 serve un servizio in primo piano dichiarato; non c'era.
+
+Due cose lente sono più veloci. Lo squillo ad app chiusa si adatta: per qualche minuto dopo un'attività — una conversazione appena chiusa, una chiamata appena arrivata — il telefono controlla ogni cinque secondi invece di quarantacinque, che è quando la gente richiama; dopo un'ora di silenzio controlla meno di prima, così il costo della giornata scende. E le credenziali del relay, che ci mettevano quasi tre secondi ad arrivare, si rinnovano in sottofondo prima di scadere invece che sulla strada verso una chiamata.
+
+Inoltre: rispondendo dallo schermo bloccato l'app non squilla una seconda volta quando si apre. Un messaggio lasciato mentre l'app era in sottofondo si trova quando ci torni, non solo quando la riavvii. E la voce dell'altra persona viene fatta suonare esplicitamente invece di essere lasciata all'autoplay, che alcuni browser rifiutano senza un tocco recente.
