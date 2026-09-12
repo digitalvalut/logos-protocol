@@ -1,0 +1,7 @@
+The invite's QR code would not scan with a real reader — fixed.
+
+Found: an independent reader could locate the QR (the three corner squares are there) but read zero characters, every time, for a real invite — because from version 7 up, the QR standard needs a second stamp, near the top-right and bottom-left corners, and Logos never wrote it or reserved the space for it: real data got written on top, and everything placed afterward fell out of sync. A real invite (link, code, and security piece) almost always crosses that size threshold — this wasn't a rare case, it was the normal one.
+
+Fixed, and verified with a reader written to trust nothing Logos wrote: it reads the grid purely from the pixels, the way a real scanner does, and recovers the exact text — checked across the whole length range that used to be broken, one by one, plus a real invite with every one of its pieces.
+
+Everything else in this version already shipped as a pre-release (v40-v42): the phone enters call mode, video gets a cap and voice gets priority, a call recovers on its own when the network changes, a single ring from the lock screen, faster listening right after activity, the relay's credentials renewed ahead of expiry, and answering at the address no longer opens a second connection.

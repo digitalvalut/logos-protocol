@@ -7928,7 +7928,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.35';
+const APP_VERSION = 'logos-modifica-4.36';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8580,6 +8580,24 @@ function makeMatrix(version, codewords, mask){
   const reserved = [];
   for (let i = 0; i < 9; i++){ reserved.push([8, i], [i, 8]); }
   for (let i = 0; i < 8; i++){ reserved.push([8, size - 1 - i], [size - 1 - i, 8]); }
+  /* ⚠️ TROVATO IL 12 SET 2026: da qui in giù mancava del tutto — un lettore
+     vero, provato in isolamento, TROVAVA il QR (i tre quadrati agli angoli
+     bastano a localizzarlo) ma leggeva zero caratteri, sempre, da 45x45 in
+     su. Dalla versione 7 lo standard vuole un secondo bollino — la
+     "versione", non da confondere col formato sopra — in due blocchi fissi
+     vicino agli angoli in alto a destra e in basso a sinistra. Senza
+     riservarli, il ciclo qui sotto ci scriveva sopra dati veri: da quel
+     punto in poi ogni bit successivo cadeva nel posto sbagliato, e un
+     lettore che si aspetta il bollino trova un pasticcio e si arrende.
+     Confermato con un decodificatore indipendente (non scritto da noi):
+     33x33 leggeva perfetto, 45x45 zero caratteri, sempre — vedi
+     tests/checks.test.js per la prova. */
+  if (version >= 7){
+    for (let a = 0; a < 3; a++) for (let b = 0; b < 6; b++){
+      reserved.push([size - 11 + a, b]);   /* blocco basso-sinistra: 3 righe x 6 colonne */
+      reserved.push([b, size - 11 + a]);   /* blocco alto-destra: la trasposta */
+    }
+  }
   for (const [r, c] of reserved) if (m[r][c] === null) m[r][c] = 0;
 
   /* data, snaking up and down in two-column strips, skipping column 6 */
@@ -8614,6 +8632,24 @@ function maskBit(mask, r, c){
     case 5: return (r * c) % 2 + (r * c) % 3 === 0;
     case 6: return ((r * c) % 2 + (r * c) % 3) % 2 === 0;
     case 7: return ((r + c) % 2 + (r * c) % 3) % 2 === 0;
+  }
+}
+/* il bollino "versione" — BCH(18,6), stesso stile di calcolo del formato qui
+   sotto: 6 bit di dato (il numero di versione), 12 bit di correzione. Serve
+   solo dalla versione 7 in su, cioe' esattamente il caso lasciato scoperto.
+   Nessuna maschera qui: a differenza del formato, la versione non dipende
+   da quale delle otto mascherine e' stata scelta. */
+function placeVersion(m, version){
+  if (version < 7) return;
+  const size = m.length;
+  let rem = version;
+  for (let i = 0; i < 12; i++) rem = (rem << 1) ^ ((rem >> 11) * 0x1F25);
+  const bits = (version << 12) | rem;
+  const get = i => (bits >> i) & 1;
+  for (let i = 0; i < 18; i++){
+    const a = i % 3, b = (i / 3) | 0;
+    m[size - 11 + a][b] = get(i);   /* basso-sinistra: 3 righe x 6 colonne */
+    m[b][size - 11 + a] = get(i);   /* alto-destra: la trasposta della stessa */
   }
 }
 /* format information: level M (0b00) + mask, BCH(15,5) with the standard mask */
@@ -8680,6 +8716,7 @@ function qrMatrix(text){
   for (let mask = 0; mask < 8; mask++){
     const m = makeMatrix(version, codewords, mask);
     placeFormat(m, mask);
+    placeVersion(m, version);
     const s = penalty(m);
     if (s < bestScore){ bestScore = s; best = m; }
   }

@@ -1,0 +1,7 @@
+Il codice QR dell'invito non si lasciava leggere da un lettore vero — corretto.
+
+Trovato: un lettore indipendente trovava il QR (i tre quadrati agli angoli ci sono) ma leggeva zero caratteri, sempre, per un invito vero — perché dalla versione 7 in su lo standard QR vuole un secondo bollino, vicino agli angoli in alto a destra e in basso a sinistra, e Logos non lo scriveva né riservava lo spazio: i dati veri ci finivano sopra, e tutto quello che veniva dopo si disallineava. Un invito vero (con il link, il codice e la parte di sicurezza) supera quasi sempre quella soglia: non era un caso raro, era il caso normale.
+
+Corretto, e verificato con un lettore scritto apposta per non fidarsi di una riga del codice di Logos: legge la griglia solo dai pixel, come farebbe un vero scanner, e ritrova il testo esatto — provato su ogni lunghezza della fascia che prima era rotta, una per una, più un invito vero con tutti i suoi pezzi.
+
+Il resto di questa versione era già uscito come pre-release (v40-v42): il telefono entra in modalità chiamata, il video ha un tetto e la voce la precedenza, la chiamata si riprende da sola quando cambia la rete, un solo squillo dallo schermo bloccato, l'ascolto più veloce dopo un'attività, le credenziali del relay rinnovate in anticipo, e rispondere all'indirizzo non apre più due connessioni.
