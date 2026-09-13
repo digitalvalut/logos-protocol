@@ -54,8 +54,17 @@ function kvVuoto(){
        (localStorage non enumerabile, IndexedDB assente): mentiva lo strumento
        di misura, non il codice misurato. */
     async get(k){ const v = m.get(k); log.push({ op: 'get', k }); return v === undefined ? null : v.valore; },
+    /* I metadati: dal 13 set 2026 il relay ci tiene il GETTONE con cui una
+       busta puo' essere cancellata (la cassetta che nessuno puo' svuotare).
+       KV vero li restituisce solo da getWithMetadata, mai da get — e il finto
+       fa lo stesso, perche' e' esattamente la proprieta' su cui poggia la
+       protezione: chi legge la busta NON riceve il gettone. */
+    async getWithMetadata(k){
+      const v = m.get(k); log.push({ op: 'get', k });
+      return v === undefined ? { value: null, metadata: null } : { value: v.valore, metadata: v.metadata || null };
+    },
     async put(k, valore, opts){
-      m.set(k, { valore, ttl: opts && opts.expirationTtl });
+      m.set(k, { valore, ttl: opts && opts.expirationTtl, metadata: opts && opts.metadata });
       log.push({ op: 'put', k, ttl: opts && opts.expirationTtl, bytes: String(valore).length });
     },
     async delete(k){ m.delete(k); log.push({ op: 'delete', k }); },
@@ -115,9 +124,10 @@ function caricaWorker(opts){
     /* Ogni richiesta parte da un IP: i limiti di frequenza sono per indirizzo,
        quindi senza questo header ogni prova sarebbe un cliente diverso e
        nessun limite scatterebbe mai. */
-    async chiama(metodo, percorso, { body, origin, ip } = {}){
+    async chiama(metodo, percorso, { body, origin, ip, headers: extra } = {}){
       const headers = { 'CF-Connecting-IP': ip || '203.0.113.7' };
       if (origin !== undefined && origin !== null) headers['Origin'] = origin;
+      if (extra) Object.assign(headers, extra);
       const req = new Request('https://worker.example' + percorso, { method: metodo, headers, body });
       const res = await sandbox.__worker.fetch(req, env);
       let corpo = null;

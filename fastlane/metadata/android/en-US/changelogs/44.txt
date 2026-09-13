@@ -1,0 +1,7 @@
+Nobody can silence you any more by knowing your address.
+
+Until now, the slot where your incoming calls and letters waited on the relay was computed from your address — the thing you hand out on purpose — and reading it emptied it. So anyone holding your address could pull your calls out before your phone saw them: you never rang, the caller read "no answer", and neither of you could tell why. Nothing could be read (everything is sealed), but everything could be made to vanish. It was the most serious open defect in the project, and the one reason we told you not to print your address on a QR code in a shop window.
+
+Now every envelope carries a random token: inside the sealed part, where only the addressee can read it, and as a hidden note at the relay. Reading no longer empties anything. Removing an envelope requires the token — so only the person who opened it, or the one who wrote it, can. Whoever can merely compute where your mailbox is now finds nothing to do there.
+
+Nothing changes in how the app looks or works, and no old phone is left behind: an envelope written by an older version behaves exactly as before, and this version understands both. The protection itself lives in the relay and switches on when the relay is updated (it is, for the address the app uses).

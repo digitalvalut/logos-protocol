@@ -189,15 +189,26 @@ minuti (`TURN_CACHE_MS` in `turn-worker/worker.js`): una modifica **al
 Worker**, che l'app non porta con sé. Va messa in produzione a parte:
 
 ```
-cd turn-worker && wrangler deploy
+cd turn-worker && npx wrangler deploy --keep-vars
 ```
 
-⚠️ **`wrangler deploy` cancella i Secret del Worker.** Subito dopo vanno
-rimessi tutti (TURN_KEY_ID, TURN_API_TOKEN, VAPID_*): stanno in
-`MEMORIA-PROGETTO-PRIVATA.md`, §4, e da nessun'altra parte. Un Worker senza
+⚠️ **`--keep-vars` è obbligatorio** (è scritto anche in cima a
+`turn-worker/wrangler.toml`): senza, wrangler cancella le variabili
+impostate dal pannello. I quattro Secret (TURN_API_TOKEN, TURN_KEY_ID,
+VAPID_PRIVATE_JWK, VAPID_PUBLIC_KEY) wrangler 4.x non li tocca — ma si
+**controlla sempre**, subito dopo:
+
+```
+cd turn-worker && npx wrangler secret list --name digitalvalut-turn
+```
+
+Devono comparire tutti e quattro. Se ne manca uno, stanno in
+`MEMORIA-PROGETTO-PRIVATA.md` §4 e si rimettono con `npx wrangler secret put
+NOME` (digitando il valore, mai incollandolo in una chat). Un Worker senza
 Secret risponde `500` su `/turn` e ogni chiamata parte senza ponte — cioè due
-telefoni su due reti mobili non si collegano, in silenzio. Controllo dopo il
-deploy, da terminale:
+telefoni su due reti mobili non si collegano, in silenzio. Se qualcosa va
+storto: `npx wrangler rollback` torna alla versione precedente. Controllo
+dopo il deploy, da terminale:
 
 ```
 curl -s -H "Origin: https://digitalvalut.github.io" https://digitalvalut-turn.burbeng78.workers.dev/ | head -c 120
@@ -206,9 +217,13 @@ curl -s -H "Origin: https://digitalvalut.github.io" https://digitalvalut-turn.bu
 Deve cominciare con `{"iceServers":[`. Se dice `TURN not configured`, i
 Secret non ci sono.
 
-L'app funziona anche con il Worker vecchio (chiede le credenziali come ha
-sempre fatto): il deploy non è un prerequisito della release, è un pezzo di
-velocità in più.
+**Dalla v44 (13 set 2026) il Worker porta anche la cassetta che nessuno
+può svuotare** (gettoni: vedi il commento in `worker.js`). L'app funziona
+anche con il Worker vecchio — legge e scrive come ha sempre fatto, i gettoni
+vengono ignorati — quindi il deploy non è un prerequisito della release. Ma
+**finché il Worker vecchio è in produzione la protezione non c'è**: chiunque
+abbia un indirizzo può ancora svuotargli la cassetta. Il deploy è il pezzo
+che la accende.
 
 ---
 

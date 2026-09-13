@@ -1,0 +1,7 @@
+Nessuno può più zittirti conoscendo il tuo indirizzo.
+
+Fino a oggi il posto dove le tue chiamate e le tue lettere aspettavano sul relay si calcolava dal tuo indirizzo — la cosa che dai in giro apposta — e leggerlo lo svuotava. Quindi chiunque avesse il tuo indirizzo poteva strappare le tue chiamate prima che il telefono le vedesse: tu non squillavi mai, chi chiamava leggeva "non ha risposto", e nessuno dei due poteva capire perché. Niente poteva essere letto (è tutto sigillato), ma tutto poteva essere fatto sparire. Era il difetto aperto più serio del progetto, e l'unico motivo per cui ti avevamo detto di non stampare il tuo indirizzo su un QR in vetrina.
+
+Ora ogni busta porta un gettone casuale: dentro la parte sigillata, dove solo il destinatario lo legge, e come nota nascosta al relay. Leggere non svuota più niente. Togliere una busta richiede il gettone — quindi solo chi l'ha aperta, o chi l'ha scritta, può farlo. Chi sa soltanto calcolare dov'è la tua cassetta non ci trova più niente da fare.
+
+Non cambia niente nell'uso, e nessun telefono resta indietro: una busta scritta da una versione vecchia si comporta esattamente come prima, e questa versione capisce tutte e due. La protezione vera vive nel relay e si accende quando il relay viene aggiornato (lo è, per l'indirizzo che l'app usa).

@@ -75,18 +75,26 @@ how a build stops being reproducible.
 It is stateless and has no idea who anyone is. Everything it stores is already sealed
 before it arrives.
 
-| route | lives | consumed by reading? |
+| route | lives | removed by |
 |---|---|---|
 | `/` · `/turn` | — | — |
-| `/mailbox/:key` | 2 minutes | **yes** |
-| `/wake/:key` | 24 hours | no |
-| `/key/:key` | 365 days | no |
-| `/letter/:key` | 7 days | **yes** |
+| `/mailbox/:key` | 2 minutes | **`DELETE` with the token** (see below) |
+| `/wake/:key` | 24 hours | expiry only |
+| `/key/:key` | 365 days | expiry only |
+| `/letter/:key` | 7 days | **`DELETE` with the token**, one letter at a time |
 | `/knock` | — | — |
 
-The "consumed by reading" column is the most important thing on this page. A mailbox
-that empties when read cannot be replicated across relays, and forgetting that has
-already cost this project a release.
+**The token (13 Sep 2026).** Until then a mailbox emptied when read — and the slot
+of an address is computable from the address, so anyone holding one could pull your
+calls out before you saw them. Now the writer puts a random token *inside* the sealed
+envelope and sends the same token in an `X-Logos-Token` header; the relay keeps it as
+metadata, never in a response body. Reading (`?keep=1`) removes nothing. Deleting
+requires the token — so only whoever could open the envelope, or whoever wrote it,
+can. Two-step compatibility is deliberate and load-bearing: an envelope written by
+an old app (no token) is still consumed by a plain read, so old phones keep working;
+a tokened envelope is **never** removed by any read, or the protection is void. A
+consumed-on-read mailbox cannot be replicated across relays either, and forgetting
+that has already cost this project a release.
 
 It runs on a free plan with a hard daily write allowance. Before adding anything that
 writes or polls, work out what it costs per user per day — a loop with no deadline is
@@ -129,7 +137,7 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 432 tests, 65 suites, about three
+Node 22. Node finds the files itself. 449 tests, 67 suites, about three
 minutes, and it exits on its own (measured: 181 s). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 

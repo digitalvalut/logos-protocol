@@ -59,14 +59,26 @@ test.describe('arnese: orologio e mailbox finta', () => {
     app.stop();
   });
 
-  test('la mailbox finta è a lettura unica come quella vera', async () => {
+  test('la mailbox finta si svuota come quella vera: aperta col gettone, poi sparita', async () => {
+    /* ⚠️ Riscritto il 13 set 2026 con la cassetta che nessuno puo' svuotare.
+       Prima «leggere» cancellava; adesso cancella CHI APRE, col gettone che
+       trova dentro. Il contratto che questo test difende e' lo stesso di
+       sempre — dopo che una busta e' stata presa, la casella e' vuota — ma
+       la strada e' un'altra, e una finta che rileggesse nasconderebbe
+       proprio i bug di rilettura che I6 cerca. */
     const app = H.loadHostile();
-    await app.run("mailboxPut('k1', { sdp: 'x' })");
-    const primo = await app.run("mailboxGet('k1')");
-    const secondo = await app.run("mailboxGet('k1')");
-    assert.ok(primo, 'la prima lettura deve trovare quello che è stato messo');
+    await app.run("(async () => { window.__sec = await pairSecrets('prova'); })()");
+    await app.run("mailboxPutSealed('k1', window.__sec, { sdp: 'x' })");
+    const primo = await app.run("mailboxGetSealed('k1', window.__sec)");
+    const secondo = await app.run("mailboxGetSealed('k1', window.__sec)");
+    assert.ok(primo && primo.sdp === 'x', 'la prima lettura deve trovare quello che e stato messo');
     assert.strictEqual(secondo, null,
-      'una mailbox finta che rilegge nasconderebbe proprio i bug di rilettura che I6 cerca');
+      'aperta una volta, la casella deve essere vuota: chi apre cancella col gettone');
+    /* e senza gettone non si cancella: e' la protezione, non un caso */
+    await app.run("mailboxPutSealed('k2', window.__sec, { sdp: 'y' })");
+    await app.run("mailboxGet('k2')");   /* lettura senza apertura: come farebbe un attaccante */
+    const ancora = await app.run("mailboxGetSealed('k2', window.__sec)");
+    assert.ok(ancora && ancora.sdp === 'y', 'una lettura che non sa aprire non deve portare via niente');
     app.stop();
   });
 

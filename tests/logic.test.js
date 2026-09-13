@@ -4328,21 +4328,36 @@ test.describe('le lettere sigillate su piu relay', () => {
     fetch = (url, opts) => {
       const host = ['uno.example','due.example','tre.example'].find(h => url.indexOf(h) >= 0);
       if (!host || window.__giu.indexOf(host) >= 0) return Promise.reject(new Error('relay giu'));
-      const pezzi = (url.split('/letter/')[1] || '').split('/');
+      /* dal 13 set 2026 la lettura porta ?keep=1 e la cancellazione e' un
+         DELETE col gettone: questo relay finto imita quello vero */
+      const senzaQuery = url.split('?')[0];
+      const keep = /[?&]keep=1/.test(url);
+      const pezzi = (senzaQuery.split('/letter/')[1] || '').split('/');
       const box = pezzi[0], id = pezzi[1];
       const c = window.__cassette[host];
+      const tok = opts && opts.headers && opts.headers['X-Logos-Token'];
       if (opts && opts.method === 'PUT'){
         c[box] = c[box] || {};
-        c[box][id] = opts.body;
+        c[box][id] = { v: opts.body, tok: tok || null };
         return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
       }
+      if (opts && opts.method === 'DELETE'){
+        const rec = c[box] && c[box][id];
+        if (!rec) return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}) });
+        if (!tok || rec.tok !== tok) return Promise.resolve({ ok: false, status: 403, json: () => Promise.resolve({}) });
+        delete c[box][id];
+        return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ ok: true }) });
+      }
       const dentro = c[box] ? Object.keys(c[box]).map(k => {
-        const v = c[box][k];
+        const rec = c[box][k];
         /* La manomissione deve cambiare DAVVERO il carattere: sostituirlo con
            una lettera fissa non manometteva niente quando era gia quella, e il
            test falliva a caso circa una volta su sessanta. */
-        return window.__manomette === host
-          ? v.replace(/"c":"(.)/, (m, c) => '"c":"' + (c === 'Z' ? 'Y' : 'Z')) : v;
+        const v = window.__manomette === host
+          ? rec.v.replace(/"c":"(.)/, (m, c) => '"c":"' + (c === 'Z' ? 'Y' : 'Z')) : rec.v;
+        /* senza gettone e senza keep si cancella leggendo, come il relay vero */
+        if (!rec.tok && !keep) delete c[box][k];
+        return keep ? { r: k, v } : v;
       }) : [];
       return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(dentro) });
     };
@@ -4360,7 +4375,7 @@ test.describe('le lettere sigillate su piu relay', () => {
                             return b ? Object.keys(window.__cassette[h][b]).length : 0; };
     const bustaDi = (h) => { const b = Object.keys(window.__cassette[h])[0]; if (!b) return null;
                              const k = Object.keys(window.__cassette[h][b])[0];
-                             return k ? window.__cassette[h][b][k] : null; };
+                             return k ? window.__cassette[h][b][k].v : null; };   /* .v: dal 13 set la voce porta anche il gettone */
   `;
 
   test('PROPRIETA 1: la lettera viene depositata DAVVERO su tutti i relay, identica', () => {
@@ -4481,10 +4496,14 @@ test.describe('le lettere sigillate su piu relay', () => {
       window.__giu = ['uno.example','due.example'];
       await letterPut(mioIndirizzo, { testo: 'lasciata al buio' });
       window.__giu = [];                       /* tornano su, ma vuoti */
+      /* misurato PRIMA di raccogliere: dal 13 set 2026 chi apre una lettera la
+         cancella col gettone, e dopo la raccolta la casella e' giustamente vuota */
+      const soloSuTre = quante('uno.example') === 0 && quante('due.example') === 0 && quante('tre.example') === 1;
       const lette = await letterGet(mioIndirizzo);
       return JSON.stringify({
         quante: lette.length, testo: lette[0] && lette[0].testo,
-        soloSuTre: quante('uno.example') === 0 && quante('due.example') === 0 && quante('tre.example') === 1,
+        soloSuTre,
+        dopo: quante('tre.example'),
       });
     })()`);
     return r.then(x => {
@@ -4492,6 +4511,7 @@ test.describe('le lettere sigillate su piu relay', () => {
       assert.strictEqual(o.soloSuTre, true, 'la lettera deve stare su un relay solo, per il senso della prova');
       assert.strictEqual(o.quante, 1, 'e deve essere trovata lo stesso');
       assert.strictEqual(o.testo, 'lasciata al buio');
+      assert.strictEqual(o.dopo, 0, 'aperta, va tolta col gettone: una lettera che resta si rilegge per sette giorni');
       app.stop();
     });
   });
@@ -6939,5 +6959,175 @@ test.describe('una risposta sola per chiamata', () => {
     assert.strictEqual(app.run('window.__squilli'), 0, 'letta due volte dal relay, risposta una volta sola');
     assert.strictEqual(app.run('addrPending'), null);
     app.stop();
+  });
+});
+
+/* ============================================================================
+   La cassetta che nessuno puo' svuotare — lato app, 13 settembre 2026.
+   Il gettone entra nella busta e nell'intestazione; chi apre cancella col
+   gettone; chi ritira usa il suo. E l'app deve andare d'accordo con TUTTI E
+   DUE i relay, quello vecchio e quello nuovo, perche' l'aggiornamento del
+   relay lo fa l'operatore a parte, e nel mezzo l'app e' gia' in giro.
+   ========================================================================= */
+test.describe('la cassetta che nessuno puo svuotare, lato app', () => {
+  /* Un relay finto che imita quello NUOVO: metadati, keep, DELETE. */
+  const RELAY_NUOVO = `
+    window.__store = new Map(); window.__chiamate = [];
+    fetch = (url, opts) => {
+      const method = (opts && opts.method) || 'GET';
+      const senzaQuery = url.split('?')[0]; const keep = /[?&]keep=1/.test(url);
+      const key = senzaQuery.slice(senzaQuery.lastIndexOf('/') + 1);
+      const tok = opts && opts.headers && opts.headers['X-Logos-Token'];
+      window.__chiamate.push({ method, key, keep, tok: tok || null });
+      const risp = (status, body) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(body), text: () => Promise.resolve(JSON.stringify(body)) });
+      if (method === 'PUT'){ window.__store.set(key, { body: opts.body, tok: tok || null }); return risp(200, { ok: true }); }
+      if (method === 'DELETE'){
+        const rec = window.__store.get(key);
+        if (!rec) return risp(404, { empty: true });
+        if (!tok || rec.tok !== tok) return risp(403, { error: 'wrong token' });
+        window.__store.delete(key); return risp(200, { ok: true });
+      }
+      const rec = window.__store.get(key);
+      if (!rec) return risp(404, { empty: true });
+      if (!rec.tok && !keep) window.__store.delete(key);
+      return risp(200, JSON.parse(rec.body));
+    };
+  `;
+  /* ...e uno che imita quello VECCHIO: ignora l'intestazione e keep, leggere
+     cancella, DELETE non esiste (405). */
+  const RELAY_VECCHIO = `
+    window.__store = new Map(); window.__chiamate = [];
+    fetch = (url, opts) => {
+      const method = (opts && opts.method) || 'GET';
+      const key = url.split('?')[0].slice(url.split('?')[0].lastIndexOf('/') + 1);
+      window.__chiamate.push({ method, key });
+      const risp = (status, body) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(body), text: () => Promise.resolve(JSON.stringify(body)) });
+      if (method === 'PUT'){ window.__store.set(key, opts.body); return risp(200, { ok: true }); }
+      if (method === 'DELETE') return risp(405, { error: 'method not allowed' });
+      const body = window.__store.get(key);
+      if (body === undefined) return risp(404, { empty: true });
+      window.__store.delete(key);
+      return risp(200, JSON.parse(body));
+    };
+  `;
+
+  test('chi scrive mette il gettone DENTRO la busta e nell intestazione, e sono lo stesso', async () => {
+    const app = loadApp();
+    app.run(RELAY_NUOVO);
+    await app.run("(async () => { window.__sec = await pairSecrets('p'); await mailboxPutSealed('k1', window.__sec, { sdp: 'x' }); })()");
+    const put = app.run('window.__chiamate').find(c => c.method === 'PUT');
+    assert.match(put.tok, /^[0-9a-f]{32}$/, 'senza gettone nell intestazione il relay non puo proteggere niente');
+    const dentro = await app.run("openFrom(window.__sec.key, JSON.parse(window.__store.get('k1').body))");
+    assert.strictEqual(dentro.tok, put.tok, 'il gettone nella busta e quello al relay devono essere lo stesso, o chi apre non puo cancellare');
+    assert.strictEqual(dentro.sdp, 'x');
+    app.stop();
+  });
+
+  test('L ATTACCO, lato app: chi legge senza saper aprire non porta via niente; chi apre, si', async () => {
+    const app = loadApp();
+    app.run(RELAY_NUOVO);
+    await app.run("(async () => { window.__sec = await pairSecrets('p'); await mailboxPutSealed('k1', window.__sec, { sdp: 'x' }); })()");
+    /* l attaccante: la stessa lettura che fa l app, ma senza la chiave */
+    const rubata = await app.run("mailboxGet('k1')");
+    assert.ok(rubata && rubata.c, 'la vede, sigillata');
+    assert.strictEqual(app.run("window.__store.has('k1')"), true, 'ma e ancora li: leggere non cancella piu');
+    /* il destinatario vero, dopo l attaccante */
+    const aperta = await app.run("mailboxGetSealed('k1', window.__sec)");
+    assert.strictEqual(aperta.sdp, 'x', 'la chiamata arriva lo stesso');
+    assert.strictEqual(app.run("window.__store.has('k1')"), false, 'e chi ha aperto l ha tolta col gettone');
+    const del = app.run('window.__chiamate').find(c => c.method === 'DELETE');
+    assert.ok(del && del.tok, 'la cancellazione deve portare il gettone');
+    app.stop();
+  });
+
+  test('chi ritira il proprio invito usa il suo gettone (e, per il relay vecchio, anche la lettura di una volta)', async () => {
+    const app = loadApp();
+    app.run(RELAY_NUOVO);
+    await app.run("(async () => { window.__sec = await pairSecrets('p'); await mailboxPutSealed('k1', window.__sec, { sdp: 'x' }); })()");
+    await app.run("withdrawOffer('k1')");
+    assert.strictEqual(app.run("window.__store.has('k1')"), false, 'ritirato');
+    const metodi = app.run('window.__chiamate').map(c => c.method);
+    assert.ok(metodi.includes('DELETE'), 'col gettone, sul relay nuovo');
+    const ultimoGet = app.run('window.__chiamate').filter(c => c.method === 'GET').pop();
+    assert.strictEqual(ultimoGet.keep, false, 'e ANCHE una lettura senza keep: sul relay vecchio e l unico modo di ritirare');
+    app.stop();
+  });
+
+  test('col relay VECCHIO tutto funziona come prima: nessuna protezione, nessuna rottura', async () => {
+    const app = loadApp();
+    app.run(RELAY_VECCHIO);
+    await app.run("(async () => { window.__sec = await pairSecrets('p'); await mailboxPutSealed('k1', window.__sec, { sdp: 'x' }); })()");
+    const aperta = await app.run("mailboxGetSealed('k1', window.__sec)");
+    assert.strictEqual(aperta.sdp, 'x', 'la chiamata arriva');
+    assert.strictEqual(app.run("window.__store.has('k1')"), false, 'e il relay vecchio l ha cancellata leggendo, come sempre');
+    /* il DELETE che l app manda e' un 405 che l app ignora: nessun errore a schermo, nessun blocco */
+    await app.run("(async () => { await mailboxPutSealed('k2', window.__sec, { sdp: 'y' }); })()");
+    await app.run("withdrawOffer('k2')");
+    assert.strictEqual(app.run("window.__store.has('k2')"), false, 'ritirare col relay vecchio: la lettura di una volta lo fa');
+    app.stop();
+  });
+
+  test('la busta di un app VECCHIA (senza gettone) letta da un app nuova resta, e non si riannuncia', async () => {
+    const app = loadApp();
+    app.run(RELAY_NUOVO);
+    await app.run("(async () => { window.__sec = await pairSecrets('p'); const env = await sealWith(window.__sec, { sdp: 'x', rid: 'RID-V' }); window.__store.set('k1', { body: JSON.stringify(env), tok: null }); })()");
+    const prima = await app.run("mailboxGetSealed('k1', window.__sec)");
+    assert.strictEqual(prima.sdp, 'x');
+    assert.strictEqual(app.run("window.__store.has('k1')"), true, 'senza gettone non si puo cancellare, e keep=1 non deve farlo al posto nostro');
+    assert.strictEqual(app.run("window.__chiamate.some(c => c.method === 'DELETE')"), false, 'non si prova nemmeno a cancellare senza gettone');
+    app.stop();
+  });
+
+  test('le lettere: gettone dentro e fuori, e chi le apre le toglie una per una', async () => {
+    const app = loadApp();
+    app.run(RELAY_NUOVO + `RELAYS.length = 0; RELAYS.push('https://uno.example');`);
+    await app.run(`(async () => {
+      const miaPub = await myPubB64();
+      fetchAddrKey = async () => ({
+        key: await crypto.subtle.importKey('raw', b642ab(miaPub), { name:'ECDH', namedCurve:'P-256' }, false, []),
+        slot: 0,
+      });
+    })()`);
+    const mio = await app.run('myAddress(0)');
+    const esito = await app.run("letterPut(" + JSON.stringify(mio) + ", { text: 'ciao' })");
+    assert.strictEqual(esito, 'ok');
+    const put = app.run('window.__chiamate').find(c => c.method === 'PUT');
+    assert.match(put.tok, /^[0-9a-f]{32}$/, 'anche la lettera porta il gettone al relay');
+    /* la raccolta: il relay nuovo con keep=1 risponde {r, v}; il finto qui sopra
+       risponde col corpo grezzo, quindi si simula la forma nuova */
+    app.run(`
+      const __f = fetch;
+      fetch = (url, opts) => {
+        if ((opts && opts.method) === 'GET' && url.indexOf('/letter/') >= 0){
+          const out = []; for (const [k, rec] of window.__store) if (rec.tok) out.push({ r: k, v: rec.body });
+          return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(out) });
+        }
+        return __f(url, opts);
+      };
+    `);
+    const lette = await app.run("letterGet(" + JSON.stringify(mio) + ")");
+    assert.strictEqual(lette.length, 1);
+    assert.strictEqual(lette[0].text, 'ciao');
+    assert.match(lette[0].tok, /^[0-9a-f]{32}$/, 'il gettone arriva a chi apre');
+    const del = app.run('window.__chiamate').find(c => c.method === 'DELETE');
+    assert.ok(del && del.tok === lette[0].tok, 'aperta, la lettera va tolta col SUO gettone');
+    assert.strictEqual(app.run('window.__store.size'), 0, 'e non c e piu');
+    app.stop();
+  });
+
+  test('una lettera che torna due volte (cancellazione fallita) si mostra una volta sola', () => {
+    const app = loadApp();
+    app.run(`
+      activeSlots = () => [0]; myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+      letterGet = async () => [{ nick: 'A', text: 'x', tok: '11111111111111111111111111111111' }, { nick: 'A', text: 'x', tok: '11111111111111111111111111111111' }];
+      saveLetters([]);
+    `);
+    return app.run('collectLetters()').then(() => {
+      assert.strictEqual(app.run('storedLetters().length'), 1, 'stesso gettone = stessa lettera: una volta sola a schermo');
+      return app.run('collectLetters()');
+    }).then(() => {
+      assert.strictEqual(app.run('storedLetters().length'), 1, 'e nemmeno al giro dopo');
+      app.stop();
+    });
   });
 });

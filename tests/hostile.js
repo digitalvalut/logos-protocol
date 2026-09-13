@@ -118,10 +118,20 @@ function makeMailbox(clock){
     return 'altro';
   }
   function keyOf(url){
-    const u = String(url);
+    const u = String(url).split('?')[0];
     const i = u.lastIndexOf('/');
     return i === -1 ? '' : u.slice(i + 1);
   }
+  function wantsKeep(url){ return /[?&]keep=1\b/.test(String(url)); }
+  function tokenOf(opts){
+    const h = opts && opts.headers && opts.headers['X-Logos-Token'];
+    return (typeof h === 'string' && /^[0-9a-f]{32}$/.test(h)) ? h : null;
+  }
+  /* ⚠️ Dal 13 set 2026 questa finta imita il relay NUOVO — la cassetta che
+     nessuno puo' svuotare: chi scrive allega un gettone, leggere con `keep=1`
+     non cancella, cancella solo DELETE col gettone giusto; una busta senza
+     gettone (app vecchia) si cancella leggendola come sempre. Imitare il relay
+     vecchio qui avrebbe nascosto proprio i difetti di rilettura che I6 cerca. */
   const fetch = (url, opts) => {
     const method = (opts && opts.method) || 'GET';
     const route = routeOf(url);
@@ -131,17 +141,27 @@ function makeMailbox(clock){
     if (state.status === 429){
       return Promise.resolve({ ok: false, status: 429, json: () => Promise.resolve(null), text: () => Promise.resolve('') });
     }
+    const slot = route + ':' + key;
     if (method === 'PUT'){
-      store.set(route + ':' + key, opts && opts.body);
+      store.set(slot, { body: opts && opts.body, tok: tokenOf(opts) });
       return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}), text: () => Promise.resolve('') });
     }
-    const held = store.get(route + ':' + key);
-    if (held === undefined){
+    if (method === 'DELETE'){
+      const rec = store.get(slot);
+      const tok = tokenOf(opts);
+      if (!rec) return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve(null), text: () => Promise.resolve('') });
+      if (!tok || rec.tok !== tok) return Promise.resolve({ ok: false, status: 403, json: () => Promise.resolve(null), text: () => Promise.resolve('') });
+      store.delete(slot);
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ ok: true }), text: () => Promise.resolve('') });
+    }
+    const rec = store.get(slot);
+    if (rec === undefined){
       return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve(null), text: () => Promise.resolve('') });
     }
-    /* la mailbox vera è a lettura unica: se questa finta non lo fosse,
-       nasconderebbe proprio i bug di rilettura che I6 cerca */
-    if (route === 'mailbox') store.delete(route + ':' + key);
+    /* la regola del relay vero: una busta col gettone resta finche' qualcuno
+       la toglie col gettone; una senza si cancella leggendola, salvo keep=1 */
+    if (route === 'mailbox' && !rec.tok && !wantsKeep(url)) store.delete(slot);
+    const held = rec.body;
     let parsed = null;
     try{ parsed = JSON.parse(held); }catch(e){}
     return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(parsed), text: () => Promise.resolve(String(held)) });

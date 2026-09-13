@@ -5950,9 +5950,46 @@ let mailboxThrottled = false;
    se sta in un posto solo, basta bloccare quel posto perche chi ti cerca non ti
    trovi piu, anche con gli altri vivi. Basta uno che lo prenda perche l'incontro
    possa avvenire. */
-async function mailboxPut(key, obj){
+/* ---------------- la cassetta che nessuno puo' svuotare (13 set 2026) ----------------
+   Fino a oggi leggere una casella la svuotava, e il nome della casella di un
+   indirizzo si calcola dall'indirizzo: chiunque lo avesse poteva strappare
+   le tue chiamate prima che tu le vedessi. Non leggerle — sigillate — ma
+   farle sparire. Era il difetto piu' serio ancora aperto (CONFRONTO §A).
+
+   Il rimedio e' un GETTONE casuale che chi scrive mette in due posti: dentro
+   la busta sigillata (lo vede solo chi sa aprirla) e in un'intestazione che
+   il relay conserva come metadato, mai nel corpo che una lettura restituisce.
+   Il relay cancella solo a chi presenta il gettone. Chi legge e apre, lo ha:
+   cancella dopo aver aperto. Chi ha scritto, lo ha: ritirare funziona.
+   Chi puo' solo calcolare il nome della casella non ha niente.
+
+   ⚠️ DUE TEMPI, e quest'app e' fatta per funzionare in tutti e due:
+   - col relay VECCHIO l'intestazione viene ignorata, `?keep=1` viene
+     ignorato (leggere cancella come sempre) e DELETE risponde 405, che qui
+     si ignora. Tutto come prima, nessuna protezione — nessuna rottura.
+   - col relay NUOVO la protezione c'e'. Una busta senza gettone (scritta da
+     un'app vecchia) viene lasciata dov'e' da `keep=1`: si riconosce al giro
+     dopo dal suo `rid`/`tok`, non si riannuncia. */
+const TOKEN_RE = /^[0-9a-f]{32}$/;
+function newToken(){ return hex(crypto.getRandomValues(new Uint8Array(16))); }
+/* i gettoni delle buste scritte da QUESTO dispositivo, per poterle ritirare */
+const ownTokens = new Map();
+function rememberOwnToken(key, tok){
+  ownTokens.set(key, tok);
+  if (ownTokens.size > 200) ownTokens.delete(ownTokens.keys().next().value);
+}
+async function mailboxDelete(key, tok){
+  if (!key || !TOKEN_RE.test(tok || '')) return false;
   try{
-    const e = await tellAllRelays(RELAY_PATH.mailbox + key, { method:'PUT', body: JSON.stringify(obj) });
+    const e = await tellAllRelays(RELAY_PATH.mailbox + key, { method:'DELETE', headers: { 'X-Logos-Token': tok } });
+    return e.riusciti > 0;
+  }catch(e){ return false; }
+}
+async function mailboxPut(key, obj, tok){
+  try{
+    const opts = { method:'PUT', body: JSON.stringify(obj) };
+    if (tok) opts.headers = { 'X-Logos-Token': tok };
+    const e = await tellAllRelays(RELAY_PATH.mailbox + key, opts);
     brokerReachable = e.risposto > 0;
     /* Rallentare solo se NESSUNO ha accettato e qualcuno lo ha chiesto: se anche
        un solo relay ha preso il biglietto, l'app non ha motivo di frenare. */
@@ -5962,9 +5999,13 @@ async function mailboxPut(key, obj){
 }
 /* Qui invece basta il primo che risponde: il biglietto e lo stesso ovunque, e
    l'unica cosa che conta e averlo trovato da qualche parte. */
-async function mailboxGet(key){
+/* `keep=1`: leggere non cancella; chi apre la busta cancella col gettone.
+   `svuota` = la lettura di una volta, senza keep: serve SOLO a ritirare una
+   busta propria scritta prima che il relay conoscesse i gettoni — sul relay
+   nuovo non tocca una busta col gettone (gia' tolta da DELETE). */
+async function mailboxGet(key, svuota){
   try{
-    const e = await askAnyRelay(RELAY_PATH.mailbox + key, { method:'GET' });
+    const e = await askAnyRelay(RELAY_PATH.mailbox + key + (svuota ? '' : '?keep=1'), { method:'GET' });
     brokerReachable = e.risposto > 0; /* un 404 e una risposta sanissima: la casella e vuota */
     mailboxThrottled = !e.res && e.stati.indexOf(429) >= 0;
     /* la salita dell'attesa vive qui e non in pollGap, perche' qui si sa se
@@ -6152,10 +6193,12 @@ async function sealWith(sec, obj){
    Messo qui, che e' l'unico punto da cui passa ogni busta di questa app:
    nessun chiamante deve ricordarsi di aggiungerlo. */
 async function mailboxPutSealed(key, sec, obj){
+  const tok = newToken();
   const conOra = (obj && typeof obj === 'object' && !Array.isArray(obj))
-    ? Object.assign({ ts: Date.now() }, obj)
+    ? Object.assign({ ts: Date.now(), tok }, obj)
     : obj;
-  return mailboxPut(key, await sealWith(sec, conOra));
+  rememberOwnToken(key, tok);
+  return mailboxPut(key, await sealWith(sec, conOra), tok);
 }
 /* Dieci minuti, e la larghezza e' voluta. Il tetto vero della casella e' due
    minuti (MAILBOX_TTL_SECONDS nel Worker), quindi qualunque finestra piu'
@@ -6178,7 +6221,15 @@ function bustaFresca(obj){
 async function mailboxGetSealed(key, sec){
   const env = await mailboxGet(key);
   if (!env) return null;
-  return openFrom(sec.key, env);
+  const obj = await openFrom(sec.key, env);
+  /* Aperta: adesso si puo' cancellare, e si aspetta che sia fatto PRIMA di
+     restituirla — chi chiama potrebbe rileggere la stessa casella un attimo
+     dopo, e deve trovarla vuota come trovava prima. Una busta senza gettone
+     (app vecchia) non si puo' cancellare da qui: sul relay vecchio l'ha gia'
+     cancellata la lettura; sul nuovo resta finche' scade, e chi la rilegge la
+     riconosce. */
+  if (obj && typeof obj === 'object' && TOKEN_RE.test(obj.tok || '')) await mailboxDelete(key, obj.tok);
+  return obj;
 }
 
 /* ---------------- how often to check back while waiting ----------------
@@ -6475,8 +6526,11 @@ async function letterPut(addr, obj){
        riconoscere che sono la stessa lettera — e chi guarda i relay dall'esterno
        vedrebbe comparire piu' buste dove ce n'e' una sola. Stesso nome di
        casella e stesso numero, cosi' la lettera e' LA STESSA ovunque. */
-    const busta = JSON.stringify(await sealWith(sec, obj));
-    const e = await tellAllRelays(RELAY_PATH.letter + box + '/' + rand, { method: 'PUT', body: busta });
+    /* il gettone: dentro la busta e nell'intestazione, come per la cassetta —
+       da qui in poi la lettera la toglie solo chi la sa aprire */
+    const tok = newToken();
+    const busta = JSON.stringify(await sealWith(sec, Object.assign({ tok }, obj)));
+    const e = await tellAllRelays(RELAY_PATH.letter + box + '/' + rand, { method: 'PUT', body: busta, headers: { 'X-Logos-Token': tok } });
     return e.riusciti > 0 ? 'ok' : 'rete';
   }catch(e){ return 'rete'; }
 }
@@ -6491,19 +6545,26 @@ async function letterGet(addr){
     const box = await slotId(seed, 'letterbox');
     /* Da TUTTI, e unite: relay diversi possono avere lettere diverse, perche
        una depositata mentre uno era spento esiste soltanto sull'altro. */
-    const e = await askAllRelays(RELAY_PATH.letter + box, { method: 'GET' }, 5000);
+    const e = await askAllRelays(RELAY_PATH.letter + box + '?keep=1', { method: 'GET' }, 5000);
 
     /* La stessa lettera torna da ogni relay che ce l'aveva: identica al byte,
        perche e stata sigillata una volta sola. Si tiene la prima e si scartano
-       le copie — l'utente deve vedere un messaggio, non due. */
+       le copie — l'utente deve vedere un messaggio, non due.
+       Due forme di risposta, e vanno capite tutte e due: il relay NUOVO, a
+       chi chiede `keep=1`, manda {r, v} — il nome della voce e la busta —
+       perche' chi apre deve poter dire quale cancellare; il relay VECCHIO
+       ignora `keep` e manda le buste nude, come sempre (e le ha gia'
+       cancellate leggendo). */
     const viste = Object.create(null);
     const buste = [];
     for (const raw of e.dati){
       if (!Array.isArray(raw)) continue;
-      for (const s of raw){
+      for (const item of raw){
+        const s = (item && typeof item === 'object') ? item.v : item;
+        const r = (item && typeof item === 'object' && typeof item.r === 'string') ? item.r : null;
         if (typeof s !== 'string' || viste[s]) continue;
         viste[s] = 1;
-        buste.push(s);
+        buste.push({ s, r });
       }
     }
 
@@ -6512,16 +6573,26 @@ async function letterGet(addr){
        sostituisce una lettera fa fallire QUELLA, non le altre — comprese le
        copie sane della stessa lettera arrivate dagli altri relay. */
     const out = [];
-    for (const s of buste){
+    for (const { s, r } of buste){
       try{
         const opened = await addrOpenIncoming(JSON.parse(s), seed);
-        if (opened && opened.obj) out.push(opened.obj);
+        if (opened && opened.obj){
+          out.push(opened.obj);
+          /* aperta: si toglie col gettone, dalla voce che il relay ha nominato */
+          if (r && TOKEN_RE.test(opened.obj.tok || '')) await letterDelete(box, r, opened.obj.tok);
+        }
       }catch(e){}
     }
     return out;
   }catch(e){ return []; }
 }
 
+async function letterDelete(box, rand, tok){
+  try{
+    const e = await tellAllRelays(RELAY_PATH.letter + box + '/' + rand, { method: 'DELETE', headers: { 'X-Logos-Token': tok } });
+    return e.riusciti > 0;
+  }catch(e){ return false; }
+}
 function storedLetters(){ try{ return JSON.parse(MEM.getItem('dvlogos-letters') || '[]'); }catch(e){ return []; } }
 function saveLetters(l){ try{ MEM.setItem('dvlogos-letters', JSON.stringify(l.slice(-40))); }catch(e){} }
 function dropLetter(id){ saveLetters(storedLetters().filter(x => x.id !== id)); }
@@ -6941,11 +7012,15 @@ async function addrCheckOnce(){
        The secret that comes back out is kept and used for the reply and every
        ICE candidate after it, so there is no second exchange. */
     const seed = await addrSlotSeed(addr);
-    const raw = await mailboxGet(await slotId(seed, 'addr-offer'));
+    const offerKey = await slotId(seed, 'addr-offer');
+    const raw = await mailboxGet(offerKey);
     if (!raw) continue;
     const got = await addrOpenIncoming(raw, seed);
     if (!got) continue;   /* not sealed to us, or not sealed at all */
     const { obj: msg, sec } = got;
+    /* aperta con la NOSTRA chiave: il gettone dentro e' la prova che possiamo
+       toglierla. Prima di annunciarla, cosi' un secondo giro non la ritrova. */
+    if (msg && TOKEN_RE.test(msg.tok || '')) await mailboxDelete(offerKey, msg.tok);
     if (!msg || !msg.sdp || !msg.rid) continue;
     /* una busta rimessa in circolo da chi l'aveva catturata: non e' apribile da
        lui, ma farebbe squillare questo telefono per un chiamante che non c'e' */
@@ -7360,7 +7435,12 @@ let dialedAddrProven = false;
    Togliere e' l'unica cosa che vale per tutti e due i modi di guardare. */
 async function withdrawOffer(offerKey){
   if (!offerKey) return;
-  try{ await mailboxGet(offerKey); }catch(e){}   /* se non c'e' piu', tanto meglio: vuol dire che l'hanno gia' preso */
+  /* Col gettone, sul relay nuovo. Poi ANCHE una lettura senza `keep`, che sul
+     relay vecchio e' l'unico modo di cancellare e sul nuovo non fa niente a
+     una busta col gettone (gia' tolta dalla riga sopra). Se non c'e' piu',
+     tanto meglio: vuol dire che l'hanno gia' preso. */
+  try{ const tok = ownTokens.get(offerKey); if (tok) await mailboxDelete(offerKey, tok); }catch(e){}
+  try{ await mailboxGet(offerKey, true); }catch(e){}
 }
 
 async function dialAddress(raw, unvouched){
@@ -7540,6 +7620,12 @@ async function dialAddress(raw, unvouched){
       return;
     }
     resetBigConnectingText('B');
+    /* Risposta arrivata: l'invito nella casella dell'altro ha finito il suo
+       lavoro e si ritira SUBITO. Prima lo cancellava la lettura dell'altro;
+       adesso una busta col gettone resta finche' qualcuno la toglie — e un
+       telefono con l'app vecchia, che non sa cancellarla, la ritroverebbe al
+       giro dopo e risquillerebbe per una chiamata gia' in corso. */
+    withdrawOffer(offerKey);
     /* The reply came back and it opened. Nothing but the private half behind
        this address's published key could have produced a secret that opens it,
        and the address is a hash of that key — so this is the moment the address
@@ -7583,8 +7669,14 @@ async function collectLetters(){
     const addr = await myAddress(n);
     if (!addr) continue;
     for (const l of await letterGet(addr)){
+      /* la stessa lettera puo' tornare (cancellazione non riuscita, relay
+         vecchio da una parte e nuovo dall'altra): si riconosce dal gettone,
+         che e' unico per lettera, e non si mostra due volte */
+      const tok = TOKEN_RE.test(l.tok || '') ? l.tok : null;
+      if (tok && kept.some(k => k.tok === tok)) continue;
       kept.push({
         id: hex(crypto.getRandomValues(new Uint8Array(6))),
+        tok,
         nick: (l.nick || '').toString().slice(0, 30),
         text: (l.text || '').toString().slice(0, 300),
         from: typeof l.from === 'string' ? parseAddress(l.from) : null,
@@ -7928,7 +8020,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.36';
+const APP_VERSION = 'logos-modifica-4.37';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8254,6 +8346,7 @@ async function tryAutoReconnectInner(contact){
       if (msg && msg.sdp){
         if (pc !== myPc){ pump.stop(); return; }
         await myPc.setRemoteDescription({ type:'answer', sdp: msg.sdp });
+        withdrawOffer(outKey);   /* risposta avuta: l'invito col gettone si ritira, non aspetta di scadere */
         await pump.remoteReady();
         /* re-enabled only once the handshake actually settles — see the note
            on watchHandshakeProgress; enabling it the instant an answer was

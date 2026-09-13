@@ -89,6 +89,51 @@ const WAKE_TTL_SECONDS = 24 * 3600; // an invite is opened when the other person
 const MAX_BODY_BYTES = 8192; // an encrypted offer/answer is ~1.5KB once sealed and base64'd; this is generous headroom
 const MAX_WAKE_BYTES = 1024; // a sealed push subscription and nothing else
 const KEY_RE = /^[0-9a-f]{64}$/; // a hex SHA-256, nothing else is a valid mailbox key
+
+/* ---------------- la cassetta che nessuno puo' svuotare (13 set 2026) ----------------
+   Il difetto piu' serio che questo relay avesse: il nome della cassetta di un
+   indirizzo si calcola dall'indirizzo stesso, e leggere svuotava. Chiunque
+   avesse il tuo indirizzo — che e' fatto per essere dato in giro — poteva
+   strappare le tue chiamate e le tue lettere prima che tu le vedessi. Non
+   leggerle (sono sigillate), ma farle sparire: tu non squilli mai, chi chiama
+   legge «non ha risposto», e nessuno dei due capisce perche'.
+
+   Il rimedio, senza nessuna primitiva nuova: chi SCRIVE allega un gettone
+   casuale — dentro la busta sigillata (quindi lo vede solo chi sa aprirla) e
+   in questa intestazione, che il relay conserva come METADATO, mai nel corpo
+   che una lettura restituisce. Da quel momento cancellare richiede il
+   gettone: chi non sa aprire la busta non lo conosce, e non puo' piu' svuotare
+   niente. Chi ha scritto ce l'ha (l'ha generato lui): ritirare un invito
+   continua a funzionare. Chi ha letto e aperto ce l'ha: cancella dopo aver
+   aperto.
+
+   ⚠️ DUE TEMPI, per non rompere chi ha una versione vecchia dell'app:
+   - una busta SENZA gettone (scritta da un'app vecchia) si comporta come
+     sempre: leggerla la cancella. Quella protezione non c'e' — non c'era
+     nemmeno prima — ma nessuno perde chiamate.
+   - una busta CON gettone non viene MAI cancellata da una lettura, nemmeno
+     da un'app vecchia che legge senza `keep=1`. E' la riga che protegge: se
+     una lettura qualsiasi potesse cancellarla, un attaccante userebbe quella.
+     Il prezzo: un'app vecchia che riceve da una nuova puo' rileggere la
+     stessa busta finche' scade (2 minuti per le chiamate — e chi chiama la
+     ritira appena ha la risposta, quindi in pratica mai; 7 giorni per le
+     lettere, dove puo' vederla due volte). Sparisce aggiornando.
+   Cancellare costa una scrittura, come la cancellazione-alla-lettura di
+   prima: il conto della quota non cambia. */
+const TOKEN_HEADER = 'X-Logos-Token';
+const TOKEN_RE = /^[0-9a-f]{32}$/;
+function tokenOf(request){
+  const t = request.headers.get(TOKEN_HEADER);
+  return t && TOKEN_RE.test(t) ? t : null;
+}
+function wantsKeep(request){ return new URL(request.url).searchParams.get('keep') === '1'; }
+/* Confronto a lunghezza fissa: qui non conta il tempo, ma costa niente farlo bene. */
+function sameToken(a, b){
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return d === 0;
+}
 /* A published address key has to outlive everything else here: an address is
    handed out once and dialled months later, so a key that expired would turn a
    printed address into a dead one. A year, matched to how long the device's own
@@ -99,8 +144,8 @@ const MAX_PUBKEY_BYTES = 512; // a raw P-256 point is 65 bytes, 88 once base64'd
 function corsHeaders(origin){
   return {
     'Access-Control-Allow-Origin': ALLOWED_ORIGINS.indexOf(origin) >= 0 ? origin : ALLOWED_ORIGIN,
-    'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Logos-Token',
     'Vary': 'Origin',
   };
 }
@@ -633,7 +678,24 @@ async function handleLetter(request, env, cors, key, rand){
     if (!body || body.length > MAX_LETTER_BYTES) return json({ error: 'bad body' }, 400, cors);
     const held = await env.MAILBOX.list({ prefix, limit: MAX_LETTERS + 1 });
     if (held.keys.length >= MAX_LETTERS) return json({ error: 'letterbox full' }, 429, cors);
-    await env.MAILBOX.put(prefix + rand, body, { expirationTtl: LETTER_TTL_SECONDS });
+    const tok = tokenOf(request);
+    await env.MAILBOX.put(prefix + rand, body, tok
+      ? { expirationTtl: LETTER_TTL_SECONDS, metadata: { t: tok } }
+      : { expirationTtl: LETTER_TTL_SECONDS });
+    return json({ ok: true }, 200, cors);
+  }
+
+  /* Una lettera si cancella una per una, col suo gettone: la stessa regola
+     della cassetta. Chi non l'ha aperta non puo' toglierla. */
+  if (request.method === 'DELETE'){
+    if (overWriteLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
+    if (!RAND_RE.test(rand || '')) return json({ error: 'bad key' }, 400, cors);
+    const tok = tokenOf(request);
+    if (!tok) return json({ error: 'token required' }, 403, cors);
+    const rec = await env.MAILBOX.getWithMetadata(prefix + rand);
+    if (rec.value === null) return json({ empty: true }, 404, cors);
+    if (!rec.metadata || !sameToken(rec.metadata.t, tok)) return json({ error: 'wrong token' }, 403, cors);
+    await env.MAILBOX.delete(prefix + rand);
     return json({ ok: true }, 200, cors);
   }
 
@@ -650,12 +712,21 @@ async function handleLetter(request, env, cors, key, rand){
     if (overReadLimit(request, 1 + LETTERS_PER_COLLECT * 2)) return json({ error: 'too many attempts' }, 429, cors);
     const held = await env.MAILBOX.list({ prefix, limit: LETTERS_PER_COLLECT });
     const out = [];
+    const keep = wantsKeep(request);
     for (const k of held.keys){
-      const v = await env.MAILBOX.get(k.name);
-      if (v === null) continue;
-      out.push(v);
-      /* collected means gone, exactly like the mailbox */
-      await env.MAILBOX.delete(k.name);
+      const rec = await env.MAILBOX.getWithMetadata(k.name);
+      if (rec.value === null) continue;
+      /* ⚠️ A chi legge col `keep=1` (app nuova) il nome della voce (`rand`)
+         viaggia insieme alla busta, perche' chi la apre deve poter dire QUALE
+         cancellare — non rivela niente, e' un numero casuale scelto da chi ha
+         scritto. A chi legge come prima (app vecchia) la risposta resta
+         ESATTAMENTE quella di prima, un elenco di buste: cambiarle la forma
+         sotto i piedi le farebbe perdere ogni lettera. */
+      out.push(keep ? { r: k.name.slice(prefix.length), v: rec.value } : rec.value);
+      /* col gettone resta finche' chi l'ha aperta non la cancella; senza,
+         raccolta vuol dire sparita — come sempre — salvo `keep=1` */
+      const tokened = !!(rec.metadata && rec.metadata.t);
+      if (!tokened && !keep) await env.MAILBOX.delete(k.name);
     }
     return new Response(JSON.stringify(out), { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
   }
@@ -687,7 +758,22 @@ async function handleMailbox(request, env, cors, key){
     if (!body || body.length > MAX_BODY_BYTES) return json({ error: 'bad body' }, 400, cors);
     /* last write wins — if two things land in the same inbox at once, only
        one was ever going to be answered anyway */
-    await env.MAILBOX.put(key, body, { expirationTtl: MAILBOX_TTL_SECONDS });
+    const tok = tokenOf(request);
+    await env.MAILBOX.put(key, body, tok
+      ? { expirationTtl: MAILBOX_TTL_SECONDS, metadata: { t: tok } }
+      : { expirationTtl: MAILBOX_TTL_SECONDS });
+    return json({ ok: true }, 200, cors);
+  }
+
+  /* Cancellare richiede il gettone. Una scrittura, come sempre. */
+  if (request.method === 'DELETE'){
+    if (overWriteLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
+    const tok = tokenOf(request);
+    if (!tok) return json({ error: 'token required' }, 403, cors);
+    const rec = await env.MAILBOX.getWithMetadata(key);
+    if (rec.value === null) return json({ empty: true }, 404, cors);
+    if (!rec.metadata || !sameToken(rec.metadata.t, tok)) return json({ error: 'wrong token' }, 403, cors);
+    await env.MAILBOX.delete(key);
     return json({ ok: true }, 200, cors);
   }
 
@@ -716,12 +802,15 @@ async function handleMailbox(request, env, cors, key){
        più battuta di tutte. */
     if (overReadLimit(request, 2)) return json({ error: 'too many attempts' }, 429, cors);
 
-    const val = await env.MAILBOX.get(key);
-    if (val === null) return json({ empty: true }, 404, cors);
-    /* read-once: delete on the way out, so a message can't be replayed or
-       picked up by more than one poll */
-    await env.MAILBOX.delete(key);
-    return new Response(val, { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+    const rec = await env.MAILBOX.getWithMetadata(key);
+    if (rec.value === null) return json({ empty: true }, 404, cors);
+    /* Una busta col gettone resta: la toglie solo chi lo presenta (DELETE).
+       Una busta senza — scritta da un'app vecchia — si cancella leggendola,
+       come sempre, a meno che chi legge non chieda `keep=1`: un'app nuova che
+       legge una busta vecchia la lascia li' e la riconosce al giro dopo. */
+    const tokened = !!(rec.metadata && rec.metadata.t);
+    if (!tokened && !wantsKeep(request)) await env.MAILBOX.delete(key);
+    return new Response(rec.value, { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
   }
 
   return json({ error: 'method not allowed' }, 405, cors);

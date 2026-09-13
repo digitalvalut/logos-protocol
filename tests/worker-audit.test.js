@@ -507,6 +507,10 @@ test.describe('worker: lo storage che si rifiuta non diventa un 500', () => {
     for (const [metodo, percorso] of rotte){
       const w = W.caricaWorker({ env: { MAILBOX: {
         async get(){ throw new Error('KV read failed: 429'); },
+        /* dal 13 set 2026 la cassetta legge coi metadati (il gettone): un
+           finto che non la conoscesse farebbe passare un TypeError per un
+           guasto vero, e la rotta sembrerebbe scoperta senza esserlo */
+        async getWithMetadata(){ throw new Error('KV read failed: 429'); },
         async put(){ throw new Error('KV write failed: 429'); },
         async delete(){ throw new Error('KV delete failed: 429'); },
         async list(){ throw new Error('KV list failed: 429'); },
@@ -585,5 +589,138 @@ test.describe('worker: le credenziali TURN si riusano per due minuti', () => {
     const cache = worker.match(/const TURN_CACHE_MS = ([0-9 *]+);/)[1].split('*').map(Number).reduce((a, b) => a * b, 1);
     const riuso = app.match(/const ICE_REUSE_MS = ([0-9 *]+);/)[1].split('*').map(Number).reduce((a, b) => a * b, 1);
     assert.ok(cache + riuso < ttl, `Worker ${cache} + app ${riuso} deve restare sotto la vita ${ttl}, o l app usa con fiducia un lasciapassare scaduto`);
+  });
+});
+
+/* ============================================================================
+   La cassetta che nessuno puo' svuotare — 13 settembre 2026.
+   Il difetto piu' serio che il relay avesse (CONFRONTO §A): il nome della
+   cassetta di un indirizzo si calcola dall'indirizzo, e leggere svuotava.
+   Qui c'e' l'attacco, riprodotto: chi sa il nome ma non sa aprire la busta
+   prova a farla sparire — e resta li'.
+   ========================================================================= */
+test.describe('worker: la cassetta che nessuno puo\' svuotare', () => {
+  const ORIGINE = 'https://digitalvalut.github.io';
+  const K = 'c'.repeat(64);
+  const TOK = 'a1b2c3d4e5f60718293a4b5c6d7e8f90';
+  const ALTRO = '00000000000000000000000000000000';
+  const BUSTA = JSON.stringify({ i: 'iv', c: 'sigillata' });
+
+  test('l\'ATTACCO: chi conosce la cassetta ma non il gettone non puo\' svuotarla', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA, headers: { 'X-Logos-Token': TOK } });
+    /* l'attaccante legge come faceva sempre: senza keep, sperando che leggere cancelli */
+    const letta = await w.chiama('GET', '/mailbox/' + K, { origin: ORIGINE, ip: '198.51.100.9' });
+    assert.strictEqual(letta.status, 200, 'la busta la vede: e sigillata, non gli serve a niente');
+    /* ...e prova a cancellare senza gettone, e con uno sbagliato */
+    const senza = await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, ip: '198.51.100.9' });
+    assert.strictEqual(senza.status, 403);
+    const sbagliato = await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, ip: '198.51.100.9', headers: { 'X-Logos-Token': ALTRO } });
+    assert.strictEqual(sbagliato.status, 403);
+    /* il destinatario vero arriva DOPO l'attaccante, e la trova ancora li' */
+    const vera = await w.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE });
+    assert.strictEqual(vera.status, 200, 'la chiamata e\' ancora nella cassetta: l\'attacco non ha strappato niente');
+    assert.strictEqual(vera.corpo.c, 'sigillata');
+  });
+
+  test('chi ha aperto la busta — e quindi ha il gettone — la toglie', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA, headers: { 'X-Logos-Token': TOK } });
+    const del = await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': TOK } });
+    assert.strictEqual(del.status, 200);
+    const dopo = await w.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE });
+    assert.strictEqual(dopo.status, 404, 'tolta davvero');
+    const ancora = await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': TOK } });
+    assert.strictEqual(ancora.status, 404, 'cancellare due volte non e\' un errore, e\' un 404');
+  });
+
+  test('il gettone NON esce mai dal relay: ne\' nel corpo, ne\' nel peek', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA, headers: { 'X-Logos-Token': TOK } });
+    const letta = await w.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE });
+    assert.ok(!JSON.stringify(letta.corpo).includes(TOK), 'se il gettone tornasse con la busta, chiunque legga potrebbe cancellare');
+    const peek = await w.chiama('GET', '/mailbox/' + K + '?peek=1', { origin: ORIGINE });
+    assert.ok(!JSON.stringify(peek.corpo).includes(TOK));
+    assert.strictEqual(peek.corpo.waiting, true, 'e il peek dell\'ascolto Android dice ancora la verita\'');
+  });
+
+  test('due tempi: una busta SENZA gettone (app vecchia) si cancella leggendola, come sempre', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA });
+    const prima = await w.chiama('GET', '/mailbox/' + K, { origin: ORIGINE });
+    assert.strictEqual(prima.status, 200);
+    const dopo = await w.chiama('GET', '/mailbox/' + K, { origin: ORIGINE });
+    assert.strictEqual(dopo.status, 404, 'l\'app vecchia deve continuare a trovare la cassetta vuota dopo aver letto: e\' cosi\' che ritira un invito');
+  });
+
+  test('due tempi: un\'app nuova che legge una busta vecchia (keep=1) la lascia li\'', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA });
+    await w.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE });
+    const dopo = await w.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE });
+    assert.strictEqual(dopo.status, 200, 'senza gettone non la puo\' cancellare, e leggere con keep non deve farlo al posto suo');
+  });
+
+  test('un gettone che non ha la forma giusta e\' ignorato, non accettato', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA, headers: { 'X-Logos-Token': 'corto' } });
+    /* nessun gettone valido = busta senza gettone = si comporta come vecchia */
+    await w.chiama('GET', '/mailbox/' + K, { origin: ORIGINE });
+    const dopo = await w.chiama('GET', '/mailbox/' + K, { origin: ORIGINE });
+    assert.strictEqual(dopo.status, 404);
+    const del = await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': 'corto' } });
+    assert.strictEqual(del.status, 403);
+  });
+
+  test('cancellare costa una scrittura, come la cancellazione-alla-lettura di prima: la quota non cambia', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: BUSTA, headers: { 'X-Logos-Token': TOK } });
+    const prima = w.env.MAILBOX._log.filter(o => o.op === 'delete').length;
+    await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': TOK } });
+    assert.strictEqual(w.env.MAILBOX._log.filter(o => o.op === 'delete').length, prima + 1);
+    /* e' metrata come scrittura: un diluvio di DELETE finisce in 429 */
+    let ultimo = 200;
+    for (let i = 0; i < 400 && ultimo !== 429; i++){
+      const r = await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': TOK } });
+      ultimo = r.status;
+    }
+    assert.strictEqual(ultimo, 429, 'senza il tetto, cancellare sarebbe una scrittura gratis');
+  });
+
+  test('CORS: il browser deve poter mandare DELETE e l\'intestazione del gettone', async () => {
+    const w = W.caricaWorker();
+    const r = await w.chiama('OPTIONS', '/mailbox/' + K, { origin: ORIGINE });
+    assert.match(r.headers.get('Access-Control-Allow-Methods') || '', /DELETE/);
+    assert.match(r.headers.get('Access-Control-Allow-Headers') || '', /X-Logos-Token/);
+  });
+
+  test('le LETTERE: stessa regola, una per una', async () => {
+    const w = W.caricaWorker();
+    const R = 'deadbeefdeadbeef';
+    await w.chiama('PUT', '/letter/' + K + '/' + R, { origin: ORIGINE, body: BUSTA, headers: { 'X-Logos-Token': TOK } });
+    /* l'attaccante raccoglie come si faceva sempre */
+    const rubata = await w.chiama('GET', '/letter/' + K, { origin: ORIGINE, ip: '198.51.100.9' });
+    assert.strictEqual(rubata.status, 200);
+    assert.strictEqual(rubata.corpo.length, 1, 'la vede');
+    assert.strictEqual(typeof rubata.corpo[0], 'string', 'a chi legge come prima, la forma di prima: un elenco di buste');
+    const ancora = await w.chiama('GET', '/letter/' + K + '?keep=1', { origin: ORIGINE });
+    assert.strictEqual(ancora.corpo.length, 1, 'ma non l\'ha portata via');
+    assert.strictEqual(ancora.corpo[0].r, R, 'a chi legge con keep arriva anche il nome della voce, per poterla cancellare');
+    assert.ok(!JSON.stringify(ancora.corpo).includes(TOK), 'il gettone non viaggia con la lettera');
+    const no = await w.chiama('DELETE', '/letter/' + K + '/' + R, { origin: ORIGINE, headers: { 'X-Logos-Token': ALTRO } });
+    assert.strictEqual(no.status, 403);
+    const si = await w.chiama('DELETE', '/letter/' + K + '/' + R, { origin: ORIGINE, headers: { 'X-Logos-Token': TOK } });
+    assert.strictEqual(si.status, 200);
+    const vuota = await w.chiama('GET', '/letter/' + K + '?keep=1', { origin: ORIGINE });
+    assert.strictEqual(vuota.corpo.length, 0);
+  });
+
+  test('le LETTERE, due tempi: senza gettone si raccolgono e spariscono come sempre', async () => {
+    const w = W.caricaWorker();
+    await w.chiama('PUT', '/letter/' + K + '/' + 'deadbeefdeadbeef', { origin: ORIGINE, body: BUSTA });
+    const prima = await w.chiama('GET', '/letter/' + K, { origin: ORIGINE });
+    assert.strictEqual(prima.corpo.length, 1);
+    const dopo = await w.chiama('GET', '/letter/' + K, { origin: ORIGINE });
+    assert.strictEqual(dopo.corpo.length, 0, 'l\'app vecchia non deve rivedere la stessa lettera');
   });
 });

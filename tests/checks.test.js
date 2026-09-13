@@ -537,16 +537,26 @@ test('looking into a mailbox without emptying it really does not empty it', () =
      esecuzione mostrerebbe — ma deve guardare il CODICE, e un commento non
      cancella niente. */
   const senzaCommenti = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
-  const branch = senzaCommenti(
-    body.slice(peekAt, body.indexOf('const val = await env.MAILBOX.get(key)', peekAt)));
+  const ANCORA = 'const rec = await env.MAILBOX.getWithMetadata(key)';
+  const ordinaryAt = body.indexOf(ANCORA, peekAt);
+  assert.ok(ordinaryAt > peekAt, 'the ordinary read is gone from the Worker, or its anchor line changed');
+  const branch = senzaCommenti(body.slice(peekAt, ordinaryAt));
   assert.ok(branch.length > 40, 'could not read the peek branch');
   assert.ok(!/delete/.test(branch),
     'a peek that deletes swallows the very call it is ringing about');
 
-  /* and the ordinary read must still delete, or a message could be replayed */
-  const ordinary = body.slice(body.indexOf('const val = await env.MAILBOX.get(key)'));
-  assert.match(ordinary, /MAILBOX\.delete\(key\)/,
-    'the ordinary read must stay read-once');
+  /* ⚠️ RULE CHANGED 13 Sep 2026 — the mailbox nobody can empty. The ordinary
+     read used to delete unconditionally; now it deletes ONLY an envelope
+     written without a token (an old app's) and only when the reader did not
+     ask to keep it. A tokened envelope is removed by DELETE, with the token,
+     by whoever could open it. Both halves are load-bearing: drop the
+     condition and anyone holding an address can empty the box again; drop
+     the delete and every old app re-announces the same call for two minutes. */
+  const ordinary = senzaCommenti(body.slice(ordinaryAt));
+  assert.match(ordinary, /if \(!tokened && !wantsKeep\(request\)\) await env\.MAILBOX\.delete\(key\);/,
+    'the ordinary read must delete exactly the untokened, not-kept envelope — nothing more, nothing less');
+  assert.ok(!/^\s*await env\.MAILBOX\.delete\(key\);/m.test(ordinary),
+    'an unconditional delete on read is the very thing that let anyone empty the box');
 });
 
 /* --------------------------------------------------- nothing from outside -- */
