@@ -6980,7 +6980,10 @@ test.describe('la cassetta che nessuno puo svuotare, lato app', () => {
       const tok = opts && opts.headers && opts.headers['X-Logos-Token'];
       window.__chiamate.push({ method, key, keep, tok: tok || null });
       const risp = (status, body) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(body), text: () => Promise.resolve(JSON.stringify(body)) });
-      if (method === 'PUT'){ window.__store.set(key, { body: opts.body, tok: tok || null }); return risp(200, { ok: true }); }
+      /* via: da quale rotta e' arrivata la voce — dalla v45 una lettera lascia
+         anche un bigliettino nella cassetta (/mailbox/), e la buca (/letter/)
+         non deve restituirlo come se fosse una lettera */
+      if (method === 'PUT'){ window.__store.set(key, { body: opts.body, tok: tok || null, via: senzaQuery.indexOf('/letter/') >= 0 ? 'letter' : 'mailbox' }); return risp(200, { ok: true }); }
       if (method === 'DELETE'){
         const rec = window.__store.get(key);
         if (!rec) return risp(404, { empty: true });
@@ -7099,7 +7102,7 @@ test.describe('la cassetta che nessuno puo svuotare, lato app', () => {
       const __f = fetch;
       fetch = (url, opts) => {
         if ((opts && opts.method) === 'GET' && url.indexOf('/letter/') >= 0){
-          const out = []; for (const [k, rec] of window.__store) if (rec.tok) out.push({ r: k, v: rec.body });
+          const out = []; for (const [k, rec] of window.__store) if (rec.tok && rec.via === 'letter') out.push({ r: k, v: rec.body });
           return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(out) });
         }
         return __f(url, opts);
@@ -7111,7 +7114,7 @@ test.describe('la cassetta che nessuno puo svuotare, lato app', () => {
     assert.match(lette[0].tok, /^[0-9a-f]{32}$/, 'il gettone arriva a chi apre');
     const del = app.run('window.__chiamate').find(c => c.method === 'DELETE');
     assert.ok(del && del.tok === lette[0].tok, 'aperta, la lettera va tolta col SUO gettone');
-    assert.strictEqual(app.run('window.__store.size'), 0, 'e non c e piu');
+    assert.strictEqual(app.run("[...window.__store.values()].filter(r => r.via === 'letter').length"), 0, 'e nella buca non c e piu (il bigliettino nella cassetta e un altra storia, provata a parte)');
     app.stop();
   });
 
@@ -7129,5 +7132,394 @@ test.describe('la cassetta che nessuno puo svuotare, lato app', () => {
       assert.strictEqual(app.run('storedLetters().length'), 1, 'e nemmeno al giro dopo');
       app.stop();
     });
+  });
+});
+
+/* =========================================================================
+   v45 (14 settembre 2026): le riparazioni nate dalla prova formale.
+   Tre difetti trovati con Tamarin/ProVerif (memory/PROTOCOLLO.md §6), piu' il
+   bigliettino delle lettere. Ogni test qui e' stato sabotato: rompere il
+   comportamento lo fa andare rosso.
+   ========================================================================= */
+test.describe('v45: il rito fra contatti si sigilla con le chiavi, non con le impronte', () => {
+  /* due telefoni veri: due sandbox, due coppie di chiavi */
+  async function duePersone(){
+    const A = loadApp(), B = loadApp(), C = loadApp();
+    const pubA = await A.run('myPubB64()'), pubB = await B.run('myPubB64()'), pubC = await C.run('myPubB64()');
+    return { A, B, C, pubA, pubB, pubC, stop: () => { A.stop(); B.stop(); C.stop(); } };
+  }
+
+  test('la busta sigillata da A si apre solo da B, e un terzo che conosce le due impronte resta fuori (lemma C2)', async () => {
+    const { A, B, C, pubA, pubB, stop } = await duePersone();
+    const env = await A.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const sec = await contactDialSecrets({ nick: 'B', fp: 'fpB', pub: ${JSON.stringify(pubB)} }, legacy.seed);
+      if (!sec) return null;
+      return JSON.stringify(await sealWith(sec, { kind: 'offer', sdp: 'v=0 A' }));
+    })()`);
+    assert.ok(env, 'con la pub di B in rubrica, A deve poter sigillare con le chiavi');
+    const parsed = JSON.parse(env);
+    assert.strictEqual(typeof parsed.e, 'string', 'l effimera viaggia accanto alla busta');
+    assert.strictEqual(parsed.p, pubA, 'e anche la pubblica fissa di A: e cosi che B sa chi scrive');
+
+    /* B: apre, e sa che e' A perche' `p` combacia con la rubrica */
+    const daB = await B.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const got = await contactOpenIncoming(${JSON.stringify(parsed)}, { nick: 'A', fp: 'fpA', pub: ${JSON.stringify(pubA)} }, legacy.seed);
+      return got ? JSON.stringify(got.obj) : null;
+    })()`);
+    assert.ok(daB, 'B deve aprire');
+    assert.strictEqual(JSON.parse(daB).sdp, 'v=0 A');
+
+    /* C: l'ex contatto comune. Conosce fpA e fpB, quindi la chiave di prima —
+       ed e' esattamente cio' che non deve bastare piu'. */
+    const daC = await C.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      return openFrom(legacy.key, ${JSON.stringify(parsed)});
+    })()`);
+    assert.strictEqual(daC, null, 'la chiave dalle impronte NON deve aprire: era il difetto');
+    /* e nemmeno provando il rito nuovo con la propria privata: non e' ne' A ne' B */
+    const daC2 = await C.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const got = await contactOpenIncoming(${JSON.stringify(parsed)}, { nick: 'A', fp: 'fpA', pub: ${JSON.stringify(pubA)} }, legacy.seed);
+      return got ? 'aperta' : null;
+    })()`);
+    assert.strictEqual(daC2, null, 'senza la privata di B non si apre');
+    stop();
+  });
+
+  test('B rifiuta la busta se la pubblica accanto non e quella in rubrica: chi finge di essere A non passa la porta', async () => {
+    const { A, B, pubA, pubB, pubC, stop } = await duePersone();
+    const env = await A.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const sec = await contactDialSecrets({ fp: 'fpB', pub: ${JSON.stringify(pubB)} }, legacy.seed);
+      return JSON.stringify(await sealWith(sec, { kind: 'offer', sdp: 'x' }));
+    })()`);
+    const got = await B.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      /* la rubrica di B dice che A ha un ALTRA pubblica */
+      const g = await contactOpenIncoming(${env}, { fp: 'fpA', pub: ${JSON.stringify(pubC)} }, legacy.seed);
+      return g ? 'aperta' : null;
+    })()`);
+    assert.strictEqual(got, null);
+    /* e senza pub in rubrica, una busta col rito nuovo non si apre: se A avesse la
+       nostra pub, noi avremmo la sua (stesso saluto) */
+    const got2 = await B.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const g = await contactOpenIncoming(${env}, { fp: 'fpA' }, legacy.seed);
+      return g ? 'aperta' : null;
+    })()`);
+    assert.strictEqual(got2, null);
+    stop();
+  });
+
+  test('C non puo spacciarsi per A nemmeno mettendo la pub di A accanto alla busta: serve la privata di A', async () => {
+    /* la meta' FISSA della chiave — ECDH(priv_A, pub_B) — e' quella che dice chi
+       ha scritto. Senza, chiunque potrebbe scrivere "sono A" accanto a una busta
+       che B apre, e B risponderebbe da solo (acceptIncomingAutoOffer). */
+    const { B, C, pubA, pubB, stop } = await duePersone();
+    const finta = await C.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const sec = await contactDialSecrets({ fp: 'fpB', pub: ${JSON.stringify(pubB)} }, legacy.seed);
+      sec.spk = ${JSON.stringify(pubA)};   /* «sono A» */
+      return JSON.stringify(await sealWith(sec, { kind: 'offer', sdp: 'FINTA' }));
+    })()`);
+    const daB = await B.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const got = await contactOpenIncoming(${finta}, { fp: 'fpA', pub: ${JSON.stringify(pubA)} }, legacy.seed);
+      return got ? 'aperta' : null;
+    })()`);
+    assert.strictEqual(daB, null, 'la pub di A accanto non basta: la chiave dipende dalla privata di A');
+    stop();
+  });
+
+  test('senza la pub in rubrica A usa il sigillo di prima: chi ha la versione vecchia resta raggiungibile', async () => {
+    const app = loadApp();
+    const sec = await app.run(`(async () => {
+      const legacy = await pairSecrets('fpA:fpB');
+      const s = await contactDialSecrets({ fp: 'fpB', pub: null }, legacy.seed);
+      return s ? 'nuovo' : 'legacy';
+    })()`);
+    assert.strictEqual(sec, 'legacy');
+    app.stop();
+  });
+
+  test('il giro della rubrica apre tutte e due le buste — nuova e vecchia — e passa a chi risponde la chiave giusta', async () => {
+    const { A, B, pubA, pubB, stop } = await duePersone();
+    const myFpB = 'fpB', myFpA = 'fpA';
+    /* A prepara una busta col rito nuovo, e una col rito vecchio */
+    const nuova = await A.run(`(async () => {
+      const legacy = await pairSecrets('${myFpA}:${myFpB}');
+      const sec = await contactDialSecrets({ fp: '${myFpB}', pub: ${JSON.stringify(pubB)} }, legacy.seed);
+      return JSON.stringify(await sealWith(sec, { kind: 'offer', sdp: 'NUOVA', tok: 'a'.repeat(32) }));
+    })()`);
+    const vecchia = await A.run(`(async () => {
+      const legacy = await pairSecrets('${myFpA}:${myFpB}');
+      return JSON.stringify(await sealWith(legacy, { sdp: 'VECCHIA' }));
+    })()`);
+    for (const [busta, atteso] of [[nuova, 'NUOVA'], [vecchia, 'VECCHIA']]){
+      await B.run(`
+        myFingerprintHex = async () => '${myFpB}';
+        saveContacts([{ nick: 'A', fp: '${myFpA}', lastSeen: Date.now(), push: null, addr: null, pub: ${JSON.stringify(pubA)} }]);
+        window.__accettata = null; window.__cancellata = null;
+        mailboxGet = async () => JSON.parse(${JSON.stringify(busta)});
+        mailboxDelete = async (k, t) => { window.__cancellata = t; return true; };
+        acceptIncomingAutoOffer = async (c, msg, sec) => { window.__accettata = { sdp: msg.sdp, haKey: !!(sec && sec.key) }; };
+        inboxScanning = false;
+      `);
+      await B.run('checkInboxOnce()');
+      const acc = JSON.parse(await B.run('JSON.stringify(window.__accettata)'));
+      assert.ok(acc, 'la busta ' + atteso + ' deve arrivare a chi risponde');
+      assert.strictEqual(acc.sdp, atteso);
+      assert.strictEqual(acc.haKey, true, 'con la chiave con cui rispondere');
+      if (atteso === 'NUOVA') assert.strictEqual(await B.run('window.__cancellata'), 'a'.repeat(32), 'la busta nuova aperta si toglie col gettone');
+    }
+    stop();
+  });
+
+  test('il saluto porta la chiave pubblica, e la rubrica la salva solo se legata all impronta provata', async () => {
+    const app = loadApp();
+    /* statico: il saluto deve contenere `pub` */
+    assert.match(app.run('String(wireDataChannel)'), /type: 'hello'[^\n]*pub/, 'il saluto deve portare la pub');
+    const pub = await app.run('myPubB64()');
+    app.run(`touchContact('Anna', 'fp1', null, null, ${JSON.stringify(pub)})`);
+    assert.strictEqual(app.run("loadContacts()[0].pub"), pub, 'salvata');
+    /* una pub malformata non entra */
+    app.run("touchContact('Bea', 'fp2', null, null, 'non-una-chiave')");
+    assert.strictEqual(app.run("loadContacts()[0].pub"), null);
+    /* stessa impronta, saluto senza pub (versione vecchia in mezzo): la pub resta */
+    app.run("touchContact('Anna', 'fp1', null, null, null)");
+    assert.strictEqual(app.run("loadContacts().find(c => c.nick === 'Anna').pub"), pub, 'non si butta via per un saluto vecchio');
+    /* impronta cambiata (telefono nuovo): la pub vecchia non vale piu' */
+    app.run("touchContact('Anna', 'fp1-nuova', null, null, null)");
+    assert.strictEqual(app.run("loadContacts().find(c => c.nick.startsWith('Anna')).pub"), null, 'con un impronta nuova la vecchia pub sarebbe una chiave morta');
+    app.stop();
+  });
+
+  test('chi chiama un contatto con la pub manda e/p nella busta; senza pub, no', async () => {
+    const { A, pubB, stop } = await duePersone();
+    for (const [pub, atteso] of [[pubB, true], [null, false]]){
+      await A.run(`
+        window.__put = null;
+        myFingerprintHex = async () => 'fpA';
+        mailboxPut = async (key, obj, tok) => { window.__put = obj; return true; };
+        mailboxGet = async () => null;
+        sendKnock = () => {};
+        pollGap = () => 1;
+        stopQuickPump = () => {};
+        candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+        newPeerConnection = async () => ({ createDataChannel(){ return {}; }, createOffer: async () => ({ type:'offer', sdp:'v=0' }), setLocalDescription: async function(d){ this.localDescription = d; }, signalingState: 'stable', close(){} });
+        wireDataChannel = () => {};
+        sealOrEncodeOffer = async () => 'codice'; revealInviteCode = () => {}; robustCopy = async () => false;
+      `);
+      const p = A.run(`tryAutoReconnectInner({ nick: 'B', fp: 'fpB', pub: ${JSON.stringify(pub)} })`);
+      await new Promise(r => setTimeout(r, 50));
+      const put = JSON.parse(await A.run('JSON.stringify(window.__put)'));
+      assert.ok(put, 'l offerta deve partire');
+      assert.strictEqual(typeof put.e === 'string' && typeof put.p === 'string', atteso, atteso ? 'con la pub: rito nuovo' : 'senza pub: rito vecchio, niente e/p');
+      A.run('pc = null;');
+      await Promise.race([p, new Promise(r => setTimeout(r, 10))]).catch(() => {});
+    }
+    stop();
+  });
+});
+
+test.describe('v45: ogni busta dice il suo verso', () => {
+  test('bustaDelVerso: senza etichetta passa (versione vecchia), con quella sbagliata no', () => {
+    const app = loadApp();
+    assert.strictEqual(app.run("bustaDelVerso({ sdp: 'x' }, 'answer')"), true);
+    assert.strictEqual(app.run("bustaDelVerso({ sdp: 'x', kind: 'answer' }, 'answer')"), true);
+    assert.strictEqual(app.run("bustaDelVerso({ sdp: 'x', kind: 'offer' }, 'answer')"), false);
+    assert.strictEqual(app.run("bustaDelVerso(null, 'answer')"), false);
+    app.stop();
+  });
+
+  test('statico: ogni offerta e ogni risposta scritta nella cassetta porta `kind`', () => {
+    const src = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
+    const scritture = src.match(/mailboxPutSealed\([^;]*?\{[^}]*sdp:[^}]*\}/gs) || [];
+    assert.ok(scritture.length >= 9, 'ci sono almeno nove scritture con sdp (misurato il 14 set 2026: ' + scritture.length + ')');
+    for (const w of scritture) assert.match(w, /kind: '(offer|answer)'/, 'scrittura senza verso:\n' + w);
+  });
+
+  test('l offerta di A rimandata come risposta (riflessione) non viene accettata', async () => {
+    /* il trucco trovato tre volte dalla prova formale: il relay rimette la busta
+       di chi chiama nella casella della risposta */
+    const app = loadApp();
+    app.run(`
+      globalThis.__accettata = false;
+      activeSlots = () => [0];
+      myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+      addrSlotSeed = async () => 'semenza';
+      slotId = async (seed, nome) => nome;
+      mailboxGet = async () => ({ busta: 1 });
+      mailboxDelete = async () => true;
+      addrOpenIncoming = async () => ({
+        obj: { kind: 'answer', sdp: 'v=0', rid: 'RID-9', nick: 'Chi', fp: 'ff', ts: Date.now(), tok: 'b'.repeat(32) },
+        sec: { seed: 'semenza', slot: 0 }
+      });
+    `);
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run("$('addrIncoming').classList.contains('hide')"), true,
+      'una risposta nella casella delle offerte non e una chiamata in arrivo');
+    /* e col verso giusto, la stessa busta e' una chiamata */
+    app.run(`addrOpenIncoming = async () => ({
+      obj: { kind: 'offer', sdp: 'v=0', rid: 'RID-9', nick: 'Chi', fp: 'ff', ts: Date.now(), tok: 'b'.repeat(32) },
+      sec: { seed: 'semenza', slot: 0 }
+    });`);
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run("$('addrIncoming').classList.contains('hide')"), false);
+    app.stop();
+  });
+
+  test('e nel giro della rubrica: una risposta nella casella delle offerte non fa rispondere', async () => {
+    const app = loadApp();
+    for (const [kind, atteso] of [['answer', false], ['offer', true], [undefined, true]]){
+      const env = await app.run(`(async () => {
+        const legacy = await pairSecrets('fpA:fpB');
+        return JSON.stringify(await sealWith(legacy, ${JSON.stringify(kind ? { kind, sdp: 'x' } : { sdp: 'x' })}));
+      })()`);
+      await app.run(`
+        myFingerprintHex = async () => 'fpB';
+        saveContacts([{ nick: 'A', fp: 'fpA', lastSeen: Date.now(), push: null, addr: null }]);
+        window.__accettata = false; inboxScanning = false;
+        mailboxGet = async () => JSON.parse(${JSON.stringify(env)});
+        mailboxDelete = async () => true;
+        acceptIncomingAutoOffer = async () => { window.__accettata = true; };
+      `);
+      await app.run('checkInboxOnce()');
+      assert.strictEqual(app.run('window.__accettata'), atteso, 'kind=' + kind);
+    }
+    app.stop();
+  });
+});
+
+test.describe('v45: il bigliettino delle lettere e il tasto Rispondi', () => {
+  const RELAY = `
+    window.__store = new Map(); window.__chiamate = [];
+    fetch = (url, opts) => {
+      const method = (opts && opts.method) || 'GET';
+      const senzaQuery = url.split('?')[0];
+      const key = senzaQuery.slice(senzaQuery.lastIndexOf('/') + 1);
+      const tok = opts && opts.headers && opts.headers['X-Logos-Token'];
+      window.__chiamate.push({ method, key, url: senzaQuery, tok: tok || null });
+      const risp = (status, body) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(body), text: () => Promise.resolve(JSON.stringify(body)) });
+      if (method === 'PUT'){ window.__store.set(key, { body: opts.body, tok: tok || null, via: senzaQuery.indexOf('/letter/') >= 0 ? 'letter' : 'mailbox' }); return risp(200, { ok: true }); }
+      if (method === 'DELETE'){
+        const rec = window.__store.get(key);
+        if (!rec) return risp(404, { empty: true });
+        if (!tok || rec.tok !== tok) return risp(403, { error: 'wrong token' });
+        window.__store.delete(key); return risp(200, { ok: true });
+      }
+      if (senzaQuery.indexOf('/letter/') >= 0){
+        const out = []; for (const [k, rec] of window.__store) if (rec.via === 'letter') out.push({ r: k, v: rec.body });
+        return risp(200, out);
+      }
+      const rec = window.__store.get(key);
+      if (!rec) return risp(404, { empty: true });
+      return risp(200, JSON.parse(rec.body));
+    };
+    RELAYS.length = 0; RELAYS.push('https://uno.example');
+  `;
+  /* scrive a se stesso: la chiave dell'indirizzo e' la propria, cosi' una sola
+     sandbox fa da mittente e da destinatario */
+  async function aSeStesso(app){
+    await app.run(`(async () => {
+      const miaPub = await myPubB64();
+      fetchAddrKey = async () => ({ key: await crypto.subtle.importKey('raw', b642ab(miaPub), { name:'ECDH', namedCurve:'P-256' }, false, []), slot: 0 });
+      setAddrOn(true);
+    })()`);
+    return app.run('myAddress(0)');
+  }
+
+  test('lasciare una lettera scrive DUE cose: la lettera nella buca e il bigliettino nella cassetta, con lo stesso gettone', async () => {
+    const app = loadApp();
+    app.run(RELAY);
+    const mio = await aSeStesso(app);
+    assert.strictEqual(await app.run("letterPut(" + JSON.stringify(mio) + ", { text: 'ciao', nick: 'Io' })"), 'ok');
+    const puts = JSON.parse(app.run("JSON.stringify(window.__chiamate.filter(c => c.method === 'PUT'))"));
+    assert.strictEqual(puts.length, 2, 'lettera + bigliettino');
+    const lettera = puts.find(p => p.url.indexOf('/letter/') >= 0), nota = puts.find(p => p.url.indexOf('/mailbox/') >= 0);
+    assert.ok(lettera && nota);
+    const slotNota = await app.run("(async () => slotId(await addrSlotSeed(" + JSON.stringify(mio) + "), 'addr-letter'))()");
+    assert.strictEqual(nota.key, slotNota, 'il bigliettino sta nella casella accanto a quella delle chiamate, non sopra');
+    const dentro = await app.run("(async () => { const seed = await addrSlotSeed(" + JSON.stringify(mio) + "); const g = await addrOpenIncoming(JSON.parse(window.__store.get(" + JSON.stringify(slotNota) + ").body), seed); return g && g.obj; })()");
+    assert.strictEqual(dentro.kind, 'letter');
+    assert.strictEqual(dentro.ltok, lettera.tok, 'il bigliettino porta il gettone della lettera: serve a toglierla dalla buca');
+    assert.strictEqual(dentro.r, lettera.key, 'e il suo numero');
+    assert.strictEqual(dentro.text, 'ciao');
+    app.stop();
+  });
+
+  test('con l app aperta la lettera compare al giro dell indirizzo, una volta sola, e sparisce da tutte e due le parti', async () => {
+    const app = loadApp();
+    app.run(RELAY);
+    const mio = await aSeStesso(app);
+    await app.run("letterPut(" + JSON.stringify(mio) + ", { text: 'ciao', nick: 'Io' })");
+    assert.strictEqual(app.run('storedLetters().length'), 0);
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('storedLetters().length'), 1, 'vista al giro, senza riaprire l app');
+    assert.strictEqual(app.run("storedLetters()[0].text"), 'ciao');
+    assert.strictEqual(app.run("$('lettersCard').classList.contains('hide')"), false, 'e mostrata');
+    await new Promise(r => setTimeout(r, 20));
+    assert.strictEqual(app.run('window.__store.size'), 0, 'bigliettino E lettera tolti, ciascuno col suo gettone');
+    const del = JSON.parse(app.run("JSON.stringify(window.__chiamate.filter(c => c.method === 'DELETE'))"));
+    assert.strictEqual(del.length, 2);
+    /* un secondo giro, e la raccolta dalla buca, non la raddoppiano */
+    app.run('for (const k in letterPeekAt) delete letterPeekAt[k];');
+    await app.run('addrCheckOnce()');
+    await app.run('collectLetters()');
+    assert.strictEqual(app.run('storedLetters().length'), 1);
+    app.stop();
+  });
+
+  test('se la buca non risponde, la lettera torna alla riapertura e il gettone la riconosce', async () => {
+    const app = loadApp();
+    app.run(RELAY);
+    const mio = await aSeStesso(app);
+    await app.run("letterPut(" + JSON.stringify(mio) + ", { text: 'ciao', nick: 'Io' })");
+    /* la cancellazione nella buca fallisce (rete) */
+    app.run("letterDelete = async () => false;");
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('storedLetters().length'), 1);
+    assert.strictEqual(app.run("[...window.__store.values()].filter(r => r.via === 'letter').length"), 1, 'la copia nella buca e ancora li');
+    await app.run('collectLetters()');
+    assert.strictEqual(app.run('storedLetters().length'), 1, 'stesso gettone: non si mostra due volte');
+    app.stop();
+  });
+
+  test('il bigliettino si guarda ogni 15 secondi, non a ogni giro: costa quanto il giro lento', async () => {
+    const app = loadApp();
+    app.run(`
+      window.__letture = [];
+      activeSlots = () => [0];
+      myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+      addrSlotSeed = async () => 'semenza';
+      slotId = async (seed, nome) => nome;
+      mailboxGet = async (k) => { window.__letture.push(k); return null; };
+    `);
+    await app.run('addrCheckOnce()'); await app.run('addrCheckOnce()'); await app.run('addrCheckOnce()');
+    const letture = JSON.parse(app.run('JSON.stringify(window.__letture)'));
+    assert.ok(letture.filter(k => k === 'addr-offer').length >= 3, 'le chiamate si guardano sempre');
+    assert.strictEqual(letture.filter(k => k === 'addr-letter').length, 1, 'il bigliettino una volta ogni LETTER_PEEK_MS, non a ogni giro');
+    assert.strictEqual(app.run('LETTER_PEEK_MS'), 15000);
+    app.stop();
+  });
+
+  test('sotto una lettera con mittente c e «Rispondi con due righe», e apre la scheda gia indirizzata', () => {
+    const app = loadApp();
+    app.run(`
+      window.__bottoni = () => { const out = []; const giu = el => { for (const c of (el.children || [])){ if (c.tagName === 'BUTTON') out.push(c); giu(c); } }; giu($('lettersList')); return out; };
+      saveLetters([{ id: 'x1', tok: null, nick: 'Anna', text: 'ciao', from: 'DVAAAABBBBCC', slot: 0, at: Date.now() }]); renderLetters();`);
+    const bottoni = app.run("window.__bottoni().map(b => b.textContent)");
+    assert.ok(bottoni.some(b => /Rispondi/.test(b)), 'manca il tasto: ' + JSON.stringify(bottoni));
+    app.run("window.__bottoni().find(b => /Rispondi/.test(b.textContent)).listeners.click[0]()");
+    assert.strictEqual(app.run("$('leaveLetter').classList.contains('hide')"), false, 'la scheda della lettera si apre');
+    assert.strictEqual(app.run('letterTarget'), 'DVAAAABBBBCC', 'gia indirizzata a chi ha scritto');
+    assert.strictEqual(app.run('storedLetters().length'), 1, 'la lettera resta finche non si tocca Fatto');
+    /* senza mittente, niente tasto: non c e nessuno a cui rispondere */
+    /* il DOM finto non svuota i figli su innerHTML = '': si svuota a mano, come farebbe il browser */
+    app.run(`$('lettersList').children = []; saveLetters([{ id: 'x2', tok: null, nick: 'Anon', text: 'ciao', from: null, slot: 0, at: Date.now() }]); renderLetters();`);
+    assert.ok(!app.run("window.__bottoni().some(b => /Rispondi/.test(b.textContent))"));
+    app.stop();
   });
 });

@@ -96,6 +96,30 @@ a tokened envelope is **never** removed by any read, or the protection is void. 
 consumed-on-read mailbox cannot be replicated across relays either, and forgetting
 that has already cost this project a release.
 
+**Every offer and answer carries `kind` inside the seal** (14 Sep 2026), and the
+reader insists on it: the same key seals both directions, and without the tag
+the relay could hand a caller back its own envelope as the answer — found by the
+formal model, three times, before it was found anywhere else. An envelope with
+no `kind` is from an older app and passes.
+
+**Two contacts reconnect under their ECDH keys, not their fingerprints** (4.38).
+Fingerprints are what every contact stores, so a key derived from two of them
+was known to every former mutual contact. `contactDialSecrets` /
+`contactOpenIncoming` use `HKDF(ECDH(eph, pub_B) || ECDH(priv_A, pub_B))`, with
+the public keys learned in the `hello` over DTLS (`contact.pub`). No `pub` on
+file means the old seal — that is how an older phone stays reachable.
+
+**Letters leave a note in the address mailbox** (`addr-letter` slot, 2 minutes),
+looked at every 15 s while the app is in front, so a letter shows up without
+reopening the app. The letterbox (`/letter`, 7 days) is still where a letter
+waits for a closed phone; the note is a convenience and never the only copy.
+Never poll `/letter` on a timer: a collect costs a `list`, and lists are as
+scarce as writes.
+
+**The formal models** of the signalling (Tamarin + ProVerif) live outside the
+app; run on GitHub Actions, not on this Mac. They are the reason for the three
+paragraphs above. Publication of the models follows the fixes, never precedes.
+
 It runs on a free plan with a hard daily write allowance. Before adding anything that
 writes or polls, work out what it costs per user per day — a loop with no deadline is
 the classic way to turn a working relay into an exhausted one.
@@ -137,8 +161,8 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 449 tests, 67 suites, about three
-minutes, and it exits on its own (measured: 181 s). They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 465 tests, 70 suites, about three
+minutes, and it exits on its own (measured: 186 s). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**

@@ -1,0 +1,11 @@
+Sicuro anche contro chi ti ha conosciuto, non solo contro gli estranei.
+
+Il protocollo di Logos è stato scritto per intero e passato a due strumenti di prova matematica (Tamarin e ProVerif), quelli usati per analizzare Signal, TLS e il 5G. La parte più importante — la chiamata all'indirizzo — ha retto: solo il vero proprietario apre la busta, il relay non legge e non può scambiare le chiavi. Tre cose invece no, e sono tutte corrette qui.
+
+1. Quando due persone già in rubrica si ricollegavano, la busta era chiusa con una chiave ricavata dalle loro due "impronte" — che però conosce chiunque abbia mai parlato con una delle due. Un ex contatto in comune poteva vedere quando vi ricollegavate e da quale rete, far squillare l'altro a nome tuo, e far sparire quelle buste. Ora la busta si chiude con le chiavi private dei due telefoni (quelle che esistono già per gli indirizzi): chi non è uno dei due non apre, non finge e non cancella. Si accende da sola al primo collegamento fatto con questa versione da tutte e due le parti.
+
+2. Una busta non diceva se era un'offerta o una risposta, e il relay poteva rimandarti la tua stessa busta spacciandola per la risposta dell'altro. Non faceva danno solo perché WebRTC se ne accorgeva: ora se ne accorge Logos.
+
+3. Le lettere ("due righe, senza chiamare") si vedevano solo riaprendo l'app. Ora arrivano anche con l'app aperta, entro pochi secondi, e sotto ogni lettera c'è "Rispondi con due righe".
+
+Nessun telefono resta indietro: una versione vecchia continua a collegarsi come prima. I modelli della prova verranno pubblicati; quello che manca ancora è una revisione indipendente, che è stata chiesta.

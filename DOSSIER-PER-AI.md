@@ -78,7 +78,11 @@ libreria. Nessuna riga di codice scritta da altri viene caricata.
 - **AES-256-GCM** per le buste (7 punti)
 - **PBKDF2-SHA256** per irrobustire i codici corti (100.000 giri per il codice
   a 6 cifre, 250.000 per la parola d'ordine opzionale)
-- **HKDF-SHA256** dove il segreto è già lungo (impronte di certificato)
+- **HKDF-SHA256** dove il segreto è già lungo (il risultato di un ECDH)
+- **ECDH P-256** (coppia a lungo termine, privata non esportabile) per gli
+  indirizzi e, dalla 4.38, per i ricollegamenti fra contatti: chiave effimera +
+  chiave fissa di chi scrive, così solo i due possono aprire e solo il vero
+  mittente può aver sigillato
 - **ECDSA P-256** per il certificato d'identità del dispositivo
 - **DTLS-SRTP** (nativo del browser) protegge messaggi, file e chiamate
 
@@ -98,7 +102,9 @@ chiunque può dichiarare.
 - **Indirizzo permanente** (`DV-XXXX-XXXX-XXXX`), non registrato in nessun elenco
 - **Fino a 8 indirizzi usa e getta**, con nome, cancellabili singolarmente
 - **Rubrica locale**: dopo il primo contatto, un tocco sul nome ricollega da
-  solo — nessun codice da reinserire ✅ *già esistente*
+  solo — nessun codice da reinserire ✅ *già esistente*. Dalla 4.38 la busta
+  del ricollegamento è sigillata con le chiavi dei due dispositivi (prima: con
+  le due impronte, che ogni contatto conosce)
 
 ### Quando l'altro non c'è
 - **Invito che aspetta 24 ore**: chi lo crea può chiudere l'app

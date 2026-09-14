@@ -1,0 +1,11 @@
+Safe against people who used to know you, not only against strangers.
+
+Logos's protocol was written out in full and put through two formal-proof tools (Tamarin and ProVerif), the ones used to analyse Signal, TLS and 5G. The part that matters most — calling an address — held: only the real owner opens the envelope, the relay cannot read and cannot swap keys. Three things did not hold, and all three are fixed here.
+
+1. When two people already in each other's contacts reconnected, the envelope was sealed with a key derived from their two "fingerprints" — which anyone who ever talked to either of them knows. A former mutual contact could see when you reconnected and from which network, ring the other person in your name, and make those envelopes disappear. The envelope is now sealed with the two phones' private keys (the ones that already exist for addresses): nobody but the two of you can open, impersonate or delete. It switches on by itself the first time both sides connect with this version.
+
+2. An envelope did not say whether it was an offer or an answer, and the relay could hand you back your own envelope as if it were the other side's answer. It did no harm only because WebRTC noticed: now Logos notices.
+
+3. Letters ("a couple of lines, without calling") were only found when the app was reopened. They now arrive while the app is open too, within seconds, and every letter has a "Reply with a couple of lines" button.
+
+No phone is left behind: an older version keeps connecting exactly as before. The proof models will be published; what is still missing is an independent review, which has been requested.
