@@ -16,7 +16,10 @@ jobs:
           set -e
           sudo apt-get update -qq && sudo apt-get install -y -qq ocaml ocaml-findlib >/dev/null
           curl -sSL -o pv.tgz https://bblanche.gitlabpages.inria.fr/proverif/proverif2.05.tar.gz
-          tar xzf pv.tgz && cd proverif2.05 && ./build >/dev/null 2>&1; ls proverif && mkdir -p $HOME/bin && cp proverif $HOME/bin/ && echo "$HOME/bin" >> $GITHUB_PATH
+          ls -la pv.tgz; file pv.tgz
+          tar xzf pv.tgz && cd proverif2.05 && (./build 2>&1 | tail -20)
+          ls -la proverif
+          mkdir -p $HOME/bin && cp proverif $HOME/bin/ && echo "$HOME/bin" >> $GITHUB_PATH
       - name: Ogni modello ProVerif
         run: |
           mkdir -p risultati
