@@ -8259,7 +8259,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.39';
+const APP_VERSION = 'logos-modifica-4.40';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -11383,13 +11383,14 @@ async function initSpeakerToggle(){
      telefono, e il ponte la espone. */
   if (androidCall){
     $('btnSpeakerCall').classList.remove('hide');
-    /* la partenza l'ha scelta il telefono (video → altoparlante); il ricordo
-       dell'ultima volta vale solo per le chiamate vocali, dove ha senso */
+    /* La partenza la sceglie il telefono (v47: altoparlante per tutte e due;
+       nella vocale il sensore di prossimita' passa all'auricolare quando il
+       telefono e' all'orecchio, e CallService avvisa qui con dvSpeakerRoute).
+       Il ricordo dell'ultima volta non si applica piu' da solo: toccare il
+       pulsante spegnerebbe il sensore per tutta la chiamata, e una scelta
+       fatta un'altra volta non deve farlo al posto della persona. */
     let on = false;
     try{ on = !!androidCall.isSpeakerOn(); }catch(_){}
-    if (callKind !== 'video' && speakerPref() && !on){
-      try{ if (androidCall.setSpeaker(true)) on = true; }catch(_){}
-    }
     speakerOn = on;
     $('btnSpeakerCall').classList.toggle('on', speakerOn);
     setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
@@ -11405,6 +11406,14 @@ async function initSpeakerToggle(){
   setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
   await applySpeakerChoice();
 }
+/* Chiamato dal telefono (MainActivity.listenToAudioRoute) quando il sensore
+   di prossimita' cambia la strada dell'audio da solo: si aggiorna solo il
+   disegno del pulsante. */
+window.dvSpeakerRoute = function(on){
+  speakerOn = !!on;
+  $('btnSpeakerCall').classList.toggle('on', speakerOn);
+  setIcon('btnSpeakerCall', speakerOn ? 'speakerLoud' : 'speakerLow');
+};
 $('btnSpeakerCall').addEventListener('click', async () => {
   const want = !speakerOn;
   if (androidCall){
