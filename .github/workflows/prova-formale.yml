@@ -4,7 +4,17 @@
 # dai loro rilasci ufficiali (GitHub e INRIA); niente di tutto questo entra
 # nell'app.
 name: prova formale
-on: { workflow_dispatch: {} }
+on:
+  workflow_dispatch: {}
+  # quando cambia un modello o il documento del protocollo: il rito cambia,
+  # la prova si rifa' nello stesso momento
+  push:
+    branches: [ main ]
+    paths: [ 'prova-formale/**', '.github/workflows/prova-formale.yml' ]
+  # e una volta al mese, per accorgersi se gli strumenti non si scaricano piu'
+  # (non per "sorvegliare": una dimostrazione su un modello fisso non cambia)
+  schedule:
+    - cron: '17 4 1 * *'
 jobs:
   proverif:
     runs-on: ubuntu-latest

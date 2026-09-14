@@ -3,6 +3,8 @@
 **Talk to anyone, wherever they are. No sign-up, no phone number, free forever.**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![prova formale](https://github.com/digitalvalut/logos-protocol/actions/workflows/prova-formale.yml/badge.svg)](prova-formale/)
+[![controlli](https://github.com/digitalvalut/logos-protocol/actions/workflows/checks.yml/badge.svg)](https://github.com/digitalvalut/logos-protocol/actions/workflows/checks.yml)
 
 Web app: **https://digitalvalut.github.io/logos-protocol/**
 Source code: **https://github.com/digitalvalut/logos-protocol** · Apache 2.0 license
