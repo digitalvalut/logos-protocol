@@ -229,13 +229,13 @@ Object.assign(I18N.en, {
 "verify.noteKnown":"Same code as last time: nobody has come in between since.",
 "verify.noteNew":"First time with this person: compare the code out loud, then the app remembers it.",
 "verify.noteChanged":"The code has changed. Usually that means a new phone or a reinstalled app — but it is also what being intercepted looks like. Compare it out loud before accepting it.",
-"quick.titleA":"Your code","quick.helpA":"Send it with the button below — one tap and they're in. Or say the six digits out loud. It keeps working as long as you stay on this screen.",
+"quick.titleA":"Your invite","quick.helpA":"Send it with the button below — one tap and they're in. If they're here with you, let them scan the QR. It keeps working as long as you stay on this screen.",
 "quick.orType":"Or open the app and type this code:",
 "quick.qrHint":"Or point a phone camera at this",
 "quick.newCode":"Generate a new code","quick.useLong":"Prefer the long code?",
-"quick.titleB":"Type the code","quick.helpB":"Ask whoever invited you for the code \u2014 6 digits, said out loud or written \u2014 and type it here.",
-"quick.codePh":"000000","quick.connect":"Connect",
-"quick.waiting":"Waiting for the other person to type the code\u2026","quick.expired":"The code expired with no answer. Generate a new one.",
+"quick.titleB":"Open the invite","quick.helpB":"Tap the link they sent you, or point your camera at the QR: everything is ready. If you have the link at hand, paste it here.",
+"quick.codePh":"paste the invite link here","quick.needLink":"You need the invite link or QR, not just the digits: paste the whole link here, or scan the QR with your camera.","quick.connect":"Connect",
+"quick.waiting":"Waiting for the other person to open the invite…","quick.expired":"The code expired with no answer. Generate a new one.",
 "quick.notFound":"Code expired or wrong. Check it with whoever gave it to you.","quick.tryingAddr":"Trying the other way…","quick.tryingAddrHint":"That invite had expired, but whoever sent it has an address that never does. Calling there now.","quick.nobodyWaiting":"I didn't find anyone waiting. Either the code is wrong, or the person who sent it no longer has the app open: ask them to reopen it, or ask for their permanent address, which never expires.","quick.addrOnNote":"I switched on your permanent address, so people can still find you after the invite expires. You can switch it off in settings.",
 "quick.shareText":"Here's the link to talk to me on DigitalValut Logos. Tap it and we're connected:",
 "quick.share":"Send the invitation",
@@ -418,13 +418,13 @@ Object.assign(I18N.it, {
 "mic.recording":"Registrazione — tocca per fermare","mic.capped":"Due minuti: il vocale si è chiuso da solo e sta partendo.","history.cleared":"Cronologia svuotata su questo dispositivo.",
 "install.genericText":"<b>Installa DigitalValut Logos</b> per averla come app, con la sua icona, senza passare dal browser.",
 "install.iosText":"<b>Installa DigitalValut Logos su iPhone o iPad.</b> Tocca <b>Condividi</b> in Safari, poi <b>Aggiungi a Home</b>.","install.always":"Metti Logos sulla schermata","install.macText":"<b>Installa DigitalValut Logos su Mac.</b> In Safari tocca <b>Condividi</b>, poi <b>Aggiungi al Dock</b>.",
-"quick.titleA":"Il tuo codice","quick.helpA":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.",
+"quick.titleA":"Il tuo invito","quick.helpA":"Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Se è qui con te, fagli inquadrare il QR. Resta valido finché tieni aperta questa schermata.",
 "quick.orType":"Oppure apri l'app e scrivi questo codice:",
 "quick.qrHint":"Oppure inquadralo con la fotocamera del telefono",
 "quick.newCode":"Genera un nuovo codice","quick.useLong":"Preferisci il codice lungo?",
-"quick.titleB":"Digita il codice","quick.helpB":"Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.",
-"quick.codePh":"000000","quick.connect":"Connetti",
-"quick.waiting":"In attesa che l'altra persona digiti il codice…","quick.expired":"Il codice è scaduto senza risposta. Generane uno nuovo.",
+"quick.titleB":"Apri l'invito","quick.helpB":"Tocca il link che ti hanno mandato, o inquadra il QR con la fotocamera: è già tutto pronto. Se hai il link sotto mano, incollalo qui.",
+"quick.codePh":"incolla qui il link dell'invito","quick.needLink":"Servono il link o il QR dell'invito, non solo le cifre: incolla qui il link intero, o inquadra il QR con la fotocamera.","quick.connect":"Connetti",
+"quick.waiting":"In attesa che l'altra persona apra l'invito…","quick.expired":"Il codice è scaduto senza risposta. Generane uno nuovo.",
 "quick.notFound":"Codice scaduto o sbagliato. Controllalo con chi te l'ha dato.","quick.tryingAddr":"Provo dall'altra parte…","quick.tryingAddrHint":"L'invito non era più valido, ma chi te l'ha mandato ha un indirizzo che non scade. Sto chiamando lì.","quick.nobodyWaiting":"Non ho trovato nessuno in attesa. O il codice è sbagliato, oppure chi te l'ha mandato non ha più l'app aperta: chiedigli di riaprirla, o fatti dare il suo indirizzo permanente, che non scade mai.","quick.addrOnNote":"Ho acceso il tuo indirizzo permanente, così ti trovano anche se l'invito scade. Puoi spegnerlo dalle impostazioni.",
 "quick.shareText":"Ecco il link per parlare con me su DigitalValut Logos. Toccalo e siamo connessi:",
 "quick.share":"Manda l'invito",
@@ -599,14 +599,14 @@ Object.assign(I18N.fr, {
 "verify.noteKnown":"Même code que la dernière fois : personne ne s'est interposé depuis.",
 "verify.noteNew":"Première fois avec cette personne : comparez le code à voix haute, puis l'appli s'en souvient.",
 "verify.noteChanged":"Le code a changé. Cela signifie généralement un nouveau téléphone ou une appli réinstallée — mais c'est aussi ce à quoi ressemble une interception. Comparez-le à voix haute avant de l'accepter.",
-"quick.titleA":"Votre code",
-"quick.helpA":"Envoyez-le avec le bouton ci-dessous — un tap et c'est fait. Ou dites les six chiffres à voix haute. Ça continue de fonctionner tant que vous restez sur cet écran.",
+"quick.titleA":"Votre invitation",
+"quick.helpA":"Envoyez-la avec le bouton ci-dessous — un appui et la personne est connectée. Si elle est à côté de vous, faites-lui scanner le QR. Elle reste valable tant que cet écran est ouvert.",
 "quick.orType":"Ou ouvrez l'appli et tapez ce code :","quick.qrHint":"Ou pointez une caméra de téléphone ici",
 "quick.newCode":"Générer un nouveau code","quick.useLong":"Vous préférez le code long ?",
-"quick.titleB":"Tapez le code",
-"quick.helpB":"Demandez le code à la personne qui vous a invité — 6 chiffres, dits à voix haute ou écrits — et tapez-le ici.",
-"quick.codePh":"000000","quick.connect":"Connecter",
-"quick.waiting":"En attente que l'autre personne tape le code…","quick.expired":"Le code a expiré sans réponse. Générez-en un nouveau.",
+"quick.titleB":"Ouvrir l'invitation",
+"quick.helpB":"Appuyez sur le lien reçu, ou visez le QR avec l'appareil photo : tout est prêt. Si vous avez le lien sous la main, collez-le ici.",
+"quick.codePh":"collez ici le lien d'invitation","quick.needLink":"Il faut le lien ou le QR de l'invitation, pas seulement les chiffres : collez ici le lien entier, ou scannez le QR avec l'appareil photo.","quick.connect":"Connecter",
+"quick.waiting":"En attente que l'autre personne ouvre l'invitation…","quick.expired":"Le code a expiré sans réponse. Générez-en un nouveau.",
 "quick.notFound":"Code expiré ou incorrect. Vérifiez-le avec la personne qui vous l'a donné.","quick.tryingAddr":"J'essaie par l'autre chemin…","quick.tryingAddrHint":"Cette invitation n'était plus valable, mais la personne qui vous l'a envoyée a une adresse qui n'expire jamais. J'appelle là.","quick.nobodyWaiting":"Je n'ai trouvé personne en attente. Soit le code est faux, soit la personne qui vous l'a envoyé n'a plus l'application ouverte : demandez-lui de la rouvrir, ou demandez son adresse permanente, qui n'expire jamais.","quick.addrOnNote":"J'ai activé votre adresse permanente, pour qu'on vous trouve même après l'expiration de l'invitation. Vous pouvez la désactiver dans les réglages.",
 "quick.shareText":"Voici le lien pour discuter avec moi sur DigitalValut Logos. Touchez-le et nous sommes connectés :",
 "quick.share":"Envoyer l'invitation",
@@ -781,14 +781,14 @@ Object.assign(I18N.de, {
 "verify.noteKnown":"Gleicher Code wie letztes Mal: seitdem hat sich niemand dazwischengeschaltet.",
 "verify.noteNew":"Erstes Mal mit dieser Person: vergleicht den Code laut, dann merkt die App ihn sich.",
 "verify.noteChanged":"Der Code hat sich geändert. Das bedeutet normalerweise ein neues Telefon oder eine neu installierte App — aber genau so sieht auch ein Abhören aus. Vergleicht ihn laut, bevor ihr ihn akzeptiert.",
-"quick.titleA":"Dein Code",
-"quick.helpA":"Sende ihn mit dem Button unten — ein Tipp und sie sind drin. Oder sag die sechs Ziffern laut. Er funktioniert weiter, solange du auf diesem Bildschirm bleibst.",
+"quick.titleA":"Deine Einladung",
+"quick.helpA":"Schick sie mit dem Knopf unten — ein Tipp und die Person ist drin. Ist sie bei dir, lass sie den QR-Code scannen. Sie gilt, solange dieser Bildschirm offen bleibt.",
 "quick.orType":"Oder öffne die App und gib diesen Code ein:","quick.qrHint":"Oder richte eine Handykamera darauf",
 "quick.newCode":"Neuen Code erzeugen","quick.useLong":"Lieber den langen Code?",
-"quick.titleB":"Code eingeben",
-"quick.helpB":"Frag die Person, die dich eingeladen hat, nach dem Code — 6 Ziffern, laut gesagt oder geschrieben — und gib ihn hier ein.",
-"quick.codePh":"000000","quick.connect":"Verbinden",
-"quick.waiting":"Warte darauf, dass die andere Person den Code eingibt…","quick.expired":"Der Code ist ohne Antwort abgelaufen. Erzeuge einen neuen.",
+"quick.titleB":"Einladung öffnen",
+"quick.helpB":"Tippe auf den Link, den du bekommen hast, oder halte die Kamera auf den QR-Code: alles ist bereit. Hast du den Link zur Hand, füge ihn hier ein.",
+"quick.codePh":"Einladungslink hier einfügen","quick.needLink":"Du brauchst den Einladungslink oder den QR-Code, nicht nur die Ziffern: füge hier den ganzen Link ein oder scanne den QR-Code mit der Kamera.","quick.connect":"Verbinden",
+"quick.waiting":"Warte, bis die andere Person die Einladung öffnet…","quick.expired":"Der Code ist ohne Antwort abgelaufen. Erzeuge einen neuen.",
 "quick.notFound":"Code abgelaufen oder falsch. Prüfe ihn mit der Person, die ihn dir gegeben hat.","quick.tryingAddr":"Ich versuche den anderen Weg…","quick.tryingAddrHint":"Diese Einladung war abgelaufen, aber wer sie geschickt hat, hat eine Adresse, die nie abläuft. Ich rufe dort an.","quick.nobodyWaiting":"Ich habe niemanden gefunden, der wartet. Entweder ist der Code falsch, oder die Person hat die App nicht mehr offen: bitte sie, sie wieder zu öffnen, oder frag nach ihrer dauerhaften Adresse, die nie abläuft.","quick.addrOnNote":"Ich habe deine dauerhafte Adresse eingeschaltet, damit man dich auch nach Ablauf der Einladung findet. Du kannst sie in den Einstellungen ausschalten.",
 "quick.shareText":"Hier ist der Link, um mit mir auf DigitalValut Logos zu sprechen. Tippe ihn an, und wir sind verbunden:",
 "quick.share":"Einladung senden",
@@ -963,14 +963,14 @@ Object.assign(I18N.es, {
 "verify.noteKnown":"Mismo código que la última vez: nadie se ha interpuesto desde entonces.",
 "verify.noteNew":"Primera vez con esta persona: comparad el código en voz alta, luego la app lo recuerda.",
 "verify.noteChanged":"El código ha cambiado. Normalmente significa un teléfono nuevo o la app reinstalada — pero también es lo que parece una interceptación. Comparadlo en voz alta antes de aceptarlo.",
-"quick.titleA":"Tu código",
-"quick.helpA":"Envíalo con el botón de abajo — un toque y ya está. O di los seis dígitos en voz alta. Sigue funcionando mientras te quedes en esta pantalla.",
+"quick.titleA":"Tu invitación",
+"quick.helpA":"Envíala con el botón de abajo: con un toque la otra persona ya está dentro. Si está contigo, que escanee el QR. Sigue valiendo mientras dejes abierta esta pantalla.",
 "quick.orType":"O abre la app y escribe este código:","quick.qrHint":"O apunta la cámara de un teléfono aquí",
 "quick.newCode":"Generar un código nuevo","quick.useLong":"¿Prefieres el código largo?",
-"quick.titleB":"Escribe el código",
-"quick.helpB":"Pide el código a quien te invitó — 6 dígitos, dichos en voz alta o escritos — y escríbelo aquí.",
-"quick.codePh":"000000","quick.connect":"Conectar",
-"quick.waiting":"Esperando a que la otra persona escriba el código…","quick.expired":"El código expiró sin respuesta. Genera uno nuevo.",
+"quick.titleB":"Abre la invitación",
+"quick.helpB":"Toca el enlace que te han enviado, o apunta la cámara al QR: ya está todo listo. Si tienes el enlace a mano, pégalo aquí.",
+"quick.codePh":"pega aquí el enlace de la invitación","quick.needLink":"Hace falta el enlace o el QR de la invitación, no solo las cifras: pega aquí el enlace entero, o escanea el QR con la cámara.","quick.connect":"Conectar",
+"quick.waiting":"Esperando a que la otra persona abra la invitación…","quick.expired":"El código expiró sin respuesta. Genera uno nuevo.",
 "quick.notFound":"Código expirado o incorrecto. Compruébalo con quien te lo dio.","quick.tryingAddr":"Pruebo por el otro lado…","quick.tryingAddrHint":"Esa invitación ya no era válida, pero quien te la envió tiene una dirección que no caduca. Estoy llamando allí.","quick.nobodyWaiting":"No he encontrado a nadie esperando. O el código está mal, o la persona que te lo mandó ya no tiene la app abierta: pídele que la vuelva a abrir, o pídele su dirección permanente, que no caduca nunca.","quick.addrOnNote":"He activado tu dirección permanente, para que te encuentren aunque caduque la invitación. Puedes desactivarla en los ajustes.",
 "quick.shareText":"Aquí tienes el enlace para hablar conmigo en DigitalValut Logos. Tócalo y estaremos conectados:",
 "quick.share":"Enviar la invitación",
@@ -1145,14 +1145,14 @@ Object.assign(I18N.pt, {
 "verify.noteKnown":"Mesmo código da última vez: ninguém se interpôs desde então.",
 "verify.noteNew":"Primeira vez com esta pessoa: comparem o código em voz alta, depois a app lembra-se dele.",
 "verify.noteChanged":"O código mudou. Normalmente significa um telemóvel novo ou a app reinstalada — mas também é o que parece uma interceção. Comparem-no em voz alta antes de aceitar.",
-"quick.titleA":"O seu código",
-"quick.helpA":"Envie-o com o botão abaixo — um toque e está feito. Ou diga os seis dígitos em voz alta. Continua a funcionar enquanto ficar neste ecrã.",
+"quick.titleA":"O seu convite",
+"quick.helpA":"Envie-o com o botão abaixo — basta um toque e a pessoa entra. Se estiver consigo, deixe-a ler o QR. Continua válido enquanto mantiver este ecrã aberto.",
 "quick.orType":"Ou abra a app e escreva este código:","quick.qrHint":"Ou aponte a câmara de um telemóvel aqui",
 "quick.newCode":"Gerar um código novo","quick.useLong":"Prefere o código longo?",
-"quick.titleB":"Escreva o código",
-"quick.helpB":"Peça o código a quem o convidou — 6 dígitos, ditos em voz alta ou escritos — e escreva-o aqui.",
-"quick.codePh":"000000","quick.connect":"Ligar",
-"quick.waiting":"A aguardar que a outra pessoa escreva o código…","quick.expired":"O código expirou sem resposta. Gere um novo.",
+"quick.titleB":"Abra o convite",
+"quick.helpB":"Toque no link que lhe enviaram, ou aponte a câmara ao QR: está tudo pronto. Se tiver o link à mão, cole-o aqui.",
+"quick.codePh":"cole aqui o link do convite","quick.needLink":"É preciso o link ou o QR do convite, não só os dígitos: cole aqui o link inteiro, ou leia o QR com a câmara.","quick.connect":"Ligar",
+"quick.waiting":"À espera que a outra pessoa abra o convite…","quick.expired":"O código expirou sem resposta. Gere um novo.",
 "quick.notFound":"Código expirado ou errado. Verifique-o com quem lho deu.","quick.tryingAddr":"Tento pelo outro lado…","quick.tryingAddrHint":"Esse convite já não era válido, mas quem o enviou tem um endereço que não expira. Estou a ligar para lá.","quick.nobodyWaiting":"Não encontrei ninguém à espera. Ou o código está errado, ou quem o enviou já não tem a app aberta: peça-lhe para a reabrir, ou peça o endereço permanente, que nunca expira.","quick.addrOnNote":"Liguei o seu endereço permanente, para o encontrarem mesmo depois de o convite expirar. Pode desligá-lo nas definições.",
 "quick.shareText":"Aqui está o link para falar comigo no DigitalValut Logos. Toque nele e ficamos ligados:",
 "quick.share":"Enviar o convite",
@@ -1327,14 +1327,14 @@ Object.assign(I18N.ru, {
 "verify.noteKnown":"Тот же код, что и в прошлый раз: с тех пор никто не вклинился.",
 "verify.noteNew":"Первый раз с этим человеком: сравните код вслух, затем приложение его запомнит.",
 "verify.noteChanged":"Код изменился. Обычно это означает новый телефон или переустановленное приложение — но так же выглядит и перехват. Сравните его вслух, прежде чем принять.",
-"quick.titleA":"Ваш код",
-"quick.helpA":"Отправьте его кнопкой ниже — одно касание, и он у них. Или произнесите шесть цифр вслух. Он продолжает работать, пока вы остаётесь на этом экране.",
+"quick.titleA":"Ваше приглашение",
+"quick.helpA":"Отправьте его кнопкой ниже — одно нажатие, и человек внутри. Если он рядом, пусть отсканирует QR. Действует, пока открыт этот экран.",
 "quick.orType":"Или откройте приложение и введите этот код:","quick.qrHint":"Или наведите камеру телефона сюда",
 "quick.newCode":"Создать новый код","quick.useLong":"Предпочитаете длинный код?",
-"quick.titleB":"Введите код",
-"quick.helpB":"Спросите код у того, кто вас пригласил — 6 цифр, сказанных вслух или написанных — и введите его здесь.",
-"quick.codePh":"000000","quick.connect":"Соединиться",
-"quick.waiting":"Ожидание, пока собеседник введёт код…","quick.expired":"Срок кода истёк без ответа. Создайте новый.",
+"quick.titleB":"Откройте приглашение",
+"quick.helpB":"Нажмите на присланную ссылку или наведите камеру на QR — всё готово. Если ссылка под рукой, вставьте её сюда.",
+"quick.codePh":"вставьте сюда ссылку-приглашение","quick.needLink":"Нужна ссылка или QR приглашения, а не только цифры: вставьте сюда всю ссылку или отсканируйте QR камерой.","quick.connect":"Соединиться",
+"quick.waiting":"Ждём, пока другой человек откроет приглашение…","quick.expired":"Срок кода истёк без ответа. Создайте новый.",
 "quick.notFound":"Код истёк или неверен. Проверьте его у того, кто вам его дал.","quick.tryingAddr":"Пробую с другой стороны…","quick.tryingAddrHint":"Приглашение уже не действовало, но у отправителя есть адрес, который не истекает. Звоню туда.","quick.nobodyWaiting":"Я никого не нашёл в ожидании. Либо код неверный, либо у отправителя больше не открыто приложение: попросите его снова открыть, или попросите постоянный адрес — он не истекает.","quick.addrOnNote":"Я включил ваш постоянный адрес, чтобы вас нашли и после истечения приглашения. Отключить можно в настройках.",
 "quick.shareText":"Вот ссылка, чтобы поговорить со мной в DigitalValut Logos. Нажмите на неё, и мы будем на связи:",
 "quick.share":"Отправить приглашение",
@@ -1509,14 +1509,14 @@ Object.assign(I18N.zh, {
 "verify.noteKnown":"和上次相同的代码：此后没有人插入其中。",
 "verify.noteNew":"第一次和此人连接：口头核对代码，之后应用会记住它。",
 "verify.noteChanged":"代码已更改。通常意味着换了新手机或重装了应用——但这也可能是被拦截的迹象。接受之前请口头核对。",
-"quick.titleA":"你的代码",
-"quick.helpA":"用下面的按钮发送——轻触一下对方就进来了。或者大声说出这六位数字。只要你留在这个屏幕上，它就一直有效。",
+"quick.titleA":"你的邀请",
+"quick.helpA":"用下面的按钮发送——对方点一下就进来了。如果对方就在你身边，让他扫描二维码。只要你停留在此页面，邀请就一直有效。",
 "quick.orType":"或者打开应用并输入这个代码：","quick.qrHint":"或用手机摄像头对准这里",
 "quick.newCode":"生成新代码","quick.useLong":"更喜欢长代码？",
-"quick.titleB":"输入代码",
-"quick.helpB":"向邀请你的人索要代码——6位数字，口头告知或写下——然后在此输入。",
-"quick.codePh":"000000","quick.connect":"连接",
-"quick.waiting":"正在等待对方输入代码…","quick.expired":"代码已过期且无人应答。请生成一个新代码。",
+"quick.titleB":"打开邀请",
+"quick.helpB":"点一下对方发来的链接，或用相机对准二维码：一切就绪。如果链接就在手边，也可以粘贴到这里。",
+"quick.codePh":"在此粘贴邀请链接","quick.needLink":"需要邀请链接或二维码，仅有数字不够：把完整链接粘贴到这里，或用相机扫描二维码。","quick.connect":"连接",
+"quick.waiting":"等待对方打开邀请……","quick.expired":"代码已过期且无人应答。请生成一个新代码。",
 "quick.notFound":"代码已过期或错误。请向给你代码的人核实。","quick.tryingAddr":"换一条路试试…","quick.tryingAddrHint":"这个邀请已经失效了，但发给你的人有一个永不过期的地址。正在拨那边。","quick.nobodyWaiting":"没有找到在等待的人。可能是代码不对，也可能是对方已经关掉了应用：请他重新打开，或者问他要永不过期的永久地址。","quick.addrOnNote":"我打开了你的永久地址，这样邀请过期后别人也能找到你。可以在设置里关掉。",
 "quick.shareText":"这是在 DigitalValut Logos 上和我聊天的链接。点击它，我们就连接上了：",
 "quick.share":"发送邀请",
@@ -1691,14 +1691,14 @@ Object.assign(I18N.ar, {
 "verify.noteKnown":"نفس الرمز كالمرة السابقة: لم يتدخّل أحد منذ ذلك الحين.",
 "verify.noteNew":"أول مرة مع هذا الشخص: قارنا الرمز بصوت عالٍ، ثم يتذكره التطبيق.",
 "verify.noteChanged":"تغيّر الرمز. عادةً ما يعني ذلك هاتفًا جديدًا أو تطبيقًا أُعيد تثبيته — لكنه أيضًا ما يبدو عليه الاعتراض. قارناه بصوت عالٍ قبل قبوله.",
-"quick.titleA":"رمزك",
-"quick.helpA":"أرسله بالزر أدناه — لمسة واحدة وسيدخلان. أو انطق الأرقام الستة بصوت عالٍ. يستمر بالعمل طالما بقيت في هذه الشاشة.",
+"quick.titleA":"دعوتك",
+"quick.helpA":"أرسلها بالزر أدناه — لمسة واحدة ويدخل الشخص. إن كان بجانبك فليمسح رمز QR. تبقى صالحة ما دمت في هذه الشاشة.",
 "quick.orType":"أو افتح التطبيق واكتب هذا الرمز:","quick.qrHint":"أو وجّه كاميرا هاتف إلى هنا",
 "quick.newCode":"إنشاء رمز جديد","quick.useLong":"تفضّل الرمز الطويل؟",
-"quick.titleB":"اكتب الرمز",
-"quick.helpB":"اطلب الرمز ممن دعاك — 6 أرقام، منطوقة بصوت عالٍ أو مكتوبة — واكتبه هنا.",
-"quick.codePh":"٠٠٠٠٠٠","quick.connect":"اتصال",
-"quick.waiting":"في انتظار أن يكتب الشخص الآخر الرمز…","quick.expired":"انتهت صلاحية الرمز بلا رد. أنشئ رمزًا جديدًا.",
+"quick.titleB":"افتح الدعوة",
+"quick.helpB":"المس الرابط الذي أُرسل إليك، أو وجّه الكاميرا نحو رمز QR: كل شيء جاهز. إن كان الرابط بين يديك فالصقه هنا.",
+"quick.codePh":"الصق رابط الدعوة هنا","quick.needLink":"تحتاج إلى رابط الدعوة أو رمز QR، لا الأرقام وحدها: الصق الرابط كاملاً هنا، أو امسح رمز QR بالكاميرا.","quick.connect":"اتصال",
+"quick.waiting":"بانتظار أن يفتح الشخص الآخر الدعوة…","quick.expired":"انتهت صلاحية الرمز بلا رد. أنشئ رمزًا جديدًا.",
 "quick.notFound":"الرمز منتهي الصلاحية أو خاطئ. تحقق منه مع من أعطاك إياه.","quick.tryingAddr":"أجرّب من الجهة الأخرى…","quick.tryingAddrHint":"لم تعد تلك الدعوة صالحة، لكن من أرسلها لديه عنوان لا ينتهي. أتصل هناك الآن.","quick.nobodyWaiting":"لم أجد أحدًا في الانتظار. إما أن الرمز خاطئ، أو أن من أرسله لم يعد التطبيق مفتوحًا لديه: اطلب منه إعادة فتحه، أو اطلب عنوانه الدائم الذي لا ينتهي أبدًا.","quick.addrOnNote":"شغّلت عنوانك الدائم كي يجدك الناس حتى بعد انتهاء الدعوة. يمكنك إيقافه من الإعدادات.",
 "quick.shareText":"إليك الرابط للتحدث معي على DigitalValut Logos. المسه وسنكون متصلَين:",
 "quick.share":"إرسال الدعوة",
@@ -1873,14 +1873,14 @@ Object.assign(I18N.ur, {
 "verify.noteKnown":"پچھلی بار جیسا ہی کوڈ: تب سے کسی نے مداخلت نہیں کی۔",
 "verify.noteNew":"اس شخص کے ساتھ پہلی بار: کوڈ کا بلند آواز میں موازنہ کریں، پھر ایپ اسے یاد رکھے گی۔",
 "verify.noteChanged":"کوڈ تبدیل ہو گیا ہے۔ عام طور پر اس کا مطلب ہے نیا فون یا دوبارہ انسٹال کی گئی ایپ — لیکن یہ مداخلت کی علامت بھی ہو سکتی ہے۔ قبول کرنے سے پہلے اس کا بلند آواز میں موازنہ کریں۔",
-"quick.titleA":"آپ کا کوڈ",
-"quick.helpA":"نیچے دیے گئے بٹن سے اسے بھیجیں — ایک ٹچ اور وہ اندر آ جائیں گے۔ یا چھ ہندسے بلند آواز میں بتائیں۔ جب تک آپ اس اسکرین پر رہیں گے یہ کام کرتا رہے گا۔",
+"quick.titleA":"آپ کا دعوت نامہ",
+"quick.helpA":"نیچے والے بٹن سے بھیجیں — ایک ٹچ اور وہ اندر ہیں۔ اگر وہ آپ کے پاس ہیں تو QR اسکین کرائیں۔ جب تک یہ اسکرین کھلی ہے، یہ چلتا رہے گا۔",
 "quick.orType":"یا ایپ کھولیں اور یہ کوڈ ٹائپ کریں:","quick.qrHint":"یا فون کیمرا یہاں دکھائیں",
 "quick.newCode":"نیا کوڈ بنائیں","quick.useLong":"لمبا کوڈ ترجیح دیتے ہیں؟",
-"quick.titleB":"کوڈ ٹائپ کریں",
-"quick.helpB":"جس نے آپ کو مدعو کیا اس سے کوڈ مانگیں — 6 ہندسے، بلند آواز میں بتائے گئے یا لکھے گئے — اور یہاں ٹائپ کریں۔",
-"quick.codePh":"000000","quick.connect":"کنیکٹ کریں",
-"quick.waiting":"دوسرے شخص کے کوڈ ٹائپ کرنے کا انتظار ہو رہا ہے…","quick.expired":"کوڈ بغیر جواب کے ختم ہو گیا۔ ایک نیا بنائیں۔",
+"quick.titleB":"دعوت نامہ کھولیں",
+"quick.helpB":"بھیجا گیا لنک ٹچ کریں، یا کیمرہ QR پر رکھیں: سب تیار ہے۔ لنک پاس ہو تو یہاں پیسٹ کریں۔",
+"quick.codePh":"دعوت کا لنک یہاں پیسٹ کریں","quick.needLink":"صرف ہندسے کافی نہیں، دعوت کا لنک یا QR چاہیے: پورا لنک یہاں پیسٹ کریں، یا کیمرے سے QR اسکین کریں۔","quick.connect":"کنیکٹ کریں",
+"quick.waiting":"دوسرے شخص کے دعوت نامہ کھولنے کا انتظار…","quick.expired":"کوڈ بغیر جواب کے ختم ہو گیا۔ ایک نیا بنائیں۔",
 "quick.notFound":"کوڈ ختم ہو گیا یا غلط ہے۔ جس نے آپ کو دیا اس سے چیک کریں۔","quick.tryingAddr":"دوسری طرف سے کوشش کر رہا ہوں…","quick.tryingAddrHint":"وہ دعوت اب درست نہیں رہی، لیکن بھیجنے والے کے پاس ایسا پتہ ہے جو کبھی ختم نہیں ہوتا۔ وہاں کال کر رہا ہوں۔","quick.nobodyWaiting":"مجھے کوئی انتظار کرتا نہیں ملا۔ یا تو کوڈ غلط ہے، یا بھیجنے والے نے ایپ بند کر دی ہے: اُن سے دوبارہ کھولنے کو کہیں، یا اُن کا مستقل پتہ مانگ لیں جو کبھی ختم نہیں ہوتا۔","quick.addrOnNote":"میں نے آپ کا مستقل پتہ آن کر دیا ہے، تاکہ دعوت ختم ہونے کے بعد بھی لوگ آپ کو ڈھونڈ سکیں۔ ترتیبات سے بند کر سکتے ہیں۔",
 "quick.shareText":"یہ ہے DigitalValut Logos پر مجھ سے بات کرنے کا لنک۔ اسے ٹچ کریں اور ہم منسلک ہو جائیں گے:",
 "quick.share":"دعوت بھیجیں",
@@ -2055,14 +2055,14 @@ Object.assign(I18N.hi, {
 "verify.noteKnown":"पिछली बार जैसा ही कोड: तब से किसी ने दखल नहीं दिया।",
 "verify.noteNew":"इस व्यक्ति के साथ पहली बार: कोड को ज़ोर से मिलाएं, फिर ऐप इसे याद रखेगा।",
 "verify.noteChanged":"कोड बदल गया है। आमतौर पर इसका मतलब है नया फ़ोन या फिर से इंस्टॉल किया गया ऐप — लेकिन यह दखलंदाज़ी जैसा भी दिख सकता है। स्वीकार करने से पहले इसे ज़ोर से मिलाएं।",
-"quick.titleA":"आपका कोड",
-"quick.helpA":"इसे नीचे दिए बटन से भेजें — एक टैप और वे अंदर आ जाएंगे। या छह अंक ज़ोर से बोलें। जब तक आप इस स्क्रीन पर रहेंगे यह काम करता रहेगा।",
+"quick.titleA":"आपका न्योता",
+"quick.helpA":"नीचे वाले बटन से भेजें — एक टैप और वह अंदर। अगर वह आपके साथ है तो QR स्कैन करवाएँ। जब तक यह स्क्रीन खुली है, यह काम करता रहेगा।",
 "quick.orType":"या ऐप खोलें और यह कोड टाइप करें:","quick.qrHint":"या यहाँ फ़ोन कैमरा दिखाएं",
 "quick.newCode":"नया कोड बनाएं","quick.useLong":"लंबा कोड पसंद करेंगे?",
-"quick.titleB":"कोड टाइप करें",
-"quick.helpB":"जिसने आपको आमंत्रित किया उससे कोड मांगें — 6 अंक, ज़ोर से बोले या लिखे गए — और यहाँ टाइप करें।",
-"quick.codePh":"000000","quick.connect":"कनेक्ट करें",
-"quick.waiting":"दूसरे व्यक्ति के कोड टाइप करने का इंतज़ार हो रहा है…","quick.expired":"कोड बिना जवाब के समाप्त हो गया। एक नया बनाएं।",
+"quick.titleB":"न्योता खोलें",
+"quick.helpB":"भेजा गया लिंक टैप करें, या कैमरा QR पर रखें: सब तैयार है। लिंक पास हो तो यहाँ पेस्ट करें।",
+"quick.codePh":"न्योते का लिंक यहाँ पेस्ट करें","quick.needLink":"सिर्फ़ अंक काफ़ी नहीं, न्योते का लिंक या QR चाहिए: पूरा लिंक यहाँ पेस्ट करें, या कैमरे से QR स्कैन करें।","quick.connect":"कनेक्ट करें",
+"quick.waiting":"दूसरे व्यक्ति के न्योता खोलने का इंतज़ार…","quick.expired":"कोड बिना जवाब के समाप्त हो गया। एक नया बनाएं।",
 "quick.notFound":"कोड समाप्त हो गया या ग़लत है। जिसने आपको दिया उससे जांचें।","quick.tryingAddr":"दूसरे रास्ते से कोशिश कर रहा हूँ…","quick.tryingAddrHint":"वह निमंत्रण अब मान्य नहीं था, लेकिन भेजने वाले के पास एक पता है जो कभी खत्म नहीं होता। वहाँ कॉल कर रहा हूँ।","quick.nobodyWaiting":"मुझे कोई प्रतीक्षा करता नहीं मिला। या तो कोड गलत है, या भेजने वाले ने ऐप बंद कर दी है: उनसे दोबारा खोलने को कहें, या उनका स्थायी पता माँगें, जो कभी खत्म नहीं होता।","quick.addrOnNote":"मैंने आपका स्थायी पता चालू कर दिया है, ताकि निमंत्रण खत्म होने के बाद भी लोग आपको ढूँढ सकें। सेटिंग्स से बंद कर सकते हैं।",
 "quick.shareText":"यह रहा DigitalValut Logos पर मुझसे बात करने का लिंक। इसे टैप करें और हम जुड़ जाएंगे:",
 "quick.share":"निमंत्रण भेजें",
@@ -2237,14 +2237,14 @@ Object.assign(I18N.bn, {
 "verify.noteKnown":"গত বারের মতো একই কোড: তারপর থেকে কেউ ঢুকে পড়েনি।",
 "verify.noteNew":"এই ব্যক্তির সাথে প্রথমবার: কোডটি জোরে মিলিয়ে দেখুন, তারপর অ্যাপ এটি মনে রাখবে।",
 "verify.noteChanged":"কোড পরিবর্তিত হয়েছে। সাধারণত এর অর্থ একটি নতুন ফোন বা পুনরায় ইনস্টল করা অ্যাপ — তবে এটি বাধাদানের মতোও দেখাতে পারে। গ্রহণ করার আগে এটি জোরে মিলিয়ে দেখুন।",
-"quick.titleA":"আপনার কোড",
-"quick.helpA":"নিচের বোতাম দিয়ে এটি পাঠান — একটি ট্যাপ এবং তারা ঢুকে যাবে। অথবা ছয়টি সংখ্যা জোরে বলুন। আপনি এই স্ক্রিনে থাকা পর্যন্ত এটি কাজ করতে থাকবে।",
+"quick.titleA":"আপনার আমন্ত্রণ",
+"quick.helpA":"নিচের বোতাম দিয়ে পাঠান — এক ট্যাপেই সে ঢুকে যাবে। সে পাশে থাকলে QR স্ক্যান করতে দিন। এই স্ক্রিন খোলা রাখা পর্যন্ত এটি কাজ করবে।",
 "quick.orType":"অথবা অ্যাপ খুলুন এবং এই কোডটি টাইপ করুন:","quick.qrHint":"অথবা এখানে ফোনের ক্যামেরা ধরুন",
 "quick.newCode":"একটি নতুন কোড তৈরি করুন","quick.useLong":"দীর্ঘ কোড পছন্দ করেন?",
-"quick.titleB":"কোড টাইপ করুন",
-"quick.helpB":"যিনি আপনাকে আমন্ত্রণ জানিয়েছেন তার কাছে কোড চান — ৬টি সংখ্যা, জোরে বলা বা লেখা — এবং এখানে টাইপ করুন।",
-"quick.codePh":"000000","quick.connect":"সংযোগ করুন",
-"quick.waiting":"অন্য ব্যক্তি কোড টাইপ করার অপেক্ষায়…","quick.expired":"কোডের মেয়াদ উত্তর ছাড়াই শেষ হয়ে গেছে। একটি নতুন তৈরি করুন।",
+"quick.titleB":"আমন্ত্রণ খুলুন",
+"quick.helpB":"পাঠানো লিঙ্কে ট্যাপ করুন, বা ক্যামেরা QR-এর দিকে ধরুন: সব প্রস্তুত। লিঙ্ক হাতে থাকলে এখানে পেস্ট করুন।",
+"quick.codePh":"আমন্ত্রণের লিঙ্ক এখানে পেস্ট করুন","quick.needLink":"শুধু সংখ্যা নয়, আমন্ত্রণের লিঙ্ক বা QR দরকার: পুরো লিঙ্ক এখানে পেস্ট করুন, বা ক্যামেরা দিয়ে QR স্ক্যান করুন।","quick.connect":"সংযোগ করুন",
+"quick.waiting":"অন্য ব্যক্তির আমন্ত্রণ খোলার অপেক্ষায়…","quick.expired":"কোডের মেয়াদ উত্তর ছাড়াই শেষ হয়ে গেছে। একটি নতুন তৈরি করুন।",
 "quick.notFound":"কোডের মেয়াদ শেষ বা ভুল। যিনি আপনাকে দিয়েছেন তার সাথে এটি পরীক্ষা করুন।","quick.tryingAddr":"অন্য দিক দিয়ে চেষ্টা করছি…","quick.tryingAddrHint":"সেই আমন্ত্রণ আর বৈধ ছিল না, কিন্তু যিনি পাঠিয়েছেন তাঁর একটি ঠিকানা আছে যা কখনও শেষ হয় না। সেখানে কল করছি।","quick.nobodyWaiting":"অপেক্ষা করছেন এমন কাউকে পাইনি। হয় কোডটি ভুল, নয়তো যিনি পাঠিয়েছেন তাঁর অ্যাপ আর খোলা নেই: তাঁকে আবার খুলতে বলুন, বা তাঁর স্থায়ী ঠিকানা চান, যা কখনও শেষ হয় না।","quick.addrOnNote":"আমি আপনার স্থায়ী ঠিকানা চালু করেছি, যাতে আমন্ত্রণ শেষ হলেও লোকে আপনাকে খুঁজে পায়। সেটিংস থেকে বন্ধ করতে পারেন।",
 "quick.shareText":"DigitalValut Logos-এ আমার সাথে কথা বলার লিঙ্ক এই রইল। এটি ট্যাপ করুন এবং আমরা সংযুক্ত হয়ে যাব:",
 "quick.share":"আমন্ত্রণ পাঠান",
@@ -2419,14 +2419,14 @@ Object.assign(I18N.id, {
 "verify.noteKnown":"Kode sama seperti terakhir kali: tidak ada yang menyisip sejak itu.",
 "verify.noteNew":"Pertama kali dengan orang ini: bandingkan kode dengan suara keras, lalu aplikasi akan mengingatnya.",
 "verify.noteChanged":"Kode telah berubah. Biasanya ini berarti ponsel baru atau aplikasi terpasang ulang — tetapi ini juga seperti apa penyadapan terlihat. Bandingkan dengan suara keras sebelum menerimanya.",
-"quick.titleA":"Kode Anda",
-"quick.helpA":"Kirim dengan tombol di bawah — satu ketukan dan mereka masuk. Atau ucapkan enam angka dengan suara keras. Ini akan terus berfungsi selama Anda tetap di layar ini.",
+"quick.titleA":"Undanganmu",
+"quick.helpA":"Kirim dengan tombol di bawah — satu ketukan dan dia masuk. Kalau dia ada di dekatmu, minta dia memindai QR. Tetap berlaku selama layar ini terbuka.",
 "quick.orType":"Atau buka aplikasi dan ketik kode ini:","quick.qrHint":"Atau arahkan kamera ponsel ke sini",
 "quick.newCode":"Buat kode baru","quick.useLong":"Lebih suka kode panjang?",
-"quick.titleB":"Ketik kode",
-"quick.helpB":"Minta kode dari orang yang mengundang Anda — 6 angka, diucapkan dengan suara keras atau ditulis — dan ketik di sini.",
-"quick.codePh":"000000","quick.connect":"Sambungkan",
-"quick.waiting":"Menunggu orang lain mengetik kode…","quick.expired":"Kode kedaluwarsa tanpa jawaban. Buat yang baru.",
+"quick.titleB":"Buka undangan",
+"quick.helpB":"Ketuk tautan yang dikirimkan, atau arahkan kamera ke QR: semuanya sudah siap. Kalau tautannya ada, tempel di sini.",
+"quick.codePh":"tempel tautan undangan di sini","quick.needLink":"Perlu tautan atau QR undangan, bukan hanya angkanya: tempel tautan lengkap di sini, atau pindai QR dengan kamera.","quick.connect":"Sambungkan",
+"quick.waiting":"Menunggu orang lain membuka undangan…","quick.expired":"Kode kedaluwarsa tanpa jawaban. Buat yang baru.",
 "quick.notFound":"Kode kedaluwarsa atau salah. Periksa dengan orang yang memberikannya kepada Anda.","quick.tryingAddr":"Mencoba lewat jalan lain…","quick.tryingAddrHint":"Undangan itu sudah tidak berlaku, tapi pengirimnya punya alamat yang tidak pernah kedaluwarsa. Sedang menghubungi ke sana.","quick.nobodyWaiting":"Saya tidak menemukan siapa pun yang menunggu. Entah kodenya salah, atau pengirimnya sudah tidak membuka aplikasi: minta dia membukanya lagi, atau minta alamat permanennya yang tidak pernah kedaluwarsa.","quick.addrOnNote":"Saya menyalakan alamat permanen Anda, supaya orang tetap menemukan Anda setelah undangan kedaluwarsa. Bisa dimatikan di pengaturan.",
 "quick.shareText":"Ini tautan untuk berbicara dengan saya di DigitalValut Logos. Ketuk dan kita akan tersambung:",
 "quick.share":"Kirim undangan",
@@ -6110,7 +6110,16 @@ function makeQuickSecret(){
   return btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 
-async function quickSecrets(code, lungo){
+/* La parte lenta (PBKDF2) da sola, cosi' chi ha bisogno di due chiavi dallo
+   stesso codice la paga una volta: vedi quickSecretsBoth. */
+async function quickRaw(code){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode('logos-quick-v3:' + code), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name:'PBKDF2', salt: SIGNAL_SALT, iterations: QUICK_ITER, hash:'SHA-256' }, base, 512);
+  const raw = new Uint8Array(bits);
+  return { raw, seed: hex(raw.slice(32, 64)) };
+}
+async function quickSecrets(code, lungo, giaRaw){
   /* ⚠️ IL PUNTO PIU' DELICATO DI TUTTA QUESTA CORREZIONE, e sbagliarlo rompe
      le connessioni invece di proteggerle.
 
@@ -6127,11 +6136,7 @@ async function quickSecrets(code, lungo){
      stesso costo, e da' un `seed` IDENTICO a quello di sempre. Il segreto
      lungo viene mescolato dopo, e solo nella chiave, con HKDF — che e' veloce,
      quindi il tempo di attesa non cambia di un millisecondo. */
-  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode('logos-quick-v3:' + code), 'PBKDF2', false, ['deriveBits']);
-  const bits = await crypto.subtle.deriveBits(
-    { name:'PBKDF2', salt: SIGNAL_SALT, iterations: QUICK_ITER, hash:'SHA-256' }, base, 512);
-  const raw = new Uint8Array(bits);
-  const seed = hex(raw.slice(32, 64));
+  const { raw, seed } = giaRaw || await quickRaw(code);
 
   /* Senza segreto lungo — invito vecchio, o codice dettato a voce — la chiave
      resta identica byte per byte a quella di prima. E' questo che permette a
@@ -6149,6 +6154,37 @@ async function quickSecrets(code, lungo){
       info: new TextEncoder().encode('logos-quick-link-v1') },
     hk, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
   return { key, seed };
+}
+/* ---- v46 (14 set 2026): il segreto lungo si ACCENDE, e chi entra sa aprire
+   tutte e due le buste ----
+   Chi mostra l'invito sigilla SEMPRE col segreto lungo (vedi startQuickShare:
+   la dettatura a voce non c'e' piu', quindi il caso che ha fatto ritirare la
+   v28 — chi digita a mano non ha il segreto — non esiste piu'). Chi entra puo'
+   pero' trovare un invito fatto da una versione precedente, sigillato col solo
+   codice: qui si preparano ENTRAMBE le chiavi da un solo PBKDF2 (la parte
+   lenta e' una sola), e chi legge prova prima la lunga, poi la corta. Aprire
+   con la corta vuol dire «dall'altra parte c'e' una versione vecchia»: si
+   risponde con la stessa, e nessuno resta fuori. Senza segreto lungo (link
+   vecchio, senza `s=`) c'e' solo la corta, come prima. */
+async function quickSecretsBoth(code, lungo){
+  const r = await quickRaw(code);
+  const corta = await quickSecrets(code, '', r);
+  const lunga = lungo ? await quickSecrets(code, lungo, r) : null;
+  return { seed: r.seed, lunga, corta };
+}
+/* Apre una busta della cassetta con la prima delle chiavi che funziona, e la
+   toglie col gettone come mailboxGetSealed. Torna { msg, sec } o null. */
+async function mailboxGetSealedAny(key, secs){
+  const env = await mailboxGet(key);
+  if (!env) return null;
+  for (const sec of secs){
+    if (!sec) continue;
+    const obj = await openFrom(sec.key, env);
+    if (!obj) continue;
+    if (typeof obj === 'object' && TOKEN_RE.test(obj.tok || '')) await mailboxDelete(key, obj.tok);
+    return { msg: obj, sec };
+  }
+  return null;
 }
 /* The fingerprints two people already hold for each other are 256-bit values,
    not a short code — there is nothing to guess, so no stretching is needed and
@@ -6763,8 +6799,8 @@ async function publishWakeSlot(sec){
    leave whoever is holding the link waiting at an address nobody is at. */
 const PENDING_KEY = 'dvlogos-pending-invite';
 const PENDING_MAX_AGE = 24 * 3600 * 1000; /* matches the wake slot's own life */
-function savePendingInvite(code){
-  try{ MEM.setItem(PENDING_KEY, JSON.stringify({ code, at: Date.now() })); }catch(e){}
+function savePendingInvite(code, s){
+  try{ MEM.setItem(PENDING_KEY, JSON.stringify({ code, s: s || '', at: Date.now() })); }catch(e){}
 }
 function readPendingInvite(){
   try{
@@ -8223,7 +8259,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.38';
+const APP_VERSION = 'logos-modifica-4.39';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -9280,7 +9316,7 @@ function stopQuickPump(){ if (quickPump){ quickPump.stop(); quickPump = null; qu
    reason and there is no need to drag anyone to the invite screen unless it turns
    out somebody is genuinely waiting at the other end. */
 let sharing = false;
-async function startQuickShare(existingCode, quiet){
+async function startQuickShare(existingCode, quiet, existingSecret){
   /* Two of these running at once means two codes published and only the second
      one listened to — so a code shown on screen, or already photographed off a
      QR, could belong to the attempt that has quietly been abandoned. Cheap to
@@ -9297,8 +9333,11 @@ async function startQuickShare(existingCode, quiet){
   stopQuickPump();
   const code = existingCode || makeQuickCode();
   /* Nuovo a ogni invito, come il codice. Vive solo nel link: non compare sullo
-     schermo, non si detta, non si scrive a mano. */
-  quickLinkSecret = makeQuickSecret();
+     schermo, non si detta, non si scrive a mano.
+     Un invito RIPRESO (l'app riaperta mentre il link e' gia' in giro) deve
+     riusare lo stesso segreto: uno nuovo lascerebbe chi ha il link con una
+     chiave che non apre piu' niente. */
+  quickLinkSecret = existingSecret || makeQuickSecret();
   /* La rete di sicurezza dell'invito, preparata qui perche' il link si
      costruisce subito dopo. Chi invita vuole essere raggiunto — e' l'unica
      cosa che sta chiedendo — quindi se non ha ancora un indirizzo glielo si
@@ -9318,7 +9357,11 @@ async function startQuickShare(existingCode, quiet){
      in cui una persona sola scrive nel proprio telefono il codice che quel
      telefono sta mostrando. Vedi la guardia in tryQuickConnect. */
   codiceCheStoMostrando = code;
+  /* Le cifre non si mostrano piu' (v46): non c'e' piu' nessuno a cui dettarle.
+     Restano nel DOM, nascoste, perche' il pulsante «Manda l'invito» legge il
+     codice da li'. */
   $('quickCodeOut').textContent = formatQuickCode(code);
+  $('quickCodeOut').classList.add('hide');
   paintQr(code).catch(()=>{}); /* the QR is a convenience: never hold the invite up for it */
   $('btnRetryQuickA').classList.add('hide');
   /* both start from "this invite dies with the screen" and are corrected below
@@ -9351,7 +9394,16 @@ async function startQuickShare(existingCode, quiet){
      codice, come e' sempre stato. Il segreto lungo continua a viaggiare nel
      link ma NON viene usato per sigillare: inerte, in attesa del disegno
      giusto. */
-  const secReady = quickSecrets(code);
+  /* ⚠️ IL DISEGNO GIUSTO E' ARRIVATO CON LA v46 (14 set 2026), ed e' piu'
+     semplice di quello immaginato: NON si detta piu' a voce. L'invito viaggia
+     solo come link o QR, e tutti e due portano il segreto lungo. Quindi chi
+     mostra l'invito puo' sigillare sempre con quello — chi indovina le sei
+     cifre trova la casella e dentro una busta che non sa aprire (H-01,
+     chiuso). Chi entra con una versione precedente non ha il segreto
+     nemmeno dal link (lo ignorava): non apre, e ripiega sull'indirizzo che
+     il link porta come riserva (quickFallbackAddr). Deciso dall'operatore:
+     «togli la voce». */
+  const secReady = quickSecrets(code, quickLinkSecret);
   secReady.catch(()=>{});   /* awaited below; this only silences the unhandled-rejection warning if the setup throws first */
   pc = await newPeerConnection();
   /* Every operation below targets this, the connection this call actually
@@ -9391,7 +9443,7 @@ async function startQuickShare(existingCode, quiet){
 
   /* the note that lets this invite outlive the screen it was made on, and the
      code itself so that opening the app again can resume this exact invite */
-  savePendingInvite(code);
+  savePendingInvite(code, quickLinkSecret);
   publishWakeSlot(sec).then(ok => {
     if (quiet) return;
     $('inviteWaitsNote').classList.toggle('hide', !ok);
@@ -9565,12 +9617,12 @@ $('btnShareQuick').addEventListener('click', async () => {
     return;
   }
   const code = $('quickCodeOut').textContent.replace(/\s/g,'');
-  /* Both, deliberately: the link is one tap and needs no explaining, and the
-     digits underneath still let someone read the code down the phone to a
-     person who would rather type it than tap a link they do not trust. */
+  /* Fino alla 4.38 qui c'erano anche le cifre, per chi preferiva dettarle a
+     chi non si fida dei link. Dalla v46 le cifre da sole non aprono niente. */
+  /* Solo il link (v46): le cifre da sole non aprono piu' niente, e scriverle
+     qui inviterebbe a digitarle. */
   const text = t('quick.shareText','Ecco il link per parlare con me su DigitalValut Logos. Toccalo e siamo connessi:') +
-               '\n\n' + quickLink(code) +
-               '\n\n' + t('quick.orType','Oppure apri l\'app e scrivi questo codice:') + ' ' + code;
+               '\n\n' + quickLink(code);
   try{ if (navigator.share){ await navigator.share({ title: 'DigitalValut Logos', text }); return; } }catch(e){ if (e && e.name==='AbortError') return; }
   await copyOrSelect(text, $('quickCodeOut'));
 });
@@ -9638,6 +9690,15 @@ async function tryQuickConnect(){
      alongside it instead of in front of it. */
   /* ⚠️ Ritirato insieme all'altro lato: finche' chi mostra l'invito sigilla
      col solo codice, chi entra deve aprire col solo codice. */
+  /* v46: chi mostra l'invito sigilla col segreto lungo; qui si preparano
+     tutte e due le chiavi e si prova prima la lunga (vedi quickSecretsBoth).
+     Senza segreto — sei cifre digitate a mano — non si parte nemmeno: non c'e'
+     piu' nessuna busta che quelle sei cifre possano aprire, e dirlo subito e'
+     meglio che cercare per quindici secondi e poi accusare il codice. */
+  if (!quickJoinSecret){
+    setStatus($('quickStatusB'), t('quick.needLink','Servono il link o il QR dell\'invito, non solo le cifre: incolla qui il link intero, o inquadra il QR con la fotocamera.'), 'bad');
+    return;
+  }
   /* held until it is either handed over to `pc` or closed: a connection warmed
      up for a code that turns out to be wrong must not be left open.
      Dichiarato FUORI dal try perche' il `finally` lo usa. */
@@ -9649,14 +9710,18 @@ async function tryQuickConnect(){
        «Collegati» restava spento per sempre. Aggiungere il finally non era
        bastato — copriva tutto tranne le due righe che il difetto colpiva.
        Due righe fuori dal recinto valgono quanto nessun recinto. */
-    const secReady = quickSecrets(code);
+    const secReady = quickSecretsBoth(code, quickJoinSecret);
     const pcReady = newPeerConnection();
     secReady.catch(()=>{}); pcReady.catch(()=>{});
-    const sec = await secReady;
+    const chiavi = await secReady;
+    /* la lunga prima, la corta per un invito fatto da una versione vecchia;
+       `sec` diventa quella che ha aperto davvero, e con quella si risponde */
+    const tentativi = [chiavi.lunga, chiavi.corta];
+    let sec = chiavi.lunga || chiavi.corta;
     warmPc = await pcReady;
     tempiSegna('preparazione');
-    const offerKey = await slotId(sec.seed, 'offer');
-    const answerKey = await slotId(sec.seed, 'answer');
+    const offerKey = await slotId(chiavi.seed, 'offer');
+    const answerKey = await slotId(chiavi.seed, 'answer');
 
     /* Stretching the code costs the phone showing it a couple of seconds before
        it can publish anything, and someone reading that code off the screen in
@@ -9674,7 +9739,9 @@ async function tryQuickConnect(){
     const FIRST_LOOKS = [250, 350, 500, 700];
     let look = 0;
     for (;;){
-      msg = await mailboxGetSealed(offerKey, sec);
+      const got = await mailboxGetSealedAny(offerKey, tentativi);
+      msg = got ? got.msg : null;
+      if (got) sec = got.sec;
       if (msg && msg.sdp && bustaDelVerso(msg, 'offer')) break;
       if (Date.now() >= lookUntil) break;
       const gap = look < FIRST_LOOKS.length ? FIRST_LOOKS[look++] : 1000;
@@ -9687,7 +9754,14 @@ async function tryQuickConnect(){
        this very code, and the two connect without either having had to wait. */
     let knocked = false;
     if (!msg || !msg.sdp){
-      const wake = await wakeGetSealed(await slotId(sec.seed, 'wake'), sec);
+      /* la nota della sveglia e' sigillata da chi invita con la stessa chiave
+         dell'offerta: si provano le stesse due */
+      let wake = null;
+      for (const cand of tentativi){
+        if (!cand) continue;
+        wake = await wakeGetSealed(await slotId(cand.seed, 'wake'), cand);
+        if (wake) break;
+      }
       if (wake && wake.push && wake.push.endpoint){
         knockEndpoint(wake.push.endpoint);
         knocked = true;
@@ -9704,7 +9778,9 @@ async function tryQuickConnect(){
             quickConnecting = false; $('btnQuickConnect').disabled = false;
             return;
           }
-          msg = await mailboxGetSealed(offerKey, sec);
+          const got = await mailboxGetSealedAny(offerKey, tentativi);
+          msg = got ? got.msg : null;
+          if (got) sec = got.sec;
           if (msg && msg.sdp && bustaDelVerso(msg, 'offer')) break;
         }
       }
@@ -9821,16 +9897,39 @@ async function tryQuickConnect(){
 }
 $('btnQuickConnect').addEventListener('click', tryQuickConnect);
 $('quickCodeIn').addEventListener('input', () => {
-  const v = normalizeDigits($('quickCodeIn').value).replace(/\D/g,'').slice(0,6);
-  $('quickCodeIn').value = v;
-  /* ⚠️ Digitare a mano vuol dire NIENTE segreto lungo: sei cifre dettate a
-     voce e basta. Se ne restasse attaccato uno da un link aperto prima, la
-     chiave sarebbe sbagliata e il collegamento fallirebbe senza spiegazione.
-     Questo gestore scatta solo sulla digitazione vera: quando il codice arriva
-     da un link viene messo nel campo dal programma, che non lo fa scattare. */
+  /* v46: nel campo si INCOLLA IL LINK dell'invito (o si arriva qui dal link
+     stesso, che riempie il campo da programma senza far scattare questo).
+     Dal link si prendono codice, segreto lungo, indirizzo di riserva e — se
+     c'e' — l'impronta del QR, con la stessa lettura di autoFillFromHash.
+     Sei cifre da sole non bastano piu': lo si dice subito. */
+  const grezzo = $('quickCodeIn').value;
+  const link = leggiLinkInvito(grezzo);
+  if (link){
+    quickJoinSecret = link.s; quickJoinAddr = link.a; scannedFp = link.v;
+    $('quickCodeIn').value = link.code;
+    tryQuickConnect();
+    return;
+  }
+  const v = normalizeDigits(grezzo).replace(/\D/g,'').slice(0,6);
   quickJoinSecret = '';
-  if (v.length === 6) tryQuickConnect();
+  if (v.length === 6 && !/[#&]q=/.test(grezzo)){
+    $('quickCodeIn').value = v;
+    setStatus($('quickStatusB'), t('quick.needLink','Servono il link o il QR dell\'invito, non solo le cifre: incolla qui il link intero, o inquadra il QR con la fotocamera.'), 'bad');
+  }
 });
+/* Un link d'invito, incollato o arrivato dall'esterno: `#q=` con sei cifre,
+   `s=` il segreto lungo, `a=` l'indirizzo di riserva, `v=` l'impronta (solo
+   dal QR). Torna null se non e' un link d'invito. Stesse espressioni di
+   autoFillFromHash, tenute uguali apposta. */
+function leggiLinkInvito(testo){
+  const t0 = String(testo || '');
+  const q = t0.match(/[#&]q=(\d{6})\b/);
+  if (!q) return null;
+  const s = t0.match(/[#&]s=([A-Za-z0-9_-]{20,})\b/);
+  const a = t0.match(/[#&]a=([0-9A-Za-z]{12})\b/);
+  const v = t0.match(/[#&]v=([0-9a-f]{8,64})\b/);
+  return { code: q[1], s: s ? s[1] : '', a: a ? (parseAddress(a[1]) || '') : '', v: v ? v[1] : null };
+}
 
 /* ============================== chat: text + files ============================== */
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -11566,7 +11665,7 @@ startInboxPolling();
      instead, invisible to this catch. Caught properly now; still silent by
      design (see the note above this function) rather than alarming someone
      over a resume that may simply have nobody waiting on the other end. */
-  startQuickShare(pending.code, true).catch(() => {});
+  startQuickShare(pending.code, true, pending.s || '').catch(() => {});
 })();
 
 function autoFillFromHash(){
