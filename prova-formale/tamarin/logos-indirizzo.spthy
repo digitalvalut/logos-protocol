@@ -1,6 +1,6 @@
 /*
   Logos - rito B: la chiamata all indirizzo (modifica.js 6302-6445, 7001-7145, 7446+)
-  Bozza del 13 set 2026, scritta dalla descrizione in PROTOCOLLO.md sez. 3.
+  Bozza del 13 set 2026, scritta dalla descrizione in memory/PROTOCOLLO.md ?3.
 
   Cosa modella:
     - B possiede una coppia ECDH a lungo termine; il suo indirizzo e  addr(pub, slot).
@@ -13,7 +13,7 @@
     - Compromissione: la privata di B puo  essere rivelata (per la lemma di
       "nessuna segretezza in avanti", che DEVE fallire: e  dichiarato nel codice).
 
-  Cosa NON modella (dichiarato in PROTOCOLLO.md sez. 7): DTLS, il troncamento
+  Cosa NON modella (dichiarato in PROTOCOLLO.md ?7): DTLS, il troncamento
   dell indirizzo a 60 bit, il limitatore del Worker, il gettone (v44), ts.
 */
 
