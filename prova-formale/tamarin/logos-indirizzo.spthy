@@ -115,7 +115,7 @@ lemma B2_B3_autenticazione_di_B:
 /* B4. Il relay non puo far accettare ad A una chiave che non e di B: la
    chiave con cui A sigilla e quella di un B onesto (il controllo addr(pub) =
    indirizzo lo garantisce). La prima stesura chiedeva "ogni risposta di B
-   segue una chiamata onesta": era una domanda sbagliata — chiunque puo
+   segue una chiamata onesta": era una domanda sbagliata - chiunque puo
    chiamare un indirizzo, anche l avversario (vedi B1 risposta). */
 lemma B4_chiave_non_sostituibile:
   "All A B sa rid #i. AChiama(A, B, sa, rid) @ i ==> Ex k #n. Nasce(B, k) @ n & n < i"
