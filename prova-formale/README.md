@@ -15,14 +15,15 @@ Questi strumenti ragionano su **tutte** le sequenze possibili di messaggi che
 un avversario che controlla il relay può costruire, e o dimostrano che una
 proprietà vale sempre, o mostrano la sequenza che la rompe.
 
-## Cosa dicono, oggi (14 settembre 2026, versione 4.38)
+## Cosa dicono, oggi (14 settembre 2026, versione 4.39)
 
 | rito | proprietà | esito | strumento |
 |---|---|---|---|
 | invito a sei cifre | il relay non legge le SDP | ✅ dimostrata | Tamarin |
 | invito a sei cifre | codice segreto ⇒ nessuno in mezzo | ✅ dimostrata | Tamarin |
-| invito a sei cifre | codice **noto** ⇒ l'intruso esiste | ✅ traccia trovata — limite dichiarato in `SECURITY.md` | Tamarin |
+| invito a sei cifre, fino alla 4.38 | codice **noto** ⇒ l'intruso esiste | ✅ traccia trovata — chiuso nella 4.39 | Tamarin |
 | invito a sei cifre | tre parole uguali ⇒ nessuno in mezzo | ✅ dimostrata | Tamarin |
+| **invito dalla 4.39** (solo link/QR) | nessuno in mezzo **anche con le sei cifre pubbliche** | ✅ dimostrata | Tamarin |
 | chiamata all'indirizzo | offerta e risposta segrete | ✅ dimostrata | ProVerif |
 | chiamata all'indirizzo | chi risponde è il proprietario, a *quella* chiamata, una volta sola | ✅ dimostrata | ProVerif |
 | chiamata all'indirizzo | il relay non può sostituire la chiave | ✅ dimostrata | ProVerif |
@@ -34,7 +35,9 @@ Tre cose sono uscite da questo lavoro e sono state corrette nella 4.38:
 la chiave del ricollegamento fra contatti (derivava dalle impronte, che ogni
 contatto conosce), il verso delle buste (la stessa chiave sigillava offerta e
 risposta senza dire quale fosse), e — per strada — le lettere che si vedevano
-solo riaprendo l'app. Il dettaglio è in `PROTOCOLLO.md` §6 e §8.
+solo riaprendo l'app. La 4.39 ha chiuso l'ultima nota: l'invito non si detta
+più a voce, e il segreto lungo del link sigilla la busta. Il dettaglio è in
+`PROTOCOLLO.md` §6 e §8.
 
 ## Cosa NON dicono
 
@@ -75,11 +78,13 @@ cambiato: in entrambi i casi è una notizia.
 
 This folder holds the full description of Logos's signalling protocol
 (`PROTOCOLLO.md`, Italian) and the models used to check it with **Tamarin**
-and **ProVerif**. Results as of 4.38 (14 Sep 2026): the address-call
+and **ProVerif**. Results as of 4.39 (14 Sep 2026): the address-call
 handshake is proven secret and injectively authenticated against a relay
-adversary (ProVerif); the six-digit invite is proven safe when the code is
-secret and the three-word SAS is proven to detect a man-in-the-middle when it
-is not (Tamarin); the pre-4.38 contact reconnect was **broken** against a
+adversary (ProVerif); the six-digit invite was proven safe only while the code was
+secret, so since 4.39 invites are link/QR only and the 128-bit secret they carry
+seals the envelope — proven safe even with the digits public (Tamarin); the
+three-word SAS is proven to detect a man-in-the-middle when the link itself
+leaks; the pre-4.38 contact reconnect was **broken** against a
 former mutual contact (Tamarin found the trace) and the 4.38 redesign is
 proven ×4 (ProVerif). No forward secrecy on addresses, by construction and
 declared. **The models were written by the project and have not been

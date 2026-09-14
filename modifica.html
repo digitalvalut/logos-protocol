@@ -644,9 +644,12 @@
     </div>
 
     <div class="card" id="quickStartCard">
-      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo codice</div></div>
-      <div class="helptext" id="quickHelpA" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Oppure dille le sei cifre a voce. Resta valido finché tieni aperta questa schermata.</div>
-      <div class="quickcode" id="quickCodeOut">······</div>
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleA">Il tuo invito</div></div>
+      <div class="helptext" id="quickHelpA" data-i18n="quick.helpA">Mandalo col pulsante qui sotto — all'altra persona basta toccarlo ed è dentro. Se è qui con te, fagli inquadrare il QR. Resta valido finché tieni aperta questa schermata.</div>
+      <!-- Le sei cifre non si mostrano piu' (v46): l'invito viaggia come link o
+           QR, che portano un segreto lungo. Il blocco resta nel DOM, nascosto,
+           perche' il pulsante «Manda l'invito» legge il codice da qui. -->
+      <div class="quickcode hide" id="quickCodeOut">······</div>
       <div class="qrbox hide" id="quickQr">
         <canvas id="quickQrCanvas" aria-label="Codice QR dell'invito"></canvas>
         <div class="qrhint" data-i18n="quick.qrHint">Oppure inquadralo con la fotocamera del telefono</div>
@@ -749,10 +752,12 @@
          person came here to say can still be left. -->
 
     <div class="card" id="quickJoinCard">
-      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleB">Digita il codice</div></div>
-      <div class="helptext" data-i18n="quick.helpB">Chiedi il codice a chi ti ha invitato — 6 cifre, a voce o scritte — e scrivilo qui.</div>
-      <input type="text" class="quickinput" id="quickCodeIn" inputmode="numeric" autocomplete="off"
-             data-i18n-ph="quick.codePh" placeholder="000000" maxlength="6">
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="quick.titleB">Apri l'invito</div></div>
+      <div class="helptext" data-i18n="quick.helpB">Tocca il link che ti hanno mandato, o inquadra il QR con la fotocamera: è già tutto pronto. Se hai il link sotto mano, incollalo qui.</div>
+      <!-- v46: il campo accetta il LINK intero (con il segreto lungo), non piu'
+           sei cifre: niente maxlength, niente tastiera numerica. -->
+      <input type="text" class="quickinput" id="quickCodeIn" autocomplete="off" autocapitalize="off" spellcheck="false"
+             data-i18n-ph="quick.codePh" placeholder="incolla qui il link dell'invito">
       <button class="btn primary big mt10" id="btnQuickConnect" data-i18n="quick.connect">Connetti</button>
       <div class="status" id="quickStatusB"></div>
       <div class="diagline hide" id="diagQuickB"></div>

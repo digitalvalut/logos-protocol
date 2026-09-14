@@ -1,0 +1,91 @@
+/*
+  Logos - rito A, versione 4.39 / v46: l invito SOLO come link o QR.
+  (modifica.js: startQuickShare sigilla con quickSecrets(code, quickLinkSecret);
+   tryQuickConnect prova la chiave lunga, poi la corta per gli inviti vecchi.)
+
+  Cambiamento rispetto a logos-invito.spthy (fino alla 4.38):
+    - la chiave e kdf(code, lungo): il segreto lungo di 128 bit che viaggia nel
+      link/QR entra nel sigillo. Le sei cifre dicono solo DOVE (la casella).
+    - non si detta piu a voce: il codice da solo non apre niente.
+
+  Modello dell avversario: le SEI CIFRE SONO PUBBLICHE (Out): chiunque le
+  conosce o le indovina. Il segreto lungo arriva a B per la stessa via fidata
+  del link (fuori dal modello); puo essere rivelato con una regola a parte
+  (chi trasporta il link lo vede: WhatsApp, l email — quella e la SAS).
+
+  Attesa: A1 e A2 dimostrate ANCHE con le cifre pubbliche (era il difetto
+  H-01); A3 traccia solo se il segreto lungo e rivelato; A4 come prima.
+*/
+
+theory Logos_Invito_v46
+begin
+
+builtins: symmetric-encryption, hashing
+functions: kdf/2
+
+restriction una_impronta_per_dispositivo:
+  "All X f1 f2 #i #j. Nasce(X, f1) @ i & Nasce(X, f2) @ j ==> #i = #j"
+
+rule Nasce:
+  [ Fr(~fp) ] --[ Nasce($X, ~fp) ]-> [ !Fp($X, ~fp) ]
+
+/* A genera codice e segreto lungo; le CIFRE sono pubbliche da subito */
+rule A_Genera:
+  [ Fr(~code), Fr(~lungo) ] --[ Genera($A, ~code, ~lungo) ]-> [ !Invito($A, ~code, ~lungo), Out(~code) ]
+
+/* B riceve il link (codice + segreto) per una via fidata */
+rule B_RiceveLink:
+  [ !Invito($A, ~code, ~lungo) ] --[ Riceve($B, $A, ~code) ]-> [ !LinkDi($B, $A, ~code, ~lungo) ]
+
+/* il segreto lungo finisce nelle mani sbagliate (chi trasporta il link) */
+rule Rivela_Lungo:
+  [ !Invito($A, ~code, ~lungo) ] --[ LungoRivelato($A, ~code) ]-> [ Out(~lungo) ]
+
+rule A_Offre:
+  let k = kdf(~code, ~lungo)
+  in
+  [ !Invito($A, ~code, ~lungo), !Fp($A, fpA) ]
+  --[ AOffre($A, ~code, fpA) ]->
+  [ Out(<h(<~code, 'offer'>), senc(<'offer', fpA>, k)>), AttesaA($A, ~code, k, fpA) ]
+
+rule B_Risponde:
+  let k = kdf(~code, ~lungo)
+  in
+  [ !LinkDi($B, $A, ~code, ~lungo), !Fp($B, fpB), In(<h(<~code, 'offer'>), senc(<'offer', fpA>, k)>) ]
+  --[ BRisponde($B, $A, ~code, fpA, fpB), Collegato($B, fpB, fpA), SAS($B, h(<fpA, fpB>)) ]->
+  [ Out(<h(<~code, 'answer'>), senc(<'answer', fpB>, k)>) ]
+
+rule A_Conclude:
+  [ AttesaA($A, ~code, k, fpA), In(<h(<~code, 'answer'>), senc(<'answer', fpB>, k)>) ]
+  --[ AConclude($A, ~code, fpA, fpB), Collegato($A, fpA, fpB), SAS($A, h(<fpA, fpB>)) ]->
+  [ ]
+
+lemma eseguibile:
+  exists-trace
+  "Ex A code fa fb #i. AConclude(A, code, fa, fb) @ i & not (Ex X c #r. LungoRivelato(X, c) @ r)"
+
+/* A1 (v46): con le cifre PUBBLICHE, il relay non apprende le impronte scambiate
+   finche il segreto lungo non e rivelato */
+lemma A1_cifre_pubbliche_relay_non_legge:
+  "All A code fa fb #i. AConclude(A, code, fa, fb) @ i
+     ==> not (Ex #j. K(fb) @ j & not (Ex X #n. Nasce(X, fb) @ n & Ex Y c #r. LungoRivelato(Y, c) @ r))
+         | (Ex #r. LungoRivelato(A, code) @ r)"
+
+/* A2 (v46): con le cifre PUBBLICHE, nessuno in mezzo — era H-01 */
+lemma A2_cifre_pubbliche_nessun_mitm:
+  "All A code fa fb #i. AConclude(A, code, fa, fb) @ i
+     ==> (Ex B #j. BRisponde(B, A, code, fa, fb) @ j & j < i)
+         | (Ex #r. LungoRivelato(A, code) @ r)"
+
+/* A3: con il segreto lungo rivelato (chi trasporta il link), l intruso esiste:
+   e il limite che resta, coperto dalla SAS (A4) */
+lemma A3_mitm_con_lungo_rivelato_ESISTE:
+  exists-trace
+  "Ex A code fa fb #i. AConclude(A, code, fa, fb) @ i
+     & not (Ex B #j. BRisponde(B, A, code, fa, fb) @ j)"
+
+lemma A4_sas_uguali_implica_nessun_mitm:
+  "All A B s #i #j. SAS(A, s) @ i & SAS(B, s) @ j & not (A = B)
+     ==> (Ex fa fb #k #l. Collegato(A, fa, fb) @ k & Collegato(B, fb, fa) @ l)"
+
+end

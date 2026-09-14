@@ -117,6 +117,14 @@ waits for a closed phone; the note is a convenience and never the only copy.
 Never poll `/letter` on a timer: a collect costs a `list`, and lists are as
 scarce as writes.
 
+**Invites are link or QR only** (4.39). The six-digit code names the slot; the
+128-bit secret in the link (`s=`) seals the envelope (`quickSecrets(code,
+quickLinkSecret)`). Do not bring back a typed-digits path: a code that opens
+the envelope by itself is H-01 again. A joiner tries the long key, then the
+short one (`quickSecretsBoth`, one PBKDF2), so an invite made by an older app
+still opens; an older joiner cannot open a new invite and falls back to the
+address in the link.
+
 **The formal models** of the signalling (Tamarin + ProVerif) live in
 `prova-formale/`, outside the app, with the protocol written out
 (`prova-formale/PROTOCOLLO.md`) and a manual workflow to re-run them (an hour;
@@ -168,8 +176,8 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 465 tests, 70 suites, about three
-minutes, and it exits on its own (measured: 186 s). They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 473 tests, 71 suites, about three
+minutes, and it exits on its own (measured: 195 s). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**

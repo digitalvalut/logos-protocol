@@ -1792,6 +1792,7 @@ test.describe('what the audit found', () => {
       mailboxGet = async () => { window.__toccato = true; return null; };
       codiceCheStoMostrando = null;
       $('quickCodeIn').value = '123456';
+      quickJoinSecret = 'segreto-lungo-dal-link-xxxxxxxx';   /* v46: senza il link non si parte */
     `);
     await app.run('Promise.resolve(tryQuickConnect()).catch(function(){})');
     await app.run('new Promise(r => setTimeout(r, 20))');
@@ -2491,13 +2492,15 @@ test.describe('what the audit found', () => {
     const app = loadApp();
     app.run(`
       window.__order = [];
-      quickSecrets = function(){
+      /* v46: la parte lenta e' quickRaw, chiamata da quickSecretsBoth */
+      quickSecretsBoth = function(){
         window.__order.push('stretch-start');
         return new Promise(r => setTimeout(() => {
           window.__order.push('stretch-end');
-          r({ key: {}, seed: 'deadbeef' });
+          r({ seed: 'deadbeef', lunga: { key: {}, seed: 'deadbeef' }, corta: { key: {}, seed: 'deadbeef' } });
         }, 50));
       };
+      quickJoinSecret = 'segreto-lungo-dal-link-xxxxxxxx';
       newPeerConnection = function(){
         window.__order.push('conn-start');
         return Promise.resolve(new RTCPeerConnection());
@@ -7520,6 +7523,148 @@ test.describe('v45: il bigliettino delle lettere e il tasto Rispondi', () => {
     /* il DOM finto non svuota i figli su innerHTML = '': si svuota a mano, come farebbe il browser */
     app.run(`$('lettersList').children = []; saveLetters([{ id: 'x2', tok: null, nick: 'Anon', text: 'ciao', from: null, slot: 0, at: Date.now() }]); renderLetters();`);
     assert.ok(!app.run("window.__bottoni().some(b => /Rispondi/.test(b.textContent))"));
+    app.stop();
+  });
+});
+
+/* =========================================================================
+   v46 (14 settembre 2026): l'invito viaggia solo come link o QR, e il segreto
+   lungo entra nel sigillo. Chiude H-01 (deciso dall'operatore: «togli la
+   voce»). Chi ha una versione precedente: se INVITA, chi entra con la v46
+   apre lo stesso (chiave corta di riserva); se ENTRA in un invito v46, non
+   apre e ripiega sull'indirizzo che il link porta (gia' cosi' dalla 4.2x).
+   ========================================================================= */
+test.describe('v46: il segreto lungo sigilla, le sei cifre da sole non aprono', () => {
+  const RELAY = `
+    window.__store = new Map();
+    fetch = (url, opts) => {
+      const method = (opts && opts.method) || 'GET';
+      const senzaQuery = url.split('?')[0]; const key = senzaQuery.slice(senzaQuery.lastIndexOf('/') + 1);
+      const tok = opts && opts.headers && opts.headers['X-Logos-Token'];
+      const risp = (status, body) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(body), text: () => Promise.resolve(JSON.stringify(body)) });
+      if (method === 'PUT'){ window.__store.set(key, { body: opts.body, tok: tok || null }); return risp(200, { ok: true }); }
+      if (method === 'DELETE'){ const r = window.__store.get(key); if (!r) return risp(404, {}); if (r.tok !== tok) return risp(403, {}); window.__store.delete(key); return risp(200, { ok: true }); }
+      const rec = window.__store.get(key); if (!rec) return risp(404, { empty: true }); return risp(200, JSON.parse(rec.body));
+    };
+    RELAYS.length = 0; RELAYS.push('https://uno.example');
+  `;
+
+  test('chi invita sigilla col segreto lungo: le sei cifre da sole NON aprono la busta (H-01)', async () => {
+    const app = loadApp();
+    app.run(RELAY + `
+      newPeerConnection = async () => ({ createDataChannel(){ return {}; }, createOffer: async () => ({ type:'offer', sdp:'v=0 A' }), setLocalDescription: async function(d){ this.localDescription = d; }, addEventListener(){}, signalingState:'stable', close(){} });
+      wireDataChannel = () => {}; candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+      ensureFallbackAddress = async () => ''; paintQr = async () => {}; publishWakeSlot = async () => false;
+      mailboxGet = async () => null;
+    `);
+    app.run('startQuickShare("123456", true)');
+    await new Promise(r => setTimeout(r, 1500));
+    const segreto = app.run('quickLinkSecret');
+    assert.match(segreto, /^[A-Za-z0-9_-]{20,}$/, 'il segreto lungo esiste');
+    assert.ok(app.run("quickLink('123456')").indexOf('&s=' + segreto) > 0, 'e viaggia nel link');
+    const offerKey = await app.run("(async () => slotId((await quickSecrets('123456')).seed, 'offer'))()");
+    const rec = app.run(`window.__store.get(${JSON.stringify(offerKey)})`);
+    assert.ok(rec, 'l offerta e nella casella delle sei cifre (trovabile, come sempre)');
+    const conCorta = await app.run(`(async () => openFrom((await quickSecrets('123456')).key, JSON.parse(${JSON.stringify(rec.body)})))()`);
+    assert.strictEqual(conCorta, null, 'chi ha solo le sei cifre NON la apre: era il difetto H-01');
+    const conLunga = await app.run(`(async () => openFrom((await quickSecrets('123456', ${JSON.stringify(segreto)})).key, JSON.parse(${JSON.stringify(rec.body)})))()`);
+    assert.ok(conLunga && conLunga.sdp === 'v=0 A', 'chi ha il link la apre');
+    app.run('pc = null; stopQuickPump();');
+    app.stop();
+  });
+
+  test('chi entra prova prima la chiave lunga, poi quella corta: un invito fatto da una versione vecchia si apre ancora', async () => {
+    const app = loadApp();
+    app.run(RELAY);
+    /* busta "vecchia": sigillata col solo codice */
+    await app.run(`(async () => { const sec = await quickSecrets('123456'); await mailboxPutSealed(await slotId(sec.seed, 'offer'), sec, { kind: 'offer', sdp: 'v=0 VECCHIA' }); })()`);
+    const got = await app.run(`(async () => { const c = await quickSecretsBoth('123456', 'segreto-lungo-che-l-altro-non-usa'); const g = await mailboxGetSealedAny(await slotId(c.seed, 'offer'), [c.lunga, c.corta]); return g ? { sdp: g.msg.sdp, lunga: g.sec === c.lunga } : null; })()`);
+    assert.ok(got, 'si apre');
+    assert.strictEqual(got.sdp, 'v=0 VECCHIA');
+    assert.strictEqual(got.lunga, false, 'con la chiave corta: e cosi si sa che dall altra parte c e una versione vecchia, e si risponde con quella');
+    /* busta nuova: si apre con la lunga */
+    await app.run(`(async () => { const sec = await quickSecrets('654321', 'segreto-lungo-vero-xxxxxxxx'); await mailboxPutSealed(await slotId(sec.seed, 'offer'), sec, { kind: 'offer', sdp: 'v=0 NUOVA' }); })()`);
+    const got2 = await app.run(`(async () => { const c = await quickSecretsBoth('654321', 'segreto-lungo-vero-xxxxxxxx'); const g = await mailboxGetSealedAny(await slotId(c.seed, 'offer'), [c.lunga, c.corta]); return g ? { sdp: g.msg.sdp, lunga: g.sec === c.lunga } : null; })()`);
+    assert.ok(got2 && got2.sdp === 'v=0 NUOVA' && got2.lunga === true);
+    app.stop();
+  });
+
+  test('tryQuickConnect, davanti a un invito di una versione vecchia, risponde con la chiave corta', async () => {
+    const app = loadApp();
+    app.run(RELAY + `
+      quickJoinSecret = 'segreto-lungo-che-l-altro-non-usa'; codiceCheStoMostrando = null;
+      $('screenChat').classList.add('hide');
+      newPeerConnection = async () => ({ ondatachannel: null, createAnswer: async () => ({ type:'answer', sdp:'v=0 B' }), setRemoteDescription: async function(d){ window.__remota = d.sdp; }, setLocalDescription: async function(d){ this.localDescription = d; }, addEventListener(){}, signalingState:'stable', close(){} });
+      wireDataChannel = () => {}; candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+      watchHandshakeProgress = () => {}; wakeGetSealed = async () => null;
+      $('quickCodeIn').value = '123456';
+    `);
+    await app.run(`(async () => { const sec = await quickSecrets('123456'); await mailboxPutSealed(await slotId(sec.seed, 'offer'), sec, { kind: 'offer', sdp: 'v=0 VECCHIA' }); })()`);
+    app.run('window.__p = tryQuickConnect();');
+    await new Promise(r => setTimeout(r, 2500));
+    assert.strictEqual(app.run('window.__remota'), 'v=0 VECCHIA', 'l offerta vecchia si apre e si usa');
+    const risposta = await app.run(`(async () => { const sec = await quickSecrets('123456'); const k = await slotId(sec.seed, 'answer'); const r = window.__store.get(k); return r ? openFrom(sec.key, JSON.parse(r.body)) : null; })()`);
+    assert.ok(risposta && risposta.sdp === 'v=0 B', 'e la risposta e sigillata con la chiave CORTA, l unica che la versione vecchia sa aprire');
+    app.run('pc = null; quickConnecting = false;');
+    app.stop();
+  });
+
+  test('tryQuickConnect senza segreto lungo non tocca il relay e dice cosa serve', async () => {
+    const app = loadApp();
+    app.run(`window.__partito = 0; mailboxGet = async () => { window.__partito++; return null; }; quickJoinSecret = ''; codiceCheStoMostrando = null; $('screenChat').classList.add('hide'); $('quickCodeIn').value = '123456';`);
+    await app.run('Promise.resolve(tryQuickConnect()).catch(() => {})');
+    await new Promise(r => setTimeout(r, 30));
+    assert.strictEqual(app.run('window.__partito'), 0);
+    assert.match(app.run("$('quickStatusB').textContent"), /link|QR/i);
+    app.stop();
+  });
+
+  test('quickSecretsBoth paga PBKDF2 una volta sola per due chiavi', async () => {
+    const app = loadApp();
+    app.run(`window.__pbkdf = 0; const __d = crypto.subtle.deriveBits.bind(crypto.subtle); crypto.subtle.deriveBits = (a, k, n) => { if (a && a.name === 'PBKDF2') window.__pbkdf++; return __d(a, k, n); };`);
+    await app.run("quickSecretsBoth('123456', 'segreto-lungo-vero-xxxxxxxx')");
+    assert.strictEqual(app.run('window.__pbkdf'), 1, 'la parte lenta si paga una volta: due volte raddoppierebbe l attesa sul telefono');
+    app.stop();
+  });
+
+  test('sei cifre digitate a mano non partono e lo dicono; il link incollato invece parte', async () => {
+    const app = loadApp();
+    app.run(`window.__partito = 0; mailboxGet = async () => { window.__partito++; return null; }; quickJoinSecret = ''; codiceCheStoMostrando = null;`);
+    app.run("$('quickCodeIn').value = '123456'; $('quickCodeIn').listeners.input[0]();");
+    await new Promise(r => setTimeout(r, 30));
+    assert.strictEqual(app.run('window.__partito'), 0, 'senza segreto non si tocca il relay');
+    assert.match(app.run("$('quickStatusB').textContent"), /link|QR/i, 'e si spiega cosa serve');
+    /* il link intero, incollato */
+    app.run("$('quickCodeIn').value = 'https://digitalvalut.github.io/logos-protocol/modifica.html#q=654321&s=segreto-lungo-vero-xxxxxxxx&a=DVAAAABBBBCC'; $('quickCodeIn').listeners.input[0]();");
+    assert.strictEqual(app.run('quickJoinSecret'), 'segreto-lungo-vero-xxxxxxxx', 'il segreto viene dal link');
+    assert.strictEqual(app.run("$('quickCodeIn').value"), '654321');
+    assert.strictEqual(app.run('quickJoinAddr'), 'DVAAAABBBBCC', 'e anche la riserva');
+    await new Promise(r => setTimeout(r, 1500));
+    assert.ok(app.run('window.__partito') > 0, 'col link si parte');
+    app.run('quickConnecting = false;');
+    app.stop();
+  });
+
+  test('un invito ripreso all apertura dell app riusa lo stesso segreto lungo, o il link gia mandato non apre piu', () => {
+    const app = loadApp();
+    app.run("savePendingInvite('123456', 'segreto-lungo-vero-xxxxxxxx')");
+    const p = JSON.parse(app.run('JSON.stringify(readPendingInvite())'));
+    assert.strictEqual(p.code, '123456');
+    assert.strictEqual(p.s, 'segreto-lungo-vero-xxxxxxxx');
+    /* statico: la ripresa passa il segreto a startQuickShare, e startQuickShare lo riusa */
+    const src = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
+    assert.match(src, /startQuickShare\(pending\.code, true, pending\.s/, 'la ripresa deve passare il segreto');
+    assert.match(src, /quickLinkSecret = existingSecret \|\| makeQuickSecret\(\)/, 'e startQuickShare deve riusarlo');
+    app.stop();
+  });
+
+  test('sullo schermo di chi invita le cifre non si vedono; il testo condiviso porta solo il link', () => {
+    const app = loadApp();
+    const html = fs.readFileSync(path.join(__dirname, '..', 'modifica.html'), 'utf8');
+    assert.match(html, /class="quickcode hide" id="quickCodeOut"/, 'le cifre restano nel DOM ma nascoste');
+    assert.doesNotMatch(html, /id="quickCodeIn"[^>]*maxlength="6"/, 'il campo accetta un link intero');
+    const src = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
+    assert.doesNotMatch(src, /t\('quick\.orType'/, 'niente «oppure scrivi questo codice» nel testo condiviso');
     app.stop();
   });
 });

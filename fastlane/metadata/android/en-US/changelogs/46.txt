@@ -1,0 +1,7 @@
+Invites travel only as a link or a QR code: the six digits alone no longer open anything.
+
+It was the last known weakness in the protocol, declared for weeks in SECURITY.md: anyone who overheard the six digits — or guessed them — found the invite envelope and opened it. The link and the QR have carried a 128-bit long secret for a while, but it went unused, because there was no way to know whether the other person would type the digits by hand.
+
+From this version they are no longer read aloud. Whoever invites shows the QR and sends the link; whoever joins taps the link, scans the QR, or pastes the whole link. The envelope is sealed with the long secret: whoever has only the six digits finds the slot and, inside it, an envelope they cannot open. The formal proof, redone on the new rite, shows it: nobody in the middle even with the digits public.
+
+Compatibility: if the inviter runs an older version, this version still opens their invite. If the joiner runs an older version and receives an invite made by this one, it cannot open it and falls back by itself to the permanent address the link carries as a reserve.

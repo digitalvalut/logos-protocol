@@ -60,11 +60,12 @@ running list of them.
 
 Being straight about this saves your time:
 
-- **The six-digit code is a short secret.** Read aloud over a channel somebody is
-  listening to, it can be attacked. The relay limits attempts, and the app shows
-  three words for verification, but the code alone is not strong. A better design
-  is planned; an earlier attempt was withdrawn because it broke people typing the
-  digits by hand.
+- **The invite link carries the secret.** Since 4.39 an invite is a link or a QR
+  code and the envelope is sealed with the 128-bit secret they carry; the six
+  digits only name the slot. Whoever carries the link (the messenger you send it
+  through) holds that secret: against that party the defence is the three-word
+  verification, which the formal model shows to detect an interception. Before
+  4.39 the six digits alone opened the envelope.
 - **The local history is stored unencrypted** on the device. Whoever can read the
   device's storage can read past messages.
 - **The free hosting tier is a real limit.** Logos runs on a free Cloudflare plan

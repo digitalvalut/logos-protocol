@@ -223,7 +223,7 @@ un contatto salvato prima della v2 degli indirizzi potrebbe non avere la
 `pub` dell'altro in rubrica — da verificare cosa salva `saveContact`.
 **Chiuso nella 4.38** (`contactDialSecrets`/`contactOpenIncoming`; i contatti salvati prima restano sul rito vecchio finché non si ricollegano una volta con la 4.38 da entrambe le parti).
 
-### 6.2 Rito A: il segreto lungo inerte — **aperto, dichiarato in SECURITY.md**
+### ~~6.2 Rito A: il segreto lungo inerte~~ — ✅ CHIUSO nella 4.39/v46: niente più dettatura a voce, il segreto lungo sigilla (`logos-invito-v46.spthy`)
 
 Già noto (H-01), già scritto nel codice (9119–9134) e in `SECURITY.md`. La
 correzione va disegnata così che A pubblichi in modo che *sia* chi ha il
@@ -279,6 +279,7 @@ Actions, a mano) o in locale con gli stessi comandi.
 | A invito | A2 codice segreto ⇒ nessun MITM | ✅ dimostrata (18) | Tamarin |
 | A invito | A3 codice noto ⇒ MITM esiste | ✅ traccia trovata (attesa: H-01) | Tamarin |
 | A invito | A4 SAS uguali ⇒ nessun MITM | ✅ dimostrata (14) | Tamarin |
+| **A invito v46** (4.39, solo link/QR, segreto lungo nel sigillo) | A1, A2 **con le sei cifre pubbliche**; A3 solo se il segreto lungo è rivelato; A4 | ✅ dimostrate (21, 25, 8, 14 passi) | Tamarin (`logos-invito-v46.spthy`) |
 | B indirizzo | B1 offerta segreta | ✅ **true** | ProVerif |
 | B indirizzo | B1b risposta segreta se A onesto | ✅ **true** | ProVerif |
 | B indirizzo | B2+B3 autenticazione iniettiva di B | ✅ **true** | ProVerif |

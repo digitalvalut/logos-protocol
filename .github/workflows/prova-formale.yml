@@ -49,7 +49,7 @@ jobs:
       - name: Ogni lemma, una alla volta (8 minuti e 6 GB ciascuna; i veloci prima)
         run: |
           mkdir -p risultati
-          for f in prova-formale/tamarin/logos-invito.spthy prova-formale/tamarin/logos-contatto.spthy prova-formale/tamarin/logos-contatto-v45.spthy prova-formale/tamarin/logos-indirizzo-leggero.spthy prova-formale/tamarin/logos-indirizzo.spthy; do
+          for f in prova-formale/tamarin/logos-invito.spthy prova-formale/tamarin/logos-invito-v46.spthy prova-formale/tamarin/logos-contatto.spthy prova-formale/tamarin/logos-contatto-v45.spthy prova-formale/tamarin/logos-indirizzo-leggero.spthy prova-formale/tamarin/logos-indirizzo.spthy; do
             n=$(basename $f .spthy)
             echo "=================== $n ==================="
             for l in $(grep -oE '^lemma [A-Za-z0-9_]+' "$f" | awk '{print $2}'); do

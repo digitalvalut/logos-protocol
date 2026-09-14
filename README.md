@@ -33,9 +33,11 @@ anyone — because there is no server handling your conversation at all.
   different address and is rejected. Each call seals its offer under a fresh one-time key
   pair of its own, so two calls to the same address share no secret with each other. A
   device can hold up to eight independent addresses at once, each revocable on its own.
-- **Encrypted from the first handshake.** Six-digit and link-based invites derive their key
-  from PBKDF2 + AES-256-GCM; address-based calls use the ECIES scheme above. Either way,
-  the offer is useless to anyone who intercepts it without the matching device.
+- **Encrypted from the first handshake.** An invite is a link or a QR code carrying a
+  128-bit secret; the envelope is sealed with it (HKDF over a PBKDF2-stretched code +
+  AES-256-GCM), so the six digits that name the slot open nothing by themselves.
+  Address-based calls use the ECIES scheme above. Either way, the offer is useless to
+  anyone who intercepts it without the matching device.
 - **You verify who you're really talking to.** The first time you connect to someone, both
   sides see the same three-word security code, generated from the actual cryptographic
   connection (the same principle used by ZRTP-based secure calling). Read them out loud to
@@ -156,7 +158,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-465 automated tests (measured 14 Sep 2026), each verified by deliberately reintroducing
+473 automated tests (measured 14 Sep 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root.

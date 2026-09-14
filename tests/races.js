@@ -139,7 +139,7 @@ const PROCEDURE = {
     invoca:  `tryAutoReconnect(window.__c);`,
   },
   tryQuickConnect: {
-    prepara: `$('quickCodeIn').value = '123456';`,
+    prepara: `$('quickCodeIn').value = '123456'; quickJoinSecret = 'segreto-lungo-dal-link-xxxxxxxx';`,
     invoca:  `tryQuickConnect();`,
   },
   startQuickShare: {

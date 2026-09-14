@@ -1,0 +1,7 @@
+L'invito si manda solo come link o QR: le sei cifre da sole non aprono più niente.
+
+Era l'ultima debolezza nota del protocollo, dichiarata da settimane in SECURITY.md: chi sentiva dettare le sei cifre — o le indovinava — trovava la busta dell'invito e la apriva. Il link e il QR portano da tempo un segreto lungo di 128 bit che però non veniva usato, perché non si poteva sapere se dall'altra parte qualcuno avrebbe digitato le cifre a mano.
+
+Da questa versione non si dettano più. Chi invita mostra il QR e manda il link; chi entra tocca il link, inquadra il QR, o incolla il link intero. La busta è sigillata con il segreto lungo: chi ha solo le sei cifre trova la casella e dentro una busta che non sa aprire. La prova formale, rifatta sul rito nuovo, lo dimostra: nessuno in mezzo anche con le cifre pubbliche.
+
+Compatibilità: se chi invita ha una versione precedente, questa apre lo stesso il suo invito. Se chi entra ha una versione precedente e riceve un invito fatto da questa, non lo apre e passa da solo all'indirizzo permanente che il link porta come riserva.
