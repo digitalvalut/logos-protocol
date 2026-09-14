@@ -70,11 +70,13 @@ lemma B2_B3_autenticazione_di_B:
            & not (Ex A2 sb2 #k. AConclude(A2, B, sa, sb2, rid) @ k & not (#k = #i)) )
          | (Ex #r. Rivelata(B) @ r)"
 
-/* B4. Il relay non puo far accettare ad A una chiave che non e di B. */
+/* B4. Il relay non puo far accettare ad A una chiave che non e di B: la
+   chiave con cui A sigilla e quella di un B onesto (il controllo addr(pub) =
+   indirizzo lo garantisce). La prima stesura chiedeva "ogni risposta di B
+   segue una chiamata onesta": era una domanda sbagliata — chiunque puo
+   chiamare un indirizzo, anche l avversario (vedi B1 risposta). */
 lemma B4_chiave_non_sostituibile:
-  "All B sa rid sb #j. BRisponde(B, sa, rid, sb) @ j
-     ==> (Ex A #i. AChiama(A, B, sa, rid) @ i & i < j)
-         | (Ex #r. Rivelata(B) @ r)"
+  "All A B sa rid #i. AChiama(A, B, sa, rid) @ i ==> Ex k #n. Nasce(B, k) @ n & n < i"
 
 /* Nessuna segretezza in avanti: DEVE FALLIRE (dichiarato a modifica.js 6369-6388). */
 lemma NON_forward_secrecy_deve_fallire:
