@@ -1,0 +1,7 @@
+La chiamata vocale si sente di nuovo tenendo il telefono in mano.
+
+Dalla versione 40 la chiamata vocale usciva dall'auricolare, come una telefonata: giusto per chi mette il telefono all'orecchio, muto per chi lo tiene davanti a sé come si fa con un'app. Da qui l'"audio che non si sente" e la "voce bassa" riferiti su due telefoni veri, mentre la videochiamata — che esce dall'altoparlante — andava bene.
+
+Ora ogni chiamata parte dall'altoparlante. Nella vocale il sensore di prossimità fa quello che fa il telefono normale: avvicini il telefono all'orecchio e la voce passa all'auricolare (e lo schermo si spegne, così la guancia non preme i tasti); lo allontani e torna all'altoparlante. Il pulsante dell'altoparlante resta, e se lo tocchi decidi tu per il resto della chiamata.
+
+Solo l'app Android cambia; nessuna modifica al relay.

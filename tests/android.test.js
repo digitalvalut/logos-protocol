@@ -71,6 +71,24 @@ test.describe('il telefono durante una chiamata: il ponte esiste davvero', () =>
     assert.ok(/TYPE_BUILTIN_EARPIECE/.test(CALL) && /TYPE_BUILTIN_SPEAKER/.test(CALL));
   });
 
+  test('v47: la chiamata parte dall\'altoparlante, e nella vocale e\' il sensore di prossimita\' a portarla all\'orecchio', () => {
+    /* 14 set 2026, due telefoni veri: la vocale partiva dall'auricolare e chi
+       teneva il telefono in mano non sentiva («voce bassa», «non mi sente»);
+       la video, dall'altoparlante, andava. */
+    const enter = CALL.slice(CALL.indexOf('static synchronized void enterCallMode'), CALL.indexOf('static synchronized void leaveCallMode'));
+    assert.ok(/setSpeaker\(c, true\)/.test(enter), 'il punto di partenza e\' l\'altoparlante, per tutte e due le chiamate');
+    assert.ok(!/setSpeaker\(c, video\)/.test(enter), 'non piu\' «auricolare se vocale»');
+    assert.ok(/if \(!video\) startProximity\(c\)/.test(enter), 'nella vocale si accende il sensore');
+    assert.ok(/Sensor\.TYPE_PROXIMITY/.test(CALL) && /registerListener\(proximity/.test(CALL), 'il sensore di prossimita\' va ascoltato');
+    assert.ok(/PROXIMITY_SCREEN_OFF_WAKE_LOCK/.test(CALL), 'all\'orecchio lo schermo si spegne, o la guancia preme i tasti');
+    assert.ok(/if \(manualRoute \|\| videoCall\) return;/.test(CALL), 'il pulsante toccato a mano vince sul sensore');
+    const leave = CALL.slice(CALL.indexOf('static synchronized void leaveCallMode'));
+    assert.ok(/stopProximity\(\)/.test(leave), 'a fine chiamata il sensore si spegne e il blocco si rilascia');
+    assert.ok(/userSetSpeaker\(MainActivity\.this, on\)/.test(MAIN), 'il pulsante della pagina passa da userSetSpeaker, che segna la scelta manuale');
+    assert.ok(/dvSpeakerRoute/.test(MAIN) && /window\.dvSpeakerRoute = function/.test(APP), 'quando il sensore cambia strada, la pagina lo viene a sapere');
+    assert.ok(/android\.permission\.WAKE_LOCK/.test(MANIFEST), 'il blocco di prossimita\' vuole WAKE_LOCK');
+  });
+
   test('il servizio in chiamata e\' nel manifest col tipo giusto, e i permessi che quel tipo pretende', () => {
     assert.match(MANIFEST, /<service\s+android:name="\.CallService"[^>]*android:foregroundServiceType="microphone\|camera"/,
       'senza il tipo microfono|fotocamera Android 14 toglie il microfono a schermo spento');

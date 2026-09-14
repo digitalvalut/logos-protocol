@@ -22,12 +22,17 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioAttributes;
 import android.media.AudioDeviceInfo;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import java.util.List;
 
@@ -53,10 +58,17 @@ import java.util.List;
  * chiamata:
  *   1. mette il telefono in MODE_IN_COMMUNICATION e chiede il «fuoco» audio,
  *      cosi' la musica di un'altra app si abbassa e la voce ha la strada;
- *   2. sceglie da dove esce la voce — auricolare per una chiamata vocale,
- *      altoparlante per una videochiamata, e il pulsante nella pagina puo'
- *      cambiarlo (nella WebView `setSinkId` non esiste, quindi il pulsante
- *      passa da qui);
+ *   2. sceglie da dove esce la voce. ⚠️ CAMBIATO IL 14 SET 2026 (v47) dopo
+ *      una prova su due telefoni veri: la vocale partiva dall'AURICOLARE, e
+ *      chi teneva il telefono in mano — come si fa con un'app, non con un
+ *      telefono — sentiva niente o quasi («la voce arriva bassa», «non mi
+ *      sente»), mentre la video, che parte dall'altoparlante, andava bene.
+ *      Ora TUTTE le chiamate partono dall'altoparlante; nella vocale il
+ *      sensore di prossimita' fa quello che fa il telefono normale: telefono
+ *      all'orecchio → auricolare e schermo spento (cosi' la guancia non preme
+ *      i tasti), telefono allontanato → altoparlante. Il pulsante nella
+ *      pagina vince sul sensore per il resto della chiamata (nella WebView
+ *      `setSinkId` non esiste, quindi il pulsante passa da qui);
  *   3. resta in primo piano come servizio di tipo microfono/fotocamera:
  *      da Android 14 e' l'unico modo per cui il microfono NON venga tolto
  *      all'app quando lo schermo si spegne o si guarda un'altra app.
@@ -81,6 +93,18 @@ public class CallService extends Service {
     private static boolean speakerBefore = false;
     private static AudioFocusRequest focus = null;
     private static boolean inCall = false;
+    /* la chiamata in corso e' video? e il pulsante e' stato toccato a mano? */
+    private static boolean videoCall = false;
+    private static boolean manualRoute = false;
+    /* il sensore di prossimita' e il blocco che spegne lo schermo all'orecchio */
+    private static SensorManager sensors = null;
+    private static SensorEventListener proximity = null;
+    private static PowerManager.WakeLock proximityLock = null;
+
+    /** Chi vuole sapere quando la strada dell'audio cambia DA SOLA (il sensore):
+        la pagina, per tenere giusto il disegno del pulsante. */
+    interface RouteListener { void onRoute(boolean speaker); }
+    static volatile RouteListener routeListener = null;
 
     @Override public IBinder onBind(Intent intent) { return null; }
 
@@ -143,13 +167,70 @@ public class CallService extends Service {
             }
         } catch (Exception ignored) { /* senza fuoco si parla lo stesso, solo con la musica sotto */ }
         try { am.setMode(AudioManager.MODE_IN_COMMUNICATION); } catch (Exception ignored) {}
-        /* Vocale: all'orecchio, come una telefonata. Video: si guarda lo
-           schermo, quindi l'altoparlante. E' il punto di partenza; il pulsante
-           nella pagina lo cambia con setSpeaker(). */
-        setSpeaker(c, video);
+        /* Punto di partenza: l'ALTOPARLANTE, per tutte e due (vedi la nota in
+           testa). Nella vocale poi comanda il sensore: all'orecchio →
+           auricolare. Il pulsante nella pagina lo cambia con userSetSpeaker(). */
+        videoCall = video;
+        manualRoute = false;
+        setSpeaker(c, true);
+        if (!video) startProximity(c);
+        else stopProximity();
+    }
+
+    /* ------------------------------------------------------------------
+       Il sensore di prossimita': telefono all'orecchio = auricolare + schermo
+       spento; allontanato = altoparlante. Solo nella chiamata vocale, e solo
+       finche' la persona non tocca il pulsante: da li' in poi decide lei.
+       ------------------------------------------------------------------ */
+    private static synchronized void startProximity(final Context c) {
+        stopProximity();
+        try {
+            sensors = (SensorManager) c.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+            if (sensors == null) return;
+            final Sensor s = sensors.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            if (s == null) return;   /* un tablet senza sensore: resta l'altoparlante */
+            /* «vicino» = sotto il massimo del sensore; molti telefoni danno
+               solo 0 (vicino) o il massimo (lontano), e 5 cm copre gli altri */
+            final float near = Math.min(s.getMaximumRange(), 5f);
+            proximity = new SensorEventListener() {
+                @Override public void onSensorChanged(SensorEvent ev) {
+                    if (manualRoute || videoCall) return;
+                    boolean atEar = ev.values != null && ev.values.length > 0 && ev.values[0] < near;
+                    boolean nowSpeaker = !atEar;
+                    if (isSpeakerOn(c) == nowSpeaker) return;
+                    if (setSpeaker(c, nowSpeaker)) {
+                        RouteListener l = routeListener;
+                        if (l != null) { try { l.onRoute(nowSpeaker); } catch (Exception ignored) {} }
+                    }
+                }
+                @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+            };
+            sensors.registerListener(proximity, s, SensorManager.SENSOR_DELAY_NORMAL);
+        } catch (Exception ignored) { proximity = null; }
+        try {
+            PowerManager pm = (PowerManager) c.getApplicationContext().getSystemService(Context.POWER_SERVICE);
+            if (pm != null && pm.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)) {
+                proximityLock = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "logos:call");
+                proximityLock.acquire();
+            }
+        } catch (Exception ignored) { proximityLock = null; }
+    }
+
+    private static synchronized void stopProximity() {
+        try { if (sensors != null && proximity != null) sensors.unregisterListener(proximity); } catch (Exception ignored) {}
+        proximity = null;
+        try { if (proximityLock != null && proximityLock.isHeld()) proximityLock.release(); } catch (Exception ignored) {}
+        proximityLock = null;
+    }
+
+    /** Il pulsante della pagina: da qui in poi, per questa chiamata, decide la persona. */
+    static boolean userSetSpeaker(Context c, boolean on) {
+        manualRoute = true;
+        return setSpeaker(c, on);
     }
 
     static synchronized void leaveCallMode(Context c) {
+        stopProximity();
         if (!inCall) return;
         inCall = false;
         AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);

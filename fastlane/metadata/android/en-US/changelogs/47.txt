@@ -1,0 +1,7 @@
+Voice calls are audible again with the phone held in your hand.
+
+Since version 40 a voice call came out of the earpiece, like a phone call: right for someone holding the phone to their ear, silent for someone holding it in front of them the way you use an app. Hence the "no audio" and "faint voice" reported on two real phones, while video calls — which use the loudspeaker — were fine.
+
+Every call now starts on the loudspeaker. In a voice call the proximity sensor does what the phone's own dialler does: bring the phone to your ear and the voice moves to the earpiece (and the screen turns off, so your cheek does not press buttons); move it away and it returns to the loudspeaker. The speaker button stays, and once you tap it the choice is yours for the rest of the call.
+
+Only the Android app changes; nothing in the relay.

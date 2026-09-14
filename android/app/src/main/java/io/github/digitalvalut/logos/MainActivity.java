@@ -78,6 +78,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
+        listenToAudioRoute();
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .setDomain("appassets.androidplatform.net")
@@ -588,7 +589,7 @@ public class MainActivity extends Activity {
         /** Il pulsante «altoparlante» della pagina: nella WebView `setSinkId`
             non esiste, quindi passa da qui. */
         @JavascriptInterface
-        public boolean setSpeaker(boolean on) { return CallService.setSpeaker(MainActivity.this, on); }
+        public boolean setSpeaker(boolean on) { return CallService.userSetSpeaker(MainActivity.this, on); }
 
         @JavascriptInterface
         public boolean isSpeakerOn() { return CallService.isSpeakerOn(MainActivity.this); }
@@ -607,6 +608,16 @@ public class MainActivity extends Activity {
     /* Answering from the lock screen brings us here. The service only ever knew
        that something was waiting; the reading and the decrypting are the page's,
        so all this does is tell it to look now instead of at its next poll. */
+    /* Il sensore di prossimita' ha cambiato la strada dell'audio da solo: la
+       pagina aggiorna il disegno del pulsante, e basta. Registrato qui perche'
+       il servizio non conosce la WebView. */
+    private void listenToAudioRoute() {
+        CallService.routeListener = speaker -> runOnUiThread(() -> {
+            if (web == null) return;
+            web.evaluateJavascript("window.dvSpeakerRoute && window.dvSpeakerRoute(" + (speaker ? "true" : "false") + ");", null);
+        });
+    }
+
     private void tellPageACallIsWaiting() {
         if (web == null) return;
         web.evaluateJavascript(
@@ -717,6 +728,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        CallService.routeListener = null;
         if (web != null) { web.destroy(); web = null; }
         super.onDestroy();
     }
