@@ -1,0 +1,130 @@
+/*
+  Logos - rito B: la chiamata all indirizzo (modifica.js 6302-6445, 7001-7145, 7446+)
+  Bozza del 13 set 2026, scritta dalla descrizione in PROTOCOLLO.md sez. 3.
+
+  Cosa modella:
+    - B possiede una coppia ECDH a lungo termine; il suo indirizzo e  addr(pub, slot).
+    - A conosce l indirizzo per una via fidata (glielo ha dato B) e riceve la
+      chiave pubblica DAL RELAY (= dall avversario): la accetta solo se
+      addr(pub, slot) ricalcola l indirizzo che aveva.
+    - A genera una coppia effimera, deriva k = HKDF(ECDH), manda <E, senc(offerta, k)>.
+    - B deriva la stessa k dalla propria privata e da E, risponde senc(risposta, k).
+    - L avversario e  il relay: vede e manipola tutto cio  che passa.
+    - Compromissione: la privata di B puo  essere rivelata (per la lemma di
+      "nessuna segretezza in avanti", che DEVE fallire: e  dichiarato nel codice).
+
+  Cosa NON modella (dichiarato in PROTOCOLLO.md sez. 7): DTLS, il troncamento
+  dell indirizzo a 60 bit, il limitatore del Worker, il gettone (v44), ts.
+*/
+
+theory Logos_Indirizzo
+begin
+
+builtins: diffie-hellman, symmetric-encryption
+functions: hkdf/1, addr/2
+
+/* ETICHETTA DI DIREZIONE dentro la busta ( offer / answer ): la prima stesura
+   non l aveva, e Tamarin ha trovato tre volte lo stesso trucco - rimandare al
+   mittente la sua stessa busta come risposta (riflessione). Nell app la busta
+   JSON non porta un campo esplicito: la difesa e  che un SDP di offerta non passa
+   come risposta in WebRTC. Vedi PROTOCOLLO.md 6.4: da rendere esplicito nel codice. */
+
+/* Un dispositivo, una coppia di chiavi: senza questa restrizione Tamarin usa
+   due identita  con lo stesso nome, che nel mondo reale non esistono. */
+restriction una_chiave_per_dispositivo:
+  "All X k1 k2 #i #j. Nasce(X, k1) @ i & Nasce(X, k2) @ j ==> #i = #j"
+
+/* ---------- B nasce e pubblica ---------- */
+
+rule B_Nasce:
+  let pub = 'g'^~priv
+  in
+  [ Fr(~priv) ]
+  --[ Nasce($B, ~priv) ]->
+  [ !PrivB($B, ~priv), !AddrDi($B, addr(pub, '0')), Out(pub) ]
+
+/* L indirizzo arriva ad A per una via fuori dal modello (QR, a voce, una lettera):
+   qui lo si prende come fatto autentico. E  l assunzione centrale, e va detta. */
+rule A_ConosceIndirizzo:
+  [ !AddrDi($B, addrB) ] --[ AConosceAz($A, $B, addrB) ]-> [ !AConosce($A, $B, addrB) ]
+
+/* Compromissione della privata di B (per le lemma condizionate) */
+rule Rivela_PrivB:
+  [ !PrivB($B, ~priv) ] --[ Rivelata($B) ]-> [ Out(~priv) ]
+
+/* ---------- A chiama ---------- */
+
+/* pub arriva dalla rete: e  il relay a servirla. A la accetta SOLO se
+   addr(pub, 0 ) e  l indirizzo che gia  conosceva (fetchAddrKey 6346-6367).
+   L unificazione con !AConosce($A,$B, addr(pub, 0 )) e  esattamente quel controllo. */
+rule A_Chiama:
+  let E = 'g'^~e
+      k = hkdf(pub^~e)
+  in
+  [ !AConosce($A, $B, addr(pub, '0')), In(pub), Fr(~e), Fr(~sdpA), Fr(~rid) ]
+  --[ AChiama($A, $B, ~sdpA, ~rid), SegretoA(~sdpA, $B) ]->
+  [ Out(<E, senc(<'offer', ~sdpA, ~rid>, k)>), AttesaA($A, $B, ~rid, k, ~sdpA) ]
+
+/* ---------- B risponde ---------- */
+
+rule B_Risponde:
+  let k = hkdf(E^~priv)
+  in
+  [ !PrivB($B, ~priv), In(<E, senc(<'offer', sdpA, rid>, k)>), Fr(~sdpB) ]
+  --[ BRisponde($B, sdpA, rid, ~sdpB), SegretoB(~sdpB, $B) ]->
+  [ Out(senc(<'answer', ~sdpB, rid>, k)) ]
+
+/* ---------- A conclude ---------- */
+
+rule A_Conclude:
+  [ AttesaA($A, $B, ~rid, k, ~sdpA), In(senc(<'answer', sdpB, ~rid>, k)) ]
+  --[ AConclude($A, $B, ~sdpA, sdpB, ~rid) ]->
+  [ ]
+
+/* ================= LEMMA ================= */
+
+/* Sanita : il rito puo  completarsi (se questa fallisce, il modello e  rotto,
+   non il protocollo). */
+lemma eseguibile:
+  exists-trace
+  "Ex A B sa sb rid #i. AConclude(A, B, sa, sb, rid) @ i
+     & not (Ex X #r. Rivelata(X) @ r)"
+
+/* B1. Segretezza dell offerta e della risposta finche  la privata di B non e  rivelata. */
+lemma B1_segretezza_offerta:
+  "All s B #i. SegretoA(s, B) @ i
+     ==> not (Ex #j. K(s) @ j) | (Ex #r. Rivelata(B) @ r)"
+
+/* La risposta di B e  segreta verso il relay SOLO se B stava rispondendo a un A
+   onesto: chiunque abbia l indirizzo puo  chiamare, anche l avversario, e a lui
+   B risponde apposta (dopo che la persona ha accettato: acceptAddrCall). La prima
+   stesura chiedeva "sempre segreta" ed era una domanda sbagliata: Tamarin l ha
+   bocciata mostrando l avversario che chiama con la propria chiave effimera. */
+lemma B1_segretezza_risposta:
+  "All B sa rid s #i. BRisponde(B, sa, rid, s) @ i & (Ex A #j. AChiama(A, B, sa, rid) @ j)
+     ==> not (Ex #k. K(s) @ k) | (Ex #r. Rivelata(B) @ r)"
+
+/* B2 + B3. Se A conclude, B ha davvero risposto a QUESTA offerta (stesso sdpA,
+   stesso rid), e una sola volta (accordo iniettivo). */
+lemma B2_B3_autenticazione_di_B:
+  "All A B sa sb rid #i. AConclude(A, B, sa, sb, rid) @ i
+     ==> ( Ex #j. BRisponde(B, sa, rid, sb) @ j & j < i
+           & not (Ex A2 sb2 #k. AConclude(A2, B, sa, sb2, rid) @ k & not (#k = #i)) )
+         | (Ex #r. Rivelata(B) @ r)"
+
+/* B4. Il relay non puo  far accettare ad A una chiave che non e  di B:
+   se A chiama B, la k che usa deriva dalla vera pub di B. Espresso cosi :
+   ogni offerta accettata da qualcuno e  stata aperta dal vero B. */
+lemma B4_chiave_non_sostituibile:
+  "All B sa rid sb #j. BRisponde(B, sa, rid, sb) @ j
+     ==> (Ex A #i. AChiama(A, B, sa, rid) @ i & i < j)
+         | (Ex #r. Rivelata(B) @ r)"
+
+/* NESSUNA SEGRETEZZA IN AVANTI - dichiarato a modifica.js 6369-6388.
+   Questa lemma DEVE FALLIRE: rivelare la privata DOPO la chiamata apre le buste
+   registrate prima. Se un giorno passa, o il modello e  sbagliato o il rito e  cambiato. */
+lemma NON_forward_secrecy_deve_fallire:
+  "All s B #i. SegretoA(s, B) @ i
+     ==> not (Ex #j. K(s) @ j) | (Ex #r. Rivelata(B) @ r & r < i)"
+
+end

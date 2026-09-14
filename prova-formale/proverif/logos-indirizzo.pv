@@ -1,0 +1,77 @@
+(* Logos - rito B: la chiamata all indirizzo, in ProVerif.
+   Stesso rito di ../logos-indirizzo-leggero.spthy (ECIES come KEM: la chiave di
+   sessione k viaggia cifrata verso la pubblica di B). 14 set 2026.
+
+   Domande:
+     B1  l offerta di A (sdpA) resta segreta            -> query attacker(new sdpA)
+     B1b la risposta di B, quando B risponde a un A onesto, resta segreta
+     B2  se A conclude, B ha risposto a QUESTA offerta, una volta sola (inj)
+     B4  la chiave che A usa e davvero quella di B (l indirizzo la vincola)
+   La NON segretezza in avanti sta in logos-indirizzo-reveal.pv, e deve fallire. *)
+
+type skey.
+type pkey.
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m: bitstring, s: skey; adec(aenc(m, pk(s)), s) = m.
+
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+
+(* l indirizzo: primi 60 bit di SHA-256(pub, slot). Qui una funzione libera:
+   nessuno la inverte, nessuno trova una seconda preimmagine (il troncamento a
+   60 bit e fuori dal modello, dichiarato in PROTOCOLLO.md). *)
+fun addr(pkey, bitstring): bitstring.
+
+const zero: bitstring.
+const OFFER: bitstring.
+const ANSWER: bitstring.
+
+free c: channel.
+
+event AChiama(pkey, bitstring, bitstring).
+event BRisponde(pkey, bitstring, bitstring, bitstring).
+event AConclude(pkey, bitstring, bitstring, bitstring).
+event Nasce(pkey).
+
+(* B1: l offerta non arriva mai all avversario *)
+query attacker(new sdpA).
+
+(* B1b: se A ha concluso con B, la risposta che ha ricevuto non e dell avversario *)
+query pkb: pkey, sa, sb, rid: bitstring;
+  event(AConclude(pkb, sa, sb, rid)) && attacker(sb) ==> false.
+
+(* B2+B3: chi risponde e il vero B, a questa offerta, una volta sola *)
+query pkb: pkey, sa, sb, rid: bitstring;
+  event(AConclude(pkb, sa, sb, rid)) ==> inj-event(BRisponde(pkb, sa, rid, sb)).
+
+(* B4: A chiama solo con una chiave che e nata come chiave di un B onesto *)
+query pkb: pkey, sa, rid: bitstring;
+  event(AChiama(pkb, sa, rid)) ==> event(Nasce(pkb)).
+
+let processB(skB: skey) =
+  in(c, m: bitstring);
+  let (=OFFER, k: bitstring, sa: bitstring, rid: bitstring) = adec(m, skB) in
+  new sdpB: bitstring;
+  event BRisponde(pk(skB), sa, rid, sdpB);
+  out(c, senc((ANSWER, sdpB, rid), k)).
+
+(* A conosce l indirizzo di B per una via fidata (e legato dallo scope);
+   la chiave pubblica invece la riceve dalla rete, cioe dal relay = avversario,
+   e la accetta solo se ricalcola l indirizzo: fetchAddrKey 6346-6367. *)
+let processA(addrB: bitstring) =
+  in(c, pub: pkey);
+  if addr(pub, zero) = addrB then
+  new k: bitstring; new sdpA: bitstring; new rid: bitstring;
+  event AChiama(pub, sdpA, rid);
+  out(c, aenc((OFFER, k, sdpA, rid), pub));
+  in(c, r: bitstring);
+  let (=ANSWER, sb: bitstring, =rid) = sdec(r, k) in
+  event AConclude(pub, sdpA, sb, rid).
+
+process
+  !( new skB: skey;
+     event Nasce(pk(skB));
+     out(c, pk(skB));
+     ( !processB(skB) | !processA(addr(pk(skB), zero)) ) )

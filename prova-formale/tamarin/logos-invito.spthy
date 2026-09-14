@@ -1,0 +1,103 @@
+/*
+  Logos - rito A: l invito a sei cifre (modifica.js 6099-6138, 9125-9160, 9433+)
+  Bozza del 13 set 2026, da PROTOCOLLO.md sez. 2.
+
+  Cosa modella:
+    - A genera un codice; chiave e casella derivano DAL SOLO codice
+      (quickSecrets(code) senza segreto lungo: il segreto lungo nel link e 
+      inerte dal 1 set 2026, modifica.js 9119-9134).
+    - Il codice arriva a B per una via fuori dal modello (QR, a voce, link).
+    - A scrive senc(offerta, k) nella casella; B risponde senc(risposta, k).
+    - Dopo il collegamento i due confrontano 3 parole = h(fpA, fpB): la SAS.
+      Tamarin non misura i 25 bit; la si modella come confronto esatto su un
+      canale autentico (la voce), e si dimostra: SAS uguali => nessun MITM.
+    - "Indovinare" il codice non si modella (Tamarin non conta i tentativi):
+      lo si rappresenta con una regola che rivela il codice. Tutte le lemma
+      sono condizionate a "codice non rivelato", e A3 mostra l attacco quando lo e .
+
+  Le impronte fpA/fpB sono le impronte DTLS dentro le SDP: qui l SDP E  l impronta,
+  perche  e  l unica parte che conta per il canale che segue.
+*/
+
+theory Logos_Invito
+begin
+
+builtins: symmetric-encryption, hashing
+functions: kdf/1
+
+/* Etichetta di direzione e una impronta per dispositivo: vedi logos-indirizzo.spthy. */
+restriction una_impronta_per_dispositivo:
+  "All X f1 f2 #i #j. Nasce(X, f1) @ i & Nasce(X, f2) @ j ==> #i = #j"
+
+rule Nasce:
+  [ Fr(~fp) ] --[ Nasce($X, ~fp) ]-> [ !Fp($X, ~fp) ]
+
+/* A genera il codice; B lo riceve per una via fidata (fuori dal modello). */
+rule A_Genera:
+  [ Fr(~code) ] --[ Genera($A, ~code) ]-> [ !Codice($A, ~code) ]
+
+rule B_RiceveCodice:
+  [ !Codice($A, ~code) ] --[ Riceve($B, $A, ~code) ]-> [ !CodiceDi($B, $A, ~code) ]
+
+/* Il codice viene indovinato / intercettato / dettato a voce davanti a terzi. */
+rule Rivela_Codice:
+  [ !Codice($A, ~code) ] --[ CodiceRivelato($A, ~code) ]-> [ Out(~code) ]
+
+/* A pubblica l offerta (= la propria impronta) sigillata con kdf(code) nella casella h(code, offer ). */
+rule A_Offre:
+  let k = kdf(~code)
+  in
+  [ !Codice($A, ~code), !Fp($A, fpA) ]
+  --[ AOffre($A, ~code, fpA) ]->
+  [ Out(<h(<~code, 'offer'>), senc(<'offer', fpA>, k)>), AttesaA($A, ~code, k, fpA) ]
+
+/* B apre, risponde con la propria impronta, e da questo momento "e  collegato"
+   con chi ha l impronta letta nell offerta. */
+rule B_Risponde:
+  let k = kdf(~code)
+  in
+  [ !CodiceDi($B, $A, ~code), !Fp($B, fpB), In(<h(<~code, 'offer'>), senc(<'offer', fpA>, k)>) ]
+  --[ BRisponde($B, $A, ~code, fpA, fpB), Collegato($B, fpB, fpA), SAS($B, h(<fpA, fpB>)) ]->
+  [ Out(<h(<~code, 'answer'>), senc(<'answer', fpB>, k)>) ]
+
+/* A legge la risposta ed e  collegato con chi ha l impronta letta. */
+rule A_Conclude:
+  [ AttesaA($A, ~code, k, fpA), In(<h(<~code, 'answer'>), senc(<'answer', fpB>, k)>) ]
+  --[ AConclude($A, ~code, fpA, fpB), Collegato($A, fpA, fpB), SAS($A, h(<fpA, fpB>)) ]->
+  [ ]
+
+lemma eseguibile:
+  exists-trace
+  "Ex A code fa fb #i. AConclude(A, code, fa, fb) @ i & not (Ex X c #r. CodiceRivelato(X, c) @ r)"
+
+/* A1. Codice segreto => le impronte scambiate restano segrete verso il relay.
+   (Nota: le impronte di per se  non sono un segreto forte - vedi rito C - ma
+   qui si dimostra che il RELAY non le apprende da questo rito.) */
+lemma A1_relay_non_legge:
+  "All A code fa fb #i. AConclude(A, code, fa, fb) @ i
+     ==> not (Ex #j. K(fb) @ j & not (Ex X #n. Nasce(X, fb) @ n & Ex Y c #r. CodiceRivelato(Y, c) @ r))
+         | (Ex #r. CodiceRivelato(A, code) @ r)"
+
+/* A2. Codice segreto => quando A conclude, B ha risposto con la stessa coppia di
+   impronte: nessuno in mezzo. */
+lemma A2_nessun_mitm_se_codice_segreto:
+  "All A code fa fb #i. AConclude(A, code, fa, fb) @ i
+     ==> (Ex B #j. BRisponde(B, A, code, fa, fb) @ j & j < i)
+         | (Ex #r. CodiceRivelato(A, code) @ r)"
+
+/* A3. Codice rivelato => esiste una traccia in cui A conclude con un impronta
+   che non e  di nessun B onesto (l avversario in mezzo). ATTESA: la traccia ESISTE.
+   E  il difetto H-01, gia  pubblico. */
+lemma A3_mitm_con_codice_rivelato_ESISTE:
+  exists-trace
+  "Ex A code fa fb #i. AConclude(A, code, fa, fb) @ i
+     & not (Ex B #j. BRisponde(B, A, code, fa, fb) @ j)"
+
+/* A4. La SAS chiude il buco: se A e B mostrano le STESSE tre parole e le hanno
+   confrontate (canale autentico, fuori dal modello), allora sono collegati fra loro,
+   anche con il codice rivelato. Espresso: stessa SAS => stesse impronte nei due Collegato. */
+lemma A4_sas_uguali_implica_nessun_mitm:
+  "All A B s #i #j. SAS(A, s) @ i & SAS(B, s) @ j & not (A = B)
+     ==> (Ex fa fb #k #l. Collegato(A, fa, fb) @ k & Collegato(B, fb, fa) @ l)"
+
+end

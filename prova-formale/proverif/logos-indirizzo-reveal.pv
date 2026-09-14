@@ -1,0 +1,53 @@
+(* Logos - rito B, con RIVELAZIONE della privata di B dopo la chiamata (fase 1).
+   Stesso rito di logos-indirizzo.pv. La domanda "sdpA resta segreta anche
+   dopo" DEVE FALLIRE: e la mancanza di segretezza in avanti dichiarata a
+   modifica.js 6369-6388 (la privata di B apre ogni busta mai indirizzata a B).
+   Se un giorno risultasse vera, o il modello e sbagliato o il rito e cambiato. *)
+
+type skey.
+type pkey.
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m: bitstring, s: skey; adec(aenc(m, pk(s)), s) = m.
+
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+
+fun addr(pkey, bitstring): bitstring.
+
+const zero: bitstring.
+const OFFER: bitstring.
+const ANSWER: bitstring.
+
+free c: channel.
+
+event AChiama(pkey, bitstring, bitstring).
+event BRisponde(pkey, bitstring, bitstring, bitstring).
+event AConclude(pkey, bitstring, bitstring, bitstring).
+
+(* In fase 0 (prima della rivelazione) l offerta e segreta; in fase 1 no. *)
+query attacker(new sdpA) phase 0.
+query attacker(new sdpA) phase 1.
+
+let processB(skB: skey) =
+  in(c, m: bitstring);
+  let (=OFFER, k: bitstring, sa: bitstring, rid: bitstring) = adec(m, skB) in
+  new sdpB: bitstring;
+  event BRisponde(pk(skB), sa, rid, sdpB);
+  out(c, senc((ANSWER, sdpB, rid), k)).
+
+let processA(addrB: bitstring) =
+  in(c, pub: pkey);
+  if addr(pub, zero) = addrB then
+  new k: bitstring; new sdpA: bitstring; new rid: bitstring;
+  event AChiama(pub, sdpA, rid);
+  out(c, aenc((OFFER, k, sdpA, rid), pub));
+  in(c, r: bitstring);
+  let (=ANSWER, sb: bitstring, =rid) = sdec(r, k) in
+  event AConclude(pub, sdpA, sb, rid).
+
+process
+  !( new skB: skey;
+     out(c, pk(skB));
+     ( !processB(skB) | !processA(addr(pk(skB), zero)) | (phase 1; out(c, skB)) ) )

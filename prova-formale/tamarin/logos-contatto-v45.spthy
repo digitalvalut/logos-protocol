@@ -1,0 +1,82 @@
+/*
+  Logos - rito C, versione 4.38 / v45: ricollegarsi a un contatto in rubrica
+  CON LE CHIAVI (modifica.js: contactDialSecrets / contactOpenIncoming).
+
+  Cambiamento rispetto a logos-contatto.spthy (4.37):
+    - la busta si sigilla con k = HKDF( ECDH(eff_A, pub_B) || ECDH(priv_A, pub_B) )
+    - accanto viaggiano in chiaro l effimera E e la pubblica fissa P_A
+    - B ricava k con la propria privata; apre SOLO se P_A e la pub che ha in rubrica per A
+    - la casella resta dalle impronte (trovabile), che sono pubbliche (ogni contatto le ha)
+
+  Attesa: C1 e C2 dimostrate (l ex contatto che conosce le impronte NON apre),
+  C3 dimostrata (chi scrive a nome di A senza la privata di A non passa).
+  Modello leggero: ECDH come KEM (aenc) per la meta effimera; la meta fissa
+  come funzione dh(priv, pub) simmetrica dichiarata con un equazione.
+*/
+
+theory Logos_Contatto_v45
+begin
+
+builtins: symmetric-encryption, hashing, asymmetric-encryption
+functions: dh/2, kdf/2
+equations: dh(x, pk(y)) = dh(y, pk(x))
+
+restriction una_chiave_per_dispositivo:
+  "All X k1 k2 #i #j. Nasce(X, k1) @ i & Nasce(X, k2) @ j ==> #i = #j"
+
+/* ogni dispositivo: impronta (pubblica) + coppia di chiavi a lungo termine */
+rule Nasce:
+  [ Fr(~fp), Fr(~priv) ]
+  --[ Nasce($X, ~priv) ]->
+  [ !Fp($X, ~fp), !Priv($X, ~priv), !Pub($X, pk(~priv)), Out(~fp), Out(pk(~priv)) ]
+
+/* A e B si sono gia parlati con la v45: ognuno ha impronta E pubblica dell altro
+   (imparate nel saluto sul canale DTLS, fuori dal modello) */
+rule InRubrica:
+  [ !Fp($A, fpA), !Pub($A, pubA), !Fp($B, fpB), !Pub($B, pubB) ]
+  --[ Rubrica($A, $B) ]->
+  [ !Conosce($A, $B, fpB, pubB), !Conosce($B, $A, fpA, pubA) ]
+
+rule Rivela_Priv:
+  [ !Priv($X, ~priv) ] --[ Rivelata($X) ]-> [ Out(~priv) ]
+
+/* A scrive: la meta effimera come KEM verso pub_B (porta ~ke), la meta fissa dh(priv_A, pub_B) */
+rule A_Offre:
+  let k = kdf(~ke, dh(~privA, pubB))
+  in
+  [ !Fp($A, fpA), !Priv($A, ~privA), !Conosce($A, $B, fpB, pubB), Fr(~ke), Fr(~sdpA) ]
+  --[ AOffre($A, $B, ~sdpA), SegretoOfferta(~sdpA, $A, $B) ]->
+  [ Out(<h(<fpA, fpB>), aenc(~ke, pubB), pk(~privA), senc(<'offer', ~sdpA>, k)>), AttesaA($A, $B, k, ~sdpA) ]
+
+/* B legge: ricava ke dalla propria privata, la meta fissa da (priv_B, P), e pretende P = pub di A in rubrica */
+rule B_Risponde:
+  let k = kdf(ke, dh(~privB, pubA))
+  in
+  [ !Fp($B, fpB), !Priv($B, ~privB), !Conosce($B, $A, fpA, pubA),
+    In(<h(<fpA, fpB>), aenc(ke, pk(~privB)), pubA, senc(<'offer', sdpA>, k)>), Fr(~sdpB) ]
+  --[ BRisponde($B, $A, sdpA, ~sdpB) ]->
+  [ Out(senc(<'answer', ~sdpB>, k)) ]
+
+rule A_Conclude:
+  [ AttesaA($A, $B, k, ~sdpA), In(senc(<'answer', sdpB>, k)) ]
+  --[ AConclude($A, $B, ~sdpA, sdpB) ]->
+  [ ]
+
+lemma eseguibile:
+  exists-trace
+  "Ex A B sa sb #i. AConclude(A, B, sa, sb) @ i & not (Ex X #r. Rivelata(X) @ r)"
+
+/* C1+C2 insieme: le impronte sono PUBBLICHE nel modello (Out in Nasce), quindi
+   questa lemma dice gia: chi conosce le impronte non apre. Fallisce solo
+   rivelando una privata. */
+lemma C2_segreta_anche_con_impronte_note:
+  "All s A B #i. SegretoOfferta(s, A, B) @ i
+     ==> not (Ex #j. K(s) @ j) | (Ex #r. Rivelata(A) @ r) | (Ex #r. Rivelata(B) @ r)"
+
+/* C3: se B risponde credendo che sia A, l offerta viene da A (serve la privata di A) */
+lemma C3_offerta_autentica:
+  "All B A sa sb #j. BRisponde(B, A, sa, sb) @ j
+     ==> (Ex #i. AOffre(A, B, sa) @ i & i < j)
+         | (Ex #r. Rivelata(A) @ r) | (Ex #r. Rivelata(B) @ r)"
+
+end

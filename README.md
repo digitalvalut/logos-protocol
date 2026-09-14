@@ -156,10 +156,19 @@ itself will refuse to run it.
 
 ## Quality signal
 
-375 automated tests, each verified by deliberately reintroducing the bug it guards against
-and confirming it fails red before the fix — not just written to pass. They run in a
-~150-line hand-written browser sandbox, not a framework, in keeping with the
-zero-runtime-dependency rule. `node --test` from the repository root.
+465 automated tests (measured 14 Sep 2026), each verified by deliberately reintroducing
+the bug it guards against and confirming it fails red before the fix — not just written
+to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
+keeping with the zero-runtime-dependency rule. `node --test` from the repository root.
+
+**Formal analysis.** The signalling protocol — how two devices find each other through
+the relay — is written out in full and modelled in **Tamarin** and **ProVerif**, the
+tools used to analyse Signal, TLS 1.3 and 5G. The models, the results, and a manual
+GitHub Actions workflow to re-run them are in [`prova-formale/`](prova-formale/). The
+address handshake is proven secret and authenticated against a relay adversary; the
+analysis also found the defects fixed in 4.38 (see the folder). The models were written
+by the project and have **not** been independently reviewed — that is the next step, and
+the reason they are published.
 
 ## License
 

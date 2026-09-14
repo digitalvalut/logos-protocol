@@ -77,6 +77,11 @@ Conversations are end-to-end encrypted and travel directly between the two
 devices. The relay exists so that two devices can find each other, and it cannot
 read anything that passes through it.
 
+The signalling protocol has been modelled in Tamarin and ProVerif (models,
+results and known limits in [`prova-formale/`](prova-formale/)). Those models
+were written by the project itself and have not been reviewed by anyone else:
+they are a starting point for a reviewer, not a certificate.
+
 It has **not** been audited independently. An external review was received in
 August 2026 and its findings are being worked through; until an independent audit
 exists, please treat this as software written carefully by very few people rather

@@ -1,0 +1,81 @@
+(* Logos - rito C, versione 4.38 / v45: ricollegarsi a un contatto in rubrica
+   CON LE CHIAVI (modifica.js: contactDialSecrets / contactOpenIncoming).
+
+   k = HKDF( ECDH(eff_A, pub_B) || ECDH(priv_A, pub_B) )
+   La meta effimera e un KEM verso pub_B (aenc di una chiave fresca ke).
+   La meta fissa ECDH(priv_A, pub_B) = ECDH(priv_B, pub_A) e un segreto di
+   COPPIA: qui e rappresentata da una funzione pair(skA, pkB) con l equazione
+   pair(x, pk(y)) = pair(y, pk(x)) — ProVerif la accetta (convergente come
+   coppia di regole di riscrittura orientate? no: e simmetrica, quindi si usa
+   la forma canonica con una funzione ausiliaria ordinata, vedi sotto).
+
+   Per restare dentro cio che ProVerif tratta bene, la meta fissa e modellata
+   come un segreto condiviso per coppia, generato una volta per (A,B) e noto
+   solo ai due — che e esattamente cio che ECDH statico-statico da. Rivelare la
+   privata di X rivela tutti i segreti di coppia di X.
+
+   Le impronte sono PUBBLICHE (ogni contatto le ha): l attaccante le conosce.
+
+   Domande:
+     C2  l offerta resta segreta anche a chi conosce le impronte
+     C3  se B risponde credendo che sia A, l offerta viene da A (inj)
+     C4  la risposta di B resta segreta
+*)
+
+type skey.
+type pkey.
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m: bitstring, s: skey; adec(aenc(m, pk(s)), s) = m.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+fun h(bitstring): bitstring.
+fun kdf(bitstring, bitstring): bitstring.
+
+const OFFER: bitstring.
+const ANSWER: bitstring.
+
+free c: channel.
+
+event AOffre(bitstring, bitstring, bitstring).      (* fpA, fpB, sdpA *)
+event BRisponde(bitstring, bitstring, bitstring, bitstring). (* fpB, fpA, sdpA, sdpB *)
+event AConclude(bitstring, bitstring, bitstring, bitstring). (* fpA, fpB, sdpA, sdpB *)
+
+(* segretezza espressa sugli eventi: i processi sono usati in due versi *)
+query fa, fb, sa: bitstring; event(AOffre(fa, fb, sa)) && attacker(sa) ==> false.
+query fb, fa, sa, sb: bitstring; event(BRisponde(fb, fa, sa, sb)) && attacker(sb) ==> false.
+query fa, fb, sa, sb: bitstring;
+  event(AConclude(fa, fb, sa, sb)) ==> inj-event(BRisponde(fb, fa, sa, sb)).
+query fb, fa, sa, sb: bitstring;
+  event(BRisponde(fb, fa, sa, sb)) ==> event(AOffre(fa, fb, sa)).
+
+(* A: ha in rubrica (fpB, pubB) e il segreto di coppia s *)
+let processA(fpA: bitstring, skA: skey, fpB: bitstring, pubB: pkey, s: bitstring) =
+  new ke: bitstring; new sdpA: bitstring;
+  let k = kdf(ke, s) in
+  event AOffre(fpA, fpB, sdpA);
+  out(c, (h((fpA, fpB)), aenc(ke, pubB), pk(skA), senc((OFFER, sdpA), k)));
+  in(c, r: bitstring);
+  let (=ANSWER, sb: bitstring) = sdec(r, k) in
+  event AConclude(fpA, fpB, sdpA, sb).
+
+(* B: ha in rubrica (fpA, pubA) e lo stesso s; pretende P = pubA *)
+let processB(fpB: bitstring, skB: skey, fpA: bitstring, pubA: pkey, s: bitstring) =
+  in(c, (=h((fpA, fpB)), m: bitstring, p: pkey, e: bitstring));
+  if p = pubA then
+  let ke = adec(m, skB) in
+  let k = kdf(ke, s) in
+  let (=OFFER, sa: bitstring) = sdec(e, k) in
+  new sdpB: bitstring;
+  event BRisponde(fpB, fpA, sa, sdpB);
+  out(c, senc((ANSWER, sdpB), k)).
+
+process
+  !( new skA: skey; new fpA: bitstring; out(c, (pk(skA), fpA));
+     !( new skB: skey; new fpB: bitstring; out(c, (pk(skB), fpB));
+        (* il segreto di coppia: ECDH(priv_A, pub_B), noto solo ai due *)
+        new s: bitstring;
+        ( !processA(fpA, skA, fpB, pk(skB), s) | !processB(fpB, skB, fpA, pk(skA), s)
+        (* e anche nel verso opposto: B chiama A *)
+        | !processA(fpB, skB, fpA, pk(skA), s) | !processB(fpA, skA, fpB, pk(skB), s) ) ) )

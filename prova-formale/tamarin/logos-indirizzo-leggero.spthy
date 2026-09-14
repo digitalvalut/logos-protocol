@@ -1,0 +1,84 @@
+/*
+  Logos - rito B, versione LEGGERA: la chiamata all indirizzo.
+  Stesso rito di logos-indirizzo.spthy, ma l ECIES (ECDH effimero + HKDF) e
+  rappresentato come cifratura a chiave pubblica di una chiave di sessione
+  fresca: aenc(<..., k>, pub_B). E l astrazione standard di un KEM: chi ha la
+  privata di B ricava k, nessun altro. Si perde solo cio che riguarda la
+  matematica della curva (punti degeneri), che Web Crypto valida da se.
+
+  Perche esiste: il modello fedele con Diffie-Hellman non risponde in 8 minuti
+  (13 set 2026, tre lemma su cinque senza risposta). Questo risponde in secondi.
+*/
+
+theory Logos_Indirizzo_Leggero
+begin
+
+builtins: asymmetric-encryption, symmetric-encryption
+functions: addr/2
+
+restriction una_chiave_per_dispositivo:
+  "All X k1 k2 #i #j. Nasce(X, k1) @ i & Nasce(X, k2) @ j ==> #i = #j"
+
+rule B_Nasce:
+  [ Fr(~priv) ]
+  --[ Nasce($B, ~priv) ]->
+  [ !PrivB($B, ~priv), !AddrDi($B, addr(pk(~priv), '0')), Out(pk(~priv)) ]
+
+/* L indirizzo arriva ad A per una via fidata, fuori dal modello. */
+rule A_ConosceIndirizzo:
+  [ !AddrDi($B, addrB) ] --[ AConosceAz($A, $B, addrB) ]-> [ !AConosce($A, $B, addrB) ]
+
+rule Rivela_PrivB:
+  [ !PrivB($B, ~priv) ] --[ Rivelata($B) ]-> [ Out(~priv) ]
+
+/* pub arriva dal relay (= dalla rete). A la accetta solo se addr(pub,'0') e
+   l indirizzo che gia conosceva: fetchAddrKey 6346-6367. */
+rule A_Chiama:
+  [ !AConosce($A, $B, addr(pub, '0')), In(pub), Fr(~k), Fr(~sdpA), Fr(~rid) ]
+  --[ AChiama($A, $B, ~sdpA, ~rid), SegretoA(~sdpA, $B) ]->
+  [ Out(aenc(<'offer', ~k, ~sdpA, ~rid>, pub)), AttesaA($A, $B, ~rid, ~k, ~sdpA) ]
+
+rule B_Risponde:
+  [ !PrivB($B, ~priv), In(aenc(<'offer', k, sdpA, rid>, pk(~priv))), Fr(~sdpB) ]
+  --[ BRisponde($B, sdpA, rid, ~sdpB) ]->
+  [ Out(senc(<'answer', ~sdpB, rid>, k)) ]
+
+rule A_Conclude:
+  [ AttesaA($A, $B, ~rid, ~k, ~sdpA), In(senc(<'answer', sdpB, ~rid>, ~k)) ]
+  --[ AConclude($A, $B, ~sdpA, sdpB, ~rid) ]->
+  [ ]
+
+lemma eseguibile:
+  exists-trace
+  "Ex A B sa sb rid #i. AConclude(A, B, sa, sb, rid) @ i & not (Ex X #r. Rivelata(X) @ r)"
+
+/* B1. L offerta resta segreta finche la privata di B non e rivelata. */
+lemma B1_segretezza_offerta:
+  "All s B #i. SegretoA(s, B) @ i
+     ==> not (Ex #j. K(s) @ j) | (Ex #r. Rivelata(B) @ r)"
+
+/* B1 bis. La risposta e segreta se B stava rispondendo a un A onesto
+   (chiunque puo chiamare un indirizzo, anche l avversario, e a lui B risponde). */
+lemma B1_segretezza_risposta:
+  "All B sa rid s #i. BRisponde(B, sa, rid, s) @ i & (Ex A #j. AChiama(A, B, sa, rid) @ j)
+     ==> not (Ex #k. K(s) @ k) | (Ex #r. Rivelata(B) @ r)"
+
+/* B2 + B3. Se A conclude, B ha risposto a QUESTA offerta, una volta sola. */
+lemma B2_B3_autenticazione_di_B:
+  "All A B sa sb rid #i. AConclude(A, B, sa, sb, rid) @ i
+     ==> ( Ex #j. BRisponde(B, sa, rid, sb) @ j & j < i
+           & not (Ex A2 sb2 #k. AConclude(A2, B, sa, sb2, rid) @ k & not (#k = #i)) )
+         | (Ex #r. Rivelata(B) @ r)"
+
+/* B4. Il relay non puo far accettare ad A una chiave che non e di B. */
+lemma B4_chiave_non_sostituibile:
+  "All B sa rid sb #j. BRisponde(B, sa, rid, sb) @ j
+     ==> (Ex A #i. AChiama(A, B, sa, rid) @ i & i < j)
+         | (Ex #r. Rivelata(B) @ r)"
+
+/* Nessuna segretezza in avanti: DEVE FALLIRE (dichiarato a modifica.js 6369-6388). */
+lemma NON_forward_secrecy_deve_fallire:
+  "All s B #i. SegretoA(s, B) @ i
+     ==> not (Ex #j. K(s) @ j) | (Ex #r. Rivelata(B) @ r & r < i)"
+
+end

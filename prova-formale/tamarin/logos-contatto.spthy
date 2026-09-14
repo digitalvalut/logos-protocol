@@ -1,0 +1,84 @@
+/*
+  Logos - rito C: ricollegarsi a un contatto in rubrica (modifica.js 8300-8330, 8415-8440)
+  Bozza del 13 set 2026, da PROTOCOLLO.md sez. 4.
+
+  Cosa modella:
+    - Ogni dispositivo ha un impronta DTLS `fp` (un valore a lungo termine).
+    - Due contatti A e B conoscono l impronta l uno dell altro.
+    - La chiave del ricollegamento e  HKDF(fpA, fpB): dalle sole impronte.
+    - Le impronte NON sono segrete: ogni contatto di A conosce fpA. Qui lo si
+      modella con una regola che le rivela (un contatto comune, un ex contatto).
+
+  Attesa (PROTOCOLLO.md sez. 6.1): C1 regge se nessuno rivela le impronte;
+  C2 FALLISCE - chi conosce entrambe le impronte legge l offerta.
+*/
+
+theory Logos_Contatto
+begin
+
+builtins: symmetric-encryption, hashing
+functions: hkdf/1
+
+/* Etichetta di direzione e una impronta per dispositivo: vedi logos-indirizzo.spthy. */
+restriction una_impronta_per_dispositivo:
+  "All X f1 f2 #i #j. Nasce(X, f1) @ i & Nasce(X, f2) @ j ==> #i = #j"
+
+rule Nasce:
+  [ Fr(~fp) ] --[ Nasce($X, ~fp) ]-> [ !Fp($X, ~fp) ]
+
+/* A e B sono gia  in rubrica l uno dell altro: si conoscono le impronte. */
+rule InRubrica:
+  [ !Fp($A, fpA), !Fp($B, fpB) ]
+  --[ Rubrica($A, $B) ]->
+  [ !Conosce($A, $B, fpB), !Conosce($B, $A, fpA) ]
+
+/* Un terzo che ha parlato con X conosce fpX: e  cio  che si salva in rubrica.
+   Non e  una "compromissione": e  il normale funzionamento. */
+rule TerzoConosceImpronta:
+  [ !Fp($X, fp) ] --[ ImprontaNota($X) ]-> [ Out(fp) ]
+
+/* A scrive l offerta nella casella h(fpA, > ,fpB), sigillata con HKDF(fpA:fpB). */
+rule A_Offre:
+  let k = hkdf(<fpA, fpB>)
+  in
+  [ !Fp($A, fpA), !Conosce($A, $B, fpB), Fr(~sdpA) ]
+  --[ AOffre($A, $B, ~sdpA), SegretoOfferta(~sdpA, $A, $B) ]->
+  [ Out(<h(<fpA, fpB>), senc(<'offer', ~sdpA>, k)>), AttesaA($A, $B, k, ~sdpA) ]
+
+rule B_Risponde:
+  let k = hkdf(<fpA, fpB>)
+  in
+  [ !Fp($B, fpB), !Conosce($B, $A, fpA), In(<h(<fpA, fpB>), senc(<'offer', sdpA>, k)>), Fr(~sdpB) ]
+  --[ BRisponde($B, $A, sdpA, ~sdpB) ]->
+  [ Out(senc(<'answer', ~sdpB>, k)) ]
+
+rule A_Conclude:
+  [ AttesaA($A, $B, k, ~sdpA), In(senc(<'answer', sdpB>, k)) ]
+  --[ AConclude($A, $B, ~sdpA, sdpB) ]->
+  [ ]
+
+lemma eseguibile:
+  exists-trace
+  "Ex A B sa sb #i. AConclude(A, B, sa, sb) @ i & not (Ex X #r. ImprontaNota(X) @ r)"
+
+/* C1. Se nessun terzo conosce le impronte, l offerta resta segreta. */
+lemma C1_segreta_se_impronte_private:
+  "All s A B #i. SegretoOfferta(s, A, B) @ i
+     ==> not (Ex #j. K(s) @ j)
+         | (Ex #r. ImprontaNota(A) @ r) | (Ex #r. ImprontaNota(B) @ r)"
+
+/* C2. L offerta resta segreta ANCHE se un terzo conosce entrambe le impronte.
+   ATTESA: FALLISCE. Se Tamarin trova la traccia, e  la conferma di sez. 6.1:
+   un contatto comune legge i metadati del ricollegamento. */
+lemma C2_segreta_anche_con_impronte_note_DEVE_FALLIRE:
+  "All s A B #i. SegretoOfferta(s, A, B) @ i ==> not (Ex #j. K(s) @ j)"
+
+/* C3. Se B risponde credendo che sia A, l offerta viene davvero da A -
+   ATTESA: FALLISCE con impronte note (il terzo puo  scrivere a nome di A).
+   Nell app l allarme sas.leadChanged scatta DOPO, al collegamento DTLS. */
+lemma C3_offerta_autentica:
+  "All B A sa sb #j. BRisponde(B, A, sa, sb) @ j
+     ==> (Ex #i. AOffre(A, B, sa) @ i & i < j)
+         | (Ex #r. ImprontaNota(A) @ r) | (Ex #r. ImprontaNota(B) @ r)"
+
+end

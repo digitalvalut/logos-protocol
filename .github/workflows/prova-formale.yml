@@ -1,0 +1,60 @@
+# La prova formale del protocollo: si lancia A MANO (Actions -> prova formale),
+# non a ogni push — dura fino a un'ora e non ha niente da dire su un commit
+# qualunque. Vedi prova-formale/README.md. Tamarin, Maude e ProVerif vengono
+# dai loro rilasci ufficiali (GitHub e INRIA); niente di tutto questo entra
+# nell'app.
+name: prova formale
+on: { workflow_dispatch: {} }
+jobs:
+  proverif:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compila ProVerif 2.05 dal sorgente ufficiale (INRIA)
+        run: |
+          set -e
+          sudo apt-get update -qq && sudo apt-get install -y -qq ocaml ocaml-findlib >/dev/null
+          curl -sSL -o pv.tgz https://bblanche.gitlabpages.inria.fr/proverif/proverif2.05.tar.gz
+          tar xzf pv.tgz && cd proverif2.05 && ./build >/dev/null 2>&1; ls proverif && mkdir -p $HOME/bin && cp proverif $HOME/bin/ && echo "$HOME/bin" >> $GITHUB_PATH
+      - name: Ogni modello ProVerif
+        run: |
+          mkdir -p risultati
+          for f in prova-formale/proverif/*.pv; do
+            echo "=================== $(basename $f) ==================="
+            timeout 600 proverif "$f" > "risultati/$(basename $f).txt" 2>&1 || true
+            grep -E "^RESULT|^Error" "risultati/$(basename $f).txt"
+          done
+      - uses: actions/upload-artifact@v4
+        with: { name: risultati-proverif, path: risultati }
+  tamarin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scarica Tamarin 1.12.0 e Maude 3.5.1 (rilasci ufficiali)
+        run: |
+          set -e
+          mkdir -p $HOME/bin
+          curl -sSL -o t.tgz https://github.com/tamarin-prover/tamarin-prover/releases/download/1.12.0/tamarin-prover-1.12.0-linux64-ubuntu.tar.gz
+          tar xzf t.tgz -C $HOME/bin
+          curl -sSL -o m.zip https://github.com/maude-lang/Maude/releases/download/Maude3.5.1/Maude-3.5.1-linux-x86_64.zip
+          unzip -q -o m.zip -d $HOME/maude
+          M=$(for f in $(find $HOME/maude -type f); do file "$f" | grep -q ELF && echo "$f"; done | head -1); chmod +x "$M"; ln -s "$M" $HOME/bin/maude
+          echo "MAUDE_LIB=$(dirname "$M")" >> $GITHUB_ENV
+          echo "$HOME/bin" >> $GITHUB_PATH
+      - name: Ogni lemma, una alla volta (8 minuti e 6 GB ciascuna; i veloci prima)
+        run: |
+          mkdir -p risultati
+          for f in prova-formale/tamarin/logos-invito.spthy prova-formale/tamarin/logos-contatto.spthy prova-formale/tamarin/logos-contatto-v45.spthy prova-formale/tamarin/logos-indirizzo-leggero.spthy prova-formale/tamarin/logos-indirizzo.spthy; do
+            n=$(basename $f .spthy)
+            echo "=================== $n ==================="
+            for l in $(grep -oE '^lemma [A-Za-z0-9_]+' "$f" | awk '{print $2}'); do
+              timeout 480 tamarin-prover --prove="$l" "$f" +RTS -M6g -RTS > "risultati/$n.$l.txt" 2>&1 || true
+              r=$(grep -E "^  $l " "risultati/$n.$l.txt" | grep -v incomplete | head -1)
+              [ -n "$r" ] && echo "$r" || echo "  $l: NESSUNA RISPOSTA (tempo o memoria esauriti)"
+            done
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: risultati-tamarin, path: risultati }
