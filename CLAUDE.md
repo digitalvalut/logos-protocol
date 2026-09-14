@@ -62,6 +62,7 @@ confidently wrong figure.
 | Android wrapper: bundles the app, rings when closed, puts the phone in call mode | `android/` | 5 Java classes |
 | **How to publish an Android version — read it before trying** | `android/RILASCIO.md` | a checklist |
 | Tests | `tests/` | 9,000 lines |
+| The protocol written out, and its formal models (Tamarin, ProVerif) | `prova-formale/` | a document + 8 models |
 | The twin copy to look at before publishing | `prova/` (generated) | `tools/prova.js` |
 
 `build-single-file.py` bundles the web app into `android/app/src/main/assets/logos.html`.
@@ -116,9 +117,15 @@ waits for a closed phone; the note is a convenience and never the only copy.
 Never poll `/letter` on a timer: a collect costs a `list`, and lists are as
 scarce as writes.
 
-**The formal models** of the signalling (Tamarin + ProVerif) live outside the
-app; run on GitHub Actions, not on this Mac. They are the reason for the three
-paragraphs above. Publication of the models follows the fixes, never precedes.
+**The formal models** of the signalling (Tamarin + ProVerif) live in
+`prova-formale/`, outside the app, with the protocol written out
+(`prova-formale/PROTOCOLLO.md`) and a manual workflow to re-run them (an hour;
+never on push). They are the reason for the three paragraphs above. When the
+rite changes, the model changes in the same commit — a model of a protocol
+that no longer exists is worse than none. A lemma marked *deve fallire* is a
+declared limit or an expected attack trace: if it ever passes, something moved.
+An unfixed defect a model finds goes to `memory/` first (rule 5); the model
+is published with the fix.
 
 It runs on a free plan with a hard daily write allowance. Before adding anything that
 writes or polls, work out what it costs per user per day — a loop with no deadline is
