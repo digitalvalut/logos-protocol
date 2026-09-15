@@ -303,7 +303,7 @@ Object.assign(I18N.en, {
 "health.brokerOk":"Answering.",
 "health.brokerBad":"Not answering. The long codes still work: they go through no server at all.",
 "health.brokerOrigin":"This copy of the app is at an address the service doesn't recognise: it won't work from here. Open the official one.",
-"health.closed":"With the app closed","health.nativeRing":"Ringing with the app closed","health.nativeRingOk":"Working: calls to your address ring your phone even with the app closed.","health.nativeRingRefused":"Android refused to start it. Reopen the app, then switch it off and on again.","health.nativeRingOff":"Off. Turn on your address and \u00abstay listening\u00bb above.",
+"health.closed":"With the app closed","health.nativeRing":"Ringing with the app closed","health.nativeRingOk":"Working: calls to your address ring your phone even with the app closed.","health.nativeRingRefused":"Android refused to start it. Reopen the app, then switch it off and on again.","health.nativeRingOff":"Off. Turn on your address and \u00abstay listening\u00bb above.","health.wire":"Wire to the relay","health.wireOk":"Open ({n}): the phone rings the moment a call arrives. Last pull: {t}.","health.wireDown":"Not open: the mailbox is polled as before. Last attempt {q}: {e}","health.ringQuota":"Rings in the last 5 minutes","health.ringQuotaHit":"{n} of {m}: the phone stays silent until five minutes have passed since the last one. It is a protection against someone flooding you with calls.",
 "health.closedOk":"They can make your phone ring.",
 "health.closedOff":"They can't reach you. Turn on notifications above.",
 "health.closedDenied":"The browser is blocking notifications: with the app closed, nobody reaches you.",
@@ -492,7 +492,7 @@ Object.assign(I18N.it, {
 "health.brokerOk":"Risponde.",
 "health.brokerBad":"Non risponde. Restano i codici lunghi, che non passano da nessun server.",
 "health.brokerOrigin":"Questa copia dell'app è su un indirizzo che il servizio non riconosce: da qui non funzionerà. Apri quella ufficiale.",
-"health.closed":"Con l'app chiusa","health.nativeRing":"Squillo ad app chiusa","health.nativeRingOk":"Funziona: le chiamate al tuo indirizzo ti fanno squillare anche con l'app chiusa.","health.nativeRingRefused":"Android ha rifiutato di avviarlo. Riapri l'app, poi spegni e riaccendi l'interruttore.","health.nativeRingOff":"Spento. Accendi il tuo indirizzo e \u00abresta in ascolto\u00bb qui sopra.",
+"health.closed":"Con l'app chiusa","health.nativeRing":"Squillo ad app chiusa","health.nativeRingOk":"Funziona: le chiamate al tuo indirizzo ti fanno squillare anche con l'app chiusa.","health.nativeRingRefused":"Android ha rifiutato di avviarlo. Riapri l'app, poi spegni e riaccendi l'interruttore.","health.nativeRingOff":"Spento. Accendi il tuo indirizzo e \u00abresta in ascolto\u00bb qui sopra.","health.wire":"Filo con il relay","health.wireOk":"Aperto ({n}): il telefono squilla appena arriva una chiamata. Ultima tirata: {t}.","health.wireDown":"Non aperto: si bussa alla cassetta come prima. Ultimo tentativo {q}: {e}","health.ringQuota":"Squilli negli ultimi 5 minuti","health.ringQuotaHit":"{n} su {m}: il telefono resta muto finché non passano cinque minuti dall'ultimo. È una protezione contro chi ti tempesta di chiamate.",
 "health.closedOk":"Ti possono far squillare il telefono.",
 "health.closedOff":"Non ti raggiungono. Accendi gli avvisi qui sopra.",
 "health.closedDenied":"Il browser blocca gli avvisi: con l'app chiusa non ti raggiunge nessuno.",
@@ -674,7 +674,7 @@ Object.assign(I18N.fr, {
 "health.brokerOk":"Répond.",
 "health.brokerBad":"Ne répond pas. Les codes longs fonctionnent encore : ils ne passent par aucun serveur.",
 "health.brokerOrigin":"Cette copie de l'application est à une adresse que le service ne reconnaît pas : elle ne marchera pas d'ici. Ouvrez l'officielle.",
-"health.closed":"Application fermée","health.nativeRing":"Sonnerie application fermée","health.nativeRingOk":"Fonctionne : les appels à votre adresse font sonner le téléphone même application fermée.","health.nativeRingRefused":"Android a refusé de le démarrer. Rouvrez l'application, puis éteignez et rallumez l'interrupteur.","health.nativeRingOff":"Éteint. Activez votre adresse et « rester à l'écoute » ci-dessus.",
+"health.closed":"Application fermée","health.nativeRing":"Sonnerie application fermée","health.nativeRingOk":"Fonctionne : les appels à votre adresse font sonner le téléphone même application fermée.","health.nativeRingRefused":"Android a refusé de le démarrer. Rouvrez l'application, puis éteignez et rallumez l'interrupteur.","health.nativeRingOff":"Éteint. Activez votre adresse et « rester à l'écoute » ci-dessus.","health.wire":"Fil avec le relais","health.wireOk":"Ouvert ({n}) : le téléphone sonne dès qu'un appel arrive. Dernier signal : {t}.","health.wireDown":"Pas ouvert : la boîte est consultée comme avant. Dernier essai {q} : {e}","health.ringQuota":"Sonneries des 5 dernières minutes","health.ringQuotaHit":"{n} sur {m} : le téléphone reste muet jusqu'à cinq minutes après la dernière. C'est une protection contre qui vous inonde d'appels.",
 "health.closedOk":"Ils peuvent faire sonner votre téléphone.",
 "health.closedOff":"Ils ne vous joignent pas. Activez les notifications ci-dessus.",
 "health.closedDenied":"Le navigateur bloque les notifications : application fermée, personne ne vous joint.",
@@ -856,7 +856,7 @@ Object.assign(I18N.de, {
 "health.brokerOk":"Antwortet.",
 "health.brokerBad":"Antwortet nicht. Die langen Codes gehen weiter: sie laufen über keinen Server.",
 "health.brokerOrigin":"Diese Kopie der App liegt auf einer Adresse, die der Dienst nicht kennt: von hier aus geht es nicht. Öffne die offizielle.",
-"health.closed":"Bei geschlossener App","health.nativeRing":"Klingeln bei geschlossener App","health.nativeRingOk":"Funktioniert: Anrufe an deine Adresse lassen das Telefon auch bei geschlossener App klingeln.","health.nativeRingRefused":"Android hat den Start verweigert. App neu öffnen, dann Schalter aus- und wieder einschalten.","health.nativeRingOff":"Aus. Aktiviere oben deine Adresse und „auf Anrufe lauschen“.",
+"health.closed":"Bei geschlossener App","health.nativeRing":"Klingeln bei geschlossener App","health.nativeRingOk":"Funktioniert: Anrufe an deine Adresse lassen das Telefon auch bei geschlossener App klingeln.","health.nativeRingRefused":"Android hat den Start verweigert. App neu öffnen, dann Schalter aus- und wieder einschalten.","health.nativeRingOff":"Aus. Aktiviere oben deine Adresse und „auf Anrufe lauschen“.","health.wire":"Draht zum Relay","health.wireOk":"Offen ({n}): das Telefon klingelt, sobald ein Anruf kommt. Letztes Ziehen: {t}.","health.wireDown":"Nicht offen: das Postfach wird wie bisher abgefragt. Letzter Versuch {q}: {e}","health.ringQuota":"Klingeln in den letzten 5 Minuten","health.ringQuotaHit":"{n} von {m}: das Telefon bleibt stumm, bis fünf Minuten seit dem letzten vergangen sind. Ein Schutz gegen Anrufflut.",
 "health.closedOk":"Sie können dein Telefon klingeln lassen.",
 "health.closedOff":"Sie erreichen dich nicht. Schalte oben die Hinweise ein.",
 "health.closedDenied":"Der Browser blockiert Hinweise: bei geschlossener App erreicht dich niemand.",
@@ -1038,7 +1038,7 @@ Object.assign(I18N.es, {
 "health.brokerOk":"Responde.",
 "health.brokerBad":"No responde. Quedan los códigos largos, que no pasan por ningún servidor.",
 "health.brokerOrigin":"Esta copia de la aplicación está en una dirección que el servicio no reconoce: desde aquí no funcionará. Abre la oficial.",
-"health.closed":"Con la aplicación cerrada","health.nativeRing":"Timbre con la app cerrada","health.nativeRingOk":"Funciona: las llamadas a tu dirección hacen sonar el teléfono incluso con la app cerrada.","health.nativeRingRefused":"Android se negó a iniciarlo. Vuelve a abrir la app y apaga y enciende el interruptor.","health.nativeRingOff":"Apagado. Activa tu dirección y «quedarse a la escucha» arriba.",
+"health.closed":"Con la aplicación cerrada","health.nativeRing":"Timbre con la app cerrada","health.nativeRingOk":"Funciona: las llamadas a tu dirección hacen sonar el teléfono incluso con la app cerrada.","health.nativeRingRefused":"Android se negó a iniciarlo. Vuelve a abrir la app y apaga y enciende el interruptor.","health.nativeRingOff":"Apagado. Activa tu dirección y «quedarse a la escucha» arriba.","health.wire":"Hilo con el relay","health.wireOk":"Abierto ({n}): el teléfono suena en cuanto llega una llamada. Último tirón: {t}.","health.wireDown":"No abierto: se consulta el buzón como antes. Último intento {q}: {e}","health.ringQuota":"Timbres en los últimos 5 minutos","health.ringQuotaHit":"{n} de {m}: el teléfono queda mudo hasta que pasen cinco minutos desde el último. Es una protección contra quien te acribilla a llamadas.",
 "health.closedOk":"Pueden hacer sonar tu teléfono.",
 "health.closedOff":"No te localizan. Activa los avisos aquí arriba.",
 "health.closedDenied":"El navegador bloquea los avisos: con la aplicación cerrada no te localiza nadie.",
@@ -1220,7 +1220,7 @@ Object.assign(I18N.pt, {
 "health.brokerOk":"Responde.",
 "health.brokerBad":"Não responde. Restam os códigos longos, que não passam por nenhum servidor.",
 "health.brokerOrigin":"Esta cópia da aplicação está num endereço que o serviço não reconhece: daqui não vai funcionar. Abra a oficial.",
-"health.closed":"Com a aplicação fechada","health.nativeRing":"Toque com a aplicação fechada","health.nativeRingOk":"Funciona: as chamadas para o seu endereço fazem o telefone tocar mesmo com a aplicação fechada.","health.nativeRingRefused":"O Android recusou iniciá-lo. Reabra a aplicação e desligue e ligue o interruptor.","health.nativeRingOff":"Desligado. Ative o seu endereço e «ficar à escuta» acima.",
+"health.closed":"Com a aplicação fechada","health.nativeRing":"Toque com a aplicação fechada","health.nativeRingOk":"Funciona: as chamadas para o seu endereço fazem o telefone tocar mesmo com a aplicação fechada.","health.nativeRingRefused":"O Android recusou iniciá-lo. Reabra a aplicação e desligue e ligue o interruptor.","health.nativeRingOff":"Desligado. Ative o seu endereço e «ficar à escuta» acima.","health.wire":"Fio com o relay","health.wireOk":"Aberto ({n}): o telemóvel toca assim que chega uma chamada. Último puxão: {t}.","health.wireDown":"Não aberto: a caixa é consultada como antes. Última tentativa {q}: {e}","health.ringQuota":"Toques nos últimos 5 minutos","health.ringQuotaHit":"{n} de {m}: o telemóvel fica mudo até passarem cinco minutos desde o último. É uma proteção contra quem o inunda de chamadas.",
 "health.closedOk":"Podem fazer o seu telemóvel tocar.",
 "health.closedOff":"Não o alcançam. Ative os avisos aqui em cima.",
 "health.closedDenied":"O navegador bloqueia os avisos: com a aplicação fechada, ninguém o alcança.",
@@ -1402,7 +1402,7 @@ Object.assign(I18N.ru, {
 "health.brokerOk":"Отвечает.",
 "health.brokerBad":"Не отвечает. Остаются длинные коды — они не проходят ни через один сервер.",
 "health.brokerOrigin":"Эта копия приложения находится по адресу, который служба не признаёт: отсюда работать не будет. Откройте официальную.",
-"health.closed":"При закрытом приложении","health.nativeRing":"Звонок при закрытом приложении","health.nativeRingOk":"Работает: вызовы на ваш адрес заставляют телефон звонить даже при закрытом приложении.","health.nativeRingRefused":"Android отказался его запустить. Откройте приложение и выключите и включите переключатель.","health.nativeRingOff":"Выключено. Включите свой адрес и «оставаться на связи» выше.",
+"health.closed":"При закрытом приложении","health.nativeRing":"Звонок при закрытом приложении","health.nativeRingOk":"Работает: вызовы на ваш адрес заставляют телефон звонить даже при закрытом приложении.","health.nativeRingRefused":"Android отказался его запустить. Откройте приложение и выключите и включите переключатель.","health.nativeRingOff":"Выключено. Включите свой адрес и «оставаться на связи» выше.","health.wire":"Линия с реле","health.wireOk":"Открыта ({n}): телефон звонит, как только приходит вызов. Последний сигнал: {t}.","health.wireDown":"Не открыта: ящик опрашивается как раньше. Последняя попытка {q}: {e}","health.ringQuota":"Звонков за последние 5 минут","health.ringQuotaHit":"{n} из {m}: телефон молчит, пока не пройдёт пять минут с последнего. Это защита от шквала звонков.",
 "health.closedOk":"Они могут заставить ваш телефон зазвонить.",
 "health.closedOff":"Они до вас не достучатся. Включите уведомления выше.",
 "health.closedDenied":"Браузер блокирует уведомления: при закрытом приложении до вас никто не достучится.",
@@ -1584,7 +1584,7 @@ Object.assign(I18N.zh, {
 "health.brokerOk":"有回应。",
 "health.brokerBad":"没有回应。长代码仍然可用：它们不经过任何服务器。",
 "health.brokerOrigin":"这份应用副本所在的地址不被服务认可：从这里无法工作。请打开官方的那个。",
-"health.closed":"应用关闭时","health.nativeRing":"应用关闭时响铃","health.nativeRingOk":"正常：即使应用关闭，拨打你地址的来电也会让手机响铃。","health.nativeRingRefused":"Android 拒绝启动它。请重新打开应用，然后关闭再打开开关。","health.nativeRingOff":"已关闭。请在上方开启你的地址和「保持接听」。",
+"health.closed":"应用关闭时","health.nativeRing":"应用关闭时响铃","health.nativeRingOk":"正常：即使应用关闭，拨打你地址的来电也会让手机响铃。","health.nativeRingRefused":"Android 拒绝启动它。请重新打开应用，然后关闭再打开开关。","health.nativeRingOff":"已关闭。请在上方开启你的地址和「保持接听」。","health.wire":"与中继的连线","health.wireOk":"已连接（{n}）：来电时手机立即响铃。上次拉动：{t}。","health.wireDown":"未连接：照旧轮询信箱。上次尝试 {q}：{e}","health.ringQuota":"最近 5 分钟内的响铃","health.ringQuotaHit":"{m} 次中的第 {n} 次：距上次响铃五分钟内手机保持静音。这是防止骚扰来电的保护。",
 "health.closedOk":"他们能让你的手机响起来。",
 "health.closedOff":"他们找不到你。请在上面打开通知。",
 "health.closedDenied":"浏览器阻止了通知：应用关闭时没人能找到你。",
@@ -1766,7 +1766,7 @@ Object.assign(I18N.ar, {
 "health.brokerOk":"يستجيب.",
 "health.brokerBad":"لا يستجيب. تبقى الرموز الطويلة، وهي لا تمر بأي خادم.",
 "health.brokerOrigin":"هذه النسخة من التطبيق على عنوان لا تعرفه الخدمة: لن تعمل من هنا. افتح النسخة الرسمية.",
-"health.closed":"والتطبيق مغلق","health.nativeRing":"الرنين والتطبيق مغلق","health.nativeRingOk":"يعمل: المكالمات إلى عنوانك تجعل هاتفك يرن حتى والتطبيق مغلق.","health.nativeRingRefused":"رفض أندرويد تشغيله. أعد فتح التطبيق ثم أطفئ المفتاح وأعده.","health.nativeRingOff":"مغلق. فعّل عنوانك و«ابقَ منصتًا» بالأعلى.",
+"health.closed":"والتطبيق مغلق","health.nativeRing":"الرنين والتطبيق مغلق","health.nativeRingOk":"يعمل: المكالمات إلى عنوانك تجعل هاتفك يرن حتى والتطبيق مغلق.","health.nativeRingRefused":"رفض أندرويد تشغيله. أعد فتح التطبيق ثم أطفئ المفتاح وأعده.","health.nativeRingOff":"مغلق. فعّل عنوانك و«ابقَ منصتًا» بالأعلى.","health.wire":"الخيط مع المُرحِّل","health.wireOk":"مفتوح ({n}): يرن الهاتف فور وصول مكالمة. آخر سحب: {t}.","health.wireDown":"غير مفتوح: يُفحص الصندوق كما في السابق. آخر محاولة {q}: {e}","health.ringQuota":"رنّات آخر 5 دقائق","health.ringQuotaHit":"{n} من {m}: يبقى الهاتف صامتًا حتى تمر خمس دقائق على الأخيرة. حماية ممن يغرقك بالمكالمات.",
 "health.closedOk":"يمكنهم جعل هاتفك يرن.",
 "health.closedOff":"لا يصلون إليك. فعّل التنبيهات في الأعلى.",
 "health.closedDenied":"المتصفح يحجب التنبيهات: والتطبيق مغلق لن يصل إليك أحد.",
@@ -1948,7 +1948,7 @@ Object.assign(I18N.ur, {
 "health.brokerOk":"جواب دے رہی ہے۔",
 "health.brokerBad":"جواب نہیں دے رہی۔ لمبے کوڈ اب بھی کام کرتے ہیں: وہ کسی سرور سے نہیں گزرتے۔",
 "health.brokerOrigin":"ایپ کی یہ نقل ایسے پتے پر ہے جسے سروس نہیں پہچانتی: یہاں سے کام نہیں کرے گی۔ سرکاری والی کھولیں۔",
-"health.closed":"ایپ بند ہونے پر","health.nativeRing":"ایپ بند ہونے پر گھنٹی","health.nativeRingOk":"کام کر رہا ہے: آپ کے پتے پر آنے والی کالیں ایپ بند ہونے پر بھی فون بجاتی ہیں۔","health.nativeRingRefused":"اینڈرائیڈ نے اسے شروع کرنے سے انکار کیا۔ ایپ دوبارہ کھولیں، پھر سوئچ بند کر کے آن کریں۔","health.nativeRingOff":"بند ہے۔ اوپر اپنا پتہ اور «سنتے رہیں» آن کریں۔",
+"health.closed":"ایپ بند ہونے پر","health.nativeRing":"ایپ بند ہونے پر گھنٹی","health.nativeRingOk":"کام کر رہا ہے: آپ کے پتے پر آنے والی کالیں ایپ بند ہونے پر بھی فون بجاتی ہیں۔","health.nativeRingRefused":"اینڈرائیڈ نے اسے شروع کرنے سے انکار کیا۔ ایپ دوبارہ کھولیں، پھر سوئچ بند کر کے آن کریں۔","health.nativeRingOff":"بند ہے۔ اوپر اپنا پتہ اور «سنتے رہیں» آن کریں۔","health.wire":"ریلے سے تار","health.wireOk":"کھلا ({n}): کال آتے ہی فون بجتا ہے۔ آخری اشارہ: {t}۔","health.wireDown":"کھلا نہیں: پہلے کی طرح ڈبہ دیکھا جاتا ہے۔ آخری کوشش {q}: {e}","health.ringQuota":"آخری 5 منٹ میں گھنٹیاں","health.ringQuotaHit":"{m} میں سے {n}: آخری گھنٹی کے پانچ منٹ تک فون خاموش رہتا ہے۔ یہ کالوں کی بوچھاڑ سے تحفظ ہے۔",
 "health.closedOk":"وہ آپ کا فون بجا سکتے ہیں۔",
 "health.closedOff":"وہ آپ تک نہیں پہنچ سکتے۔ اوپر اطلاعات آن کریں۔",
 "health.closedDenied":"براؤزر اطلاعات روک رہا ہے: ایپ بند ہو تو کوئی آپ تک نہیں پہنچے گا۔",
@@ -2130,7 +2130,7 @@ Object.assign(I18N.hi, {
 "health.brokerOk":"जवाब दे रही है।",
 "health.brokerBad":"जवाब नहीं दे रही। लंबे कोड अब भी चलते हैं: वे किसी सर्वर से नहीं गुज़रते।",
 "health.brokerOrigin":"ऐप की यह नकल ऐसे पते पर है जिसे सेवा नहीं पहचानती: यहाँ से काम नहीं करेगी। आधिकारिक वाली खोलें।",
-"health.closed":"ऐप बंद होने पर","health.nativeRing":"ऐप बंद होने पर घंटी","health.nativeRingOk":"काम कर रहा है: आपके पते पर आने वाली कॉल ऐप बंद होने पर भी फ़ोन बजाती हैं।","health.nativeRingRefused":"Android ने इसे शुरू करने से मना कर दिया। ऐप फिर से खोलें, फिर स्विच बंद करके चालू करें।","health.nativeRingOff":"बंद है। ऊपर अपना पता और «सुनते रहें» चालू करें।",
+"health.closed":"ऐप बंद होने पर","health.nativeRing":"ऐप बंद होने पर घंटी","health.nativeRingOk":"काम कर रहा है: आपके पते पर आने वाली कॉल ऐप बंद होने पर भी फ़ोन बजाती हैं।","health.nativeRingRefused":"Android ने इसे शुरू करने से मना कर दिया। ऐप फिर से खोलें, फिर स्विच बंद करके चालू करें।","health.nativeRingOff":"बंद है। ऊपर अपना पता और «सुनते रहें» चालू करें।","health.wire":"रिले से तार","health.wireOk":"खुला ({n}): कॉल आते ही फ़ोन बजता है। अंतिम संकेत: {t}।","health.wireDown":"खुला नहीं: पहले की तरह डिब्बा देखा जाता है। अंतिम कोशिश {q}: {e}","health.ringQuota":"पिछले 5 मिनट में घंटियाँ","health.ringQuotaHit":"{m} में से {n}: आख़िरी घंटी के पाँच मिनट तक फ़ोन चुप रहता है। यह कॉल की बौछार से सुरक्षा है।",
 "health.closedOk":"वे आपका फ़ोन बजा सकते हैं।",
 "health.closedOff":"वे आप तक नहीं पहुँच सकते। ऊपर सूचनाएं चालू करें।",
 "health.closedDenied":"ब्राउज़र सूचनाएं रोक रहा है: ऐप बंद होने पर कोई आप तक नहीं पहुँचेगा।",
@@ -2312,7 +2312,7 @@ Object.assign(I18N.bn, {
 "health.brokerOk":"সাড়া দিচ্ছে।",
 "health.brokerBad":"সাড়া দিচ্ছে না। লম্বা কোডগুলো এখনও চলে: সেগুলো কোনো সার্ভার দিয়ে যায় না।",
 "health.brokerOrigin":"অ্যাপের এই কপিটি এমন ঠিকানায় আছে যা সেবাটি চেনে না: এখান থেকে কাজ করবে না। আসলটি খুলুন।",
-"health.closed":"অ্যাপ বন্ধ থাকলে","health.nativeRing":"অ্যাপ বন্ধ থাকলে রিং","health.nativeRingOk":"কাজ করছে: আপনার ঠিকানায় আসা কল অ্যাপ বন্ধ থাকলেও ফোন বাজায়।","health.nativeRingRefused":"Android এটি চালু করতে অস্বীকার করেছে। অ্যাপ আবার খুলুন, তারপর সুইচ বন্ধ করে চালু করুন।","health.nativeRingOff":"বন্ধ। উপরে আপনার ঠিকানা ও «শুনতে থাকুন» চালু করুন।",
+"health.closed":"অ্যাপ বন্ধ থাকলে","health.nativeRing":"অ্যাপ বন্ধ থাকলে রিং","health.nativeRingOk":"কাজ করছে: আপনার ঠিকানায় আসা কল অ্যাপ বন্ধ থাকলেও ফোন বাজায়।","health.nativeRingRefused":"Android এটি চালু করতে অস্বীকার করেছে। অ্যাপ আবার খুলুন, তারপর সুইচ বন্ধ করে চালু করুন।","health.nativeRingOff":"বন্ধ। উপরে আপনার ঠিকানা ও «শুনতে থাকুন» চালু করুন।","health.wire":"রিলের সাথে তার","health.wireOk":"খোলা ({n}): কল এলেই ফোন বাজে। শেষ টান: {t}।","health.wireDown":"খোলা নয়: আগের মতো বাক্স দেখা হয়। শেষ চেষ্টা {q}: {e}","health.ringQuota":"গত ৫ মিনিটে রিং","health.ringQuotaHit":"{m}-এর মধ্যে {n}: শেষ রিংয়ের পাঁচ মিনিট পর্যন্ত ফোন নীরব থাকে। এটি কলের বন্যা থেকে সুরক্ষা।",
 "health.closedOk":"তাঁরা আপনার ফোন বাজাতে পারেন।",
 "health.closedOff":"তাঁরা আপনার কাছে পৌঁছাতে পারবেন না। উপরে বিজ্ঞপ্তি চালু করুন।",
 "health.closedDenied":"ব্রাউজার বিজ্ঞপ্তি আটকাচ্ছে: অ্যাপ বন্ধ থাকলে কেউ আপনার কাছে পৌঁছাবে না।",
@@ -2494,7 +2494,7 @@ Object.assign(I18N.id, {
 "health.brokerOk":"Menjawab.",
 "health.brokerBad":"Tidak menjawab. Kode panjang masih bisa: itu tidak melewati server mana pun.",
 "health.brokerOrigin":"Salinan aplikasi ini ada di alamat yang tidak dikenali layanan: dari sini tidak akan jalan. Buka yang resmi.",
-"health.closed":"Saat aplikasi tertutup","health.nativeRing":"Dering saat aplikasi tertutup","health.nativeRingOk":"Berfungsi: panggilan ke alamat Anda membuat ponsel berdering meski aplikasi tertutup.","health.nativeRingRefused":"Android menolak menjalankannya. Buka lagi aplikasi, lalu matikan dan nyalakan sakelarnya.","health.nativeRingOff":"Mati. Aktifkan alamat Anda dan «tetap mendengarkan» di atas.",
+"health.closed":"Saat aplikasi tertutup","health.nativeRing":"Dering saat aplikasi tertutup","health.nativeRingOk":"Berfungsi: panggilan ke alamat Anda membuat ponsel berdering meski aplikasi tertutup.","health.nativeRingRefused":"Android menolak menjalankannya. Buka lagi aplikasi, lalu matikan dan nyalakan sakelarnya.","health.nativeRingOff":"Mati. Aktifkan alamat Anda dan «tetap mendengarkan» di atas.","health.wire":"Kabel ke relay","health.wireOk":"Terbuka ({n}): ponsel berdering begitu panggilan masuk. Tarikan terakhir: {t}.","health.wireDown":"Tidak terbuka: kotak surat dicek seperti sebelumnya. Percobaan terakhir {q}: {e}","health.ringQuota":"Dering dalam 5 menit terakhir","health.ringQuotaHit":"{n} dari {m}: ponsel tetap diam sampai lima menit berlalu sejak yang terakhir. Ini perlindungan dari orang yang membanjirimu panggilan.",
 "health.closedOk":"Mereka bisa membunyikan ponsel Anda.",
 "health.closedOff":"Mereka tidak bisa menghubungi Anda. Nyalakan pemberitahuan di atas.",
 "health.closedDenied":"Peramban memblokir pemberitahuan: saat aplikasi tertutup, tidak ada yang bisa menghubungi Anda.",
@@ -8259,7 +8259,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.40';
+const APP_VERSION = 'logos-modifica-4.41';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8390,6 +8390,24 @@ async function runHealth(){
     rows.push(statoAscoltoNativo === 'si' ? ['ok', t('health.nativeRing'), t('health.nativeRingOk')]
             : statoAscoltoNativo === 'rifiutato' ? ['bad', t('health.nativeRing'), t('health.nativeRingRefused')]
             : ['off', t('health.nativeRing'), t('health.nativeRingOff')]);
+    /* il filo aperto (v48): cosa sta facendo davvero, letto dal telefono */
+    if (statoAscoltoNativo === 'si' && androidRing && typeof androidRing.wireStatus === 'function'){
+      let w = null;
+      try{ w = JSON.parse(androidRing.wireStatus()); }catch(_){ w = null; }
+      if (w){
+        const quando = w.tentativo ? relTime(w.tentativo) : '—';
+        const tirato = w.tirato ? relTime(w.tirato) : '—';
+        rows.push(w.aperti > 0
+          ? ['ok', t('health.wire','Filo con il relay'), fill(t('health.wireOk','Aperto ({n}): il telefono squilla appena arriva una chiamata. Ultima tirata: {t}.'), { n: w.aperti, t: tirato })]
+          : ['warn', t('health.wire','Filo con il relay'), fill(t('health.wireDown','Non aperto: si bussa alla cassetta come prima. Ultimo tentativo {q}: {e}'), { q: quando, e: w.errore || '—' })]);
+        /* il limite anti-molestia: sei squilli in cinque minuti, poi silenzio.
+           Chi fa dieci prove di fila deve poterlo VEDERE, non credere che
+           l'app sia rotta */
+        if (typeof w.squilliRecenti === 'number' && w.squilliRecenti >= w.maxSquilli){
+          rows.push(['warn', t('health.ringQuota','Squilli negli ultimi 5 minuti'), fill(t('health.ringQuotaHit','{n} su {m}: il telefono resta muto finché non passano cinque minuti dall\'ultimo. È una protezione contro chi ti tempesta di chiamate.'), { n: w.squilliRecenti, m: w.maxSquilli })]);
+        }
+      }
+    }
   }
   /* ⚠️ QUESTA RIGA PARLA DELLE NOTIFICHE WEB, e dentro l'app Android quelle non
      esistono: una WebView non ha il Push del browser, quindi l'interruttore
