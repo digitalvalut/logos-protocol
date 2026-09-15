@@ -217,6 +217,11 @@ curl -s -H "Origin: https://digitalvalut.github.io" https://digitalvalut-turn.bu
 Deve cominciare con `{"iceServers":[`. Se dice `TURN not configured`, i
 Secret non ci sono.
 
+**Dalla v48 (15 set 2026) il Worker dice anche se una richiesta arriva da Tor**
+(`X-Logos-Tor`, dal codice paese `T1` di Cloudflare): è la spia della scheda
+«Da dove parli». Senza il deploy la spia resta grigia («sto controllando…»);
+nient'altro cambia.
+
 **Dalla v44 (13 set 2026) il Worker porta anche la cassetta che nessuno
 può svuotare** (gettoni: vedi il commento in `worker.js`). L'app funziona
 anche con il Worker vecchio — legge e scrive come ha sempre fatto, i gettoni

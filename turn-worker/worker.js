@@ -146,8 +146,25 @@ function corsHeaders(origin){
     'Access-Control-Allow-Origin': ALLOWED_ORIGINS.indexOf(origin) >= 0 ? origin : ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-Logos-Token',
+    /* la spia «Su Tor» (v48): la pagina deve poter leggere questa intestazione */
+    'Access-Control-Expose-Headers': 'X-Logos-Tor',
     'Vary': 'Origin',
   };
+}
+/* ---- LA SPIA «SU TOR» (v48, 15 set 2026) ----
+   Cloudflare sa se una richiesta arriva da un'uscita della rete Tor: la marca
+   con il codice paese speciale «T1». Lo si ripete alla pagina in
+   un'intestazione, cosi' la scheda «Da dove parli» mostra cio' che il relay
+   VEDE, non cio' che la persona ha scelto. Non e' un dato sulla persona:
+   e' un dato su questa richiesta, e serve solo a chi l'ha fatta. Niente viene
+   scritto ne' contato. Un relay senza `request.cf` (le prove in locale) non
+   dice niente, e la pagina lo prende per «non lo so». */
+function torHeader(request){
+  try{
+    const cf = request && request.cf;
+    if (!cf || typeof cf.country !== 'string') return {};
+    return { 'X-Logos-Tor': cf.country === 'T1' ? '1' : '0' };
+  }catch(e){ return {}; }
 }
 function json(body, status, cors){
   return new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
@@ -894,7 +911,7 @@ async function instrada(request, env, cors){
          money when it is. Credentials handed out here are valid for ten
          minutes (TURN_TTL_SECONDS) for whoever holds them. */
       if (overTurnLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
-      return handleTurn(env, cors);
+      return handleTurn(env, { ...cors, ...torHeader(request) });
     }
 
     const m = url.pathname.match(/^\/mailbox\/([0-9a-f]{64})$/);

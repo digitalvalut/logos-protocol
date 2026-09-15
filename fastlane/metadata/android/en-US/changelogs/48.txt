@@ -1,0 +1,9 @@
+With people you don't know, nobody sees where you speak from. And the ringer rings once.
+
+Until now, in every call the other person could see your network address, as in every direct call (Signal and WhatsApp included). With a trusted contact that does not matter; with a stranger calling you from the address in your shop window or a throwaway one, it was a gift. Calls with anyone not in your contacts now go entirely through the encrypted bridge: they see the bridge, not you. With your contacts the call stays direct and faster. No button, no notice: it just happens.
+
+In Settings, at the bottom, a new card, "Where you speak from": you can route calls with contacts through the bridge too ("Always hide"), or choose Tor with the Orbot app — one button turns it on, and an indicator tells you whether you really are on Tor, because the relay can see that. With Tor nobody sees where you speak from, not even us; calls start a few seconds later. If you already use a VPN there is nothing to do. Whoever never opens the card has Logos as it was.
+
+The ringer: trying Logos over Tor, the phone rang before the call was connected and kept ringing afterwards. The ringer only asked "is there an envelope?", never "is it new?" or "am I already on a call?". It now stays quiet while you are on a call, and after a handled call it does not ring again for the same envelope for two and a half minutes. Without Tor nothing changes: the envelope was already gone in an instant.
+
+The relay changes too (one line: it says whether you arrive from Tor); the app also works with the old one, the indicator just stays grey.

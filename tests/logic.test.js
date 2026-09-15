@@ -7668,3 +7668,140 @@ test.describe('v46: il segreto lungo sigilla, le sei cifre da sole non aprono', 
     app.stop();
   });
 });
+
+/* =========================================================================
+   v48 (15 set 2026): da dove parli. Con chi non e' in rubrica la chiamata usa
+   solo il ponte; la scheda; la spia «Su Tor» letta dal relay.
+   ========================================================================= */
+test.describe('v48: con chi non conosci, solo il ponte', () => {
+  test('la politica: normale di partenza; relayOnlyFor(noto) dice solo il ponte per gli sconosciuti; «sempre» per tutti', () => {
+    const app = loadApp();
+    assert.strictEqual(app.run('netPolicy()'), 'normale');
+    assert.strictEqual(app.run('relayOnlyFor(false)'), true, 'sconosciuto: solo il ponte');
+    assert.strictEqual(app.run('relayOnlyFor(true)'), false, 'contatto: diretto');
+    app.run("setNetPolicy('sempre')");
+    assert.strictEqual(app.run('relayOnlyFor(true)'), true, '«nascondi sempre»: anche con i contatti');
+    app.run("setNetPolicy('tor')");
+    assert.strictEqual(app.run('relayOnlyFor(true)'), false, 'con Tor la strada la impone Tor: la politica resta quella normale');
+    app.run("setNetPolicy('qualunque')");
+    assert.strictEqual(app.run('netPolicy()'), 'normale', 'un valore strano non e\' una politica');
+    app.stop();
+  });
+
+  test('newPeerConnection({ relayOnly: true }) chiede al browser SOLO candidati del ponte', async () => {
+    const app = loadApp();
+    app.run("fetchIceServers = async () => [{ urls: 'turn:x' }];");
+    const conRelay = await app.run("newPeerConnection({ relayOnly: true }).then(c => c.__config.iceTransportPolicy)");
+    assert.strictEqual(conRelay, 'relay');
+    const senza = await app.run("newPeerConnection({ relayOnly: false }).then(c => c.__config.iceTransportPolicy)");
+    assert.strictEqual(senza, undefined, 'con un contatto niente vincolo: come oggi');
+    const nudo = await app.run("newPeerConnection().then(c => c.__config.iceTransportPolicy)");
+    assert.strictEqual(nudo, undefined);
+    app.stop();
+  });
+
+  test('chi risponde a un indirizzo: sconosciuto → ponte; impronta in rubrica → diretto', async () => {
+    const app = loadApp();
+    for (const [contatti, fp, atteso] of [[[], 'ff01', 'relay'], [[{ nick: 'Anna', fp: 'ff01', lastSeen: 1, push: null, addr: null }], 'ff01', undefined]]){
+      await app.run(`
+        saveContacts(${JSON.stringify(contatti)});
+        window.__cfg = null;
+        fetchIceServers = async () => [{ urls: 'turn:x' }];
+        window.__npc = window.__npc || newPeerConnection;
+        newPeerConnection = async (o) => { const c = await window.__npc(o); window.__cfg = c.__config; throw new Error('basta cosi'); };
+        addrPending = { msg: { sdp: 'v=0', rid: 'R1', fp: ${JSON.stringify(fp)}, tok: 'a'.repeat(32) }, sec: { key: {}, seed: 's', slot: 0 }, slot: 0 };
+        acceptingAddr = false;
+      `);
+      await app.run('acceptAddrCall().catch(() => {})');
+      await new Promise(r => setTimeout(r, 30));
+      const cfg = JSON.parse(await app.run('JSON.stringify(window.__cfg)'));
+      assert.ok(cfg, 'la connessione deve nascere');
+      assert.strictEqual(cfg.iceTransportPolicy, atteso, contatti.length ? 'contatto: diretto' : 'sconosciuto: solo il ponte');
+      app.run('pc = null; acceptingAddr = false;');
+    }
+    app.stop();
+  });
+
+  test('chi chiama un indirizzo: in rubrica → diretto; altrimenti → ponte', async () => {
+    const app = loadApp();
+    const mio = 'DVAAAABBBBCC';
+    for (const [contatti, atteso] of [[[], 'relay'], [[{ nick: 'Anna', fp: 'x', lastSeen: 1, push: null, addr: mio }], undefined]]){
+      await app.run(`
+        saveContacts(${JSON.stringify(contatti)});
+        window.__cfg = null;
+        fetchIceServers = async () => [{ urls: 'turn:x' }];
+        addrDialSecrets = async () => ({ key: {}, seed: 's', epk: 'e', slot: 0 });
+        window.__npc = window.__npc || newPeerConnection;
+        newPeerConnection = async (o) => { const c = await window.__npc(o); window.__cfg = c.__config; throw new Error('basta cosi'); };
+        dialing = false; pc = null;
+      `);
+      await app.run("dialAddress(" + JSON.stringify(mio) + ").catch(() => {})");
+      await new Promise(r => setTimeout(r, 30));
+      const cfg = JSON.parse(await app.run('JSON.stringify(window.__cfg)'));
+      assert.ok(cfg, 'la connessione deve nascere');
+      assert.strictEqual(cfg.iceTransportPolicy, atteso);
+      app.run('pc = null; dialing = false;');
+    }
+    app.stop();
+  });
+
+  test('statico: ogni nascita di connessione dice se e\' con un contatto o con uno sconosciuto', () => {
+    const src = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
+    const nude = (src.match(/newPeerConnection\(\)/g) || []).length;
+    assert.strictEqual(nude, 0, 'una connessione nata senza dire chi c\'e\' dall\'altra parte usa il diretto per sbaglio');
+    const nascite = (src.match(/newPeerConnection\(\{ relayOnly: relayOnlyFor\((true|false|isKnownFp\([^)]*\)|isKnownAddr\([^)]*\))\) \}\)/g) || []).length;
+    assert.ok(nascite >= 8, 'misurato il 15 set 2026: 8 nascite (' + nascite + ')');
+  });
+});
+
+test.describe('v48: la scheda «Da dove parli» e la spia «Su Tor»', () => {
+  test('la spia dice cio\' che il relay vede: 1 = su Tor, 0 = no, assente = non lo so', () => {
+    const app = loadApp();
+    app.run("setNetPolicy('tor'); paintNetCard();");
+    assert.strictEqual(app.run('torSeen'), null);
+    app.run("noteTorHeader({ headers: { get: h => h === 'X-Logos-Tor' ? '1' : null } })");
+    assert.strictEqual(app.run('torSeen'), true);
+    assert.match(app.run("$('netTorStatus').textContent"), /Su Tor/);
+    assert.strictEqual(app.run("$('callViaTor').classList.contains('hide')"), false, 'in chiamata compare «via Tor»');
+    app.run("noteTorHeader({ headers: { get: h => h === 'X-Logos-Tor' ? '0' : null } })");
+    assert.strictEqual(app.run('torSeen'), false);
+    assert.match(app.run("$('netTorStatus').textContent"), /Orbot/);
+    assert.strictEqual(app.run("$('callViaTor').classList.contains('hide')"), true);
+    app.run("torSeen = null; noteTorHeader({ headers: { get: () => null } })");
+    assert.strictEqual(app.run('torSeen'), null, 'un relay vecchio non dice niente, e non si inventa un no');
+    app.stop();
+  });
+
+  test('la scheda: una riga accesa alla volta, la scelta si ricorda, il riquadro Orbot solo con Tor', () => {
+    const app = loadApp();
+    /* il DOM finto non legge la pagina: le tre righe si costruiscono a mano,
+       con la stessa forma di modifica.html */
+    app.run(`
+      for (const v of ['normale', 'sempre', 'tor']){
+        const r = document.createElement('div'); r.classList.add('switchrow'); r.classList.add('netrow');
+        r.setAttribute('data-net', v); r.setAttribute('aria-checked', 'false'); $('netCard').appendChild(r);
+      }
+      paintNetCard();`);
+    const acceso = () => app.run("netRows().filter(r => r.getAttribute('aria-checked') === 'true').map(r => r.getAttribute('data-net'))");
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(' + "netRows().filter(r => r.getAttribute('aria-checked') === 'true').map(r => r.getAttribute('data-net'))" + ')')), ['normale']);
+    assert.strictEqual(app.run("$('netTorBox').classList.contains('hide')"), true);
+    app.run("chooseNet('sempre')");
+    assert.strictEqual(app.run('netPolicy()'), 'sempre');
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(' + "netRows().filter(r => r.getAttribute('aria-checked') === 'true').map(r => r.getAttribute('data-net'))" + ')')), ['sempre']);
+    app.run("loadIceServersNow = async () => []; chooseNet('tor')");
+    assert.strictEqual(app.run("$('netTorBox').classList.contains('hide')"), false, 'con Tor compare il riquadro di Orbot');
+    /* si ricorda: una nuova app sullo stesso telefono riparte da li' */
+    assert.strictEqual(app.run("MEM.getItem('dvlogos-net')"), 'tor');
+    app.stop();
+  });
+
+  test('la home e gli inviti non nominano mai la rete: la scheda vive solo nelle impostazioni', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'modifica.html'), 'utf8');
+    const settings = html.slice(html.indexOf('id="screenSettings"'), html.indexOf('</section>', html.indexOf('id="screenSettings"')));
+    assert.ok(/id="netCard"/.test(settings), 'la scheda sta nelle impostazioni');
+    const fuori = html.replace(settings, '');
+    assert.ok(!/id="netCard"|data-i18n="net\./.test(fuori), 'fuori dalle impostazioni non c\'e\' niente di «net.»');
+    /* e l'unica traccia fuori e' la riga «via Tor» nella chiamata, nascosta di partenza */
+    assert.ok(/id="callViaTor"[^>]*data-i18n="call\.viaTor"/.test(html) && /class="hint hide" id="callViaTor"/.test(html));
+  });
+});

@@ -230,6 +230,7 @@ public class MainActivity extends Activity {
            questo ponte la pagina non ha nessun modo di farlo: e' un'impostazione
            del telefono, non della pagina. */
         web.addJavascriptInterface(new CallBridge(), "AndroidCall");
+        web.addJavascriptInterface(new TorBridge(), "AndroidTor");
 
         /* A frame around the WebView, so the insets have something to shrink
            that the page will actually feel. */
@@ -465,6 +466,20 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void activity() { RingService.noteActivity(MainActivity.this); }
 
+        /** La pagina ha preso in mano una chiamata in arrivo (l'ha annunciata,
+            o l'ha accettata): il campanello smette e per un po' non risuona
+            per la stessa busta. Vedi le due regole in RingService (v48). */
+        @JavascriptInterface
+        public void handled() {
+            RingService.markHandled(MainActivity.this);
+            runOnUiThread(() -> {
+                try {
+                    startService(new Intent(MainActivity.this, RingService.class)
+                        .setAction(RingService.ACTION_HANDLED));
+                } catch (Exception ignored) {}
+            });
+        }
+
         @JavascriptInterface
         public boolean watch(String keysCsv, String base, String title, String body) {
             if (RingService.keysOf(String.valueOf(keysCsv)).isEmpty()) return false;
@@ -550,6 +565,58 @@ public class MainActivity extends Activity {
        qui c'e' solo la porta. Ogni metodo restituisce un esito, cosi' la
        pagina puo' dire la verita' invece di sperarci.
        ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------
+       Tor, senza portarlo dentro (v48, 15 set 2026). Logos non fa Tor: accende
+       Orbot, l'app di Tor Project, e lascia che sia lei a fare il suo mestiere.
+       Due sole cose: dire se Orbot c'e', e aprirlo (o aprire la pagina per
+       installarlo). Il permesso «VPN per queste app» lo chiede Orbot alla
+       persona, la prima volta: e' Android che lo impone, e nessuna app puo'
+       darselo da sola. Se Orbot c'e' e sta davvero portando il traffico lo
+       dice il relay (X-Logos-Tor), non questo ponte: la spia nella pagina
+       mostra cio' che e' misurato, non cio' che e' stato scelto.
+       ------------------------------------------------------------------ */
+    static final String ORBOT_PKG = "org.torproject.android";
+    static final String ORBOT_START = "org.torproject.android.intent.action.START";
+    static final String ORBOT_DOWNLOAD = "https://www.torproject.org/download/#android";
+
+    public class TorBridge {
+        @JavascriptInterface
+        public boolean available() { return true; }
+
+        /** "installed" se Orbot c'e', "missing" altrimenti. */
+        @JavascriptInterface
+        public String status() {
+            try {
+                getPackageManager().getPackageInfo(ORBOT_PKG, 0);
+                return "installed";
+            } catch (Exception e) {
+                return "missing";
+            }
+        }
+
+        /** Accende Orbot (o apre la pagina ufficiale per installarlo). Torna se
+            e' riuscito ad aprire qualcosa. */
+        @JavascriptInterface
+        public boolean open() {
+            final boolean installed = "installed".equals(status());
+            final boolean[] ok = { false };
+            try {
+                runOnUiThread(() -> {});
+                if (installed) {
+                    Intent start = new Intent(ORBOT_START).setPackage(ORBOT_PKG);
+                    start.putExtra("org.torproject.android.intent.extra.PACKAGE_NAME", getPackageName());
+                    try { sendBroadcast(start); } catch (Exception ignored) {}
+                    Intent show = getPackageManager().getLaunchIntentForPackage(ORBOT_PKG);
+                    if (show != null) { show.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); startActivity(show); ok[0] = true; }
+                } else {
+                    startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(ORBOT_DOWNLOAD)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    ok[0] = true;
+                }
+            } catch (Exception e) { ok[0] = false; }
+            return ok[0];
+        }
+    }
+
     public class CallBridge {
         @JavascriptInterface
         public boolean available() { return true; }

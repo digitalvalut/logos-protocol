@@ -1,0 +1,9 @@
+Con chi non conosci, nessuno vede da dove parli. E il campanello suona una volta sola.
+
+Fino a oggi, in ogni chiamata l'altra persona vedeva il tuo indirizzo di rete, come in tutte le chiamate dirette (anche su Signal e WhatsApp). Con un contatto fidato non importa; con uno sconosciuto che ti chiama dall'indirizzo in vetrina o da un indirizzo usa e getta, è un dato che gli si regalava. Ora la chiamata con chi non è in rubrica passa tutta dal ponte cifrato: lui vede il ponte, non te. Con i tuoi contatti resta diretta e più veloce. Nessun tasto, nessun avviso: succede e basta.
+
+In Impostazioni, in fondo, una scheda nuova, "Da dove parli": puoi far passare dal ponte anche le chiamate con i contatti ("Nascondi sempre"), o scegliere Tor con l'app Orbot — un tasto la accende, e una spia ti dice se sei davvero su Tor, perché è il relay a vederlo. Con Tor nessuno vede da dove parli, nemmeno noi; le chiamate partono qualche secondo più tardi. Se usi già una VPN non devi fare niente. Chi non apre la scheda ha Logos com'era.
+
+Il campanello: provando Logos sopra Tor, il telefono squillava prima che la chiamata fosse collegata e continuava dopo. Il campanello chiedeva solo "c'è una busta?", non "è nuova?" né "sono già al telefono?". Ora sta zitto se sei in chiamata, e dopo una chiamata gestita non risuona per la stessa busta per due minuti e mezzo. Senza Tor non cambia niente: la busta spariva già in un attimo.
+
+Anche il relay cambia (una riga: dice se arrivi da Tor); l'app funziona anche con quello vecchio, solo la spia resta grigia.

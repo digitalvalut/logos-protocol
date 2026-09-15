@@ -124,11 +124,15 @@ function caricaWorker(opts){
     /* Ogni richiesta parte da un IP: i limiti di frequenza sono per indirizzo,
        quindi senza questo header ogni prova sarebbe un cliente diverso e
        nessun limite scatterebbe mai. */
-    async chiama(metodo, percorso, { body, origin, ip, headers: extra } = {}){
+    async chiama(metodo, percorso, { body, origin, ip, headers: extra, cf } = {}){
       const headers = { 'CF-Connecting-IP': ip || '203.0.113.7' };
       if (origin !== undefined && origin !== null) headers['Origin'] = origin;
       if (extra) Object.assign(headers, extra);
       const req = new Request('https://worker.example' + percorso, { method: metodo, headers, body });
+      /* `request.cf` e' cio' che Cloudflare sa della richiesta (paese, ecc.):
+         qui lo si finge quando una prova lo chiede, altrimenti manca come in
+         locale */
+      if (cf) Object.defineProperty(req, 'cf', { value: cf, enumerable: true });
       const res = await sandbox.__worker.fetch(req, env);
       let corpo = null;
       const testo = await res.text();
