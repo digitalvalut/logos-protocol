@@ -589,41 +589,6 @@
         <div class="status" id="wipeStatus"></div>
       </div>
     </div>
-    <!-- v48: da dove parli. Chiusa di partenza (dentro le avanzate): chi non la
-         cerca non la vede. Niente la nomina altrove: non sulla home, non negli
-         inviti, non nelle chiamate (salvo la riga «via Tor» quando lo sei). -->
-    <div class="card" id="netCard">
-      <h3 data-i18n="net.title">Da dove parli</h3>
-      <div class="helptext" data-i18n="net.sub">Con chi non conosci, nessuno vede da dove parli: la chiamata passa dal ponte cifrato. Con i tuoi contatti è diretta e più veloce. Qui puoi cambiare.</div>
-      <div class="switchrow netrow" data-net="normale" role="radio" tabindex="0" aria-checked="true">
-        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
-        <div class="txt">
-          <b data-i18n="net.normale">Normale (consigliato)</b>
-          <span data-i18n="net.normaleSub">Con chi non conosci, nessuno vede da dove parli. Con i tuoi contatti la chiamata è diretta.</span>
-        </div>
-      </div>
-      <div class="switchrow netrow" data-net="sempre" role="radio" tabindex="0" aria-checked="false">
-        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span>
-        <div class="txt">
-          <b data-i18n="net.sempre">Nascondi sempre</b>
-          <span data-i18n="net.sempreSub">Anche con i tuoi contatti la chiamata passa dal ponte. Un po' più lenta.</span>
-        </div>
-      </div>
-      <div class="switchrow netrow" data-net="tor" role="radio" tabindex="0" aria-checked="false">
-        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="9.5"/></svg></span>
-        <div class="txt">
-          <b data-i18n="net.tor">Con Tor (Orbot)</b>
-          <span data-i18n="net.torSub">Nessuno vede da dove parli, nemmeno noi. Le chiamate partono qualche secondo più tardi e possono essere meno fluide. Serve l'app gratuita Orbot.</span>
-        </div>
-      </div>
-      <div class="hide" id="netTorBox">
-        <div class="toolsrow">
-          <button class="btn" id="btnOrbot" data-i18n="net.torOpen">Accendi Orbot</button>
-        </div>
-        <div class="status" id="netTorStatus"></div>
-      </div>
-      <div class="helptext" data-i18n="net.vpnNote">Se usi già una VPN, non devi fare niente: Logos ci passa dentro.</div>
-    </div>
     <div class="card" id="healthCard">
       <h3 data-i18n="health.title">Come sta l'app</h3>
       <div class="helptext" data-i18n="health.sub">Se qualcuno non riesce a raggiungerti, qui sotto c'è il motivo.</div>
@@ -882,8 +847,6 @@
       <audio id="remoteAudio" autoplay playsinline></audio>
       <video id="localVideo" autoplay playsinline muted></video>
       <div id="callStatus"></div>
-      <!-- v48: l'unica traccia di Tor fuori dalle impostazioni, e solo quando ci sei -->
-      <div class="hint hide" id="callViaTor" data-i18n="call.viaTor">via Tor · più lenta, più riservata</div>
       <div class="callctrl">
         <button id="btnMuteCall" title="Muto"></button>
         <button id="btnCamCall" title="Camera"></button>

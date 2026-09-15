@@ -526,12 +526,6 @@
      app — dim until the switch is on, same as the two big home-screen icons */
   .switchrow > .ic{width:22px;height:22px;flex-shrink:0;color:var(--faint);transition:color .15s}
   .switchrow.on > .ic{color:var(--accent2)}
-  /* v48: le tre scelte di «Da dove parli» sono righe come gli interruttori,
-     ma una sola alla volta e' accesa (role=radio) */
-  .netrow{margin-bottom:10px}
-  .netrow[aria-checked="true"]{border-color:var(--accent2)}
-  .netrow[aria-checked="true"] > .ic{color:var(--accent2)}
-  #callViaTor{font-size:0.8125rem;color:var(--faint);text-align:center;margin-top:4px}
   .switchrow .txt{flex:1;min-width:0}
   .switchrow .txt b{font-size:1rem;display:block}
   .switchrow .txt span{font-size:0.8125rem;color:var(--faint);line-height:1.55;display:block;margin-top:4px}
