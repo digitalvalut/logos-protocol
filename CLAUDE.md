@@ -136,7 +136,7 @@ declared limit or an expected attack trace: if it ever passes, something moved.
 An unfixed defect a model finds goes to `memory/` first (rule 5); the model
 is published with the fix.
 
-**The open wire** (v48 Android, 16 Sep 2026). A phone with the app closed used
+**The open wire** (v50 / 4.42 Android, 16 Sep 2026). A phone with the app closed used
 to poll its mailbox every 5/45/90 s (`RingService`). It can now hold one
 WebSocket per watched key to a Durable Object (`Ascolto`, one per mailbox key,
 hibernated: idle costs nothing) and the relay pulls the wire the instant a
@@ -190,7 +190,7 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 473 tests, 71 suites, about three
+Node 22. Node finds the files itself. 486 tests, 73 suites, about three
 minutes, and it exits on its own (measured: 195 s). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 

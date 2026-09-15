@@ -51,6 +51,12 @@ SHA-256(seme + '/' + etichetta)` (6149). Il relay non sa cosa sia un seme.
   rifiutare una chiave. **Non può** cancellare una busta con gettone
   fingendo di leggerla (v44), né sostituire la chiave di un indirizzo senza
   che chi chiama se ne accorga (§3).
+- **Dal 16 set 2026 (v50)** il relay tiene anche i *fili*: un oggetto per
+  cassetta ricorda «c'è un telefono in ascolto qui» finché il WebSocket è
+  aperto, e lo tira quando arriva una busta (`{"busta":1}`). Non è
+  un'informazione nuova — la stessa cosa la vedeva già a ogni bussata — ma
+  è continua invece che a scatti: chi osserva il relay vede *quando* una
+  cassetta ha un ascoltatore. Contenuti e chiavi: come prima, mai.
 - Il modello dell'avversario per la prova: **il relay è l'avversario**
   (Dolev-Yao sul canale verso il relay), più eventuali contatti disonesti.
 
