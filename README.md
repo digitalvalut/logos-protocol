@@ -99,6 +99,15 @@ anyone — because there is no server handling your conversation at all.
   German, Hindi, Indonesian, Italian, Portuguese, Russian, Spanish and Urdu — detected
   automatically from your device, with proper right-to-left layout for Arabic and Urdu.
 
+## Logos and VPNs
+
+Logos works over a VPN, and — on Android, through the Orbot app — over Tor:
+tried on real phones on 15 Sep 2026, calls connect and work, just a few
+seconds slower to start. Nothing to configure: turn the VPN on, open Logos.
+If you would rather that the person you call, or the network you are on, did
+not see where you connect from, that is the way to do it — Logos itself never
+asks for, stores or shows anybody's location.
+
 ## Install it — phone or computer
 
 - **iPhone / iPad** — open the page in Safari, tap **Share**, then **Add to Home Screen**.

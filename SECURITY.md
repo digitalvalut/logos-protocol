@@ -66,6 +66,11 @@ Being straight about this saves your time:
   through) holds that secret: against that party the defence is the three-word
   verification, which the formal model shows to detect an interception. Before
   4.39 the six digits alone opened the envelope.
+- **A direct call is direct.** Like every peer-to-peer call, it goes from one
+  device's network address to the other's. Logos works over a VPN, and on
+  Android over Tor via Orbot (tried on real phones, 15 Sep 2026: calls connect,
+  a few seconds slower). Use one if you do not want the other side, or your
+  network, to see where you connect from.
 - **The local history is stored unencrypted** on the device. Whoever can read the
   device's storage can read past messages.
 - **The free hosting tier is a real limit.** Logos runs on a free Cloudflare plan
