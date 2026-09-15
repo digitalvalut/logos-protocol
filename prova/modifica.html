@@ -617,9 +617,13 @@
         </div>
       </div>
       <div class="hide" id="netTorBox">
+        <!-- Nel browser il tasto non c'e' (Orbot vive solo su Android): allora
+             la scheda DICE cosa fare, invece di mostrare il nulla. -->
+        <div class="helptext hide" id="netTorNoAndroid" data-i18n="net.torNoAndroid">Da un browser Logos non può accendere Tor da solo. Sul telefono Android, dentro l'app Logos, c'è il tasto che lo fa: installa Orbot da lì.</div>
         <div class="toolsrow">
           <button class="btn" id="btnOrbot" data-i18n="net.torOpen">Accendi Orbot</button>
         </div>
+        <div class="helptext"><a id="netTorLink" href="https://www.torproject.org/download/#android" target="_blank" rel="noopener" data-i18n="net.torWhere">Orbot è gratuito, di Tor Project: si scarica da torproject.org</a></div>
         <div class="status" id="netTorStatus"></div>
       </div>
       <div class="helptext" data-i18n="net.vpnNote">Se usi già una VPN, non devi fare niente: Logos ci passa dentro.</div>
