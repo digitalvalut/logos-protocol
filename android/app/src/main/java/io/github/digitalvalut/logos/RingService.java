@@ -163,6 +163,27 @@ public class RingService extends Service {
     private static final long WIRE_RETRY_MAX_MS = 60000;
     /* il relay non ha il pezzo dei fili (404): si riprova ogni tanto, non subito */
     private static final long WIRE_RETRY_UNAVAILABLE_MS = 10 * 60000;
+    /* lo stato del filo, per la scheda «Come sta l'app»: mai piu' indovinare */
+    private static final String PREF_WIRE_OPEN = "wireOpen";
+    private static final String PREF_WIRE_ERR = "wireErr";
+    private static final String PREF_WIRE_AT = "wireAt";
+    private static final String PREF_WIRE_PULLED = "wirePulled";
+
+    /** JSON per la pagina: quanti fili aperti, ultimo errore, ultimo tentativo, ultima tirata. */
+    static String wireStatus(Context c) {
+        SharedPreferences p = prefs(c);
+        long now = System.currentTimeMillis();
+        int recenti = ringsWithin(p.getString(PREF_RINGS, ""), now, RING_WINDOW_MS).size();
+        return "{\"aperti\":" + p.getInt(PREF_WIRE_OPEN, 0)
+            + ",\"squilliRecenti\":" + recenti + ",\"maxSquilli\":" + RING_MAX_PER_WINDOW
+            + ",\"errore\":\"" + p.getString(PREF_WIRE_ERR, "").replace("\"", "'") + "\""
+            + ",\"tentativo\":" + p.getLong(PREF_WIRE_AT, 0)
+            + ",\"tirato\":" + p.getLong(PREF_WIRE_PULLED, 0) + "}";
+    }
+    private void segnaFilo(String errore) {
+        prefs(this).edit().putInt(PREF_WIRE_OPEN, filiAperti).putString(PREF_WIRE_ERR, errore == null ? "" : errore)
+            .putLong(PREF_WIRE_AT, System.currentTimeMillis()).apply();
+    }
     private static final String PREF_ACTIVITY = "lastActivity";
 
     /** La pagina, o questo stesso servizio, dicono che e' successo qualcosa. */
@@ -218,6 +239,20 @@ public class RingService extends Service {
     /* Set while a call is on screen: the watch pauses rather than ringing again
        over a phone that is already ringing. */
     private volatile boolean ringing;
+    /* ⚠️ TROVATO IL 16 SET 2026 con il registro del relay: la sveglia arrivava
+       in mezzo secondo, il telefono guardava la cassetta, la busta c'era — e
+       non suonava. `ringing` si accende a ogni squillo e si spegneva SOLO
+       quando la persona rispondeva o rifiutava dallo schermo bloccato
+       (ACTION_HANDLED). Chi apriva l'app da solo lasciava la spia accesa per
+       sempre: il campanello «stava gia' squillando» e taceva a tutte le
+       chiamate successive. Ora uno squillo dura al massimo RING_STALE_MS. */
+    private static final long RING_STALE_MS = 90_000;
+    private volatile long ringingSince = 0;
+    private boolean staSquillando() {
+        if (!ringing) return false;
+        if (System.currentTimeMillis() - ringingSince > RING_STALE_MS) { ringing = false; cancelRinging(); return false; }
+        return true;
+    }
     private PowerManager.WakeLock wake;
 
     @Override public IBinder onBind(Intent i) { return null; }
@@ -307,11 +342,11 @@ public class RingService extends Service {
                     sveglia = false;
                     lastPoll = now;
                     try {
-                        if (!ringing) {
+                        if (!staSquillando()) {
                             SharedPreferences p = prefs(this);
                             String base = p.getString(EXTRA_BASE, "");
                             for (String key : keysOf(p.getString(EXTRA_KEYS, ""))) {
-                                if (!running || ringing) break;
+                                if (!running || staSquillando()) break;
                                 if (somethingWaitingAt(base, key)) {
                                     /* una chiamata E' attivita': chi ha appena
                                        chiamato spesso richiama, e la prossima
@@ -367,20 +402,26 @@ public class RingService extends Service {
                                 eraAperto[0] = true;
                                 filiAperti++;
                                 attesa[0] = WIRE_RETRY_MIN_MS;   /* un filo che si apre azzera la calma */
+                                segnaFilo(null);
                             }
                             @Override public void busta() {
                                 /* il relay ha tirato: si guarda subito, e da qui
                                    in poi la marcia svelta (chi chiama richiama) */
+                                prefs(RingService.this).edit().putLong(PREF_WIRE_PULLED, System.currentTimeMillis()).apply();
                                 noteActivity(RingService.this);
                                 synchronized (lucchetto) { sveglia = true; lucchetto.notifyAll(); }
                             }
                         });
+                        segnaFilo("chiuso");
                     } catch (IOException e) {
                         nonDisponibile = String.valueOf(e.getMessage()).contains("404");
-                    } catch (Exception ignored) {
+                        segnaFilo(e.getClass().getSimpleName() + ": " + e.getMessage());
+                    } catch (Exception e) {
+                        segnaFilo(e.getClass().getSimpleName() + ": " + e.getMessage());
                     } finally {
                         if (eraAperto[0]) filiAperti = Math.max(0, filiAperti - 1);
                         synchronized (filiVivi) { filiVivi.remove(filo); }
+                        prefs(this).edit().putInt(PREF_WIRE_OPEN, filiAperti).apply();
                     }
                     if (!running) break;
                     /* il filo e' caduto: si riprova con calma crescente; se il
@@ -493,6 +534,7 @@ public class RingService extends Service {
     }
 
     private void ring() {
+        ringingSince = System.currentTimeMillis();
         /* Marked as ringing either way: the watch pauses until this call has
            been dealt with, whether or not the phone was allowed to make a
            sound about it. Carrying on polling would find the same envelope

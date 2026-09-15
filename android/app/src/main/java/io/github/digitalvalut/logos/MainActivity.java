@@ -465,6 +465,10 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void activity() { RingService.noteActivity(MainActivity.this); }
 
+        /** Lo stato del filo aperto (v48), per la scheda «Come sta l'app». */
+        @JavascriptInterface
+        public String wireStatus() { return RingService.wireStatus(MainActivity.this); }
+
         @JavascriptInterface
         public boolean watch(String keysCsv, String base, String title, String body) {
             if (RingService.keysOf(String.valueOf(keysCsv)).isEmpty()) return false;

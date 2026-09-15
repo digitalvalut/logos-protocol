@@ -219,3 +219,23 @@ test.describe('v49: il filo aperto nel campanello', () => {
     assert.ok(/"wss:\/\/" \+ host \+ "\/ascolta\/" \+ key/.test(RING));
   });
 });
+
+test.describe('v48: il campanello non resta «gia\' in squillo» per sempre, e dice cosa fa', () => {
+  const RING = read(J + 'RingService.java');
+  test('uno squillo scade da solo dopo 90 s: chi apre l\'app da solo non zittisce il telefono per sempre', () => {
+    /* 16 set 2026, dal registro del relay: sveglia in 0,5 s, busta vista, nessun
+       suono — `ringing` acceso da una prova precedente e mai spento */
+    assert.ok(/RING_STALE_MS = 90_000/.test(RING));
+    assert.ok(/private boolean staSquillando\(\)/.test(RING) && /System\.currentTimeMillis\(\) - ringingSince > RING_STALE_MS/.test(RING));
+    assert.ok(/if \(!staSquillando\(\)\)/.test(RING), 'il ciclo chiede «sto DAVVERO squillando?», non legge la spia grezza');
+    assert.ok(!/if \(!ringing\) \{/.test(RING), 'la spia grezza non decide piu\'');
+    const ring = RING.slice(RING.indexOf('private void ring()'), RING.indexOf('private void ring()') + 120);
+    assert.ok(/ringingSince = System\.currentTimeMillis\(\)/.test(ring), 'ogni squillo segna l\'ora');
+  });
+  test('la pagina puo\' leggere lo stato del filo e degli squilli recenti (niente piu\' da indovinare)', () => {
+    assert.ok(/public String wireStatus\(\)/.test(MAIN) && /RingService\.wireStatus\(MainActivity\.this\)/.test(MAIN));
+    /* nel Java le chiavi JSON sono scritte con le virgolette scappate: \"aperti\" */
+    for (const k of ['aperti', 'squilliRecenti', 'maxSquilli', 'errore']) assert.ok(RING.indexOf('\\"' + k + '\\"') >= 0, 'manca ' + k + ' nello stato');
+    assert.ok(/androidRing\.wireStatus\(\)/.test(APP) && /health\.wireDown/.test(APP) && /health\.ringQuotaHit/.test(APP), 'la scheda «Come sta l\'app» lo mostra');
+  });
+});
