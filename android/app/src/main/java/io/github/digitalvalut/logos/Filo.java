@@ -61,6 +61,8 @@ final class Filo {
         void aperto();
         /** Il relay ha tirato il filo: c'e' una busta. */
         void busta();
+        /** Una fase del filo, per il registro: «connetto», «101», «chiuso da noi»… */
+        void fase(String cosa);
     }
 
     /* un ping ogni quattro minuti: sotto i cinque che i NAT mobili tengono.
@@ -95,6 +97,7 @@ final class Filo {
         int port = u.getPort() > 0 ? u.getPort() : 443;
         String path = u.getRawPath();
 
+        ascoltatore.fase("connetto " + host);
         SSLSocketFactory f = (SSLSocketFactory) SSLSocketFactory.getDefault();
         socket = (SSLSocket) f.createSocket();
         socket.connect(new java.net.InetSocketAddress(host, port), CONNECT_TIMEOUT_MS);
@@ -116,10 +119,12 @@ final class Filo {
             + "Sec-WebSocket-Version: 13\r\n"
             + "Origin: https://appassets.androidplatform.net\r\n"
             + "\r\n";
+        ascoltatore.fase("tls ok, chiedo il filo");
         out.write(req.getBytes("US-ASCII"));
         out.flush();
 
         String status = leggiRiga();
+        ascoltatore.fase("risposta: " + status);
         if (status == null || !status.startsWith("HTTP/1.1 101")) throw new IOException("non aperto: " + status);
         String accept = null;
         for (String line = leggiRiga(); line != null && !line.isEmpty(); line = leggiRiga()) {
@@ -139,6 +144,7 @@ final class Filo {
         ascoltatore.aperto();
         boolean attesaPong = false;
         try {
+            ascoltatore.fase("in ascolto");
             while (aperto) {
                 int[] cornice;
                 try {
@@ -151,8 +157,9 @@ final class Filo {
                     attesaPong = true;
                     continue;
                 }
-                if (cornice == null) break;                       /* filo caduto */
+                if (cornice == null) { ascoltatore.fase("filo caduto (fine flusso)"); break; }
                 attesaPong = false;                               /* qualcosa e' arrivato: la linea e' viva */
+                ascoltatore.fase("cornice " + cornice[0] + " (" + cornice[1] + " byte)");
                 int opcode = cornice[0], len = cornice[1];
                 if (len > MAX_FRAME_BYTES) throw new IOException("cornice troppo lunga");
                 byte[] payload = leggiEsatti(len);
@@ -173,6 +180,7 @@ final class Filo {
         } catch (IOException e) {
             /* chiuso da noi (chiudi()): non e' un guasto, e' la fine voluta */
             if (aperto) throw e;
+            ascoltatore.fase("chiuso da noi");
         } finally {
             chiudi();
         }

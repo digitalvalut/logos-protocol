@@ -8259,7 +8259,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.41';
+const APP_VERSION = 'logos-modifica-4.42';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -8399,7 +8399,8 @@ async function runHealth(){
         const tirato = w.tirato ? relTime(w.tirato) : '—';
         rows.push(w.aperti > 0
           ? ['ok', t('health.wire','Filo con il relay'), fill(t('health.wireOk','Aperto ({n}): il telefono squilla appena arriva una chiamata. Ultima tirata: {t}.'), { n: w.aperti, t: tirato })]
-          : ['warn', t('health.wire','Filo con il relay'), fill(t('health.wireDown','Non aperto: si bussa alla cassetta come prima. Ultimo tentativo {q}: {e}'), { q: quando, e: w.errore || '—' })]);
+          : ['warn', t('health.wire','Filo con il relay'), fill(t('health.wireDown','Non aperto: si bussa alla cassetta come prima. Ultimo tentativo {q}: {e}'), { q: quando, e: w.errore || '—' })
+              + (w.registro ? '\n' + String(w.registro).split('|').join('\n') : '')]);
         /* il limite anti-molestia: sei squilli in cinque minuti, poi silenzio.
            Chi fa dieci prove di fila deve poterlo VEDERE, non credere che
            l'app sia rotta */

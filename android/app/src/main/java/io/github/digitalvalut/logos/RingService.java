@@ -168,6 +168,21 @@ public class RingService extends Service {
     private static final String PREF_WIRE_ERR = "wireErr";
     private static final String PREF_WIRE_AT = "wireAt";
     private static final String PREF_WIRE_PULLED = "wirePulled";
+    /* le ultime otto fasi del filo, con l'ora: e' il registro che la scheda
+       mostra quando qualcosa non va — meglio di qualunque ipotesi */
+    private static final String PREF_WIRE_LOG = "wireLog";
+    private static final int WIRE_LOG_MAX = 8;
+    private synchronized void registra(String cosa) {
+        SharedPreferences p = prefs(this);
+        String vecchio = p.getString(PREF_WIRE_LOG, "");
+        String riga = new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.ROOT).format(new java.util.Date()) + " " + cosa.replace("\n", " ").replace("|", "/");
+        String[] righe = vecchio.isEmpty() ? new String[0] : vecchio.split("\\|");
+        StringBuilder sb = new StringBuilder();
+        int da = Math.max(0, righe.length - (WIRE_LOG_MAX - 1));
+        for (int i = da; i < righe.length; i++) sb.append(righe[i]).append('|');
+        sb.append(riga);
+        p.edit().putString(PREF_WIRE_LOG, sb.toString()).apply();
+    }
 
     /** JSON per la pagina: quanti fili aperti, ultimo errore, ultimo tentativo, ultima tirata. */
     static String wireStatus(Context c) {
@@ -178,7 +193,8 @@ public class RingService extends Service {
             + ",\"squilliRecenti\":" + recenti + ",\"maxSquilli\":" + RING_MAX_PER_WINDOW
             + ",\"errore\":\"" + p.getString(PREF_WIRE_ERR, "").replace("\"", "'") + "\""
             + ",\"tentativo\":" + p.getLong(PREF_WIRE_AT, 0)
-            + ",\"tirato\":" + p.getLong(PREF_WIRE_PULLED, 0) + "}";
+            + ",\"tirato\":" + p.getLong(PREF_WIRE_PULLED, 0)
+            + ",\"registro\":\"" + p.getString(PREF_WIRE_LOG, "").replace("\\", "/").replace("\"", "'") + "\"}";
     }
     private void segnaFilo(String errore) {
         prefs(this).edit().putInt(PREF_WIRE_OPEN, filiAperti).putString(PREF_WIRE_ERR, errore == null ? "" : errore)
@@ -391,6 +407,7 @@ public class RingService extends Service {
             if (url == null) continue;
             Thread t = new Thread(() -> {
                 final long[] attesa = { WIRE_RETRY_MIN_MS };
+                registra("filo: parto per " + key.substring(0, 6));
                 while (running) {
                     final Filo filo = new Filo();
                     final boolean[] eraAperto = { false };
@@ -404,7 +421,9 @@ public class RingService extends Service {
                                 attesa[0] = WIRE_RETRY_MIN_MS;   /* un filo che si apre azzera la calma */
                                 segnaFilo(null);
                             }
+                            @Override public void fase(String cosa) { registra("filo: " + cosa); }
                             @Override public void busta() {
+                                registra("filo: TIRATO");
                                 /* il relay ha tirato: si guarda subito, e da qui
                                    in poi la marcia svelta (chi chiama richiama) */
                                 prefs(RingService.this).edit().putLong(PREF_WIRE_PULLED, System.currentTimeMillis()).apply();
@@ -416,8 +435,14 @@ public class RingService extends Service {
                     } catch (IOException e) {
                         nonDisponibile = String.valueOf(e.getMessage()).contains("404");
                         segnaFilo(e.getClass().getSimpleName() + ": " + e.getMessage());
-                    } catch (Exception e) {
+                        registra("filo: errore " + e.getClass().getSimpleName() + ": " + e.getMessage());
+                    } catch (Throwable e) {
+                        /* Throwable, non Exception: un Error (classe mancante,
+                           memoria) ucciderebbe il thread in silenzio, e il
+                           registro non direbbe niente — che e' esattamente il
+                           buio in cui si stava il 16 set */
                         segnaFilo(e.getClass().getSimpleName() + ": " + e.getMessage());
+                        registra("filo: ERRORE GRAVE " + e.getClass().getSimpleName() + ": " + e.getMessage());
                     } finally {
                         if (eraAperto[0]) filiAperti = Math.max(0, filiAperti - 1);
                         synchronized (filiVivi) { filiVivi.remove(filo); }
