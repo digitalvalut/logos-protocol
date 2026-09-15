@@ -1,0 +1,5 @@
+Il telefono squilla subito, anche con l'app chiusa.
+
+Fino a oggi, a telefono chiuso, Logos andava a guardare la propria cassetta ogni 5, 45 o 90 secondi (a seconda di quanto l'avevi usato di recente): chi ti chiamava poteva aspettare fino a un minuto e mezzo prima che squillassi. Ora il telefono tiene un filo aperto con il relay — un filo che dorme e non consuma — e il relay lo tira nell'istante in cui arriva una busta: squilla entro un paio di secondi, sempre. Senza Google, senza app di terzi, senza che il relay sappia niente di nuovo (già oggi vedeva che "qualcuno guarda la cassetta X"; ora lo vede in continuo invece che a scatti).
+
+Se il filo cade, o il relay non lo regge, il telefono torna a guardare la cassetta come prima: niente si perde, cambia solo l'attesa. Solo l'app Android e il relay cambiano; la pagina è la stessa della v47.

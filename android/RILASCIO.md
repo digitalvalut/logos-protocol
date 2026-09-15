@@ -217,6 +217,13 @@ curl -s -H "Origin: https://digitalvalut.github.io" https://digitalvalut-turn.bu
 Deve cominciare con `{"iceServers":[`. Se dice `TURN not configured`, i
 Secret non ci sono.
 
+**Dalla v48 (16 set 2026) il Worker tiene i fili** (Durable Object `Ascolto`,
+binding `ASCOLTO`, migrazione `v1-ascolto` in `wrangler.toml`): il deploy la
+crea da solo, sul piano gratuito. Senza il deploy l'app v48 funziona lo stesso
+(`/ascolta` risponde 404 e il campanello torna a bussare). Se un deploy futuro
+toglie il binding per sbaglio, wrangler lo dice: non si deploya senza
+`env.ASCOLTO (Ascolto) — Durable Object` nell'elenco.
+
 **Dalla v44 (13 set 2026) il Worker porta anche la cassetta che nessuno
 può svuotare** (gettoni: vedi il commento in `worker.js`). L'app funziona
 anche con il Worker vecchio — legge e scrive come ha sempre fatto, i gettoni

@@ -83,6 +83,7 @@ before it arrives.
 | `/wake/:key` | 24 hours | expiry only |
 | `/key/:key` | 365 days | expiry only |
 | `/letter/:key` | 7 days | **`DELETE` with the token**, one letter at a time |
+| `/ascolta/:key` | while the wire is open | closing the socket |
 | `/knock` | — | — |
 
 **The token (13 Sep 2026).** Until then a mailbox emptied when read — and the slot
@@ -134,6 +135,19 @@ that no longer exists is worse than none. A lemma marked *deve fallire* is a
 declared limit or an expected attack trace: if it ever passes, something moved.
 An unfixed defect a model finds goes to `memory/` first (rule 5); the model
 is published with the fix.
+
+**The open wire** (v48 Android, 16 Sep 2026). A phone with the app closed used
+to poll its mailbox every 5/45/90 s (`RingService`). It can now hold one
+WebSocket per watched key to a Durable Object (`Ascolto`, one per mailbox key,
+hibernated: idle costs nothing) and the relay pulls the wire the instant a
+`PUT /mailbox/:key` lands (`tiraIlFilo`). The object remembers only its open
+sockets, never touches storage, and the only message on the wire is
+`{"busta":1}` — "go and look". The phone still polls, rarely, as a safety net,
+and falls back to the three-speed polling whenever the wire is down or the
+relay answers 404 to `/ascolta`. `Filo.java` is a hand-written RFC 6455
+client: no library, and it verifies `Sec-WebSocket-Accept`. Durable Objects
+work on the free plan with `new_sqlite_classes`; the migration tag in
+`wrangler.toml` is declared once and never renamed.
 
 It runs on a free plan with a hard daily write allowance. Before adding anything that
 writes or polls, work out what it costs per user per day — a loop with no deadline is

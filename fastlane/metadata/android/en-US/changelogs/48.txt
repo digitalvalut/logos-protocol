@@ -1,0 +1,5 @@
+The phone rings right away, even with the app closed.
+
+Until now, with the app closed, Logos looked at its own mailbox every 5, 45 or 90 seconds (depending on how recently you had used it): a caller could wait up to a minute and a half before you rang. The phone now keeps an open wire to the relay — a wire that sleeps and costs nothing — and the relay pulls it the instant an envelope arrives: you ring within a couple of seconds, every time. No Google, no third-party app, and the relay learns nothing new (it already saw that "someone looks at mailbox X"; it now sees it continuously instead of in samples).
+
+If the wire drops, or the relay cannot hold it, the phone goes back to looking at the mailbox as before: nothing is lost, only the wait changes. Only the Android app and the relay change; the page is the same as v47.

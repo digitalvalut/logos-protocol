@@ -170,6 +170,9 @@ final class Filo {
                     default: break;                                 /* binario, continuazione: non nostri */
                 }
             }
+        } catch (IOException e) {
+            /* chiuso da noi (chiudi()): non e' un guasto, e' la fine voluta */
+            if (aperto) throw e;
         } finally {
             chiudi();
         }
