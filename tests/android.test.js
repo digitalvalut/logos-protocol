@@ -141,7 +141,8 @@ test.describe('il ritmo adattivo dell\'ascolto a telefono chiuso', () => {
 
   test('il ciclo dorme a fette e ricalcola, non dorme un intervallo intero', () => {
     const loop = RING.slice(RING.indexOf('worker = new Thread'));
-    assert.ok(/Thread\.sleep\(SLICE_MS\)/.test(loop), 'dormire POLL_MS intero vuol dire che un\'attivita\' arrivata adesso aspetta fino a 90 s');
+    /* dalla v49 la fetta e' un wait sul lucchetto (cosi' il filo tirato la interrompe), non un sleep */
+    assert.ok(/lucchetto\.wait\(SLICE_MS\)/.test(loop), 'dormire POLL_MS intero vuol dire che un\'attivita\' arrivata adesso aspetta fino a 90 s');
     assert.ok(!/Thread\.sleep\(POLL_MS\)/.test(loop));
     assert.ok(/currentPollInterval\(\)/.test(loop), 'la marcia va chiesta a ogni giro');
     assert.ok(/noteActivity\(this\);\s*\n\s*ring\(\);/.test(loop), 'una chiamata arrivata E\' attivita\': chi ha appena chiamato richiama');
@@ -164,5 +165,57 @@ test.describe('il ritmo adattivo dell\'ascolto a telefono chiuso', () => {
     const fine = APP.slice(APP.indexOf('function endSession()'), APP.indexOf('function endSession()') + 900);
     assert.ok(/noteAndroidActivity\(\)/.test(fine), '«ho appena chiuso con Mario e mi richiama» e\' IL caso da rendere veloce');
     assert.ok(/typeof androidRing\.activity !== 'function'\) return;/.test(APP), 'un ponte vecchio senza activity() non deve far esplodere la pagina');
+  });
+});
+
+/* =========================================================================
+   v49 — il filo aperto (16 set 2026): il campanello tiene un WebSocket con il
+   relay (classe Filo, scritta a mano) e si sveglia quando il relay lo tira;
+   le tre marce restano come rete di sicurezza.
+   ========================================================================= */
+test.describe('v49: il filo aperto nel campanello', () => {
+  const RING = read(J + 'RingService.java');
+  const FILO = read(J + 'Filo.java');
+
+  test('il filo e\' scritto a mano: nessuna libreria WebSocket, solo le prese di Java', () => {
+    assert.ok(!/okhttp|java_websocket|org\.java_websocket|nv-websocket|tyrus|jetty/i.test(FILO + RING), 'niente codice di altri');
+    assert.ok(/SSLSocketFactory\.getDefault\(\)/.test(FILO) && /Sec-WebSocket-Key/.test(FILO) && /Sec-WebSocket-Version: 13/.test(FILO));
+    assert.ok(/258EAFA5-E914-47DA-95CA-C5AB0DC85B11/.test(FILO) && /stretta di mano sbagliata/.test(FILO), 'la risposta del server va verificata (Sec-WebSocket-Accept), non creduta');
+    assert.ok(/mask\[i & 3\]/.test(FILO), 'le cornici dal client sono mascherate, come vuole il protocollo');
+    assert.ok(/MAX_FRAME_BYTES = 4096/.test(FILO) && /frammentazione non ammessa/.test(FILO), 'una cornice lunga o frammentata non e\' del relay');
+  });
+
+  test('il filo e\' un campanello, non una posta: dal telefono parte solo «ping», dal relay conta solo «busta»', () => {
+    assert.ok(/mandaTesto\("ping"\)/.test(FILO));
+    assert.ok(/s\.contains\("\\"busta\\""\)\) ascoltatore\.busta\(\)/.test(FILO));
+    const invii = (FILO.match(/mandaTesto\(/g) || []).length;
+    assert.strictEqual(invii, 2, 'una definizione e una sola chiamata (il ping): niente altro parte dal telefono');
+  });
+
+  test('la linea si tiene viva con un ping ogni 4 minuti, e un ping senza risposta chiude il filo', () => {
+    assert.ok(/PING_EVERY_MS = 4 \* 60000/.test(FILO) && /READ_TIMEOUT_MS = \(int\) PING_EVERY_MS/.test(FILO));
+    assert.ok(/catch \(java\.net\.SocketTimeoutException t\)/.test(FILO) && /if \(attesaPong\) throw new IOException/.test(FILO));
+  });
+
+  test('il campanello: con il filo aperto bussa di rado, senza filo come prima; il filo tirato sveglia subito', () => {
+    assert.ok(/POLL_WITH_WIRE_MS = 10 \* 60000/.test(RING));
+    assert.ok(/long intervallo = filiAperti > 0 \? POLL_WITH_WIRE_MS : currentPollInterval\(\);/.test(RING), 'senza filo: le tre marce di sempre');
+    assert.ok(/if \(sveglia \|\| now - lastPoll >= intervallo \|\| lastPoll == 0\)/.test(RING), 'il filo tirato salta l\'attesa');
+    assert.ok(/lucchetto\.wait\(SLICE_MS\)/.test(RING) && /lucchetto\.notifyAll\(\)/.test(RING), 'e non aspetta la fine della fetta di sonno');
+    assert.ok(/noteActivity\(RingService\.this\)/.test(RING), 'una busta arrivata dal filo e\' attivita\': la marcia svelta');
+  });
+
+  test('se il relay non ha il filo (404) o il filo cade, si riprova con calma e si continua a bussare', () => {
+    assert.ok(/WIRE_RETRY_UNAVAILABLE_MS = 10 \* 60000/.test(RING) && /contains\("404"\)/.test(RING));
+    assert.ok(/WIRE_RETRY_MIN_MS = 5000/.test(RING) && /WIRE_RETRY_MAX_MS = 60000/.test(RING) && /attesa\[0\] \* 2/.test(RING));
+    assert.ok(/filiAperti = Math\.max\(0, filiAperti - 1\)/.test(RING), 'un filo caduto non lascia il conto sballato');
+    const stop = RING.slice(RING.indexOf('private void stopEverything'));
+    assert.ok(/fermaFili\(\)/.test(stop), 'a servizio fermato i fili si chiudono');
+  });
+
+  test('l\'indirizzo del filo nasce dalla base della cassetta, e solo da una base sicura', () => {
+    assert.ok(/static String wireUrlFor\(String base, String key\)/.test(RING));
+    assert.ok(/if \(!isSafeBase\(base\)\) return null;/.test(RING.slice(RING.indexOf('static String wireUrlFor'))));
+    assert.ok(/"wss:\/\/" \+ host \+ "\/ascolta\/" \+ key/.test(RING));
   });
 });

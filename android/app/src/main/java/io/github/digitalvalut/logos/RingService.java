@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -145,6 +146,23 @@ public class RingService extends Service {
     private static final long FAST_WINDOW_MS = 3 * 60000;
     private static final long NORMAL_WINDOW_MS = 60 * 60000;
     private static final long SLICE_MS = 5000;
+
+    /* ---- IL FILO APERTO (v49, 16 set 2026) ----
+       Oltre a bussare, il campanello tiene un filo aperto con il relay per
+       ogni cassetta che sorveglia (classe Filo): quando arriva una busta il
+       relay tira il filo e si va a guardare SUBITO, invece che al prossimo
+       giro. Lo squillo passa da «entro 5/45/90 secondi» a «entro un paio di
+       secondi». Le tre marce restano: con il filo aperto si bussa lo stesso,
+       ma di rado (POLL_WITH_WIRE_MS), come rete di sicurezza; se il filo cade
+       o il relay non ce l'ha (404: versione vecchia) si torna a bussare come
+       prima, e si riprova ad aprirlo con calma. Un filo che dorme costa meno
+       batteria di 960 risvegli al giorno: e' cosi' che funzionano le
+       notifiche dei telefoni, solo senza Google. */
+    private static final long POLL_WITH_WIRE_MS = 10 * 60000;
+    private static final long WIRE_RETRY_MIN_MS = 5000;
+    private static final long WIRE_RETRY_MAX_MS = 60000;
+    /* il relay non ha il pezzo dei fili (404): si riprova ogni tanto, non subito */
+    private static final long WIRE_RETRY_UNAVAILABLE_MS = 10 * 60000;
     private static final String PREF_ACTIVITY = "lastActivity";
 
     /** La pagina, o questo stesso servizio, dicono che e' successo qualcosa. */
@@ -190,6 +208,13 @@ public class RingService extends Service {
 
     private Thread worker;
     private volatile boolean running;
+    /* i fili: uno per cassetta, ciascuno nel suo thread; `filiAperti` conta
+       quelli vivi, `sveglia` e' il segnale «il relay ha tirato» */
+    private final List<Thread> fili = new ArrayList<>();
+    private final List<Filo> filiVivi = new ArrayList<>();
+    private volatile int filiAperti = 0;
+    private volatile boolean sveglia = false;
+    private final Object lucchetto = new Object();
     /* Set while a call is on screen: the watch pauses rather than ringing again
        over a phone that is already ringing. */
     private volatile boolean ringing;
@@ -224,6 +249,7 @@ public class RingService extends Service {
         makeChannels();
         startForegroundCompat();
         startWorker();
+        avviaFili();
         /* START_STICKY: if Android reclaims this under memory pressure, the
            user's phone should go back to being able to ring rather than
            quietly stopping and never saying so. */
@@ -273,9 +299,12 @@ public class RingService extends Service {
             while (running) {
                 /* la marcia si ricalcola a ogni fetta: un'attivita' appena
                    segnata accorcia l'attesa in corso invece di aspettare che
-                   finisca quella lunga */
+                   finisca quella lunga. Con un filo aperto si bussa di rado;
+                   se il relay ha tirato il filo (`sveglia`) si guarda ORA. */
                 long now = System.currentTimeMillis();
-                if (now - lastPoll >= currentPollInterval() || lastPoll == 0) {
+                long intervallo = filiAperti > 0 ? POLL_WITH_WIRE_MS : currentPollInterval();
+                if (sveglia || now - lastPoll >= intervallo || lastPoll == 0) {
+                    sveglia = false;
                     lastPoll = now;
                     try {
                         if (!ringing) {
@@ -299,11 +328,78 @@ public class RingService extends Service {
                            — the next tick tries again. */
                     }
                 }
-                try { Thread.sleep(SLICE_MS); } catch (InterruptedException e) { return; }
+                /* si dorme a fette, ma un filo tirato sveglia subito */
+                try {
+                    synchronized (lucchetto) { if (!sveglia) lucchetto.wait(SLICE_MS); }
+                } catch (InterruptedException e) { return; }
             }
         }, "logos-listening");
         worker.setDaemon(true);
         worker.start();
+    }
+
+    /* ---- i fili ---- */
+
+    /** wss://host/ascolta/<chiave>, dalla base della cassetta (https://host/mailbox/). */
+    static String wireUrlFor(String base, String key) {
+        if (!isSafeBase(base)) return null;
+        String host = base.substring("https://".length(), base.length() - "/mailbox/".length());
+        return "wss://" + host + "/ascolta/" + key;
+    }
+
+    private void avviaFili() {
+        fermaFili();
+        SharedPreferences p = prefs(this);
+        final String base = p.getString(EXTRA_BASE, "");
+        for (final String key : keysOf(p.getString(EXTRA_KEYS, ""))) {
+            final String url = wireUrlFor(base, key);
+            if (url == null) continue;
+            Thread t = new Thread(() -> {
+                final long[] attesa = { WIRE_RETRY_MIN_MS };
+                while (running) {
+                    final Filo filo = new Filo();
+                    final boolean[] eraAperto = { false };
+                    synchronized (filiVivi) { filiVivi.add(filo); }
+                    boolean nonDisponibile = false;
+                    try {
+                        filo.ascolta(url, new Filo.Ascoltatore() {
+                            @Override public void aperto() {
+                                eraAperto[0] = true;
+                                filiAperti++;
+                                attesa[0] = WIRE_RETRY_MIN_MS;   /* un filo che si apre azzera la calma */
+                            }
+                            @Override public void busta() {
+                                /* il relay ha tirato: si guarda subito, e da qui
+                                   in poi la marcia svelta (chi chiama richiama) */
+                                noteActivity(RingService.this);
+                                synchronized (lucchetto) { sveglia = true; lucchetto.notifyAll(); }
+                            }
+                        });
+                    } catch (IOException e) {
+                        nonDisponibile = String.valueOf(e.getMessage()).contains("404");
+                    } catch (Exception ignored) {
+                    } finally {
+                        if (eraAperto[0]) filiAperti = Math.max(0, filiAperti - 1);
+                        synchronized (filiVivi) { filiVivi.remove(filo); }
+                    }
+                    if (!running) break;
+                    /* il filo e' caduto: si riprova con calma crescente; se il
+                       relay proprio non ce l'ha, molto piu' tardi */
+                    long dormi = nonDisponibile ? WIRE_RETRY_UNAVAILABLE_MS : attesa[0];
+                    attesa[0] = Math.min(WIRE_RETRY_MAX_MS, attesa[0] * 2);
+                    try { Thread.sleep(dormi); } catch (InterruptedException e) { return; }
+                }
+            }, "logos-filo");
+            t.setDaemon(true);
+            synchronized (fili) { fili.add(t); }
+            t.start();
+        }
+    }
+
+    private void fermaFili() {
+        synchronized (filiVivi) { for (Filo f : filiVivi) f.chiudi(); filiVivi.clear(); }
+        synchronized (fili) { for (Thread t : fili) t.interrupt(); fili.clear(); }
+        filiAperti = 0;
     }
 
     /** The keys are hex SHA-256 and nothing else is accepted as one. */
@@ -517,6 +613,7 @@ public class RingService extends Service {
 
     private void stopEverything() {
         running = false;
+        fermaFili();
         ringing = false;
         if (worker != null) { worker.interrupt(); worker = null; }
         if (wake != null && wake.isHeld()) { try { wake.release(); } catch (Exception ignored) {} }

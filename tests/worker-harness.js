@@ -89,8 +89,18 @@ function caricaWorker(opts){
     static now(){ return orologio.t; }
   }
 
+  /* Nel Worker vero una Response con status 101 e' l'aggancio di un filo
+     (WebSocket); la Response di Node la rifiuta. Qui la si accetta, cosi' il
+     Durable Object del filo aperto si puo' provare dentro il vm. */
+  class RispostaWorker extends Response {
+    constructor(body, init){
+      if (init && init.status === 101){ super(body, Object.assign({}, init, { status: 200 })); this.__status = 101; this.webSocket = init.webSocket; }
+      else super(body, init);
+    }
+    get status(){ return this.__status || super.status; }
+  }
   const sandbox = {
-    Request, Response, Headers, URL, URLSearchParams,
+    Request, Response: RispostaWorker, Headers, URL, URLSearchParams,
     crypto: globalThis.crypto,
     TextEncoder, TextDecoder,
     fetch: o.fetch || (() => Promise.reject(new TypeError('nessuna rete in questa stanza'))),
@@ -101,6 +111,10 @@ function caricaWorker(opts){
     Uint8Array, ArrayBuffer, DataView,
     console,
     setTimeout, clearTimeout,
+    /* le prese del Worker, finte: un WebSocketPair sono due capi che si
+       parlano; qui basta ricordare cosa e' stato mandato */
+    WebSocketPair: class { constructor(){ const a = { sent: [], send(m){ this.sent.push(m); }, close(){ this.closed = true; } }; const b = { sent: [], send(m){ this.sent.push(m); }, close(){ this.closed = true; } }; this[0] = a; this[1] = b; } },
+    WebSocketRequestResponsePair: class { constructor(q, r){ this.q = q; this.r = r; } },
   };
   sandbox.globalThis = sandbox;
 
@@ -111,7 +125,11 @@ function caricaWorker(opts){
      `o.sorgente` esiste per i mutanti della Fase F: la copia guasta arriva
      come stringa e il file su disco non viene mai toccato, che è il vincolo 3
      del brief. */
-  const codice = (o.sorgente || SORGENTE).replace(/export\s+default\s*\{/, 'globalThis.__worker = {');
+  /* `export class Ascolto` (il filo aperto, v49): in un vm normale `export`
+     non esiste; si toglie la parola e la classe resta, come per il default. */
+  const codice = (o.sorgente || SORGENTE)
+    .replace(/export\s+default\s*\{/, 'globalThis.__worker = {')
+    .replace(/export\s+class\s+Ascolto/, 'globalThis.Ascolto = class Ascolto');
   vm.createContext(sandbox);
   vm.runInContext(codice, sandbox, { filename: 'worker.js' });
 

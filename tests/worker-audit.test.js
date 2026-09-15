@@ -14,6 +14,8 @@
 const test = require('node:test');
 const assert = require('node:assert');
 const W = require('./worker-harness.js');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const ORIGINE_BUONA = 'https://digitalvalut.github.io';
 
@@ -722,5 +724,100 @@ test.describe('worker: la cassetta che nessuno puo\' svuotare', () => {
     assert.strictEqual(prima.corpo.length, 1);
     const dopo = await w.chiama('GET', '/letter/' + K, { origin: ORIGINE });
     assert.strictEqual(dopo.corpo.length, 0, 'l\'app vecchia non deve rivedere la stessa lettera');
+  });
+});
+
+/* =========================================================================
+   v49 — il filo aperto: un Durable Object per cassetta tiene i fili dei
+   telefoni e li tira quando arriva una busta. Qui l'oggetto vero gira dentro
+   il vm con prese finte; la rotta e la sveglia si provano con un namespace
+   finto che registra cosa il Worker gli chiede.
+   ========================================================================= */
+test.describe('worker: il filo aperto', () => {
+  const ORIGINE = 'https://digitalvalut.github.io';
+  const K = 'e'.repeat(64);
+  /* un namespace finto: ricorda gli id chiesti e le fetch fatte agli stub */
+  function ascoltoFinto(){
+    const chiamate = [];
+    return {
+      chiamate,
+      idFromName: name => ({ name }),
+      get: id => ({ fetch: async (url, init) => { chiamate.push({ name: id.name, url: String(url), method: init && init.method, upgrade: init && init.headers && init.headers.get && init.headers.get('Upgrade') }); return new Response(JSON.stringify({ svegliati: 1 }), { status: 200 }); } }),
+    };
+  }
+
+  test('scrivere una busta nella cassetta tira il filo di QUELLA cassetta, e solo dopo averla scritta', async () => {
+    const A = ascoltoFinto();
+    const w = W.caricaWorker({ env: { ASCOLTO: A } });
+    const r = await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}', headers: { 'X-Logos-Token': 'f'.repeat(32) } });
+    assert.strictEqual(r.status, 200);
+    assert.strictEqual(A.chiamate.length, 1, 'una sveglia per una busta');
+    assert.strictEqual(A.chiamate[0].name, K, 'il filo della cassetta giusta, non di un\'altra');
+    assert.match(A.chiamate[0].url, /\/sveglia$/);
+    assert.strictEqual(await w.env.MAILBOX.get(K), '{"i":"x","c":"y"}', 'e la busta e\' gia\' nella cassetta quando il filo viene tirato');
+  });
+
+  test('senza il pezzo che tiene i fili (relay vecchio, prove in locale) niente cambia: la scrittura va, /ascolta dice 404', async () => {
+    const w = W.caricaWorker();
+    const r = await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}' });
+    assert.strictEqual(r.status, 200, 'la busta va in cassetta come sempre');
+    const f = await w.chiama('GET', '/ascolta/' + K, { headers: { 'Upgrade': 'websocket' } });
+    assert.strictEqual(f.status, 404, 'il telefono capisce che deve tornare a bussare');
+  });
+
+  test('una sveglia che fallisce non e\' un errore della scrittura: la busta e\' al sicuro, il telefono la trova bussando', async () => {
+    const A = { idFromName: n => ({ n }), get: () => ({ fetch: async () => { throw new Error('oggetto morto'); } }) };
+    const w = W.caricaWorker({ env: { ASCOLTO: A } });
+    const r = await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}' });
+    assert.strictEqual(r.status, 200);
+    assert.strictEqual(await w.env.MAILBOX.get(K), '{"i":"x","c":"y"}');
+  });
+
+  test('/ascolta: solo GET con Upgrade, metrato come una lettura, e va allo stub della cassetta giusta', async () => {
+    const A = ascoltoFinto();
+    const w = W.caricaWorker({ env: { ASCOLTO: A } });
+    assert.strictEqual((await w.chiama('PUT', '/ascolta/' + K, { headers: { 'Upgrade': 'websocket' } })).status, 405);
+    assert.strictEqual((await w.chiama('GET', '/ascolta/' + K)).status, 426, 'senza Upgrade non e\' un filo');
+    const ok = await w.chiama('GET', '/ascolta/' + K, { headers: { 'Upgrade': 'websocket' } });
+    assert.strictEqual(ok.status, 200);
+    assert.strictEqual(A.chiamate[A.chiamate.length - 1].name, K);
+    assert.match(A.chiamate[A.chiamate.length - 1].url, /\/filo$/);
+    /* metrato: la stessa raffica che ferma le letture ferma anche i fili */
+    let ultimo = 200;
+    for (let i = 0; i < 2000 && ultimo !== 429; i++) ultimo = (await w.chiama('GET', '/ascolta/' + K, { headers: { 'Upgrade': 'websocket' }, ip: '203.0.113.50' })).status;
+    assert.strictEqual(ultimo, 429, 'un filo non metrato sarebbe un modo gratuito di martellare il relay');
+  });
+
+  test('l\'oggetto: accetta il filo, tira TUTTI i fili aperti con {"busta":1}, e non ricorda niente d\'altro', async () => {
+    const w = W.caricaWorker();
+    const sb = w.sandbox;
+    const prese = [];
+    const state = { acceptWebSocket: ws => prese.push(ws), getWebSockets: () => prese, setWebSocketAutoResponse(){} };
+    const A = new sb.Ascolto(state, {});
+    const r1 = await A.fetch(new sb.Request('https://ascolto/filo', { headers: { 'Upgrade': 'websocket' } }));
+    const r2 = await A.fetch(new sb.Request('https://ascolto/filo', { headers: { 'Upgrade': 'websocket' } }));
+    assert.strictEqual(r1.status, 101); assert.strictEqual(r2.status, 101);
+    assert.strictEqual(prese.length, 2, 'due telefoni in ascolto sulla stessa cassetta (telefono + tablet)');
+    const senza = await A.fetch(new sb.Request('https://ascolto/filo'));
+    assert.strictEqual(senza.status, 426);
+    const s = await A.fetch(new sb.Request('https://ascolto/sveglia', { method: 'POST' }));
+    assert.deepStrictEqual(JSON.parse(await s.text()), { svegliati: 2 });
+    for (const ws of prese) assert.deepStrictEqual(ws.sent, ['{"busta":1}'], 'un solo messaggio, e dice solo «vai a guardare»');
+    /* un filo morto non blocca gli altri */
+    prese[0].send = () => { throw new Error('rotto'); };
+    const s2 = await A.fetch(new sb.Request('https://ascolto/sveglia', { method: 'POST' }));
+    assert.deepStrictEqual(JSON.parse(await s2.text()), { svegliati: 1 });
+    assert.strictEqual(prese[0].closed, true, 'e viene chiuso');
+    /* niente su disco: l'oggetto non tocca mai lo storage */
+    assert.ok(!/state\.storage|this\.storage|ctx\.storage/.test(String(sb.Ascolto.toString()) + fs.readFileSync(path.join(__dirname, '..', 'turn-worker', 'worker.js'), 'utf8').slice(0, 0)), 'l\'oggetto non scrive niente su disco');
+    const sorgente = fs.readFileSync(path.join(__dirname, '..', 'turn-worker', 'worker.js'), 'utf8');
+    const classe = sorgente.slice(sorgente.indexOf('export class Ascolto'), sorgente.indexOf('async function tiraIlFilo'));
+    assert.ok(!/storage/.test(classe), 'l\'oggetto ricorda solo i fili, e solo in memoria');
+  });
+
+  test('wrangler.toml dichiara l\'oggetto, con la migrazione che il piano gratuito accetta', () => {
+    const toml = fs.readFileSync(path.join(__dirname, '..', 'turn-worker', 'wrangler.toml'), 'utf8');
+    assert.ok(/\[\[durable_objects\.bindings\]\]\s*\nname = "ASCOLTO"\s*\nclass_name = "Ascolto"/.test(toml));
+    assert.ok(/new_sqlite_classes = \["Ascolto"\]/.test(toml), 'senza new_sqlite_classes il piano gratuito rifiuta il deploy');
   });
 });

@@ -762,6 +762,8 @@ async function handleMailbox(request, env, cors, key){
     await env.MAILBOX.put(key, body, tok
       ? { expirationTtl: MAILBOX_TTL_SECONDS, metadata: { t: tok } }
       : { expirationTtl: MAILBOX_TTL_SECONDS });
+    /* la busta e' nella cassetta: adesso, e solo adesso, si tira il filo */
+    await tiraIlFilo(env, key);
     return json({ ok: true }, 200, cors);
   }
 
@@ -842,6 +844,80 @@ function isKvThrottle(e){
       || m.includes('exceeded') || m.includes('limit exceeded');
 }
 
+/* ============================== IL FILO APERTO ==============================
+   v49 (16 set 2026). Fino a qui il telefono, ad app chiusa, BUSSAVA alla
+   propria cassetta ogni 5/45/90 secondi (RingService.java): squillava fra 2 e
+   92 secondi dopo la chiamata. Da qui puo' invece tenere UN FILO APERTO con
+   questo Durable Object — uno per cassetta — e il relay tira il filo
+   nell'istante in cui una busta arriva. Lo squillo passa da «entro un minuto e
+   mezzo» a «entro un paio di secondi», senza Google, senza app di terzi.
+
+   Cosa ricorda l'oggetto: SOLO i fili aperti per la sua cassetta, e li
+   dimentica appena cadono. Niente su disco, niente sull'identita' di chi
+   ascolta, niente sul contenuto (che e' sigillato come sempre). Sapere che
+   «qualcuno ascolta alla cassetta X» e' cio' che il relay sa GIA' oggi ogni
+   90 secondi, quando quel qualcuno bussa: qui lo sa in continuo invece che a
+   scatti. Non e' un'informazione nuova, ed e' scritto nel documento del
+   protocollo (prova-formale/PROTOCOLLO.md, §1).
+
+   Ibernazione: Cloudflare tiene i fili aperti a costo zero mentre dormono;
+   l'oggetto viene svegliato solo quando arriva una busta o un ping. E' il
+   motivo per cui un telefono con il filo aperto consuma MENO di uno che si
+   sveglia 960 volte al giorno per bussare.
+
+   Cosa viaggia sul filo: dal telefono NIENTE (al massimo un ping vuoto per
+   tenere viva la linea); dal relay un solo messaggio, `{"busta":1}`, che vuol
+   dire «vai a guardare». Il telefono poi legge la cassetta come ha sempre
+   fatto (peek, poi la pagina apre col gettone). Il filo e' un campanello, non
+   una posta. */
+export class Ascolto {
+  constructor(state, env){
+    this.state = state;
+    /* un ping vuoto ogni tanto tiene viva la linea attraverso i NAT delle reti
+       mobili; la risposta e' automatica e non sveglia l'oggetto */
+    try{ this.state.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping', 'pong')); }catch(e){}
+  }
+
+  async fetch(request){
+    const url = new URL(request.url);
+    /* il telefono apre il filo */
+    if (url.pathname === '/filo'){
+      if (request.headers.get('Upgrade') !== 'websocket') return new Response('expected websocket', { status: 426 });
+      const pair = new WebSocketPair();
+      const [client, server] = [pair[0], pair[1]];
+      this.state.acceptWebSocket(server);
+      return new Response(null, { status: 101, webSocket: client });
+    }
+    /* il relay tira il filo: una busta e' arrivata */
+    if (url.pathname === '/sveglia'){
+      let svegliati = 0;
+      for (const ws of this.state.getWebSockets()){
+        try{ ws.send('{"busta":1}'); svegliati++; }catch(e){ try{ ws.close(1011, 'gone'); }catch(_){} }
+      }
+      return new Response(JSON.stringify({ svegliati }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+    return new Response('not found', { status: 404 });
+  }
+
+  /* dal telefono non deve arrivare niente: un messaggio qualunque si ignora */
+  async webSocketMessage(ws, msg){}
+  async webSocketClose(ws, code, reason, wasClean){ try{ ws.close(); }catch(e){} }
+  async webSocketError(ws, err){ try{ ws.close(); }catch(e){} }
+}
+
+/* Tira il filo della cassetta `key`, se il relay ha il pezzo che li tiene.
+   Best effort: una sveglia che fallisce non e' un errore della scrittura —
+   la busta e' gia' al sicuro nella cassetta, e il telefono la trovera' al
+   prossimo giro di bussate, come prima. Nessun await sul risultato oltre il
+   necessario: chi scrive non deve aspettare il campanello. */
+async function tiraIlFilo(env, key){
+  try{
+    if (!env.ASCOLTO) return;
+    const stub = env.ASCOLTO.get(env.ASCOLTO.idFromName(key));
+    await stub.fetch('https://ascolto/sveglia', { method: 'POST' });
+  }catch(e){}
+}
+
 export default {
   async fetch(request, env){
     const origin = request.headers.get('Origin') || '';
@@ -895,6 +971,20 @@ async function instrada(request, env, cors){
          minutes (TURN_TTL_SECONDS) for whoever holds them. */
       if (overTurnLimit(request)) return json({ error: 'too many attempts' }, 429, cors);
       return handleTurn(env, cors);
+    }
+
+    /* il filo: GET con Upgrade, una cassetta per filo. Metrato come una
+       lettura (e' cio' che sostituisce). Senza il pezzo che tiene i fili
+       (relay vecchio, prove in locale) risponde 404 e il telefono torna a
+       bussare: e' la rete di sicurezza. */
+    const f = url.pathname.match(/^\/ascolta\/([0-9a-f]{64})$/);
+    if (f){
+      if (request.method !== 'GET') return json({ error: 'method not allowed' }, 405, cors);
+      if (!env.ASCOLTO) return json({ error: 'not available' }, 404, cors);
+      if (request.headers.get('Upgrade') !== 'websocket') return json({ error: 'expected websocket' }, 426, cors);
+      if (overReadLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
+      const stub = env.ASCOLTO.get(env.ASCOLTO.idFromName(f[1]));
+      return stub.fetch('https://ascolto/filo', request);
     }
 
     const m = url.pathname.match(/^\/mailbox\/([0-9a-f]{64})$/);

@@ -25,3 +25,15 @@ compatibility_date = "2024-11-01"
 [[kv_namespaces]]
 binding = "MAILBOX"
 id = "a3c45b0252984101bd5d02f36a6070a1"
+
+# Il filo aperto (v49, 16 set 2026): un Durable Object per cassetta tiene i
+# fili dei telefoni in ascolto e li tira quando arriva una busta. Classe
+# `Ascolto` in worker.js. `new_sqlite_classes` e' la forma che il piano
+# gratuito accetta; la migrazione va dichiarata UNA volta e mai rinominata.
+[[durable_objects.bindings]]
+name = "ASCOLTO"
+class_name = "Ascolto"
+
+[[migrations]]
+tag = "v1-ascolto"
+new_sqlite_classes = ["Ascolto"]
