@@ -277,9 +277,6 @@ public class CallService extends Service {
         }
     }
 
-    /** Il campanello chiede: siamo gia' al telefono? (regola 1 in RingService) */
-    static boolean isInCall() { return inCall; }
-
     static boolean isSpeakerOn(Context c) {
         AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
         if (am == null) return false;

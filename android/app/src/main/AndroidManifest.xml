@@ -90,13 +90,6 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
 
-    <!-- v48: per vedere se Orbot e' installato (da Android 11 la visibilita'
-         dei pacchetti va dichiarata) e per accenderlo -->
-    <queries>
-        <package android:name="org.torproject.android" />
-        <intent><action android:name="org.torproject.android.intent.action.START" /></intent>
-    </queries>
-
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

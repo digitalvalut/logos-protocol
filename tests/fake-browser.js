@@ -236,8 +236,7 @@ function buildSandbox(options = {}){
     /* enough of a peer connection to be created and inspected; the tests never
        carry a real handshake, they ask the app what it *thinks* about one */
     RTCPeerConnection: class {
-      /* `__config` ricordata: dalla v48 la prova del «solo ponte» legge iceTransportPolicy da qui */
-      constructor(config){ this.__config = config || {}; this.connectionState = 'new'; this.signalingState = 'stable'; this.iceConnectionState = 'new'; }
+      constructor(){ this.connectionState = 'new'; this.signalingState = 'stable'; this.iceConnectionState = 'new'; }
       createDataChannel(){ return { readyState: 'connecting', send(){}, close(){}, addEventListener(){} }; }
       createOffer(){ return Promise.resolve({ type: 'offer', sdp: 'v=0\r\n' }); }
       createAnswer(){ return Promise.resolve({ type: 'answer', sdp: 'v=0\r\n' }); }

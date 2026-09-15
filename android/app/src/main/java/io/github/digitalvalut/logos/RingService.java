@@ -186,26 +186,6 @@ public class RingService extends Service {
        is still there in the mailbox when the app is next opened. */
     private static final long RING_WINDOW_MS = 5 * 60000;
     private static final int RING_MAX_PER_WINDOW = 6;
-    /* ⚠️ v48 (15 set 2026), trovato dall'operatore provando Logos sopra Tor:
-       il campanello squillava PRIMA che i due telefoni fossero collegati, e
-       ANCORA dopo. Il motivo: qui si chiede solo «c'e' una busta?», non «e'
-       una busta nuova?» ne' «sono gia' al telefono?». Con una rete veloce la
-       busta sparisce in un attimo (l'app la apre e la toglie, chi chiama la
-       ritira appena ha la risposta) e non si nota; con Tor resta li' decine
-       di secondi, e chi chiama la rimette ogni 80 s finche' non ha risposta:
-       a ogni giro il campanello la ritrovava e risuonava.
-       Due regole, e basta:
-         1. se il telefono e' gia' in chiamata (CallService) non si suona;
-         2. dopo che una chiamata e' stata gestita — risposta o rifiutata dallo
-            schermo bloccato, o presa in mano dalla pagina — per QUIET_AFTER_
-            HANDLED_MS non si risuona: una busta vive 2 minuti, quindi una
-            trovata in questa finestra e' la stessa chiamata (o la stessa
-            persona che riprova). Prezzo dichiarato: un'ALTRA persona che
-            chiama in quei 150 s non fa squillare il telefono chiuso (l'app
-            aperta la mostra lo stesso). Senza Tor le due regole non entrano
-            quasi mai in gioco: la busta e' gia' sparita. */
-    private static final long QUIET_AFTER_HANDLED_MS = 150_000;
-    private static final String PREF_QUIET_UNTIL = "quietUntil";
     private static final String PREF_RINGS = "rings";
 
     private Thread worker;
@@ -230,7 +210,6 @@ public class RingService extends Service {
         if (ACTION_HANDLED.equals(action)) {
             ringing = false;
             cancelRinging();
-            markHandled(this);
             return START_STICKY;
         }
 
@@ -299,7 +278,7 @@ public class RingService extends Service {
                 if (now - lastPoll >= currentPollInterval() || lastPoll == 0) {
                     lastPoll = now;
                     try {
-                        if (!ringing && !CallService.isInCall() && !quietNow(this)) {
+                        if (!ringing) {
                             SharedPreferences p = prefs(this);
                             String base = p.getString(EXTRA_BASE, "");
                             for (String key : keysOf(p.getString(EXTRA_KEYS, ""))) {
@@ -404,16 +383,6 @@ public class RingService extends Service {
         StringBuilder b = new StringBuilder();
         for (Long t : times) { if (b.length() > 0) b.append(','); b.append(t); }
         return b.toString();
-    }
-
-    /** Una chiamata e' stata gestita: da qui in poi, per un po', questa
-        cassetta non fa piu' squillare (regola 2 in testa al file). Nei prefs,
-        non in memoria: il servizio puo' essere ricreato nel frattempo. */
-    static void markHandled(Context c) {
-        prefs(c).edit().putLong(PREF_QUIET_UNTIL, System.currentTimeMillis() + QUIET_AFTER_HANDLED_MS).apply();
-    }
-    static boolean quietNow(Context c) {
-        return System.currentTimeMillis() < prefs(c).getLong(PREF_QUIET_UNTIL, 0L);
     }
 
     /** False when the phone has already made this noise too often lately. */

@@ -125,21 +125,6 @@ short one (`quickSecretsBoth`, one PBKDF2), so an invite made by an older app
 still opens; an older joiner cannot open a new invite and falls back to the
 address in the link.
 
-**Calls with anyone not in the address book use the bridge only** (4.41):
-`newPeerConnection({ relayOnly })` sets `iceTransportPolicy: 'relay'` when
-`relayOnlyFor(noto)` says so — every birth site says whether the other side is
-a contact (`isKnownFp` / `isKnownAddr`); a bare `newPeerConnection()` is a test
-failure. The bridge cannot read anything; what it buys is that a stranger sees
-Cloudflare's address, not yours. `netPolicy()` is `normale` | `sempre` | `tor`;
-`tor` changes nothing in the connection — Orbot forces the route — it only
-turns on the settings card and the `X-Logos-Tor` indicator the relay sends.
-Logos never carries Tor itself: `AndroidTor` starts Orbot and nothing more.
-
-**The native ringer rings once** (v48): it stays quiet while `CallService` is
-in a call, and for 150 s after a handled call (`RingService.markHandled`,
-also called by the page through `AndroidRing.handled()`). Found over Tor,
-where an envelope lingers long enough to be seen twice.
-
 **The formal models** of the signalling (Tamarin + ProVerif) live in
 `prova-formale/`, outside the app, with the protocol written out
 (`prova-formale/PROTOCOLLO.md`) and a manual workflow to re-run them (an hour;
@@ -191,8 +176,8 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 491 tests, 76 suites, about three
-minutes, and it exits on its own (measured: 192 s). They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 473 tests, 71 suites, about three
+minutes, and it exits on its own (measured: 195 s). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**
