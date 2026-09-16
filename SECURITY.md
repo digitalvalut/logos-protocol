@@ -84,7 +84,10 @@ Being straight about this saves your time:
   a few seconds slower). Use one if you do not want the other side, or your
   network, to see where you connect from.
 - **The local history is stored unencrypted** on the device. Whoever can read the
-  device's storage can read past messages.
+  device's storage can read past messages — and the address book, and the
+  secret of an invite that is still open (kept for up to 24 hours so that the
+  link keeps working after the app is reopened). The private key is the one
+  thing that cannot be read out, by anyone, including this code.
 - **The free hosting tier is a real limit.** Logos runs on a free Cloudflare plan
   and can be exhausted by volume. Availability, not confidentiality: the relay
   only ever forwards material that is already encrypted, and never holds a key.

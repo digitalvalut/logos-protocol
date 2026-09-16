@@ -27,6 +27,13 @@ on:
         description: "Il tag da verificare (es. android-39). Vuoto = l'ultima release."
         required: false
 
+# The token these jobs get can only READ the repository: none of them
+# writes to it, and a stolen token from a compromised action would then
+# be able to do nothing. (Artifacts upload through a separate runtime
+# token, so `contents: read` is enough for those too.)
+permissions:
+  contents: read
+
 jobs:
   riproducibile:
     runs-on: ubuntu-latest

@@ -15,6 +15,13 @@ on:
   # (non per "sorvegliare": una dimostrazione su un modello fisso non cambia)
   schedule:
     - cron: '17 4 1 * *'
+# The token these jobs get can only READ the repository: none of them
+# writes to it, and a stolen token from a compromised action would then
+# be able to do nothing. (Artifacts upload through a separate runtime
+# token, so `contents: read` is enough for those too.)
+permissions:
+  contents: read
+
 jobs:
   proverif:
     runs-on: ubuntu-latest
