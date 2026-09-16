@@ -6,7 +6,9 @@
 
 Write to **burbeng78@gmail.com** with `[SECURITY]` in the subject line, or use
 GitHub's private reporting: **Security → Report a vulnerability** on this
-repository.
+repository. The same contact is published in machine-readable form at
+[`/.well-known/security.txt`](https://digitalvalut.github.io/logos-protocol/.well-known/security.txt)
+(RFC 9116).
 
 Include whatever you have — a description, the steps you took, a proof of
 concept, or just a hunch you could not fully confirm. A partial report is worth
@@ -33,6 +35,16 @@ maintainer, so please allow a few days rather than a few hours.
 We ask for a **90-day** window before public disclosure, and we will usually be
 much faster than that. If a fix is going to take longer, we will tell you why
 and agree a date with you rather than let the deadline pass in silence.
+
+**There is no bug bounty.** DigitalValut has no budget for one; what we can
+offer is a fast, honest answer and public credit.
+
+**Good-faith research is welcome.** If you look for weaknesses in Logos in good
+faith — without harming other people's conversations, without degrading the
+relay for others, and without keeping data you happen to come across — we
+will not take legal action against you, and we will say so to anyone who asks.
+Testing against the shared relay is fine as long as it stays at the scale of
+a real user: it runs on a free plan, and exhausting it silences everyone.
 
 Fixed problems are described openly — in the commit that fixes them and in the
 release notes, in plain language. Problems that are still open are not published

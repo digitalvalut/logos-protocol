@@ -53,7 +53,10 @@ anyone — because there is no server handling your conversation at all.
   you chose to keep it, it's gone. There is no database, anywhere, holding your messages.
 - **Zero runtime dependencies.** Every cryptographic primitive comes from the browser's own
   Web Crypto API — no cryptography is hand-written, and no third-party script, library, or
-  CDN resource is loaded at any point.
+  CDN resource is loaded at any point. To be exact: the web app has none; the Android
+  wrapper has exactly one, `androidx.webkit`, which is what lets the bundled page run
+  inside the system WebView. Build tools (Gradle, the Android SDK, a JDK) are used to
+  produce the APK and are not part of what runs on the phone.
 
 ## What you can do with it
 

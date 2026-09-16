@@ -190,8 +190,8 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 486 tests, 73 suites, about three
-minutes, and it exits on its own (measured: 195 s). They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 488 tests, 74 suites, about three
+minutes, and it exits on its own (measured: 192 s, 16 Sep 2026). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**

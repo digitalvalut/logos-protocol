@@ -1,0 +1,17 @@
+# Dependabot: tells us when something we build WITH has an update.
+#
+# The web app has no dependencies, so there is nothing for Dependabot to watch
+# there. What it can watch is the build side: the GitHub Actions the workflows
+# use, and the Android wrapper's one runtime dependency (androidx.webkit) plus
+# the Gradle plugin. A pull request from Dependabot is a notice, not a change:
+# it is merged by hand, after the tests, like anything else.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "gradle"
+    directory: "/android"
+    schedule:
+      interval: "monthly"

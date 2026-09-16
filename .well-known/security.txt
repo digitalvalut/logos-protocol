@@ -1,0 +1,8 @@
+# Logos — how to report a security problem (RFC 9116)
+# Human-readable policy: https://github.com/digitalvalut/logos-protocol/blob/main/SECURITY.md
+Contact: mailto:burbeng78@gmail.com
+Contact: https://github.com/digitalvalut/logos-protocol/security/advisories/new
+Expires: 2027-09-16T00:00:00.000Z
+Policy: https://github.com/digitalvalut/logos-protocol/blob/main/SECURITY.md
+Preferred-Languages: en, it
+Canonical: https://digitalvalut.github.io/logos-protocol/.well-known/security.txt
