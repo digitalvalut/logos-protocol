@@ -285,24 +285,27 @@
   .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
   .bigchoice:not(.primary):not(.enter):not(.book):not(.addr):hover{border-color:var(--dim)}
-  /* I due pulsantoni (tappa 2, 17 set 2026): due tinte piene e moderne, le
-     stesse che usano le app piu' diffuse — indaco/viola per «chiama chi
-     conosci», verde acqua/smeraldo per «chiama un indirizzo». L'arancione
-     resta a UNA cosa sola, «Manda il mio indirizzo». Testo bianco, ombra
-     colorata sotto: sembra un tasto, si preme come un tasto. */
-  .bigchoice.book{background:linear-gradient(158deg,#7c8cff,#5b5bd6 52%,#4338ca);
+  /* I due pulsantoni (tappa 2, 17 set 2026). Psicologia del colore, non
+     gusto: il blu navy/zaffiro e' il colore della FIDUCIA e della SICUREZZA
+     in tutte le culture (banche, assicurazioni, forze dell'ordine), le tinte
+     scure danno autorita' e calma. Tutti e due uguali: due modi di chiamare,
+     nessuno conta piu' dell'altro. L'ORO sta su un gesto solo, «Manda il mio
+     indirizzo»: potenza e valore, l'accento caldo che i marchi di sicurezza
+     accostano al navy. Il teal/indaco di prima era «start-up», non
+     sicurezza: tolto lo stesso giorno. */
+  .bigchoice.book,.bigchoice.addr{background:linear-gradient(158deg,#2f5fd6,#1e40af 48%,#0f2a6b);
     border-color:rgba(255,255,255,.14);color:#fff;
-    box-shadow:0 16px 36px rgba(79,70,229,.38),inset 0 1px 0 rgba(255,255,255,.28)}
-  .bigchoice.book:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(79,70,229,.46),inset 0 1px 0 rgba(255,255,255,.30)}
-  .bigchoice.book .ic{color:#fff;opacity:.92}
-  .bigchoice.book .d{color:rgba(255,255,255,.82)}
-  .bigchoice.addr{background:linear-gradient(158deg,#5eead4,#14b8a6 52%,#0f766e);
-    border-color:rgba(255,255,255,.14);color:#062a26;
-    box-shadow:0 16px 36px rgba(20,184,166,.34),inset 0 1px 0 rgba(255,255,255,.30)}
-  .bigchoice.addr:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(20,184,166,.42),inset 0 1px 0 rgba(255,255,255,.32)}
-  .bigchoice.addr .ic{color:#062a26;opacity:.9}
-  .bigchoice.addr .d{color:rgba(6,42,38,.76)}
-  .bigchoice.addr[aria-expanded="true"]{box-shadow:0 0 0 3px rgba(94,234,212,.55),0 16px 36px rgba(20,184,166,.34)}
+    box-shadow:0 16px 36px rgba(30,64,175,.42),inset 0 1px 0 rgba(255,255,255,.26)}
+  .bigchoice.book:hover,.bigchoice.addr:hover{filter:brightness(1.05);box-shadow:0 20px 44px rgba(30,64,175,.5),inset 0 1px 0 rgba(255,255,255,.28)}
+  .bigchoice.book .ic,.bigchoice.addr .ic{color:#f5c451;opacity:.95}
+  .bigchoice.book .d,.bigchoice.addr .d{color:rgba(255,255,255,.80)}
+  .bigchoice.addr[aria-expanded="true"]{box-shadow:0 0 0 3px rgba(245,196,81,.7),0 16px 36px rgba(30,64,175,.42)}
+  /* l'oro */
+  #btnHomeShare.btn.primary{background:linear-gradient(158deg,#ffe08a,#f5c451 50%,#d9a520);color:#2a1d02;
+    border-color:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(217,165,32,.38),inset 0 1px 0 rgba(255,255,255,.35)}
+  #btnHomeShare.btn.primary:hover{filter:brightness(1.04)}
+  #btnHomeShare.btn.primary .ic{color:#2a1d02}
+  .homecard .addrbox{border-color:rgba(245,196,81,.35);color:#f5c451}
   .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
     align-items:center;gap:0 14px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
