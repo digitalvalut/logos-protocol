@@ -293,8 +293,10 @@
     padding:0 7px;margin-right:8px;border-radius:11px;background:var(--accent);color:var(--accent-ink);
     font-weight:800;font-size:0.8125rem;vertical-align:middle}
   .bigchoice[aria-expanded="true"]{border-color:var(--accent2)}
-  .smalllinks{margin:14px 0 0;text-align:center}
+  .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
+    align-items:center;gap:4px 8px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+  .smalllinks .otherways{color:var(--dim)}
   /* La tessera in prima pagina (tappa 2): l'indirizzo grande, «Manda il mio
      indirizzo» come azione principale. La prima apertura chiede solo il nome. */
   .homecard{margin-top:16px}
