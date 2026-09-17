@@ -182,9 +182,12 @@
   /* stessa storia di #showAddrDial: eredita `.linkbtn`, che azzera l'altezza
      minima per i collegamenti dentro una frase — ma questo e' un bersaglio */
   #toggleLongInviteA{min-height:44px;padding:12px 10px}
-  /* #showAddrDial dal 17 set 2026 e' un pulsantone (.bigchoice): le regole
-     da collegamento che aveva qui sono state tolte. */
-  .addrdial{margin-top:14px}
+  #showAddrDial{display:block;margin:14px auto 0;text-align:center;
+    font-size:0.9062rem;color:var(--dim);text-decoration:none;
+    min-height:44px;padding:12px 14px;
+    border-bottom:1px dashed var(--line)}
+  #showAddrDial:hover{color:var(--accent2);border-bottom-color:var(--accent)}
+  .addrdial{margin-top:22px}
   #addrDialIn{border-radius:14px;padding:16px;font-size:1.125rem!important;
     letter-spacing:.06em;text-align:center;background:#0a0c10}
   #btnAddrDial{width:100%;margin-top:9px;padding:14px 20px;border-radius:14px;
@@ -194,8 +197,39 @@
     transform:translateY(-1px)}
   #btnAddrDial .ic{color:var(--accent2);opacity:.9}
 
-  /* La fila di nomi in prima pagina (.people) e' stata tolta il 17 set 2026:
-     la rubrica ha una schermata sua. */
+  /* ⚠️ I nomi sotto il campo dell indirizzo. NON e una rubrica: e il campo che
+     si ricorda chi chiami di solito — vedi #addrPeople nella pagina.
+     Sta o cade su una cosa sola: deve pesare MENO dei due pulsantoni sotto,
+     o abbiamo rimesso in cima alla prima pagina lo stesso elenco che ne
+     abbiamo appena tolto. Per questo sono pillole basse, senza sfondo pieno,
+     senza avatar e senza date: si vedono se le cerchi, non si impongono.
+     44 px di altezza minima: sotto quella misura un pollice manca il bersaglio
+     e finisce sul pulsante accanto, che qui vuol dire chiamare la persona
+     sbagliata. */
+  .people{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .people .chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;
+    padding:0 15px;border-radius:22px;cursor:pointer;
+    background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+    font:inherit;font-size:0.9375rem;font-weight:600;
+    max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .people .chip:hover,.people .chip:focus-visible{border-color:var(--accent);color:var(--accent2)}
+  /* Il nome che si scontra con un altro e non e mai stato verificato a voce.
+     Il segno sta PRIMA del nome e dentro il pulsante: e l unico posto dove
+     lo si legge prima di toccare, e un avviso letto dopo non e un avviso.
+     Vedi contactCollisions() — la stessa regola dell elenco completo. */
+  /* ⚠️ ROSSO, non ambra, e non e' una scelta estetica: l'elenco completo nella
+     rotellina segna lo stesso identico fatto con --bad (vedi .ctrust.bad), e
+     due schermate che colorano la stessa cosa in due modi raccontano due
+     storie diverse su una persona sola.
+     E soprattutto NON arancione: l'arancione qui e' il colore di «Parla con
+     qualcuno», cioe' del pulsante che si vuole far premere. Un avviso dipinto
+     del colore dell'invito si legge come «questo e' quello consigliato» —
+     esattamente il contrario di quello che deve dire. */
+  .people .chip.warn{border-color:var(--bad);color:var(--bad)}
+  .people .chip.warn:hover,.people .chip.warn:focus-visible{border-color:var(--bad);color:var(--bad)}
+  .people .chip .wm{display:inline-flex;align-items:center;justify-content:center;
+    width:18px;height:18px;border-radius:50%;flex:none;
+    background:var(--bad);color:#fff;font-size:0.75rem;font-weight:800}
   input.mono{font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
   #addrIncoming b{display:block;color:var(--ink);font-size:1.0625rem;margin-bottom:6px}
   @media(min-width:520px){ .addrbox{font-size:1.625rem} }
@@ -285,17 +319,6 @@
   .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
   .bigchoice:not(.primary):not(.enter):hover{border-color:var(--dim)}
-  /* «Rubrica»: il terzo pulsantone, neutro apposta — non e' un'azione verso
-     fuori come gli altri due, e' il posto dove si torna. Il numero dice
-     quante persone ci sono senza aprirla. */
-  .bigchoice.book .ic{color:var(--accent2)}
-  .bigchoice .count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;
-    padding:0 7px;margin-right:8px;border-radius:11px;background:var(--accent);color:var(--accent-ink);
-    font-weight:800;font-size:0.8125rem;vertical-align:middle}
-  .bigchoice[aria-expanded="true"]{border-color:var(--accent2)}
-  .smalllinks{margin:14px 0 0;text-align:center}
-  .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
-  .screentitle{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;margin:10px 0 6px}
 
   /* Stacked at every width, on purpose. Side by side would put the two on the
      same footing and ask which one first; one above the other answers that
@@ -343,8 +366,34 @@
   .gear .notice{position:absolute;top:1px;right:1px;width:10px;height:10px;
     border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
 
-    /* La «modalita' semplice» (html.easy) e' stata tolta il 17 set 2026:
-     la prima pagina e' gia' tre pulsanti. */
+  /* ---------------- simple mode ----------------
+     Everything that is not "start a chat" or "open the one I was sent" gets out
+     of the way, and what is left gets big enough to hit without aiming. Nothing
+     is removed from the app — the settings are all still there the moment it is
+     switched off again — so this costs nobody anything.
+     The switch that turns it off deliberately stays on screen: a mode that
+     hides its own exit is a trap, however well meant. */
+  html.easy .hero p,
+  html.easy #onboardBanner,
+  html.easy #contactsCard .helptext,
+  html.easy #notifyCard,
+  html.easy #autocleanCard,
+  html.easy .legal,
+  /* «Modalità semplice» = due pulsanti e nient'altro attorno: qui il tasto
+     «fai conoscere l'app» è proprio il tipo di cosa in più che questa modalità
+     esiste per togliere. */
+  html.easy .sharerow,
+  html.easy #easyCard .switchrow .txt span{display:none}
+  html.easy .hero h1{font-size:1.5rem}
+  html.easy .choicecard{padding:30px 24px;gap:20px;border-width:2px}
+  html.easy .choicecard .ic{font-size:2.5rem;width:78px;height:78px;border-radius:22px}
+  html.easy .choicecard .t{font-size:1.5rem;line-height:1.3}
+  html.easy .choicecard .d{font-size:1.0625rem;margin-top:6px}
+  html.easy .choices{gap:16px}
+  html.easy #easyCard{opacity:.75}
+  html.easy .quickcode{font-size:2.6rem;letter-spacing:.14em}
+  html.easy .quickinput{font-size:1.2rem}
+  html.easy .btn.big{padding:20px;font-size:1.25rem}
 
   .contactrow{display:flex;align-items:center;gap:13px;padding:13px 6px;border-bottom:1px solid var(--line);
     cursor:pointer;transition:background .12s;border-radius:12px}
