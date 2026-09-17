@@ -64,6 +64,10 @@ e i limiti dichiarati con la prova che sono limiti. È pensato per un
 pomeriggio di lavoro, e finisce con le cinque domande a cui vorremmo una
 risposta.
 
+`PP-APP.md`: l'autovalutazione contro il profilo NIAP per le app
+(Common Criteria) — requisito per requisito, con i «no» scritti per esteso.
+Non è una certificazione: è la mappa di quanto manca per una.
+
 ## Farli girare
 
 Su GitHub: **Actions → «prova formale» → Run workflow** (manuale, ~1 ora; i

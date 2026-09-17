@@ -54,9 +54,13 @@ anyone — because there is no server handling your conversation at all.
 - **Zero runtime dependencies.** Every cryptographic primitive comes from the browser's own
   Web Crypto API — no cryptography is hand-written, and no third-party script, library, or
   CDN resource is loaded at any point. To be exact: the web app has none; the Android
-  wrapper has exactly one, `androidx.webkit`, which is what lets the bundled page run
-  inside the system WebView. Build tools (Gradle, the Android SDK, a JDK) are used to
-  produce the APK and are not part of what runs on the phone.
+  wrapper declares one, `androidx.webkit` (what lets the bundled page run inside the
+  system WebView), which brings Google's AndroidX compatibility libraries with it
+  (`core`, `annotation`, `lifecycle`, `collection`, `arch.core`,
+  `versionedparcelable`) — the full list, as found in the APK, is in
+  [`prova-formale/PP-APP.md`](prova-formale/PP-APP.md). No native code. Build tools
+  (Gradle, the Android SDK, a JDK) produce the APK and are not part of what runs on
+  the phone.
 
 ## What you can do with it
 
