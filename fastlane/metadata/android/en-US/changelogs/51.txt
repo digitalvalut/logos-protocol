@@ -1,0 +1,3 @@
+When the meeting service refuses, the app says so.
+
+The relay has two ways of not serving: not answering, and answering "no" — which happens when the free daily quota is spent or it is overloaded. The first case was already reported well. The second was not: an invite showed its link and QR as valid even though nothing had been written anywhere (whoever opened the link found nothing), and a call to an address blamed the person called ("no longer active"). The app now tells the truth — "the service is overloaded, try again in a while, it is neither of you" — shows the long code, which still works, and the "How is the app doing" card has a row for it. Only the page changes; calls, audio and the ringer are the same as v50.

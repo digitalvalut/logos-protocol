@@ -1,0 +1,3 @@
+Quando il servizio che vi fa incontrare rifiuta, l'app lo dice.
+
+Il relay ha due modi di non servire: non rispondere, e rispondere «no» — succede quando la quota gratuita del giorno è finita o è sovraccarico. Il primo caso era già detto bene. Il secondo no: l'invito mostrava link e QR come validi anche se non era stato scritto da nessuna parte (chi apriva il link non trovava niente), e la chiamata a un indirizzo dava la colpa alla persona chiamata («non risulta più attivo»). Ora l'app dice la verità — «il servizio è sovraccarico, riprova fra un po', non dipende da voi» — mostra il codice lungo che funziona lo stesso, e la scheda «Come sta l'app» ha una riga apposta. Solo la pagina cambia; chiamate, audio e campanello sono gli stessi della v50.
