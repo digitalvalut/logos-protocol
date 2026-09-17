@@ -182,12 +182,9 @@
   /* stessa storia di #showAddrDial: eredita `.linkbtn`, che azzera l'altezza
      minima per i collegamenti dentro una frase — ma questo e' un bersaglio */
   #toggleLongInviteA{min-height:44px;padding:12px 10px}
-  #showAddrDial{display:block;margin:14px auto 0;text-align:center;
-    font-size:0.9062rem;color:var(--dim);text-decoration:none;
-    min-height:44px;padding:12px 14px;
-    border-bottom:1px dashed var(--line)}
-  #showAddrDial:hover{color:var(--accent2);border-bottom-color:var(--accent)}
-  .addrdial{margin-top:22px}
+  /* #showAddrDial dal 17 set 2026 e' un pulsantone (.bigchoice): le regole
+     da collegamento che aveva qui sono state tolte. */
+  .addrdial{margin-top:14px}
   #addrDialIn{border-radius:14px;padding:16px;font-size:1.125rem!important;
     letter-spacing:.06em;text-align:center;background:#0a0c10}
   #btnAddrDial{width:100%;margin-top:9px;padding:14px 20px;border-radius:14px;
