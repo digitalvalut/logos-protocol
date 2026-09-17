@@ -7668,3 +7668,109 @@ test.describe('v46: il segreto lungo sigilla, le sei cifre da sole non aprono', 
     app.stop();
   });
 });
+
+/* ⚠️ NATO DALL'ESERCITAZIONE «RELAY MORTO» DEL 17 SET 2026. Il relay ha due
+   modi di non servire: non rispondere (rete, DNS, Worker giu') e rispondere
+   «no» (429 quando il limitatore o la quota giornaliera del piano gratuito
+   sono finiti, 503 quando lo storage lancia). Il primo era detto bene; il
+   secondo NON ERA DETTO AFFATTO: l'invito mostrava link e QR come validi con
+   un'offerta mai scritta — l'utente mandava un link morto — e la chiamata a
+   un indirizzo dava la colpa al chiamato («non risulta piu' attivo… gli
+   indirizzi sono cambiati con l'ultimo aggiornamento»). Il caso 429 e' il
+   piu' probabile di tutti: e' cio' che succede ogni volta che la quota
+   finisce, fino a mezzanotte UTC. Sabotaggio verificato: senza
+   `brokerRefusing` questi test sono rossi. */
+test.describe('4.43: il relay che risponde «no» viene detto, non taciuto', () => {
+  const STUBS = `
+    newPeerConnection = async () => ({ createDataChannel(){ return {}; }, createOffer: async () => ({ type:'offer', sdp:'v=0 A' }), setLocalDescription: async function(d){ this.localDescription = d; }, addEventListener(){}, removeEventListener(){}, signalingState:'stable', close(){} });
+    wireDataChannel = () => {}; candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+    ensureFallbackAddress = async () => ''; paintQr = async () => {}; publishWakeSlot = async () => false;
+    RELAYS.length = 0; RELAYS.push('https://uno.example');
+  `;
+  const relay = mode => `
+    fetch = (url, opts) => {
+      const risp = (status, body) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(body), text: () => Promise.resolve(JSON.stringify(body)) });
+      if (${JSON.stringify(mode)} === 'giu') return Promise.reject(new TypeError('Failed to fetch'));
+      if (${JSON.stringify(mode)} === '429') return risp(429, { error: 'slow down' });
+      if (${JSON.stringify(mode)} === '503') return risp(503, { error: 'storage' });
+      return risp(404, { empty: true });
+    };
+  `;
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+
+  for (const mode of ['429', '503']){
+    test(`invito con relay che risponde ${mode}: niente link morto, la verita' e il codice lungo`, async () => {
+      const app = loadApp();
+      app.run(STUBS + relay(mode));
+      app.run('startQuickShare("123456", false)');
+      await attendi(1500);
+      assert.strictEqual(app.run("$('statusA').textContent"), app.run("t('broker.busy')"),
+        'l\'utente deve sapere che il servizio ha rifiutato, non vedere un link «valido»');
+      assert.strictEqual(app.run('brokerRefusing'), true);
+      assert.strictEqual(app.run('readPendingInvite()'), null,
+        'un invito mai scritto non va ripreso alla riapertura come se esistesse');
+      assert.strictEqual(app.run("$('longInviteWrapA').classList.contains('hide')"), false,
+        'il codice lungo, che non passa dal relay, viene mostrato');
+      app.stop();
+    });
+
+    test(`chiamata a un indirizzo con relay che risponde ${mode}: non si da' la colpa al chiamato`, async () => {
+      const app = loadApp();
+      app.run(STUBS + relay(mode));
+      app.run('dialAddress("DV-AAAA-BBBB-CCCC")');
+      await attendi(1500);
+      const detto = app.run("$('addrDialStatus').textContent");
+      assert.strictEqual(detto, app.run("t('addr.busy')"));
+      assert.notStrictEqual(detto, app.run("t('addr.noKey')"), 'era il messaggio sbagliato: «indirizzo non più attivo»');
+      app.stop();
+    });
+  }
+
+  test('relay che NON risponde: i due messaggi di prima restano quelli (nessuna regressione)', async () => {
+    const a = loadApp();
+    a.run(STUBS + relay('giu'));
+    a.run('startQuickShare("123456", false)');
+    await attendi(1500);
+    assert.strictEqual(a.run("$('statusA').textContent"), a.run("t('broker.down')"));
+    assert.strictEqual(a.run('brokerRefusing'), false);
+    a.stop();
+    const b = loadApp();
+    b.run(STUBS + relay('giu'));
+    b.run('dialAddress("DV-AAAA-BBBB-CCCC")');
+    await attendi(1500);
+    assert.strictEqual(b.run("$('addrDialStatus').textContent"), b.run("t('addr.noBroker')"));
+    b.stop();
+  });
+
+  test('un 404 (casella vuota, chiave assente) NON e\' un rifiuto: il messaggio «indirizzo non attivo» resta per quel caso', async () => {
+    const app = loadApp();
+    app.run(STUBS + relay('404'));
+    app.run('dialAddress("DV-AAAA-BBBB-CCCC")');
+    await attendi(1500);
+    assert.strictEqual(app.run("$('addrDialStatus').textContent"), app.run("t('addr.noKey')"));
+    assert.strictEqual(app.run('brokerRefusing'), false);
+    app.stop();
+  });
+
+  test('la scheda «Come sta l\'app» distingue «risponde ma rifiuta» da «non risponde»', async () => {
+    const app = loadApp();
+    app.run(STUBS + relay('429'));
+    assert.strictEqual(await app.run('brokerAlive()'), 'busy');
+    app.run(relay('giu'));
+    assert.strictEqual(await app.run('brokerAlive()'), 'bad');
+    app.run(relay('404'));
+    assert.strictEqual(await app.run('brokerAlive()'), 'ok');
+    app.stop();
+  });
+
+  test('il rifiuto si azzera appena il relay torna a dire di si\'', async () => {
+    const app = loadApp();
+    app.run(STUBS + relay('429'));
+    await app.run("mailboxPut('k', { a: 1 })");
+    assert.strictEqual(app.run('brokerRefusing'), true);
+    app.run(`fetch = () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ ok: true }), text: () => Promise.resolve('{}') });`);
+    await app.run("mailboxPut('k', { a: 1 })");
+    assert.strictEqual(app.run('brokerRefusing'), false);
+    app.stop();
+  });
+});
