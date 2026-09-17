@@ -1,0 +1,5 @@
+Prima pagina con tre pulsanti, e la rubrica in una schermata sua.
+
+«Parla con qualcuno», «Ti hanno dato un indirizzo?» (apre il campo sotto), «Rubrica» (con il numero delle persone). «Ho un codice» non è più un pulsantone: dalla 4.39 non c'è nessun codice da scrivere, il link si apre da solo; resta una riga piccola in fondo per il caso raro in cui un invito non si apre in Logos.
+
+La rubrica ha una schermata sua: per ogni persona Chiama, Scrivi, e la × per toglierla — con «Annulla» per qualche secondo, così un dito sbagliato non cancella nessuno. La modalità semplice è stata tolta (resta «Dillo ad alta voce»). Chiamate, inviti, indirizzi e campanello sono gli stessi della v52.

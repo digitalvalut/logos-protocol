@@ -1979,49 +1979,8 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
-  test('the simple-mode hint offers to turn it on right there, not just in settings', () => {
-    /* The setting has existed for a while inside Impostazioni, reachable only
-       by someone already comfortable enough to go looking for it — backwards
-       from who it is actually for. This checks the home-screen offer exists
-       by default, and that accepting it both turns the setting on for real
-       and never asks again. */
-    const app = loadApp();
-    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), false,
-      'a fresh install with simple mode off should be offered the hint');
-    app.run("$('easyHintBtn').listeners.click[0]();");
-    assert.strictEqual(app.run('easyPref()'), true,
-      'accepting the hint must actually turn simple mode on, not just hide the banner');
-    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), true);
-    assert.strictEqual(app.run("$('easyRow').classList.contains('on')"), true,
-      'the settings toggle itself must reflect it too, not just localStorage');
-    app.stop();
-  });
 
-  test('closing the simple-mode hint without accepting it does not turn simple mode on', () => {
-    const app = loadApp();
-    app.run("$('easyHintClose').listeners.click[0]();");
-    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), true);
-    assert.strictEqual(app.run('easyPref()'), false,
-      'dismissing the hint must not be mistaken for accepting it');
-    app.stop();
-  });
 
-  test('the simple-mode hint does not pile up on top of the install banner', () => {
-    /* Both live in the same quiet strip on the home screen, on purpose — two
-       notices stacked there at once would be exactly the stare that strip
-       was designed to avoid (see the comment above it in modifica.html).
-       The install banner can legitimately show up *after* the hint already
-       has — beforeinstallprompt is an event that can fire well after the
-       page finished loading — so the hint being first is not enough on its
-       own; the install banner has to actively yield the spot back too. */
-    const app = loadApp();
-    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), false,
-      'sanity check: the hint should already be showing at this point, same as any fresh load');
-    app.run("showInstallBar('test', false);");
-    assert.strictEqual(app.run("$('easyHintBar').classList.contains('hide')"), true,
-      'the install banner arriving later must take back the spot from the simple-mode hint');
-    app.stop();
-  });
 
   test('a message that arrives while looking at settings lights up a notice', () => {
     /* The connection already survives a trip to Impostazioni mid-conversation
@@ -4895,12 +4854,12 @@ test.describe('la prima volta in assoluto (4.25)', () => {
     app.run("$('showAddrDial').listeners.click[0]();");
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false,
       'la riga deve aprire il campo, non solo esistere');
-    assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), true,
-      'e sparire lei, o restano la domanda e la risposta una sopra l\'altra');
+    assert.strictEqual(app.run("$('showAddrDial').getAttribute('aria-expanded')"), 'true',
+      'il pulsantone resta al suo posto e dice che il campo e\' aperto (4.45)');
     app.stop();
   });
 
-  test('col blocco chiuso i nomi restano visibili e lo stato si legge lo stesso', () => {
+  test('col blocco chiuso il contatore della rubrica e lo stato si leggono lo stesso', () => {
     /* ⚠️ IL CONTROLLO CHE PROTEGGE LA COSA PIU FACILE DA ROMPERE QUI.
        In `addrDialStatus` finiscono «Ha rifiutato la chiamata», «Non ha
        risposto», «Questo indirizzo non e' scritto bene». Se fosse rimasta
@@ -4913,10 +4872,8 @@ test.describe('la prima volta in assoluto (4.25)', () => {
     app.run("saveContacts([]); touchContact('Antonella','fp-a',null,'DV-AAAA-BBBB-CCCC');");
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
       'il blocco e\' chiuso, come deve');
-    assert.strictEqual(app.run("$('addrPeople').classList.contains('hide')"), false,
-      'i nomi devono restare visibili anche col blocco chiuso');
-    assert.match(app.run("$('addrPeople').innerHTML"), /data-reach="Antonella"/,
-      'e devono essere davvero toccabili, non solo presenti');
+    assert.strictEqual(app.run("$('contactsCount').textContent"), '1',
+      'il pulsantone «Rubrica» dice quante persone ci sono, anche col blocco chiuso');
     app.run("setStatus($('addrDialStatus'), 'Ha rifiutato la chiamata.', 'warn');");
     assert.strictEqual(app.run("$('addrDialStatus').classList.contains('hide')"), false,
       'la risposta a una chiamata appena tentata non deve finire dentro qualcosa di chiuso');
@@ -5069,153 +5026,9 @@ test.describe('la prima volta in assoluto (4.25)', () => {
   });
 });
 
-/* ------------------------------------------------------------------------
-   4.22 — i nomi sotto il campo dell'indirizzo.
-   L'operatore ha guardato la prima pagina della 4.21 e ha detto: «la rubrica
-   sopra cosa c'entra? troppa carne al fuoco». Aveva ragione: un elenco di
-   persone con avatar, date, una × che cancella e due pulsanti per riga era la
-   prima cosa che si leggeva aprendo l'app, e l'ultima che serviva.
-   L'elenco e' andato nella rotellina; al suo posto, sotto il campo
-   dell'indirizzo, e' rimasta una riga sola di nomi. Questi controlli
-   sorvegliano le tre cose che quella sostituzione poteva rompere: che i nomi
-   ci siano, che facciano davvero la stessa cosa dell'elenco (rifiuto quando
-   si e' occupati compreso), e che l'avviso sull'omonimo mai verificato — che
-   e' una difesa, non un ornamento — non sia rimasto indietro nella rotellina
-   mentre la strada veloce ne resta senza.
-   ------------------------------------------------------------------------ */
-test.describe('la prima pagina si ricorda chi chiami (4.22)', () => {
-
-  test('i nomi salvati compaiono sotto il campo dell\'indirizzo', () => {
-    const app = loadApp();
-    app.run(`
-      saveContacts([]);
-      touchContact('Antonella', 'fp-a', null, 'DV-AAAA-AAAA-AAAA');
-      touchContact('Marco', 'fp-m', null, null);
-      renderContacts();
-    `);
-    const html = app.run("$('addrPeople').innerHTML");
-    assert.match(html, /data-reach="Antonella"/, 'chi ha un indirizzo salvato deve comparire');
-    /* Chi ha solo l'impronta si raggiunge per un'altra strada — piu' fragile,
-       ma esiste. Toglierlo dai nomi avrebbe tolto l'unico modo di richiamare
-       qualcuno conosciuto prima che gli indirizzi esistessero. */
-    assert.match(html, /data-reach="Marco"/,
-      'anche chi ha solo l\'impronta deve comparire: e\' comunque raggiungibile');
-    assert.strictEqual(app.run("$('addrPeople').classList.contains('hide')"), false,
-      'con dei nomi salvati la riga deve essere visibile');
-    app.stop();
-  });
-
-  test('senza nessun contatto la riga dei nomi non c\'e proprio', () => {
-    /* Un contenitore vuoto ma presente lascia il suo margine sotto il
-       pulsante «Chiamalo»: uno spazio bianco che non si spiega. */
-    const app = loadApp();
-    app.run("saveContacts([]); renderContacts();");
-    assert.strictEqual(app.run("$('addrPeople').classList.contains('hide')"), true,
-      'senza nomi la riga deve sparire, non restare vuota');
-    assert.strictEqual(app.run("$('addrPeople').innerHTML"), '',
-      'e non deve restare dentro niente di una lista precedente');
-    app.stop();
-  });
-
-  test('i nomi si fermano a otto: una scorciatoia lunga torna a essere una rubrica', () => {
-    /* La rubrica tiene fino a quaranta persone. Quaranta pillole sotto un
-       campo di testo sono esattamente l'elenco che abbiamo appena tolto dalla
-       prima pagina, solo di un altro colore. */
-    const app = loadApp();
-    app.run(`
-      saveContacts([]);
-      for (var i = 0; i < 12; i++) touchContact('Tizio' + i, 'fp-' + i, null, 'DV-AAAA-AAAA-AAA' + i);
-      renderContacts();
-    `);
-    const quanti = (app.run("$('addrPeople').innerHTML").match(/data-reach=/g) || []).length;
-    assert.strictEqual(quanti, 8, 'sotto il campo ne devono comparire otto, non tutti e dodici');
-    /* e la rotellina invece li tiene tutti: il nono non e' sparito, e' altrove */
-    const inElenco = (app.run("$('contactsList').innerHTML").match(/data-nick=/g) || []).length;
-    assert.strictEqual(inElenco, 12, 'l\'elenco completo nella rotellina non deve perdere nessuno');
-    app.stop();
-  });
-
-  test('toccare un nome chiama il suo indirizzo, come toccarlo nell\'elenco', () => {
-    const app = loadApp();
-    app.run(`
-      saveContacts([]);
-      touchContact('Antonella', 'fp-a', null, 'DV-AAAA-BBBB-CCCC');
-      renderContacts();
-      window.__dialedWith = null;
-      dialAddress = function(a){ window.__dialedWith = a; };
-    `);
-    app.run(`
-      $('addrPeople').listeners.click[0]({
-        target: { closest: sel => sel === '[data-reach]' ? { getAttribute: () => 'Antonella' } : null },
-      });
-    `);
-    assert.strictEqual(app.run('window.__dialedWith'), 'DV-AAAA-BBBB-CCCC',
-      'toccare un nome deve chiamare il suo indirizzo salvato');
-    app.stop();
-  });
-
-  test('toccare un nome mentre si e occupati non butta giu quello che c\'e', () => {
-    /* La stessa protezione che l'elenco ha gia': un tocco qui crea o
-       sostituisce `pc` esattamente come «Parla con qualcuno», e senza questa
-       domanda strapperebbe via una chiamata in corso. Era il difetto che
-       l'elenco aveva prima di essere corretto — riscriverlo qui sotto un altro
-       nome sarebbe stato rimetterlo dentro. */
-    const app = loadApp();
-    app.run(`
-      saveContacts([]);
-      touchContact('Antonella', 'fp-a', null, 'DV-AAAA-BBBB-CCCC');
-      renderContacts();
-      window.__dialedWith = null;
-      dialAddress = function(a){ window.__dialedWith = a; };
-      dc = { readyState: 'open' };   /* una conversazione e gia aperta */
-    `);
-    app.run(`
-      $('addrPeople').listeners.click[0]({
-        target: { closest: sel => sel === '[data-reach]' ? { getAttribute: () => 'Antonella' } : null },
-      });
-    `);
-    assert.strictEqual(app.run('window.__dialedWith'), null,
-      'toccare un nome mentre una connessione e aperta non deve strapparla via');
-    app.stop();
-  });
-
-  test('l\'avviso sull\'omonimo mai verificato arriva anche sui nomi, non solo nell\'elenco', () => {
-    /* ⚠️ IL CONTROLLO PIU IMPORTANTE DI QUESTO BLOCCO. L'avviso «nome quasi
-       identico a un altro, mai verificato a voce» e' l'unica cosa che
-       distingue tua madre da chi ha scelto un nome per sembrare tua madre.
-       Se fosse rimasto solo nell'elenco dentro la rotellina, la strada che la
-       gente usa davvero — un tocco sul nome in prima pagina — sarebbe l'unica
-       senza protezione: esattamente al contrario di come deve stare. */
-    const app = loadApp();
-    app.run(`
-      saveContacts([]);
-      writeSafetyRec(safetyKeyFp('fp-vera'), 'parola parola parola');   /* verificata a voce */
-      touchContact('Mamma', 'fp-vera', null, 'DV-AAAA-AAAA-AAAA');
-      touchContact('Mаmmа', 'fp-attaccante', null, 'DV-BBBB-BBBB-BBBB');
-      renderContacts();
-    `);
-    const html = app.run("$('addrPeople').innerHTML");
-    assert.match(html, /chip warn/, 'l\'omonimo mai verificato deve portare il segno anche qui');
-    /* e uno solo dei due: segnarli tutti e due non direbbe quale evitare */
-    assert.strictEqual((html.match(/chip warn/g) || []).length, 1,
-      'solo quello mai verificato va segnato, o il segno non dice piu niente');
-    app.stop();
-  });
-
-  test('senza collisione nessun nome porta il segno', () => {
-    /* Un segno su ogni pillola sarebbe tappezzeria entro una settimana. */
-    const app = loadApp();
-    app.run(`
-      saveContacts([]);
-      touchContact('Mamma', 'fp-vera', null, 'DV-AAAA-AAAA-AAAA');
-      touchContact('Marco', 'fp-m', null, 'DV-BBBB-BBBB-BBBB');
-      renderContacts();
-    `);
-    assert.doesNotMatch(app.run("$('addrPeople').innerHTML"), /warn/,
-      'senza omonimi non c\'e niente da segnalare');
-    app.stop();
-  });
-});
+/* 4.22–4.44: una fila di nomi sotto il campo dell'indirizzo. Tolta il 17 set
+   2026 con la 4.45: la rubrica ha una schermata sua. I controlli sono qui
+   sotto, in «4.45: la rubrica in una schermata sua». */
 
 /* ------------------------------------------------------------------------
    M4-M7 — i reperti MEDIO dell'audit ostile.
@@ -7832,5 +7645,81 @@ test.describe('v52: condividere passa dal ponte Android quando c\'e\', e lo sche
     assert.ok(riaperta.run("$('secureRow').classList.contains('on')"), 'la scelta salvata si vede');
     assert.strictEqual(stato3.on, true, 'e arriva al telefono all\'avvio');
     riaperta.stop();
+  });
+});
+
+/* 4.45 (17 set 2026): tre pulsantoni in prima pagina; la rubrica in una
+   schermata sua con Chiama / Scrivi / Togli-e-annulla; via la modalita'
+   semplice e la fila di nomi. Dove stanno le cose lo controlla checks.test.js;
+   qui si guarda che facciano quello che promettono. */
+test.describe('4.45: la rubrica in una schermata sua', () => {
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+
+  test('il pulsantone «Rubrica» apre la schermata, con il numero delle persone sopra', () => {
+    const app = loadApp();
+    app.run("saveContacts([]); renderContacts();");
+    assert.strictEqual(app.run("$('contactsCount').classList.contains('hide')"), true, 'senza nessuno, niente numero');
+    app.run("touchContact('Anna','fp-1',null,'DV-AAAA-BBBB-CCCC'); touchContact('Bruno','fp-2',null,null);");
+    assert.strictEqual(app.run("$('contactsCount').textContent"), '2');
+    app.run("$('goContacts').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenContacts').classList.contains('hide')"), false, 'la schermata si apre');
+    assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), true);
+    assert.strictEqual(app.run("$('contactsEmpty').classList.contains('hide')"), true, 'con qualcuno dentro, niente «nessuno ancora»');
+    app.run("$('backFromContacts').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), false, 'indietro torna alla prima pagina');
+    app.stop();
+  });
+
+  test('rubrica vuota: lo dice, e il pulsantone resta (chi la cerca la trova sempre nello stesso posto)', () => {
+    const app = loadApp();
+    app.run("saveContacts([]); renderContacts(); $('goContacts').listeners.click[0]();");
+    assert.strictEqual(app.run("$('contactsEmpty').classList.contains('hide')"), false);
+    assert.strictEqual(app.run("$('contactsCard').classList.contains('hide')"), true);
+    assert.strictEqual(app.run("$('goContacts').classList.contains('hide')"), false, 'il pulsantone non sparisce');
+    app.stop();
+  });
+
+  test('togliere qualcuno si puo\' annullare per qualche secondo; poi e\' definitivo', async () => {
+    const app = loadApp();
+    app.run("saveContacts([]); touchContact('Anna','fp-1',null,'DV-AAAA-BBBB-CCCC'); renderContacts();");
+    app.run(`$('contactsList').listeners.click[0]({ target: { closest: sel => sel === '[data-rm]' ? { getAttribute: () => 'Anna' } : null } });`);
+    assert.strictEqual(app.run("loadContacts().length"), 0, 'tolta subito');
+    assert.strictEqual(app.run("$('contactsUndo').classList.contains('hide')"), false, 'e compare «annulla»');
+    assert.match(app.run("$('contactsUndoText').textContent"), /Anna/);
+    app.run("$('contactsUndoBtn').listeners.click[0]();");
+    assert.strictEqual(app.run("loadContacts().length"), 1, 'annulla la rimette');
+    assert.strictEqual(app.run("loadContacts()[0].addr"), 'DV-AAAA-BBBB-CCCC', 'con tutto quello che aveva');
+    assert.strictEqual(app.run("$('contactsUndo').classList.contains('hide')"), true);
+    /* e dopo la finestra, niente da annullare */
+    app.run(`$('contactsList').listeners.click[0]({ target: { closest: sel => sel === '[data-rm]' ? { getAttribute: () => 'Anna' } : null } });`);
+    app.run(`UNDO_MS_TEST = 1; clearTimeout(timerAnnulla); timerAnnulla = setTimeout(() => { ultimoTolto = null; $('contactsUndo').classList.add('hide'); }, 10);`);
+    await attendi(40);
+    app.run("$('contactsUndoBtn').listeners.click[0]();");
+    assert.strictEqual(app.run("loadContacts().length"), 0, 'scaduto il tempo, annulla non fa piu\' niente');
+    app.stop();
+  });
+
+  test('«un invito che non si apre» porta alla schermata dove si incolla il link, come faceva il pulsantone', () => {
+    const app = loadApp();
+    app.run("$('goJoin').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenJoin').classList.contains('hide')"), false);
+    app.stop();
+  });
+
+  test('il pulsantone dell\'indirizzo apre e richiude il campo, senza sparire', () => {
+    const app = loadApp();
+    app.run("$('showAddrDial').listeners.click[0]();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false);
+    app.run("$('showAddrDial').listeners.click[0]();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true, 'un secondo tocco lo richiude');
+    assert.strictEqual(app.run("$('showAddrDial').classList.contains('hide')"), false, 'e il pulsantone non e\' mai sparito');
+    app.stop();
+  });
+
+  test('della modalita\' semplice non resta traccia: ne\' nel codice ne\' nelle frasi', () => {
+    const src = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
+    assert.doesNotMatch(src, /easyPref|applyEasy|easyHintBar|'dvlogos-easy'/, 'resta solo «Dillo ad alta voce»');
+    assert.doesNotMatch(src, /"easy\.title"|"easyhint\./);
+    assert.match(src, /"easy\.voiceTitle"/, 'la voce resta: non ingombra e serve a chi non vede bene');
   });
 });

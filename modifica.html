@@ -250,23 +250,7 @@
          cassetto del cruscotto. Sta prima dei due pulsanti grandi perche chi ha
          gia un indirizzo in mano non deve passare da «Parla con qualcuno», che
          serve a creare un invito per chi non ce l ha. -->
-    <!-- ⚠️ QUESTA NON E' UNA RUBRICA, ed e' la differenza che conta.
-         Prima qui c'era un elenco vero: avatar, «3 giorni fa», una × che
-         cancella e due pulsanti per riga. Sembrava la rubrica del telefono, e
-         chi apriva l'app si fermava a leggerla invece di fare la cosa per cui
-         era entrato.
-         Questa e' la stessa cosa che fa il telefono quando ti suggerisce
-         l'ultimo numero. Nessun avatar, nessuna data, nessuna × — chi vuole
-         mettere ordine lo fa dalla rotellina, dove l'elenco completo e'
-         rimasto per intero.
-         Un tocco fa partire la chiamata, perche' e' l'unica cosa che uno vuole
-         fare toccando un nome; se non risponde, l'app offre da sola di
-         lasciargli due righe (vedi offerToLeaveLetter).
-         ⚠️ STA FUORI dal blocco richiudibile qui sotto, dal 7 set 2026:
-         toccare un nome e' il modo NORMALE di richiamare qualcuno, scrivere
-         un indirizzo a mano e' il caso raro. Tenerli insieme voleva dire
-         chiudere il primo per nascondere il secondo. -->
-    <div class="people hide" id="addrPeople"></div>
+    
 
     <!-- ⚠️ FUORI ANCH'ESSA, e non e' un dettaglio: qui ci finiscono «Ha
          rifiutato la chiamata», «Non ha risposto», «Questo indirizzo non e'
@@ -288,13 +272,6 @@
          per chi arriva oggi e per chi usa l'app da un anno, e chi l'indirizzo
          ce l'ha davvero in mano lo apre con un tocco. Una domanda, non un
          campo vuoto da interpretare. -->
-    <button class="btn ghost linkbtn" id="showAddrDial" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</button>
-    <div class="addrdial hide" id="addrDial">
-      <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
-      <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
-             data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
-      <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
-    </div>
 
     <!-- The whole home, in two verbs. Everything that used to sit around
          these — the name, the address, the switches, the small print — is one
@@ -304,6 +281,13 @@
          phone, at a size and weight nobody chose, and two of them side by side
          never look like they belong to the same app. These are the same stroke
          weight and the same size wherever they land. -->
+    <!-- ⚠️ RIFATTA IL 17 SET 2026 su richiesta dell'operatore: «solo i
+         pulsantoni, la rubrica in una schermata sua, e via la modalita'
+         semplice». Tre verbi, uno per pulsante: creare un invito, chiamare un
+         indirizzo che ti hanno dato, riaprire la rubrica. «Ho un codice» non
+         e' piu' un pulsantone: dalla 4.39 non c'e' nessun codice da scrivere,
+         il link si apre da solo — resta una riga piccola in fondo per il caso
+         raro in cui il link non si apre in Logos (vedi #goJoin). -->
     <div class="bigchoices">
       <button class="bigchoice primary" id="goStart">
         <span class="ic" aria-hidden="true">
@@ -316,17 +300,48 @@
         <span class="t" data-i18n="home.bigStart">Parla con qualcuno</span>
         <span class="d" data-i18n="home.bigStartD">Crea un invito da mandare</span>
       </button>
-      <button class="bigchoice enter" id="goJoin">
+      <button class="bigchoice enter" id="showAddrDial" aria-expanded="false">
         <span class="ic" aria-hidden="true">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
                stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="21.5" cy="10.5" r="5.5"/>
-            <path d="M17.6 14.4 5 27v0h4.5v-3.5H13V20l4.6-4.6"/>
+            <path d="M9 14a7 7 0 1 1 14 0c0 5.5-7 12-7 12s-7-6.5-7-12z"/>
+            <circle cx="16" cy="14" r="2.6"/>
           </svg>
         </span>
-        <span class="t" data-i18n="home.bigJoin">Ho un codice</span>
-        <span class="d" data-i18n="home.bigJoinD">Mi hanno mandato un invito</span>
+        <span class="t" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</span>
+        <span class="d" data-i18n="home.bigAddrD">Scrivilo qui e chiamalo</span>
       </button>
+      <button class="bigchoice book" id="goContacts">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="4" width="18" height="24" rx="3"/>
+            <path d="M4 10h3M4 16h3M4 22h3"/>
+            <circle cx="16" cy="13" r="3"/>
+            <path d="M11 22c1-3 3-4 5-4s4 1 5 4"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.bigBook">Rubrica</span>
+        <span class="d"><span id="contactsCount" class="count hide"></span><span data-i18n="home.bigBookD">Le persone con cui hai parlato</span></span>
+      </button>
+    </div>
+
+    <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026: si apre con un tocco sul
+         pulsantone qui sopra. Chi ha un indirizzo scritto su un foglio lo
+         scrive qui; chi ha gia' parlato con qualcuno lo ritrova in rubrica. -->
+    <div class="addrdial hide" id="addrDial">
+      <label class="fieldlabel" for="addrDialIn" data-i18n="addr.dialLabel">Hai l'indirizzo di qualcuno?</label>
+      <input type="text" id="addrDialIn" class="sans-input mono" autocomplete="off" spellcheck="false"
+             data-i18n-ph="addr.dialPh" placeholder="DV-XXXX-XXXX-XXXX" maxlength="20">
+      <button class="btn mt10" id="btnAddrDial"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8c1.4 2.9 3.7 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1z"/></svg></span><span data-i18n="addr.dial">Chiamalo</span></button>
+    </div>
+
+    <!-- Il caso raro: il link dell'invito e' arrivato ma non si e' aperto in
+         Logos (il telefono l'ha aperto nel browser, o e' arrivato sul PC).
+         Una riga piccola, non un pulsantone: chi ne ha bisogno la trova, chi
+         non ne ha bisogno non la vede nemmeno. -->
+    <div class="smalllinks">
+      <button class="btn ghost linkbtn" id="goJoin" data-i18n="home.joinLink">Hai un invito che non si apre? Incolla qui il link</button>
     </div>
 
     <!-- ⚠️ RIMESSO IN PRIMA PAGINA IL 6 SET 2026 su richiesta dell'operatore
@@ -372,13 +387,6 @@
          the stare this area was designed to avoid. Aimed at whoever the two
          big buttons above were already too much for, without asking them to
          find Impostazioni first to discover it exists. -->
-    <div class="banner accent hide jsb" id="easyHintBar">
-      <span class="f1" data-i18n="easyhint.text">C'è anche una modalità con due soli pulsanti, per chi preferisce non pensarci.</span>
-      <span class="inlinebtns">
-        <button class="btn mini" id="easyHintBtn" data-i18n="easyhint.btn">Attiva</button>
-        <button class="x" id="easyHintClose" aria-label="close"><svg class="btnicon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      </span>
-    </div>
 
   </section>
 
@@ -387,6 +395,27 @@
        Everything that is a choice rather than an action. Nothing here is
        needed to use the app; all of it used to be stacked on the home screen,
        where it buried the two things that are. -->
+  <!-- ⚠️ LA RUBRICA, dal 17 set 2026 in una schermata sua. Storia: stava in
+       prima pagina (4.21: «troppa carne al fuoco»), poi nella rotellina con
+       una riga di nomi in prima pagina (4.22), ora dietro il pulsantone
+       «Rubrica»: un tocco, e nient'altro sulla prima pagina. Qui si chiama,
+       si scrive, si toglie — con un «annulla» perche' un dito sbagliato non
+       deve cancellare nessuno. -->
+  <section id="screenContacts" class="hide">
+    <button class="btn ghost" id="backFromContacts">‹ <span data-i18n="nav.back">Indietro</span></button>
+    <h2 class="screentitle" data-i18n="contacts.title">Contatti recenti</h2>
+    <div class="helptext hide" id="contactsEmpty" data-i18n="contacts.empty">Nessuno, ancora. Quando parli con qualcuno lo trovi qui.</div>
+    <div class="banner accent hide" id="contactsUndo">
+      <span class="f1" id="contactsUndoText"></span>
+      <button class="btn mini" id="contactsUndoBtn" data-i18n="contacts.undo">Annulla</button>
+    </div>
+    <div class="card hide" id="contactsCard">
+            <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
+        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
+      <div id="contactsList"></div>
+    </div>
+  </section>
+
   <section id="screenSettings" class="hide">
     <button class="btn ghost" id="backFromSettings">‹ <span data-i18n="nav.back">Indietro</span></button>
 
@@ -507,35 +536,9 @@
       <div class="helptext mt10 hide" id="listenStatus" data-i18n="listen.status">In ascolto — se cambi schermata o app, si ferma finché non torni qui.</div>
     </div>
 
-    <!-- ⚠️ PORTATA QUI DALLA PRIMA PAGINA IL 6 SET 2026, dopo che l'operatore
-         l'ha vista con i propri occhi: «la rubrica sopra cosa c'entra? troppa
-         carne al fuoco». Aveva ragione — un elenco di persone in cima alla
-         home e' la prima cosa che si legge e l'ultima che serve a chi ha
-         appena aperto l'app.
-         NON e' stata cancellata: cancellarla avrebbe tolto l'unico posto dove
-         si puo' togliere qualcuno dall'elenco, e quel gesto conta — e' come si
-         butta fuori un nome quasi identico a un altro (vedi il segno «mai
-         verificato» qui sotto), che e' una difesa, non una comodita'.
-         Sta qui perche' questo e' un posto dove si METTE ORDINE, non dove si
-         agisce di fretta. Chi vuole solo chiamare qualcuno lo fa dalla prima
-         pagina, toccando il suo nome sotto il campo dell'indirizzo. -->
-    <div class="card hide" id="contactsCard">
-      <h3 data-i18n="contacts.title">Contatti recenti</h3>
-      <div class="helptext" data-i18n="contacts.note">Un tocco per rivederli: quello che vi siete detti è rimasto qui.
-        Ogni volta serve un invito nuovo, perché nessun server tiene nessuno collegato al posto vostro.</div>
-      <div id="contactsList"></div>
-    </div>
 
     <h3 class="setgroup" data-i18n="set.grpLook">Come si vede e si usa</h3>
-    <div class="card" id="easyCard">
-      <div class="switchrow" id="easyRow" role="button" tabindex="0" aria-pressed="false">
-        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 10.2h.01M15.5 10.2h.01"/><path d="M8.3 14.2a5 5 0 0 0 7.4 0"/></svg></span>
-        <div class="txt">
-          <b data-i18n="easy.title">Modalità semplice</b>
-          <span data-i18n="easy.sub">Solo due pulsanti grandi e nient'altro attorno. Per chi non vuole pensare a niente — o per chi prepara il telefono a qualcun altro.</span>
-        </div>
-        <div class="sw" aria-hidden="true"></div>
-      </div>
+    <div class="card" id="accessCard">
       <div class="switchrow" id="voiceRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.3L12 18V6L7.3 9.5H4z"/><path d="M16 8.2a5.8 5.8 0 0 1 0 7.6M18.6 6.2a9.4 9.4 0 0 1 0 11.6"/></svg></span>
         <div class="txt">

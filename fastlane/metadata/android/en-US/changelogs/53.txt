@@ -1,0 +1,5 @@
+A three-button home, and contacts on a screen of their own.
+
+"Talk to someone", "Got someone's address?" (opens the field below), "Contacts" (with the number of people). "I have a code" is no longer a big button: since 4.39 there is no code to type, the link opens by itself; a small line at the bottom remains for the rare case where an invite does not open in Logos.
+
+Contacts have their own screen: for each person Call, Write, and × to remove — with "Undo" for a few seconds, so a slipped finger removes nobody. Simple mode has been removed ("Say it out loud" stays). Calls, invites, addresses and the ringer are the same as v52.

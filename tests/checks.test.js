@@ -147,19 +147,19 @@ const SEZIONI = Object.fromEntries(
   [...HTML.matchAll(/<section id="(screen[A-Za-z]+)"[^>]*>([\s\S]*?)<\/section>/g)]
     .map(m => [m[1], m[2]]));
 
-test('la prima pagina non si riprende la rubrica lunga', () => {
-  assert.ok(SEZIONI.screenHome && SEZIONI.screenSettings, 'le due schermate non sono state lette');
-  /* id -> perche' non deve stare in prima pagina */
-  const SFRATTATI = {
-    contactsCard: 'la rubrica lunga: avatar, date e una × che cancella, letta prima di tutto e utile per ultima',
-    contactsList: 'idem — l\'elenco vero e proprio',
-  };
+test('la prima pagina non si riprende la rubrica lunga: vive nella sua schermata', () => {
+  /* 4.21: in prima pagina («troppa carne al fuoco»). 4.22: nella rotellina,
+     con una fila di nomi in prima pagina. 4.45 (17 set 2026): una schermata
+     sua dietro il pulsantone «Rubrica» — un tocco, e la prima pagina resta
+     tre pulsanti. */
+  assert.ok(SEZIONI.screenHome && SEZIONI.screenSettings && SEZIONI.screenContacts, 'le tre schermate non sono state lette');
   const guai = [];
-  for (const [id, perche] of Object.entries(SFRATTATI)){
-    if (new RegExp(`id="${id}"`).test(SEZIONI.screenHome))
-      guai.push(`#${id} e' tornato in prima pagina — ${perche}`);
-    if (!new RegExp(`id="${id}"`).test(SEZIONI.screenSettings))
-      guai.push(`#${id} non e' nelle impostazioni: spostato o cancellato?`);
+  for (const id of ['contactsCard', 'contactsList', 'addrPeople']){
+    if (new RegExp(`id="${id}"`).test(SEZIONI.screenHome)) guai.push(`#${id} e' tornato in prima pagina`);
+    if (new RegExp(`id="${id}"`).test(SEZIONI.screenSettings)) guai.push(`#${id} e' tornato nelle impostazioni: la rubrica ha una schermata sua`);
+  }
+  for (const id of ['contactsCard', 'contactsList', 'contactsEmpty', 'contactsUndo', 'backFromContacts']){
+    if (!new RegExp(`id="${id}"`).test(SEZIONI.screenContacts)) guai.push(`#${id} manca nella schermata della rubrica`);
   }
   assert.deepStrictEqual(guai, [], guai.join(' | '));
 });
@@ -302,7 +302,7 @@ test('chiudere una conversazione non e\' sepolto dentro un menu', () => {
     'la voce nel menu non va tolta: chi la usa da sempre non deve perderla');
 });
 
-test('i nomi e la riga di stato stanno FUORI dal blocco dell\'indirizzo che si richiude', () => {
+test('la riga di stato e i pulsantoni stanno FUORI dal blocco dell\'indirizzo che si richiude', () => {
   /* ⚠️ Il blocco `#addrDial` parte chiuso per tutti (vedi refreshAddrDial).
      Se `#addrPeople` o `#addrDialStatus` finissero dentro, si chiuderebbero
      con lui: i nomi sono il modo NORMALE di richiamare qualcuno, e in quella
@@ -311,7 +311,7 @@ test('i nomi e la riga di stato stanno FUORI dal blocco dell\'indirizzo che si r
      E' il difetto piu' facile da reintrodurre riordinando questa pagina. */
   const blocco = SEZIONI.screenHome.match(/<div class="addrdial hide" id="addrDial">([\s\S]*?)<\/div>\s*\n\s*<!--/);
   assert.ok(blocco, 'il blocco #addrDial non e\' stato trovato');
-  for (const id of ['addrPeople', 'addrDialStatus']){
+  for (const id of ['addrDialStatus', 'showAddrDial', 'goContacts']){
     assert.doesNotMatch(blocco[1], new RegExp(`id="${id}"`),
       `#${id} e' finito dentro il blocco che si richiude: si chiuderebbe insieme a lui`);
   }
@@ -324,17 +324,26 @@ test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ord
   /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
      che rimescolavano questa pagina sono state tolte apposta, perche' chi legge
      il codice e chi usa l'app devono vedere la stessa pagina. */
-  const ATTESI = ['lettersCard', 'addrPeople', 'addrDialStatus', 'showAddrDial', 'addrDialIn',
-                  'goStart', 'goJoin', 'btnShareApp'];
+  /* 4.45 (17 set 2026): tre pulsantoni e basta — «Parla con qualcuno»,
+     «Ti hanno dato un indirizzo?», «Rubrica» — poi il campo dell'indirizzo
+     che il secondo apre, poi le due righe piccole: «un invito che non si
+     apre» e «fai conoscere l'app». «Ho un codice» NON e' piu' un pulsantone:
+     non c'e' nessun codice da scrivere dalla 4.39. */
+  const ATTESI = ['lettersCard', 'addrDialStatus', 'goStart', 'showAddrDial', 'goContacts', 'addrDialIn',
+                  'goJoin', 'btnShareApp'];
   const dove = ATTESI.map(id => [id, SEZIONI.screenHome.indexOf(`id="${id}"`)]);
   for (const [id, pos] of dove) assert.notStrictEqual(pos, -1, `#${id} non e' piu' in prima pagina`);
   const fuoriPosto = dove.filter(([, pos], i) => i > 0 && pos < dove[i - 1][1]);
   assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [],
-    'l\'ordine atteso e\': messaggi lasciati, i NOMI, la riga di stato, la domanda «ti hanno dato ' +
-    'un indirizzo?», il campo che apre, i due pulsantoni, poi «fai conoscere l\'app». ' +
-    'I nomi PRIMA di tutto il resto perche\' toccarne uno e\' il modo normale di richiamare ' +
-    'qualcuno; il campo dell\'indirizzo DOPO perche\' scriverlo a mano e\' il caso raro; e la ' +
-    'condivisione ULTIMA perche\' non e\' il motivo per cui uno ha aperto l\'app');
+    'l\'ordine atteso e\': messaggi lasciati, la riga di stato, i TRE pulsantoni (parla, indirizzo, ' +
+    'rubrica), il campo che il secondo apre, poi le due righe piccole');
+  const grandi = [...SEZIONI.screenHome.matchAll(/<button[^>]*class="bigchoice[^"]*"[^>]*id="([a-zA-Z]+)"/g)].map(m => m[1]);
+  assert.deepStrictEqual(grandi, ['goStart', 'showAddrDial', 'goContacts'],
+    'esattamente tre pulsantoni, in quest\'ordine: un quarto e\' rumore, e «Ho un codice» non torna');
+  const rigaJoin = SEZIONI.screenHome.match(/<button[^>]*id="goJoin"[^>]*>/)[0];
+  assert.match(rigaJoin, /linkbtn/, '«un invito che non si apre» e\' una riga piccola, non un pulsantone');
+  assert.doesNotMatch(SEZIONI.screenHome, /id="easyHintBar"/, 'la modalita\' semplice e\' stata tolta (17 set 2026)');
+  assert.doesNotMatch(SEZIONI.screenSettings, /id="easyRow"/, 'anche il suo interruttore');
 });
 
 /* ------------------------------------------------------------ the languages -- */
