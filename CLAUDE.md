@@ -136,7 +136,7 @@ declared limit or an expected attack trace: if it ever passes, something moved.
 An unfixed defect a model finds goes to `memory/` first (rule 5); the model
 is published with the fix.
 
-**The open wire** (v50 / 4.42 Android, 16 Sep 2026). A phone with the app closed used
+**The open wire** (v50 / 4.42 Android, 16 Sep 2026; live version `061af837` since v56). A phone with the app closed used
 to poll its mailbox every 5/45/90 s (`RingService`). It can now hold one
 WebSocket per watched key to a Durable Object (`Ascolto`, one per mailbox key,
 hibernated: idle costs nothing) and the relay pulls the wire the instant a
