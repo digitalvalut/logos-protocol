@@ -70,7 +70,7 @@
   .banner{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);
     border-radius:var(--r-sm);padding:12px 14px;margin:14px 0;font-size:0.7812rem;color:var(--dim);
     box-shadow:var(--shadow)}
-  .banner.accent{border-left:3px solid #3a4250}
+  .banner.accent{border-left:3px solid var(--accent)}
   .banner b{color:var(--ink)}
   .shareicon{display:inline-block;vertical-align:-5px;margin-inline-end:6px;color:var(--accent)}
   .banner button.mini{flex-shrink:0;background:var(--ink);color:#0b0d10;border:none;padding:8px 14px;
@@ -89,6 +89,10 @@
      the second of the two buttons fell below the fold, which defeats the whole
      point of having exactly two. */
   .hero{text-align:center;padding:12px 10px 0}
+  .hero{position:relative}
+  .hero::before{content:'';position:absolute;left:50%;top:-10px;width:260px;height:180px;transform:translateX(-50%);
+    background:radial-gradient(closest-side,rgba(255,145,77,.22),rgba(255,145,77,0));pointer-events:none;z-index:0}
+  .hero>*{position:relative;z-index:1}
   .hero img{width:58px;height:58px;border-radius:18px;
     box-shadow:0 12px 30px rgba(255,145,77,.22),0 3px 10px rgba(0,0,0,.35)}
   .hero h1{font-size:1.25rem;letter-spacing:-.02em;margin:12px 0 5px;font-weight:800;line-height:1.2}
@@ -285,20 +289,26 @@
   .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
   .bigchoice:not(.primary):not(.enter):not(.book):not(.addr):hover{border-color:var(--dim)}
-  /* LA PRIMA PAGINA, 17 set 2026, dopo tre giri di colori bocciati
-     dall'operatore («troppi colori»). Regola definitiva: UN accento solo — il
-     colore del marchio — su UN elemento solo, «Manda il mio indirizzo» (e
-     «Inizia», che e' lo stesso gesto la prima volta). Tutto il resto e'
-     grafite, bianco e grigio: i due pulsantoni sono uguali, sobri, con
-     l'icona in grigio chiaro; l'indirizzo e' bianco; nessun verde, nessun
-     oro, nessun blu. Cio' che e' colorato e' cio' che si vuole premere. */
-  .bigchoice.book,.bigchoice.addr{background:linear-gradient(180deg,var(--panel2),var(--panel));
-    border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow)}
-  .bigchoice.book:hover,.bigchoice.addr:hover{border-color:#3a4250;background:linear-gradient(180deg,#222731,var(--panel2))}
-  .bigchoice.book .ic,.bigchoice.addr .ic{color:var(--ink);opacity:.85}
+  /* LA PRIMA PAGINA, 17 set 2026 — la stessa lingua del sito vetrina
+     (digitalvalut-logos.org): nero, bianco, grigio, e UN colore solo, il
+     nostro arancione (#ff914d). L'arancione va su cio' che si vuole premere —
+     «Manda il mio indirizzo», «Inizia» — e come filo sottile (bordi, icone)
+     sul resto. Tre giri di colori «moderni» (teal, indaco, navy+oro) bocciati
+     dall'operatore: «troppi colori». Aveva ragione. */
+  .homecard,.welcome{background:linear-gradient(180deg,#15181e,#0b0d11);
+    border:1px solid rgba(255,145,77,.28);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 1px rgba(255,145,77,.06)}
+  .homecard .fieldlabel{font-size:0.7188rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:8px}
+  .homecard .addrbox{color:var(--accent);background:#0b0d11;border:1px solid rgba(255,145,77,.22);
+    font-size:1.5rem;padding:16px 10px}
+  .homecard .toolsrow .btn{font-size:0.9062rem;padding:13px 12px;border-radius:14px;font-weight:800}
+  .homecard .toolsrow .btn.primary{flex:1.6}
+  .welcome .btn.big{width:100%;border-radius:14px}
+  .bigchoice.book,.bigchoice.addr{background:#15181e;border:1px solid rgba(164,174,185,.12);color:var(--ink);
+    box-shadow:0 12px 32px rgba(0,0,0,.35)}
+  .bigchoice.book:hover,.bigchoice.addr:hover{border-color:rgba(255,145,77,.35);background:#181c23}
+  .bigchoice.book .ic,.bigchoice.addr .ic{color:var(--accent);opacity:1}
   .bigchoice.book .d,.bigchoice.addr .d{color:var(--dim)}
   .bigchoice.addr[aria-expanded="true"]{border-color:var(--accent)}
-  .homecard .addrbox{color:var(--ink)}
   .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
     align-items:center;gap:0 14px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
@@ -342,14 +352,15 @@
      Non ha classe `.bigchoice`: la forma è diversa apposta, e riusare quella
      classe l'avrebbe trascinato di nuovo verso il pulsantone. */
   .sharerow{margin-top:11px}
-  /* sobrio dal 17 set 2026 (era verde): in prima pagina l'unico colore e'
-     «Manda il mio indirizzo» */
+  /* come il pulsante «GitHub» del sito vetrina: bordo sottile, nessun colore
+     suo — in prima pagina l'arancione e' di «Manda il mio indirizzo» */
   .sharebtn{display:flex;align-items:center;gap:12px;width:100%;
-    padding:14px 16px;cursor:pointer;text-align:start;font:inherit;color:var(--dim);
-    border-radius:16px;border:1px solid var(--line);
+    padding:14px 16px;cursor:pointer;text-align:start;font:inherit;color:var(--ink);
+    border-radius:14px;border:1px solid rgba(164,174,185,.25);
     background:none;
-    transition:transform .12s ease,border-color .15s ease,color .15s ease}
-  .sharebtn:hover{transform:translateY(-1px);border-color:#3a4250;color:var(--ink)}
+    transition:transform .12s ease,border-color .15s ease}
+  .sharebtn:hover{transform:translateY(-1px);border-color:rgba(255,145,77,.5)}
+  .sharebtn .ic{color:var(--accent)}
   .sharebtn:active{transform:translateY(0)}
   .sharebtn .ic{width:22px;height:22px;flex:none}
   .sharebtn .ic svg,.sharebtn .go svg{width:100%;height:100%;display:block}
