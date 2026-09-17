@@ -295,6 +295,18 @@
   .bigchoice[aria-expanded="true"]{border-color:var(--accent2)}
   .smalllinks{margin:14px 0 0;text-align:center}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+  /* La tessera in prima pagina (tappa 2): l'indirizzo grande, «Manda il mio
+     indirizzo» come azione principale. La prima apertura chiede solo il nome. */
+  .homecard{margin-top:16px}
+  .homecard .addrbox{margin-top:8px}
+  .homecard .toolsrow{margin-top:12px}
+  .welcome{margin-top:16px}
+  .welcome .btn.big{width:100%}
+  /* con la tessera il titolo grande ha gia' detto tutto */
+  body.hasname .hero{padding:6px 10px 0}
+  body.hasname .hero img{width:40px;height:40px;border-radius:13px}
+  body.hasname .hero h1{font-size:1.0625rem;margin:8px 0 0}
+  body.hasname .hero p{display:none}
   .screentitle{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;margin:10px 0 6px}
 
   /* Stacked at every width, on purpose. Side by side would put the two on the

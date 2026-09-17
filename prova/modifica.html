@@ -259,6 +259,40 @@
          scritto bene». Lasciata dentro al blocco richiuso, la risposta a una
          chiamata appena tentata sarebbe stata invisibile — il difetto peggiore
          di tutta questa riorganizzazione, e il piu' facile da non vedere. -->
+    <!-- ⚠️ LA PRIMA PAGINA E' UN TELEFONO, dal 17 set 2026 («tappa 2»).
+         «Ho un numero, lo do a chi voglio, e chiamo chi ce l'ha.» In alto la
+         TESSERA: il tuo indirizzo e «Manda il mio indirizzo» — chi riceve il
+         link tocca, gli si apre Logos, e ti sta chiamando. E' l'unico modo
+         per conoscere qualcuno: come dare il numero. L'invito a sei cifre
+         resta sotto (codice, test, modello formale intatti) ma senza
+         pulsantone: una riga piccola in fondo, per chi non vuole dare il
+         proprio indirizzo. La PRIMA VOLTA c'e' una domanda sola: come ti
+         chiami. Con «Inizia» l'indirizzo e «Fatti trovare» si accendono da
+         soli (deciso dall'operatore: «acceso, senza rotture; poi se vuole li
+         spegne»): tutti e due restano interruttori nelle impostazioni. -->
+    <div class="card welcome hide" id="welcomeCard">
+      <label class="fieldlabel" for="welcomeNameIn" data-i18n="welcome.title">Benvenuto. Come ti chiami?</label>
+      <input type="text" id="welcomeNameIn" class="sans-input" maxlength="30" spellcheck="false"
+             autocapitalize="words" autocomplete="off" data-i18n-ph="home.namePh" placeholder="Il tuo nome">
+      <div class="helptext mt10" data-i18n="welcome.why">Il nome lo vede solo chi chiami. Poi hai subito il tuo indirizzo da mandare a chi vuoi.</div>
+      <button class="btn primary big mt12" id="btnWelcomeGo" data-i18n="welcome.go">Inizia</button>
+    </div>
+    <div class="card homecard hide" id="homeCard">
+      <div class="fieldlabel" data-i18n="home.cardTitle">Il tuo indirizzo</div>
+      <div class="addrbox" id="homeAddr">DV-····-····-····</div>
+      <div class="qrbox hide" id="homeQr">
+        <canvas id="homeQrCanvas" aria-label="Codice QR del tuo indirizzo"></canvas>
+        <div class="qrhint" data-i18n="addr.qrHint">Chi lo inquadra ti chiama direttamente</div>
+      </div>
+      <div class="toolsrow" id="homeAddrTools">
+        <button class="btn primary" id="btnHomeShare"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5"/><path d="M21 3 14.5 21l-4-7.5L3 9.5z"/></svg></span><span data-i18n="home.cardShare">Manda il mio indirizzo</span></button>
+        <button class="btn" id="btnHomeQr"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM18 14h3M14 18v3"/></svg></span><span data-i18n="home.cardQr">QR</span></button>
+      </div>
+      <div class="hide" id="homeAddrOff">
+        <div class="helptext" data-i18n="home.cardOff">Il tuo indirizzo è spento: nessuno può chiamarti. Lo accendi qui, o dalle impostazioni.</div>
+        <button class="btn mt10" id="btnHomeAddrOn" data-i18n="home.cardOn">Accendi il mio indirizzo</button>
+      </div>
+    </div>
     <div class="status" id="addrDialStatus"></div>
 
     <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026. Prima era nascosto solo a chi
@@ -291,28 +325,6 @@
          il link si apre da solo — resta una riga piccola in fondo per il caso
          raro in cui il link non si apre in Logos (vedi #goJoin). -->
     <div class="bigchoices">
-      <button class="bigchoice primary" id="goStart">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M27 18.5a3 3 0 0 1-3 3H11l-6 5V8a3 3 0 0 1 3-3h16a3 3 0 0 1 3 3z"/>
-            <path d="M11.5 13.2h.01M16 13.2h.01M20.5 13.2h.01"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="home.bigStart">Parla con qualcuno</span>
-        <span class="d" data-i18n="home.bigStartD">Crea un invito da mandare</span>
-      </button>
-      <button class="bigchoice enter" id="showAddrDial" aria-expanded="false">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 14a7 7 0 1 1 14 0c0 5.5-7 12-7 12s-7-6.5-7-12z"/>
-            <circle cx="16" cy="14" r="2.6"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="addr.haveOne">Ti hanno dato un indirizzo?</span>
-        <span class="d" data-i18n="home.bigAddrD">Scrivilo qui e chiamalo</span>
-      </button>
       <button class="bigchoice book" id="goContacts">
         <span class="ic" aria-hidden="true">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
@@ -325,6 +337,17 @@
         </span>
         <span class="t" data-i18n="home.bigBook">Rubrica</span>
         <span class="d" data-i18n="home.bigBookD">Le persone con cui hai parlato</span>
+      </button>
+      <button class="bigchoice enter" id="showAddrDial" aria-expanded="false">
+        <span class="ic" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 14a7 7 0 1 1 14 0c0 5.5-7 12-7 12s-7-6.5-7-12z"/>
+            <circle cx="16" cy="14" r="2.6"/>
+          </svg>
+        </span>
+        <span class="t" data-i18n="home.bigAddr">Chiama un indirizzo</span>
+        <span class="d" data-i18n="home.bigAddrD">Te l'hanno dato? Scrivilo o incollalo qui</span>
       </button>
     </div>
 
@@ -343,6 +366,7 @@
          Una riga piccola, non un pulsantone: chi ne ha bisogno la trova, chi
          non ne ha bisogno non la vede nemmeno. -->
     <div class="smalllinks">
+      <button class="btn ghost linkbtn" id="goStart" data-i18n="home.inviteLink">Invito usa e getta, senza dare il tuo indirizzo</button>
       <button class="btn ghost linkbtn" id="goJoin" data-i18n="home.joinLink">Hai un invito che non si apre? Incolla qui il link</button>
     </div>
 
