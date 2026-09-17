@@ -147,7 +147,11 @@ and falls back to the three-speed polling whenever the wire is down or the
 relay answers 404 to `/ascolta`. `Filo.java` is a hand-written RFC 6455
 client: no library, and it verifies `Sec-WebSocket-Accept`. Durable Objects
 work on the free plan with `new_sqlite_classes`; the migration tag in
-`wrangler.toml` is declared once and never renamed.
+`wrangler.toml` is declared once and never renamed. Since v56 the `PUT`
+answers `{ok, svegliati}` — how many wires were pulled — so the caller's
+page can say «Sta squillando…» only when a phone really got the wake, and a
+ringback tone plays on the caller's side meanwhile (`startRingback`). A relay
+without the object answers `svegliati: 0` and the page promises nothing.
 
 It runs on a free plan with a hard daily write allowance. Before adding anything that
 writes or polls, work out what it costs per user per day — a loop with no deadline is

@@ -7876,3 +7876,89 @@ test.describe('4.47: la prima pagina e\' un telefono', () => {
     app.stop();
   });
 });
+
+/* v56 (17 set 2026): chi chiama sente il «tu… tu… tu…» e legge «Sta
+   squillando…» solo quando il relay ha tirato davvero un filo. Chiesto
+   dall'operatore: «chi chiama si disorienta». */
+test.describe('v56: il segnale di libero per chi chiama, e «Sta squillando» detto quando e\' vero', () => {
+  const PREP = `
+    myAddress = async () => 'ZZZZZZZZZZZZ';
+    addrDialSecrets = async () => ({ key: {}, seed: 's', slot: 0 });
+    myFingerprintHex = async () => 'ff';
+    slotId = async (seed, nome) => nome;
+    mailboxGet = async () => null;
+    globalThis.__toni = 0; playRingbackTone = () => { globalThis.__toni++; };
+  `;
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+
+  test('scritta la busta parte il segnale; alla risposta si ferma', async () => {
+    const app = loadApp();
+    app.run(PREP + `
+      mailboxPutSealed = async () => true;
+      let giri = 0;
+      mailboxGetSealed = async (k) => {
+        if (String(k).indexOf('addr-answer') !== 0) return null;
+        giri++;
+        if (giri === 1){
+          assert_ringing = ringbackTimer !== null;   /* mentre si aspetta, suona */
+          return null;
+        }
+        return { kind: 'answer', sdp: 'v=0 B', ts: Date.now(), rid: 'x' };
+      };
+      bustaFresca = () => true; bustaDelVerso = (m, v) => m.kind === v;
+      newPeerConnection = async () => ({ createDataChannel(){ return {}; }, createOffer: async () => ({ type:'offer', sdp:'v=0 A' }), setLocalDescription: async function(d){ this.localDescription = d; }, setRemoteDescription: async () => {}, addEventListener(){}, removeEventListener(){}, signalingState:'stable', close(){} });
+      candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+      watchHandshakeProgress = () => {};
+      wireDataChannel = () => {};
+      assert_ringing = null;
+    `);
+    await app.run("Promise.resolve(dialAddress('AAAABBBBCCCC')).catch(e => { globalThis.__err = String(e); })");
+    await attendi(20);
+    assert.strictEqual(app.run('assert_ringing'), true, 'durante l\'attesa il timer del segnale e\' armato');
+    assert.ok(app.run('globalThis.__toni') >= 1, 'e almeno un tono e\' partito subito');
+    assert.strictEqual(app.run('ringbackTimer'), null, 'arrivata la risposta, il segnale si ferma');
+    app.stop();
+  });
+
+  test('«Sta squillando…» solo se il relay ha tirato un filo; altrimenti resta «Sto chiamando…»', async () => {
+    for (const [sveglia, atteso] of [[1, 'addr.ringingTitle'], [0, 'addr.callingTitle']]){
+      const app = loadApp();
+      app.run(PREP + `
+        mailboxPutSealed = async () => { ultimaSveglia = ${sveglia}; return true; };
+        mailboxGetSealed = async (k) => { if (String(k).indexOf('addr-answer') === 0) pc = { soppiantata: true }; return null; };
+        newPeerConnection = async () => ({ createDataChannel(){ return {}; }, createOffer: async () => ({ type:'offer', sdp:'v=0 A' }), setLocalDescription: async function(d){ this.localDescription = d; }, addEventListener(){}, removeEventListener(){}, signalingState:'stable', close(){} });
+        candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+        wireDataChannel = () => {};
+        globalThis.__titolo = null;
+        const _set = setBigConnectingText; setBigConnectingText = (side, title, hint) => { globalThis.__titolo = title; _set(side, title, hint); };
+      `);
+      await app.run("Promise.resolve(dialAddress('AAAABBBBCCCC')).catch(function(){})");
+      await attendi(10);
+      const titolo = app.run('globalThis.__titolo');
+      if (sveglia) assert.strictEqual(titolo, app.run("t('addr.ringingTitle')"), 'un filo tirato: «Sta squillando…»');
+      else assert.notStrictEqual(titolo, app.run("t('addr.ringingTitle')"), 'nessun filo: non si promette uno squillo');
+      app.stop();
+    }
+  });
+
+  test('rinuncia, rifiuto o chiusura della schermata spengono il segnale', () => {
+    const app = loadApp();
+    app.run("playRingbackTone = () => {}; startRingback();");
+    assert.notStrictEqual(app.run('ringbackTimer'), null);
+    app.run('hideBigConnectingB(true)');
+    assert.strictEqual(app.run('ringbackTimer'), null, 'chiudere la schermata dell\'attesa spegne il tono');
+    app.stop();
+  });
+
+  test('il relay dice quanti fili ha tirato, e la pagina se lo segna', async () => {
+    const app = loadApp();
+    app.run(`RELAYS.length = 0; RELAYS.push('https://uno.example');
+             fetch = async () => ({ ok: true, status: 200, json: async () => ({ ok: true, svegliati: 2 }) });`);
+    await app.run("mailboxPut('k', { a: 1 })");
+    assert.strictEqual(app.run('ultimaSveglia'), 2);
+    app.run(`fetch = async () => ({ ok: true, status: 200, json: async () => ({ ok: true }) });`);
+    await app.run("mailboxPut('k', { a: 1 })");
+    assert.strictEqual(app.run('ultimaSveglia'), 0, 'un relay vecchio non lo dice: zero, non una promessa');
+    app.stop();
+  });
+});

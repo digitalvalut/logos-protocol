@@ -762,9 +762,14 @@ async function handleMailbox(request, env, cors, key){
     await env.MAILBOX.put(key, body, tok
       ? { expirationTtl: MAILBOX_TTL_SECONDS, metadata: { t: tok } }
       : { expirationTtl: MAILBOX_TTL_SECONDS });
-    /* la busta e' nella cassetta: adesso, e solo adesso, si tira il filo */
-    await tiraIlFilo(env, key);
-    return json({ ok: true }, 200, cors);
+    /* la busta e' nella cassetta: adesso, e solo adesso, si tira il filo.
+       Quanti fili c'erano lo si dice a chi ha scritto (v56, 17 set 2026):
+       cosi' la sua app scrive «Sta squillando…» solo quando un telefono ha
+       davvero ricevuto lo squillo, e «Sto cercando…» altrimenti. Non rivela
+       niente di nuovo: che un filo esista il relay lo sapeva gia', e chi
+       scrive in una cassetta ne conosce gia' il proprietario. */
+    const svegliati = await tiraIlFilo(env, key);
+    return json({ ok: true, svegliati }, 200, cors);
   }
 
   /* Cancellare richiede il gettone. Una scrittura, come sempre. */
@@ -912,10 +917,12 @@ export class Ascolto {
    necessario: chi scrive non deve aspettare il campanello. */
 async function tiraIlFilo(env, key){
   try{
-    if (!env.ASCOLTO) return;
+    if (!env.ASCOLTO) return 0;
     const stub = env.ASCOLTO.get(env.ASCOLTO.idFromName(key));
-    await stub.fetch('https://ascolto/sveglia', { method: 'POST' });
-  }catch(e){}
+    const r = await stub.fetch('https://ascolto/sveglia', { method: 'POST' });
+    const j = await r.json();
+    return (j && j.svegliati) | 0;
+  }catch(e){ return 0; }
 }
 
 export default {

@@ -1,0 +1,3 @@
+Chi chiama sente il segnale di libero, e legge «Sta squillando…» quando è vero.
+
+Prima, chiamando un indirizzo, si vedeva solo una rotellina: non si capiva se stesse succedendo qualcosa. Ora, appena la chiamata parte, si sente il «tu… tu… tu…» come su un telefono normale (generato dall'app, niente file, niente server), e si ferma nell'istante in cui l'altro risponde o rifiuta. In più il relay dice a chi chiama se il telefono dell'altro ha ricevuto lo squillo: in quel caso la scritta diventa «Sta squillando…», altrimenti resta «Sto chiamando…». Anche la scheda dell'indirizzo nelle impostazioni ora dice «lo spegni qui quando vuoi» invece di «spento di base». Chiamate, campanello e protocollo sono gli stessi della v55.

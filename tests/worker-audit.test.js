@@ -755,6 +755,20 @@ test.describe('worker: il filo aperto', () => {
     assert.strictEqual(A.chiamate[0].name, K, 'il filo della cassetta giusta, non di un\'altra');
     assert.match(A.chiamate[0].url, /\/sveglia$/);
     assert.strictEqual(await w.env.MAILBOX.get(K), '{"i":"x","c":"y"}', 'e la busta e\' gia\' nella cassetta quando il filo viene tirato');
+    /* v56 (17 set 2026): chi ha scritto la busta sa se un filo c'era. E' cio'
+       che permette alla pagina di dire «Sta squillando…» solo quando e' vero. */
+    assert.strictEqual(r.corpo.svegliati, 1, 'la risposta al PUT dice quanti fili sono stati tirati');
+  });
+
+  test('senza nessun filo aperto, la risposta dice zero: la pagina scrive «Sto cercando…», non «Sta squillando»', async () => {
+    const A = { idFromName: n => ({ n }), get: () => ({ fetch: async () => new Response(JSON.stringify({ svegliati: 0 }), { status: 200 }) }) };
+    const w = W.caricaWorker({ env: { ASCOLTO: A } });
+    const r = await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}' });
+    assert.strictEqual(r.status, 200);
+    assert.strictEqual(r.corpo.svegliati, 0);
+    const senza = W.caricaWorker();
+    const r2 = await senza.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}' });
+    assert.strictEqual(r2.corpo.svegliati, 0, 'relay senza fili: zero, non undefined');
   });
 
   test('senza il pezzo che tiene i fili (relay vecchio, prove in locale) niente cambia: la scrittura va, /ascolta dice 404', async () => {
