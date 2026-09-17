@@ -89,6 +89,10 @@
      the second of the two buttons fell below the fold, which defeats the whole
      point of having exactly two. */
   .hero{text-align:center;padding:12px 10px 0}
+  .hero{position:relative}
+  .hero::before{content:'';position:absolute;left:50%;top:-10px;width:260px;height:180px;transform:translateX(-50%);
+    background:radial-gradient(closest-side,rgba(255,145,77,.22),rgba(255,145,77,0));pointer-events:none;z-index:0}
+  .hero>*{position:relative;z-index:1}
   .hero img{width:58px;height:58px;border-radius:18px;
     box-shadow:0 12px 30px rgba(255,145,77,.22),0 3px 10px rgba(0,0,0,.35)}
   .hero h1{font-size:1.25rem;letter-spacing:-.02em;margin:12px 0 5px;font-weight:800;line-height:1.2}
@@ -284,17 +288,43 @@
   .bigchoice.enter .ic{color:#08142e;opacity:.9}
   .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
-  .bigchoice:not(.primary):not(.enter):hover{border-color:var(--dim)}
-  /* «Rubrica»: il terzo pulsantone, neutro apposta — non e' un'azione verso
-     fuori come gli altri due, e' il posto dove si torna. Il numero dice
-     quante persone ci sono senza aprirla. */
-  .bigchoice.book .ic{color:var(--accent2)}
-  .bigchoice .count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;
-    padding:0 7px;margin-right:8px;border-radius:11px;background:var(--accent);color:var(--accent-ink);
-    font-weight:800;font-size:0.8125rem;vertical-align:middle}
-  .bigchoice[aria-expanded="true"]{border-color:var(--accent2)}
-  .smalllinks{margin:14px 0 0;text-align:center}
+  .bigchoice:not(.primary):not(.enter):not(.book):not(.addr):hover{border-color:var(--dim)}
+  /* LA PRIMA PAGINA, 17 set 2026 — la stessa lingua del sito vetrina
+     (digitalvalut-logos.org): nero, bianco, grigio, e UN colore solo, il
+     nostro arancione (#ff914d). L'arancione va su cio' che si vuole premere —
+     «Manda il mio indirizzo», «Inizia» — e come filo sottile (bordi, icone)
+     sul resto. Tre giri di colori «moderni» (teal, indaco, navy+oro) bocciati
+     dall'operatore: «troppi colori». Aveva ragione. */
+  .homecard,.welcome{background:linear-gradient(180deg,#15181e,#0b0d11);
+    border:1px solid rgba(255,145,77,.28);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 1px rgba(255,145,77,.06)}
+  .homecard .fieldlabel{font-size:0.7188rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:8px}
+  .homecard .addrbox{color:var(--accent);background:#0b0d11;border:1px solid rgba(255,145,77,.22);
+    font-size:1.5rem;padding:16px 10px}
+  .homecard .toolsrow .btn{font-size:0.9062rem;padding:13px 12px;border-radius:14px;font-weight:800}
+  .homecard .toolsrow .btn.primary{flex:1.6}
+  .welcome .btn.big{width:100%;border-radius:14px}
+  .bigchoice.book,.bigchoice.addr{background:#15181e;border:1px solid rgba(164,174,185,.12);color:var(--ink);
+    box-shadow:0 12px 32px rgba(0,0,0,.35)}
+  .bigchoice.book:hover,.bigchoice.addr:hover{border-color:rgba(255,145,77,.35);background:#181c23}
+  .bigchoice.book .ic,.bigchoice.addr .ic{color:var(--accent);opacity:1}
+  .bigchoice.book .d,.bigchoice.addr .d{color:var(--dim)}
+  .bigchoice.addr[aria-expanded="true"]{border-color:var(--accent)}
+  .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
+    align-items:center;gap:0 14px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+  .smalllinks .otherways{color:var(--dim)}
+  /* La tessera in prima pagina (tappa 2): l'indirizzo grande, «Manda il mio
+     indirizzo» come azione principale. La prima apertura chiede solo il nome. */
+  .homecard{margin-top:16px}
+  .homecard .addrbox{margin-top:8px}
+  .homecard .toolsrow{margin-top:12px}
+  .welcome{margin-top:16px}
+  .welcome .btn.big{width:100%}
+  /* con la tessera il titolo grande ha gia' detto tutto */
+  body.hasname .hero{padding:6px 10px 0}
+  body.hasname .hero img{width:40px;height:40px;border-radius:13px}
+  body.hasname .hero h1{font-size:1.0625rem;margin:8px 0 0}
+  body.hasname .hero p{display:none}
   .screentitle{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;margin:10px 0 6px}
 
   /* Stacked at every width, on purpose. Side by side would put the two on the
@@ -322,13 +352,15 @@
      Non ha classe `.bigchoice`: la forma è diversa apposta, e riusare quella
      classe l'avrebbe trascinato di nuovo verso il pulsantone. */
   .sharerow{margin-top:11px}
+  /* come il pulsante «GitHub» del sito vetrina: bordo sottile, nessun colore
+     suo — in prima pagina l'arancione e' di «Manda il mio indirizzo» */
   .sharebtn{display:flex;align-items:center;gap:12px;width:100%;
-    padding:14px 16px;cursor:pointer;text-align:start;font:inherit;color:var(--ok);
-    border-radius:16px;border:1.5px solid rgba(61,220,151,.42);
-    background:linear-gradient(180deg,rgba(61,220,151,.13),rgba(61,220,151,.04));
-    transition:transform .12s ease,border-color .15s ease,box-shadow .18s ease}
-  .sharebtn:hover{transform:translateY(-1px);border-color:var(--ok);
-    box-shadow:0 12px 28px rgba(61,220,151,.18)}
+    padding:14px 16px;cursor:pointer;text-align:start;font:inherit;color:var(--ink);
+    border-radius:14px;border:1px solid rgba(164,174,185,.25);
+    background:none;
+    transition:transform .12s ease,border-color .15s ease}
+  .sharebtn:hover{transform:translateY(-1px);border-color:rgba(255,145,77,.5)}
+  .sharebtn .ic{color:var(--accent)}
   .sharebtn:active{transform:translateY(0)}
   .sharebtn .ic{width:22px;height:22px;flex:none}
   .sharebtn .ic svg,.sharebtn .go svg{width:100%;height:100%;display:block}

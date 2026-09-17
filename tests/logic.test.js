@@ -7794,3 +7794,85 @@ test.describe('4.46: «Fatti trovare» e\' un interruttore solo, e dice la verit
     }
   });
 });
+
+/* 4.47 (17 set 2026, «tappa 2»): la prima pagina e' un telefono. La prima
+   volta una domanda sola (il nome) e con «Inizia» indirizzo e «Fatti
+   trovare» si accendono da soli — deciso dall'operatore; restano interruttori.
+   La tessera in alto mostra l'indirizzo e lo manda; «Parla con qualcuno» e'
+   una riga piccola. */
+test.describe('4.47: la prima pagina e\' un telefono', () => {
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+
+  test('la prima volta: solo «come ti chiami»; con «Inizia» nome, indirizzo e «Fatti trovare» sono accesi', async () => {
+    const app = loadApp();
+    await attendi(30);
+    app.run("MEM.removeItem('logos-modifica-nick'); $('nickInput').value = ''; setAddrOn(false); paintWelcome();");
+    assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), false, 'senza nome: la domanda');
+    assert.strictEqual(app.run("$('homeCard').classList.contains('hide')"), true, 'e niente tessera vuota');
+    app.run(`pushSupported = () => false; window.__consegne = 0; handOverWatchToAndroid = () => { window.__consegne++; };
+             $('welcomeNameIn').value = 'Giuseppe';`);
+    await app.run("$('btnWelcomeGo').listeners.click[0]()");
+    await attendi(30);
+    assert.strictEqual(app.run("$('nickInput').value"), 'Giuseppe', 'il nome e\' lo stesso delle impostazioni');
+    assert.strictEqual(app.run("MEM.getItem('logos-modifica-nick')"), 'Giuseppe');
+    assert.strictEqual(app.run('addrOn()'), true, 'l\'indirizzo si accende da solo');
+    assert.strictEqual(app.run('listenMode'), true, 'e «Fatti trovare» pure');
+    assert.strictEqual(app.run("MEM.getItem('dvlogos-listen')"), '1');
+    assert.ok(app.run('window.__consegne') >= 1, 'il telefono viene avvisato di cosa sorvegliare');
+    assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), true);
+    assert.strictEqual(app.run("$('homeCard').classList.contains('hide')"), false, 'la tessera compare');
+    assert.match(app.run("$('homeAddr').textContent"), /^DV-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/, 'con l\'indirizzo dentro');
+    app.stop();
+  });
+
+  test('«Inizia» senza nome non fa niente: il nome e\' l\'unica cosa che si chiede, e serve', async () => {
+    const app = loadApp();
+    await attendi(30);
+    app.run("MEM.removeItem('logos-modifica-nick'); $('nickInput').value = ''; setAddrOn(false); paintWelcome(); $('welcomeNameIn').value = '   ';");
+    await app.run("$('btnWelcomeGo').listeners.click[0]()");
+    assert.strictEqual(app.run('addrOn()'), false);
+    assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), false);
+    app.stop();
+  });
+
+  test('la tessera: «Manda il mio indirizzo» manda lo stesso testo e lo stesso link delle impostazioni', async () => {
+    const app = loadApp();
+    await attendi(30);
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(true); paintWelcome();");
+    await app.run('paintAddrCard()');
+    app.run(`window.__mandati = []; navigator.share = async (o) => { window.__mandati.push(o.text); };`);
+    await app.run("$('btnHomeShare').listeners.click[0]()");
+    await app.run("$('btnAddrShare').listeners.click[0]()");
+    await attendi(30);
+    const m = app.run('window.__mandati');
+    assert.strictEqual(m.length, 2);
+    assert.strictEqual(m[0], m[1], 'tessera e impostazioni: la stessa funzione');
+    assert.match(m[0], /#a=[A-Z0-9]{12}/, 'e il link porta l\'indirizzo');
+    app.stop();
+  });
+
+  test('indirizzo spento: la tessera lo dice e offre di accenderlo; acceso: mostra l\'indirizzo', async () => {
+    const app = loadApp();
+    await attendi(30);
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(false); paintWelcome(); handOverWatchToAndroid = () => {};");
+    await app.run('paintAddrCard()');
+    assert.strictEqual(app.run("$('homeAddrOff').classList.contains('hide')"), false, 'spento: lo dice');
+    assert.strictEqual(app.run("$('homeAddrTools').classList.contains('hide')"), true, 'e non offre di mandare un indirizzo che non c\'e\'');
+    await app.run("$('btnHomeAddrOn').listeners.click[0]()");
+    await attendi(30);
+    assert.strictEqual(app.run('addrOn()'), true);
+    assert.strictEqual(app.run("$('homeAddrOff').classList.contains('hide')"), true);
+    assert.strictEqual(app.run("$('homeAddrTools').classList.contains('hide')"), false);
+    assert.strictEqual(app.run("$('homeAddr').textContent"), app.run("$('addrMine').textContent"), 'stesso indirizzo delle impostazioni');
+    app.stop();
+  });
+
+  test('l\'invito usa e getta esiste ancora, come riga piccola, e apre la sua schermata', () => {
+    const app = loadApp();
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna';");
+    app.run(`startQuickShare = () => {}; showQuickLayoutA = () => {};`);
+    app.run("$('goStart').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenStart').classList.contains('hide')"), false);
+    app.stop();
+  });
+});

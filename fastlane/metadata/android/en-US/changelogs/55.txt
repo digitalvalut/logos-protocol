@@ -1,0 +1,3 @@
+The home is a phone: your address at the top, send it to whoever you like.
+
+At the top, your card: the address, "Send my address" and the QR. Whoever receives the link taps it, Logos opens and they are calling you: it is the one way to meet someone, like giving a number. Below, two buttons: "Call someone you know" and "Call an address". The first time only your name is asked: with "Start", your address and "Let people reach you" turn on by themselves (both stay as switches in settings). The one-time invite remains as a small line, for those who prefer not to give their address. Colours: the site's, a single orange. Calls, ringer and protocol are the same as v54.

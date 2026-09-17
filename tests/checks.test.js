@@ -324,24 +324,27 @@ test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ord
   /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
      che rimescolavano questa pagina sono state tolte apposta, perche' chi legge
      il codice e chi usa l'app devono vedere la stessa pagina. */
-  /* 4.45 (17 set 2026): tre pulsantoni e basta — «Parla con qualcuno»,
-     «Ti hanno dato un indirizzo?», «Rubrica» — poi il campo dell'indirizzo
-     che il secondo apre, poi le due righe piccole: «un invito che non si
-     apre» e «fai conoscere l'app». «Ho un codice» NON e' piu' un pulsantone:
-     non c'e' nessun codice da scrivere dalla 4.39. */
-  const ATTESI = ['lettersCard', 'addrDialStatus', 'goStart', 'showAddrDial', 'goContacts', 'addrDialIn',
-                  'goJoin', 'btnShareApp'];
+  /* 4.47 (17 set 2026, «tappa 2»): la prima pagina e' un telefono. In alto
+     la TESSERA (o la domanda del nome, la prima volta), poi DUE pulsantoni —
+     «Rubrica», «Chiama un indirizzo» — poi il campo che il secondo apre, poi
+     le righe piccole: l'invito usa e getta, «un invito che non si apre»,
+     «fai conoscere l'app». «Parla con qualcuno» NON e' piu' un pulsantone:
+     il tuo indirizzo E' l'invito. */
+  const ATTESI = ['lettersCard', 'welcomeCard', 'homeCard', 'btnHomeShare', 'addrDialStatus',
+                  'goContacts', 'showAddrDial', 'addrDialIn', 'goStart', 'goJoin', 'btnShareApp'];
   const dove = ATTESI.map(id => [id, SEZIONI.screenHome.indexOf(`id="${id}"`)]);
   for (const [id, pos] of dove) assert.notStrictEqual(pos, -1, `#${id} non e' piu' in prima pagina`);
   const fuoriPosto = dove.filter(([, pos], i) => i > 0 && pos < dove[i - 1][1]);
   assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [],
-    'l\'ordine atteso e\': messaggi lasciati, la riga di stato, i TRE pulsantoni (parla, indirizzo, ' +
-    'rubrica), il campo che il secondo apre, poi le due righe piccole');
+    'l\'ordine atteso e\': messaggi lasciati, la tessera (o il nome), la riga di stato, i DUE ' +
+    'pulsantoni (rubrica, chiama un indirizzo), il campo che il secondo apre, poi le righe piccole');
   const grandi = [...SEZIONI.screenHome.matchAll(/<button[^>]*class="bigchoice[^"]*"[^>]*id="([a-zA-Z]+)"/g)].map(m => m[1]);
-  assert.deepStrictEqual(grandi, ['goStart', 'showAddrDial', 'goContacts'],
-    'esattamente tre pulsantoni, in quest\'ordine: un quarto e\' rumore, e «Ho un codice» non torna');
-  const rigaJoin = SEZIONI.screenHome.match(/<button[^>]*id="goJoin"[^>]*>/)[0];
-  assert.match(rigaJoin, /linkbtn/, '«un invito che non si apre» e\' una riga piccola, non un pulsantone');
+  assert.deepStrictEqual(grandi, ['goContacts', 'showAddrDial'],
+    'esattamente due pulsantoni, in quest\'ordine: «Parla con qualcuno» e «Ho un codice» non tornano');
+  for (const id of ['goJoin', 'goStart']){
+    const riga = SEZIONI.screenHome.match(new RegExp(`<button[^>]*id="${id}"[^>]*>`))[0];
+    assert.match(riga, /linkbtn/, `#${id} e' una riga piccola, non un pulsantone`);
+  }
   assert.doesNotMatch(SEZIONI.screenHome, /id="easyHintBar"/, 'la modalita\' semplice e\' stata tolta (17 set 2026)');
   assert.doesNotMatch(SEZIONI.screenSettings, /id="easyRow"/, 'anche il suo interruttore');
 });

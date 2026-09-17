@@ -1,0 +1,3 @@
+La prima pagina è un telefono: il tuo indirizzo in alto, mandalo a chi vuoi.
+
+In alto la tua tessera: l'indirizzo, «Manda il mio indirizzo» e il QR. Chi riceve il link tocca, gli si apre Logos e ti sta chiamando: è l'unico modo per conoscere qualcuno, come dare il numero. Sotto, due pulsanti: «Chiama chi conosci» e «Chiama un indirizzo». La prima volta si chiede solo il nome: con «Inizia» l'indirizzo e «Fatti trovare» si accendono da soli (restano interruttori nelle impostazioni). L'invito usa e getta resta come riga piccola, per chi non vuole dare il proprio indirizzo. Colori: quelli del sito, un arancione solo. Chiamate, campanello e protocollo sono gli stessi della v54.

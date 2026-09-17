@@ -133,7 +133,8 @@
   const TETTI = [
     ['peerNameLbl', 1, 'il nome di chi hai davanti'],
     ['btnAddrDial', 2, 'il pulsante «Chiamalo»'],
-    ['goStart', 4, 'il pulsantone «Parla con qualcuno»'],
+    ['goStart', 2, 'la riga «invito usa e getta»'],
+    ['btnHomeShare', 2, 'il pulsante «Manda il mio indirizzo»'],
     ['showAddrDial', 4, 'il pulsantone «Ti hanno dato un indirizzo?»'],
     ['goContacts', 4, 'il pulsantone «Rubrica»'],
     ['goJoin', 2, 'la riga «un invito che non si apre»'],
@@ -152,7 +153,7 @@
   /* ---- 6. quello che conta si vede senza scorrere ----------------------
      Non e' un guasto, e' una misura: quanto della prima pagina arriva prima
      che uno debba scorrere. Detto, non deciso. */
-  const sotto = ['goStart', 'showAddrDial', 'goContacts', 'btnShareApp']
+  const sotto = ['btnHomeShare', 'goContacts', 'showAddrDial', 'btnShareApp']
     .map(id => document.getElementById(id)).filter(vis)
     .filter(el => el.getBoundingClientRect().bottom > window.innerHeight)
     .map(el => el.id);
