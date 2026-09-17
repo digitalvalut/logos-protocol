@@ -7774,3 +7774,63 @@ test.describe('4.43: il relay che risponde «no» viene detto, non taciuto', () 
     app.stop();
   });
 });
+
+/* v52 (17 set 2026): nell'APK «manda» apre la tendina di Android; lo schermo
+   protetto e' un interruttore che parte spento. Vedi android.test.js per il
+   contratto con il telefono; qui si guarda cosa fa la pagina. */
+test.describe('v52: condividere passa dal ponte Android quando c\'e\', e lo schermo protetto e\' una scelta', () => {
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+
+  test('con il ponte: la tendina di Android, non navigator.share e non la copia', async () => {
+    const app = loadApp({ globals: { AndroidShare: { chiamate: [], text(t){ this.chiamate.push(t); } } } });
+    app.run(`window.__share = 0; navigator.share = async () => { window.__share++; };
+             window.__copie = 0; copyOrSelect = async () => { window.__copie++; };`);
+    app.run("$('btnShareApp').click()");
+    await attendi(50);
+    assert.strictEqual(app.sandbox.AndroidShare.chiamate.length, 1, 'il ponte deve ricevere il testo');
+    assert.match(app.sandbox.AndroidShare.chiamate[0], /https:\/\//, 'e il testo porta il link');
+    assert.strictEqual(app.run('window.__share'), 0, 'navigator.share non va chiamato se c\'e\' il ponte');
+    assert.strictEqual(app.run('window.__copie'), 0, 'e nemmeno la copia');
+    app.stop();
+  });
+
+  test('senza il ponte (Chrome): navigator.share come prima; senza nemmeno quello: la copia', async () => {
+    const a = loadApp();
+    a.run(`window.__share = 0; navigator.share = async () => { window.__share++; }; window.__copie = 0; copyOrSelect = async () => { window.__copie++; };`);
+    a.run("$('btnShareApp').click()"); await attendi(50);
+    assert.strictEqual(a.run('window.__share'), 1); assert.strictEqual(a.run('window.__copie'), 0);
+    a.stop();
+    const b = loadApp();
+    b.run(`delete navigator.share; window.__copie = 0; copyOrSelect = async () => { window.__copie++; };`);
+    b.run("$('btnShareApp').click()"); await attendi(50);
+    assert.strictEqual(b.run('window.__copie'), 1, 'l\'ultima spiaggia resta la copia');
+    b.stop();
+  });
+
+  test('l\'interruttore dello schermo: nascosto nel browser, visibile e spento nell\'APK, e la scelta arriva al telefono', () => {
+    const web = loadApp();
+    assert.ok(web.run("$('secureRow').classList.contains('hide')"), 'senza AndroidScreen non si mostra');
+    web.stop();
+    const stato = { on: null, setSecure(v){ this.on = v; }, isSecure(){ return !!this.on; } };
+    const apk = loadApp({ globals: { AndroidScreen: stato } });
+    assert.ok(!apk.run("$('secureRow').classList.contains('hide')"), 'con il ponte si mostra');
+    assert.ok(!apk.run("$('secureRow').classList.contains('on')"), 'e parte SPENTO');
+    assert.strictEqual(stato.on, false, 'all\'avvio la pagina riallinea il telefono alla scelta salvata (spento)');
+    apk.run("$('secureRow').click()");
+    assert.strictEqual(stato.on, true, 'un tocco lo accende sul telefono');
+    assert.strictEqual(apk.run("MEM.getItem('dvlogos-secure')"), '1', 'e la scelta viene ricordata');
+    apk.run("$('secureRow').click()");
+    assert.strictEqual(stato.on, false);
+    apk.stop();
+    /* riaperta l'app con la scelta salvata, il telefono la riceve subito */
+    const stato2 = { on: null, setSecure(v){ this.on = v; }, isSecure(){ return !!this.on; } };
+    const dopo = loadApp({ globals: { AndroidScreen: stato2 } });
+    dopo.run("MEM.setItem('dvlogos-secure', '1')");
+    dopo.stop();
+    const stato3 = { on: null, setSecure(v){ this.on = v; }, isSecure(){ return !!this.on; } };
+    const riaperta = loadApp({ globals: { AndroidScreen: stato3, localStorage: dopo.sandbox.localStorage } });
+    assert.ok(riaperta.run("$('secureRow').classList.contains('on')"), 'la scelta salvata si vede');
+    assert.strictEqual(stato3.on, true, 'e arriva al telefono all\'avvio');
+    riaperta.stop();
+  });
+});

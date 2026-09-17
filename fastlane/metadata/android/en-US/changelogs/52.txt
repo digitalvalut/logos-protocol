@@ -1,0 +1,5 @@
+"Send the invite" opens Android's share sheet; and a protected screen, if you want it.
+
+In the Android app the "send" button always ended in "copied": the WebView lacks the share menu Chrome has, and anyone who does not know what a clipboard is was left stuck. It now opens the system share sheet — WhatsApp, email, Signal, whatever you have — for invites, your address, letters and "tell someone about the app".
+
+Also, in settings, "Protected screen": no screenshots and a black preview in the app switcher. Off by default, because on it also blocks screenshotting the invite QR. Calls, audio and the ringer are the same as v51.

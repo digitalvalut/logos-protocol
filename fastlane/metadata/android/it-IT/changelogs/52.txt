@@ -1,0 +1,5 @@
+«Manda l'invito» apre la tendina di Android; e lo schermo protetto, se lo vuoi.
+
+Nell'app Android il pulsante «manda» finiva sempre in «copiato»: il WebView non ha il menù di condivisione che Chrome ha, e chi non sa cos'è la clipboard restava fermo. Ora si apre la tendina di sistema — WhatsApp, email, Signal, quello che hai — per l'invito, l'indirizzo, le lettere e «fai conoscere l'app».
+
+In più, nelle impostazioni, «Schermo protetto»: niente screenshot e anteprima nera fra le app aperte. Parte spento, perché acceso blocca anche lo screenshot del QR dell'invito. Chiamate, audio e campanello sono gli stessi della v51.

@@ -27,6 +27,7 @@ const RING = read(J + 'RingService.java');
 const CALL = read(J + 'CallService.java');
 const MANIFEST = read('android/app/src/main/AndroidManifest.xml');
 const APP = read('modifica.js');
+const HTML = read('modifica.html');
 const STR_EN = read('android/app/src/main/res/values/strings.xml');
 const STR_IT = read('android/app/src/main/res/values-it/strings.xml');
 
@@ -237,5 +238,54 @@ test.describe('v48: il campanello non resta «gia\' in squillo» per sempre, e d
     /* nel Java le chiavi JSON sono scritte con le virgolette scappate: \"aperti\" */
     for (const k of ['aperti', 'squilliRecenti', 'maxSquilli', 'errore']) assert.ok(RING.indexOf('\\"' + k + '\\"') >= 0, 'manca ' + k + ' nello stato');
     assert.ok(/androidRing\.wireStatus\(\)/.test(APP) && /health\.wireDown/.test(APP) && /health\.ringQuotaHit/.test(APP), 'la scheda «Come sta l\'app» lo mostra');
+  });
+});
+
+/* ⚠️ v52 (17 set 2026). Due cose che il WebView non sa fare da solo e che
+   Chrome fa: la tendina «Condividi con…» (navigator.share non esiste nel
+   WebView: nell'APK «Manda l'invito» finiva sempre in «copiato», e chi non
+   sa cos'e' la clipboard restava fermo) e lo schermo protetto
+   (FLAG_SECURE: niente screenshot, anteprima nera nel multitasking), che
+   e' un interruttore SPENTO di partenza — acceso bloccherebbe anche lo
+   screenshot del QR che la gente manda. */
+test.describe('v52: condividere dalla tendina di Android, e lo schermo protetto', () => {
+  const CALLACT = read(J + 'CallActivity.java');
+
+  test('AndroidShare.text() esiste, è montato, e la pagina lo prova PRIMA di navigator.share', () => {
+    assert.ok(exposed(MAIN, 'ShareBridge', 'text'), 'AndroidShare.text() manca o non ha @JavascriptInterface');
+    assert.ok(/addJavascriptInterface\(new ShareBridge\(\), "AndroidShare"\)/.test(MAIN), 'il ponte va montato col nome che la pagina cerca');
+    assert.ok(/ACTION_SEND/.test(MAIN) && /createChooser/.test(MAIN), 'deve aprire la tendina di sistema, non un\'app scelta da noi');
+    const siti = APP.split('navigator.share(').length - 1;
+    const conPonte = APP.split('AndroidShare.text(').length - 1;
+    assert.ok(siti >= 6, 'i punti di condivisione sono almeno sei, oggi: ' + siti);
+    assert.strictEqual(conPonte, siti, 'OGNI punto che condivide deve provare prima il ponte Android: ' + conPonte + ' su ' + siti);
+    /* e nell'ordine giusto: il ponte viene letto prima di navigator.share in ognuno */
+    let pos = 0;
+    for (let i = 0; i < siti; i++){
+      const p = APP.indexOf('AndroidShare.text(', pos), n = APP.indexOf('navigator.share(', pos);
+      assert.ok(p > 0 && p < n, 'sito ' + (i+1) + ': il ponte deve venire PRIMA di navigator.share');
+      pos = n + 1;
+    }
+  });
+
+  test('AndroidScreen.setSecure()/isSecure() esistono, e il flag si applica in TUTTE E DUE le finestre', () => {
+    assert.ok(exposed(MAIN, 'ScreenBridge', 'setSecure'), 'AndroidScreen.setSecure() manca');
+    assert.ok(exposed(MAIN, 'ScreenBridge', 'isSecure'), 'AndroidScreen.isSecure() manca');
+    assert.ok(/addJavascriptInterface\(new ScreenBridge\(\), "AndroidScreen"\)/.test(MAIN));
+    assert.ok(/FLAG_SECURE/.test(MAIN), 'MainActivity deve applicare FLAG_SECURE');
+    /* CallActivity e' la schermata dello squillo sopra il blocco: mostra il
+       nome di chi chiama. Il flag vale per finestra, quindi anche li'. */
+    assert.ok(/applySecureScreen\(this\)/.test(CALLACT), 'la schermata dello squillo deve applicare lo stesso flag: vale per finestra, non per app');
+    assert.ok(/"secureScreen"/.test(MAIN), 'la scelta va letta dalle preferenze all\'avvio, prima che la pagina carichi');
+    assert.ok(/applySecureScreen\(this\)/.test(MAIN.slice(MAIN.indexOf('protected void onCreate'), MAIN.indexOf('setContentView'))),
+      'in MainActivity il flag va messo in onCreate, PRIMA di setContentView');
+  });
+
+  test('l\'interruttore nella pagina: esiste, parte SPENTO, e senza il ponte non si vede', () => {
+    assert.ok(/id="secureRow"/.test(HTML), 'manca la riga dell\'interruttore');
+    assert.ok(/'dvlogos-secure'/.test(APP), 'la scelta va ricordata');
+    assert.ok(/AndroidScreen\.setSecure\(/.test(APP), 'la pagina deve dirlo al telefono');
+    assert.ok(/if \(!window\.AndroidScreen\) \$\('secureRow'\)\.classList\.add\('hide'\)/.test(APP),
+      'nel browser (senza ponte) l\'interruttore non ha senso e non si mostra');
   });
 });

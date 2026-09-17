@@ -20,7 +20,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,6 +32,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.WindowInsets;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
@@ -78,6 +81,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
+        applySecureScreen(this);
         listenToAudioRoute();
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
@@ -230,6 +234,21 @@ public class MainActivity extends Activity {
            questo ponte la pagina non ha nessun modo di farlo: e' un'impostazione
            del telefono, non della pagina. */
         web.addJavascriptInterface(new CallBridge(), "AndroidCall");
+        /* v52 (17 set 2026). Due cose che Chrome fa da solo e il WebView no.
+           1) «Condividi con…»: nel WebView `navigator.share` non esiste, quindi
+              «Manda l'invito» finiva SEMPRE in «copiato» — e chi non sa cosa
+              sia la clipboard restava fermo davanti al telefono, mentre lo
+              stesso pulsante da Chrome apriva WhatsApp, l'email, Signal. La
+              pagina ora prova prima questo ponte, che apre la tendina di
+              sistema: la stessa di qualsiasi app, con le app dell'utente.
+           2) lo schermo protetto (FLAG_SECURE): niente screenshot, anteprima
+              nera nel multitasking. E' un interruttore nelle impostazioni,
+              SPENTO di partenza: acceso bloccherebbe anche lo screenshot del
+              QR dell'invito, che la gente usa per mandarlo. La scelta vive
+              nelle SharedPreferences perche' vada applicata all'avvio della
+              finestra, prima che la pagina sia caricata. */
+        web.addJavascriptInterface(new ShareBridge(), "AndroidShare");
+        web.addJavascriptInterface(new ScreenBridge(), "AndroidScreen");
 
         /* A frame around the WebView, so the insets have something to shrink
            that the page will actually feel. */
@@ -384,6 +403,56 @@ public class MainActivity extends Activity {
         "  }).catch(function(){});" +
         " }, true);" +
         "})();";
+
+    /* --- v52: lo schermo protetto, letto dalle preferenze prima della pagina --- */
+    static final String PREF_SECURE = "secureScreen";
+    static boolean secureScreenWanted(Context c) {
+        try {
+            return c.getSharedPreferences("dvlogos-app", MODE_PRIVATE).getBoolean(PREF_SECURE, false);
+        } catch (Exception e) { return false; }
+    }
+    /* Chiamata all'avvio di OGNI finestra dell'app (qui e in CallActivity): il
+       flag vale per finestra, non per app, e una finestra senza flag e' un
+       buco. */
+    static void applySecureScreen(Activity a) {
+        try {
+            if (secureScreenWanted(a)) a.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            else a.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        } catch (Exception e) { /* mai bloccare l'avvio per un flag */ }
+    }
+
+    public class ShareBridge {
+        /* La tendina di sistema «Condividi con…». Solo testo: il link
+           dell'invito, l'indirizzo, il testo «fai conoscere l'app». Nessun
+           destinatario scelto da noi: e' l'utente che sceglie l'app. */
+        @JavascriptInterface
+        public void text(String t) {
+            if (t == null || t.trim().isEmpty()) return;
+            final String testo = t;
+            runOnUiThread(() -> {
+                try {
+                    Intent send = new Intent(Intent.ACTION_SEND);
+                    send.setType("text/plain");
+                    send.putExtra(Intent.EXTRA_TEXT, testo);
+                    startActivity(Intent.createChooser(send, null));
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, testo, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public class ScreenBridge {
+        @JavascriptInterface
+        public void setSecure(boolean on) {
+            try {
+                getSharedPreferences("dvlogos-app", MODE_PRIVATE).edit().putBoolean(PREF_SECURE, on).apply();
+            } catch (Exception e) {}
+            runOnUiThread(() -> applySecureScreen(MainActivity.this));
+        }
+        @JavascriptInterface
+        public boolean isSecure() { return secureScreenWanted(MainActivity.this); }
+    }
 
     public class SaveBridge {
         @JavascriptInterface

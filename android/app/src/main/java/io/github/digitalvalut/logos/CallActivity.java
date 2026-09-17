@@ -57,6 +57,9 @@ public class CallActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
+        /* v52: lo schermo protetto vale per finestra; questa mostra il nome di
+           chi chiama sopra la schermata di blocco (preferenza "secureScreen") */
+        MainActivity.applySecureScreen(this);
         showOverLockScreen();
 
         Intent in = getIntent();
