@@ -56,6 +56,14 @@ più a voce, e il segreto lungo del link sigilla la busta. Il dettaglio è in
 - Il modello non misura probabilità: le tre parole hanno ≈25 bit, il codice
   a sei cifre 20; qui contano come «uguale/diverso».
 
+## Da dove cominciare, se siete un revisore
+
+`PER-IL-REVISORE.md`: ogni promessa di Logos con accanto il punto del codice,
+la lemma che la copre, il test che la sorveglia e come verificarla da soli —
+e i limiti dichiarati con la prova che sono limiti. È pensato per un
+pomeriggio di lavoro, e finisce con le cinque domande a cui vorremmo una
+risposta.
+
 ## Farli girare
 
 Su GitHub: **Actions → «prova formale» → Run workflow** (manuale, ~1 ora; i

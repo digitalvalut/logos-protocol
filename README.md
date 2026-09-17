@@ -184,7 +184,9 @@ GitHub Actions workflow to re-run them are in [`prova-formale/`](prova-formale/)
 address handshake is proven secret and authenticated against a relay adversary; the
 analysis also found the defects fixed in 4.38 (see the folder). The models were written
 by the project and have **not** been independently reviewed — that is the next step, and
-the reason they are published.
+the reason they are published. If you are that reviewer, start from
+[`prova-formale/PER-IL-REVISORE.md`](prova-formale/PER-IL-REVISORE.md): every promise
+Logos makes, mapped to the code, the lemma, the test, and how to check it yourself.
 
 ## License
 
