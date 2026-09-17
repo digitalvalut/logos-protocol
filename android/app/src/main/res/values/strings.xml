@@ -16,12 +16,12 @@
   <string name="answer">Answer</string>
   <string name="dismiss">Not now</string>
 
-  <string name="watchingTitle">Listening for calls</string>
-  <string name="watchingBody">No account and no push service — the phone waits by itself.</string>
+  <string name="watchingTitle">Ready to receive calls</string>
+  <string name="watchingBody">Logos is not listening to anything: it just waits for someone to call you. Tap to open.</string>
   <string name="watchingStop">Stop</string>
 
-  <string name="chWatching">Listening for calls</string>
-  <string name="chWatchingWhy">The quiet, permanent line saying the phone is still able to ring. It never makes a sound.</string>
+  <string name="chWatching">Ready to receive calls</string>
+  <string name="chWatchingWhy">The silent line that stays while “Let people reach you” is on: it means the phone can ring. It never makes a sound and records nothing.</string>
   <string name="chRinging">Incoming calls</string>
   <string name="chRingingWhy">Rings and shows the call on the lock screen.</string>
   <string name="callAudioTitle">Call in progress</string>

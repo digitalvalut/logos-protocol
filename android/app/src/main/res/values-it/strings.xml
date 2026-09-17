@@ -14,12 +14,12 @@
   <string name="answer">Rispondi</string>
   <string name="dismiss">Non ora</string>
 
-  <string name="watchingTitle">In ascolto delle chiamate</string>
-  <string name="watchingBody">Nessun account e nessun servizio push: il telefono aspetta da solo.</string>
+  <string name="watchingTitle">Pronto a ricevere chiamate</string>
+  <string name="watchingBody">Logos non ascolta niente: aspetta solo che qualcuno ti chiami. Tocca per aprire.</string>
   <string name="watchingStop">Ferma</string>
 
-  <string name="chWatching">In ascolto delle chiamate</string>
-  <string name="chWatchingWhy">La riga silenziosa e permanente che dice che il telefono può ancora squillare. Non fa mai alcun suono.</string>
+  <string name="chWatching">Pronto a ricevere chiamate</string>
+  <string name="chWatchingWhy">La riga silenziosa che resta finché «Fatti trovare» è acceso: dice che il telefono può squillare. Non fa mai alcun suono e non registra niente.</string>
   <string name="chRinging">Chiamate in arrivo</string>
   <string name="chRingingWhy">Squilla e mostra la chiamata sullo schermo bloccato.</string>
   <string name="callAudioTitle">Chiamata in corso</string>

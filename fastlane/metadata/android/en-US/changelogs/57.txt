@@ -1,0 +1,3 @@
+The permanent notification no longer sounds scary.
+
+It used to say "Listening for calls — no push service, the phone waits by itself", and more than one person read it as "it is listening to me". It now says "Ready to receive calls — Logos is not listening to anything: it just waits for someone to call you". Words only: the service is identical to v56.
