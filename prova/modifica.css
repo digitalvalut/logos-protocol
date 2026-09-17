@@ -301,9 +301,9 @@
   .bigchoice.book .d,.bigchoice.addr .d{color:rgba(255,255,255,.80)}
   .bigchoice.addr[aria-expanded="true"]{box-shadow:0 0 0 3px rgba(245,196,81,.7),0 16px 36px rgba(30,64,175,.42)}
   /* l'oro */
-  #btnHomeShare.btn.primary{background:linear-gradient(158deg,#ffe08a,#f5c451 50%,#d9a520);color:#2a1d02;
+  #btnHomeShare.btn.primary,#btnWelcomeGo.btn.primary{background:linear-gradient(158deg,#ffe08a,#f5c451 50%,#d9a520);color:#2a1d02;
     border-color:rgba(255,255,255,.18);box-shadow:0 12px 28px rgba(217,165,32,.38),inset 0 1px 0 rgba(255,255,255,.35)}
-  #btnHomeShare.btn.primary:hover{filter:brightness(1.04)}
+  #btnHomeShare.btn.primary:hover,#btnWelcomeGo.btn.primary:hover{filter:brightness(1.04)}
   #btnHomeShare.btn.primary .ic{color:#2a1d02}
   .homecard .addrbox{border-color:rgba(245,196,81,.35);color:#f5c451}
   .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
