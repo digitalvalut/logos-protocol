@@ -309,8 +309,8 @@
   .bigchoice.book .ic,.bigchoice.addr .ic{color:var(--accent);opacity:1}
   .bigchoice.book .d,.bigchoice.addr .d{color:var(--dim)}
   .bigchoice.addr[aria-expanded="true"]{border-color:var(--accent)}
-  .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-direction:column;align-items:center;
-    gap:0;color:var(--dim);font-size:0.8125rem}
+  .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
+    align-items:center;gap:0 14px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
   .smalllinks .otherways{color:var(--dim)}
   /* La tessera in prima pagina (tappa 2): l'indirizzo grande, «Manda il mio
