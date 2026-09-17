@@ -294,7 +294,7 @@
     font-weight:800;font-size:0.8125rem;vertical-align:middle}
   .bigchoice[aria-expanded="true"]{border-color:var(--accent2)}
   .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
-    align-items:center;gap:4px 8px;color:var(--dim);font-size:0.8125rem}
+    align-items:center;gap:0 14px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
   .smalllinks .otherways{color:var(--dim)}
   /* La tessera in prima pagina (tappa 2): l'indirizzo grande, «Manda il mio
