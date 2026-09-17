@@ -284,15 +284,25 @@
   .bigchoice.enter .ic{color:#08142e;opacity:.9}
   .bigchoice.enter .d{color:rgba(8,20,46,.72)}
 
-  .bigchoice:not(.primary):not(.enter):hover{border-color:var(--dim)}
-  /* «Rubrica»: il terzo pulsantone, neutro apposta — non e' un'azione verso
-     fuori come gli altri due, e' il posto dove si torna. Il numero dice
-     quante persone ci sono senza aprirla. */
-  .bigchoice.book .ic{color:var(--accent2)}
-  .bigchoice .count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;
-    padding:0 7px;margin-right:8px;border-radius:11px;background:var(--accent);color:var(--accent-ink);
-    font-weight:800;font-size:0.8125rem;vertical-align:middle}
-  .bigchoice[aria-expanded="true"]{border-color:var(--accent2)}
+  .bigchoice:not(.primary):not(.enter):not(.book):not(.addr):hover{border-color:var(--dim)}
+  /* I due pulsantoni (tappa 2, 17 set 2026): due tinte piene e moderne, le
+     stesse che usano le app piu' diffuse — indaco/viola per «chiama chi
+     conosci», verde acqua/smeraldo per «chiama un indirizzo». L'arancione
+     resta a UNA cosa sola, «Manda il mio indirizzo». Testo bianco, ombra
+     colorata sotto: sembra un tasto, si preme come un tasto. */
+  .bigchoice.book{background:linear-gradient(158deg,#7c8cff,#5b5bd6 52%,#4338ca);
+    border-color:rgba(255,255,255,.14);color:#fff;
+    box-shadow:0 16px 36px rgba(79,70,229,.38),inset 0 1px 0 rgba(255,255,255,.28)}
+  .bigchoice.book:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(79,70,229,.46),inset 0 1px 0 rgba(255,255,255,.30)}
+  .bigchoice.book .ic{color:#fff;opacity:.92}
+  .bigchoice.book .d{color:rgba(255,255,255,.82)}
+  .bigchoice.addr{background:linear-gradient(158deg,#5eead4,#14b8a6 52%,#0f766e);
+    border-color:rgba(255,255,255,.14);color:#062a26;
+    box-shadow:0 16px 36px rgba(20,184,166,.34),inset 0 1px 0 rgba(255,255,255,.30)}
+  .bigchoice.addr:hover{filter:brightness(1.04);box-shadow:0 20px 44px rgba(20,184,166,.42),inset 0 1px 0 rgba(255,255,255,.32)}
+  .bigchoice.addr .ic{color:#062a26;opacity:.9}
+  .bigchoice.addr .d{color:rgba(6,42,38,.76)}
+  .bigchoice.addr[aria-expanded="true"]{box-shadow:0 0 0 3px rgba(94,234,212,.55),0 16px 36px rgba(20,184,166,.34)}
   .smalllinks{margin:14px 0 0;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;
     align-items:center;gap:0 14px;color:var(--dim);font-size:0.8125rem}
   .smalllinks .linkbtn{min-height:44px;display:inline-flex;align-items:center}
