@@ -1,0 +1,3 @@
+Un interruttore solo per farsi trovare, e le impostazioni più semplici.
+
+«Fatti trovare» prende il posto di due interruttori («Fai squillare il telefono» e «Mandami solo un avviso silenzioso») e dice la verità per il dispositivo che hai in mano: nell'app Android il telefono squilla anche ad app chiusa; in un browser ricevi un avviso da toccare; su iPhone ti dice come mettere Logos sulla schermata Home. Le impostazioni mostrano solo ciò che serve a tutti — lingua, nome, indirizzo, fatti trovare — e il resto sta dentro «Altro». Via il numero sul pulsante Rubrica. Chiamate, inviti e campanello sono gli stessi della v53.

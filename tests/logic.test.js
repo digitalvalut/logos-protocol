@@ -337,13 +337,16 @@ test.describe('what the audit found', () => {
     await app.run('new Promise(r => setTimeout(r, 20))');
     app.run(`
       setAddrOn(true);
+      pushSupported = () => true;               /* un browser con le notifiche */
       window.enableNotifications = async function(){ return true; };
       window.__published = 0;
       window.publishAddress = async function(){ window.__published++; return true; };
+      listenMode = false;
     `);
     /* invoked directly rather than through .click(), so the real promise the
-       listener returns can be awaited from the Node side instead of racing it */
-    await app.run(`$('notifyRow').listeners.click[0]()`);
+       listener returns can be awaited from the Node side instead of racing it.
+       Dal 17 set 2026 l'avviso lo accende «Fatti trovare» (listenRow). */
+    await app.run(`$('listenRow').listeners.click[0]()`);
     assert.ok(app.run('window.__published') >= 1,
       'the address must be republished once a subscription actually exists');
     app.stop();
@@ -4859,7 +4862,7 @@ test.describe('la prima volta in assoluto (4.25)', () => {
     app.stop();
   });
 
-  test('col blocco chiuso il contatore della rubrica e lo stato si leggono lo stesso', () => {
+  test('col blocco chiuso la rubrica e lo stato si leggono lo stesso', () => {
     /* ⚠️ IL CONTROLLO CHE PROTEGGE LA COSA PIU FACILE DA ROMPERE QUI.
        In `addrDialStatus` finiscono «Ha rifiutato la chiamata», «Non ha
        risposto», «Questo indirizzo non e' scritto bene». Se fosse rimasta
@@ -4872,8 +4875,7 @@ test.describe('la prima volta in assoluto (4.25)', () => {
     app.run("saveContacts([]); touchContact('Antonella','fp-a',null,'DV-AAAA-BBBB-CCCC');");
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true,
       'il blocco e\' chiuso, come deve');
-    assert.strictEqual(app.run("$('contactsCount').textContent"), '1',
-      'il pulsantone «Rubrica» dice quante persone ci sono, anche col blocco chiuso');
+    assert.strictEqual(app.run("loadContacts().length"), 1, 'la persona e\' in rubrica');
     app.run("setStatus($('addrDialStatus'), 'Ha rifiutato la chiamata.', 'warn');");
     assert.strictEqual(app.run("$('addrDialStatus').classList.contains('hide')"), false,
       'la risposta a una chiamata appena tentata non deve finire dentro qualcosa di chiuso');
@@ -7655,12 +7657,12 @@ test.describe('v52: condividere passa dal ponte Android quando c\'e\', e lo sche
 test.describe('4.45: la rubrica in una schermata sua', () => {
   const attendi = ms => new Promise(r => setTimeout(r, ms));
 
-  test('il pulsantone «Rubrica» apre la schermata, con il numero delle persone sopra', () => {
+  test('il pulsantone «Rubrica» apre la schermata (senza numeri sopra)', () => {
     const app = loadApp();
     app.run("saveContacts([]); renderContacts();");
-    assert.strictEqual(app.run("$('contactsCount').classList.contains('hide')"), true, 'senza nessuno, niente numero');
     app.run("touchContact('Anna','fp-1',null,'DV-AAAA-BBBB-CCCC'); touchContact('Bruno','fp-2',null,null);");
-    assert.strictEqual(app.run("$('contactsCount').textContent"), '2');
+    const html = fs.readFileSync(path.join(__dirname, '..', 'modifica.html'), 'utf8');
+    assert.doesNotMatch(html, /contactsCount/, 'niente numero sul pulsantone (tolto il 17 set: «deve sparire»)');
     app.run("$('goContacts').listeners.click[0]();");
     assert.strictEqual(app.run("$('screenContacts').classList.contains('hide')"), false, 'la schermata si apre');
     assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), true);
@@ -7721,5 +7723,74 @@ test.describe('4.45: la rubrica in una schermata sua', () => {
     assert.doesNotMatch(src, /easyPref|applyEasy|easyHintBar|'dvlogos-easy'/, 'resta solo «Dillo ad alta voce»');
     assert.doesNotMatch(src, /"easy\.title"|"easyhint\./);
     assert.match(src, /"easy\.voiceTitle"/, 'la voce resta: non ingombra e serve a chi non vede bene');
+  });
+});
+
+
+/* 4.46 (17 set 2026, «tappa 1»): un interruttore solo, «Fatti trovare», con la
+   frase giusta per il dispositivo; via «Mandami solo un avviso silenzioso»;
+   «Altro» nelle impostazioni con usa-e-getta, bloccati, voce, schermo. */
+test.describe('4.46: «Fatti trovare» e\' un interruttore solo, e dice la verita\' per dispositivo', () => {
+  test('nel browser con le notifiche: accenderlo accende anche l\'avviso; spegnerlo lo spegne', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 20))');
+    app.run(`pushSupported = () => true; window.__on = 0; window.__off = 0;
+             window.enableNotifications = async () => { window.__on++; return true; };
+             window.disableNotifications = () => { window.__off++; };
+             listenMode = false; paintListenMode(false);`);
+    await app.run("$('listenRow').listeners.click[0]()");
+    assert.strictEqual(app.run('listenMode'), true);
+    assert.strictEqual(app.run('window.__on'), 1, 'un solo interruttore: l\'avviso si accende con lui');
+    await app.run("$('listenRow').listeners.click[0]()");
+    assert.strictEqual(app.run('window.__off'), 1, 'e si spegne con lui');
+    app.stop();
+  });
+
+  test('nel browser SENZA notifiche: l\'interruttore funziona come prima e non tocca il push', async () => {
+    const app = loadApp();
+    await app.run('new Promise(r => setTimeout(r, 20))');
+    app.run(`pushSupported = () => false; window.__on = 0;
+             window.enableNotifications = async () => { window.__on++; return true; };
+             listenMode = false; paintListenMode(false);`);
+    await app.run("$('listenRow').listeners.click[0]()");
+    assert.strictEqual(app.run('listenMode'), true);
+    assert.strictEqual(app.run('window.__on'), 0);
+    app.stop();
+  });
+
+  test('la frase sotto e\' quella del dispositivo: app Android, browser con avvisi, iPhone in Safari, il resto', () => {
+    const casi = [
+      [{ }, 'listen.sub', 'un browser qualunque senza push'],
+    ];
+    for (const [g, chiave, perche] of casi){
+      const app = loadApp({ globals: g });
+      assert.strictEqual(app.run("$('listenSub').getAttribute('data-i18n')"), chiave, perche);
+      app.stop();
+    }
+    /* con il ponte Android */
+    const apk = loadApp({ globals: { AndroidRing: { available: () => true, activity(){}, watch(){ return true; }, stop(){}, canTakeOverLockScreen: () => true, askForLockScreen(){}, wireStatus: () => '{}' } } });
+    assert.strictEqual(apk.run("$('listenSub').getAttribute('data-i18n')"), 'listen.subApp', 'nell\'app Android: squilla ad app chiusa');
+    apk.stop();
+    /* le quattro frasi esistono in tutte le lingue: lo controlla checks; qui
+       che siano quattro frasi DIVERSE, o il bivio non serve a niente */
+    const web = loadApp();
+    const frasi = ['listen.sub','listen.subApp','listen.subPush','listen.subIos'].map(k => web.run(`t('${k}')`));
+    assert.strictEqual(new Set(frasi).size, 4);
+    web.stop();
+  });
+
+  test('del secondo interruttore («avviso silenzioso») non resta traccia nella pagina', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'modifica.html'), 'utf8');
+    assert.doesNotMatch(html, /id="notifyRow"|id="notifyCard"/);
+    assert.match(html, /id="listenSub"/);
+    /* e «Altro» tiene dentro le cose da smanettoni */
+    const altro = html.slice(html.indexOf('<details class="advbox">'), html.indexOf('</details>'));
+    for (const id of ['burnersCard', 'blockedWrap', 'accessCard', 'autocleanCard', 'healthCard', 'installCard']){
+      assert.ok(altro.includes('id="' + id + '"'), '#' + id + ' deve stare dentro «Altro»');
+    }
+    const sopra = html.slice(html.indexOf('<section id="screenSettings"'), html.indexOf('<details class="advbox">'));
+    for (const id of ['nickInput', 'addrCard', 'listenRow', 'langSel']){
+      assert.ok(sopra.includes('id="' + id + '"'), '#' + id + ' deve stare SOPRA «Altro»: serve a tutti');
+    }
   });
 });

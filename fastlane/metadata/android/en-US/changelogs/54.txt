@@ -1,0 +1,3 @@
+One switch to be reachable, and simpler settings.
+
+"Let people reach you" replaces two switches ("Ring my phone" and "Just send me a silent alert") and tells the truth for the device in your hand: in the Android app the phone rings even with the app closed; in a browser you get an alert to tap; on iPhone it tells you how to put Logos on the Home Screen. Settings show only what everyone needs — language, name, address, reachability — and the rest sits under "More". The number on the Contacts button is gone. Calls, invites and the ringer are the same as v53.
