@@ -68,6 +68,23 @@ risposta.
 (Common Criteria) — requisito per requisito, con i «no» scritti per esteso.
 Non è una certificazione: è la mappa di quanto manca per una.
 
+## Gli altri controlli (18 settembre 2026)
+
+Oltre ai modelli, il progetto passa da questi strumenti — tutti gratuiti, tutti
+rieseguibili, nessuno che tocchi il codice dell'app. Per ogni esito c'è scritto
+cosa vuol dire, compreso ciò che è basso e perché.
+
+| controllo | cosa guarda | esito | note oneste |
+|---|---|---|---|
+| **Verifpal** 1.4.12 (`verifpal/`) | terzo motore formale sul rito dell'indirizzo, esito confrontato riga per riga con l'atteso | 2 dimostrate, 2 «deve fallire» (A non è autenticato: chiunque può chiamare un indirizzo) | la prima stesura senza `kind` ha ritrovato da sola la riflessione trovata da Tamarin il 14 set e chiusa nella 4.38 |
+| **ProVerif** — lettere e ripresa | i due riti che erano «fuori dal modello» | lettere: segrete (L1), niente segretezza in avanti dopo la rivelazione (L2, dichiarato); ripresa: offerta segreta (D1), nessuno fa ripartire una chiamata altrui (D2, iniettiva) | — |
+| **CodeQL** (GitHub) | analisi statica di JavaScript, Java, Python, workflow | 0 avvisi aperti | 13 al primo giro (16 set): 4 sui permessi dei workflow corretti, 9 chiusi con motivazione scritta (falsi positivi e codice dei test) |
+| **Android Lint** (`android-lint.yml`) | l'involucro Android | 0 errori, 17 avvisi | il primo giro (18 set) ha trovato **due chiusure improvvise su Android 5–8** (funzioni che esistono solo da API 28 e 23), corrette nella v58 |
+| **MobSF** 4.5 | l'APK pubblicato (v57), analisi statica completa | punteggio 46/100; 0 tracker; 2 «alte», 5 «avvisi» | le 2 alte: *minSdk 21* (scelta: Logos deve girare anche su telefoni vecchi; si dichiara) e *WebView debugging*: **falso positivo**, la chiamata è protetta da `FLAG_DEBUGGABLE` e in un pacchetto pubblicato è spenta. Gli avvisi: firma v1 (ma c'è anche v2+v3: non vale), `BootReceiver` esportato (necessario per `BOOT_COMPLETED`, che solo il sistema può mandare, e il codice controlla l'azione), memoria esterna (solo ≤ Android 9, per un file scelto dall'utente), JavaScript nel WebView (è un'app web: la pagina è impacchettata e la CSP vieta tutto il resto), SHA-1 (è la stretta di mano WebSocket dell'RFC 6455, non un uso crittografico) |
+| **OpenSSF Scorecard** (`scorecard.yml`) | igiene del repository | **5,7 / 10** | 10/10: permessi dei workflow, azioni fissate al commit, politica di sicurezza, Dependabot, vulnerabilità, licenza. 0/10 *per costruzione*: revisione a due persone, protezione del ramo con secondo approvatore, contributori aziendali — c'è una persona sola. 0 anche: fuzzing esterno (il nostro è scritto a mano nella suite), badge OpenSSF (in corso), firma dei rilasci con provenienza (da fare) |
+| **CSP** della pagina | la politica che vieta codice esterno | `default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'`, niente `unsafe-inline`, niente `unsafe-eval` | viaggia in un `<meta>` perché GitHub Pages non permette intestazioni: quindi niente `frame-ancestors` né `report-uri` (limite della piattaforma, dichiarato) |
+| **HTTP Observatory** (MDN) | intestazioni del server | non misurabile per l'app (GitHub Pages non permette intestazioni); il sito vetrina `digitalvalut-logos.org` prende **D-** (25/100) | il sito vetrina non è in questo repository; le intestazioni si aggiungono dalla console Cloudflare, gratis |
+
 ## Farli girare
 
 Su GitHub: **Actions → «prova formale» → Run workflow** (manuale, ~1 ora; i
