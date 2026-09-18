@@ -277,23 +277,37 @@
       <div class="helptext mt10" data-i18n="welcome.why">Il nome lo vede solo chi chiami. Poi hai subito il tuo indirizzo da mandare a chi vuoi.</div>
       <button class="btn primary big mt12" id="btnWelcomeGo" data-i18n="welcome.go">Inizia</button>
     </div>
-    <div class="card homecard hide" id="homeCard">
-      <div class="fieldlabel" data-i18n="home.cardTitle">Il tuo indirizzo</div>
-      <div class="addrbox" id="homeAddr">DV-····-····-····</div>
-      <div class="qrbox hide" id="homeQr">
-        <canvas id="homeQrCanvas" aria-label="Codice QR del tuo indirizzo"></canvas>
-        <div class="qrhint" data-i18n="addr.qrHint">Chi lo inquadra ti chiama direttamente</div>
-      </div>
-      <div class="toolsrow" id="homeAddrTools">
-        <button class="btn primary" id="btnHomeShare"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5"/><path d="M21 3 14.5 21l-4-7.5L3 9.5z"/></svg></span><span data-i18n="home.cardShare">Manda il mio indirizzo</span></button>
-        <button class="btn" id="btnHomeQr"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM18 14h3M14 18v3"/></svg></span><span data-i18n="home.cardQr">QR</span></button>
-      </div>
-      <div class="hide" id="homeAddrOff">
-        <div class="helptext" data-i18n="home.cardOff">Il tuo indirizzo è spento: nessuno può chiamarti. Lo accendi qui, o dalle impostazioni.</div>
-        <button class="btn mt10" id="btnHomeAddrOn" data-i18n="home.cardOn">Accendi il mio indirizzo</button>
-      </div>
-    </div>
     <div class="status" id="addrDialStatus"></div>
+
+    <!-- ⚠️ LA GRIGLIA, 18 set 2026 («la gente decide in mezzo secondo»).
+         Quattro riquadri uguali di forma, diversi di colore, un verbo ciascuno,
+         e NIENT'ALTRO sulla prima pagina: l'indirizzo scritto, il QR, le
+         impostazioni stanno nella seconda. Stessa luminosita' e intensita'
+         per i quattro colori — una famiglia con quattro porte, non quattro
+         cose — e l'arancione del marchio sull'azione principale.
+         Sotto la griglia, una riga piccola per il caso raro: un indirizzo
+         scritto su un foglietto (di solito arriva come link e si apre da solo). -->
+    <div class="tiles">
+      <button class="tile t-mine" id="btnHomeShare">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M28 4 14 18"/><path d="M28 4 19.5 28l-5.5-10L4 12.5z"/></svg></span>
+        <span class="t" data-i18n="home.cardShare">Manda il mio indirizzo</span>
+      </button>
+      <button class="tile t-people" id="goContacts">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11" r="4.5"/><path d="M4 26c1.5-5 4.5-7.5 8-7.5s6.5 2.5 8 7.5"/><circle cx="23" cy="12" r="3.5"/><path d="M22 18.5c3 .3 5.3 2.4 6.5 6"/></svg></span>
+        <span class="t" data-i18n="home.bigBook">Chiama chi conosci</span>
+      </button>
+      <button class="tile t-burner" id="btnBurnerQuick">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c3 4 7 6.5 7 12a7 7 0 0 1-14 0c0-3 1.5-5 3-6.5.5 2 1.5 3 3 3.5-1-3 0-6.5 1-9z"/><path d="M8 27h16"/></svg></span>
+        <span class="t" data-i18n="home.tileBurner">Indirizzo usa e getta</span>
+      </button>
+      <button class="tile t-grow" id="btnShareApp">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13v6l14 5V8z"/><path d="M20 11.5a6 6 0 0 1 0 9"/><path d="M8 19v5.5a1.5 1.5 0 0 0 1.5 1.5H12l1.5-6"/></svg></span>
+        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app</span>
+      </button>
+    </div>
+    <div class="smalllinks">
+      <button class="btn ghost linkbtn" id="showAddrDial" aria-expanded="false" data-i18n="home.addrLine">Ti hanno dato un indirizzo scritto? Scrivilo qui</button>
+    </div>
 
     <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026. Prima era nascosto solo a chi
          era appena arrivato (l'operatore: «mi trovo davanti "hai l'indirizzo
@@ -317,39 +331,6 @@
          phone, at a size and weight nobody chose, and two of them side by side
          never look like they belong to the same app. These are the same stroke
          weight and the same size wherever they land. -->
-    <!-- ⚠️ RIFATTA IL 17 SET 2026 su richiesta dell'operatore: «solo i
-         pulsantoni, la rubrica in una schermata sua, e via la modalita'
-         semplice». Tre verbi, uno per pulsante: creare un invito, chiamare un
-         indirizzo che ti hanno dato, riaprire la rubrica. «Ho un codice» non
-         e' piu' un pulsantone: dalla 4.39 non c'e' nessun codice da scrivere,
-         il link si apre da solo — resta una riga piccola in fondo per il caso
-         raro in cui il link non si apre in Logos (vedi #goJoin). -->
-    <div class="bigchoices">
-      <button class="bigchoice book" id="goContacts">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
-               stroke-linecap="round" stroke-linejoin="round">
-            <rect x="7" y="4" width="18" height="24" rx="3"/>
-            <path d="M4 10h3M4 16h3M4 22h3"/>
-            <circle cx="16" cy="13" r="3"/>
-            <path d="M11 22c1-3 3-4 5-4s4 1 5 4"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="home.bigBook">Rubrica</span>
-        <span class="d" data-i18n="home.bigBookD">Le persone con cui hai parlato</span>
-      </button>
-      <button class="bigchoice addr" id="showAddrDial" aria-expanded="false">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 14a7 7 0 1 1 14 0c0 5.5-7 12-7 12s-7-6.5-7-12z"/>
-            <circle cx="16" cy="14" r="2.6"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="home.bigAddr">Chiama un indirizzo</span>
-        <span class="d" data-i18n="home.bigAddrD">Te l'hanno dato? Scrivilo o incollalo qui</span>
-      </button>
-    </div>
 
     <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026: si apre con un tocco sul
          pulsantone qui sopra. Chi ha un indirizzo scritto su un foglio lo
@@ -365,34 +346,7 @@
          Logos (il telefono l'ha aperto nel browser, o e' arrivato sul PC).
          Una riga piccola, non un pulsantone: chi ne ha bisogno la trova, chi
          non ne ha bisogno non la vede nemmeno. -->
-    <div class="smalllinks">
-      <span class="otherways" data-i18n="home.otherWays">Altri modi:</span>
-      <button class="btn ghost linkbtn" id="goStart" data-i18n="home.inviteLink">invito usa e getta</button>
-      <button class="btn ghost linkbtn" id="goJoin" data-i18n="home.joinLink">incolla un link ricevuto</button>
-    </div>
 
-    <!-- ⚠️ RIMESSO IN PRIMA PAGINA IL 6 SET 2026 su richiesta dell'operatore
-         («è un tasto importante»), dopo che nella 4.22 l'avevo spostato dietro
-         la rotellina. Orizzontale e non un terzo pulsantone: icona piccola a
-         sinistra, testo accanto, tutta larghezza per essere un bersaglio vero.
-         Verde come le altre cose che «passano avanti qualcosa», sotto i due
-         grandi perché resta un gradino sotto «Parla con qualcuno». -->
-    <div class="sharerow">
-      <button class="sharebtn" id="btnShareApp">
-        <span class="ic" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-               stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5.5" r="2.8"/><circle cx="6" cy="12" r="2.8"/><circle cx="18" cy="18.5" r="2.8"/>
-            <path d="M8.5 10.6 15.5 6.9M8.5 13.4l7 3.7"/>
-          </svg>
-        </span>
-        <span class="t" data-i18n="home.shareApp">Fai conoscere l'app a qualcuno</span>
-        <span class="go" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-               stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-        </span>
-      </button>
-    </div>
 
     <!-- Quiet on purpose, and placed after the two real choices rather than
          between them: the same strip used for every other
@@ -535,6 +489,13 @@
          qui dentro, chiuso: chi smanetta lo apre, gli altri non lo vedono. -->
     <details class="advbox">
       <summary data-i18n="set.grpAdv">Altro</summary>
+    <div class="card" id="otherWaysCard">
+      <label class="fieldlabel" data-i18n="home.otherWays">Altri modi</label>
+      <div class="smalllinks left">
+        <button class="btn ghost linkbtn" id="goStart" data-i18n="home.inviteLink">Invito a scadenza, senza dare nessun indirizzo</button>
+        <button class="btn ghost linkbtn" id="goJoin" data-i18n="home.joinLink">Ti hanno mandato un link che non si apre? Incollalo qui</button>
+      </div>
+    </div>
     <div class="card" id="burnersCard">
       <!-- The ones meant to be thrown away. An address given to a stranger is a
            stranger who can reach you forever unless you can take it back. -->
