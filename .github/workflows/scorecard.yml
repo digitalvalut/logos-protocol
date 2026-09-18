@@ -1,0 +1,39 @@
+# OpenSSF Scorecard: un voto pubblico sull'igiene del repository (firme,
+# permessi dei workflow, dipendenze, canale per le segnalazioni, revisione del
+# codice…). Aggiunto il 18 set 2026. ⚠️ Alcune voci resteranno basse PER
+# COSTRUZIONE: c'e' una persona sola, quindi niente «revisione a due» ne'
+# protezione del ramo che richieda un secondo approvatore. Si dice, non si
+# trucca. I risultati vanno nella scheda Security → Code scanning.
+name: scorecard
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ossf/scorecard-action@v2.4.0
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scorecard
+          path: results.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
