@@ -21,19 +21,19 @@ B -> A: [pubB]
 
 principal A[
     knows public info
-    generates sdpA, e, rid, nA
-    E = PUBKEY(e)
-    // k = HKDF(ECDH(e, pubB), salt, 'logos-addr-v2'); busta(k, {sdpA, rid}) + E
-    kA = HKDF(nil, DH_KEX(pubB, e), info)
+    generates sdpA, ea, rid, nA
+    gea = PUBKEY(ea)
+    // k = HKDF(ECDH(e, pubB), salt, 'logos-addr-v2'); busta(k, {sdpA, rid}) + gea
+    kA = HKDF(nil, DH_KEX(pubB, ea), info)
     offerta = AEAD_ENC(kA, nA, CONCAT(sdpA, rid), nil)
 ]
 
-A -> B: E, nA, offerta
+A -> B: gea, nA, offerta
 
 principal B[
     knows public info
     generates sdpB, nB
-    kB = HKDF(nil, DH_KEX(E, privB), info)
+    kB = HKDF(nil, DH_KEX(gea, privB), info)
     apertaA = AEAD_DEC(kB, nA, offerta, nil)?
     // B risponde nella casella addr-answer-<rid>, sotto la stessa k
     risposta = AEAD_ENC(kB, nB, sdpB, nil)
