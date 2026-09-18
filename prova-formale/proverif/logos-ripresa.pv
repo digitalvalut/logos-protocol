@@ -1,0 +1,46 @@
+(* Logos - rito D: la RIPRESA di una chiamata caduta (PROTOCOLLO.md §5), in
+   ProVerif. 18 set 2026. Durante la chiamata, dentro DTLS (canale privato
+   qui), i due si scambiano un nonce ciascuno. Se ICE cade, caselle e chiave
+   nascono da pairSecrets('logos-repair-v1:' + impronte + nonce + round):
+   HKDF di una stringa che l avversario non conosce.
+
+   Domande:
+     D1  la nuova offerta resta segreta verso il relay          -> attesa: true
+     D2  un avversario non puo far ripartire una chiamata altrui:
+         se B accetta una ripresa, l ha mandata A in questa sessione (inj) -> attesa: true *)
+
+fun h(bitstring, bitstring): bitstring.       (* HKDF(base, round): la chiave della ripresa *)
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+fun pair(bitstring, bitstring): bitstring [data].
+
+free c: channel.
+free dtls: channel [private].                 (* il canale dati della chiamata: DTLS, assunto sicuro (§7) *)
+const round: bitstring.
+
+event AManda(bitstring, bitstring).
+event BAccetta(bitstring, bitstring).
+
+query attacker(new offerR).
+query nb: bitstring, o: bitstring; event(BAccetta(nb, o)) ==> inj-event(AManda(nb, o)).
+
+let latoA =
+  new nA: bitstring;
+  out(dtls, nA);
+  in(dtls, nB: bitstring);
+  let k = h(pair(nA, nB), round) in
+  new offerR: bitstring;
+  event AManda(nB, offerR);
+  out(c, senc(offerR, k)).
+
+let latoB =
+  in(dtls, nA: bitstring);
+  new nB: bitstring;
+  out(dtls, nB);
+  let k = h(pair(nA, nB), round) in
+  in(c, e: bitstring);
+  let o = sdec(e, k) in
+  event BAccetta(nB, o).
+
+process
+  ( (!latoA) | (!latoB) )

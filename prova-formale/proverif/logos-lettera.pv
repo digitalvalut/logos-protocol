@@ -1,0 +1,51 @@
+(* Logos - le LETTERE (PROTOCOLLO.md §7, ultimo punto), in ProVerif. 18 set 2026.
+   Una lettera per un telefono spento: stesso sigillo del rito B (ECIES verso la
+   chiave pubblica dell indirizzo, chiave effimera di chi scrive, HKDF), messa in
+   /letter/<box>/<rand> con vita 7 giorni e gettone. Il relay la conserva
+   sigillata. Chi scrive NON e autenticato (chiunque puo scrivere a un indirizzo,
+   come chiunque puo chiamarlo).
+
+   Domande:
+     L1  il testo della lettera resta segreto verso chi non ha priv_B,
+         anche se controlla il relay e conosce l indirizzo   -> attesa: true
+     L2  NON segretezza in avanti: rivelata priv_B, le lettere del passato si
+         aprono                                               -> attesa: FALSE (dichiarato) *)
+
+type skey.
+type pkey.
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m: bitstring, s: skey; adec(aenc(m, pk(s)), s) = m.
+fun senc(bitstring, bitstring): bitstring.
+reduc forall m: bitstring, k: bitstring; sdec(senc(m, k), k) = m.
+fun addr(pkey, bitstring): bitstring.
+
+const zero: bitstring.
+free c: channel.
+
+event Scrive(pkey, bitstring).
+event Legge(pkey, bitstring).
+
+(* L1: il testo non arriva all avversario finche priv_B e segreta *)
+query attacker(new testo) phase 0.
+(* L2: dopo la rivelazione di priv_B (fase 1) il testo del passato si apre:
+   attesa FALSE. Se un giorno diventa true, il rito e cambiato. *)
+query attacker(new testo) phase 1.
+
+let scrivente(pubB: pkey) =
+  new k: bitstring; new testo: bitstring;
+  event Scrive(pubB, testo);
+  out(c, (aenc(k, pubB), senc(testo, k))).
+
+let lettore(sB: skey) =
+  in(c, (ek: bitstring, et: bitstring));
+  let k = adec(ek, sB) in
+  let t = sdec(et, k) in
+  event Legge(pk(sB), t).
+
+process
+  new sB: skey;
+  let pubB = pk(sB) in
+  out(c, pubB); out(c, addr(pubB, zero));
+  ( (!scrivente(pubB)) | (!lettore(sB)) | (phase 1; out(c, sB)) )
