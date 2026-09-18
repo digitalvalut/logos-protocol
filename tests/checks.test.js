@@ -164,22 +164,16 @@ test('la prima pagina non si riprende la rubrica lunga: vive nella sua schermata
   assert.deepStrictEqual(guai, [], guai.join(' | '));
 });
 
-test('«fai conoscere l\'app» sta in prima pagina, ma NON come terzo pulsantone', () => {
-  /* ⚠️ Rimesso in home il 6 set 2026 su richiesta esplicita dell'operatore
-     («è un tasto importante») dopo che la 4.22 l'aveva spostato dietro la
-     rotellina. La parte che questo controllo protegge non e' che ci sia — e'
-     che non torni a essere un pulsantone: `.sharebtn` e' orizzontale e basso,
-     `.bigchoice` e' il blocco alto e pieno. Rimetterlo in quella classe
-     significherebbe tre blocchi pieni in fila e nessuna gerarchia. */
-  assert.match(SEZIONI.screenHome, /id="btnShareApp"/,
-    'il pulsante per far conoscere l\'app deve stare in prima pagina');
-  assert.doesNotMatch(SEZIONI.screenSettings, /id="btnShareApp"/,
-    'e in un posto solo: due copie dello stesso id romperebbero il controllo sui duplicati');
+test('«fai conoscere l\'app» e\' uno dei QUATTRO riquadri della griglia, e in un posto solo', () => {
+  /* Storia: 6 set 2026, rimesso in home come pulsante basso («e' un tasto
+     importante»); 18 set 2026, l'operatore ha voluto la griglia a quattro:
+     manda il mio indirizzo, chiama chi conosci, indirizzo usa e getta, fai
+     conoscere l'app — uguali di forma, diversi di colore. Quindi ora E' un
+     riquadro come gli altri tre, e questo controllo cambia verso. */
+  assert.match(SEZIONI.screenHome, /id="btnShareApp"/, 'deve stare in prima pagina');
+  assert.doesNotMatch(SEZIONI.screenSettings, /id="btnShareApp"/, 'e in un posto solo');
   const riga = SEZIONI.screenHome.match(/<button[^>]*id="btnShareApp"[^>]*>/)[0];
-  assert.match(riga, /class="sharebtn"/,
-    'deve restare il pulsante orizzontale basso');
-  assert.doesNotMatch(riga, /bigchoice/,
-    'non deve tornare un terzo pulsantone: sotto i due grandi, non accanto a loro');
+  assert.match(riga, /class="tile t-grow"/, 'e\' il riquadro verde della griglia');
 });
 
 /* ------------------------------------------- la copia di prova -- */
@@ -321,32 +315,27 @@ test('la riga di stato e i pulsantoni stanno FUORI dal blocco dell\'indirizzo ch
 });
 
 test('quello che serve per raggiungere qualcuno sta in prima pagina, e nell\'ordine giusto', () => {
-  /* L'ordine nel documento E' l'ordine sullo schermo: le nove regole `order:`
-     che rimescolavano questa pagina sono state tolte apposta, perche' chi legge
-     il codice e chi usa l'app devono vedere la stessa pagina. */
-  /* 4.47 (17 set 2026, «tappa 2»): la prima pagina e' un telefono. In alto
-     la TESSERA (o la domanda del nome, la prima volta), poi DUE pulsantoni —
-     «Rubrica», «Chiama un indirizzo» — poi il campo che il secondo apre, poi
-     le righe piccole: l'invito usa e getta, «un invito che non si apre»,
-     «fai conoscere l'app». «Parla con qualcuno» NON e' piu' un pulsantone:
-     il tuo indirizzo E' l'invito. */
-  const ATTESI = ['lettersCard', 'welcomeCard', 'homeCard', 'btnHomeShare', 'addrDialStatus',
-                  'goContacts', 'showAddrDial', 'addrDialIn', 'goStart', 'goJoin', 'btnShareApp'];
+  /* 4.50 (18 set 2026): la GRIGLIA. Sopra: lettere arrivate (se ci sono), la
+     domanda del nome (la prima volta), la riga di stato. Poi quattro riquadri
+     — manda il mio indirizzo, chiama chi conosci, indirizzo usa e getta, fai
+     conoscere l'app — e sotto UNA riga piccola per l'indirizzo scritto su un
+     foglietto, che apre il campo. Nient'altro: l'indirizzo scritto, il QR, gli
+     «altri modi» stanno nelle impostazioni. */
+  const ATTESI = ['lettersCard', 'welcomeCard', 'addrDialStatus',
+                  'btnHomeShare', 'goContacts', 'btnBurnerQuick', 'btnShareApp',
+                  'showAddrDial', 'addrDialIn'];
   const dove = ATTESI.map(id => [id, SEZIONI.screenHome.indexOf(`id="${id}"`)]);
   for (const [id, pos] of dove) assert.notStrictEqual(pos, -1, `#${id} non e' piu' in prima pagina`);
   const fuoriPosto = dove.filter(([, pos], i) => i > 0 && pos < dove[i - 1][1]);
-  assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [],
-    'l\'ordine atteso e\': messaggi lasciati, la tessera (o il nome), la riga di stato, i DUE ' +
-    'pulsantoni (rubrica, chiama un indirizzo), il campo che il secondo apre, poi le righe piccole');
-  const grandi = [...SEZIONI.screenHome.matchAll(/<button[^>]*class="bigchoice[^"]*"[^>]*id="([a-zA-Z]+)"/g)].map(m => m[1]);
-  assert.deepStrictEqual(grandi, ['goContacts', 'showAddrDial'],
-    'esattamente due pulsantoni, in quest\'ordine: «Parla con qualcuno» e «Ho un codice» non tornano');
-  for (const id of ['goJoin', 'goStart']){
-    const riga = SEZIONI.screenHome.match(new RegExp(`<button[^>]*id="${id}"[^>]*>`))[0];
-    assert.match(riga, /linkbtn/, `#${id} e' una riga piccola, non un pulsantone`);
-  }
-  assert.doesNotMatch(SEZIONI.screenHome, /id="easyHintBar"/, 'la modalita\' semplice e\' stata tolta (17 set 2026)');
-  assert.doesNotMatch(SEZIONI.screenSettings, /id="easyRow"/, 'anche il suo interruttore');
+  assert.deepStrictEqual(fuoriPosto.map(([id]) => id), [], 'l\'ordine della griglia e\' quello deciso');
+  const riquadri = [...SEZIONI.screenHome.matchAll(/<button[^>]*class="tile [^"]*"[^>]*id="([a-zA-Z]+)"/g)].map(m => m[1]);
+  assert.deepStrictEqual(riquadri, ['btnHomeShare', 'goContacts', 'btnBurnerQuick', 'btnShareApp'],
+    'esattamente quattro riquadri, in quest\'ordine: un quinto e\' rumore');
+  const tinte = [...SEZIONI.screenHome.matchAll(/class="tile (t-[a-z]+)"/g)].map(m => m[1]);
+  assert.strictEqual(new Set(tinte).size, 4, 'quattro colori diversi, uno per riquadro');
+  assert.doesNotMatch(SEZIONI.screenHome, /class="bigchoice/, 'i pulsantoni di prima non ci sono piu\'');
+  assert.doesNotMatch(SEZIONI.screenHome, /id="homeCard"|id="goStart"|id="goJoin"/, 'tessera e «altri modi» stanno nella seconda pagina');
+  assert.match(SEZIONI.screenSettings, /id="goStart"/); assert.match(SEZIONI.screenSettings, /id="goJoin"/);
 });
 
 /* ------------------------------------------------------------ the languages -- */

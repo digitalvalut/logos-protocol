@@ -1,0 +1,3 @@
+The first page is a grid of four tiles, one colour each.
+
+Send my address (orange), Call someone you know (blue), Throwaway address (teal), Spread the word (green): one tap each, understood at a glance. "Throwaway" creates one with an automatic name and sends that one, not your real address. Below the grid, one line for when someone handed you an address written down. Everything else — expiring invite, paste a link, saved throwaways, protected screen — lives in Settings under "More". Also fixed a silent bug: reopening the app with "Let people reach you" on, the screen did not stay awake. Calls and protocol are the same as v58.

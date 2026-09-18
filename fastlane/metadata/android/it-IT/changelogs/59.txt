@@ -1,0 +1,3 @@
+La prima pagina è una griglia di quattro riquadri, uno per colore.
+
+Manda il mio indirizzo (arancione), Chiama chi conosci (blu), Indirizzo usa e getta (verde acqua), Fai conoscere l'app (verde): un tocco ciascuno, si capiscono al volo. «Usa e getta» ne crea uno con un nome automatico e manda quello, non il tuo vero. Sotto la griglia, una riga per chi ti ha dato un indirizzo scritto. Tutto il resto — invito a scadenza, incolla un link, usa e getta salvati, schermo protetto — sta in Impostazioni sotto «Altro». Corretto anche un errore silenzioso: riaprendo l'app con «Fatti trovare» acceso, lo schermo non restava sveglio. Chiamate e protocollo sono gli stessi della v58.

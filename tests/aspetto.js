@@ -133,12 +133,13 @@
   const TETTI = [
     ['peerNameLbl', 1, 'il nome di chi hai davanti'],
     ['btnAddrDial', 2, 'il pulsante «Chiamalo»'],
-    ['goStart', 2, 'la riga «invito usa e getta»'],
-    ['btnHomeShare', 2, 'il pulsante «Manda il mio indirizzo»'],
+
+    ['btnHomeShare', 2, 'il riquadro «Manda il mio indirizzo»'],
+    ['btnBurnerQuick', 2, 'il riquadro «Indirizzo usa e getta»'],
     ['showAddrDial', 4, 'il pulsantone «Ti hanno dato un indirizzo?»'],
     ['goContacts', 4, 'il pulsantone «Rubrica»'],
     ['goJoin', 2, 'la riga «un invito che non si apre»'],
-    ['btnShareApp', 3, 'il pulsante per far conoscere l\'app'],
+    ['btnShareApp', 2, 'il riquadro «Fai conoscere l\'app»'],
   ];
   const troppe = [];
   for (const [id, tetto, nome] of TETTI){
@@ -153,7 +154,7 @@
   /* ---- 6. quello che conta si vede senza scorrere ----------------------
      Non e' un guasto, e' una misura: quanto della prima pagina arriva prima
      che uno debba scorrere. Detto, non deciso. */
-  const sotto = ['btnHomeShare', 'goContacts', 'showAddrDial', 'btnShareApp']
+  const sotto = ['btnHomeShare', 'goContacts', 'btnBurnerQuick', 'btnShareApp']
     .map(id => document.getElementById(id)).filter(vis)
     .filter(el => el.getBoundingClientRect().bottom > window.innerHeight)
     .map(el => el.id);

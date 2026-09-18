@@ -33,6 +33,12 @@ function loadApp(options){
      puo' vedere cosa succede quando c'e'. §33: il finto deve poter dire il
      vero anche quando il vero e' scomodo. */
   if (options && options.globals) Object.assign(sandbox, options.globals);
+  /* `storage`: cio' che il telefono aveva gia' salvato PRIMA di aprire la
+     pagina (JSON chiave→valore). Serve per provare l'avvio, non solo il
+     dopo: dal 18 set 2026 viene davvero messo nel finto localStorage. */
+  if (options && options.storage){
+    for (const [k, v] of Object.entries(JSON.parse(options.storage))) sandbox.localStorage.setItem(k, v);
+  }
   vm.createContext(sandbox);
   vm.runInContext(SOURCE, sandbox, { filename: 'modifica.js' });
   const run = expr => vm.runInContext(expr, sandbox);
@@ -5942,6 +5948,21 @@ test.describe('l ascolto si ricorda e il rapporto non tace', () => {
     dopo.stop();
   });
 
+  test('riaperta con l ascolto acceso, la pagina chiede subito lo schermo sveglio senza tirare errori (4.50)', async () => {
+    /* keepScreenAwake() viene chiamata all'avvio, molto prima della riga che
+       dichiara `screenLock`: con `let` esplodeva dentro la promise, in
+       silenzio. Qui si ascolta il silenzio. */
+    const rifiuti = [];
+    const orecchio = e => rifiuti.push(String(e && e.message || e));
+    process.on('unhandledRejection', orecchio);
+    const app = loadApp(Object.assign({}, ponte, { storage: JSON.stringify({ 'dvlogos-listen': '1' }) }));
+    await new Promise(r => setTimeout(r, 20));
+    process.off('unhandledRejection', orecchio);
+    app.stop();
+    assert.deepStrictEqual(rifiuti.filter(m => /screenLock/.test(m)), [],
+      'l\'avvio non deve rifiutare una promise su screenLock');
+  });
+
   test('la riga del rapporto compare anche prima che qualcuno tocchi niente', () => {
     /* Il difetto esatto: nessuno aveva toccato interruttori, lo stato era
        quello iniziale, e la riga spariva. */
@@ -7800,81 +7821,72 @@ test.describe('4.46: «Fatti trovare» e\' un interruttore solo, e dice la verit
    trovare» si accendono da soli — deciso dall'operatore; restano interruttori.
    La tessera in alto mostra l'indirizzo e lo manda; «Parla con qualcuno» e'
    una riga piccola. */
-test.describe('4.47: la prima pagina e\' un telefono', () => {
+test.describe('4.50: la griglia — quattro riquadri, un tocco ciascuno', () => {
   const attendi = ms => new Promise(r => setTimeout(r, ms));
+  /* se un assert fallisce, la sandbox va comunque fermata: un timer vivo tiene in piedi node --test */
+  const conApp = async fn => { const app = loadApp(); try{ await fn(app); } finally { app.stop(); } };
 
-  test('la prima volta: solo «come ti chiami»; con «Inizia» nome, indirizzo e «Fatti trovare» sono accesi', async () => {
-    const app = loadApp();
+  test('la prima volta: solo «come ti chiami»; con «Inizia» nome, indirizzo e «Fatti trovare» sono accesi', () => conApp(async app => {
     await attendi(30);
     app.run("MEM.removeItem('logos-modifica-nick'); $('nickInput').value = ''; setAddrOn(false); paintWelcome();");
     assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), false, 'senza nome: la domanda');
-    assert.strictEqual(app.run("$('homeCard').classList.contains('hide')"), true, 'e niente tessera vuota');
     app.run(`pushSupported = () => false; window.__consegne = 0; handOverWatchToAndroid = () => { window.__consegne++; };
              $('welcomeNameIn').value = 'Giuseppe';`);
     await app.run("$('btnWelcomeGo').listeners.click[0]()");
     await attendi(30);
-    assert.strictEqual(app.run("$('nickInput').value"), 'Giuseppe', 'il nome e\' lo stesso delle impostazioni');
-    assert.strictEqual(app.run("MEM.getItem('logos-modifica-nick')"), 'Giuseppe');
+    assert.strictEqual(app.run("$('nickInput').value"), 'Giuseppe');
     assert.strictEqual(app.run('addrOn()'), true, 'l\'indirizzo si accende da solo');
     assert.strictEqual(app.run('listenMode'), true, 'e «Fatti trovare» pure');
-    assert.strictEqual(app.run("MEM.getItem('dvlogos-listen')"), '1');
-    assert.ok(app.run('window.__consegne') >= 1, 'il telefono viene avvisato di cosa sorvegliare');
+    assert.ok(app.run('window.__consegne') >= 1);
     assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), true);
-    assert.strictEqual(app.run("$('homeCard').classList.contains('hide')"), false, 'la tessera compare');
-    assert.match(app.run("$('homeAddr').textContent"), /^DV-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/, 'con l\'indirizzo dentro');
-    app.stop();
-  });
+  }));
 
-  test('«Inizia» senza nome non fa niente: il nome e\' l\'unica cosa che si chiede, e serve', async () => {
-    const app = loadApp();
+  test('«Manda il mio indirizzo»: un tocco, la tendina; se l\'indirizzo era spento, lo accende prima', () => conApp(async app => {
     await attendi(30);
-    app.run("MEM.removeItem('logos-modifica-nick'); $('nickInput').value = ''; setAddrOn(false); paintWelcome(); $('welcomeNameIn').value = '   ';");
-    await app.run("$('btnWelcomeGo').listeners.click[0]()");
-    assert.strictEqual(app.run('addrOn()'), false);
-    assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), false);
-    app.stop();
-  });
-
-  test('la tessera: «Manda il mio indirizzo» manda lo stesso testo e lo stesso link delle impostazioni', async () => {
-    const app = loadApp();
-    await attendi(30);
-    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(true); paintWelcome();");
-    await app.run('paintAddrCard()');
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(false); handOverWatchToAndroid = () => {};");
     app.run(`window.__mandati = []; navigator.share = async (o) => { window.__mandati.push(o.text); };`);
     await app.run("$('btnHomeShare').listeners.click[0]()");
+    await attendi(30);
+    assert.strictEqual(app.run('addrOn()'), true, 'acceso da solo: chi manda il suo indirizzo vuole essere trovato');
+    const m = app.run('window.__mandati');
+    assert.strictEqual(m.length, 1);
+    assert.match(m[0], /#a=[A-Z0-9]{12}/, 'e il link porta l\'indirizzo');
     await app.run("$('btnAddrShare').listeners.click[0]()");
     await attendi(30);
-    const m = app.run('window.__mandati');
-    assert.strictEqual(m.length, 2);
-    assert.strictEqual(m[0], m[1], 'tessera e impostazioni: la stessa funzione');
-    assert.match(m[0], /#a=[A-Z0-9]{12}/, 'e il link porta l\'indirizzo');
-    app.stop();
-  });
+    assert.strictEqual(app.run('window.__mandati')[1], m[0], 'griglia e impostazioni: la stessa funzione');
+  }));
 
-  test('indirizzo spento: la tessera lo dice e offre di accenderlo; acceso: mostra l\'indirizzo', async () => {
-    const app = loadApp();
+  test('«Indirizzo usa e getta»: un tocco ne crea uno con un nome automatico e apre la tendina con QUEL link', () => conApp(async app => {
     await attendi(30);
-    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(false); paintWelcome(); handOverWatchToAndroid = () => {};");
-    await app.run('paintAddrCard()');
-    assert.strictEqual(app.run("$('homeAddrOff').classList.contains('hide')"), false, 'spento: lo dice');
-    assert.strictEqual(app.run("$('homeAddrTools').classList.contains('hide')"), true, 'e non offre di mandare un indirizzo che non c\'e\'');
-    await app.run("$('btnHomeAddrOn').listeners.click[0]()");
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(true); saveBurners([]); handOverWatchToAndroid = () => {};");
+    app.run(`window.__mandati = []; navigator.share = async (o) => { window.__mandati.push(o.text); };`);
+    await app.run("$('btnBurnerQuick').listeners.click[0]()");
     await attendi(30);
-    assert.strictEqual(app.run('addrOn()'), true);
-    assert.strictEqual(app.run("$('homeAddrOff').classList.contains('hide')"), true);
-    assert.strictEqual(app.run("$('homeAddrTools').classList.contains('hide')"), false);
-    assert.strictEqual(app.run("$('homeAddr').textContent"), app.run("$('addrMine').textContent"), 'stesso indirizzo delle impostazioni');
-    app.stop();
-  });
+    assert.strictEqual(app.run('burners().length'), 1, 'creato');
+    assert.strictEqual(app.run('burners()[0].name'), app.run("fill(t('burn.quickName'), { n: 1 })"), 'nome automatico');
+    const mio = app.run("(async () => formatAddress(await myAddress(0)))()");
+    const suo = app.run("(async () => formatAddress(await myAddress(burners()[0].n)))()");
+    const [mioA, suoA] = await Promise.all([mio, suo]);
+    assert.notStrictEqual(mioA, suoA, 'e\' un altro indirizzo, non il tuo');
+    assert.ok(app.run('window.__mandati')[0].includes(suoA), 'la tendina porta l\'usa e getta, non il tuo vero');
+    await app.run("$('btnBurnerQuick').listeners.click[0]()");
+    assert.strictEqual(app.run('burners().length'), 2, 'un secondo tocco, un secondo indirizzo («Usa e getta 2»)');
+  }));
 
-  test('l\'invito usa e getta esiste ancora, come riga piccola, e apre la sua schermata', () => {
-    const app = loadApp();
-    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna';");
-    app.run(`startQuickShare = () => {}; showQuickLayoutA = () => {};`);
+  test('la riga sotto la griglia apre il campo dell\'indirizzo e lo richiude', () => conApp(async app => {
+    app.run("$('showAddrDial').listeners.click[0]();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false);
+    app.run("$('showAddrDial').listeners.click[0]();");
+    assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), true);
+  }));
+
+  test('l\'invito a scadenza e «incolla un link» esistono ancora, in «Altro», e aprono le loro schermate', () => conApp(async app => {
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; startQuickShare = () => {}; showQuickLayoutA = () => {};");
     app.run("$('goStart').listeners.click[0]();");
     assert.strictEqual(app.run("$('screenStart').classList.contains('hide')"), false);
-    app.stop();
-  });
+    app.run("$('goJoin').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenJoin').classList.contains('hide')"), false);
+  }));
 });
 
 /* v56 (17 set 2026): chi chiama sente il «tu… tu… tu…» e legge «Sta
