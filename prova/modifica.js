@@ -11123,7 +11123,12 @@ function disarmCallTimeout(){ clearTimeout(callTimeoutTimer); callTimeoutTimer =
    everywhere (Safari gained it late, some browsers still lack it): every call
    is wrapped, and a browser without it simply behaves as it did before rather
    than throwing. */
-let screenLock = null;
+/* `var`, non `let`: all'avvio, quando «Fatti trovare» era gia' acceso, la
+   pagina chiama keepScreenAwake() migliaia di righe PRIMA di questa — con
+   `let` la variabile non esiste ancora, la funzione tira un errore dentro la
+   sua promise (nessuno lo vede) e lo schermo non resta sveglio (trovato
+   guardando la console della copia di prova, 18 set 2026). */
+var screenLock = null;
 async function keepScreenAwake(){
   if (screenLock) return;
   try{
