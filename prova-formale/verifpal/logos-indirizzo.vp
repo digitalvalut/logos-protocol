@@ -37,7 +37,12 @@ principal A[
     gea = PUBKEY(ea)
     // k = HKDF(ECDH(e, pubB), salt, 'logos-addr-v2'); busta(k, {kind:'offer', sdpA, rid}) + gea
     kA = HKDF(nil, DH_KEX(pubB, ea), info)
-    offerta = AEAD_ENC(kA, nA, CONCAT(offer, sdpA, rid), nil)
+    // il `kind` viaggia come dato associato dell'AEAD: aprire una busta con il
+    // verso sbagliato FALLISCE la decifratura, che e' esattamente cio' che fa
+    // bustaDelVerso nel codice (rifiuta prima di usare). Come CONCAT dentro
+    // il testo cifrato Verifpal considerava «usata» la busta gia' al
+    // passaggio di AEAD_DEC, prima dell'ASSERT sul kind.
+    offerta = AEAD_ENC(kA, nA, CONCAT(sdpA, rid), offer)
 ]
 
 A -> B: gea, nA, offerta
@@ -46,20 +51,16 @@ principal B[
     knows public info, offer, answer
     generates sdpB, nB
     kB = HKDF(nil, DH_KEX(gea, privB), info)
-    apertaA = AEAD_DEC(kB, nA, offerta, nil)?
-    kindA, sdpArecv, ridRecv = SPLIT(apertaA)?
-    // bustaDelVerso: una busta che non dice «offer» non e' un'offerta
-    _ = ASSERT(kindA, offer)?
+    apertaA = AEAD_DEC(kB, nA, offerta, offer)?
+    sdpArecv, ridRecv = SPLIT(apertaA)?
     // B risponde nella casella addr-answer-<rid>, sotto la stessa k, con kind:'answer'
-    risposta = AEAD_ENC(kB, nB, CONCAT(answer, sdpB), nil)
+    risposta = AEAD_ENC(kB, nB, sdpB, answer)
 ]
 
 B -> A: nB, risposta
 
 principal A[
-    apertaB = AEAD_DEC(kA, nB, risposta, nil)?
-    kindB, sdpBrecv = SPLIT(apertaB)?
-    _ = ASSERT(kindB, answer)?
+    apertaB = AEAD_DEC(kA, nB, risposta, answer)?
 ]
 
 queries[
