@@ -23,6 +23,31 @@ permissions:
   contents: read
 
 jobs:
+  # Verifpal: terzo motore, indipendente da Tamarin e ProVerif (18 set 2026).
+  # Meno potente, ma se concorda sui punti in comune vale come controllo in
+  # piu'; se dissente, va capito chi ha ragione — e' il motivo per cui c'e'.
+  # «attack found» nel risultato = rosso.
+  verifpal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Verifpal 1.4.12 (binario linux dal rilascio ufficiale)
+        run: |
+          curl -sSL -o vp.zip https://github.com/symbolicsoft/verifpal/releases/download/v1.4.12/verifpal_1.4.12_linux_amd64.zip
+          unzip -q vp.zip -d vp && chmod +x vp/verifpal && ./vp/verifpal --version
+      - name: verifica di ogni modello
+        run: |
+          set -o pipefail; rosso=0
+          for m in prova-formale/verifpal/*.vp; do
+            echo "=== $m"; ./vp/verifpal verify "$m" 2>&1 | tee -a verifpal.log | tail -30
+            if grep -q -i "attack found\|Attack found" verifpal.log; then rosso=1; fi
+          done
+          exit $rosso
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with: { name: verifpal, path: verifpal.log }
+
   proverif:
     runs-on: ubuntu-latest
     timeout-minutes: 30
