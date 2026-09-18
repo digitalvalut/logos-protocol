@@ -1,0 +1,3 @@
+The caller can hang up while it rings, and the other phone stops ringing.
+
+Under "Calling…" there is now a "Hang up" button: it stops the ringback tone, withdraws the call from the other person's mailbox and goes back to the first page. "Back" now does the same thing in full (before, it only hid the screen, and the other phone kept ringing until the envelope expired). At the top, the line reads "Logos. Privacy. Freedom." in every language. Calls and protocol are the same as v59.

@@ -7892,6 +7892,69 @@ test.describe('4.50: la griglia — quattro riquadri, un tocco ciascuno', () => 
 /* v56 (17 set 2026): chi chiama sente il «tu… tu… tu…» e legge «Sta
    squillando…» solo quando il relay ha tirato davvero un filo. Chiesto
    dall'operatore: «chi chiama si disorienta». */
+test.describe('4.51: «Chiudi» mentre squilla — tono spento, busta ritirata, ciclo finito', () => {
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+  /* la chiamata arriva allo squillo e ci resta: la cassetta delle risposte e'
+     sempre vuota, come quando l'altro non risponde */
+  const PREP = `
+    myAddress = async () => 'ZZZZZZZZZZZZ';
+    addrDialSecrets = async () => ({ key: {}, seed: 's', slot: 0 });
+    myFingerprintHex = async () => 'ff';
+    slotId = async (seed, nome) => nome;
+    mailboxGet = async () => null;
+    playRingbackTone = () => {};
+    mailboxPutSealed = async () => true;
+    globalThis.__ritirate = []; withdrawOffer = k => { globalThis.__ritirate.push(k); };
+    globalThis.__giri = 0;
+    mailboxGetSealed = async (k) => { if (String(k).indexOf('addr-answer') === 0) globalThis.__giri++; return null; };
+    newPeerConnection = async () => ({ createDataChannel(){ return {}; }, createOffer: async () => ({ type:'offer', sdp:'v=0 A' }), setLocalDescription: async function(d){ this.localDescription = d; }, addEventListener(){}, removeEventListener(){}, signalingState:'stable', close(){ globalThis.__chiusa = true; } });
+    candidatePump = () => ({ stop(){}, remoteReady: async () => {} });
+    wireDataChannel = () => {};
+    globalThis.__chiusa = false; globalThis.__finita = false;
+  `;
+  const conApp = async fn => { const app = loadApp(); try{ await fn(app); } finally { app.stop(); } };
+
+  test('mentre squilla il pulsante c\'e; un tocco spegne il tono, ritira la busta e riporta a casa', () => conApp(async app => {
+    app.run(PREP);
+    app.run("Promise.resolve(dialAddress('AAAABBBBCCCC')).then(() => { globalThis.__finita = true; }).catch(e => { globalThis.__err = String(e); })");
+    await attendi(40);
+    assert.notStrictEqual(app.run('ringbackTimer'), null, 'sta squillando');
+    assert.strictEqual(app.run("$('btnHangUpDial').classList.contains('hide')"), false, 'e «Chiudi» e\' sotto il dito');
+    assert.strictEqual(app.run('typeof riagganciaChiamata'), 'function');
+    app.run("$('btnHangUpDial').listeners.click[0]()");
+    assert.strictEqual(app.run('ringbackTimer'), null, 'tono spento subito');
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__ritirate)'), '["addr-offer"]', 'la busta e\' ritirata: l\'altro telefono smette di squillare');
+    assert.strictEqual(app.run('globalThis.__chiusa'), true, 'la connessione e\' lasciata');
+    assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), false, 'e si torna alla prima pagina');
+    assert.strictEqual(app.run("$('btnHangUpDial').classList.contains('hide')"), true);
+    /* il ciclo di attesa deve accorgersene e uscire — non restare tre minuti a interrogare la cassetta */
+    await attendi(1700);
+    assert.strictEqual(app.run('globalThis.__finita'), true, 'dialAddress e\' finita');
+    assert.strictEqual(app.run('dialing'), false);
+    assert.strictEqual(app.run('riagganciaChiamata'), null, 'non c\'e\' piu\' niente da chiudere');
+    assert.ok(app.run('globalThis.__giri') <= 2, 'la cassetta non viene piu\' interrogata');
+    assert.strictEqual(app.run('globalThis.__ritirate.length'), 1, 'ritirata UNA volta, non due');
+  }));
+
+  test('«Indietro» fa la stessa cosa per intero (prima lasciava tono e busta accesi)', () => conApp(async app => {
+    app.run(PREP);
+    app.run("Promise.resolve(dialAddress('AAAABBBBCCCC')).then(() => { globalThis.__finita = true; }).catch(e => { globalThis.__err = String(e); })");
+    await attendi(40);
+    app.run("$('backFromJoin').listeners.click[0]()");
+    assert.strictEqual(app.run('ringbackTimer'), null);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__ritirate)'), '["addr-offer"]');
+    await attendi(1700);
+    assert.strictEqual(app.run('globalThis.__finita'), true);
+  }));
+
+  test('fuori da una chiamata «Indietro» e «Chiudi» non toccano niente', () => conApp(async app => {
+    app.run(PREP + "showScreen('screenJoin');");
+    app.run("$('backFromJoin').listeners.click[0]()");
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__ritirate)'), '[]');
+    assert.strictEqual(app.run("$('screenHome').classList.contains('hide')"), false);
+  }));
+});
+
 test.describe('v56: il segnale di libero per chi chiama, e «Sta squillando» detto quando e\' vero', () => {
   const PREP = `
     myAddress = async () => 'ZZZZZZZZZZZZ';

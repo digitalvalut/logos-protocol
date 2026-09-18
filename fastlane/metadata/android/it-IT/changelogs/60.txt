@@ -1,0 +1,3 @@
+Chi chiama può chiudere mentre squilla, e l'altro telefono smette di squillare.
+
+Sotto «Sto chiamando…» c'è il pulsante «Chiudi»: spegne il segnale di libero, ritira la chiamata dalla cassetta dell'altro e torna alla prima pagina. Anche «Indietro» ora fa la stessa cosa per intero (prima nascondeva solo la schermata, e l'altro telefono squillava fino alla scadenza). In alto, la frase è «Logos. Privacy. Libertà.», in tutte le lingue. Chiamate e protocollo sono gli stessi della v59.
