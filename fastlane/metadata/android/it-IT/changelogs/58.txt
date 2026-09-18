@@ -1,0 +1,3 @@
+Due chiusure improvvise su Android 5–8 corrette, e niente copie dei dati fuori dal telefono.
+
+Trovate con Android Lint, il controllo automatico degli strumenti Android: su Android dal 5 all'8 l'app poteva chiudersi da sola all'apertura e accendendo «Fatti trovare», per due funzioni che esistono solo nelle versioni più recenti. Ora sono protette. In più le regole per Android 12 e successivi dicono esplicitamente che i dati di Logos non vanno né nel backup cloud né nel trasferimento a un telefono nuovo — la stessa scelta di sempre, detta anche nel modo nuovo. Lint gira ora a ogni modifica. Chiamate e protocollo sono gli stessi della v57.

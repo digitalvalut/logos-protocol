@@ -273,8 +273,12 @@ public class MainActivity extends Activity {
         try {
             android.content.SharedPreferences p =
                 getSharedPreferences("dvlogos-app", MODE_PRIVATE);
-            long installata = getPackageManager()
-                .getPackageInfo(getPackageName(), 0).getLongVersionCode();
+            /* ⚠️ TROVATO DA ANDROID LINT IL 18 SET 2026: getLongVersionCode() esiste
+               solo da Android 9 (API 28). Su Android 5-8 lanciava NoSuchMethodError
+               — che NON e' un'Exception, quindi il catch qui sotto non lo prendeva —
+               e l'app si chiudeva all'apertura. Il minimo dichiarato e' Android 5. */
+            android.content.pm.PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+            long installata = Build.VERSION.SDK_INT >= 28 ? info.getLongVersionCode() : info.versionCode;
             if (p.getLong("vistaVersione", -1) != installata) {
                 web.clearCache(true);
                 p.edit().putLong("vistaVersione", installata).apply();
@@ -737,6 +741,11 @@ public class MainActivity extends Activity {
     }
 
     private boolean holdsAll(String[] permissions) {
+        /* Android Lint, 18 set 2026: checkSelfPermission() esiste da Android 6
+           (API 23). Prima di quella versione i permessi si concedono
+           all'installazione: se siamo qui, li abbiamo. Senza questa riga, su
+           Android 5 l'app si chiudeva accendendo «Fatti trovare». */
+        if (Build.VERSION.SDK_INT < 23) return true;
         for (String p : permissions) {
             if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) return false;
         }

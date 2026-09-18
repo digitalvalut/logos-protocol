@@ -229,6 +229,7 @@ public class CallService extends Service {
         return setSpeaker(c, on);
     }
 
+    @android.annotation.SuppressLint("WrongConstant")
     static synchronized void leaveCallMode(Context c) {
         stopProximity();
         if (!inCall) return;
@@ -247,6 +248,9 @@ public class CallService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) am.clearCommunicationDevice();
             else am.setSpeakerphoneOn(speakerBefore);
         } catch (Exception ignored) {}
+        /* Lint segnala «WrongConstant»: modeBefore e' il valore letto da
+           am.getMode() all'inizio della chiamata, quindi e' per costruzione una
+           delle costanti MODE_*; lo strumento non puo' saperlo. */
         try { am.setMode(modeBefore >= 0 ? modeBefore : AudioManager.MODE_NORMAL); } catch (Exception ignored) {}
         modeBefore = -1;
     }

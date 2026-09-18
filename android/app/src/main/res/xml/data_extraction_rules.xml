@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Niente copie dei dati di Logos fuori dal telefono: ne' nel backup cloud
+     ne' nel trasferimento a un telefono nuovo. E' la stessa scelta di
+     android:allowBackup="false", detta anche nel modo che Android 12+ chiede
+     (segnalato da Android Lint, 18 set 2026). La cronologia e la chiave di
+     questo telefono restano su questo telefono. -->
+<data-extraction-rules>
+    <cloud-backup disableIfNoEncryptionCapabilities="true">
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

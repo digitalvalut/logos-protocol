@@ -289,3 +289,28 @@ test.describe('v52: condividere dalla tendina di Android, e lo schermo protetto'
       'nel browser (senza ponte) l\'interruttore non ha senso e non si mostra');
   });
 });
+
+/* Android Lint, 18 set 2026: due chiamate che esistono solo da API 28 e 23 su
+   un'app con minSdk 21. Su Android 5-8 l'app si chiudeva (NoSuchMethodError
+   non e' un'Exception: il catch non lo prendeva). I controlli qui sotto
+   guardano che i due punti restino protetti da un controllo di versione. */
+test.describe('v58: Android 5-8 non si chiudono da soli (Android Lint)', () => {
+  test('getLongVersionCode() (API 28) e\' protetto da un controllo di versione', () => {
+    const i = MAIN.indexOf('info.getLongVersionCode()');
+    assert.ok(i > 0);
+    const intorno = MAIN.slice(i - 120, i);
+    assert.match(intorno, /Build\.VERSION\.SDK_INT >= 28/, 'senza il controllo, Android 5-8 crashano all\'apertura');
+  });
+  test('checkSelfPermission() (API 23) non viene chiamato sotto Android 6', () => {
+    const i = MAIN.indexOf('private boolean holdsAll(');
+    const corpo = MAIN.slice(i, MAIN.indexOf('(checkSelfPermission(p)', i));
+    assert.match(corpo, /if \(Build\.VERSION\.SDK_INT < 23\) return true;/, 'senza, Android 5 crasha accendendo «Fatti trovare»');
+  });
+  test('niente copie dei dati fuori dal telefono: allowBackup=false E le regole per Android 12+', () => {
+    assert.match(MANIFEST, /android:allowBackup="false"/);
+    assert.match(MANIFEST, /android:dataExtractionRules="@xml\/data_extraction_rules"/);
+    const regole = read('android/app/src/main/res/xml/data_extraction_rules.xml');
+    for (const sez of ['cloud-backup', 'device-transfer']) assert.ok(regole.includes('<' + sez), sez);
+    assert.ok((regole.match(/<exclude domain="root"/g) || []).length === 2, 'root escluso in tutte e due le sezioni');
+  });
+});

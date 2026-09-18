@@ -1,0 +1,37 @@
+# Android Lint a ogni modifica dell'involucro Android. Aggiunto il 18 set 2026
+# dopo che il primo giro a mano ha trovato due chiamate che esistono solo da
+# Android 9 e Android 6 in un'app che dichiara Android 5 come minimo: su quei
+# telefoni l'app si chiudeva da sola. Gli AVVISI non fermano niente; gli
+# ERRORI si'. Il rapporto e' scaricabile come artefatto.
+name: android lint
+
+on:
+  push:
+    paths: ['android/**', '.github/workflows/android-lint.yml']
+  pull_request:
+    paths: ['android/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '21' }
+      - name: build-tools 35.0.0, le stesse del rilascio
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;35.0.0" "platforms;android-36" >/dev/null
+      - name: Android Lint (release)
+        working-directory: android
+        run: ./gradlew lintRelease --no-daemon
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lint-report
+          path: android/app/build/reports/lint-results-release.html

@@ -1,0 +1,3 @@
+Two crashes on Android 5–8 fixed, and no copies of your data leave the phone.
+
+Found with Android Lint, the automatic check in the Android tools: on Android 5 through 8 the app could close by itself on opening and when turning on "Let people reach you", because of two functions that only exist on newer versions. They are now guarded. The Android 12+ rules also state explicitly that Logos data goes neither to cloud backup nor to device transfer — the same choice as always, now said the new way. Lint runs on every change. Calls and protocol are the same as v57.
