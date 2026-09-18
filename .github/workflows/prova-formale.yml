@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Compila ProVerif 2.05 dal sorgente ufficiale (INRIA)
         run: |
           set -e
@@ -45,13 +45,13 @@ jobs:
             timeout 600 proverif "$f" > "risultati/$(basename $f).txt" 2>&1 || true
             grep -E "^RESULT|^Error" "risultati/$(basename $f).txt"
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with: { name: risultati-proverif, path: risultati }
   tamarin:
     runs-on: ubuntu-latest
     timeout-minutes: 170
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Scarica Tamarin 1.12.0 e Maude 3.5.1 (rilasci ufficiali)
         run: |
           set -e
@@ -75,6 +75,6 @@ jobs:
               [ -n "$r" ] && echo "$r" || echo "  $l: NESSUNA RISPOSTA (tempo o memoria esauriti)"
             done
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with: { name: risultati-tamarin, path: risultati }
