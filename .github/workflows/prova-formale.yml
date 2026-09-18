@@ -36,17 +36,11 @@ jobs:
         run: |
           curl -sSL -o vp.zip https://github.com/symbolicsoft/verifpal/releases/download/v1.4.12/verifpal_1.4.12_linux_amd64.zip
           unzip -q vp.zip -d vp && chmod +x vp/verifpal && ./vp/verifpal --version
-      - name: verifica di ogni modello
-        run: |
-          set -o pipefail; rosso=0
-          for m in prova-formale/verifpal/*.vp; do
-            echo "=== $m"; ./vp/verifpal verify "$m" 2>&1 | tee -a verifpal.log | tail -30
-            if grep -q -i "attack found\|Attack found" verifpal.log; then rosso=1; fi
-          done
-          exit $rosso
+      - name: verifica di ogni modello contro l'esito ATTESO (.atteso)
+        run: prova-formale/verifpal/controlla.sh ./vp/verifpal
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
-        with: { name: verifpal, path: verifpal.log }
+        with: { name: verifpal, path: prova-formale/verifpal/*.log }
 
   proverif:
     runs-on: ubuntu-latest
