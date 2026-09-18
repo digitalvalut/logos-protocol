@@ -1,0 +1,4 @@
+PASS confidentiality? sdpA
+FAIL confidentiality? sdpB
+PASS authentication? B -> A: risposta
+FAIL authentication? A -> B: offerta

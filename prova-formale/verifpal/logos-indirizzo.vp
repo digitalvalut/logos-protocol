@@ -1,10 +1,22 @@
 // Rito B — la chiamata all'indirizzo (PROTOCOLLO.md §3), in Verifpal 1.4.
 // Terzo strumento accanto a Tamarin e ProVerif, motore diverso (18 set 2026).
 // Avversario attivo: controlla il relay (la rete) e conosce l'indirizzo.
-// Verifpal e' meno potente di Tamarin: e' un controllo INDIPENDENTE, non la
-// prova unica. Atteso: sdpA e sdpB confidenziali; la risposta che A accetta
-// viene da B; l'offerta che B apre e' stata sigillata per B (A stesso non e'
-// autenticato dal rito: chiunque puo' chiamare un indirizzo, per costruzione).
+//
+// ⚠️ La prima stesura di questo modello NON portava il `kind` dentro la busta
+// e Verifpal ha ritrovato da solo la RIFLESSIONE (l'avversario rimanda ad A
+// la sua stessa offerta come risposta) che Tamarin aveva trovato il 14 set
+// 2026 e che la 4.38 ha chiuso mettendo `kind: offer|answer` nel sigillo.
+// Il modello ora fa come il codice: `kind` dentro, e chi legge lo esige.
+//
+// ATTESO (vedi logos-indirizzo.atteso):
+//   PASS confidentiality? sdpA                — B1
+//   PASS authentication? B -> A: risposta     — B2/B3 (viene da B, in questa sessione)
+//   FAIL confidentiality? sdpB                — DEVE FALLIRE: chiunque puo' chiamare un
+//                                               indirizzo (A non e' autenticato dal rito,
+//                                               §3); B risponde a chi chiama, avversario
+//                                               compreso. In ProVerif e' «segreta se A e'
+//                                               onesto»; Verifpal non sa dire «se».
+//   FAIL authentication? A -> B: offerta      — DEVE FALLIRE, stessa ragione.
 
 attacker[active]
 
@@ -20,29 +32,34 @@ principal B[
 B -> A: [pubB]
 
 principal A[
-    knows public info
+    knows public info, offer, answer
     generates sdpA, ea, rid, nA
     gea = PUBKEY(ea)
-    // k = HKDF(ECDH(e, pubB), salt, 'logos-addr-v2'); busta(k, {sdpA, rid}) + gea
+    // k = HKDF(ECDH(e, pubB), salt, 'logos-addr-v2'); busta(k, {kind:'offer', sdpA, rid}) + gea
     kA = HKDF(nil, DH_KEX(pubB, ea), info)
-    offerta = AEAD_ENC(kA, nA, CONCAT(sdpA, rid), nil)
+    offerta = AEAD_ENC(kA, nA, CONCAT(offer, sdpA, rid), nil)
 ]
 
 A -> B: gea, nA, offerta
 
 principal B[
-    knows public info
+    knows public info, offer, answer
     generates sdpB, nB
     kB = HKDF(nil, DH_KEX(gea, privB), info)
     apertaA = AEAD_DEC(kB, nA, offerta, nil)?
-    // B risponde nella casella addr-answer-<rid>, sotto la stessa k
-    risposta = AEAD_ENC(kB, nB, sdpB, nil)
+    kindA, sdpArecv, ridRecv = SPLIT(apertaA)?
+    // bustaDelVerso: una busta che non dice «offer» non e' un'offerta
+    _ = ASSERT(kindA, offer)?
+    // B risponde nella casella addr-answer-<rid>, sotto la stessa k, con kind:'answer'
+    risposta = AEAD_ENC(kB, nB, CONCAT(answer, sdpB), nil)
 ]
 
 B -> A: nB, risposta
 
 principal A[
     apertaB = AEAD_DEC(kA, nB, risposta, nil)?
+    kindB, sdpBrecv = SPLIT(apertaB)?
+    _ = ASSERT(kindB, answer)?
 ]
 
 queries[
