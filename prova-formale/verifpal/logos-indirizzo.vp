@@ -1,63 +1,53 @@
-// Rito B — la chiamata all'indirizzo (PROTOCOLLO.md §3), in Verifpal.
+// Rito B — la chiamata all'indirizzo (PROTOCOLLO.md §3), in Verifpal 1.4.
 // Terzo strumento accanto a Tamarin e ProVerif, motore diverso (18 set 2026).
-// Avversario attivo: controlla il relay (la rete), conosce l'indirizzo.
-// Verifpal e' meno potente di Tamarin: usato come controllo INDIPENDENTE,
-// non come prova unica. Attesi: sdpA e sdpB confidenziali; la risposta che
-// A accetta e' autentica (viene da chi ha privB); l'offerta che B apre e'
-// fresca (nessun replay del rid).
+// Avversario attivo: controlla il relay (la rete) e conosce l'indirizzo.
+// Verifpal e' meno potente di Tamarin: e' un controllo INDIPENDENTE, non la
+// prova unica. Atteso: sdpA e sdpB confidenziali; la risposta che A accetta
+// viene da B; l'offerta che B apre e' stata sigillata per B (A stesso non e'
+// autenticato dal rito: chiunque puo' chiamare un indirizzo, per costruzione).
 
 attacker[active]
 
 principal B[
     knows private privB
-    pubB = G^privB
-    // B pubblica {p: pubB} in /key/<addr>; l'indirizzo e' HASH(pubB):
-    // chi chiama ricalcola l'hash e rifiuta una chiave che non torna (B4).
+    pubB = PUBKEY(privB)
 ]
 
-principal A[
-    knows private sdpA
-    generates e
-    generates rid
-    E = G^e
-]
-
+// B pubblica {p: pubB} in /key/<addr>, e l'indirizzo E' l'hash di pubB:
+// chi chiama ricalcola l'hash e rifiuta una chiave che non torna (B4).
+// Le parentesi quadre modellano esattamente questo: l'avversario legge
+// pubB ma non puo' sostituirlo. Senza, e' il man-in-the-middle da manuale.
 B -> A: [pubB]
-// [pubB] guardato: modella A che accetta SOLO la chiave il cui hash e'
-// l'indirizzo che ha composto (fetchAddrKey). Senza le parentesi quadre
-// l'avversario sostituirebbe la chiave e romperebbe tutto — cioe'
-// esattamente il caso che l'hash dell'indirizzo esiste per impedire.
 
 principal A[
-    // k = HKDF(ECDH(e, pubB)) — busta(k, {sdpA, rid}) + E nella casella addr-offer
-    kA = HKDF(nil, pubB^e, nil)
-    offerta = AEAD_ENC(kA, CONCAT(sdpA, rid), nil)
+    knows public info
+    generates sdpA, e, rid, nA
+    E = PUBKEY(e)
+    // k = HKDF(ECDH(e, pubB), salt, 'logos-addr-v2'); busta(k, {sdpA, rid}) + E
+    kA = HKDF(nil, DH_KEX(pubB, e), info)
+    offerta = AEAD_ENC(kA, nA, CONCAT(sdpA, rid), nil)
 ]
 
-A -> B: E, offerta
+A -> B: E, nA, offerta
 
 principal B[
-    knows private sdpB
-    kB = HKDF(nil, E^privB, nil)
-    apertaA = AEAD_DEC(kB, offerta, nil)?
+    knows public info
+    generates sdpB, nB
+    kB = HKDF(nil, DH_KEX(E, privB), info)
+    apertaA = AEAD_DEC(kB, nA, offerta, nil)?
     // B risponde nella casella addr-answer-<rid>, sotto la stessa k
-    risposta = AEAD_ENC(kB, sdpB, nil)
+    risposta = AEAD_ENC(kB, nB, sdpB, nil)
 ]
 
-B -> A: risposta
+B -> A: nB, risposta
 
 principal A[
-    apertaB = AEAD_DEC(kA, risposta, nil)?
+    apertaB = AEAD_DEC(kA, nB, risposta, nil)?
 ]
 
 queries[
     confidentiality? sdpA
     confidentiality? sdpB
-    // B2/B3: cio' che A accetta come risposta e' stato mandato da B in
-    // questa sessione (autenticazione + freschezza, perche' e' legata a E)
     authentication? B -> A: risposta
-    // l'offerta che B apre e' di A (A non e' autenticato dal rito —
-    // CHIUNQUE puo' chiamare un indirizzo — ma il contenuto sotto k lo e':
-    // solo chi ha fatto ECDH con pubB puo' averla sigillata per B)
     authentication? A -> B: offerta
 ]
