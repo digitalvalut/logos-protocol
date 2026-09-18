@@ -38,7 +38,7 @@ jobs:
           unzip -q vp.zip -d vp && chmod +x vp/verifpal && ./vp/verifpal --version
       - name: verifica di ogni modello contro l'esito ATTESO (.atteso)
         run: prova-formale/verifpal/controlla.sh ./vp/verifpal
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with: { name: verifpal, path: prova-formale/verifpal/*.log }
 
@@ -64,7 +64,7 @@ jobs:
             timeout 600 proverif "$f" > "risultati/$(basename $f).txt" 2>&1 || true
             grep -E "^RESULT|^Error" "risultati/$(basename $f).txt"
           done
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with: { name: risultati-proverif, path: risultati }
   tamarin:
     runs-on: ubuntu-latest
@@ -94,6 +94,6 @@ jobs:
               [ -n "$r" ] && echo "$r" || echo "  $l: NESSUNA RISPOSTA (tempo o memoria esauriti)"
             done
           done
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with: { name: risultati-tamarin, path: risultati }
