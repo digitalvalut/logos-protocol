@@ -1,0 +1,157 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-20T00:00:00Z",
+    "component": {
+      "type": "application",
+      "name": "DigitalValut Logos",
+      "version": "android-60 / web 4.51",
+      "description": "Messenger cifrato da capo a capo. App web: ZERO dipendenze a runtime (solo le API del browser). Involucro Android: una dipendenza dichiarata (androidx.webkit) e le sue transitive, elencate qui come le risolve Gradle (releaseRuntimeClasspath, misurato il 20 set 2026).",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/digitalvalut/logos-protocol"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "group": "androidx.webkit",
+      "name": "webkit",
+      "version": "1.11.0",
+      "purl": "pkg:maven/androidx.webkit/webkit@1.11.0",
+      "scope": "required",
+      "description": "dichiarata: fa girare la pagina nel WebView con https://appassets.androidplatform.net",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.core",
+      "name": "core",
+      "version": "1.1.0",
+      "purl": "pkg:maven/androidx.core/core@1.1.0",
+      "scope": "required",
+      "description": "transitiva di webkit",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.annotation",
+      "name": "annotation",
+      "version": "1.2.0",
+      "purl": "pkg:maven/androidx.annotation/annotation@1.2.0",
+      "scope": "required",
+      "description": "transitiva",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.arch.core",
+      "name": "core-common",
+      "version": "2.0.0",
+      "purl": "pkg:maven/androidx.arch.core/core-common@2.0.0",
+      "scope": "required",
+      "description": "transitiva",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.collection",
+      "name": "collection",
+      "version": "1.0.0",
+      "purl": "pkg:maven/androidx.collection/collection@1.0.0",
+      "scope": "required",
+      "description": "transitiva",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-common",
+      "version": "2.0.0",
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-common@2.0.0",
+      "scope": "required",
+      "description": "transitiva",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime",
+      "version": "2.0.0",
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.0.0",
+      "scope": "required",
+      "description": "transitiva",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "androidx.versionedparcelable",
+      "name": "versionedparcelable",
+      "version": "1.1.0",
+      "purl": "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.0",
+      "scope": "required",
+      "description": "transitiva",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    }
+  ]
+}
