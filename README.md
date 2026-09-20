@@ -149,6 +149,25 @@ You can check any downloaded file against it with
 `apksigner verify --print-certs <file>.apk` — if the fingerprint differs, the file did not
 come from us, whatever it claims.
 
+**Reproducible, and attested.** After every release a GitHub workflow
+(`.github/workflows/riproducibile.yml`) rebuilds the package twice from the tagged source,
+checks the two builds are identical, and compares the result entry by entry with the
+published APK (signature aside). When that passes it deposits a signed build-provenance
+attestation (Sigstore, via GitHub) for the rebuilt package, naming the commit and the
+workflow that produced it. Anyone can check it: rebuild the unsigned package as described
+in `android/RILASCIO.md`, then
+
+```
+gh attestation verify app-release-unsigned.apk -R digitalvalut/logos-protocol
+```
+
+What the package contains, measured rather than declared, is in [`SBOM.md`](SBOM.md):
+zero runtime dependencies for the web app and the relay; for the Android wrapper, one
+declared library (`androidx.webkit`) and its seven AndroidX transitives. A public status
+page — [stato.html](https://digitalvalut.github.io/logos-protocol/stato.html) — shows whether
+the relay, the site and the download link were answering at the last automatic check,
+which runs every 30 minutes, read-only, with no credentials.
+
 What is inside the package: the whole application. It is not a wrapper that opens the
 website — `assets/logos.html` is the single-file build in this repository, served to the
 app's own WebView from `https://appassets.androidplatform.net`, an address Android reserves
