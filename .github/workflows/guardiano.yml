@@ -20,6 +20,11 @@ on:
     - cron: '*/30 * * * *'   # le porte: relay, sito, APK
     - cron: '5 */2 * * *'    # la busta di prova, ogni due ore
   workflow_dispatch:
+    inputs:
+      prova_allarme:
+        description: "Fa fallire di proposito il controllo del relay, per vedere come arriva l'email. Nessuna porta viene toccata."
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -37,6 +42,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # La prova d'allarme: un fallimento voluto, chiesto a mano, per vedere
+      # che l'email arrivi davvero e come si presenta. Non bussa a niente.
+      - name: prova d'allarme (solo se chiesta a mano)
+        if: github.event.inputs.prova_allarme == 'true'
+        run: |
+          echo "::error::PROVA D'ALLARME chiesta a mano: il relay sta benissimo, questo giro fallisce apposta per far arrivare l'email"
+          exit 1
       - name: il relay risponde e il ponte da' le credenziali
         run: |
           # tre tentativi a 20 secondi: un singolo intoppo di rete non e' un allarme
