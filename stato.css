@@ -11,8 +11,8 @@
   padding:8px 8px;border-bottom:1px solid var(--line)}
 .stato-tabella td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 .stato-tabella td.esito{white-space:nowrap;font-weight:800}
-.stato-tabella tr.ok td.esito{color:var(--ok)}
-.stato-tabella tr.male td.esito{color:var(--accent2)}
+.stato-tabella tr.ok td.esito,.stato-tabella tr.ok td.esito a{color:var(--ok)}
+.stato-tabella tr.male td.esito,.stato-tabella tr.male td.esito a{color:var(--accent2)}
 .stato-tabella tr.boh td.esito{color:var(--dim)}
 .stato-tabella td.quando{white-space:nowrap;color:var(--dim)}
 .stato-nota{color:var(--dim);font-size:0.875rem;margin-top:18px}
