@@ -37,6 +37,13 @@ permissions:
 jobs:
   riproducibile:
     runs-on: ubuntu-latest
+    # Due permessi in più, SOLO per l'attestazione in fondo: `id-token` per
+    # farsi riconoscere da Sigstore, `attestations` per depositare la prova.
+    # Nessuno dei due scrive nel repository: `contents` resta in sola lettura.
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -119,3 +126,22 @@ jobs:
             exit 1
           fi
           echo "$TAG si riproduce byte per byte."
+
+      # L'attestazione: una prova firmata (Sigstore, tramite GitHub) che dice
+      # «questo pacchetto e' uscito da questo commit, con questo workflow, su
+      # questa macchina». Si deposita solo DOPO che la riproducibilita' e'
+      # verificata, e riguarda il pacchetto costruito qui — non quello
+      # firmato: la firma e' dell'operatore, sulla sua chiave, e non passa da
+      # GitHub. Chiunque puo' verificarla:
+      #   gh attestation verify app-release-unsigned.apk -R digitalvalut/logos-protocol
+      # dopo aver ricostruito il pacchetto con i passi di android/RILASCIO.md.
+      - name: Il pacchetto ricostruito, con l'impronta scritta nel riepilogo
+        run: |
+          cp /tmp/prima.apk ./app-release-unsigned.apk
+          echo "### $TAG si riproduce" >> "$GITHUB_STEP_SUMMARY"
+          echo '' >> "$GITHUB_STEP_SUMMARY"
+          echo "sha256 del pacchetto ricostruito (senza firma): \`$(sha256sum app-release-unsigned.apk | cut -d' ' -f1)\`" >> "$GITHUB_STEP_SUMMARY"
+      - name: Attestazione di provenienza del pacchetto ricostruito
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: app-release-unsigned.apk
