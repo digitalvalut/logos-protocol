@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<!--
+  Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stato — DigitalValut Logos</title>
+
+<!-- Questa pagina non ha segreti da proteggere e nessuno da cui riceverne:
+     legge l'esito del guardiano (.github/workflows/guardiano.yml) dall'API
+     pubblica di GitHub e lo mostra. L'unica connessione ammessa è quella. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self';
+  style-src 'self';
+  img-src 'self' data:;
+  connect-src https://api.github.com;
+  form-action 'none';
+  base-uri 'none'">
+
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="stato.css">
+</head>
+<body>
+<main class="legal">
+
+<h1>Stato di Logos</h1>
+<p class="legal-date">Un guardiano automatico bussa alle porte pubbliche di Logos ogni mezz'ora, da un computer di GitHub, in sola lettura. Qui c'è l'esito dell'ultimo giro. <span lang="en">Public status: an automatic check knocks on Logos's public doors every 30 minutes; this is the latest result.</span></p>
+
+<div id="riassunto" class="stato-riassunto attesa">Sto leggendo l'ultimo controllo…</div>
+
+<table class="stato-tabella" id="tabella">
+  <thead><tr><th>Cosa</th><th>Esito</th><th>Ultimo controllo</th></tr></thead>
+  <tbody>
+    <tr data-job="relay"><td>Relay — il servizio che fa incontrare due telefoni e dà le credenziali del ponte</td><td class="esito">…</td><td class="quando">…</td></tr>
+    <tr data-job="cassetta"><td>Cassetta — una busta di prova entra e si rilegge (ogni due ore)</td><td class="esito">…</td><td class="quando">…</td></tr>
+    <tr data-job="sito"><td>App sul web e sito</td><td class="esito">…</td><td class="quando">…</td></tr>
+    <tr data-job="apk"><td>Scarica l'ultima versione Android — il link porta a un file vero</td><td class="esito">…</td><td class="quando">…</td></tr>
+  </tbody>
+</table>
+
+<p class="stato-nota">Il guardiano non ha chiavi né accessi: fa quello che farebbe un'app qualsiasi aprendosi. Il suo codice è pubblico: <a href="https://github.com/digitalvalut/logos-protocol/blob/main/.github/workflows/guardiano.yml">guardiano.yml</a>. Tutti i giri: <a href="https://github.com/digitalvalut/logos-protocol/actions/workflows/guardiano.yml">cronologia</a>.</p>
+
+<p class="stato-nota">Se questa pagina non riesce a leggere l'esito (per esempio troppe letture dall'API nella stessa ora), dice che non lo sa: non indovina.</p>
+
+<p class="legal-back"><a href="index.html">← DigitalValut Logos</a></p>
+</main>
+<script src="stato.js"></script>
+</body>
+</html>

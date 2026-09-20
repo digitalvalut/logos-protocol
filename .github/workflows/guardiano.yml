@@ -1,0 +1,127 @@
+# Il guardiano: ogni mezz'ora bussa alle porte pubbliche di Logos e, se una
+# non risponde, GitHub manda un'email a chi ha scritto questo file. In tutto
+# il resto del tempo tace.
+#
+# È in SOLA LETTURA e SENZA SEGRETI: nessun token, nessuna password, nessun
+# accesso ai dati. Fa esattamente quello che farebbe un'app qualsiasi
+# aprendosi — chiede le credenziali del ponte come farebbe la pagina (con la
+# stessa Origin), legge una cassetta vuota, scarica l'intestazione dell'APK.
+# L'unica scrittura è la busta di prova (job «cassetta»), ogni due ore: una
+# chiave usa e getta, una busta finta, riletta subito. Costa 12 scritture al
+# giorno sulle 1.000 del piano gratuito, e scade da sola in due minuti.
+#
+# Le pagine di stato (stato.html) leggono l'esito di questi job dall'API
+# pubblica di GitHub: per questo ogni controllo è un job separato con un nome
+# corto — è il nome che compare sulla pagina.
+name: guardiano
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # le porte: relay, sito, APK
+    - cron: '5 */2 * * *'    # la busta di prova, ogni due ore
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  RELAY: https://digitalvalut-turn.burbeng78.workers.dev
+  APP: https://digitalvalut.github.io/logos-protocol
+  VETRINA: https://digitalvalut-logos.org
+  ORIGIN: https://digitalvalut.github.io
+
+jobs:
+  relay:
+    name: relay
+    if: github.event.schedule != '5 */2 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: il relay risponde e il ponte da' le credenziali
+        run: |
+          # tre tentativi a 20 secondi: un singolo intoppo di rete non e' un allarme
+          for i in 1 2 3; do
+            code=$(curl -s -o /tmp/turn.json -w '%{http_code}' -H "Origin: $ORIGIN" --max-time 20 "$RELAY/turn" || echo 000)
+            if [ "$code" = "200" ] && grep -q '"urls"\|"username"\|"iceServers"' /tmp/turn.json; then
+              echo "relay ok (200, credenziali del ponte presenti)"; exit 0
+            fi
+            echo "tentativo $i: HTTP $code"; sleep 20
+          done
+          echo "::error::il relay non risponde o il ponte non da' credenziali (HTTP $code)"
+          head -c 300 /tmp/turn.json || true
+          exit 1
+      - name: una cassetta vuota risponde «vuota» (KV raggiungibile)
+        run: |
+          k=$(head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n')
+          for i in 1 2 3; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$RELAY/mailbox/$k?keep=1" || echo 000)
+            if [ "$code" = "404" ]; then echo "cassetta ok (404 = vuota, come deve)"; exit 0; fi
+            echo "tentativo $i: HTTP $code"; sleep 20
+          done
+          echo "::error::la cassetta non risponde come dovrebbe (HTTP $code)"; exit 1
+
+  sito:
+    name: sito
+    if: github.event.schedule != '5 */2 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: l'app sul web si apre e dichiara una versione
+        run: |
+          for i in 1 2 3; do
+            code=$(curl -s -o /tmp/app.js -w '%{http_code}' --max-time 20 "$APP/modifica.js" || echo 000)
+            v=$(grep -o "APP_VERSION = '[^']*'" /tmp/app.js | head -1)
+            if [ "$code" = "200" ] && [ -n "$v" ]; then echo "app ok: $v"; exit 0; fi
+            echo "tentativo $i: HTTP $code"; sleep 20
+          done
+          echo "::error::l'app sul web non si apre (HTTP $code)"; exit 1
+      - name: la pagina dell'app e il sito vetrina rispondono
+        run: |
+          for u in "$APP/modifica.html" "$VETRINA/"; do
+            ok=0
+            for i in 1 2 3; do
+              code=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 20 "$u" || echo 000)
+              if [ "$code" = "200" ]; then ok=1; break; fi
+              echo "tentativo $i su $u: HTTP $code"; sleep 20
+            done
+            if [ $ok = 0 ]; then echo "::error::$u non risponde (HTTP $code)"; exit 1; fi
+            echo "$u ok"
+          done
+
+  apk:
+    name: apk
+    if: github.event.schedule != '5 */2 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: il link «scarica l'ultima versione» porta a un file vero
+        run: |
+          # solo l'intestazione: si guarda la dimensione, non si scarica l'APK
+          for i in 1 2 3; do
+            hdr=$(curl -s -I -L --max-time 30 "https://github.com/digitalvalut/logos-protocol/releases/latest/download/DigitalValut-Logos.apk" || true)
+            code=$(printf '%s' "$hdr" | grep -i '^HTTP/' | tail -1 | awk '{print $2}')
+            len=$(printf '%s' "$hdr" | grep -i '^content-length:' | tail -1 | awk '{print $2}' | tr -d '\r')
+            if [ "$code" = "200" ] && [ "${len:-0}" -gt 1000000 ]; then echo "apk ok ($len byte)"; exit 0; fi
+            echo "tentativo $i: HTTP $code, $len byte"; sleep 20
+          done
+          echo "::error::il link dell'ultimo APK non porta a un file valido (HTTP $code, ${len:-0} byte)"; exit 1
+
+  cassetta:
+    name: cassetta
+    if: github.event.schedule == '5 */2 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: una busta di prova entra e si rilegge (il relay lavora davvero)
+        run: |
+          k=$(head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n')
+          t=$(head -c 16 /dev/urandom | od -An -tx1 | tr -d ' \n')
+          body='{"guardiano":1}'
+          for i in 1 2 3; do
+            code=$(curl -s -o /tmp/put.json -w '%{http_code}' -X PUT -H "Origin: $ORIGIN" -H "X-Logos-Token: $t" --data "$body" --max-time 20 "$RELAY/mailbox/$k" || echo 000)
+            if [ "$code" = "200" ]; then break; fi
+            echo "tentativo $i (scrittura): HTTP $code"; sleep 20
+          done
+          if [ "$code" != "200" ]; then echo "::error::la scrittura nella cassetta fallisce (HTTP $code)"; head -c 300 /tmp/put.json; exit 1; fi
+          got=$(curl -s --max-time 20 "$RELAY/mailbox/$k?keep=1" || true)
+          if [ "$got" = "$body" ]; then echo "cassetta ok: scritta e riletta"; else echo "::error::la busta riletta non e' quella scritta: $got"; exit 1; fi

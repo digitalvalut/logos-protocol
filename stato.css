@@ -1,0 +1,23 @@
+/* La pagina di stato: poche righe sopra index.css. Tre colori e basta —
+   verde «ok», arancione «problema», grigio «non lo so» — perché è una pagina
+   che si guarda per un secondo. */
+.stato-riassunto{margin:18px 0 22px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);
+  background:var(--panel);font-weight:800;font-size:1.125rem;line-height:1.35}
+.stato-riassunto.ok{border-color:var(--ok);color:var(--ok)}
+.stato-riassunto.male{border-color:var(--accent);color:var(--accent2)}
+.stato-riassunto.attesa{color:var(--dim)}
+.stato-tabella{width:100%;border-collapse:collapse;font-size:0.9375rem}
+.stato-tabella th{text-align:left;color:var(--faint);font-size:0.75rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 8px;border-bottom:1px solid var(--line)}
+.stato-tabella td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.stato-tabella td.esito{white-space:nowrap;font-weight:800}
+.stato-tabella tr.ok td.esito{color:var(--ok)}
+.stato-tabella tr.male td.esito{color:var(--accent2)}
+.stato-tabella tr.boh td.esito{color:var(--dim)}
+.stato-tabella td.quando{white-space:nowrap;color:var(--dim)}
+.stato-nota{color:var(--dim);font-size:0.875rem;margin-top:18px}
+.stato-nota a{color:var(--accent2)}
+@media (max-width:560px){
+  .stato-tabella th:nth-child(3),.stato-tabella td.quando{display:none}
+  .stato-tabella td{padding:10px 6px}
+}
