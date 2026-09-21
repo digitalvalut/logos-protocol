@@ -1,0 +1,28 @@
+/* La pagina «Installa» e «Se vuoi il massimo»: poche righe sopra index.css.
+   Schede chiare, passi numerati grandi, un pulsante per dispositivo. */
+.installa .lead{color:var(--dim);font-size:1.0625rem;line-height:1.55;margin:6px 0 18px}
+.inst-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 18px;font-size:0.9375rem}
+.inst-top a{color:var(--accent2);text-decoration:none}
+.inst-lang a{color:var(--dim)}
+.inst-lang a.on{color:var(--accent2);font-weight:700}
+.inst-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.inst-nav a{display:inline-block;padding:9px 14px;border:1px solid var(--line);border-radius:999px;color:var(--accent2);
+  text-decoration:none;font-weight:700;font-size:0.9375rem;background:var(--panel)}
+.inst-card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;
+  padding:18px 20px 14px;margin:0 0 16px}
+.inst-card h2{font-size:1.25rem;margin:0 0 10px;letter-spacing:-0.01em}
+.inst-card h3{font-size:1rem;margin:18px 0 6px;color:var(--accent2)}
+.inst-card ol,.inst-card ul{margin:0 0 10px;padding-left:1.35em;line-height:1.55}
+.inst-card li{margin:0 0 8px}
+.inst-card code{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:0.9em;word-break:break-all}
+.inst-card .cta{margin:6px 0 4px}
+.inst-note{color:var(--dim);font-size:0.9375rem;line-height:1.5;margin:8px 0}
+.inst-note a,.inst-card p a:not(.cta),.inst-card li a{color:var(--accent2)}
+.inst-sep{border:0;border-top:1px solid var(--line);margin:34px 0 26px}
+.inst-close{color:var(--dim);font-style:italic;line-height:1.55;margin:22px 0 30px}
+@media (max-width:560px){
+  .inst-card{padding:14px 14px 10px}
+  .inst-top{flex-direction:column;align-items:flex-start}
+}
+/* index.css ha `.legal a{color:accent2}`, che vince sul pulsante: qui lo si rimette scuro */
+.legal .inst-card a.cta{color:var(--accent-ink)}

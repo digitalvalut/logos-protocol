@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="it">
+<!--
+  Copyright 2026 Associazione di Promozione Sociale DigitalValut (ETS)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installa Logos — DigitalValut Logos</title>
+<meta name="description" content="Logos su Android, iPhone e computer in tre passi. E, per chi vuole il massimo, la scala completa: dalle tre parole di sicurezza a Tor e GrapheneOS.">
+
+<!-- Stessa disciplina delle altre pagine: niente caricato da fuori. I link
+     verso Orbot, Tor Browser e GrapheneOS sono link, non script. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self';
+  style-src 'self';
+  img-src 'self' data:;
+  connect-src 'none';
+  form-action 'none';
+  base-uri 'none'">
+
+<link rel="icon" href="modifica-icon-192.png">
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="installa.css">
+</head>
+<body>
+<main class="legal installa">
+
+<p class="inst-top"><a href="index.html" data-i18n="top.back">← DigitalValut Logos</a> <span class="inst-lang"><a href="#" id="langIt">Italiano</a> · <a href="#" id="langEn">English</a></span></p>
+
+<h1 data-i18n="h.title">Logos sul tuo telefono e sul tuo computer</h1>
+<p class="lead" data-i18n="h.lead">Nessun numero, nessun account, nessun permesso da chiedere. Scegli il tuo dispositivo: tre passi e hai il tuo indirizzo.</p>
+
+<nav class="inst-nav" aria-label="Sezioni">
+  <a href="#android" data-i18n="nav.android">Android</a>
+  <a href="#ios" data-i18n="nav.ios">iPhone e iPad</a>
+  <a href="#pc" data-i18n="nav.pc">Computer</a>
+  <a href="#massimo" data-i18n="nav.max">Se vuoi il massimo</a>
+</nav>
+
+<section id="android" class="inst-card">
+  <h2 data-i18n="and.t">Android</h2>
+  <ol>
+    <li data-i18n="and.1">Scarica il file <strong>DigitalValut-Logos.apk</strong> con il pulsante qui sotto.</li>
+    <li data-i18n="and.2">Apri il file e tocca <strong>Installa</strong>. Se il telefono chiede il permesso per «questa fonte», concedilo: è la conferma normale per ogni app che non passa dal Play Store.</li>
+    <li data-i18n="and.3">Apri Logos, scrivi il tuo nome, tocca <strong>Inizia</strong>. Il tuo indirizzo è pronto.</li>
+  </ol>
+  <p><a class="cta" href="https://github.com/digitalvalut/logos-protocol/releases/latest/download/DigitalValut-Logos.apk" data-i18n="and.cta">Scarica per Android</a></p>
+  <p class="inst-note" data-i18n="and.obt">Vuoi che si aggiorni da solo? Installa <a href="https://github.com/ImranR98/Obtainium">Obtainium</a> e aggiungi l'indirizzo <code>https://github.com/digitalvalut/logos-protocol</code>: ogni versione nuova arriva senza fare niente.</p>
+  <p class="inst-note" data-i18n="and.sig">Vuoi la certezza che sia l'app originale? Ogni versione è firmata con la stessa chiave, la cui impronta è pubblicata nel <a href="https://github.com/digitalvalut/logos-protocol#android-as-a-signed-apk">README</a>, e ogni versione viene ricostruita e verificata da un computer indipendente prima di essere dichiarata riproducibile.</p>
+</section>
+
+<section id="ios" class="inst-card">
+  <h2 data-i18n="ios.t">iPhone e iPad</h2>
+  <ol>
+    <li data-i18n="ios.1">Apri <strong>Safari</strong> e vai su <code>digitalvalut.github.io/logos-protocol/modifica.html</code></li>
+    <li data-i18n="ios.2">Tocca <strong>Condividi</strong> (il quadrato con la freccia in alto), poi <strong>Aggiungi a Home</strong>.</li>
+    <li data-i18n="ios.3">Apri Logos dalla schermata Home, scrivi il tuo nome, tocca <strong>Inizia</strong>.</li>
+  </ol>
+  <p><a class="cta" href="modifica.html" data-i18n="ios.cta">Apri Logos in Safari</a></p>
+</section>
+
+<section id="pc" class="inst-card">
+  <h2 data-i18n="pc.t">Computer — Windows, Mac, Linux</h2>
+  <ol>
+    <li data-i18n="pc.1">Apri Chrome, Edge, Firefox o Safari e vai su <code>digitalvalut.github.io/logos-protocol/modifica.html</code></li>
+    <li data-i18n="pc.2">Se il browser propone <strong>Installa</strong>, accetta: Logos diventa un programma con la sua icona, come gli altri.</li>
+    <li data-i18n="pc.3">Scrivi il tuo nome, tocca <strong>Inizia</strong>.</li>
+  </ol>
+  <p><a class="cta" href="modifica.html" data-i18n="pc.cta">Apri Logos</a></p>
+</section>
+
+<hr class="inst-sep">
+
+<h1 id="massimo" data-i18n="max.title">Se vuoi il massimo</h1>
+<p class="lead" data-i18n="max.lead">Logos, così com'è, cifra tutto da capo a capo: quello che dici lo leggete solo tu e la persona con cui parli. Questa parte non è obbligatoria. È per chi vuole di più, a livelli: ognuno dice cosa ti dà.</p>
+
+<section class="inst-card">
+  <h2 data-i18n="l1.t">Livello 1 — Cinque gesti dentro Logos</h2>
+  <ul>
+    <li data-i18n="l1.a"><strong>Verifica le tre parole.</strong> Ogni contatto ha tre parole di sicurezza. Leggile a voce con la persona, una volta sola: da quel momento sai che è lei e nessun altro.</li>
+    <li data-i18n="l1.b"><strong>Con chi non conosci, usa un indirizzo usa e getta.</strong> È il riquadro verde acqua nella prima pagina: il tuo indirizzo vero lo dai solo a chi scegli tu.</li>
+    <li data-i18n="l1.c"><strong>Accendi «Schermo protetto»</strong> (Impostazioni → Altro): niente screenshot, niente anteprime tra le app aperte.</li>
+    <li data-i18n="l1.d"><strong>Tieni l'app aggiornata:</strong> Obtainium su Android; altrove basta riaprire la pagina.</li>
+    <li data-i18n="l1.e"><strong>Conserva solo quello che ti serve:</strong> la pulizia automatica della cronologia è nelle impostazioni.</li>
+  </ul>
+</section>
+
+<section class="inst-card">
+  <h2 data-i18n="l2.t">Livello 2 — Nessuno sa da dove ti colleghi: Tor</h2>
+  <p data-i18n="l2.p1">Con Tor acceso, nemmeno il tuo indirizzo di rete è visibile: né al relay, né alla persona con cui parli, né a chi osserva la connessione. È la scelta di giornalisti, avvocati e di chi ha bisogno di scrivere senza essere localizzato.</p>
+  <p data-i18n="l2.p2"><strong>Perché non è dentro Logos.</strong> Tor è un progetto a sé, con i suoi aggiornamenti e le sue regole. Logos non contiene una sola libreria esterna, e resta così: piccolo, leggibile per intero, verificabile. Tor lo accendi tu quando ti serve, con gli strumenti ufficiali del progetto Tor, e Logos funziona esattamente come sempre.</p>
+  <p data-i18n="l2.p3"><strong>Quando usarlo.</strong> È pensato per scrivere: messaggi, foto, file. Per le chiamate vocali e video la connessione normale è quella giusta, perché Tor privilegia l'anonimato sulla velocità.</p>
+
+  <h3 data-i18n="l2.and">Android</h3>
+  <ol>
+    <li data-i18n="l2.and1">Installa <strong>Orbot</strong> dal <a href="https://play.google.com/store/apps/details?id=org.torproject.android">Google Play</a> o dal sito del <a href="https://guardianproject.info/apps/org.torproject.android/">Guardian Project</a> (che lo sviluppa).</li>
+    <li data-i18n="l2.and2">In Orbot scegli <strong>Modalità VPN</strong>, poi «App che usano Tor» e seleziona <strong>Logos</strong>.</li>
+    <li data-i18n="l2.and3">Tocca <strong>Avvia</strong>. Quando la cipolla diventa verde, apri Logos come sempre.</li>
+  </ol>
+
+  <h3 data-i18n="l2.ios">iPhone e iPad</h3>
+  <ol>
+    <li data-i18n="l2.ios1">Installa <strong>Orbot</strong> dall'<a href="https://apps.apple.com/app/orbot/id1609461599">App Store</a>.</li>
+    <li data-i18n="l2.ios2">Tocca <strong>Connetti</strong>: Orbot protegge tutto il dispositivo, Safari compreso.</li>
+    <li data-i18n="l2.ios3">Apri Logos dalla schermata Home come sempre.</li>
+  </ol>
+
+  <h3 data-i18n="l2.pc">Computer</h3>
+  <ol>
+    <li data-i18n="l2.pc1">Scarica <strong>Tor Browser</strong> da <a href="https://www.torproject.org/download/">torproject.org</a> (Windows, Mac, Linux).</li>
+    <li data-i18n="l2.pc2">Aprilo e vai su <code>digitalvalut.github.io/logos-protocol/modifica.html</code></li>
+    <li data-i18n="l2.pc3">Usa Logos dentro Tor Browser. Per le chiamate, quando lo chiede, consenti il microfono.</li>
+  </ol>
+</section>
+
+<section class="inst-card">
+  <h2 data-i18n="l3.t">Livello 3 — Il telefono</h2>
+  <p data-i18n="l3.p1">Un'app vale quanto il telefono su cui gira. Chi fa sul serio usa <a href="https://grapheneos.org/">GrapheneOS</a> su un Google Pixel: un Android senza Google, con aggiornamenti immediati e profili separati. Logos ci gira senza alcun compromesso, perché non dipende da nessun servizio Google — per costruzione.</p>
+  <p data-i18n="l3.p2">Dentro GrapheneOS: un profilo dedicato a Logos, un PIN lungo, sblocco senza riconoscimento del volto, blocco automatico dopo pochi minuti.</p>
+</section>
+
+<section class="inst-card">
+  <h2 data-i18n="l4.t">Livello 4 — Tu</h2>
+  <p data-i18n="l4.p1">Tre abitudini valgono più di qualunque tecnologia: blocca sempre il telefono, non aprire link da sconosciuti, verifica le tre parole prima di dire cose importanti. La cifratura fa il resto.</p>
+</section>
+
+<p class="inst-close" data-i18n="close">Nessuna di queste cose è obbligatoria. Logos senza tutto questo è già un messenger cifrato da capo a capo, senza numero e senza account. Il resto è per chi vuole di più — e ora sa esattamente cosa ottiene.</p>
+
+<p class="legal-back"><a href="index.html" data-i18n="top.back">← DigitalValut Logos</a></p>
+</main>
+<script src="installa.js"></script>
+</body>
+</html>
