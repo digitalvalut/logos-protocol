@@ -1,0 +1,3 @@
+Una casella sola per gli indirizzi usa e getta.
+
+Accanto al campo del nome ce n'era un secondo, «scritta da stampare sotto il QR»: due caselle che chiedevano la stessa cosa. Ora ce n'è una: il nome che dai all'indirizzo — per esempio «Vendo divano» — è anche quello che viene stampato sotto il codice QR.

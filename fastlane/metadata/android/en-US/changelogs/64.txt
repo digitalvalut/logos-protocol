@@ -1,0 +1,3 @@
+One box instead of two for throwaway addresses.
+
+Next to the name field there was a second one, "caption to print under the QR": two boxes asking for the same thing. Now there is one: the name you give the address — for example "Sofa for sale" — is also what gets printed under the QR code.
