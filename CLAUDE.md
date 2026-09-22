@@ -194,7 +194,7 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 537 tests, 84 suites, about three
+Node 22. Node finds the files itself. 526 tests, 83 suites, about three
 minutes, and it exits on its own (measured 22 Sep 2026). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
