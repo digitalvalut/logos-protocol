@@ -1,0 +1,5 @@
+Senza internet, nella stessa stanza: due telefoni si collegano con due QR, senza nessun server.
+
+In «Altri modi» c'è «Senza internet, nella stessa stanza». Due telefoni sulla stessa rete Wi-Fi — basta l'hotspot di uno dei due, anche senza SIM — si trovano mostrandosi un QR a vicenda: nessun relay, nessuna rete in mezzo. Poi messaggi, foto, chiamate e video come sempre. Serve essere a portata di Wi-Fi: una stanza, un cortile, un cantiere.
+
+Anche: il QR del tuo indirizzo si salva come immagine da stampare, con una scritta che scegli tu, e lo stesso vale per gli indirizzi usa e getta — un annuncio, un biglietto da visita, una bacheca. Quando l'annuncio finisce, cancelli l'indirizzo e chi aveva fotografato il QR non ti trova più.

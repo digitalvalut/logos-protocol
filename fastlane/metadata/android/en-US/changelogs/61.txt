@@ -1,0 +1,5 @@
+No internet, same room: two phones connect with two QR codes, with no server at all.
+
+Under "Other ways" there is now "No internet, same room". Two phones on the same Wi-Fi — one phone's hotspot is enough, even with no SIM — find each other by showing each other a QR code: no relay, no network in between. Then messages, photos, calls and video as always. It works within Wi-Fi range: a room, a yard, a building site.
+
+Also: the QR of your address can be saved as an image to print, with a caption you choose, and the same goes for throwaway addresses — an ad, a business card, a notice board. When the ad ends, you delete the address and whoever photographed the QR can no longer find you.
