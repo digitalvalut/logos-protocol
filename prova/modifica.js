@@ -8289,9 +8289,10 @@ async function toggleAddrQr(box, canvas){
    puo' chiamare, non leggere. Lo dice il testo sotto il pulsante — insieme al
    fatto che una galleria spesso finisce nel cloud. */
 function immagineQr(m, riga1, riga2){
-  const size = m.length, quiet = 4, scale = 10;
+  /* grande abbastanza per una locandina: 20 px per modulo, ~900 px di lato */
+  const size = m.length, quiet = 4, scale = 20;
   const lato = (size + quiet * 2) * scale;
-  const testo = 110;   /* spazio sotto per le due righe */
+  const testo = 220;   /* spazio sotto per le due righe */
   const canvas = document.createElement('canvas');
   canvas.width = lato; canvas.height = lato + testo;
   const ctx = canvas.getContext('2d');
@@ -8301,11 +8302,11 @@ function immagineQr(m, riga1, riga2){
     for (let c = 0; c < size; c++)
       if (m[r][c]) ctx.fillRect((c + quiet) * scale, (r + quiet) * scale, scale, scale);
   ctx.textAlign = 'center';
-  ctx.font = 'bold 30px ui-monospace, Menlo, Consolas, monospace';
-  ctx.fillText(riga1, lato / 2, lato + 34);
+  ctx.font = 'bold 60px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillText(riga1, lato / 2, lato + 68);
   ctx.fillStyle = '#555';
-  ctx.font = '22px system-ui, sans-serif';
-  ctx.fillText(riga2, lato / 2, lato + 78);
+  ctx.font = '44px system-ui, sans-serif';
+  ctx.fillText(riga2, lato / 2, lato + 156);
   return canvas;
 }
 async function salvaQrIndirizzo(){
