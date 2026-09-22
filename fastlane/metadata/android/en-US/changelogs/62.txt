@@ -1,0 +1,3 @@
+Fix to "no internet": the two phones now find each other also when one of them is the hotspot.
+
+The QR code sometimes carried only the mobile carrier's network address — where the other phone cannot reach you even when you are side by side. Now the addresses of the room (the Wi-Fi or the hotspot) come first, and up to three fit in the QR, so the other side has more ways to find you. Found by testing on a real phone, not in the tests.

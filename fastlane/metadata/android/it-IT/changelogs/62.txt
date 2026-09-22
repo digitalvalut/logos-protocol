@@ -1,0 +1,3 @@
+Correzione al «senza internet»: ora i due telefoni si trovano anche quando uno fa da hotspot.
+
+Il codice QR portava, a volte, solo l'indirizzo della rete del gestore telefonico — dove l'altro telefono non arriva nemmeno se siete attaccati. Ora vengono prima gli indirizzi della stanza (la rete Wi-Fi o l'hotspot), e nel QR ne entrano fino a tre, così l'altro ha più strade per trovarti. Trovato provando l'app su un telefono vero, non nei test.
