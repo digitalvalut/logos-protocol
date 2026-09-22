@@ -8027,7 +8027,7 @@ test.describe('4.52: «Salva il QR» — un\'immagine generata dall\'app, non un
     }
   }));
 
-  test('anche l\'usa e getta ha il suo «Salva il QR», con la scritta scelta da chi stampa', () => conApp(async app => {
+  test('anche l\'usa e getta ha il suo «Salva il QR», e sotto c\'e\' il nome che gli hai dato', () => conApp(async app => {
     app.run(`window.AndroidSave = { save(n, m, b){ globalThis.__salvato = { n, m }; } };
              globalThis.__righe = []; immagineQr = (m, r1, r2) => { globalThis.__righe.push([r1, r2]); return { toDataURL: () => 'data:image/png;base64,QUJD' }; };
              myAddress = async (n) => n ? 'BBBBBBBBBBBB' : 'AAAAAAAAAAAA';
@@ -8035,14 +8035,15 @@ test.describe('4.52: «Salva il QR» — un\'immagine generata dall\'app, non un
     await app.run('renderBurners()');
     const btn = app.run("$('burnerList').children[0].children.map(c => c.textContent)");
     assert.ok(btn.includes('🖼'), 'il pulsante c\'e\': ' + btn.join(' '));
-    /* con la scritta: e' quella che finisce sotto il QR */
-    app.run("$('burnerQrCaption').value = '  Vendo divano, chiamami qui  '; $('burnerList').children[0].children.find(c => c.textContent === '🖼').listeners.click[0]()");
+    /* sotto il QR va il nome che gli hai dato: una casella sola, non due */
+    app.run("$('burnerList').children[0].children.find(c => c.textContent === '🖼').listeners.click[0]()");
     await attendi(30);
-    /* senza scritta: resta il nome dell'usa e getta */
-    app.run("$('burnerQrCaption').value = ''; $('burnerList').children[0].children.find(c => c.textContent === '🖼').listeners.click[0]()");
-    await attendi(30);
-    assert.strictEqual(app.run('JSON.stringify(globalThis.__righe)'),
-      '[["DV-BBBB-BBBB-BBBB","Vendo divano, chiamami qui"],["DV-BBBB-BBBB-BBBB","Divano"]]');
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__righe)'), '[["DV-BBBB-BBBB-BBBB","Divano"]]');
+    /* il finto DOM inventa gli elementi che gli chiedi, quindi la casella in piu'
+       si cerca dove vive davvero: nella pagina */
+    const html = fs.readFileSync(__dirname + '/../modifica.html', 'utf8');
+    assert.ok(!/burnerQrCaption/.test(html), 'niente seconda casella accanto a quella del nome');
+    assert.ok(/id="burnerName"/.test(html), 'quella del nome resta, ed e\' l\'unica');
     assert.strictEqual(app.run('globalThis.__salvato.n'), 'logos-DV-BBBB-BBBB-BBBB.png', 'il file porta l\'indirizzo usa e getta, non il tuo');
   }));
 
