@@ -4950,7 +4950,26 @@ function byteDaB64url(s){
    `i<ipv4>~porta` oppure `j<ipv6>~porta`. Al massimo due, nell'ordine in cui
    servono davvero: il nome mDNS prima, poi IPv4, poi IPv6 — oltre due la
    busta esce dal QR. */
-function sdpCompatto(sdp){
+/* ⚠️ TROVATO DALLA PROVA VERA (22 set 2026, 16:28, telefono + Mac sull'hotspot
+   DEL TELEFONO). Il QR del telefono portava un indirizzo solo: 100.84.1.229 —
+   la rete del gestore, non la stanza. Il telefono ne aveva due, ma qui si
+   tenevano i primi due che capitavano.
+   Un indirizzo 100.64–100.127 e' CGNAT: vive dentro la rete mobile
+   dell'operatore e da un altro dispositivo non e' raggiungibile nemmeno se i
+   due sono attaccati. Gli indirizzi che contano qui sono quelli privati —
+   10.x, 192.168.x, 172.16–31.x, e il 169.254.x di chi non ha preso un
+   indirizzo — perche' sono l'unica cosa che esiste dentro la stanza. Vanno
+   davanti; tutto il resto e' zavorra che occupa il posto nel QR. */
+function reteLocale(ip){
+  const o = ip.split('.').map(Number);
+  if (o.length !== 4 || o.some(n => !(n >= 0 && n <= 255))) return false;
+  if (o[0] === 10) return true;
+  if (o[0] === 192 && o[1] === 168) return true;
+  if (o[0] === 172 && o[1] >= 16 && o[1] <= 31) return true;
+  if (o[0] === 169 && o[1] === 254) return true;   /* link-local */
+  return false;
+}
+function sdpCompatto(sdp, quanti){
   const riga = re => { const m = re.exec(sdp); return m ? m[1] : null; };
   const ufrag = riga(/a=ice-ufrag:(\S+)/), pwd = riga(/a=ice-pwd:(\S+)/), fp = riga(/a=fingerprint:sha-256 ([0-9A-Fa-f:]+)/);
   if (!ufrag || !pwd || !fp) return null;
@@ -4968,15 +4987,15 @@ function sdpCompatto(sdp){
        garantita. Un IPv4 vero, quando c'e', non ha bisogno di nessuno: va
        per primo. C'e' quando la pagina ha il permesso del microfono — vedi
        esponiGliIndirizziVeri(). */
-    if (uuid) cand.push({ ord: 1, s: 'm' + b64urlDaByte(uuid.slice(1).join('').match(/../g).map(h => parseInt(h, 16))) + '~' + porta });
+    if (uuid) cand.push({ ord: 2, s: 'm' + b64urlDaByte(uuid.slice(1).join('').match(/../g).map(h => parseInt(h, 16))) + '~' + porta });
     /* i punti dell'IP diventano trattini: il punto e' il separatore dei campi
        (trovato dal test, non dal ragionamento) */
-    else if (/^\d+\.\d+\.\d+\.\d+$/.test(addr)) cand.push({ ord: 0, s: 'i' + addr.replace(/\./g, '-') + '~' + porta });
-    else if (/^[0-9a-f:.]+$/i.test(addr)) cand.push({ ord: 2, s: 'j' + addr.replace(/\./g, '-') + '~' + porta });
+    else if (/^\d+\.\d+\.\d+\.\d+$/.test(addr)) cand.push({ ord: reteLocale(addr) ? 0 : 1, s: 'i' + addr.replace(/\./g, '-') + '~' + porta });
+    else if (/^[0-9a-f:.]+$/i.test(addr)) cand.push({ ord: 3, s: 'j' + addr.replace(/\./g, '-') + '~' + porta });
   }
   if (!cand.length) return null;
   cand.sort((a, b) => a.ord - b.ord);
-  return [SENZA_RETE_MAGIA, ufrag, pwd, impronta, cand.slice(0, 2).map(c => c.s).join(',')].join('.');
+  return [SENZA_RETE_MAGIA, ufrag, pwd, impronta, cand.slice(0, quanti || 2).map(c => c.s).join(',')].join('.');
 }
 /* Il modulo fisso, riscritto dalla parte che riceve: e' quello che Chrome e
    Safari producono per un'offerta con il solo canale dati (misurato). L'audio
@@ -5023,6 +5042,16 @@ function senzaReteDaTesto(raw){
   return { tipo: m[1] === 'r' ? 'answer' : (m[1] === 'o' ? 'offer' : null), compatto: m[2] };
 }
 
+/* Piu' indirizzi si mandano, piu' strade ha l'altro lato per trovarti — ma il
+   QR ha un tetto (versione 10, 213 byte). Si parte da tre e si scende finche'
+   ci sta: meglio due indirizzi giusti che un QR che non si puo' disegnare. */
+function bustaCheStaNelQr(sdp, verso){
+  for (let n = 3; n >= 1; n--){
+    const c = sdpCompatto(sdp, n);
+    if (c && qrMatrix(senzaReteLink(verso, c))) return c;
+  }
+  return sdpCompatto(sdp, 1);
+}
 let offlinePc = null;   /* la connessione in attesa della seconda scansione — guardia, come manualInvitePc */
 /* Chrome maschera gli indirizzi locali dietro nomi mDNS finche' la pagina
    non ha il permesso di microfono o fotocamera: e' la sua protezione della
@@ -5076,7 +5105,7 @@ async function avviaSenzaReteA(){
   await myPc.setLocalDescription(offer);
   await waitIceComplete(myPc);
   if (pc !== myPc) return;   /* superseded during the awaits above */
-  const compatto = sdpCompatto(myPc.localDescription.sdp);
+  const compatto = bustaCheStaNelQr(myPc.localDescription.sdp, 'offer');
   if (!compatto || !mostraQrSenzaRete(senzaReteLink('offer', compatto))){
     setStatus($('offStatus'), t('off.noAddr','Non trovo un indirizzo di rete locale: il telefono è collegato a un Wi-Fi o a un hotspot?'), 'bad');
     $('btnOfflineShow').disabled = false; offlinePc = null; return;
@@ -5104,7 +5133,7 @@ async function rispondiSenzaRete(compatto){
   await myPc.setLocalDescription(answer);
   await waitIceComplete(myPc);
   if (pc !== myPc) return;
-  const mio = sdpCompatto(myPc.localDescription.sdp);
+  const mio = bustaCheStaNelQr(myPc.localDescription.sdp, 'answer');
   if (!mio || !mostraQrSenzaRete(senzaReteLink('answer', mio))){
     setStatus($('offStatus'), t('off.noAddr','Non trovo un indirizzo di rete locale: il telefono è collegato a un Wi-Fi o a un hotspot?'), 'bad');
     $('btnOfflineShow').disabled = false; offlinePc = null; return;
@@ -8743,7 +8772,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.53';
+const APP_VERSION = 'logos-modifica-4.54';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

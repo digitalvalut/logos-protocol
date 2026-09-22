@@ -8090,12 +8090,36 @@ test.describe('4.53: «Senza internet» — la busta compressa in un QR, nessun 
     const c = app.run('sdpCompatto(' + JSON.stringify(tre) + ')');
     const ind = c.split('.')[4].split(',');
     assert.strictEqual(ind.length, 2, 'due indirizzi, non tre');
-    /* IPv4 vero per primo (dalla prova del 22 set: l'mDNS sull'hotspot puo' non risolversi), poi mDNS; l'IPv6 resta fuori */
-    assert.ok(ind[0] === 'i192-168-43-5~5001' && ind[1].startsWith('m'), 'IPv4, poi mDNS: ' + ind.join(' '));
+    /* IPv4 della stanza per primo (dalla prova del 22 set: l'mDNS sull'hotspot puo' non risolversi), poi mDNS; l'IPv6 resta fuori */
+    assert.ok(ind[0] === 'i192-168-43-5~5001' && ind[1].startsWith('m'), 'IPv4 locale, poi mDNS: ' + ind.join(' '));
     assert.ok(app.run('sdpEspanso(' + JSON.stringify(c) + ', "offer")').includes('192.168.43.5 5001 typ host'), 'e l\'IPv4 torna con i punti');
     for (const brutto of ['', 'L1.x', 'L2.a.b.c.d', 'L1.Kiog.R6EGotUDDgVP5P4A46LJcEZy.corta.m8Ncqs7W9SXGOiPmj12jUaw~1', 'L1.Kiog.R6EGotUDDgVP5P4A46LJcEZy.' + c.split('.')[3] + '.x1~2'])
       assert.strictEqual(app.run('sdpEspanso(' + JSON.stringify(brutto) + ', "offer")'), null, 'accettato: ' + brutto);
     assert.strictEqual(app.run('sdpCompatto("v=0\\r\\na=ice-ufrag:a\\r\\n")'), null, 'senza impronta non c\'e\' busta');
+  }));
+
+  test('gli indirizzi della stanza vengono prima di quelli del gestore (trovato dalla prova del 22 set)', () => conApp(async app => {
+    /* un telefono che fa da hotspot: 100.84.x e' la rete mobile (CGNAT, irraggiungibile
+       dall'altro dispositivo), 10.136.28.22 e' la stanza */
+    const dueReti = SDP.replace('a=ice-ufrag:Kiog',
+      'a=candidate:1 1 udp 2 100.84.1.229 35402 typ host generation 0\r\n' +
+      'a=candidate:2 1 udp 2 10.136.28.22 54932 typ host generation 0\r\na=ice-ufrag:Kiog');
+    const c = app.run('sdpCompatto(' + JSON.stringify(dueReti) + ', 1)');
+    assert.strictEqual(c.split('.')[4], 'i10-136-28-22~54932', 'con un posto solo, va la stanza: ' + c.split('.')[4]);
+    const tre = app.run('sdpCompatto(' + JSON.stringify(dueReti) + ', 3)').split('.')[4].split(',');
+    assert.strictEqual(tre[0], 'i10-136-28-22~54932');
+    assert.ok(tre.indexOf('i100-84-1-229~35402') > 0, 'il gestore viene dopo, non si butta: ' + tre.join(' '));
+    for (const dentro of ['10.0.0.5', '192.168.1.7', '172.20.3.4', '169.254.9.9'])
+      assert.strictEqual(app.run('reteLocale(' + JSON.stringify(dentro) + ')'), true, dentro);
+    for (const fuori of ['100.84.1.229', '100.64.0.1', '8.8.8.8', '172.32.0.1', '193.1.2.3'])
+      assert.strictEqual(app.run('reteLocale(' + JSON.stringify(fuori) + ')'), false, fuori);
+    /* e la busta che esce porta PIU' di un indirizzo quando ci stanno, e sta sempre dentro un QR */
+    const b = app.run('bustaCheStaNelQr(' + JSON.stringify(dueReti) + ', "offer")');
+    assert.ok(b.split('.')[4].split(',').length >= 2, 'quando ci stanno, si mandano piu' + '\u2019 strade: ' + b.split('.')[4]);
+    assert.notStrictEqual(app.run('qrMatrix(senzaReteLink("offer", ' + JSON.stringify(b) + '))'), null, 'il QR si disegna');
+    /* e se non ci stanno, si scende invece di restare senza QR */
+    const tanti = app.run('bustaCheStaNelQr(' + JSON.stringify(dueReti.replace('a=ice-ufrag:Kiog', 'a=candidate:9 1 udp 2 192.168.199.199 65001 typ host generation 0\r\na=candidate:8 1 udp 2 172.31.31.31 65002 typ host generation 0\r\na=ice-ufrag:Kiog')) + ', "offer")');
+    assert.notStrictEqual(app.run('qrMatrix(senzaReteLink("offer", ' + JSON.stringify(tanti) + '))'), null, 'anche con cinque indirizzi il QR esce');
   }));
 
   test('dal link, dal solo codice, da un messaggio intero: senzaReteDaTesto trova la busta e il verso', () => conApp(async app => {
