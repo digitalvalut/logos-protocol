@@ -478,6 +478,10 @@
   .qrbox{background:#fff;border-radius:var(--r-sm);padding:14px 14px 10px;margin:0 0 14px;text-align:center}
   .qrbox canvas{width:100%;max-width:260px;height:auto;image-rendering:pixelated;display:block;margin:0 auto}
   .qrhint{color:#4a4a4a;font-size:0.8125rem;margin-top:10px;line-height:1.5}
+  /* 4.52: «Salva il QR» vive dentro il riquadro bianco del QR, dove i colori
+     del tema scuro non si vedono: pulsante e nota si ridipingono per il bianco */
+  .qrbox .btn{margin:12px auto 0;background:#f1f3f6;color:#111;border-color:#c9ced6;display:inline-flex}
+  .qrbox .helptext{color:#4a4a4a;font-size:0.8125rem;line-height:1.5;margin:10px 0 2px}
   /* v46: qui si incolla un link, non sei cifre — corpo normale, niente
      spaziatura da codice, il testo scorre */
   .quickinput{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);

@@ -443,6 +443,10 @@
         <div class="qrbox hide" id="addrQr">
           <canvas id="addrQrCanvas" aria-label="Codice QR del tuo indirizzo"></canvas>
           <div class="qrhint" data-i18n="addr.qrHint">Chi lo inquadra ti chiama direttamente</div>
+          <!-- 4.52: l'immagine da stampare. La genera l'app, non e' uno screenshot:
+               esce anche con «Schermo protetto» acceso. -->
+          <button class="btn" id="btnAddrSaveQr"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17.5V19a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-1.5"/></svg></span><span data-i18n="addr.saveQr">Salva il QR</span></button>
+          <div class="helptext" data-i18n="addr.saveQrNote">Un'immagine da stampare o mandare. Dentro c'è solo il tuo indirizzo: chi la vede può chiamarti, non leggere niente — ma se finisce in galleria, può finire anche nel cloud.</div>
         </div>
         <div class="toolsrow">
           <button class="btn primary" id="btnAddrShare"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 20 4l-6.5 16-3-6.5-6.5-2z"/><path d="M13.5 13.5 20 4"/></svg></span><span data-i18n="addr.share">Manda il tuo indirizzo</span></button>
