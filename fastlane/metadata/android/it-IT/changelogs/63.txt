@@ -1,0 +1,5 @@
+Il QR del tuo indirizzo si stampa: biglietto, vetrina, bacheca.
+
+«Salva il QR» ti dà un'immagine grande con il codice, l'indirizzo scritto sotto e una frase che scegli tu. Vale anche per gli indirizzi usa e getta: sotto il QR metti «Vendo divano, chiamami qui» e lo appendi dove vuoi. Quando l'annuncio finisce cancelli quell'indirizzo, e chi aveva fotografato il foglio non ti trova più — il tuo indirizzo vero non l'ha mai avuto.
+
+Tolto il collegamento «senza internet» comparso nelle due versioni precedenti: sul campo non ha retto, e una funzione che non si può usare non resta in mezzo. Il resto dell'app è esattamente come lo conoscete.

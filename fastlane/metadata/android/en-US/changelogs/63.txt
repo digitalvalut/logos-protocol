@@ -1,0 +1,5 @@
+The QR of your address is made to be printed: a card, a shop window, a notice board.
+
+"Save the QR" gives you a large image with the code, the address written under it and a caption you choose. It works for throwaway addresses too: put "Sofa for sale, call me here" under the QR and pin it wherever you like. When the ad ends you delete that address, and whoever photographed the sheet can no longer find you — they never had your real address.
+
+The "no internet" link from the two previous versions has been removed: it did not hold up in the field, and a feature that cannot be used does not stay in the way. The rest of the app is exactly as you know it.
