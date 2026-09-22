@@ -143,12 +143,19 @@ Deve essere vuoto. (Se `apksigcopier` è installato, la prova prescritta è
 
 ```
 git tag -a android-<N> -m "v<N> (<versione app>)" && git push origin android-<N>
-gh release create android-<N> DigitalValut-Logos-v<N>.apk \
+cp DigitalValut-Logos-v<N>.apk DigitalValut-Logos.apk
+gh release create android-<N> DigitalValut-Logos-v<N>.apk DigitalValut-Logos.apk \
    --notes-file fastlane/metadata/android/en-US/changelogs/<N>.txt
 ```
 
-⚠️ **Poi carica una seconda copia dello stesso pacchetto, chiamata
-`DigitalValut-Logos.apk`** (senza numero). Il tasto "Scarica l'app per Android"
+⚠️ **I due file si caricano CON LA STESSA RIGA, non in due momenti.**
+Scritto cosi' il 22 set 2026 dopo averlo dimenticato quattro release di fila
+(v61, v62, v63, v64): il rilascio riusciva, le note erano giuste, e intanto il
+tasto del sito dava 404 a tutti. Un passo separato « poi carica anche... » e'
+un passo che si salta. Il guardiano se n'e' accorto da solo in due ore, ed e'
+il motivo per cui esiste.
+
+La seconda copia si chiama `DigitalValut-Logos.apk` (senza numero). Il tasto "Scarica l'app per Android"
 del sito punta a
 `releases/latest/download/DigitalValut-Logos.apk`: senza quel file il tasto dà
 404 e il sito è rotto per tutti, mentre il rilascio sembra perfetto.
