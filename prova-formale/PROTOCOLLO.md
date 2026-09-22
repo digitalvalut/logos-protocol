@@ -197,6 +197,31 @@ sono passati dentro DTLS: l'avversario non li ha). D2. Un avversario non può
 far ripartire una chiamata altrui (non conosce i nonce). Entrambe dovrebbero
 reggere senza sorprese; D è il rito più semplice da dimostrare.
 
+## 5b. Rito E — senza internet, nella stessa stanza (4.53, 22 set 2026)
+
+Il rito A con un altro portalettere: **nessun relay**. I due telefoni stanno
+sulla stessa rete locale (l'hotspot di uno dei due basta). A crea l'offerta
+con `iceServers: []` (solo candidati `host`; il browser li maschera come nomi
+mDNS `uuid.local`), la **comprime** — `L1.ufrag.pwd.impronta.indirizzi`,
+~110 caratteri: le due credenziali ICE, i 32 byte dell'impronta DTLS, al più
+due indirizzi — e la mostra in un QR (`#o=`). B la inquadra, ricostruisce la
+SDP dal modulo fisso (`sdpEspanso`), risponde con lo stesso formato in un
+secondo QR (`#r=`), che A inquadra. Poi DTLS come sempre; audio e video si
+aggiungono sul canale già aperto.
+
+**La busta non è sigillata, e non deve esserlo:** il canale è fisico (chi la
+legge è nella stanza) e non contiene segreti — solo credenziali ICE valide per
+quel tentativo e l'impronta della chiave, che è pubblica per costruzione.
+**Avversario:** chi filma il QR può *bussare* (rispondere per primo), non
+*leggere*; chi sostituisce un QR con il proprio si mette in mezzo — ed è
+esattamente ciò che le tre parole (SAS dalle impronte DTLS, come in ogni
+rito) smascherano. Il relay non vede niente perché non c'è: non c'è nemmeno
+la rete. Il modello non cambia: E è A con il canale di segnalazione
+sostituito da un canale autentico-ma-pubblico, e la proprietà che regge è la
+stessa A2 (MITM rilevato dalle parole). Fuori dal modello: la risoluzione
+mDNS sulla rete locale (dipende dall'hotspot), l'isolamento dei client su
+alcune reti pubbliche.
+
 ## 6. Cosa è emerso scrivendo questo, e cosa ne è stato
 
 ### ~~6.1 Rito C: la chiave viene da valori che un terzo può conoscere~~ — ✅ CHIUSO nella 4.38/v45 (14 set): sigillo con le chiavi, `logos-contatto-v45.spthy`

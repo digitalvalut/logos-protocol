@@ -3610,7 +3610,8 @@ test.describe('chi vince diventa la connessione attiva', () => {
     `);
     return Promise.resolve(r).then(x => {
       const o = JSON.parse(x);
-      assert.deepStrictEqual(o.testi, ['','','',''], 'nessun messaggio deve restare');
+      /* tante righe vuote quante sono le righe di stato (4.53 ne ha aggiunta una: offStatus) */
+      assert.ok(o.testi.length >= 5 && o.testi.every(x => x === ''), 'nessun messaggio deve restare: ' + JSON.stringify(o.testi));
       assert.strictEqual(o.rossi, 0, 'e nemmeno il colore rosso');
       app.stop();
     });
@@ -8037,6 +8038,213 @@ test.describe('4.52: «Salva il QR» — un\'immagine generata dall\'app, non un
     }
     assert.ok(/altra persona/.test(I.it['secure.sub']) && /app spia/.test(I.it['secure.sub']));
     assert.ok(/other person/.test(I.en['secure.sub']) && /spyware/.test(I.en['secure.sub']));
+  }));
+});
+
+test.describe('4.53: «Senza internet» — la busta compressa in un QR, nessun relay', () => {
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+  const conApp = async fn => { const app = loadApp(); try{ await fn(app); } finally { app.stop(); } };
+  /* un'offerta VERA (Chrome, 22 set 2026, canale dati e basta): 19 righe */
+  const SDP = [
+    'v=0', 'o=- 718668066744365635 2 IN IP4 127.0.0.1', 's=-', 't=0 0', 'a=group:BUNDLE 0', 'a=extmap-allow-mixed', 'a=msid-semantic: WMS',
+    'm=application 9 UDP/DTLS/SCTP webrtc-datachannel', 'c=IN IP4 0.0.0.0',
+    'a=candidate:3832285418 1 udp 2113937151 63a467fe-bfd4-4106-9b1a-cd233e2f73bc.local 59056 typ host generation 0 network-cost 999',
+    'a=ice-ufrag:Kiog', 'a=ice-pwd:R6EGotUDDgVP5P4A46LJcEZy', 'a=ice-options:trickle',
+    'a=fingerprint:sha-256 75:F5:14:6D:65:B7:30:3A:E3:EB:93:05:5C:BA:A5:D4:23:3D:52:6A:D5:2D:89:7C:72:CA:CA:B4:E0:CF:12:1E',
+    'a=setup:actpass', 'a=mid:0', 'a=sctp-port:5000', 'a=max-message-size:262144', ''].join('\r\n');
+  const PC_FINTO = `
+    globalThis.__pcs = []; globalThis.__opz = [];
+    newPeerConnection = async (o) => { globalThis.__opz.push(o || null);
+      const p = { signalingState: 'stable', connectionState: 'new', iceGatheringState: 'complete', __ls: {},
+        createDataChannel(){ return { readyState: 'connecting', send(){}, close(){}, addEventListener(){} }; },
+        createOffer: async () => ({ type: 'offer', sdp: ${JSON.stringify(SDP)} }),
+        createAnswer: async () => ({ type: 'answer', sdp: ${JSON.stringify(SDP.replace('a=setup:actpass', 'a=setup:active'))} }),
+        setLocalDescription: async function(d){ this.localDescription = d; this.signalingState = d.type === 'offer' ? 'have-local-offer' : 'stable'; },
+        setRemoteDescription: async function(d){ this.remoteDescription = d; if (d.type === 'answer') this.signalingState = 'stable'; },
+        addEventListener(t, f){ (this.__ls[t] = this.__ls[t] || []).push(f); }, removeEventListener(){}, getStats: async () => new Map(), close(){ this.connectionState = 'closed'; } };
+      globalThis.__pcs.push(p); return p; };
+    waitIceComplete = async () => {};
+    globalThis.__cassetta = 0; mailboxPutSealed = async () => { globalThis.__cassetta++; return true; };
+    wireDataChannel = () => {};
+  `;
+
+  test('compressa e riespansa, la busta e\' la stessa: credenziali, impronta, indirizzo mDNS nascosto, ruolo', () => conApp(async app => {
+    const c = app.run('sdpCompatto(' + JSON.stringify(SDP) + ')');
+    assert.ok(c && c.startsWith('L1.'), 'formato L1');
+    assert.ok(c.length < 120, 'la busta compressa sta in ~110 caratteri, oggi ' + c.length);
+    assert.ok(!/63a467fe/.test(c), 'il nome mDNS viaggia come byte, non come 36 caratteri');
+    const o = app.run('sdpEspanso(' + JSON.stringify(c) + ', "offer")');
+    for (const riga of ['a=ice-ufrag:Kiog', 'a=ice-pwd:R6EGotUDDgVP5P4A46LJcEZy', 'a=fingerprint:sha-256 75:F5:14:6D:65:B7:30:3A:E3:EB:93:05:5C:BA:A5:D4:23:3D:52:6A:D5:2D:89:7C:72:CA:CA:B4:E0:CF:12:1E',
+                        '63a467fe-bfd4-4106-9b1a-cd233e2f73bc.local 59056 typ host', 'a=setup:actpass', 'm=application 9 UDP/DTLS/SCTP webrtc-datachannel', 'a=sctp-port:5000'])
+      assert.ok(o.includes(riga), 'manca: ' + riga);
+    const r = app.run('sdpEspanso(' + JSON.stringify(c) + ', "answer")');
+    assert.ok(r.includes('a=setup:active') && !r.includes('actpass'), 'la risposta e\' active');
+    /* il link sta nel QR che questa app sa fare (versione ≤ 10) */
+    const link = app.run('senzaReteLink("offer", ' + JSON.stringify(c) + ')');
+    assert.ok(/#o=L1\./.test(link));
+    assert.notStrictEqual(app.run('qrMatrix(' + JSON.stringify(link) + ')'), null, 'il link entra in un QR, ' + link.length + ' caratteri');
+  }));
+
+  test('al massimo due indirizzi, mDNS prima di IPv4 prima di IPv6; il resto e\' rifiutato', () => conApp(async app => {
+    const tre = SDP.replace('a=ice-ufrag:Kiog', 'a=candidate:1 1 udp 2 2001:db8::1 5000 typ host generation 0\r\na=candidate:2 1 udp 2 192.168.43.5 5001 typ host generation 0\r\na=ice-ufrag:Kiog');
+    const c = app.run('sdpCompatto(' + JSON.stringify(tre) + ')');
+    const ind = c.split('.')[4].split(',');
+    assert.strictEqual(ind.length, 2, 'due indirizzi, non tre');
+    /* IPv4 vero per primo (dalla prova del 22 set: l'mDNS sull'hotspot puo' non risolversi), poi mDNS; l'IPv6 resta fuori */
+    assert.ok(ind[0] === 'i192-168-43-5~5001' && ind[1].startsWith('m'), 'IPv4, poi mDNS: ' + ind.join(' '));
+    assert.ok(app.run('sdpEspanso(' + JSON.stringify(c) + ', "offer")').includes('192.168.43.5 5001 typ host'), 'e l\'IPv4 torna con i punti');
+    for (const brutto of ['', 'L1.x', 'L2.a.b.c.d', 'L1.Kiog.R6EGotUDDgVP5P4A46LJcEZy.corta.m8Ncqs7W9SXGOiPmj12jUaw~1', 'L1.Kiog.R6EGotUDDgVP5P4A46LJcEZy.' + c.split('.')[3] + '.x1~2'])
+      assert.strictEqual(app.run('sdpEspanso(' + JSON.stringify(brutto) + ', "offer")'), null, 'accettato: ' + brutto);
+    assert.strictEqual(app.run('sdpCompatto("v=0\\r\\na=ice-ufrag:a\\r\\n")'), null, 'senza impronta non c\'e\' busta');
+  }));
+
+  test('dal link, dal solo codice, da un messaggio intero: senzaReteDaTesto trova la busta e il verso', () => conApp(async app => {
+    const c = app.run('sdpCompatto(' + JSON.stringify(SDP) + ')');
+    const j = espr => app.run('JSON.stringify(' + espr + ')');
+    assert.strictEqual(j('senzaReteDaTesto("ciao, ecco: https://x/y.html#o=' + c + ' grazie")'), JSON.stringify({ tipo: 'offer', compatto: c }));
+    assert.strictEqual(j('senzaReteDaTesto("https://x/y.html#r=' + c + '")'), JSON.stringify({ tipo: 'answer', compatto: c }));
+    assert.strictEqual(j('senzaReteDaTesto("  ' + c + '  ")'), JSON.stringify({ tipo: null, compatto: c }));
+    assert.strictEqual(app.run('senzaReteDaTesto("https://x/y.html#a=K7M29QRTX4WP")'), null);
+  }));
+
+  test('lato A: «Mostra il mio QR» apre una connessione SENZA relay (niente STUN, niente cassetta) e mostra #o=', () => conApp(async app => {
+    app.run(PC_FINTO);
+    app.run("$('goOffline').listeners.click[0]()");
+    assert.strictEqual(app.run("$('screenOffline').classList.contains('hide')"), false);
+    app.run("$('btnOfflineShow').listeners.click[0]()");
+    await attendi(60);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__opz)'), '[{"senzaRete":true}]', 'la connessione nasce senza rete');
+    assert.strictEqual(app.run('globalThis.__cassetta'), 0, 'il relay non e\' stato toccato');
+    const link = app.run("$('offLinkOut').textContent");
+    assert.ok(/#o=L1\./.test(link), 'il QR porta l\'offerta: ' + link);
+    assert.strictEqual(app.run("$('offQrBox').classList.contains('hide')"), false);
+    assert.strictEqual(app.run("$('offHintA').classList.contains('hide')"), false);
+    assert.strictEqual(app.run('offlinePc === pc && pc.signalingState'), 'have-local-offer');
+    /* seconda scansione nella stessa pagina (l'APK cambia solo l'hash): la risposta chiude il cerchio */
+    const c = app.run('sdpCompatto(' + JSON.stringify(SDP.replace('a=setup:actpass', 'a=setup:active')) + ')');
+    app.run('location.hash = "#r=' + c + '"; window.dispatchEvent({ type: "hashchange" });');
+    await attendi(60);
+    assert.strictEqual(app.run('pc.remoteDescription && pc.remoteDescription.type'), 'answer');
+    assert.ok(app.run('pc.remoteDescription.sdp').includes('a=setup:active'));
+  }));
+
+  test('lato B: il link #o= apre la schermata, risponde senza relay e mostra #r=', () => conApp(async app => {
+    app.run(PC_FINTO);
+    const c = app.run('sdpCompatto(' + JSON.stringify(SDP) + ')');
+    app.run('location.hash = "#o=' + c + '"; autoFillFromHash();');
+    await attendi(60);
+    assert.strictEqual(app.run("$('screenOffline').classList.contains('hide')"), false);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__opz)'), '[{"senzaRete":true}]');
+    assert.strictEqual(app.run('globalThis.__cassetta'), 0);
+    assert.strictEqual(app.run('pc.remoteDescription.type'), 'offer');
+    assert.ok(/#r=L1\./.test(app.run("$('offLinkOut').textContent")), 'il QR porta la risposta');
+    assert.strictEqual(app.run("$('offHintB').classList.contains('hide')"), false);
+  }));
+
+  test('la risposta arrivata in un\'altra scheda passa dalla memoria condivisa, e la scheda che aspetta la raccoglie', () => conApp(async app => {
+    app.run(PC_FINTO);
+    const c = app.run('sdpCompatto(' + JSON.stringify(SDP.replace('a=setup:actpass', 'a=setup:active')) + ')');
+    /* nessuna connessione in attesa qui: e' la scheda nuova aperta dalla fotocamera */
+    app.run('location.hash = "#r=' + c + '"; autoFillFromHash();');
+    await attendi(30);
+    const rec = JSON.parse(app.run("MEM.getItem('dvlogos-offline-answer')"));
+    assert.strictEqual(rec.c, c, 'la risposta e\' lasciata in memoria');
+    assert.ok(/scheda/.test(app.run("$('offStatus').textContent")), 'e lo si dice');
+    /* ora la scheda che aspettava: offerta pendente, evento storage */
+    app.run("$('goOffline').listeners.click[0](); $('btnOfflineShow').listeners.click[0]()");
+    await attendi(60);
+    app.run("MEM.setItem('dvlogos-offline-answer', JSON.stringify({ c: " + JSON.stringify(c) + ", ts: Date.now() }))");
+    app.run("for (const f of (window.listeners.storage || [])) f({ key: PFX_PROVA + 'dvlogos-offline-answer', newValue: 'x' })");
+    await attendi(60);
+    assert.strictEqual(app.run('pc.remoteDescription && pc.remoteDescription.type'), 'answer', 'raccolta e applicata');
+    assert.strictEqual(app.run("MEM.getItem('dvlogos-offline-answer')"), null, 'e consumata');
+  }));
+
+  test('prima della connessione si chiede il microfono (per un attimo), cosi\' il browser mette nella busta l\'IP vero', () => conApp(async app => {
+    app.run(PC_FINTO + `
+      globalThis.__ordine = [];
+      navigator.mediaDevices = { getUserMedia: async () => { globalThis.__ordine.push('mic'); return { getTracks: () => [{ stop(){ globalThis.__ordine.push('stop'); } }] }; } };
+      const _n = newPeerConnection; newPeerConnection = async (o) => { globalThis.__ordine.push('pc'); return _n(o); };
+    `);
+    app.run("$('goOffline').listeners.click[0](); $('btnOfflineShow').listeners.click[0]()");
+    await attendi(60);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__ordine)'), '["mic","stop","pc"]', 'microfono chiesto e richiuso PRIMA di costruire la connessione');
+    /* e se lo rifiutano, si va avanti lo stesso */
+    app.run("navigator.mediaDevices = { getUserMedia: async () => { throw new Error('no'); } }; globalThis.__ordine = []; $('goOffline').listeners.click[0](); $('btnOfflineShow').listeners.click[0]()");
+    await attendi(60);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__ordine)'), '["pc"]');
+    assert.ok(/#o=L1\./.test(app.run("$('offLinkOut').textContent")));
+  }));
+
+  test('la scritta sotto il QR stampato la sceglie chi stampa; vuota, resta il nome', () => conApp(async app => {
+    app.run(`window.AndroidSave = { save(){} }; globalThis.__righe = [];
+             immagineQr = (m, r1, r2) => { globalThis.__righe.push(r2); return { toDataURL: () => 'data:image/png;base64,QUJD' }; };
+             myAddress = async () => 'AAAAAAAAAAAA';`);
+    app.run("$('addrQrCaption').value = '  Studio legale Rossi  '; $('btnAddrSaveQr').listeners.click[0]()");
+    await attendi(30);
+    app.run("$('addrQrCaption').value = ''; $('btnAddrSaveQr').listeners.click[0]()");
+    await attendi(30);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__righe)'), '["Studio legale Rossi","DigitalValut Logos"]');
+  }));
+
+  test('la resa arriva dopo cinque minuti, non dopo ottanta secondi: la seconda busta la porta una persona', () => conApp(async app => {
+    app.run(PC_FINTO + "globalThis.__pazienze = []; const _w = watchHandshakeProgress; watchHandshakeProgress = (p, s2, d, pu, on, paz) => { globalThis.__pazienze.push(paz); };");
+    const c = app.run('sdpCompatto(' + JSON.stringify(SDP) + ')');
+    app.run('location.hash = "#o=' + c + '"; autoFillFromHash();');
+    await attendi(60);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__pazienze)'), '[300000]', 'lato B: cinque minuti');
+    assert.ok(/Non chiudere|non chiudere/.test(app.run("$('offStatus').textContent")), 'e lo schermo dice cosa si aspetta: ' + app.run("$('offStatus').textContent"));
+    /* e anche lato A, quando applica la risposta */
+    app.run("globalThis.__pazienze = []; $('goOffline').listeners.click[0](); $('btnOfflineShow').listeners.click[0]()");
+    await attendi(60);
+    const ca = app.run('sdpCompatto(' + JSON.stringify(SDP.replace('a=setup:actpass', 'a=setup:active')) + ')');
+    app.run('location.hash = "#r=' + ca + '"; window.dispatchEvent({ type: "hashchange" });');
+    await attendi(60);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__pazienze)'), '[300000]', 'lato A: cinque minuti');
+  }));
+
+  test('ICE collegato non e\' un fallimento: se manca solo l\'altro lato, niente rosso', () => conApp(async app => {
+    app.run(`
+      globalThis.__scritte = [];
+      const el = { textContent: '', className: '', classList: { add(){}, remove(){}, contains(){ return false; } } };
+      globalThis.__el = el;
+      const _ss = setStatus; setStatus = (e, t2, k) => { if (e === el) globalThis.__scritte.push([t2, k || '']); _ss(e, t2, k); };
+      globalThis.__p = { iceConnectionState: 'connected', connectionState: 'failed', signalingState: 'stable', __ls: {},
+        addEventListener(t2, f){ (this.__ls[t2] = this.__ls[t2] || []).push(f); }, removeEventListener(){}, getStats: async () => new Map() };
+      watchHandshakeProgress(globalThis.__p, el, null, null, null, 40);
+      for (const f of (globalThis.__p.__ls.connectionstatechange || [])) f({});
+    `);
+    await attendi(220);
+    let rosse = app.run("JSON.stringify(globalThis.__scritte.filter(x => x[1] === 'bad'))");
+    assert.strictEqual(rosse, '[]', 'con la strada aperta nessun rosso: ' + app.run('JSON.stringify(globalThis.__scritte)'));
+    assert.ok(/aperta/.test(app.run('JSON.stringify(globalThis.__scritte)')), 'e si dice che manca solo l\'altro');
+    /* se invece la strada NON c'e', il verdetto arriva come sempre */
+    app.run("globalThis.__scritte = []; globalThis.__p.iceConnectionState = 'failed'; for (const f of (globalThis.__p.__ls.connectionstatechange || [])) f({});");
+    await attendi(220);
+    rosse = app.run("JSON.stringify(globalThis.__scritte.filter(x => x[1] === 'bad'))");
+    assert.notStrictEqual(rosse, '[]', 'senza strada il rosso ci deve essere');
+  }));
+
+  test('newPeerConnection({senzaRete}) non chiede i server ICE al relay; senza l\'opzione si\'', () => conApp(async app => {
+    app.run('globalThis.__ice = 0; fetchIceServers = async () => { globalThis.__ice++; return []; }; myIdentity = async () => null;');
+    await app.run('newPeerConnection({ senzaRete: true })');
+    assert.strictEqual(app.run('globalThis.__ice'), 0);
+    await app.run('newPeerConnection()');
+    assert.strictEqual(app.run('globalThis.__ice'), 1);
+  }));
+
+  test('anche l\'usa e getta ha il suo «Salva il QR», col nome sotto', () => conApp(async app => {
+    app.run(`window.AndroidSave = { save(n, m, b){ globalThis.__salvato = { n, m }; } };
+             globalThis.__righe = []; immagineQr = (m, r1, r2) => { globalThis.__righe.push([r1, r2]); return { toDataURL: () => 'data:image/png;base64,QUJD' }; };
+             myAddress = async (n) => n ? 'BBBBBBBBBBBB' : 'AAAAAAAAAAAA';
+             burners = () => [{ n: 1, name: 'Divano usato' }];`);
+    await app.run('renderBurners()');
+    const btn = app.run("$('burnerList').children[0].children.map(c => c.textContent)");
+    assert.ok(btn.includes('🖼'), 'il pulsante c\'e\': ' + btn.join(' '));
+    app.run("$('burnerList').children[0].children.find(c => c.textContent === '🖼').listeners.click[0]()");
+    await attendi(30);
+    assert.strictEqual(app.run('JSON.stringify(globalThis.__righe)'), '[["DV-BBBB-BBBB-BBBB","Divano usato"]]');
+    assert.strictEqual(app.run('globalThis.__salvato.n'), 'logos-DV-BBBB-BBBB-BBBB.png');
   }));
 });
 

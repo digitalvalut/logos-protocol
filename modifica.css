@@ -482,6 +482,7 @@
      del tema scuro non si vedono: pulsante e nota si ridipingono per il bianco */
   .qrbox .btn{margin:12px auto 0;background:#f1f3f6;color:#111;border-color:#c9ced6;display:inline-flex}
   .qrbox .helptext{color:#4a4a4a;font-size:0.8125rem;line-height:1.5;margin:10px 0 2px}
+  .qrbox .qrcaption{margin-top:12px;background:#fff;color:#111;border:1.5px solid #c9ced6}
   /* v46: qui si incolla un link, non sei cifre — corpo normale, niente
      spaziatura da codice, il testo scorre */
   .quickinput{width:100%;background:#0b0d11;color:var(--ink);border:1.5px solid var(--line);

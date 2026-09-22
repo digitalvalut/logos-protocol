@@ -36,12 +36,13 @@
     'max.title': 'If you want the most',
     'max.lead': 'Logos, as it is, encrypts everything end to end: what you say is read only by you and the person you talk to. This part is not required. It is for those who want more, in levels: each one says what it gives you.',
 
-    'l1.t': 'Level 1 — Five habits inside Logos',
+    'l1.t': 'Level 1 — Six habits inside Logos',
     'l1.a': '<strong>Check the three words.</strong> Every contact has three safety words. Read them aloud with the person, once: from then on you know it is them and nobody else.',
     'l1.b': '<strong>With people you do not know, use a throwaway address.</strong> It is the teal tile on the first page: your real address goes only to whom you choose.',
     'l1.c': '<strong>Turn on "Protected screen"</strong> (Settings → More): no screenshots, no previews among open apps.',
     'l1.d': '<strong>Keep the app up to date:</strong> Obtainium on Android; elsewhere, just reopen the page.',
     'l1.e': '<strong>Keep only what you need:</strong> automatic history clean-up is in the settings.',
+    'l1.f': '<strong>Print your QR.</strong> "Save the QR" (Settings → your address) gives you an image for a business card, a shop window, a notice board: whoever scans it calls you, without ever having your number. It works for a throwaway address too — the ad ends, you delete it, and whoever photographed it can no longer find you.',
 
     'l2.t': 'Level 2 — Nobody knows where you connect from: Tor',
     'l2.p1': 'With Tor on, not even your network address is visible: not to the relay, not to the person you talk to, not to anyone watching the connection. It is the choice of journalists, lawyers and anyone who needs to write without being located.',
