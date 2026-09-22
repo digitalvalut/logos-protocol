@@ -498,6 +498,8 @@
       <div class="smalllinks left">
         <button class="btn ghost linkbtn" id="goStart" data-i18n="home.inviteLink">Invito a scadenza, senza dare nessun indirizzo</button>
         <button class="btn ghost linkbtn" id="goJoin" data-i18n="home.joinLink">Ti hanno mandato un link che non si apre? Incollalo qui</button>
+        <!-- 4.53: due telefoni nella stessa stanza, senza relay e senza internet -->
+        <button class="btn ghost linkbtn" id="goOffline" data-i18n="home.offlineLink">Senza internet, nella stessa stanza</button>
       </div>
     </div>
     <div class="card" id="burnersCard">
@@ -805,6 +807,37 @@
         <div class="status" id="statusB"></div>
         <div class="diagline hide" id="diagB"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================ SENZA INTERNET (4.53) ============================
+       Il codice lungo con un portalettere diverso: la busta, compressa, viaggia
+       in un QR. Uno mostra, l'altro inquadra, poi al contrario. Vedi la nota
+       sopra sdpCompatto() in modifica.js. -->
+  <section id="screenOffline" class="hide">
+    <button class="btn ghost" id="backFromOffline">‹ <span data-i18n="nav.back">Indietro</span></button>
+    <div class="card mt10">
+      <h2 data-i18n="off.title">Senza internet, nella stessa stanza</h2>
+      <div class="helptext" data-i18n="off.lead">Due telefoni sulla stessa rete Wi-Fi: basta l'hotspot di uno dei due, anche senza SIM e senza internet. Nessun server in mezzo — non c'è proprio la rete. Poi messaggi, foto, chiamate e video come sempre.</div>
+      <div class="step now"><div class="n">1</div><div class="lbl" data-i18n="off.s1">Uno dei due mostra il QR</div></div>
+      <div class="helptext" data-i18n="off.s1help">Premi il pulsante. L'altra persona lo inquadra con la fotocamera del telefono, come un invito.</div>
+      <button class="btn primary big" id="btnOfflineShow"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.3"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.3"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.3"/></svg></span><span data-i18n="off.show">Mostra il mio QR</span></button>
+      <div class="qrbox hide mt16" id="offQrBox">
+        <canvas id="offQrCanvas" aria-label="Codice QR per collegarsi senza internet"></canvas>
+        <div class="qrhint hide" id="offHintA" data-i18n="off.hintA">Fallo inquadrare. Sul suo telefono comparirà un altro QR: inquadralo tu, con la fotocamera, e siete collegati.</div>
+        <div class="qrhint hide" id="offHintB" data-i18n="off.hintB">Ora fai inquadrare questo QR all'altro telefono, con la sua fotocamera. Appena lo legge, siete collegati.</div>
+        <details class="showcode"><summary data-i18n="btn.showCode">Mostra il codice</summary><div class="codebox" id="offLinkOut"></div></details>
+      </div>
+      <div class="step mt16"><div class="n">2</div><div class="lbl" data-i18n="off.s2">Ha inquadrato, ma non si è aperto?</div></div>
+      <div class="helptext" data-i18n="off.s2help">Se la fotocamera mostra solo il link senza aprirlo, copialo e incollalo qui.</div>
+      <textarea id="offPasteIn" data-i18n-ph="off.pastePh" placeholder="Incolla qui il link del QR…"></textarea>
+      <div class="pasteline">
+        <button class="btn" id="btnOfflinePaste"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.7A2.2 2.2 0 0 0 13.3 3.5H5.7A2.2 2.2 0 0 0 3.5 5.7v7.6a2.2 2.2 0 0 0 2.2 2.2h2.8"/></svg></span><span data-i18n="btn.paste">Incolla</span></button>
+        <button class="btn primary" id="btnOfflineConnect" data-i18n="off.connect">Collega</button>
+      </div>
+      <div class="status" id="offStatus"></div>
+      <div class="diagline hide" id="offDiag"></div>
+      <div class="helptext mt16" data-i18n="off.note">Funziona a portata di Wi-Fi: una stanza, un cortile, un cantiere. Alcune reti pubbliche (hotel, aeroporti) tengono separati i dispositivi e non lasciano passare: lì usa l'hotspot di un telefono. Su iPhone apri Logos in Safari, non dall'icona sulla schermata Home.</div>
     </div>
   </section>
 
