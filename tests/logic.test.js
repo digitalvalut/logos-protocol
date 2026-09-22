@@ -7955,6 +7955,91 @@ test.describe('4.51: «Chiudi» mentre squilla — tono spento, busta ritirata, 
   }));
 });
 
+test.describe('4.52: «Salva il QR» — un\'immagine generata dall\'app, non uno screenshot', () => {
+  const attendi = ms => new Promise(r => setTimeout(r, ms));
+  const PREP = `
+    myAddress = async () => 'K7M29QRTX4WP';
+    globalThis.__ponte = null; globalThis.__share = null; globalThis.__link = null; globalThis.__toast = [];
+    toast = m => { globalThis.__toast.push(m); };
+  `;
+  const conApp = async fn => { const app = loadApp(); try{ await fn(app); } finally { app.stop(); } };
+
+  test('nell\'APK passa dal ponte AndroidSave: nome col proprio indirizzo, PNG, base64 senza intestazione', () => conApp(async app => {
+    app.run(PREP + "window.AndroidSave = { save(n, m, b){ globalThis.__ponte = { n, m, b }; } };");
+    app.run("$('btnAddrSaveQr').listeners.click[0]()");
+    await attendi(30);
+    const p = JSON.parse(app.run('JSON.stringify(globalThis.__ponte)'));
+    assert.ok(p, 'il ponte e\' stato chiamato');
+    assert.strictEqual(p.n, 'logos-DV-K7M2-9QRT-X4WP.png', 'il file porta l\'indirizzo scritto come lo si legge');
+    assert.strictEqual(p.m, 'image/png');
+    assert.ok(!/^data:/.test(p.b), 'al ponte va il base64 nudo, non il data: URL');
+    assert.strictEqual(app.run('globalThis.__toast.length'), 0, 'e\' il telefono a dire «salvato», non la pagina');
+  }));
+
+  test('senza ponte e senza tendina: scaricamento normale e avviso', () => conApp(async app => {
+    app.run(PREP + `
+      delete window.AndroidSave;
+      const _ce = document.createElement.bind(document);
+      document.createElement = tag => { const el = _ce(tag); if (tag === 'a'){ el.click = () => { globalThis.__link = { href: el.href, download: el.download }; }; } return el; };
+    `);
+    app.run("$('btnAddrSaveQr').listeners.click[0]()");
+    await attendi(30);
+    const l = JSON.parse(app.run('JSON.stringify(globalThis.__link)'));
+    assert.ok(l, 'si e\' cliccato un link di scaricamento');
+    assert.strictEqual(l.download, 'logos-DV-K7M2-9QRT-X4WP.png');
+    assert.ok(/^data:/.test(l.href), 'l\'immagine viaggia come data: URL, non come blob: (che l\'APK non saprebbe aprire)');
+    assert.strictEqual(app.run('globalThis.__toast.length'), 1, 'un avviso, «salvata»');
+  }));
+
+  test('sul telefono nel browser: la tendina «condividi» con il file, e il ponte Android viene PRIMA', () => conApp(async app => {
+    app.run(PREP + `
+      delete window.AndroidSave;
+      navigator.canShare = o => !!(o && o.files && o.files.length === 1);
+      navigator.share = async o => { globalThis.__share = { n: o.files[0].name, t: o.files[0].type }; };
+      /* il finto canvas non sa fare toBlob: glielo si insegna, come farebbe un browser vero */
+      const _ce = document.createElement.bind(document);
+      document.createElement = tag => {
+        const el = _ce(tag);
+        if (tag === 'canvas'){ el.toBlob = (cb, type) => cb(new Blob(['png'], { type })); }
+        if (tag === 'a'){ el.click = () => { globalThis.__link = { href: el.href, download: el.download }; }; }
+        return el;
+      };
+    `);
+    app.run("$('btnAddrSaveQr').listeners.click[0]()");
+    await attendi(30);
+    const s = JSON.parse(app.run('JSON.stringify(globalThis.__share)'));
+    assert.ok(s, 'la tendina si e\' aperta');
+    assert.strictEqual(s.n, 'logos-DV-K7M2-9QRT-X4WP.png');
+    assert.strictEqual(s.t, 'image/png');
+    assert.strictEqual(app.run('globalThis.__link'), null, 'e non si scarica due volte');
+  }));
+
+  test('il pulsante sta dentro il riquadro del QR, in tutte le lingue, con la nota sulla galleria', () => conApp(async app => {
+    /* il finto DOM non ha la gerarchia: la posizione si legge nel sorgente della pagina */
+    const html = fs.readFileSync(__dirname + '/../modifica.html', 'utf8');
+    const box = html.indexOf('id="addrQr"'), btn = html.indexOf('id="btnAddrSaveQr"'), fine = html.indexOf('id="btnAddrShare"');
+    assert.ok(box > 0 && btn > box && btn < fine, 'il pulsante vive nel riquadro bianco del QR, non fuori');
+    assert.ok(/data-i18n="addr\.saveQrNote"/.test(html.slice(btn, fine)), 'con la nota subito sotto');
+    for (const l of Object.keys(app.run('I18N'))){
+      const d = app.run('I18N')[l];
+      assert.ok(d['addr.saveQr'] && d['addr.saveQrNote'] && d['addr.qrSaved'], 'mancano le frasi in ' + l);
+      assert.ok(/QR/.test(d['addr.saveQr']) || /二维码/.test(d['addr.saveQr']), l + ': il pulsante dice cosa salva');
+    }
+  }));
+
+  test('«Schermo protetto» dice cosa protegge (il tuo telefono) e cosa no (l\'altra persona), in 13 lingue', () => conApp(async app => {
+    const I = app.run('I18N');
+    assert.strictEqual(Object.keys(I).length, 13);
+    for (const l of Object.keys(I)){
+      const s = I[l]['secure.sub'] || '';
+      assert.ok(s.length > 40, l + ': la frase c\'e\'');
+      assert.ok(!/QR/.test(s), l + ': non parla piu\' del QR dell\'invito — ora il QR si salva dall\'app');
+    }
+    assert.ok(/altra persona/.test(I.it['secure.sub']) && /app spia/.test(I.it['secure.sub']));
+    assert.ok(/other person/.test(I.en['secure.sub']) && /spyware/.test(I.en['secure.sub']));
+  }));
+});
+
 test.describe('v56: il segnale di libero per chi chiama, e «Sta squillando» detto quando e\' vero', () => {
   const PREP = `
     myAddress = async () => 'ZZZZZZZZZZZZ';

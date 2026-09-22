@@ -256,16 +256,23 @@ test.describe('v52: condividere dalla tendina di Android, e lo schermo protetto'
     assert.ok(/addJavascriptInterface\(new ShareBridge\(\), "AndroidShare"\)/.test(MAIN), 'il ponte va montato col nome che la pagina cerca');
     assert.ok(/ACTION_SEND/.test(MAIN) && /createChooser/.test(MAIN), 'deve aprire la tendina di sistema, non un\'app scelta da noi');
     const siti = APP.split('navigator.share(').length - 1;
-    const conPonte = APP.split('AndroidShare.text(').length - 1;
-    assert.ok(siti >= 6, 'i punti di condivisione sono almeno sei, oggi: ' + siti);
-    assert.strictEqual(conPonte, siti, 'OGNI punto che condivide deve provare prima il ponte Android: ' + conPonte + ' su ' + siti);
+    /* 4.52: «Salva il QR» condivide un'IMMAGINE, e nell'APK la strada e' il
+       ponte che salva i file (AndroidSave.save), non quello del testo. Vale lo
+       stesso principio: prima il ponte Android, poi navigator.share. */
+    const conPonte = (APP.split('AndroidShare.text(').length - 1) + (APP.split('AndroidSave.save(').length - 1);
+    assert.ok(siti >= 7, 'i punti di condivisione sono almeno sette, oggi: ' + siti);
+    assert.strictEqual(conPonte, siti, 'OGNI punto che condivide deve provare prima un ponte Android: ' + conPonte + ' su ' + siti);
     /* e nell'ordine giusto: il ponte viene letto prima di navigator.share in ognuno */
     let pos = 0;
     for (let i = 0; i < siti; i++){
-      const p = APP.indexOf('AndroidShare.text(', pos), n = APP.indexOf('navigator.share(', pos);
+      const n = APP.indexOf('navigator.share(', pos);
+      const pt = APP.indexOf('AndroidShare.text(', pos), ps = APP.indexOf('AndroidSave.save(', pos);
+      const p = Math.min(...[pt, ps].filter(x => x > 0));
       assert.ok(p > 0 && p < n, 'sito ' + (i+1) + ': il ponte deve venire PRIMA di navigator.share');
       pos = n + 1;
     }
+    assert.ok(exposed(MAIN, 'SaveBridge', 'save'), 'AndroidSave.save() manca o non ha @JavascriptInterface');
+    assert.ok(/addJavascriptInterface\(new SaveBridge\(\), "AndroidSave"\)/.test(MAIN), 'il ponte del salvataggio va montato col nome che la pagina cerca');
   });
 
   test('AndroidScreen.setSecure()/isSecure() esistono, e il flag si applica in TUTTE E DUE le finestre', () => {
