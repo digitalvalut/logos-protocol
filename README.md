@@ -17,8 +17,10 @@ A peer-to-peer encrypted chat that runs entirely in the browser. There is no acc
 create, no phone number to give up, no company sitting between you and the person you're
 talking to. Two browsers connect directly to each other over **WebRTC**; once that
 connection exists, every message, call, photo and file travels straight from one device to
-the other. There is no server in the middle that could read it, log it, or hand it over to
-anyone — because there is no server handling your conversation at all.
+the other. A small relay helps the two sides find each other at the start — see
+[Architecture](#architecture) below for exactly what it does and doesn't see — but it never
+holds a key and never sees a plaintext message: there is no server in the middle that could
+read your conversation, log it, or hand it over to anyone.
 
 ## Architecture
 
