@@ -3480,7 +3480,12 @@ async function renewIceNow(conn){
   conn.restartIce();
   const offer = await conn.createOffer();
   if (pc !== conn) return;
-  await conn.setLocalDescription(offer);
+  /* Come ogni altra descrizione locale di questa app. La correzione d'errore
+     di Opus sta nel proprio SDP, e una rinegoziazione la porta via: la
+     toglierebbe proprio mentre la rete perde pacchetti, che e' l'unico
+     momento in cui serve. Idempotente — se c'e' gia', non tocca niente; e se
+     non c'e' nessuna chiamata in corso, non c'e' Opus e non cambia nulla. */
+  await conn.setLocalDescription({ type: 'offer', sdp: ensureOpusFec(offer.sdp) });
   await waitIceComplete(conn);
   if (pc !== conn || conn.signalingState !== 'have-local-offer') return;
   sig({ type: 'ice-renew-offer', sdp: conn.localDescription.sdp });
@@ -3509,10 +3514,13 @@ async function onIceRenewOffer(sdp){
     await conn.setRemoteDescription({ type: 'offer', sdp });
     if (pc !== conn) return;
     const answer = await conn.createAnswer();
-    await conn.setLocalDescription(answer);
+    await conn.setLocalDescription({ type: 'answer', sdp: ensureOpusFec(answer.sdp) });
     await waitIceComplete(conn);
     if (pc !== conn) return;
     sig({ type: 'ice-renew-answer', sdp: conn.localDescription.sdp });
+    /* anche da questo lato: chi risponde ha rinegoziato quanto chi offre, e
+       ha azzerato i parametri dei suoi sender esattamente allo stesso modo */
+    await ritocca(conn);
   }catch(e){ /* la conversazione continua sul ponte vecchio finche' regge */ }
 }
 async function onIceRenewAnswer(sdp){
@@ -3520,7 +3528,30 @@ async function onIceRenewAnswer(sdp){
   if (!conn || typeof sdp !== 'string') return;
   if (conn.__renewRollback){ clearTimeout(conn.__renewRollback); conn.__renewRollback = null; }
   if (conn.signalingState !== 'have-local-offer') return;
-  try{ await conn.setRemoteDescription({ type: 'answer', sdp }); }catch(e){}
+  try{ await conn.setRemoteDescription({ type: 'answer', sdp }); }catch(e){ return; }
+  await ritocca(conn);
+}
+/* ⚠️ LA RIGA CHE MANCAVA, e che si e' fatta sentire alla prima prova vera:
+   23 set 2026, videochiamata fra un computer e un telefono su due reti
+   diverse, immagine congelata al dodicesimo minuto — cioe' esattamente al
+   terzo giro di rinnovo (2 + 5 + 5). La connessione non era caduta: la
+   telecamera girava e il cronometro contava. Era la banda.
+
+   Una rinegoziazione azzera i parametri dei sender, e con essi il tetto di
+   CALL_VIDEO_MAX_BPS che tuneSendersForMobile mette al video. Senza tetto il
+   browser sale finche' puo', su una salita mobile satura, e l'immagine si
+   pianta. Il commento sopra `cameraOnlyConstraints` lo diceva gia' — «senza,
+   il video tornava senza tetto a meta' chiamata» — e le altre DUE
+   rinegoziazioni dell'app (call-answer-sdp, e il ritorno dalla condivisione
+   schermo) chiamano tutte e due questa funzione subito dopo. Questa terza
+   strada, nata oggi, non la chiamava: una rinegoziazione che non rimette a
+   posto cio' che ha appena azzerato non e' finita.
+
+   Da qui in poi: chi aggiunge una QUARTA strada che rinegozia la chiamata
+   deve passare di qui, o la stessa immagine si blocchera' di nuovo. */
+async function ritocca(conn){
+  if (pc !== conn || conn.connectionState === 'closed') return;
+  try{ await tuneSendersForMobile(conn); }catch(e){}
 }
 /* Come refreshIceConfig, ma saltando la cache: qui le credenziali vecchie
    sono esattamente il problema, non una scorciatoia accettabile. */
