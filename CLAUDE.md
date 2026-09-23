@@ -63,6 +63,7 @@ confidently wrong figure.
 | **How to publish an Android version — read it before trying** | `android/RILASCIO.md` | a checklist |
 | Tests | `tests/` | 9,000 lines |
 | The protocol written out, and its formal models (Tamarin, ProVerif) | `prova-formale/` | a document + 8 models |
+| Answers, with measured numbers, to the questions a competent reader always asks | `FAQ-TECNICA.md` | grown from a real review |
 | The twin copy to look at before publishing | `prova/` (generated) | `tools/prova.js` |
 
 `build-single-file.py` bundles the web app into `android/app/src/main/assets/logos.html`.

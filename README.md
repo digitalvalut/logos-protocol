@@ -9,6 +9,10 @@
 Web app: **https://digitalvalut.github.io/logos-protocol/**
 Source code: **https://github.com/digitalvalut/logos-protocol** · Apache 2.0 license
 
+Examining the code? [`FAQ-TECNICA.md`](FAQ-TECNICA.md) answers, with numbers measured
+rather than guessed, the questions a careful reader tends to ask first — test coverage,
+what the relay does and doesn't see, why the app is one file.
+
 ---
 
 ## What it is
