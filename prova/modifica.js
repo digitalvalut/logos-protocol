@@ -3393,178 +3393,38 @@ async function refreshIceConfig(conn){
   catch(e){ return false; }   /* mai far saltare una ripresa per questo: meglio ritentare con le vecchie che non ritentare */
 }
 
-/* ---------------- rinnovare il lasciapassare senza interrompere niente ----------------
-   L'altra meta' di refreshIceConfig, e quella che conta: evitare la caduta
-   invece di rimediarvi dopo.
+/* ---------------- perche' qui NON c'e' un rinnovo periodico ----------------
+   ⚠️ PROVATO IL 23 SET 2026 E TOLTO LO STESSO GIORNO, su due dispositivi
+   veri. Vale la pena scriverlo, perche' e' un'idea che verra' in mente di
+   nuovo a chiunque legga il commento qui sopra: se il lasciapassare del ponte
+   scade sotto la conversazione, basta sostituirlo in corsa, no? Il pezzo che
+   manca e' che sostituirlo non serve a niente senza una rinegoziazione, e una
+   rinegoziazione su una connessione VIVA non e' gratis.
 
-   Sostituire le credenziali sulla connessione viva non basta da solo. Il canale
-   gia' aperto sul ponte continua con quelle vecchie e muore con loro: per
-   averne uno nuovo serve una trattativa — un'offerta e una risposta — e la
-   trattativa deve passare da qualche parte.
+   Primo giro: l'immagine si e' congelata a meta' videochiamata. Una
+   rinegoziazione azzera i parametri dei sender, quindi il video tornava senza
+   il tetto di CALL_VIDEO_MAX_BPS, la salita mobile saturava e l'immagine si
+   piantava — mentre il cronometro contava e la telecamera girava, cioe' con
+   la connessione viva. (Quella lezione resta valida per chiunque rinegozi:
+   vedi `tuneSendersForMobile` e i due punti che la chiamano.)
 
-   NON dal relay, ed e' tutto il punto. La ripresa passa di li' perche' li' il
-   canale dati e' morto; qui invece la conversazione sta benissimo. Una
-   trattativa dal relay costa una decina di SCRITTURE, che sono la quota
-   stretta — mille al giorno per tutti gli utenti insieme: rinnovare ogni
-   pochi minuti per ogni conversazione in corso avrebbe prosciugato il relay
-   per tenere in piedi le chiamate, cioe' rotto tutto il resto per riparare
-   una cosa. Il canale dati e' gia' cifrato, gia' autenticato dalla stretta di
-   mano, e non costa niente: e' la stessa strada che l'app usa gia' per
-   rinegoziare una chiamata (`call-offer-sdp`).
+   Secondo giro, peggio: mentre la rinegoziazione e' in corso la connessione
+   sta in 'have-local-offer' per una ventina di secondi, e in quella finestra
+   UNA CHIAMATA NUOVA NON PARTE — uno squilla, l'altro non riceve niente. Ogni
+   cinque minuti, una finestra cosi'. Aggiungici che l'altro lato puo' essere
+   una versione che quei messaggi non li conosce: non risponde mai, e la
+   finestra resta aperta fino al ritiro dell'offerta.
 
-   Si sveglia SOLO per chi passa dal ponte: due telefoni collegati diretti non
-   hanno nessuna credenziale che possa scadere, e per loro questo non fa mai
-   niente. Vale per le conversazioni scritte quanto per le chiamate — sul
-   ponte scade il collegamento, non l'audio.
+   La cura costava piu' della malattia. Resta `refreshIceConfig`, che agisce
+   SOLO dentro la ripresa — su una connessione gia' caduta, dove non c'e' piu'
+   niente da rompere — ed era la meta' che mancava davvero: senza, la ripresa
+   ripresentava al ponte un lasciapassare morto e non poteva riuscire per
+   definizione.
 
-   Chi offre e chi risponde lo decide lo stesso ordine di impronte della
-   ripresa (`repairBase.offerer`), cosi' non capita mai che offrano tutti e
-   due insieme. Se dall'altra parte c'e' una versione che questi messaggi non
-   li conosce, non risponde: l'offerta si ritira da sola e resta tutto com'era
-   — le credenziali scadranno come prima, e sara' la ripresa, adesso con le
-   credenziali fresche, a rimettere in piedi la conversazione. Da qui non si
-   puo' peggiorare niente: ogni strada che fallisce lascia la connessione
-   esattamente come l'ha trovata.
-
-   ⚠️ IL PRIMO RINNOVO ARRIVA PRESTO, e non e' una svista. Una connessione
-   nasce con le credenziali che l'app aveva in tasca, e quelle possono gia'
-   avere nove minuti (due di cache nel relay, sette di riuso qui): su dieci di
-   vita, ne resta uno. Il primo giro le sostituisce con credenziali appena
-   emesse, e da li' in poi si sa quanto valgono. */
-const ICE_RENEW_FIRST_MS = 2 * 60 * 1000;   /* passata la fase fragile dell'avvio, prima che una credenziale ereditata vecchia scada */
-let ICE_RENEW_MS = 5 * 60 * 1000;           /* `let`: i test lo accorciano invece di aspettare cinque minuti */
-let ICE_RENEW_ROLLBACK_MS = 20000;          /* `let` per la stessa ragione: un test deve poter vedere un'offerta ritirata senza aspettare venti secondi */
-let iceRenewTimer = null;
-
-function stopIceRenewal(){
-  if (iceRenewTimer){ clearTimeout(iceRenewTimer); iceRenewTimer = null; }
-}
-function scheduleIceRenewal(conn, primo){
-  stopIceRenewal();
-  iceRenewTimer = setTimeout(() => { runIceRenewal(conn); }, primo ? ICE_RENEW_FIRST_MS : ICE_RENEW_MS);
-}
-async function runIceRenewal(conn){
-  iceRenewTimer = null;
-  /* Sostituita o chiusa: non c'e' piu' niente da rinnovare, e riarmare qui
-     lascerebbe un timer che si rimette in coda da solo per sempre sopra una
-     connessione che non esiste. */
-  if (pc !== conn || conn.connectionState === 'closed') return;
-  /* ⚠️ VACILLARE NON E' MORIRE, e la prima stesura di questa riga le
-     confondeva: chiedeva `=== 'connected'` e usciva SENZA riprogrammare.
-     Bastava che il giro cadesse nei due secondi in cui il 5G va e viene — cosa
-     che su rete mobile capita di continuo — perche' il rinnovo si spegnesse
-     per il resto della conversazione, in silenzio, e le credenziali
-     scadessero come se questo codice non ci fosse. Se adesso non e' il
-     momento, si riprova al giro dopo. */
-  if (conn.connectionState !== 'connected'){ scheduleIceRenewal(conn, false); return; }
-  try{
-    const route = await connectionRoute();
-    if (pc !== conn) return;
-    if (route === 'relay' && repairBase && repairBase.offerer) await renewIceNow(conn);
-  }catch(e){ /* un rinnovo fallito non tocca la conversazione: si riprova al giro dopo */ }
-  if (pc === conn && conn.connectionState !== 'closed') scheduleIceRenewal(conn, false);
-}
-async function renewIceNow(conn){
-  /* credenziali VERAMENTE nuove: fetchIceServers() restituirebbe quelle in
-     cache, che possono essere vecchie quasi quanto quelle da sostituire —
-     rinnovare con la stessa carta scaduta sarebbe una cerimonia a vuoto */
-  let fresh = null;
-  try{ fresh = await loadIceServersNow(); }catch(_){ return; }
-  if (pc !== conn || conn.connectionState !== 'connected') return;
-  if (!Array.isArray(fresh) || !fresh.length) return;
-  if (typeof conn.setConfiguration !== 'function' || typeof conn.restartIce !== 'function') return;
-  /* una chiamata sta gia' negoziando: non si mette una trattativa sopra
-     un'altra — la stessa regola della ripresa, per la stessa ragione */
-  if (conn.signalingState !== 'stable') return;
-  try{ conn.setConfiguration({ iceServers: fresh }); }catch(e){ return; }
-  conn.restartIce();
-  const offer = await conn.createOffer();
-  if (pc !== conn) return;
-  /* Come ogni altra descrizione locale di questa app. La correzione d'errore
-     di Opus sta nel proprio SDP, e una rinegoziazione la porta via: la
-     toglierebbe proprio mentre la rete perde pacchetti, che e' l'unico
-     momento in cui serve. Idempotente — se c'e' gia', non tocca niente; e se
-     non c'e' nessuna chiamata in corso, non c'e' Opus e non cambia nulla. */
-  await conn.setLocalDescription({ type: 'offer', sdp: ensureOpusFec(offer.sdp) });
-  await waitIceComplete(conn);
-  if (pc !== conn || conn.signalingState !== 'have-local-offer') return;
-  sig({ type: 'ice-renew-offer', sdp: conn.localDescription.sdp });
-  /* La cicatrice del 12 set 2026, che qui vale identica: un'offerta applicata
-     e mai risposta lascia la connessione in 'have-local-offer' PER SEMPRE, e
-     da li' in poi ogni createOffer — cioe' ogni chiamata — fallisce su una
-     conversazione che sta benissimo. Se non risponde nessuno, si torna
-     indietro. */
-  if (conn.__renewRollback) clearTimeout(conn.__renewRollback);
-  conn.__renewRollback = setTimeout(() => {
-    conn.__renewRollback = null;
-    if (pc === conn && conn.signalingState === 'have-local-offer'){
-      try{ conn.setLocalDescription({ type: 'rollback' }).catch(() => {}); }catch(e){}
-    }
-  }, ICE_RENEW_ROLLBACK_MS);
-}
-/* L'altro lato. Rinfresca anche lui prima di rispondere: i due capi del ponte
-   sono due allocazioni distinte, e una sola rinnovata non tiene su niente. */
-async function onIceRenewOffer(sdp){
-  const conn = pc;
-  if (!conn || typeof sdp !== 'string') return;
-  if (conn.signalingState !== 'stable') return;
-  try{
-    await refreshIceConfigFresh(conn);
-    if (pc !== conn) return;
-    await conn.setRemoteDescription({ type: 'offer', sdp });
-    if (pc !== conn) return;
-    const answer = await conn.createAnswer();
-    await conn.setLocalDescription({ type: 'answer', sdp: ensureOpusFec(answer.sdp) });
-    await waitIceComplete(conn);
-    if (pc !== conn) return;
-    sig({ type: 'ice-renew-answer', sdp: conn.localDescription.sdp });
-    /* anche da questo lato: chi risponde ha rinegoziato quanto chi offre, e
-       ha azzerato i parametri dei suoi sender esattamente allo stesso modo */
-    await ritocca(conn);
-  }catch(e){ /* la conversazione continua sul ponte vecchio finche' regge */ }
-}
-async function onIceRenewAnswer(sdp){
-  const conn = pc;
-  if (!conn || typeof sdp !== 'string') return;
-  if (conn.__renewRollback){ clearTimeout(conn.__renewRollback); conn.__renewRollback = null; }
-  if (conn.signalingState !== 'have-local-offer') return;
-  try{ await conn.setRemoteDescription({ type: 'answer', sdp }); }catch(e){ return; }
-  await ritocca(conn);
-}
-/* ⚠️ LA RIGA CHE MANCAVA, e che si e' fatta sentire alla prima prova vera:
-   23 set 2026, videochiamata fra un computer e un telefono su due reti
-   diverse, immagine congelata al dodicesimo minuto — cioe' esattamente al
-   terzo giro di rinnovo (2 + 5 + 5). La connessione non era caduta: la
-   telecamera girava e il cronometro contava. Era la banda.
-
-   Una rinegoziazione azzera i parametri dei sender, e con essi il tetto di
-   CALL_VIDEO_MAX_BPS che tuneSendersForMobile mette al video. Senza tetto il
-   browser sale finche' puo', su una salita mobile satura, e l'immagine si
-   pianta. Il commento sopra `cameraOnlyConstraints` lo diceva gia' — «senza,
-   il video tornava senza tetto a meta' chiamata» — e le altre DUE
-   rinegoziazioni dell'app (call-answer-sdp, e il ritorno dalla condivisione
-   schermo) chiamano tutte e due questa funzione subito dopo. Questa terza
-   strada, nata oggi, non la chiamava: una rinegoziazione che non rimette a
-   posto cio' che ha appena azzerato non e' finita.
-
-   Da qui in poi: chi aggiunge una QUARTA strada che rinegozia la chiamata
-   deve passare di qui, o la stessa immagine si blocchera' di nuovo. */
-async function ritocca(conn){
-  if (pc !== conn || conn.connectionState === 'closed') return;
-  try{ await tuneSendersForMobile(conn); }catch(e){}
-}
-/* Come refreshIceConfig, ma saltando la cache: qui le credenziali vecchie
-   sono esattamente il problema, non una scorciatoia accettabile. */
-async function refreshIceConfigFresh(conn){
-  if (!conn || conn !== pc || conn.connectionState === 'closed') return false;
-  if (typeof conn.setConfiguration !== 'function') return false;
-  let fresh = null;
-  try{ fresh = await loadIceServersNow(); }catch(_){ return false; }
-  if (!Array.isArray(fresh) || !fresh.length) return false;
-  if (conn !== pc || conn.connectionState === 'closed') return false;
-  try{ conn.setConfiguration({ iceServers: fresh }); return true; }
-  catch(e){ return false; }
-}
+   Se un giorno si riprova, servono tutte e tre: i due lati si DICHIARANO la
+   capacita' nel saluto; il rinnovo non parte mai mentre `callState !== 'idle'`
+   ne' mentre una chiamata si sta alzando; e una prova vera di venti minuti su
+   due telefoni prima di crederci. Niente di tutto questo lo vede la suite. */
 
 let pc = null, dc = null;
 const CHUNK = 16 * 1024;
@@ -4416,14 +4276,6 @@ function onConnectionStateChange(conn){
   } else {
     if (conn.__disconnectTimer){ clearTimeout(conn.__disconnectTimer); conn.__disconnectTimer = null; }
     if (conn.__repairTimer){ clearTimeout(conn.__repairTimer); conn.__repairTimer = null; }
-    /* Da qui parte il rinnovo del lasciapassare del ponte, e ogni giro
-       programma il successivo. Una volta sola per connessione: 'connected'
-       torna anche dopo ogni ripresa, e riarmare ogni volta rimanderebbe in
-       avanti un rinnovo che invece deve arrivare. */
-    if (conn.connectionState === 'connected' && !conn.__renewStarted){
-      conn.__renewStarted = true;
-      scheduleIceRenewal(conn, true);
-    }
     /* 'failed' non torna piu' da solo, per specifica: qui si parte, da tutti e due i lati */
     if (conn.connectionState === 'failed') startRepair(conn);
   }
@@ -11523,15 +11375,7 @@ function handleCallSignal(msg){
       endCall(true);
       sysLine(t('call.connectFailed','La chiamata non si è collegata. Riprova.'));
     });
-  } else if (msg.type === 'call-end'){ stopRing(); disarmCallTimeout(); endCall(false);
-  /* Il rinnovo del lasciapassare del ponte: non riguarda le chiamate piu' di
-     quanto riguardi le conversazioni scritte, ma viaggia sullo stesso canale
-     e si dispaccia qui insieme a tutto il resto. Silenzioso di proposito —
-     nessuna riga sullo schermo: se funziona non c'e' niente da dire, e se non
-     funziona lo dira' la ripresa. */
-  } else if (msg.type === 'ice-renew-offer'){ onIceRenewOffer(msg.sdp);
-  } else if (msg.type === 'ice-renew-answer'){ onIceRenewAnswer(msg.sdp);
-  }
+  } else if (msg.type === 'call-end'){ stopRing(); disarmCallTimeout(); endCall(false); }
 }
 $('btnAcceptCall').addEventListener('click', async () => {
   stopRing(); disarmCallTimeout();
@@ -12001,7 +11845,6 @@ function endSession(){
   destructArmed = false;
   $('destructCountdown').classList.add('hide'); $('btnDisarmDestruct').classList.add('hide');
   stopQuickPump();
-  stopIceRenewal();   /* il rinnovo apparteneva a questa connessione: senza questo resterebbe armato su una chiusa */
   endCall(false);
   if (dc) try{ dc.close(); }catch(e){}
   if (pc) try{ pc.close(); }catch(e){}
