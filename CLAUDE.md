@@ -154,6 +154,60 @@ page can say «Sta squillando…» only when a phone really got the wake, and a
 ringback tone plays on the caller's side meanwhile (`startRingback`). A relay
 without the object answers `svegliati: 0` and the page promises nothing.
 
+**The bridge pass expires under a live conversation** (23 Sep 2026). A
+`RTCPeerConnection` keeps for life the configuration it was born with,
+credentials included, and `TURN_TTL_SECONDS` is 600 — so a conversation
+forced through the TURN bridge lives about that long, which no automated
+test can see because none of them makes a real ten-minute call. Worse, the
+repair used to re-present the *same dead pass*, so it could not possibly
+succeed: the call died and never came back. `refreshIceConfig` fixes that
+half — fresh credentials before every repair — and it is safe because it
+only ever runs on a connection that has already failed.
+
+**The repair now actually retries** (24 Sep 2026), and until it did, none of
+the above mattered. `REPAIR_MAX_ROUNDS` says three; exactly **one** was ever
+spent. `startRepair` only ever ran from `onConnectionStateChange` — from a
+*change* of state — but a connection already in `failed` stays there by
+spec, so the second round never came and a dropped call never returned.
+Measured before the fix: `__repairRounds` stuck at 1, one envelope written.
+`scheduleNextRepair` now asks for the next round itself; when the rounds run
+out it calls `giveUpOnConnection`, which ends the call for real instead of
+leaving a clock ticking, a live microphone and a phone in call mode on a
+dead connection. A ceiling that is never reached is not a ceiling.
+
+**And the rounds reset on every reconnection** — the second half of the same
+bug, found only because a real call was watched minute by minute: it dropped
+at 4:46 and recovered, at 11:35 and recovered in 7 s, then at 12:36 it gave
+up. Three drops, and `REPAIR_MAX_ROUNDS` is 3. The counter was only ever
+incremented, so the three attempts were not three *per incident* but three
+for the whole conversation: three hiccups in twelve minutes — an ordinary
+morning on a mobile network — and the budget was spent on a call that had
+recovered cleanly every single time. An incident that ended well is over.
+What does **not** reset is `REPAIR_MAX_TOTAL`, because every offer is a relay
+*write* and writes are the scarce quota; past that it is not an incident, it
+is a network that is not there, and insisting does not bring it back.
+
+**Renewing the pass in flight is back, and only inside a call** (24 Sep
+2026). Read the comment above `scheduleIceRenewal` before touching it: the
+first two attempts broke a working app in ways a fully green suite could not
+see. A renegotiation wipes every sender's parameters (video loses its
+`CALL_VIDEO_MAX_BPS` cap, the mobile uplink saturates, the picture freezes
+while the clock still counts), and while it is in flight the connection sits
+in `have-local-offer`, a window in which **a new call cannot be placed at
+all** — one side rings, the other receives nothing. Hence the three
+conditions, all load-bearing: it runs **only while `callState === 'active'`**
+(inside a call there is no new call to block), only toward a peer that
+announced `ren: 1` in its `hello`, and only on a `relay` route. It is armed
+and disarmed by `startCallTimer`/`stopCallTimer`, the one place a call really
+begins and ends, so it cannot outlive its call. Do not instead lengthen
+`TURN_TTL_SECONDS`: that number is audit H-04 and a test caps it at 900 s.
+
+⚠️ **Any path that renegotiates a live call must go through `ritocca()` and
+`ensureOpusFec`** — that is what puts back the sender parameters and the
+voice error correction a renegotiation wipes. The other two paths
+(`call-answer-sdp`, the return from screen sharing) already do. The renewal
+did not, and that is how the picture froze at minute 12.
+
 It runs on a free plan with a hard daily write allowance. Before adding anything that
 writes or polls, work out what it costs per user per day — a loop with no deadline is
 the classic way to turn a working relay into an exhausted one.
@@ -195,8 +249,8 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 526 tests, 83 suites, about three
-minutes, and it exits on its own (measured 22 Sep 2026). They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 539 tests, 84 suites, about three
+and a half minutes, and it exits on its own (measured 24 Sep 2026). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**

@@ -8153,3 +8153,399 @@ test.describe('v56: il segnale di libero per chi chiama, e «Sta squillando» de
     app.stop();
   });
 });
+
+/* ============================================================================
+   IL LASCIAPASSARE DEL PONTE CHE SCADE SOTTO UNA CONVERSAZIONE (23 set 2026)
+
+   Una RTCPeerConnection si porta dietro per tutta la vita le credenziali con
+   cui e' nata. Quando la rete costringe i due telefoni a passare dal ponte,
+   la conversazione vive esattamente quanto quelle credenziali — e nessuno le
+   rinnovava. Peggio: la ripresa ripresentava al ponte la stessa carta
+   scaduta, quindi non poteva riuscire.
+
+   Questi test guardano le due meta' del rimedio, e una proprieta' di costo
+   che non si deve perdere mai: il rinnovo NON passa dal relay.
+   ========================================================================= */
+test.describe('il lasciapassare del ponte', () => {
+
+  /* Un finto che sa dire il vero anche quando il vero e' scomodo: registra
+     ogni configurazione applicata, e su richiesta la rifiuta. */
+  const PONTE = `
+    window.__mkpc2 = function(rotta){
+      var ls = {};
+      var locali = { id: 'L', candidateType: rotta === 'relay' ? 'relay' : 'host' };
+      var remoti = { id: 'R', candidateType: 'host' };
+      var coppia = { type: 'candidate-pair', state: 'succeeded', nominated: true, localCandidateId: 'L', remoteCandidateId: 'R' };
+      var mappa = new Map([['P', coppia], ['L', locali], ['R', remoti]]);
+      return {
+        connectionState: 'connected', signalingState: 'stable', iceGatheringState: 'complete',
+        localDescription: null, remoteDescription: null, log: [], configs: [],
+        setConfiguration: function(c){
+          if (this.__rifiuta) throw new Error('configurazione rifiutata');
+          this.log.push('setConfiguration'); this.configs.push(c);
+        },
+        restartIce: function(){ this.log.push('restartIce'); },
+        /* con la riga di Opus dentro: senza, nessun test potrebbe accorgersi
+           che una rinegoziazione porta via la correzione d'errore della voce */
+        createOffer: function(){ this.log.push('createOffer'); return Promise.resolve({ type: 'offer', sdp: 'v=0\\r\\no=OFF\\r\\na=rtpmap:111 opus/48000/2\\r\\n' }); },
+        createAnswer: function(){ this.log.push('createAnswer'); return Promise.resolve({ type: 'answer', sdp: 'v=0\\r\\no=RIS\\r\\na=rtpmap:111 opus/48000/2\\r\\n' }); },
+        setLocalDescription: function(d){
+          this.log.push('setLocal:' + d.type);
+          if (d.type === 'rollback'){ this.signalingState = 'stable'; return Promise.resolve(); }
+          this.localDescription = d; this.signalingState = d.type === 'offer' ? 'have-local-offer' : 'stable';
+          return Promise.resolve();
+        },
+        setRemoteDescription: function(d){
+          this.log.push('setRemote:' + d.type); this.remoteDescription = d;
+          this.signalingState = d.type === 'offer' ? 'have-remote-offer' : 'stable';
+          return Promise.resolve();
+        },
+        addIceCandidate: function(){ return Promise.resolve(); },
+        getStats: function(){ return Promise.resolve(mappa); },
+        /* I sender di una chiamata vera. Servono perche' una rinegoziazione
+           AZZERA i loro parametri, e il tetto al video va rimesso: senza, il
+           browser sale finche' puo' e l'immagine si pianta a meta' chiamata. */
+        getSenders: function(){ return this.__senders; },
+        __senders: ['audio', 'video'].map(function(k){
+          var p = { encodings: [{}] };
+          return {
+            track: { kind: k, contentHint: '' },
+            getParameters: function(){ return p; },
+            setParameters: function(np){ p = np; return Promise.resolve(); },
+            leggi: function(){ return p; },
+          };
+        }),
+        addEventListener: function(t, fn){ (ls[t] = ls[t] || []).push(fn); },
+        removeEventListener: function(){},
+        __become: function(s){ this.connectionState = s; (ls.connectionstatechange || []).forEach(function(f){ f({}); }); },
+        close: function(){ this.connectionState = 'closed'; },
+      };
+    };
+    /* il canale dati vivo, che e' tutto il punto del rinnovo */
+    window.__inviati = [];
+    dc = { readyState: 'open', send: function(s){ window.__inviati.push(JSON.parse(s)); } };
+    /* credenziali nuove riconoscibili, e il conto di quante volte si chiedono */
+    window.__emesse = 0;
+    loadIceServersNow = async function(){ window.__emesse++; return [{ urls: 'turn:fresco-' + window.__emesse }]; };
+    fetchIceServers = async function(){ return loadIceServersNow(); };
+    /* nessuna scrittura sul relay deve sfuggire: qui si registrano tutte */
+    window.__scritture = 0;
+    mailboxPut = async function(){ window.__scritture++; return true; };
+    mailboxGet = async function(){ return null; };
+  `;
+
+  test('la ripresa rinfresca il lasciapassare PRIMA di offrire, o offre con una carta scaduta', async () => {
+    const A = loadApp();
+    A.run(PONTE + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay');
+      REPAIR_ROUND_MS = 200;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('startRepair(pc)');
+    const log = A.run('pc.log');
+    assert.ok(log.indexOf('setConfiguration') !== -1, 'la ripresa deve rinfrescare le credenziali del ponte');
+    assert.ok(log.indexOf('setConfiguration') < log.indexOf('setLocal:offer'),
+      'e deve farlo PRIMA di offrire: dopo, l offerta e gia partita con la carta scaduta');
+    assert.strictEqual(A.run("pc.configs[0].iceServers[0].urls"), 'turn:fresco-1', 'le credenziali applicate sono quelle nuove');
+    A.stop();
+  });
+
+  test('se il browser rifiuta la configurazione nuova, la ripresa va avanti lo stesso', async () => {
+    /* Meglio ritentare con le vecchie che non ritentare: un errore qui non
+       deve MAI trasformarsi in una conversazione che non si riprende. */
+    const A = loadApp();
+    A.run(PONTE + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay'); pc.__rifiuta = true;
+      REPAIR_ROUND_MS = 200;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('startRepair(pc)');
+    assert.ok(A.run("pc.log.indexOf('setLocal:offer') !== -1"), 'la ripresa deve partire anche se le credenziali non si sono potute sostituire');
+    A.stop();
+  });
+
+  /* ⚠️ QUI C'ERANO SEI CONTROLLI SUL RINNOVO PERIODICO DEL LASCIAPASSARE,
+     tolti insieme al codice che sorvegliavano il 23 set 2026. Passavano
+     tutti, e tutti erano stati sabotati uno per uno: erano test buoni su
+     un'idea sbagliata. La ragione sta in modifica.js, nel commento «perche'
+     qui NON c'e' un rinnovo periodico»; il riassunto e' che rinegoziare una
+     connessione viva bloccava le chiamate nuove per venti secondi ogni cinque
+     minuti. Nessuno di quei sei test poteva vederlo, perche' il banco di
+     prova non fa chiamate vere — ed e' il promemoria piu' utile che questo
+     file possa contenere: sei controlli verdi non sono una prova.
+     Se il rinnovo un giorno tornera', questi tornano con lui; ma il controllo
+     che conta sara' su due telefoni, non qui. */
+
+
+  /* ⚠️ Il rinnovo del lasciapassare e' TORNATO il 24 set 2026, ma solo dentro
+     una chiamata. I controlli qui sotto sono le tre condizioni che lo tengono
+     innocuo: mai da fermi, mai verso una versione che non sa rispondere, e
+     sempre rimettendo a posto quello che una rinegoziazione azzera. Il primo
+     e' la guardia sull'errore che il 23 set ha impedito alle chiamate di
+     partire. */
+
+  test('IL RINNOVO NON PARTE MAI DA FERMI: e la finestra in cui una chiamata nuova non partirebbe', async () => {
+    /* ⚠️ LA REGRESSIONE DEL 23 SET 2026, in un test. Mentre la rinegoziazione
+       e in corso la connessione sta in have-local-offer per qualche secondo,
+       e in quella finestra una chiamata NUOVA non parte: uno squilla, l altro
+       non riceve niente. Succede solo da fermi — dentro una chiamata non c e
+       nessuna chiamata nuova da bloccare. Se questo test diventa rosso, quel
+       guasto e tornato.
+       ⚠️ VERIFICATO PER SABOTAGGIO IL 24 SET: questo test diventa rosso solo
+       togliendo TUTTE E TRE le guardie su callState (runIceRenewal x2 e
+       renewIceNow). Non e un difetto del test: e difesa in profondita voluta,
+       su una regressione che ha gia impedito alle chiamate di partire una
+       volta. Chi ne toglie una sola non vedra niente diventare rosso — e
+       sappia che la prossima volta potrebbe toglierle tutte. */
+    const A = loadApp();
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'idle';`);
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    assert.strictEqual(A.run('window.__inviati.length'), 0, 'da fermi non si rinegozia NIENTE');
+    assert.strictEqual(A.run("pc.log.indexOf('restartIce')"), -1, 'e non si tocca la connessione');
+    A.stop();
+  });
+
+  test('niente rinnovo verso chi non ha detto di saper rispondere', async () => {
+    /* Una versione piu vecchia non manda `ren` nel saluto. Offrirle un rinnovo
+       vuol dire lasciare un offerta appesa fino al ritiro, per niente. */
+    const A = loadApp();
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = false; callState = 'active';`);
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    assert.strictEqual(A.run('window.__inviati.length'), 0, 'se l altro non sa rispondere, non si offre');
+    A.stop();
+  });
+
+  test('dentro una chiamata sul ponte rinnova, sul canale dati, senza UNA scrittura sul relay', async () => {
+    const A = loadApp();
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';`);
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    const tipi = A.run('window.__inviati.map(function(m){ return m.type; })');
+    assert.ok(tipi.indexOf('ice-renew-offer') !== -1, 'l offerta viaggia sul canale dati, che e gia aperto e non costa niente');
+    assert.strictEqual(A.run('window.__scritture'), 0,
+      'IL COSTO: una trattativa dal relay costa una decina di scritture su mille al giorno per tutti');
+    assert.ok(A.run("pc.log.indexOf('restartIce') !== -1"), 'senza restartIce non si apre nessun canale nuovo sul ponte');
+    assert.ok(/useinbandfec=1/.test(A.run('window.__inviati[0].sdp')),
+      'e si porta dietro la correzione d errore della voce, come ogni altra descrizione locale');
+    A.stop();
+  });
+
+  test('su una connessione diretta non si tocca niente: non c e niente che scada', async () => {
+    const A = loadApp();
+    A.run(PONTE + `pc = window.__mkpc2('direct'); peerCanRenew = true; callState = 'active';`);
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    assert.strictEqual(A.run('window.__inviati.length'), 0, 'niente da rinnovare su una diretta');
+    A.stop();
+  });
+
+  test('dopo il rinnovo il video ha ANCORA il suo tetto, dai due lati', async () => {
+    /* Una rinegoziazione azzera i parametri dei sender. Senza rimetterli il
+       video riparte senza tetto, la salita mobile satura e l immagine si
+       congela a meta chiamata: misurato il 23 set, minuto 12. */
+    const A = loadApp();
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';`);
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    await A.run("onIceRenewAnswer('v=0\\r\\no=RIS\\r\\n')");
+    assert.strictEqual(A.run('pc.__senders[1].leggi().encodings[0].maxBitrate'), A.run('CALL_VIDEO_MAX_BPS'),
+      'chi offre deve rimettere il tetto al video');
+    assert.strictEqual(A.run("pc.__senders[0].leggi().encodings[0].priority"), 'high',
+      'e la voce deve tornare prioritaria, o si sente male mentre il video mangia tutto');
+    const B = loadApp();
+    B.run(PONTE + `pc = window.__mkpc2('relay');`);
+    await B.run("onIceRenewOffer('v=0\\r\\no=OFF\\r\\n')");
+    assert.strictEqual(B.run('pc.__senders[1].leggi().encodings[0].maxBitrate'), B.run('CALL_VIDEO_MAX_BPS'),
+      'e anche chi risponde: altrimenti l immagine si blocca da una parte sola, e ognuno giura che il rotto e l altro');
+    A.stop(); B.stop();
+  });
+
+  test('il rinnovo vive esattamente quanto il cronometro della chiamata', async () => {
+    /* Un posto solo da cui una chiamata comincia e finisce, da tutte e due le
+       strade: legarlo qui vuol dire che non si puo dimenticare di spegnerlo. */
+    const A = loadApp();
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';`);
+    A.run('startCallTimer()');
+    const armato = A.run('iceRenewTimer !== null');
+    A.run('stopCallTimer()');
+    const spento = A.run('iceRenewTimer');
+    A.stop();   /* stessa ragione del test qui sopra: prima si spegne, poi si giudica */
+    assert.ok(armato, 'la chiamata comincia: il rinnovo si arma');
+    assert.strictEqual(spento, null, 'la chiamata finisce: il rinnovo si spegne, o resta armato su una chiamata che non c e piu');
+  });
+
+
+  test('LA RIPRESA RIPROVA DAVVERO: un giro a vuoto non e la fine', async () => {
+    /* ⚠️ IL DIFETTO CHE HA FATTO CADERE UNA VIDEOCHIAMATA VERA SENZA PIU
+       TORNARE, 23 set 2026. Il tetto dice tre giri; ne veniva fatto UNO.
+       `startRepair` partiva solo da un CAMBIO di stato, e una connessione gia
+       'failed' non cambia piu stato: per specifica ci resta. Quindi il primo
+       giro andava a vuoto e il secondo non esisteva.
+       MISURATO prima della correzione: __repairRounds fermo a 1, una sola
+       busta scritta. Un tetto che non si raggiunge mai non e un tetto.
+       I test che c erano chiamavano startRepair a mano in un ciclo, quindi
+       misuravano il tetto e non potevano vedere niente di tutto questo. */
+    const A = loadApp();
+    A.run(PONTE + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay');
+      /* la vera newPeerConnection installa questo: senza, nessun cambio di
+         stato arriva alla ripresa e il test misurerebbe il proprio finto */
+      pc.addEventListener('connectionstatechange', function(){ onConnectionStateChange(pc); });
+      REPAIR_ROUND_MS = 120; REPAIR_RETRY_GAP_MS = 25;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('new Promise(function(r){ setTimeout(r, 1400); })');
+    const giri = A.run('pc.__repairRounds');
+    A.run('stopRepairRetries(pc)');
+    assert.ok(giri >= 2, 'dopo un giro a vuoto la ripresa deve richiamarsi da sola: giri fatti = ' + giri);
+    assert.strictEqual(giri, A.run('REPAIR_MAX_ROUNDS'), 'e deve spendere tutti i tentativi che dichiara di avere');
+    A.stop();
+  });
+
+  test('finiti i tentativi la chiamata si CHIUDE: non resta un cronometro che conta su una morta', async () => {
+    /* ⚠️ Quello che ha visto l operatore il 23 set: caduta dichiarata, e il
+       cronometro che continuava a girare. Microfono e fotocamera accesi,
+       telefono in modalita chiamata, batteria che si consuma — finche non si
+       trovava da soli «Torna alla home». Tre cose che dicono «stai parlando
+       con qualcuno» a chi non sta parlando con nessuno. */
+    const A = loadApp();
+    A.run(PONTE + `
+      pc = window.__mkpc2('relay');
+      repairBase = { text: 'x', offerer: true };
+      pc.__repairRounds = REPAIR_MAX_ROUNDS;      /* tentativi esauriti */
+      pc.connectionState = 'failed';
+      callState = 'active'; startCallTimer();
+    `);
+    const contava = A.run('callTimerInterval !== null');
+    A.run('scheduleNextRepair(pc)');
+    /* si legge tutto PRIMA di giudicare, e si spegne la sandbox subito: un
+       assert che fallisce non arriverebbe ad A.stop(), e il cronometro acceso
+       terrebbe in piedi la suite all infinito. Un test rosso deve restare
+       rosso, non diventare un blocco. */
+    const dopo = {
+      stato: A.run('callState'),
+      timer: A.run('callTimerInterval'),
+      stream: A.run('localStream'),
+    };
+    A.stop();
+    assert.ok(contava, 'si parte da una chiamata che conta');
+    assert.strictEqual(dopo.stato, 'idle', 'la chiamata deve risultare chiusa, non attiva');
+    assert.strictEqual(dopo.timer, null, 'e il cronometro deve fermarsi');
+    assert.strictEqual(dopo.stream, null, 'e microfono e fotocamera devono spegnersi');
+  });
+
+
+  test('TRE CADUTE SEPARATE non esauriscono la dote: un incidente chiuso bene e chiuso', async () => {
+    /* ⚠️ MISURATO SU UNA CHIAMATA VERA IL 24 SET 2026: caduta a 4:46 (ripresa),
+       a 11:35 (ripresa in 7 secondi), a 12:36 — e li si e arresa, con il
+       messaggio «Torna alla home». Tre cadute, e REPAIR_MAX_ROUNDS e 3.
+       Il contatore veniva solo incrementato, MAI azzerato: i tre tentativi non
+       erano tre per caduta, erano tre per tutta la conversazione. Tre
+       singhiozzi in dodici minuti — su rete mobile, una mattinata qualunque —
+       e la dote era finita, su una conversazione che ogni volta si era ripresa
+       benissimo. */
+    const A = loadApp();
+    A.run(PONTE + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay');
+      pc.addEventListener('connectionstatechange', function(){ onConnectionStateChange(pc); });
+      REPAIR_ROUND_MS = 60; REPAIR_RETRY_GAP_MS = 20;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    for (let i = 0; i < 3; i++){
+      A.run("pc.__become('failed')");
+      await A.run('new Promise(function(r){ setTimeout(r, 260); })');
+      A.run("pc.__become('connected')");          /* si e ripresa, come nella prova vera */
+      await A.run('new Promise(function(r){ setTimeout(r, 40); })');
+    }
+    const giri = A.run('pc.__repairRounds');
+    const arresa = A.run('pc.__gaveUp === true');
+    const totale = A.run('pc.__repairTotal');
+    A.run('stopRepairRetries(pc)');
+    A.stop();   /* prima si spegne, poi si giudica: un assert rosso non deve bloccare la suite */
+    assert.strictEqual(giri, 0, 'dopo un ricongiungimento la dote per il prossimo incidente deve tornare intera');
+    assert.ok(!arresa, 'tre cadute SEPARATE, ognuna ripresa, non devono far arrendere niente');
+    assert.ok(totale > 0 && totale <= A.run('REPAIR_MAX_TOTAL'),
+      'ma il tetto dell intera conversazione deve continuare a contare, o una rete che va e viene prosciuga il relay');
+  });
+
+
+  test('ma una rete che cade all infinito si ferma: il tetto dell intera conversazione', async () => {
+    /* I giri per incidente si azzerano a ogni ricongiungimento, e devono. Ma
+       ogni offerta e una SCRITTURA, e le scritture sono la quota stretta:
+       mille al giorno per tutti, una decina per giro. Senza un tetto assoluto
+       una rete che va e viene per un ora prosciugherebbe il relay da sola.
+       Arrivati li non e piu un incidente: e una rete che non c e, e insistere
+       non la fa tornare.
+       Scritto senza dipendere dai tempi: si mette il contatore totale gia al
+       tetto e si guarda cosa fa il giro successivo. */
+    const A = loadApp();
+    A.run(PONTE + `
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay');
+      pc.connectionState = 'failed';
+      pc.__repairTotal = REPAIR_MAX_TOTAL;     /* la dote dell intera conversazione e finita */
+      REPAIR_ROUND_MS = 40;
+      callState = 'active'; startCallTimer();
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    await A.run('startRepair(pc)');
+    const letto = {
+      scritture: A.run('window.__scritture'),
+      arresa: A.run('pc.__gaveUp === true'),
+      stato: A.run('callState'),
+    };
+    A.run('stopRepairRetries(pc)');
+    A.stop();
+    assert.strictEqual(letto.scritture, 0, 'oltre il tetto non si scrive piu NIENTE sul relay');
+    assert.ok(letto.arresa, 'e lo si dice, invece di riprovare in silenzio per sempre');
+    assert.strictEqual(letto.stato, 'idle', 'e la chiamata si chiude davvero, cronometro e microfono compresi');
+  });
+
+
+  test('UN TETTO NON DEVE POTER RIATTACCARE IL TELEFONO: i vacillamenti innocui non chiudono la chiamata', async () => {
+    /* ⚠️ REGRESSIONE INTRODOTTA E TOLTA IL 24 SET 2026. Il tetto dell intera
+       conversazione era contato in cima a startRepair, cioe a OGNI tentativo
+       qualunque: comprese le letture innocue di chi ascolta, che non costano
+       una sola scrittura. Su rete mobile 'disconnected' va e viene di continuo
+       — la cicatrice del 12 set lo dice — quindi bastava una mezz ora di rete
+       ballerina perche la chiamata si chiudesse DA SOLA mentre funzionava.
+       Un tetto messo li per proteggere il relay non deve poter riattaccare il
+       telefono a nessuno. Adesso conta solo le OFFERTE, che sono le scritture. */
+    const A = loadApp();
+    A.run(PONTE + `
+      pc = window.__mkpc2('relay');
+      pc.connectionState = 'disconnected';
+      repairBase = { text: 'x', offerer: false };      /* il lato che ASCOLTA e basta */
+      repairAsAnswerer = async function(){};           /* l ascolto, senza aspettare un minuto */
+      callState = 'active'; startCallTimer();
+    `);
+    for (let i = 0; i < 25; i++) await A.run('startRepair(pc)');
+    const letto = {
+      stato: A.run('callState'),
+      arresa: A.run('pc.__gaveUp === true'),
+      scritture: A.run('window.__scritture'),
+      timer: A.run('callTimerInterval !== null'),
+    };
+    A.run('stopRepairRetries(pc)'); A.run('stopCallTimer()');
+    A.stop();
+    assert.strictEqual(letto.scritture, 0, 'chi ascolta non scrive: non deve consumare un tetto fatto per le scritture');
+    assert.ok(!letto.arresa, 'venticinque vacillamenti non devono far arrendere una chiamata che funziona');
+    assert.strictEqual(letto.stato, 'active', 'e la chiamata deve restare aperta');
+    assert.ok(letto.timer, 'col suo cronometro che continua a contare');
+  });
+
+});
