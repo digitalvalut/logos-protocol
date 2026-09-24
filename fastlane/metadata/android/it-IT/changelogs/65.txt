@@ -1,0 +1,5 @@
+Le chiamate lunghe reggono.
+
+Se durante una chiamata il collegamento salta — cambio di rete, un tunnel, un momento di segnale debole — adesso si riprende da solo in pochi secondi e la conversazione continua. Provata su due telefoni in movimento, su reti diverse: trentasei minuti di chiamata continua.
+
+E quando invece il collegamento non torna davvero, la chiamata si chiude come si deve: il cronometro si ferma, microfono e fotocamera si spengono, il telefono esce dalla modalità chiamata.

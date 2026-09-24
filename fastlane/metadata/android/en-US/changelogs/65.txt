@@ -1,0 +1,5 @@
+Long calls hold.
+
+If the connection drops mid-call — a network change, a tunnel, a moment of weak signal — it now picks itself back up within seconds and the conversation carries on. Tested on two phones on different networks: thirty-six minutes of unbroken call.
+
+And when the connection really does not come back, the call now ends properly: the clock stops, microphone and camera switch off, and the phone leaves call mode.
