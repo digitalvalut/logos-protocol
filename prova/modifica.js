@@ -4393,6 +4393,27 @@ function onConnectionStateChange(conn){
     if (conn.__repairTimer){ clearTimeout(conn.__repairTimer); conn.__repairTimer = null; }
     /* tornata su, o chiusa: i giri in coda non servono piu' */
     if (conn.connectionState === 'connected' || conn.connectionState === 'closed') stopRepairRetries(conn);
+    /* ⚠️ MISURATO SU UNA CHIAMATA VERA IL 24 SET 2026: caduta a 4:46 (ripresa),
+       a 11:35 (ripresa in 7 secondi), a 12:36 — e li' si e' arresa, con il
+       messaggio «Torna alla home». Tre cadute, e REPAIR_MAX_ROUNDS e' 3: non
+       era una coincidenza.
+
+       Il contatore veniva solo incrementato, MAI azzerato. Cosi' i tre
+       tentativi non erano tre per caduta: erano tre per tutta la
+       conversazione. Tre singhiozzi in dodici minuti — che su rete mobile
+       sono una mattinata qualunque — e la dote era finita, su una
+       conversazione che ogni volta si era ripresa benissimo.
+
+       Un incidente chiuso bene e' un incidente chiuso: il prossimo riparte
+       con la sua dote intera. A limitare il costo sul relay resta
+       REPAIR_MAX_TOTAL, che conta l'intera conversazione e non si azzera —
+       perche' una rete che cade venti volte non e' un incidente, e' una rete
+       che non c'e'. */
+    if (conn.connectionState === 'connected'){
+      conn.__repairRounds = 0;
+      conn.__repairListens = 0;
+      conn.__gaveUp = false;
+    }
     /* 'failed' non torna piu' da solo, per specifica: qui si parte, da tutti e due i lati */
     if (conn.connectionState === 'failed'){
       /* l'altro lato e' una versione che non sa riprendere: non c'e' niente
@@ -4445,6 +4466,12 @@ function onConnectionStateChange(conn){
 const REPAIR_START_MS = 3000;          /* 'disconnected' spesso torna da solo in un paio di secondi: si aspetta quello, non oltre */
 let REPAIR_ROUND_MS = 60000;      /* `let` e non `const`: i test lo accorciano per vedere un giro scadere senza aspettare un minuto */
 const REPAIR_MAX_ROUNDS = 3;
+/* Il tetto dell'intera conversazione: i giri per incidente si azzerano a ogni
+   ricongiungimento, questo no. Dodici giri sono quattro incidenti pieni —
+   piu' che abbastanza per una chiamata lunga su rete mobile, dove il
+   lasciapassare del ponte scade ogni dieci minuti — e al costo peggiore
+   restano ~120 scritture, cioe' un tetto vero sulla quota del relay. */
+let REPAIR_MAX_TOTAL = 12;
 const REPAIR_PUMP_GRACE_MS = 20000;    /* dopo il ricongiungimento, quanto ancora ascoltare indirizzi ritardatari */
 let repairNonce = null;                /* il mio numero casuale per questa sessione, mandato nel saluto */
 let repairBase = null;                 /* la stringa da cui nascono i segreti, o null se la ripresa non e' armata */
@@ -4476,6 +4503,16 @@ async function startRepair(conn){
   if (pc !== conn || !repairBase) return;
   if (conn.connectionState === 'connected' || conn.connectionState === 'closed') return;
   if (conn.__repairing) return;                          /* una alla volta */
+  /* Il tetto dell'intera conversazione, che NON si azzera mai. I giri per
+     incidente ripartono da zero a ogni ricongiungimento (vedi
+     onConnectionStateChange), e devono: tre cadute separate non sono una
+     caduta lunga. Ma le offerte sono SCRITTURE, e le scritture sono la quota
+     stretta — mille al giorno per tutti gli utenti insieme, una decina per
+     giro. Senza un tetto assoluto, una rete che va e viene per un'ora
+     prosciugherebbe il relay da sola. Arrivati qui non e' piu' un incidente:
+     e' una rete che non c'e', e insistere non la fa tornare. */
+  conn.__repairTotal = (conn.__repairTotal || 0) + 1;
+  if (conn.__repairTotal > REPAIR_MAX_TOTAL){ giveUpOnConnection(conn); return; }
   conn.__repairing = true;
   try{
     /* Prima di ogni altra cosa, e da tutti e due i lati perche' tutti e due
