@@ -60,6 +60,27 @@ anche un `python3` funzionante: il task Gradle `bundleWebApp` è agganciato a
 `preBuild` e rigenera `app/src/main/assets/logos.html` a ogni compilazione.
 Quel file **non si committa mai**.
 
+⚠️⚠️ **NON scrivere `JAVA_HOME=$(/usr/libexec/java_home -v 21)` su macOS.**
+Quel `-v 21` significa «**21 o superiore**», non «21». Su una macchina dove è
+installata solo una JDK più recente restituisce quella, il comando riesce,
+la compilazione riesce, il pacchetto si firma, il rilascio esce — e nessuno
+si accorge di niente finché non tocca al confronto. Succede il 24 set 2026
+con la v65: compilata per sbaglio con la JDK 22, pubblicata, e il workflow
+`riproducibile.yml` l'ha bocciata due minuti dopo. Tutte le 49 voci
+dell'archivio combaciavano tranne `classes.dex` — **stessa dimensione,
+impronta diversa**: la firma tipica dello stesso codice passato per due
+compilatori diversi. Nessun rischio per chi aveva già installato (stesso
+codice, stessa chiave, stesso comportamento), ma il pacchetto non era più
+dimostrabile, che è tutto il punto di questa pagina.
+
+Il percorso della JDK 21 si **legge** da `LOGOS-DA-SALVARE/`, non si indovina:
+è il motivo per cui questo file dice, in cima, che i percorsi stanno lì.
+Prima di compilare, controllare con `"$JAVA_HOME/bin/java" -version` che sia
+davvero una 21. Rimedio, se ci si accorge dopo: ricompilare con la JDK giusta,
+rifirmare e **sostituire i due file sullo stesso rilascio** con
+`gh release upload <tag> <file> <file> --clobber`. Nessuna versione nuova: il
+codice non è cambiato, è cambiato solo il compilatore.
+
 ⚠️ `clean` e `--no-build-cache` non sono prudenza eccessiva: una cache vecchia
 ha già prodotto un `classes.dex` che non corrispondeva, ed è costata una
 pipeline a F-Droid e mezza giornata a capire.
