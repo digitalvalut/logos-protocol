@@ -4503,16 +4503,6 @@ async function startRepair(conn){
   if (pc !== conn || !repairBase) return;
   if (conn.connectionState === 'connected' || conn.connectionState === 'closed') return;
   if (conn.__repairing) return;                          /* una alla volta */
-  /* Il tetto dell'intera conversazione, che NON si azzera mai. I giri per
-     incidente ripartono da zero a ogni ricongiungimento (vedi
-     onConnectionStateChange), e devono: tre cadute separate non sono una
-     caduta lunga. Ma le offerte sono SCRITTURE, e le scritture sono la quota
-     stretta — mille al giorno per tutti gli utenti insieme, una decina per
-     giro. Senza un tetto assoluto, una rete che va e viene per un'ora
-     prosciugherebbe il relay da sola. Arrivati qui non e' piu' un incidente:
-     e' una rete che non c'e', e insistere non la fa tornare. */
-  conn.__repairTotal = (conn.__repairTotal || 0) + 1;
-  if (conn.__repairTotal > REPAIR_MAX_TOTAL){ giveUpOnConnection(conn); return; }
   conn.__repairing = true;
   try{
     /* Prima di ogni altra cosa, e da tutti e due i lati perche' tutti e due
@@ -4526,6 +4516,22 @@ async function startRepair(conn){
     if (repairBase.offerer){
       /* il tetto conta le OFFERTE, cioe' le scritture: oltre, e' la rete che non c'e' */
       conn.__repairRounds = (conn.__repairRounds || 0) + 1;
+      /* ⚠️ IL TETTO DELL'INTERA CONVERSAZIONE, e conta SOLO LE OFFERTE.
+         La prima stesura lo incrementava in cima a startRepair, cioe' a ogni
+         tentativo qualunque — comprese le letture innocue di chi ascolta e
+         ogni riprogrammazione. Su rete mobile 'disconnected' va e viene di
+         continuo (vedi la cicatrice del 12 set sopra onConnectionStateChange):
+         dodici vacillamenti nell'arco di una conversazione, che sono una
+         mezz'ora qualunque, e la chiamata si chiudeva DA SOLA mentre
+         funzionava benissimo. Un tetto pensato per proteggere il relay non
+         deve poter riattaccare il telefono a nessuno.
+         Qui conta quello che costa davvero: ogni offerta e' una scrittura, e
+         le scritture sono la quota stretta — mille al giorno per tutti
+         insieme, una decina per giro. I giri per incidente si azzerano a ogni
+         ricongiungimento; questo no. Arrivati al tetto non e' piu' un
+         incidente: e' una rete che non c'e', e insistere non la fa tornare. */
+      conn.__repairTotal = (conn.__repairTotal || 0) + 1;
+      if (conn.__repairTotal > REPAIR_MAX_TOTAL){ giveUpOnConnection(conn); return; }
       if (conn.__repairRounds <= REPAIR_MAX_ROUNDS) await repairAsOfferer(conn, conn.__repairRounds);
     } else {
       /* chi risponde non scrive finche' non ha un'offerta in mano: mettersi
@@ -11325,22 +11331,29 @@ function tickCallTimer(){
   setCallStatus(formatCallDuration(Math.floor((Date.now() - callStartedAt) / 1000)));
 }
 function startCallTimer(){
-  /* ⚠️ L'AGGANCIO DEL RINNOVO DEL LASCIAPASSARE, e sta qui di proposito.
-     Si rinnova SOLO mentre una chiamata e' attiva (il perche' e' scritto per
-     esteso sopra `scheduleIceRenewal`), e queste due funzioni sono l'unico
-     punto da cui una chiamata comincia e finisce davvero, da tutte e due le
-     strade — chi chiama e chi risponde. Legarlo qui vuol dire che non si puo'
-     dimenticare di spegnerlo. */
-  scheduleIceRenewal(true);
+  /* ⚠️ PRIMA IL CRONOMETRO, POI TUTTO IL RESTO, e non e' pignoleria.
+     Il 24 set 2026 il rinnovo del lasciapassare era agganciato QUI SOPRA, una
+     riga prima: se quella riga inciampa per qualunque ragione, l'eccezione si
+     porta via anche il `setInterval` sotto, e alla persona in chiamata sparisce
+     il cronometro — su una chiamata che intanto funziona benissimo.
+     Un orologio che conta i minuti non deve dipendere da niente. Quello che
+     viene dopo puo' fallire quanto vuole: non tocca cio' che si vede. */
   callStartedAt = Date.now();
   clearInterval(callTimerInterval);
   tickCallTimer();
   callTimerInterval = setInterval(tickCallTimer, 1000);
+  /* L'aggancio del rinnovo del lasciapassare. Sta in queste due funzioni
+     perche' sono l'unico punto da cui una chiamata comincia e finisce
+     davvero, da tutte e due le strade — chi chiama e chi risponde — quindi
+     spegnerlo non si puo' dimenticare. Ma sta DOPO, e dentro un try: e' un
+     miglioramento, non una condizione per telefonare. */
+  try{ scheduleIceRenewal(true); }catch(e){}
 }
 function stopCallTimer(){
-  stopIceRenewal();   /* finita la chiamata, finito il rinnovo: vedi startCallTimer */
+  /* Stesso ordine, stessa ragione: prima si ferma cio' che si vede. */
   clearInterval(callTimerInterval);
   callTimerInterval = null;
+  try{ stopIceRenewal(); }catch(e){}
 }
 
 /* "Permission denied" was covering three different problems with one message:
