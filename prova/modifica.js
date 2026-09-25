@@ -3448,6 +3448,23 @@ async function refreshIceConfig(conn){
    La suite era verde perche' i test chiamavano `onIceRenewOffer` a mano,
    saltando la porta d'ingresso. Adesso passano da `onDcMessage`, come un
    messaggio vero. */
+/* ⚠️ SPENTO IL 25 SET 2026, dopo la prima prova in cui il rinnovo e' girato
+   davvero su due dispositivi. Il rinnovo e' partito, e a 10:46 la chiamata si
+   e' bloccata e non si e' piu' ripresa: il telefono si credeva collegato
+   (verde), il PC restava su «sto riprendendo». E' peggio di quello che fa la
+   ripresa da sola (buchi da 5-20 secondi, ma si riprende sempre).
+   Ipotesi, NON misurata: chi offre si ritira dopo ICE_RENEW_ROLLBACK_MS (8 s),
+   ma chi risponde prima chiede credenziali fresche al relay e poi raccoglie gli
+   indirizzi (`waitIceComplete`, fino a ~21 s). La risposta arriva dopo il
+   ritiro e viene scartata: un lato resta sulla sessione ICE vecchia, l'altro
+   passa alla nuova. Quando il vecchio lasciapassare scade cade un lato solo, e
+   l'altro, credendosi collegato, non partecipa alla ripresa.
+   Chi lo riaccende: prima di tutto un registro delle fasi su tutti e due i lati
+   per MISURARE quanto ci mette la risposta; poi un'attesa del ritiro piu' lunga
+   del caso peggiore dell'altro lato, e una risposta arrivata tardi che non si
+   butta. Poi una prova vera di venti minuti. Da spento non si propone e non si
+   dichiara capace nel saluto: nessuna versione ci prova con questa. */
+let ICE_RENEW_ATTIVO = false;          /* `let`: i test lo accendono per provare il codice che resta */
 let ICE_RENEW_FIRST_MS = 90 * 1000;    /* passata la fase in cui la chiamata si sta alzando */
 let ICE_RENEW_MS = 4 * 60 * 1000;      /* comodamente dentro i dieci minuti della credenziale */
 let ICE_RENEW_ROLLBACK_MS = 8000;      /* `let` come gli altri: un test deve poter vedere un ritiro senza aspettare */
@@ -3459,6 +3476,7 @@ function stopIceRenewal(){
 }
 function scheduleIceRenewal(primo){
   stopIceRenewal();
+  if (!ICE_RENEW_ATTIVO) return;         /* spento: vedi il commento sopra ICE_RENEW_ATTIVO */
   const conn = pc;
   if (!conn) return;
   iceRenewTimer = setTimeout(() => { runIceRenewal(conn); }, primo ? ICE_RENEW_FIRST_MS : ICE_RENEW_MS);
@@ -3959,7 +3977,7 @@ function wireDataChannel(channel, ownerPc){
        chiavi, non con le impronte (vedi contactDialSecrets). Una versione
        vecchia la ignora e non ne manda una sua: si resta al sigillo di prima. */
     const pub = await myPubB64();
-    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: 2 });
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: ICE_RENEW_ATTIVO ? 2 : 0 });
     const provaSaluto = (ancora) => {
       try{
         if (dc.readyState !== 'open') throw new Error('canale non aperto');
@@ -8795,11 +8813,23 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.58';
+const APP_VERSION = 'logos-modifica-4.59';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
    behind it may not be, and that gap is the oldest trap in this project */
+/* La versione del service worker combacia con quella della pagina?
+   ⚠️ NON con un semplice `===`: `tools/prova.js` rinomina la cache della copia
+   di prova in `prova--logos-modifica-X`, cosi' non si mescola con quella
+   dell'app vera sullo stesso sito. Il confronto diretto, nella copia di prova,
+   non combaciava MAI, e «Come sta l'app» diceva «una parte dell'app e' ancora
+   vecchia» anche con tutto aggiornato. Il 25 set 2026 quell'avviso ha fatto
+   concludere, sbagliando, che durante un collaudo un dispositivo girasse la
+   versione precedente: una diagnosi costruita su un falso allarme. */
+function stessaVersione(delServiceWorker){
+  return typeof delServiceWorker === 'string'
+    && delServiceWorker.replace(/^prova--/, '') === APP_VERSION;
+}
 async function swVersion(){
   try{
     if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return null;
@@ -8994,7 +9024,7 @@ async function runHealth(){
 
   const running = await swVersion();
   rows.push(!running ? ['off', t('health.version'), APP_VERSION]
-          : running === APP_VERSION ? ['ok', t('health.version'), APP_VERSION]
+          : stessaVersione(running) ? ['ok', t('health.version'), APP_VERSION]
           : ['warn', t('health.version'), t('health.versionOld')]);
 
   healthRows = rows;
