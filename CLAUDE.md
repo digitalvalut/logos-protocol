@@ -187,8 +187,23 @@ What does **not** reset is `REPAIR_MAX_TOTAL`, because every offer is a relay
 *write* and writes are the scarce quota; past that it is not an incident, it
 is a network that is not there, and insisting does not bring it back.
 
-**Renewing the pass in flight is back, and only inside a call** (24 Sep
-2026). Read the comment above `scheduleIceRenewal` before touching it: the
+**Renewing the pass in flight exists in the code and is SWITCHED OFF**
+(`ICE_RENEW_ATTIVO = false`, 25 Sep 2026). Read the comment above it before
+turning it back on. The first time it really ran on two devices, the call
+froze at 10:46 and never came back — one side green, the other stuck on
+«sto riprendendo» — which is worse than the repair alone, whose gaps always
+end. Switched off, it neither offers nor announces itself in the `hello`
+(`ren: 0`), so no other version tries it with this one; the tests switch it on
+to keep watching the code that remains. The leading suspicion, **not
+measured**: the offerer rolls back after `ICE_RENEW_ROLLBACK_MS` (8 s) while
+the answerer is still fetching fresh credentials and gathering (up to ~21 s),
+so a late answer is discarded and the two sides end up on different ICE
+sessions. Whoever turns it on measures that first, on both sides, then makes
+the wait longer than the answerer's worst case and stops throwing late answers
+away — then a twenty-minute two-network call.
+
+What follows describes how it is built. Read the comment above
+`scheduleIceRenewal` before touching it: the
 first two attempts broke a working app in ways a fully green suite could not
 see. A renegotiation wipes every sender's parameters (video loses its
 `CALL_VIDEO_MAX_BPS` cap, the mobile uplink saturates, the picture freezes
@@ -197,10 +212,35 @@ in `have-local-offer`, a window in which **a new call cannot be placed at
 all** — one side rings, the other receives nothing. Hence the three
 conditions, all load-bearing: it runs **only while `callState === 'active'`**
 (inside a call there is no new call to block), only toward a peer that
-announced `ren: 1` in its `hello`, and only on a `relay` route. It is armed
-and disarmed by `startCallTimer`/`stopCallTimer`, the one place a call really
-begins and ends, so it cannot outlive its call. Do not instead lengthen
-`TURN_TTL_SECONDS`: that number is audit H-04 and a test caps it at 900 s.
+announced `ren: 2` in its `hello`, and only on a `relay` route — and only
+**one** side offers, the same `repairBase.offerer` that leads the repair. It
+is armed and disarmed by `startCallTimer`/`stopCallTimer`, the one place a
+call really begins and ends, so it cannot outlive its call. Do not instead
+lengthen `TURN_TTL_SECONDS`: that number is audit H-04 and a test caps it at
+900 s.
+
+⚠️ **In 4.57 the renewal shipped and never once worked**, with every test
+green — found on 25 Sep 2026 by rereading the released code, not by a
+failure, because the repair was quietly carrying every call. Its messages
+were named `ice-renew-offer`/`-answer`, but `onDcMessage` hands to
+`handleCallSignal` only types that start with `call-` and drops everything
+else in silence: every four minutes an offer left, nobody read it, and eight
+seconds later it rolled back. And the rewrite had lost the rule about who
+offers, so once the messages arrived both sides would have offered at once
+and ignored each other. The tests were green because they called
+`onIceRenewOffer` by hand, skipping the door. **Test through `onDcMessage`,
+with two apps wired together** — a function that is correct and never
+reached is the same as no function. The messages are now `call-ice-renew-…`,
+and the `hello` says `ren: 2` when switched on, because a 4.57 says `ren: 1`
+and cannot answer.
+
+⚠️ **In the test copy, «una parte dell'app è ancora vecchia» used to be a
+false alarm, always.** `tools/prova.js` renames the service worker's cache to
+`prova--logos-modifica-X` so it cannot collide with the real app's on the same
+site, and the health check compared it to `APP_VERSION` with a bare `===`.
+On 25 Sep 2026 that warning led to the wrong conclusion that a device had run
+the old version during a test. `stessaVersione()` now strips the prefix. Any
+check that compares the two names goes through it.
 
 ⚠️ **Any path that renegotiates a live call must go through `ritocca()` and
 `ensureOpusFec`** — that is what puts back the sender parameters and the
@@ -249,8 +289,8 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 539 tests, 84 suites, about three
-and a half minutes, and it exits on its own (measured 24 Sep 2026). They also run on every push. (That count is measured, and goes stale —
+Node 22. Node finds the files itself. 544 tests, 84 suites, about three
+and a half minutes, and it exits on its own (measured 25 Sep 2026). They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**

@@ -8221,6 +8221,10 @@ test.describe('il lasciapassare del ponte', () => {
         close: function(){ this.connectionState = 'closed'; },
       };
     };
+    /* il rinnovo e' SPENTO nell'app (25 set 2026, vedi ICE_RENEW_ATTIVO): questi
+       test lo accendono per continuare a sorvegliare il codice che resta, cosi'
+       chi lo riaccendera' trovera' ogni pezzo gia' verificato */
+    ICE_RENEW_ATTIVO = true;
     /* il canale dati vivo, che e' tutto il punto del rinnovo */
     window.__inviati = [];
     dc = { readyState: 'open', send: function(s){ window.__inviati.push(JSON.parse(s)); } };
@@ -8304,7 +8308,7 @@ test.describe('il lasciapassare del ponte', () => {
        volta. Chi ne toglie una sola non vedra niente diventare rosso — e
        sappia che la prossima volta potrebbe toglierle tutte. */
     const A = loadApp();
-    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'idle';`);
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'idle';`);
     await A.run('runIceRenewal(pc)');
     A.run('stopIceRenewal()');
     assert.strictEqual(A.run('window.__inviati.length'), 0, 'da fermi non si rinegozia NIENTE');
@@ -8316,7 +8320,7 @@ test.describe('il lasciapassare del ponte', () => {
     /* Una versione piu vecchia non manda `ren` nel saluto. Offrirle un rinnovo
        vuol dire lasciare un offerta appesa fino al ritiro, per niente. */
     const A = loadApp();
-    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = false; callState = 'active';`);
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = false; repairBase = { text: 'x', offerer: true }; callState = 'active';`);
     await A.run('runIceRenewal(pc)');
     A.run('stopIceRenewal()');
     assert.strictEqual(A.run('window.__inviati.length'), 0, 'se l altro non sa rispondere, non si offre');
@@ -8325,11 +8329,11 @@ test.describe('il lasciapassare del ponte', () => {
 
   test('dentro una chiamata sul ponte rinnova, sul canale dati, senza UNA scrittura sul relay', async () => {
     const A = loadApp();
-    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';`);
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';`);
     await A.run('runIceRenewal(pc)');
     A.run('stopIceRenewal()');
     const tipi = A.run('window.__inviati.map(function(m){ return m.type; })');
-    assert.ok(tipi.indexOf('ice-renew-offer') !== -1, 'l offerta viaggia sul canale dati, che e gia aperto e non costa niente');
+    assert.ok(tipi.indexOf('call-ice-renew-offer') !== -1, 'l offerta viaggia sul canale dati, che e gia aperto e non costa niente');
     assert.strictEqual(A.run('window.__scritture'), 0,
       'IL COSTO: una trattativa dal relay costa una decina di scritture su mille al giorno per tutti');
     assert.ok(A.run("pc.log.indexOf('restartIce') !== -1"), 'senza restartIce non si apre nessun canale nuovo sul ponte');
@@ -8340,7 +8344,7 @@ test.describe('il lasciapassare del ponte', () => {
 
   test('su una connessione diretta non si tocca niente: non c e niente che scada', async () => {
     const A = loadApp();
-    A.run(PONTE + `pc = window.__mkpc2('direct'); peerCanRenew = true; callState = 'active';`);
+    A.run(PONTE + `pc = window.__mkpc2('direct'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';`);
     await A.run('runIceRenewal(pc)');
     A.run('stopIceRenewal()');
     assert.strictEqual(A.run('window.__inviati.length'), 0, 'niente da rinnovare su una diretta');
@@ -8352,17 +8356,20 @@ test.describe('il lasciapassare del ponte', () => {
        video riparte senza tetto, la salita mobile satura e l immagine si
        congela a meta chiamata: misurato il 23 set, minuto 12. */
     const A = loadApp();
-    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';`);
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';`);
     await A.run('runIceRenewal(pc)');
     A.run('stopIceRenewal()');
-    await A.run("onIceRenewAnswer('v=0\\r\\no=RIS\\r\\n')");
+    /* dalla porta d'ingresso vera, come un messaggio arrivato dall'altro telefono */
+    await A.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-answer', sdp: 'v=0\\r\\no=RIS\\r\\n' }) })`);
+    await A.run('new Promise(function(r){ setTimeout(r, 50); })');
     assert.strictEqual(A.run('pc.__senders[1].leggi().encodings[0].maxBitrate'), A.run('CALL_VIDEO_MAX_BPS'),
       'chi offre deve rimettere il tetto al video');
     assert.strictEqual(A.run("pc.__senders[0].leggi().encodings[0].priority"), 'high',
       'e la voce deve tornare prioritaria, o si sente male mentre il video mangia tutto');
     const B = loadApp();
     B.run(PONTE + `pc = window.__mkpc2('relay');`);
-    await B.run("onIceRenewOffer('v=0\\r\\no=OFF\\r\\n')");
+    await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-offer', sdp: 'v=0\\r\\no=OFF\\r\\n' }) })`);
+    await B.run('new Promise(function(r){ setTimeout(r, 50); })');
     assert.strictEqual(B.run('pc.__senders[1].leggi().encodings[0].maxBitrate'), B.run('CALL_VIDEO_MAX_BPS'),
       'e anche chi risponde: altrimenti l immagine si blocca da una parte sola, e ognuno giura che il rotto e l altro');
     A.stop(); B.stop();
@@ -8372,7 +8379,7 @@ test.describe('il lasciapassare del ponte', () => {
     /* Un posto solo da cui una chiamata comincia e finisce, da tutte e due le
        strade: legarlo qui vuol dire che non si puo dimenticare di spegnerlo. */
     const A = loadApp();
-    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';`);
+    A.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';`);
     A.run('startCallTimer()');
     const armato = A.run('iceRenewTimer !== null');
     A.run('stopCallTimer()');
@@ -8546,6 +8553,136 @@ test.describe('il lasciapassare del ponte', () => {
     assert.ok(!letto.arresa, 'venticinque vacillamenti non devono far arrendere una chiamata che funziona');
     assert.strictEqual(letto.stato, 'active', 'e la chiamata deve restare aperta');
     assert.ok(letto.timer, 'col suo cronometro che continua a contare');
+  });
+
+
+  /* ⚠️ 25 SET 2026 — I TRE CONTROLLI CHE MANCAVANO, e il motivo per cui la 4.57
+     ha pubblicato un rinnovo che non ha mai funzionato con la suite tutta verde.
+     Ogni test qui sopra chiamava `onIceRenewOffer` / `onIceRenewAnswer` A MANO.
+     Nella realta' li chiama `onDcMessage`, e `onDcMessage` passava alle chiamate
+     solo i tipi che cominciano per `call-`: i messaggi del rinnovo si chiamavano
+     `ice-renew-…` e venivano buttati in silenzio. Il test verificava la
+     funzione; nessuno verificava che la funzione venisse mai raggiunta. Questi
+     tre passano dalla porta d'ingresso, con due app vere collegate fra loro. */
+
+  test('IL RINNOVO ARRIVA DAVVERO: due app collegate, offerta e risposta passano da onDcMessage', async () => {
+    const A = loadApp(), B = loadApp();
+    /* il canale dati: quello che A manda, B lo riceve dalla porta vera, e viceversa */
+    A.sandbox.__consegna = function(s){ B.sandbox.onDcMessage({ data: s }); };
+    B.sandbox.__consegna = function(s){ A.sandbox.onDcMessage({ data: s }); };
+    for (const [app, offre] of [[A, true], [B, false]]){
+      app.run(PONTE + `
+        pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';
+        repairBase = { text: 'x', offerer: ` + offre + ` };
+        ICE_RENEW_ROLLBACK_MS = 200;
+        dc = { readyState: 'open', send: function(s){ window.__inviati.push(JSON.parse(s)); __consegna(s); } };
+      `);
+    }
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    /* si aspetta oltre il ritiro: se la risposta non fosse arrivata, qui A si
+       sarebbe gia' ritirato */
+    await A.run('new Promise(function(r){ setTimeout(r, 450); })');
+    const letto = {
+      bRiceve: B.run("pc.log.indexOf('setRemote:offer') !== -1"),
+      bRisponde: B.run("pc.log.indexOf('setLocal:answer') !== -1"),
+      aApplica: A.run("pc.log.indexOf('setRemote:answer') !== -1"),
+      aRitira: A.run("pc.log.indexOf('setLocal:rollback') !== -1"),
+      aStato: A.run('pc.signalingState'),
+    };
+    A.stop(); B.stop();
+    assert.ok(letto.bRiceve, 'l offerta deve arrivare all altro telefono: nella 4.57 veniva buttata in silenzio');
+    assert.ok(letto.bRisponde, 'e l altro deve rispondere');
+    assert.ok(letto.aApplica, 'e la risposta deve tornare indietro ed essere applicata');
+    assert.ok(!letto.aRitira, 'un rinnovo andato a buon fine non si ritira');
+    assert.strictEqual(letto.aStato, 'stable', 'e la connessione torna stabile, pronta per il giro dopo');
+  });
+
+  test('UNO SOLO DEI DUE PROPONE: chi non e l offerente non manda niente', async () => {
+    /* Senza questa regola offrono tutti e due quasi insieme, ciascuno trova
+       l altro gia impegnato e ignora l offerta ricevuta: glare, e il rinnovo
+       non riesce mai. La 4.57 l aveva persa nella riscrittura. */
+    const B = loadApp();
+    B.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';
+                   repairBase = { text: 'x', offerer: false };`);
+    await B.run('runIceRenewal(pc)');
+    B.run('stopIceRenewal()');
+    const inviati = B.run('window.__inviati.length');
+    const toccata = B.run("pc.log.indexOf('restartIce') !== -1");
+    B.stop();
+    assert.strictEqual(inviati, 0, 'chi non guida non propone: risponde e basta');
+    assert.ok(!toccata, 'e non tocca la connessione');
+  });
+
+  test('una 4.57 non viene riconosciuta come capace: serve ren 2 nel saluto', async () => {
+    /* La 4.57 dichiara `ren: 1` ma non sa rispondere: i suoi messaggi avevano
+       il nome sbagliato. Trattarla da capace vorrebbe dire offrirle rinnovi che
+       butta — o rispondere a offerte sue che poi lei scarta alla risposta,
+       lasciando i due lati con due trattative diverse. */
+    const A = loadApp();
+    /* una connessione normale del banco di prova, non il finto ponte: al saluto
+       serve solo che ci sia una conversazione, e il finto ponte gli manca dei
+       pezzi che il saluto usa per disegnare la scheda dell'arrivo */
+    A.run(`pc = new RTCPeerConnection();`);
+    /* il saluto avvia lavoro in sottofondo (parole di sicurezza, rubrica):
+       si lascia finire prima di leggere, e prima di spegnere la sandbox */
+    const saluta = async (extra) => {
+      A.run(`onDcMessage({ data: JSON.stringify(Object.assign({ type: 'hello', nick: 'x' }, ` + JSON.stringify(extra) + `)) })`);
+      await A.run('new Promise(function(r){ setTimeout(r, 300); })');
+      return A.run('peerCanRenew');
+    };
+    const vecchia = await saluta({ fp: 'aa'.repeat(32), ren: 1 });
+    const nuova   = await saluta({ fp: 'bb'.repeat(32), ren: 2 });
+    const antica  = await saluta({ fp: 'cc'.repeat(32) });
+    A.stop();
+    assert.strictEqual(vecchia, false, 'una 4.57 dichiara ren 1 ma non sa rispondere: con lei non si rinnova');
+    assert.strictEqual(nuova, true, 'una versione con il rinnovo che funziona dichiara ren 2');
+    assert.strictEqual(antica, false, 'e una versione ancora piu vecchia non dichiara niente');
+  });
+
+
+  test('IL RINNOVO E SPENTO: la chiamata non lo arma e il saluto non si dichiara capace', async () => {
+    /* ⚠️ Spento il 25 set 2026: nella prima prova vera il rinnovo e partito e
+       la chiamata si e bloccata a 10:46 senza piu riprendersi. Meglio i buchi
+       da 5-20 secondi della sola ripresa. Da spento deve valere tutto e due:
+       non si propone, e nel saluto non si dice ren 2 — altrimenti una versione
+       che il rinnovo lo ha acceso ci proverebbe con questa. Il saluto qui e
+       quello vero, mandato dal canale dati all apertura, non ricostruito. */
+    const A = loadApp();
+    A.run(`window.__mandati = []; pc = new RTCPeerConnection(); callState = 'active';
+           var ch = { readyState: 'open', send: function(x){ window.__mandati.push(x); }, addEventListener: function(){}, close: function(){} };
+           wireDataChannel(ch, pc); ch.onopen && ch.onopen();`);
+    await A.run('new Promise(function(r){ setTimeout(r, 1200); })');
+    A.run('startCallTimer()');
+    const armato = A.run('iceRenewTimer !== null');
+    A.run('stopCallTimer()');
+    const saluti = A.run("window.__mandati.map(function(x){ try{ return JSON.parse(x); }catch(e){ return null; } }).filter(function(o){ return o && o.type === 'hello'; })");
+    A.stop();
+    assert.ok(saluti.length >= 1, 'il saluto deve essere partito, o il test non sta guardando niente');
+    assert.notStrictEqual(saluti[0].ren, 2, 'da spento il saluto NON dichiara di saper rinnovare');
+    assert.strictEqual(armato, false, 'e una chiamata che comincia non arma nessun rinnovo');
+  });
+
+  test('«una parte dell app e ancora vecchia» non e un falso allarme nella copia di prova', async () => {
+    /* ⚠️ Il 25 set 2026 quell avviso compariva SEMPRE nella copia di prova:
+       tools/prova.js rinomina la cache in prova--logos-modifica-X e il
+       confronto era un === diretto con APP_VERSION. Ha fatto concludere, a
+       torto, che in un collaudo un dispositivo girasse la versione vecchia. */
+    const A = loadApp();
+    const v = A.run('APP_VERSION');
+    const letto = {
+      vera: A.run('stessaVersione(' + JSON.stringify(v) + ')'),
+      prova: A.run('stessaVersione(' + JSON.stringify('prova--' + v) + ')'),
+      vecchia: A.run("stessaVersione('logos-modifica-0.1')"),
+      vecchiaProva: A.run("stessaVersione('prova--logos-modifica-0.1')"),
+      niente: A.run('stessaVersione(null)'),
+    };
+    A.stop();
+    assert.strictEqual(letto.vera, true, 'l app vera, aggiornata: combacia');
+    assert.strictEqual(letto.prova, true, 'la copia di prova, aggiornata: deve combaciare anche lei');
+    assert.strictEqual(letto.vecchia, false, 'una versione vecchia resta vecchia');
+    assert.strictEqual(letto.vecchiaProva, false, 'anche nella copia di prova');
+    assert.strictEqual(letto.niente, false, 'e senza risposta dal service worker non si dichiara niente');
   });
 
 });

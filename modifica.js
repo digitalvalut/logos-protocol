@@ -3428,12 +3428,43 @@ async function refreshIceConfig(conn){
       dimenticare e' impossibile.
 
    E la terza condizione, che toglie di mezzo l'ultimo caso storto: l'altro
-   lato deve AVER DETTO nel saluto che sa rispondere (`ren: 1`). Una versione
+   lato deve AVER DETTO nel saluto che sa rispondere (`ren: 2`). Una versione
    piu' vecchia non lo dice, quindi non si offre nemmeno, e per lei non cambia
    niente. Senza questa, l'offerta restava appesa fino al ritiro.
 
    Se fallisce, ogni strada lascia la connessione com'era e ci pensa la
-   ripresa — che dal 24 set riprova davvero, invece di fermarsi al primo giro. */
+   ripresa — che dal 24 set riprova davvero, invece di fermarsi al primo giro.
+
+   ⚠️ NELLA 4.57 QUESTO RINNOVO NON HA MAI FUNZIONATO, e va scritto perche' e'
+   il genere di cosa che si ripete. Trovato il 25 set rileggendo a freddo il
+   codice gia' pubblicato, non da un guasto: le chiamate reggevano grazie alla
+   ripresa, e il rinnovo sembrava semplicemente «non bastare». Due difetti:
+   1. I messaggi si chiamavano `ice-renew-offer` / `ice-renew-answer`, ma
+      `onDcMessage` passa a `handleCallSignal` solo i tipi che cominciano per
+      `call-`, e il resto lo butta in silenzio. Ogni quattro minuti un'offerta
+      partiva, nessuno la leggeva, e dopo otto secondi si ritirava.
+   2. Nella riscrittura era sparita la regola su chi propone: offrivano tutti e
+      due, e sistemato il primo difetto si sarebbero bloccati a vicenda.
+   La suite era verde perche' i test chiamavano `onIceRenewOffer` a mano,
+   saltando la porta d'ingresso. Adesso passano da `onDcMessage`, come un
+   messaggio vero. */
+/* ⚠️ SPENTO IL 25 SET 2026, dopo la prima prova in cui il rinnovo e' girato
+   davvero su due dispositivi. Il rinnovo e' partito, e a 10:46 la chiamata si
+   e' bloccata e non si e' piu' ripresa: il telefono si credeva collegato
+   (verde), il PC restava su «sto riprendendo». E' peggio di quello che fa la
+   ripresa da sola (buchi da 5-20 secondi, ma si riprende sempre).
+   Ipotesi, NON misurata: chi offre si ritira dopo ICE_RENEW_ROLLBACK_MS (8 s),
+   ma chi risponde prima chiede credenziali fresche al relay e poi raccoglie gli
+   indirizzi (`waitIceComplete`, fino a ~21 s). La risposta arriva dopo il
+   ritiro e viene scartata: un lato resta sulla sessione ICE vecchia, l'altro
+   passa alla nuova. Quando il vecchio lasciapassare scade cade un lato solo, e
+   l'altro, credendosi collegato, non partecipa alla ripresa.
+   Chi lo riaccende: prima di tutto un registro delle fasi su tutti e due i lati
+   per MISURARE quanto ci mette la risposta; poi un'attesa del ritiro piu' lunga
+   del caso peggiore dell'altro lato, e una risposta arrivata tardi che non si
+   butta. Poi una prova vera di venti minuti. Da spento non si propone e non si
+   dichiara capace nel saluto: nessuna versione ci prova con questa. */
+let ICE_RENEW_ATTIVO = false;          /* `let`: i test lo accendono per provare il codice che resta */
 let ICE_RENEW_FIRST_MS = 90 * 1000;    /* passata la fase in cui la chiamata si sta alzando */
 let ICE_RENEW_MS = 4 * 60 * 1000;      /* comodamente dentro i dieci minuti della credenziale */
 let ICE_RENEW_ROLLBACK_MS = 8000;      /* `let` come gli altri: un test deve poter vedere un ritiro senza aspettare */
@@ -3445,6 +3476,7 @@ function stopIceRenewal(){
 }
 function scheduleIceRenewal(primo){
   stopIceRenewal();
+  if (!ICE_RENEW_ATTIVO) return;         /* spento: vedi il commento sopra ICE_RENEW_ATTIVO */
   const conn = pc;
   if (!conn) return;
   iceRenewTimer = setTimeout(() => { runIceRenewal(conn); }, primo ? ICE_RENEW_FIRST_MS : ICE_RENEW_MS);
@@ -3454,7 +3486,13 @@ async function runIceRenewal(conn){
   if (pc !== conn || conn.connectionState === 'closed') return;
   if (callState !== 'active') return;                  /* chiamata finita: il rinnovo finisce con lei */
   try{
-    if (peerCanRenew && conn.connectionState === 'connected'){
+    /* ⚠️ UNO SOLO dei due propone: lo stesso che guida la ripresa
+       (`repairBase.offerer`, deciso dall'ordine delle impronte). I due timer
+       partono con la chiamata, a meno di un secondo l'uno dall'altro: senza
+       questa regola offrono tutti e due, ciascuno trova l'altro gia' in
+       'have-local-offer', ignora l'offerta ricevuta, e dopo otto secondi si
+       ritirano entrambi. La 4.57 l'aveva persa nella riscrittura. */
+    if (peerCanRenew && repairBase && repairBase.offerer && conn.connectionState === 'connected'){
       /* solo chi passa dal ponte ha qualcosa che scade: una diretta non si tocca */
       const route = await connectionRoute();
       if (pc === conn && route === 'relay' && callState === 'active') await renewIceNow(conn);
@@ -3478,7 +3516,7 @@ async function renewIceNow(conn){
   await conn.setLocalDescription({ type: 'offer', sdp: ensureOpusFec(offer.sdp) });
   await waitIceComplete(conn);
   if (pc !== conn || conn.signalingState !== 'have-local-offer') return;
-  sig({ type: 'ice-renew-offer', sdp: conn.localDescription.sdp });
+  sig({ type: 'call-ice-renew-offer', sdp: conn.localDescription.sdp });
   /* La cicatrice del 12 set 2026: un'offerta applicata e mai risposta lascia
      la connessione in 'have-local-offer' PER SEMPRE, e da li' ogni chiamata
      fallisce su una conversazione sana. Se non risponde nessuno, si torna
@@ -3506,7 +3544,7 @@ async function onIceRenewOffer(sdp){
     await conn.setLocalDescription({ type: 'answer', sdp: ensureOpusFec(answer.sdp) });
     await waitIceComplete(conn);
     if (pc !== conn) return;
-    sig({ type: 'ice-renew-answer', sdp: conn.localDescription.sdp });
+    sig({ type: 'call-ice-renew-answer', sdp: conn.localDescription.sdp });
     await ritocca(conn);
   }catch(e){ /* la chiamata continua sul ponte vecchio finche' regge, poi ci pensa la ripresa */ }
 }
@@ -3939,7 +3977,7 @@ function wireDataChannel(channel, ownerPc){
        chiavi, non con le impronte (vedi contactDialSecrets). Una versione
        vecchia la ignora e non ne manda una sua: si resta al sigillo di prima. */
     const pub = await myPubB64();
-    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: 1 });
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: ICE_RENEW_ATTIVO ? 2 : 0 });
     const provaSaluto = (ancora) => {
       try{
         if (dc.readyState !== 'open') throw new Error('canale non aperto');
@@ -8775,11 +8813,23 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.57';
+const APP_VERSION = 'logos-modifica-4.59';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
    behind it may not be, and that gap is the oldest trap in this project */
+/* La versione del service worker combacia con quella della pagina?
+   ⚠️ NON con un semplice `===`: `tools/prova.js` rinomina la cache della copia
+   di prova in `prova--logos-modifica-X`, cosi' non si mescola con quella
+   dell'app vera sullo stesso sito. Il confronto diretto, nella copia di prova,
+   non combaciava MAI, e «Come sta l'app» diceva «una parte dell'app e' ancora
+   vecchia» anche con tutto aggiornato. Il 25 set 2026 quell'avviso ha fatto
+   concludere, sbagliando, che durante un collaudo un dispositivo girasse la
+   versione precedente: una diagnosi costruita su un falso allarme. */
+function stessaVersione(delServiceWorker){
+  return typeof delServiceWorker === 'string'
+    && delServiceWorker.replace(/^prova--/, '') === APP_VERSION;
+}
 async function swVersion(){
   try{
     if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return null;
@@ -8974,7 +9024,7 @@ async function runHealth(){
 
   const running = await swVersion();
   rows.push(!running ? ['off', t('health.version'), APP_VERSION]
-          : running === APP_VERSION ? ['ok', t('health.version'), APP_VERSION]
+          : stessaVersione(running) ? ['ok', t('health.version'), APP_VERSION]
           : ['warn', t('health.version'), t('health.versionOld')]);
 
   healthRows = rows;
@@ -11058,8 +11108,14 @@ function onDcMessage(ev){
       armRepair(msg.fp, msg.rn).catch(() => { repairBase = null; });
       /* Se l'altro lato non lo dichiara e' una versione piu' vecchia: non gli
          si offre nessun rinnovo, cosi' non resta mai un'offerta appesa in
-         attesa di una risposta che non puo' arrivare. */
-      peerCanRenew = (msg.ren === 1);
+         attesa di una risposta che non puo' arrivare.
+         ⚠️ 2, non 1. La 4.57 dichiara `ren: 1` ma NON sa rispondere: i suoi
+         messaggi avevano il nome sbagliato e li butta via. Riconoscerla come
+         capace vorrebbe dire offrirle rinnovi che ignora — o peggio, rispondere
+         a offerte sue che poi lei stessa scarta alla risposta, lasciando i due
+         lati con due trattative diverse. Con `=== 2` una 4.57 e una versione
+         nuova non rinnovano fra loro, e restano esattamente come oggi. */
+      peerCanRenew = (msg.ren === 2);
       if (peerNick){
         paintConnDot();
         $('peerNameLbl').textContent = peerNick;
@@ -11635,9 +11691,13 @@ function handleCallSignal(msg){
     });
   } else if (msg.type === 'call-end'){ stopRing(); disarmCallTimeout(); endCall(false);
   /* Il rinnovo del lasciapassare del ponte. Silenzioso di proposito: se
-     funziona non c'e' niente da dire, e se non funziona lo dira' la ripresa. */
-  } else if (msg.type === 'ice-renew-offer'){ onIceRenewOffer(msg.sdp);
-  } else if (msg.type === 'ice-renew-answer'){ onIceRenewAnswer(msg.sdp);
+     funziona non c'e' niente da dire, e se non funziona lo dira' la ripresa.
+     ⚠️ Il prefisso `call-` NON e' decorativo: `onDcMessage` manda qui SOLO i
+     tipi che cominciano cosi', e butta il resto in silenzio. Nella 4.57 questi
+     due si chiamavano `ice-renew-…` e non arrivavano mai: vedi il commento
+     sopra `scheduleIceRenewal`. */
+  } else if (msg.type === 'call-ice-renew-offer'){ onIceRenewOffer(msg.sdp);
+  } else if (msg.type === 'call-ice-renew-answer'){ onIceRenewAnswer(msg.sdp);
   }
 }
 $('btnAcceptCall').addEventListener('click', async () => {
