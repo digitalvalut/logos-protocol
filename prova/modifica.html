@@ -139,6 +139,17 @@
     </span>
   </div>
 
+  <!-- 26 set 2026: la stessa cosa per il pacchetto Android, che non si
+       aggiorna da solo. Compare solo dentro l'app Android, quando un altro
+       telefono ha detto nel saluto di avere un pacchetto piu' nuovo: il
+       link porta al file con il numero nel nome (vedi confrontaVersioni). -->
+  <div class="banner accent hide jsb" id="apkBar">
+    <span class="f1" data-i18n="apk.new">C'è una versione nuova dell'app Android. Installala sopra questa: contatti e conversazioni restano.</span>
+    <span class="inlinebtns">
+      <a class="btn mini" id="btnApkNuovo" href="#" data-i18n="apk.download">Scarica</a>
+    </span>
+  </div>
+
   <!-- These two live outside every screen section on purpose: a call can be
        started from Settings (typing an address) and can arrive while any
        screen at all is open, not only Home. Nested inside one screen, either
