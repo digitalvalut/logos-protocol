@@ -239,6 +239,8 @@ test('lo strumento che genera la copia le da\' un deposito offline suo', () => {
     'la copia di prova userebbe lo stesso deposito offline dell\'app vera');
   assert.match(tool, /noindex/,
     'una copia di prova che finisce sui motori di ricerca ci manda dentro estranei');
+  assert.match(tool, /"short_name": "PROVA Logos"/,
+    'installata come icona, la copia di prova deve chiamarsi diversamente dall\'app vera');
 });
 
 test('quando arriva una versione nuova, l\'app lo DICE', () => {

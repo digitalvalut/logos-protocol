@@ -140,7 +140,7 @@ Object.assign(I18N.en, {
 "contacts.sameLookVerified":"verified by voice","contacts.write":"Write","contacts.call":"Call","contacts.remove":"Remove from contacts",
 "contacts.sameLookUnverified":"never verified — name almost identical to another",
 "onboard.text":"<b>DigitalValut Logos</b> — free and open-source software (Apache 2.0 license), owned by the Associazione di Promozione Sociale DigitalValut, a registered Italian nonprofit (Ente del Terzo Settore). Downloadable and usable free of charge by anyone, anywhere in the world.",
-"install.btn":"Install","update.text":"There's a new version of the app.","prova.title":"TEST COPY","prova.sub":"This is not the real app. It is here to check changes before they reach everyone: what you do here stays here.","update.btn":"Update",
+"install.btn":"Install","update.text":"There's a new version of the app.","prova.title":"TEST COPY","prova.sub":"This is not the real app. It is here to check changes before they reach everyone: what you do here stays here.","update.btn":"Update","apk.new":"There's a new version of the Android app. Install it over this one: contacts and conversations stay.","apk.download":"Download","peer.old":"{name} is using an old version of Logos. If they have the Android app, send them the link to update it.","peer.oldSend":"Send the link",
 "home.title":"Logos. Privacy. Freedom.",
 "home.sub":"Messages, photos, video, calls. No sign-up, no phone number, free forever.",
 "home.nameLabel":"Your name","first.nameWhy":"Only so the person who opens your invite sees your name instead of \"Someone\". It stays on this phone.","first.youAre":"Whoever opens the invite will see you as","first.change":"change","first.nameNudge":"Write your name first, so whoever opens the invite knows it is you.",
@@ -329,7 +329,7 @@ Object.assign(I18N.it, {
 "contacts.sameLookVerified":"verificato a voce","contacts.write":"Scrivi","contacts.call":"Chiama","contacts.remove":"Togli dalla rubrica",
 "contacts.sameLookUnverified":"mai verificato — nome quasi identico a un altro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libero e open source (licenza Apache 2.0), di proprietà dell'Associazione di Promozione Sociale DigitalValut, Ente del Terzo Settore. Scaricabile e utilizzabile gratis da chiunque, ovunque nel mondo.",
-"install.btn":"Installa","update.text":"C'è una versione nuova dell'app.","prova.title":"COPIA DI PROVA","prova.sub":"Non è l'app vera. Serve a controllare le modifiche prima che arrivino a tutti: quello che fai qui resta qui.","update.btn":"Aggiorna",
+"install.btn":"Installa","update.text":"C'è una versione nuova dell'app.","prova.title":"COPIA DI PROVA","prova.sub":"Non è l'app vera. Serve a controllare le modifiche prima che arrivino a tutti: quello che fai qui resta qui.","update.btn":"Aggiorna","apk.new":"C'è una versione nuova dell'app Android. Installala sopra questa: contatti e conversazioni restano.","apk.download":"Scarica","peer.old":"{name} usa una versione vecchia di Logos. Se ha l'app Android, mandagli il link per aggiornarla.","peer.oldSend":"Manda il link",
 "home.title":"Logos. Privacy. Libertà.",
 "home.sub":"Messaggi, foto, video, chiamate. Senza registrarsi, senza numero di telefono, gratis per sempre.",
 "home.nameLabel":"Come ti chiami","first.nameWhy":"Serve solo perché chi apre il tuo invito veda il tuo nome invece di «Qualcuno». Resta su questo telefono.","first.youAre":"Chi apre l'invito ti vedrà come","first.change":"cambia","first.nameNudge":"Scrivi prima come ti chiami, così chi apre l'invito sa che sei tu.","home.namePh":"Il tuo nome",
@@ -519,7 +519,7 @@ Object.assign(I18N.fr, {
 "contacts.sameLookVerified":"vérifié de vive voix","contacts.write":"Écrire","contacts.call":"Appeler","contacts.remove":"Retirer des contacts",
 "contacts.sameLookUnverified":"jamais vérifié — nom presque identique à un autre",
 "onboard.text":"<b>DigitalValut Logos</b> — logiciel libre et open source (licence Apache 2.0), propriété de l'Associazione di Promozione Sociale DigitalValut, une association à but non lucratif italienne enregistrée (Ente del Terzo Settore). Téléchargeable et utilisable gratuitement par tous, partout dans le monde.",
-"install.btn":"Installer","update.text":"Il y a une nouvelle version de l'application.","prova.title":"COPIE D'ESSAI","prova.sub":"Ce n'est pas la vraie application. Elle sert à vérifier les modifications avant qu'elles n'arrivent à tous : ce que vous faites ici reste ici.","update.btn":"Mettre à jour",
+"install.btn":"Installer","update.text":"Il y a une nouvelle version de l'application.","prova.title":"COPIE D'ESSAI","prova.sub":"Ce n'est pas la vraie application. Elle sert à vérifier les modifications avant qu'elles n'arrivent à tous : ce que vous faites ici reste ici.","update.btn":"Mettre à jour","apk.new":"Il y a une nouvelle version de l'application Android. Installez-la par-dessus celle-ci : vos contacts et conversations restent.","apk.download":"Télécharger","peer.old":"{name} utilise une ancienne version de Logos. S'il a l'application Android, envoyez-lui le lien pour la mettre à jour.","peer.oldSend":"Envoyer le lien",
 "home.title":"Logos. Vie privée. Liberté.",
 "home.sub":"Messages, photos, vidéos, appels. Sans inscription, sans numéro de téléphone, gratuit pour toujours.",
 "home.nameLabel":"Votre nom","first.nameWhy":"Uniquement pour que la personne qui ouvre votre invitation voie votre nom au lieu de « Quelqu'un ». Il reste sur ce téléphone.","first.youAre":"La personne qui ouvre l'invitation vous verra comme","first.change":"modifier","first.nameNudge":"Écrivez d'abord votre nom, pour que la personne qui ouvre l'invitation sache que c'est vous.","home.namePh":"Votre nom",
@@ -701,7 +701,7 @@ Object.assign(I18N.de, {
 "contacts.sameLookVerified":"mündlich bestätigt","contacts.write":"Schreiben","contacts.call":"Anrufen","contacts.remove":"Aus Kontakten entfernen",
 "contacts.sameLookUnverified":"nie bestätigt — Name fast identisch mit einem anderen",
 "onboard.text":"<b>DigitalValut Logos</b> — freie Open-Source-Software (Apache 2.0-Lizenz), im Besitz der Associazione di Promozione Sociale DigitalValut, einer eingetragenen italienischen Non-Profit-Organisation (Ente del Terzo Settore). Kostenlos herunterladbar und nutzbar von jedem, überall auf der Welt.",
-"install.btn":"Installieren","update.text":"Es gibt eine neue Version der App.","prova.title":"TESTKOPIE","prova.sub":"Das ist nicht die echte App. Sie dient dazu, Änderungen zu prüfen, bevor sie alle erreichen: Was du hier tust, bleibt hier.","update.btn":"Aktualisieren",
+"install.btn":"Installieren","update.text":"Es gibt eine neue Version der App.","prova.title":"TESTKOPIE","prova.sub":"Das ist nicht die echte App. Sie dient dazu, Änderungen zu prüfen, bevor sie alle erreichen: Was du hier tust, bleibt hier.","update.btn":"Aktualisieren","apk.new":"Es gibt eine neue Version der Android-App. Installiere sie über diese: Kontakte und Unterhaltungen bleiben erhalten.","apk.download":"Herunterladen","peer.old":"{name} nutzt eine alte Version von Logos. Wenn die Person die Android-App hat, schick ihr den Link zum Aktualisieren.","peer.oldSend":"Link schicken",
 "home.title":"Logos. Privatsphäre. Freiheit.",
 "home.sub":"Nachrichten, Fotos, Video, Anrufe. Keine Anmeldung, keine Telefonnummer, für immer kostenlos.",
 "home.nameLabel":"Dein Name","first.nameWhy":"Nur damit die Person, die deine Einladung öffnet, deinen Namen sieht statt „Jemand“. Er bleibt auf diesem Handy.","first.youAre":"Wer die Einladung öffnet, sieht dich als","first.change":"ändern","first.nameNudge":"Schreib zuerst deinen Namen, damit die Person, die die Einladung öffnet, weiß, dass du es bist.","home.namePh":"Dein Name",
@@ -883,7 +883,7 @@ Object.assign(I18N.es, {
 "contacts.sameLookVerified":"verificado de viva voz","contacts.write":"Escribir","contacts.call":"Llamar","contacts.remove":"Quitar de contactos",
 "contacts.sameLookUnverified":"nunca verificado — nombre casi idéntico a otro",
 "onboard.text":"<b>DigitalValut Logos</b> — software libre y de código abierto (licencia Apache 2.0), propiedad de la Associazione di Promozione Sociale DigitalValut, una organización sin fines de lucro italiana registrada (Ente del Terzo Settore). Descargable y utilizable gratis por cualquiera, en cualquier parte del mundo.",
-"install.btn":"Instalar","update.text":"Hay una versión nueva de la app.","prova.title":"COPIA DE PRUEBA","prova.sub":"No es la app real. Sirve para revisar los cambios antes de que lleguen a todos: lo que haces aquí se queda aquí.","update.btn":"Actualizar",
+"install.btn":"Instalar","update.text":"Hay una versión nueva de la app.","prova.title":"COPIA DE PRUEBA","prova.sub":"No es la app real. Sirve para revisar los cambios antes de que lleguen a todos: lo que haces aquí se queda aquí.","update.btn":"Actualizar","apk.new":"Hay una versión nueva de la app para Android. Instálala encima de esta: los contactos y las conversaciones se quedan.","apk.download":"Descargar","peer.old":"{name} usa una versión antigua de Logos. Si tiene la app para Android, mándale el enlace para actualizarla.","peer.oldSend":"Enviar el enlace",
 "home.title":"Logos. Privacidad. Libertad.",
 "home.sub":"Mensajes, fotos, vídeo, llamadas. Sin registro, sin número de teléfono, gratis para siempre.",
 "home.nameLabel":"Tu nombre","first.nameWhy":"Solo para que quien abra tu invitación vea tu nombre en lugar de «Alguien». Se queda en este teléfono.","first.youAre":"Quien abra la invitación te verá como","first.change":"cambiar","first.nameNudge":"Escribe antes tu nombre, así quien abra la invitación sabe que eres tú.","home.namePh":"Tu nombre",
@@ -1065,7 +1065,7 @@ Object.assign(I18N.pt, {
 "contacts.sameLookVerified":"verificado por voz","contacts.write":"Escrever","contacts.call":"Ligar","contacts.remove":"Remover dos contactos",
 "contacts.sameLookUnverified":"nunca verificado — nome quase idêntico a outro",
 "onboard.text":"<b>DigitalValut Logos</b> — software livre e de código aberto (licença Apache 2.0), propriedade da Associazione di Promozione Sociale DigitalValut, uma organização sem fins lucrativos italiana registada (Ente del Terzo Settore). Pode ser descarregado e utilizado gratuitamente por qualquer pessoa, em qualquer lugar do mundo.",
-"install.btn":"Instalar","update.text":"Há uma versão nova da app.","prova.title":"CÓPIA DE TESTE","prova.sub":"Não é a app verdadeira. Serve para verificar as alterações antes de chegarem a todos: o que fizeres aqui fica aqui.","update.btn":"Atualizar",
+"install.btn":"Instalar","update.text":"Há uma versão nova da app.","prova.title":"CÓPIA DE TESTE","prova.sub":"Não é a app verdadeira. Serve para verificar as alterações antes de chegarem a todos: o que fizeres aqui fica aqui.","update.btn":"Atualizar","apk.new":"Há uma versão nova da app para Android. Instala-a por cima desta: os contactos e as conversas ficam.","apk.download":"Transferir","peer.old":"{name} está a usar uma versão antiga do Logos. Se tiver a app para Android, envia-lhe o link para a atualizar.","peer.oldSend":"Enviar o link",
 "home.title":"Logos. Privacidade. Liberdade.",
 "home.sub":"Mensagens, fotos, vídeo, chamadas. Sem registo, sem número de telefone, grátis para sempre.",
 "home.nameLabel":"O seu nome","first.nameWhy":"Só para que quem abrir o teu convite veja o teu nome em vez de «Alguém». Fica neste telemóvel.","first.youAre":"Quem abrir o convite vai ver-te como","first.change":"alterar","first.nameNudge":"Escreve primeiro o teu nome, assim quem abrir o convite sabe que és tu.","home.namePh":"O seu nome",
@@ -1247,7 +1247,7 @@ Object.assign(I18N.ru, {
 "contacts.sameLookVerified":"подтверждён голосом","contacts.write":"Написать","contacts.call":"Позвонить","contacts.remove":"Убрать из контактов",
 "contacts.sameLookUnverified":"никогда не подтверждён — имя почти совпадает с другим",
 "onboard.text":"<b>DigitalValut Logos</b> — бесплатное программное обеспечение с открытым исходным кодом (лицензия Apache 2.0), принадлежит Associazione di Promozione Sociale DigitalValut, зарегистрированной итальянской некоммерческой организации (Ente del Terzo Settore). Доступно для скачивания и бесплатного использования кем угодно и где угодно в мире.",
-"install.btn":"Установить","update.text":"Есть новая версия приложения.","prova.title":"ТЕСТОВАЯ КОПИЯ","prova.sub":"Это не настоящее приложение. Оно нужно, чтобы проверить изменения до того, как они дойдут до всех: то, что вы делаете здесь, здесь и остаётся.","update.btn":"Обновить",
+"install.btn":"Установить","update.text":"Есть новая версия приложения.","prova.title":"ТЕСТОВАЯ КОПИЯ","prova.sub":"Это не настоящее приложение. Оно нужно, чтобы проверить изменения до того, как они дойдут до всех: то, что вы делаете здесь, здесь и остаётся.","update.btn":"Обновить","apk.new":"Есть новая версия приложения для Android. Установите её поверх этой: контакты и переписка сохранятся.","apk.download":"Скачать","peer.old":"{name} пользуется старой версией Logos. Если у этого человека приложение для Android, отправьте ему ссылку для обновления.","peer.oldSend":"Отправить ссылку",
 "home.title":"Logos. Приватность. Свобода.",
 "home.sub":"Сообщения, фото, видео, звонки. Без регистрации, без номера телефона, бесплатно навсегда.",
 "home.nameLabel":"Ваше имя","first.nameWhy":"Только чтобы тот, кто откроет приглашение, увидел ваше имя, а не «Кто-то». Оно остаётся на этом телефоне.","first.youAre":"Тот, кто откроет приглашение, увидит вас как","first.change":"изменить","first.nameNudge":"Сначала напишите своё имя, чтобы тот, кто откроет приглашение, знал, что это вы.","home.namePh":"Ваше имя",
@@ -1429,7 +1429,7 @@ Object.assign(I18N.zh, {
 "contacts.sameLookVerified":"已通过语音验证","contacts.write":"写信","contacts.call":"通话","contacts.remove":"从联系人移除",
 "contacts.sameLookUnverified":"从未验证 — 名字与另一个几乎相同",
 "onboard.text":"<b>DigitalValut Logos</b> — 免费开源软件（Apache 2.0 许可证），归意大利注册非营利组织 Associazione di Promozione Sociale DigitalValut（第三部门实体）所有。任何人在世界任何地方都可以免费下载和使用。",
-"install.btn":"安装","update.text":"有新版本的应用。","prova.title":"测试副本","prova.sub":"这不是正式应用。它用来在改动发到所有人之前先做检查：你在这里做的事只留在这里。","update.btn":"更新",
+"install.btn":"安装","update.text":"有新版本的应用。","prova.title":"测试副本","prova.sub":"这不是正式应用。它用来在改动发到所有人之前先做检查：你在这里做的事只留在这里。","update.btn":"更新","apk.new":"安卓应用有新版本。直接覆盖安装即可：联系人和对话都会保留。","apk.download":"下载","peer.old":"{name} 使用的是旧版 Logos。如果对方用的是安卓应用，请把更新链接发给对方。","peer.oldSend":"发送链接",
 "home.title":"Logos。隐私。自由。",
 "home.sub":"消息、照片、视频、通话。无需注册，无需电话号码，永久免费。",
 "home.nameLabel":"你的名字","first.nameWhy":"只是让打开你邀请的人看到你的名字，而不是「某人」。它只留在这台手机上。","first.youAre":"打开邀请的人会看到你是","first.change":"修改","first.nameNudge":"先写上你的名字，这样打开邀请的人就知道是你。","home.namePh":"你的名字",
@@ -1611,7 +1611,7 @@ Object.assign(I18N.ar, {
 "contacts.sameLookVerified":"تم التحقق صوتيًّا","contacts.write":"كتابة","contacts.call":"اتصال","contacts.remove":"إزالة من جهات الاتصال",
 "contacts.sameLookUnverified":"لم يُتحقق منه أبدًا — اسم يكاد يطابق اسمًا آخر",
 "onboard.text":"<b>DigitalValut Logos</b> — برنامج حر ومفتوح المصدر (رخصة Apache 2.0)، مملوك لجمعية Associazione di Promozione Sociale DigitalValut، وهي منظمة إيطالية غير ربحية مسجّلة (Ente del Terzo Settore). يمكن تنزيله واستخدامه مجانًا من قِبل أي شخص، في أي مكان في العالم.",
-"install.btn":"تثبيت","update.text":"يوجد إصدار جديد من التطبيق.","prova.title":"نسخة تجريبية","prova.sub":"هذا ليس التطبيق الحقيقي. إنه لفحص التغييرات قبل وصولها إلى الجميع: ما تفعله هنا يبقى هنا.","update.btn":"تحديث",
+"install.btn":"تثبيت","update.text":"يوجد إصدار جديد من التطبيق.","prova.title":"نسخة تجريبية","prova.sub":"هذا ليس التطبيق الحقيقي. إنه لفحص التغييرات قبل وصولها إلى الجميع: ما تفعله هنا يبقى هنا.","update.btn":"تحديث","apk.new":"يوجد إصدار جديد من تطبيق أندرويد. ثبّته فوق هذا: تبقى جهات الاتصال والمحادثات.","apk.download":"تنزيل","peer.old":"{name} يستخدم إصدارًا قديمًا من Logos. إذا كان لديه تطبيق أندرويد، أرسل له الرابط لتحديثه.","peer.oldSend":"أرسل الرابط",
 "home.title":"Logos. خصوصية. حرية.",
 "home.sub":"رسائل، صور، فيديو، مكالمات. بلا تسجيل، بلا رقم هاتف، مجانًا للأبد.",
 "home.nameLabel":"اسمك","first.nameWhy":"فقط لكي يرى من يفتح دعوتك اسمك بدل «شخص ما». يبقى على هذا الهاتف.","first.youAre":"من يفتح الدعوة سيراك باسم","first.change":"تغيير","first.nameNudge":"اكتب اسمك أولًا، ليعرف من يفتح الدعوة أنك أنت.","home.namePh":"اسمك",
@@ -1793,7 +1793,7 @@ Object.assign(I18N.ur, {
 "contacts.sameLookVerified":"زبانی تصدیق شدہ","contacts.write":"لکھیں","contacts.call":"کال","contacts.remove":"رابطوں سے ہٹائیں",
 "contacts.sameLookUnverified":"کبھی تصدیق نہیں ہوئی — نام دوسرے سے تقریباً ملتا جلتا ہے",
 "onboard.text":"<b>DigitalValut Logos</b> — مفت اور اوپن سورس سافٹ ویئر (Apache 2.0 لائسنس)، جو Associazione di Promozione Sociale DigitalValut کی ملکیت ہے، ایک رجسٹرڈ اطالوی غیر منافع بخش تنظیم (Ente del Terzo Settore)۔ دنیا میں کہیں بھی، کوئی بھی اسے مفت ڈاؤن لوڈ اور استعمال کر سکتا ہے۔",
-"install.btn":"انسٹال کریں","update.text":"ایپ کا نیا ورژن موجود ہے۔","prova.title":"آزمائشی نقل","prova.sub":"یہ اصل ایپ نہیں ہے۔ یہ تبدیلیاں سب تک پہنچنے سے پہلے جانچنے کے لیے ہے: جو آپ یہاں کرتے ہیں وہ یہیں رہتا ہے۔","update.btn":"اپ ڈیٹ کریں",
+"install.btn":"انسٹال کریں","update.text":"ایپ کا نیا ورژن موجود ہے۔","prova.title":"آزمائشی نقل","prova.sub":"یہ اصل ایپ نہیں ہے۔ یہ تبدیلیاں سب تک پہنچنے سے پہلے جانچنے کے لیے ہے: جو آپ یہاں کرتے ہیں وہ یہیں رہتا ہے۔","update.btn":"اپ ڈیٹ کریں","apk.new":"اینڈرائیڈ ایپ کا نیا ورژن موجود ہے۔ اسے اسی کے اوپر انسٹال کریں: رابطے اور گفتگو محفوظ رہتی ہیں۔","apk.download":"ڈاؤن لوڈ کریں","peer.old":"{name} Logos کا پرانا ورژن استعمال کر رہے ہیں۔ اگر ان کے پاس اینڈرائیڈ ایپ ہے تو انہیں اپ ڈیٹ کا لنک بھیجیں۔","peer.oldSend":"لنک بھیجیں",
 "home.title":"Logos۔ رازداری۔ آزادی۔",
 "home.sub":"پیغامات، تصاویر، ویڈیو، کالز۔ کوئی سائن اپ نہیں، کوئی فون نمبر نہیں، ہمیشہ کے لیے مفت۔",
 "home.nameLabel":"آپ کا نام","first.nameWhy":"صرف اس لیے کہ جو آپ کی دعوت کھولے وہ «کوئی» کے بجائے آپ کا نام دیکھے۔ یہ اسی فون پر رہتا ہے۔","first.youAre":"جو دعوت کھولے گا وہ آپ کو اس نام سے دیکھے گا","first.change":"تبدیل کریں","first.nameNudge":"پہلے اپنا نام لکھیں، تاکہ جو دعوت کھولے اُسے پتہ ہو کہ یہ آپ ہیں۔","home.namePh":"آپ کا نام",
@@ -1975,7 +1975,7 @@ Object.assign(I18N.hi, {
 "contacts.sameLookVerified":"आवाज़ से सत्यापित","contacts.write":"लिखें","contacts.call":"कॉल","contacts.remove":"संपर्कों से हटाएँ",
 "contacts.sameLookUnverified":"कभी सत्यापित नहीं — नाम दूसरे से लगभग एक जैसा",
 "onboard.text":"<b>DigitalValut Logos</b> — मुफ़्त और ओपन-सोर्स सॉफ़्टवेयर (Apache 2.0 लाइसेंस), Associazione di Promozione Sociale DigitalValut का स्वामित्व, एक पंजीकृत इतालवी गैर-लाभकारी संस्था (Ente del Terzo Settore)। दुनिया में कहीं भी, कोई भी इसे मुफ़्त में डाउनलोड और उपयोग कर सकता है।",
-"install.btn":"इंस्टॉल करें","update.text":"ऐप का नया संस्करण उपलब्ध है।","prova.title":"परीक्षण प्रति","prova.sub":"यह असली ऐप नहीं है। यह बदलावों को सबके पास पहुँचने से पहले जाँचने के लिए है: यहाँ आप जो करते हैं वह यहीं रहता है।","update.btn":"अपडेट करें",
+"install.btn":"इंस्टॉल करें","update.text":"ऐप का नया संस्करण उपलब्ध है।","prova.title":"परीक्षण प्रति","prova.sub":"यह असली ऐप नहीं है। यह बदलावों को सबके पास पहुँचने से पहले जाँचने के लिए है: यहाँ आप जो करते हैं वह यहीं रहता है।","update.btn":"अपडेट करें","apk.new":"Android ऐप का नया संस्करण उपलब्ध है। इसे इसी के ऊपर इंस्टॉल करें: संपर्क और बातचीत बनी रहती हैं।","apk.download":"डाउनलोड करें","peer.old":"{name} Logos का पुराना संस्करण इस्तेमाल कर रहे हैं। अगर उनके पास Android ऐप है, तो उन्हें अपडेट का लिंक भेजें।","peer.oldSend":"लिंक भेजें",
 "home.title":"Logos. निजता. आज़ादी.",
 "home.sub":"संदेश, फ़ोटो, वीडियो, कॉल। कोई साइन-अप नहीं, कोई फ़ोन नंबर नहीं, हमेशा के लिए मुफ़्त।",
 "home.nameLabel":"आपका नाम","first.nameWhy":"बस इसलिए कि जो आपका निमंत्रण खोले उसे «कोई» के बजाय आपका नाम दिखे। यह इसी फ़ोन पर रहता है।","first.youAre":"जो निमंत्रण खोलेगा वह आपको इस नाम से देखेगा","first.change":"बदलें","first.nameNudge":"पहले अपना नाम लिखें, ताकि जो निमंत्रण खोले उसे पता हो कि यह आप हैं।","home.namePh":"आपका नाम",
@@ -2157,7 +2157,7 @@ Object.assign(I18N.bn, {
 "contacts.sameLookVerified":"কণ্ঠস্বরে যাচাই করা","contacts.write":"লিখুন","contacts.call":"কল","contacts.remove":"পরিচিতি থেকে সরান",
 "contacts.sameLookUnverified":"কখনরই যাচাই করা হয়নি — নাম অন্যটির সাথে প্রায় এক",
 "onboard.text":"<b>DigitalValut Logos</b> — বিনামূল্যে এবং ওপেন-সোর্স সফ্টওয়্যার (Apache 2.0 লাইসেন্স), Associazione di Promozione Sociale DigitalValut-এর মালিকানাধীন, একটি নিবন্ধিত ইতালীয় অলাভজনক সংস্থা (Ente del Terzo Settore)। বিশ্বের যে কোনো জায়গা থেকে, যে কেউ এটি বিনামূল্যে ডাউনলোড এবং ব্যবহার করতে পারেন।",
-"install.btn":"ইনস্টল করুন","update.text":"অ্যাপের নতুন সংস্করণ এসেছে।","prova.title":"পরীক্ষামূলক কপি","prova.sub":"এটি আসল অ্যাপ নয়। পরিবর্তনগুলো সবার কাছে পৌঁছানোর আগে যাচাই করতে এটি আছে: এখানে যা করবেন তা এখানেই থাকে।","update.btn":"আপডেট করুন",
+"install.btn":"ইনস্টল করুন","update.text":"অ্যাপের নতুন সংস্করণ এসেছে।","prova.title":"পরীক্ষামূলক কপি","prova.sub":"এটি আসল অ্যাপ নয়। পরিবর্তনগুলো সবার কাছে পৌঁছানোর আগে যাচাই করতে এটি আছে: এখানে যা করবেন তা এখানেই থাকে।","update.btn":"আপডেট করুন","apk.new":"Android অ্যাপের নতুন সংস্করণ এসেছে। এটির ওপরেই ইনস্টল করুন: পরিচিতি আর কথোপকথন থেকে যাবে।","apk.download":"ডাউনলোড করুন","peer.old":"{name} Logos-এর পুরোনো সংস্করণ ব্যবহার করছেন। তাঁর কাছে Android অ্যাপ থাকলে আপডেটের লিংক পাঠান।","peer.oldSend":"লিংক পাঠান",
 "home.title":"Logos. গোপনীয়তা. স্বাধীনতা.",
 "home.sub":"বার্তা, ছবি, ভিডিও, কল। কোনো সাইন-আপ নেই, কোনো ফোন নম্বর নেই, চিরকালের জন্য বিনামূল্যে।",
 "home.nameLabel":"আপনার নাম","first.nameWhy":"শুধু যাতে যিনি আপনার আমন্ত্রণ খুলবেন তিনি «কেউ একজন»-এর বদলে আপনার নাম দেখেন। এটি এই ফোনেই থাকে।","first.youAre":"যিনি আমন্ত্রণ খুলবেন তিনি আপনাকে দেখবেন","first.change":"বদলান","first.nameNudge":"আগে আপনার নাম লিখুন, যাতে যিনি আমন্ত্রণ খোলেন তিনি বুঝতে পারেন এটি আপনি।","home.namePh":"আপনার নাম",
@@ -2339,7 +2339,7 @@ Object.assign(I18N.id, {
 "contacts.sameLookVerified":"diverifikasi lewat suara","contacts.write":"Tulis","contacts.call":"Telepon","contacts.remove":"Hapus dari kontak",
 "contacts.sameLookUnverified":"belum pernah diverifikasi — nama nyaris sama dengan yang lain",
 "onboard.text":"<b>DigitalValut Logos</b> — perangkat lunak bebas dan sumber terbuka (lisensi Apache 2.0), dimiliki oleh Associazione di Promozione Sociale DigitalValut, sebuah organisasi nirlaba Italia terdaftar (Ente del Terzo Settore). Dapat diunduh dan digunakan secara gratis oleh siapa saja, di mana saja di dunia.",
-"install.btn":"Pasang","update.text":"Ada versi baru aplikasi ini.","prova.title":"SALINAN UJI COBA","prova.sub":"Ini bukan aplikasi yang sebenarnya. Gunanya memeriksa perubahan sebelum sampai ke semua orang: apa yang kamu lakukan di sini tetap di sini.","update.btn":"Perbarui",
+"install.btn":"Pasang","update.text":"Ada versi baru aplikasi ini.","prova.title":"SALINAN UJI COBA","prova.sub":"Ini bukan aplikasi yang sebenarnya. Gunanya memeriksa perubahan sebelum sampai ke semua orang: apa yang kamu lakukan di sini tetap di sini.","update.btn":"Perbarui","apk.new":"Ada versi baru aplikasi Android. Pasang di atas yang ini: kontak dan percakapan tetap ada.","apk.download":"Unduh","peer.old":"{name} memakai versi lama Logos. Kalau dia memakai aplikasi Android, kirimkan tautan untuk memperbaruinya.","peer.oldSend":"Kirim tautan",
 "home.title":"Logos. Privasi. Kebebasan.",
 "home.sub":"Pesan, foto, video, panggilan. Tanpa pendaftaran, tanpa nomor telepon, gratis selamanya.",
 "home.nameLabel":"Nama Anda","first.nameWhy":"Hanya supaya orang yang membuka undanganmu melihat namamu, bukan \"Seseorang\". Namanya tetap di ponsel ini.","first.youAre":"Yang membuka undangan akan melihatmu sebagai","first.change":"ubah","first.nameNudge":"Tulis dulu namamu, supaya yang membuka undangan tahu itu kamu.","home.namePh":"Nama Anda",
@@ -4152,7 +4152,9 @@ function wireDataChannel(channel, ownerPc){
        chiavi, non con le impronte (vedi contactDialSecrets). Una versione
        vecchia la ignora e non ne manda una sua: si resta al sigillo di prima. */
     const pub = await myPubB64();
-    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: ICE_RENEW_ATTIVO ? 3 : 0 });
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: ICE_RENEW_ATTIVO ? 3 : 0,
+      /* la propria versione, e il numero del pacchetto se lo si e': vedi confrontaVersioni */
+      v: APP_VERSION, apk: IN_APK ? ANDROID_VERSION_CODE : 0 });
     const provaSaluto = (ancora) => {
       try{
         if (dc.readyState !== 'open') throw new Error('canale non aperto');
@@ -6533,6 +6535,63 @@ const PUBLIC_APP_URL = 'https://digitalvalut.github.io/logos-protocol/modifica.h
    somebody the current app a year from now. Every release carries a copy under
    this name alongside the versioned one the F-Droid recipe expects. */
 const ANDROID_APP_URL = 'https://github.com/digitalvalut/logos-protocol/releases/latest/download/DigitalValut-Logos.apk';
+
+/* ---------------- chi e' rimasto indietro ----------------
+   ⚠️ NATO IL 26 SET 2026, da un pomeriggio perso: due telefoni che non si
+   chiamavano, e uno dei due era ancora alla 4.54 senza saperlo — con la
+   chiave dell'indirizzo mai pubblicata, cioe' irraggiungibile. L'app Android
+   non sta su un negozio: nessuno la aggiorna al posto tuo, e dentro non
+   c'era niente che dicesse «ne e' uscita una nuova». Il sito si aggiorna da
+   solo (il service worker); il pacchetto no.
+   Nessun server nuovo e nessuna domanda a terzi: sono i due telefoni a
+   dirsi, nel saluto, che versione hanno. Chi e' piu' nuovo lo sa l'altro.
+   Il numero qui sotto DEVE essere uguale a versionCode in
+   android/app/build.gradle: un test lo pretende, perche' un pacchetto che
+   dichiarasse il numero sbagliato manderebbe gli altri a scaricare un file
+   che non esiste. */
+const ANDROID_VERSION_CODE = 67;
+const IN_APK = (typeof location !== 'undefined' && location.origin === APP_PACKAGE_ORIGIN);
+/* Il file col NUMERO nel nome, non quello fisso: col nome fisso Android
+   chiama il nuovo «DigitalValut-Logos (1).apk» accanto al vecchio rimasto
+   nei Download, e si installa quello sbagliato. E' successo, lo stesso
+   giorno. Il pacchetto `n` esiste di sicuro: lo ha detto un telefono che lo
+   ha installato. */
+function apkDellaVersione(n){
+  return 'https://github.com/digitalvalut/logos-protocol/releases/download/android-' + n + '/DigitalValut-Logos-v' + n + '.apk';
+}
+function numeroVersione(s){
+  const m = /^logos-modifica-(\d{1,3})\.(\d{1,4})$/.exec(typeof s === 'string' ? s : '');
+  return m ? [ +m[1], +m[2] ] : null;
+}
+/* Dal saluto dell'altro. Arriva da un altro telefono: si tipizza tutto. */
+function confrontaVersioni(msg, chi){
+  const loroApk = (Number.isInteger(msg.apk) && msg.apk > 0 && msg.apk < 100000) ? msg.apk : 0;
+  const loro = numeroVersione(msg.v), mia = numeroVersione(APP_VERSION);
+  /* 1. Questo e' il pacchetto Android e l'altro ne ha uno piu' nuovo */
+  if (IN_APK && loroApk > ANDROID_VERSION_CODE){
+    try{
+      $('btnApkNuovo').href = apkDellaVersione(loroApk);
+      $('apkBar').classList.remove('hide');
+    }catch(_){}
+  }
+  /* 2. L'altro e' indietro. Se ha l'app Android si sa per certo; se non dice
+     niente e' una versione di prima di questa (fino alla 4.60), sito o
+     pacchetto non si sa — e il sito si aggiorna da solo, quindi la frase lo
+     dice: «se ha l'app Android». Un sito piu' vecchio che dichiara la sua
+     versione non si segnala: si aggiorna alla prossima apertura. */
+  const indietro = loroApk ? loroApk < ANDROID_VERSION_CODE : (!loro && !!mia);
+  if (!indietro || !msg.fp || typeof msg.fp !== 'string') return;
+  /* una volta per contatto e per versione: un avviso a ogni collegamento
+     diventa rumore, e il rumore si impara a non leggerlo */
+  const chiave = 'dvlogos-vecchio-' + msg.fp.slice(0, 64);
+  try{ if (MEM.getItem(chiave) === APP_VERSION) return; MEM.setItem(chiave, APP_VERSION); }catch(_){}
+  try{
+    if ($('screenChat').classList.contains('hide')) return;
+    sysLineWithAction(fill(t('peer.old', '{name} usa una versione vecchia di Logos. Se ha l\'app Android, mandagli il link per aggiornarla.'), { name: chi || t('chat.someone') }),
+      t('peer.oldSend', 'Manda il link'), shareTheApp);
+  }catch(_){}
+}
+
 function shareBase(){
   return location.origin === APP_PACKAGE_ORIGIN
     ? PUBLIC_APP_URL
@@ -6552,6 +6611,9 @@ function shareBase(){
    per entrare nell'app e la spiegazione. */
 const PUBLIC_SITE_URL = 'https://digitalvalut.github.io/logos-protocol/';
 function siteBase(){
+  /* dalla copia di prova il sito da far conoscere e' quello vero: `/prova/`
+     non ha una pagina d'ingresso, e il link portava a un 404 (26 set 2026) */
+  if (IN_PROVA) return PUBLIC_SITE_URL;
   return location.origin === APP_PACKAGE_ORIGIN
     ? PUBLIC_SITE_URL
     : location.origin + location.pathname.replace(/[^/]*$/, '');
@@ -9051,7 +9113,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.60';
+const APP_VERSION = 'logos-modifica-4.61';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -11389,6 +11451,10 @@ function onDcMessage(ev){
                      pubLegata);
         sysLine(peerNick + ' ' + t('call.joined'));
       }
+      /* DOPO loadHistoryFor, che svuota le righe e ridisegna la cronologia:
+         messo prima, l'avviso veniva cancellato un istante dopo (visto dal
+         test, 26 set 2026) */
+      confrontaVersioni(msg, peerNick);
       /* Outside the `if` on purpose. Verification is the one thing here that
          must not depend on what the other side chose to send: leaving it in
          the branch meant a peer who simply omitted their name was never

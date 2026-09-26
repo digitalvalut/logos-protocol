@@ -9079,3 +9079,129 @@ test.describe('il lasciapassare del ponte', () => {
   });
 
 });
+
+/* ============================================================================
+   CHI E' RIMASTO INDIETRO (26 set 2026, 4.61)
+
+   Un pomeriggio perso: due telefoni che non si chiamavano, e uno era ancora
+   alla 4.54 senza saperlo, con la chiave dell'indirizzo mai pubblicata. Il
+   pacchetto Android non si aggiorna da solo e non diceva niente. Adesso i due
+   telefoni si dicono la versione nel saluto: chi e' indietro lo viene a sapere
+   (se e' un pacchetto) o lo viene a sapere il suo contatto (se e' piu' vecchio
+   di questa versione e quindi non sa ascoltare).
+   ========================================================================= */
+test.describe('chi e rimasto indietro', () => {
+
+  test('il numero del pacchetto nel codice e quello di build.gradle sono lo stesso', () => {
+    /* Un pacchetto che dichiarasse un numero sbagliato manderebbe gli altri a
+       scaricare un file che non esiste — o uno vecchio. */
+    const gradle = fs.readFileSync(path.join(ROOT, 'android', 'app', 'build.gradle'), 'utf8');
+    const vc = +(/versionCode\s+(\d+)/.exec(gradle) || [])[1];
+    const app = loadApp();
+    const nelCodice = app.run('ANDROID_VERSION_CODE');
+    app.stop();
+    assert.ok(vc > 0, 'versionCode letto da build.gradle');
+    assert.strictEqual(nelCodice, vc, 'ANDROID_VERSION_CODE deve essere uguale a versionCode');
+  });
+
+  const saluta = async (app, extra) => {
+    app.run(`onDcMessage({ data: JSON.stringify(Object.assign({ type: 'hello', nick: 'Mario' }, ` + JSON.stringify(extra) + `)) })`);
+    await app.run('new Promise(function(r){ setTimeout(r, 300); })');
+  };
+  /* una conversazione vera in corso, come quando il saluto arriva davvero */
+  const mostra = (app) => app.run("if (!pc) pc = new RTCPeerConnection(); $('screenChat').classList.remove('hide'); $('msgs').innerHTML = ''");
+  /* il finto DOM non somma il testo dei figli: una riga con pulsante tiene la
+     frase in uno <span>, e va letta da li' */
+  const righe = (app) => app.run("[].map.call($('msgs').children, function(d){ return d.textContent + [].map.call(d.children || [], function(c){ return ' ' + c.textContent; }).join(''); })");
+
+  test('il saluto dice la versione, e il numero del pacchetto solo se lo si e', async () => {
+    const leggi = async (opzioni) => {
+      const A = loadApp(opzioni);
+      A.run(`window.__mandati = []; pc = new RTCPeerConnection();
+             var ch = { readyState: 'open', send: function(x){ window.__mandati.push(x); }, addEventListener: function(){}, close: function(){} };
+             wireDataChannel(ch, pc); ch.onopen && ch.onopen();`);
+      await A.run('new Promise(function(r){ setTimeout(r, 1200); })');
+      const h = A.run("window.__mandati.map(function(x){ try{ return JSON.parse(x); }catch(e){ return null; } }).filter(function(o){ return o && o.type === 'hello'; })[0]");
+      const v = A.run('APP_VERSION'), n = A.run('ANDROID_VERSION_CODE');
+      A.stop();
+      return { h, v, n };
+    };
+    const sito = await leggi();
+    const pacchetto = await leggi(DENTRO_APP);
+    assert.ok(sito.h && pacchetto.h, 'il saluto deve essere partito');
+    assert.strictEqual(sito.h.v, sito.v, 'il sito dice la sua versione');
+    assert.strictEqual(sito.h.apk, 0, 'il sito non finge di essere un pacchetto');
+    assert.strictEqual(pacchetto.h.apk, pacchetto.n, 'il pacchetto Android dice il suo numero');
+  });
+
+  test('NEL PACCHETTO, un altro con un pacchetto piu nuovo fa comparire «Scarica», col file numerato', async () => {
+    const A = loadApp(DENTRO_APP);
+    const mio = A.run('ANDROID_VERSION_CODE');
+    await saluta(A, { fp: 'aa'.repeat(32), v: 'logos-modifica-9.99', apk: mio + 3 });
+    const letto = { visibile: !A.run("$('apkBar').classList.contains('hide')"), link: A.run("$('btnApkNuovo').href") };
+    A.stop();
+    assert.ok(letto.visibile, 'la striscia deve comparire');
+    assert.strictEqual(letto.link, 'https://github.com/digitalvalut/logos-protocol/releases/download/android-' + (mio + 3) + '/DigitalValut-Logos-v' + (mio + 3) + '.apk',
+      'e portare al file COL NUMERO nel nome: col nome fisso Android apre facilmente quello vecchio rimasto nei Download');
+  });
+
+  test('sul sito la striscia del pacchetto non compare mai: il sito si aggiorna da solo', async () => {
+    const A = loadApp();
+    await saluta(A, { fp: 'aa'.repeat(32), v: 'logos-modifica-9.99', apk: 999 });
+    const visibile = !A.run("$('apkBar').classList.contains('hide')");
+    A.stop();
+    assert.strictEqual(visibile, false);
+  });
+
+  test('un contatto fermo a una versione che non lo dice viene segnalato, UNA volta', async () => {
+    /* E' l'unico modo di arrivare a chi e' fermo alla 4.54: la sua app non sa
+       ascoltare, la nostra si. */
+    const A = loadApp();
+    mostra(A);
+    await saluta(A, { fp: 'bb'.repeat(32) });
+    const prima = righe(A);
+    await saluta(A, { fp: 'bb'.repeat(32) });
+    const seconda = righe(A);
+    A.stop();
+    const quanti = (l) => l.filter(r => /vecchia/.test(r)).length;
+    assert.strictEqual(prima.filter(r => /Mario/.test(r) && /vecchia/.test(r)).length, 1, 'la prima volta si dice, col nome: ' + JSON.stringify(prima));
+    assert.strictEqual(quanti(seconda), quanti(prima), 'la seconda no: un avviso a ogni collegamento diventa rumore');
+  });
+
+  test('un contatto aggiornato non viene segnalato, e nemmeno un sito che si aggiornera da solo', async () => {
+    const A = loadApp();
+    const v = A.run('APP_VERSION'), n = A.run('ANDROID_VERSION_CODE');
+    mostra(A);
+    await saluta(A, { fp: 'cc'.repeat(32), v, apk: n });
+    await saluta(A, { fp: 'dd'.repeat(32), v: 'logos-modifica-4.61', apk: 0 });
+    const r = righe(A);
+    A.stop();
+    assert.strictEqual(r.filter(x => /vecchia/.test(x)).length, 0, JSON.stringify(r));
+  });
+
+  test('un pacchetto dichiarato piu vecchio viene segnalato', async () => {
+    const A = loadApp();
+    const n = A.run('ANDROID_VERSION_CODE');
+    mostra(A);
+    await saluta(A, { fp: 'ee'.repeat(32), v: 'logos-modifica-4.61', apk: n - 1 });
+    const r = righe(A);
+    A.stop();
+    assert.strictEqual(r.filter(x => /vecchia/.test(x)).length, 1, JSON.stringify(r));
+  });
+
+  test('un numero ostile nel saluto non apre niente', async () => {
+    const A = loadApp(DENTRO_APP);
+    for (const apk of [1e9, '999', -5, 3.5, { x: 1 }]) await saluta(A, { fp: 'ff'.repeat(32), apk });
+    const visibile = !A.run("$('apkBar').classList.contains('hide')");
+    A.stop();
+    assert.strictEqual(visibile, false, 'solo un intero ragionevole puo far comparire la striscia');
+  });
+
+  test('«Fai conoscere l app» dalla copia di prova porta al sito vero, non a /prova/', () => {
+    const A = loadApp({ location: { origin: 'https://digitalvalut.github.io', pathname: '/logos-protocol/prova/modifica.html',
+      host: 'digitalvalut.github.io', hostname: 'digitalvalut.github.io', href: 'https://digitalvalut.github.io/logos-protocol/prova/modifica.html' } });
+    const link = A.run('siteBase()');
+    A.stop();
+    assert.strictEqual(link, 'https://digitalvalut.github.io/logos-protocol/', '/prova/ non ha una pagina d ingresso: era un 404');
+  });
+});

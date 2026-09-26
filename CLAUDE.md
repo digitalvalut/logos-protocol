@@ -331,7 +331,7 @@ node --test
 
 Node 22 — check `node --version` first: a shell that picks up Node 18 fails
 dozens of tests on a missing `crypto` global, which looks like a regression
-and is not one. Node finds the files itself. 561 tests, 84 suites, about
+and is not one. Node finds the files itself. 570 tests, 85 suites, about
 four minutes, and it exits on its own (measured 26 Sep 2026). Do not run it
 while a browser is encoding video on the same machine: under that load it
 has stalled twice, and the same suite finished clean with the machine idle. They also run on every push. (That count is measured, and goes stale —
@@ -402,6 +402,11 @@ green.
   exists in every one, placeholders included.
 - **`APP_VERSION` in `modifica.js` must equal `CACHE` in `modifica-sw.js`.** A test
   enforces it. When they drift, users get old code and it looks like your fix failed.
+- **`ANDROID_VERSION_CODE` in `modifica.js` must equal `versionCode` in
+  `android/app/build.gradle`.** Also enforced. Since 4.61 the package announces
+  it in the `hello`, and a phone with an older package is shown a download link
+  to *that numbered file* — the Android app never updates itself otherwise, and
+  a stale number would send people to a file that does not exist.
 - **Every element the code reaches for must exist in the page.** Also enforced —
   including that nothing is declared twice.
 - **The CSP is not to be loosened,** and no inline styles: it would block them anyway.

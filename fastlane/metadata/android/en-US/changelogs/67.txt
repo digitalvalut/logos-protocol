@@ -1,0 +1,5 @@
+Logos now tells you when a new version is out.
+
+When two phones connect, they tell each other which version they run. If the other has a newer app than yours, a "Download" button appears and takes you straight to the right file, with the version number in its name. And if it is your contact who is behind, Logos tells you and gives you a button to send them the link.
+
+Also includes v66: video calls that no longer stall on the relay bridge.

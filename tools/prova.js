@@ -85,6 +85,17 @@ for (const nome of FILE){
                           "const SHARE_CACHE = 'prova--logos-modifica-share-temp';");
   }
 
+  if (nome === 'modifica-manifest.webmanifest'){
+    /* ⚠️ 26 set 2026: installata come icona, la copia di prova si chiamava
+       come l'app vera — «DV Logos» due volte sulla stessa schermata, e per
+       sapere quale fosse quale bisognava aprirle e cercare la fascia rossa.
+       Il nome sotto l'icona deve dirlo prima di aprirla. */
+    const prima = testo;
+    testo = testo.replace(/"name": "([^"]+)"/, '"name": "PROVA — $1"')
+                 .replace(/"short_name": "([^"]+)"/, '"short_name": "PROVA Logos"');
+    if (testo === prima || !/"short_name": "PROVA Logos"/.test(testo)) throw new Error('non sono riuscito a rinominare la copia di prova installata');
+  }
+
   if (nome === 'modifica.html'){
     /* Fuori dai motori di ricerca: una copia di prova che compare su Google
        accanto all'app vera e' un modo perfetto per mandarci dentro qualcuno

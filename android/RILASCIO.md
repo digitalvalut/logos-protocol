@@ -39,6 +39,13 @@ volte.
 In `android/app/build.gradle`, `versionCode` e `versionName` — stesso numero,
 il precedente più uno. Non saltare numeri: F-Droid li usa per l'ordine.
 
+**E lo stesso numero in `ANDROID_VERSION_CODE`, in cima a `modifica.js`**
+(dalla 4.61, 26 set 2026). Il pacchetto lo dice agli altri telefoni nel
+saluto, e chi ha un pacchetto più vecchio si vede comparire «Scarica» con il
+link al file numerato di questa versione: un numero sbagliato li manderebbe
+a un file che non esiste. Un test confronta i due numeri e diventa rosso se
+non combaciano.
+
 Poi le note di versione, **in tutte e due le lingue**, nominate col versionCode:
 
 - `fastlane/metadata/android/en-US/changelogs/<N>.txt`
