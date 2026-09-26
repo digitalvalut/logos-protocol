@@ -197,6 +197,23 @@ sono passati dentro DTLS: l'avversario non li ha). D2. Un avversario non può
 far ripartire una chiamata altrui (non conosce i nonce). Entrambe dovrebbero
 reggere senza sorprese; D è il rito più semplice da dimostrare.
 
+**Aggiornato il 26 set 2026 (4.60), senza cambiare il rito.** Tre cose,
+misurate su due Logos vere collegate dal ponte:
+- La descrizione dentro la busta può viaggiare compressa (`z`, deflate del
+  browser) invece che in chiaro (`sdp`), quando supera i 4.000 caratteri:
+  in videochiamata, sigillata, superava gli 8.192 byte che il relay accetta,
+  e la ripresa non partiva mai. È una codifica **prima** del sigillo: il
+  relay vede solo la lunghezza, come prima, e nel modello l'offerta resta il
+  segreto `offerR`.
+- Chi risponde toglie l'offerta dalla casella con il suo gettone e **non ne
+  accetta mai una già usata** (ne ricorda il gettone). Prima la casella
+  teneva l'offerta due minuti dopo la lettura, e una seconda caduta entro
+  quel tempo poteva rileggerla: è l'iniettività di D2 portata nel codice.
+- Il **rinnovo** del lasciapassare del ponte durante una chiamata
+  (`call-ice-renew-*`) viaggia tutto sul canale dati, dentro DTLS: non tocca
+  il relay e resta fuori da questo modello, come ogni altro messaggio della
+  conversazione (§7).
+
 ## 6. Cosa è emerso scrivendo questo, e cosa ne è stato
 
 ### ~~6.1 Rito C: la chiave viene da valori che un terzo può conoscere~~ — ✅ CHIUSO nella 4.38/v45 (14 set): sigillo con le chiavi, `logos-contatto-v45.spthy`

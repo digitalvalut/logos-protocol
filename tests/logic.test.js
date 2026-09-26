@@ -7175,7 +7175,11 @@ test.describe('v45: ogni busta dice il suo verso', () => {
 
   test('statico: ogni offerta e ogni risposta scritta nella cassetta porta `kind`', () => {
     const src = fs.readFileSync(path.join(__dirname, '..', 'modifica.js'), 'utf8');
-    const scritture = src.match(/mailboxPutSealed\([^;]*?\{[^}]*sdp:[^}]*\}/gs) || [];
+    /* dal 26 set 2026 le buste della ripresa portano la descrizione attraverso
+       sdpPerBusta (compressa quando e' grande): sono scritture con sdp anche
+       loro, e vanno contate e controllate come le altre */
+    const scritture = (src.match(/mailboxPutSealed\([^;]*?\{[^}]*sdp:[^}]*\}/gs) || [])
+      .concat(src.match(/mailboxPutSealed\([^;]*?sdpPerBusta\([^;]*/g) || []);
     assert.ok(scritture.length >= 9, 'ci sono almeno nove scritture con sdp (misurato il 14 set 2026: ' + scritture.length + ')');
     for (const w of scritture) assert.match(w, /kind: '(offer|answer)'/, 'scrittura senza verso:\n' + w);
   });
@@ -8180,8 +8184,17 @@ test.describe('il lasciapassare del ponte', () => {
       return {
         connectionState: 'connected', signalingState: 'stable', iceGatheringState: 'complete',
         localDescription: null, remoteDescription: null, log: [], configs: [],
+        /* nata col certificato, come ogni connessione di newPeerConnection */
+        __cert: { certificato: 'nostro' },
+        getConfiguration: function(){ return { iceServers: [{ urls: 'turn:vecchio' }], certificates: [this.__cert] }; },
         setConfiguration: function(c){
           if (this.__rifiuta) throw new Error('configurazione rifiutata');
+          /* come Chrome (misurato il 26 set 2026): la configurazione e' sostituita
+             INTERA, e una che toglie il certificato e' rifiutata */
+          if (!c || !c.certificates || c.certificates[0] !== this.__cert){
+            var e = new Error('Attempted to modify the PeerConnection configuration in an unsupported way.');
+            e.name = 'InvalidModificationError'; throw e;
+          }
           this.log.push('setConfiguration'); this.configs.push(c);
         },
         restartIce: function(){ this.log.push('restartIce'); },
@@ -8218,6 +8231,7 @@ test.describe('il lasciapassare del ponte', () => {
         addEventListener: function(t, fn){ (ls[t] = ls[t] || []).push(fn); },
         removeEventListener: function(){},
         __become: function(s){ this.connectionState = s; (ls.connectionstatechange || []).forEach(function(f){ f({}); }); },
+        __emetti: function(t, ev){ (ls[t] || []).forEach(function(f){ f(ev); }); },
         close: function(){ this.connectionState = 'closed'; },
       };
     };
@@ -8272,6 +8286,219 @@ test.describe('il lasciapassare del ponte', () => {
     await A.run('startRepair(pc)');
     assert.ok(A.run("pc.log.indexOf('setLocal:offer') !== -1"), 'la ripresa deve partire anche se le credenziali non si sono potute sostituire');
     A.stop();
+  });
+
+  test('la ripresa chiede credenziali FRESCHE, non quelle tenute da parte fino a sette minuti', async () => {
+    /* Con una carta gia vecchia di sette minuti (ICE_REUSE_MS) la conversazione
+       ripresa ricadrebbe dopo tre: la ripresa deve saltare la cache. */
+    const A = loadApp();
+    A.run(PONTE + `
+      fetchIceServers = async function(){ return [{ urls: 'turn:vecchio-in-cache' }]; };
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay');
+      REPAIR_ROUND_MS = 200;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    A.run("pc.__become('failed')");
+    await A.run('startRepair(pc)');
+    const url = A.run("pc.configs.length ? pc.configs[0].iceServers[0].urls : null");
+    A.run('stopRepairRetries(pc)');
+    A.stop();
+    assert.strictEqual(url, 'turn:fresco-1', 'la ripresa deve applicare credenziali appena chieste, non quelle della cache');
+  });
+
+  /* ============================================================================
+     26 SET 2026 — LA RIPRESA DI UNA VIDEOCHIAMATA NON POTEVA RIUSCIRE, MAI.
+     Misurato su due Logos vere collegate dal ponte, nel browser: la descrizione
+     di una connessione con audio e video, sigillata, pesa 11.271 byte; il relay
+     ne accetta 8.192 per busta (MAX_BODY_BYTES nel Worker) e rispondeva 400.
+     Nessuno lo diceva. Chi proponeva restava un minuto con l'offerta appesa e,
+     nel frattempo, si credeva collegato; l'altro ascoltava una casella vuota.
+     Il banco qui sotto ha un relay finto che fa quello che fa quello vero:
+     rifiuta le buste troppo grandi, cancella solo col gettone giusto.
+     ========================================================================= */
+  const RELAY_VERO = `
+    mailboxPut = async function(k, obj, tok){
+      window.__scritture++;
+      if (JSON.stringify(obj).length > 8192) return false;     /* MAX_BODY_BYTES del Worker */
+      __relay.set(k, { obj: obj, tok: tok }); return true;
+    };
+    mailboxGet = async function(k){ var e = __relay.get(k); return e ? JSON.parse(JSON.stringify(e.obj)) : null; };
+    mailboxDelete = async function(k, tok){ var e = __relay.get(k); if (e && e.tok === tok){ __relay.delete(k); return true; } return false; };
+  `;
+  /* grande come quella misurata in una videochiamata vera (7.856 caratteri):
+     piu' piccola, il test non vedrebbe il limite del relay e passerebbe anche
+     senza compressione — e' successo, al primo sabotaggio */
+  const SDP_VIDEO = (() => {
+    let s = 'v=0\r\no=- 1 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\na=rtpmap:111 opus/48000/2\r\nm=video 9 UDP/TLS/RTP/SAVPF';
+    for (let i = 96; i < 156; i++) s += '\r\na=rtpmap:' + i + ' H264/90000\r\na=fmtp:' + i + ' level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f\r\na=rtcp-fb:' + i + ' nack pli';
+    return s + '\r\n';
+  })();
+  const conSdp = (sdp) => `
+    pc.createOffer = function(){ this.log.push('createOffer'); return Promise.resolve({ type: 'offer', sdp: ${JSON.stringify(sdp)} + 'a=offerta\\r\\n' }); };
+    pc.createAnswer = function(){ this.log.push('createAnswer'); return Promise.resolve({ type: 'answer', sdp: ${JSON.stringify(sdp)} + 'a=risposta\\r\\n' }); };
+  `;
+
+  test('LA RIPRESA DI UNA VIDEOCHIAMATA ENTRA NELLA BUSTA: offerta e risposta arrivano intere', async () => {
+    const A = loadApp(), B = loadApp();
+    const relay = new Map();
+    A.sandbox.__relay = relay; B.sandbox.__relay = relay;
+    A.run(PONTE + RELAY_VERO + `pc = window.__mkpc2('relay'); pc.connectionState = 'failed';
+      repairBase = { text: 'x', offerer: true }; REPAIR_ROUND_MS = 3000;` + conSdp(SDP_VIDEO));
+    B.run(PONTE + RELAY_VERO + `pc = window.__mkpc2('relay'); pc.connectionState = 'disconnected';
+      repairBase = { text: 'x', offerer: false }; REPAIR_ROUND_MS = 3000;` + conSdp(SDP_VIDEO));
+    await Promise.all([B.run('repairAsAnswerer(pc)'), A.run('repairAsOfferer(pc, 1)')]);
+    const letto = {
+      bOfferta: B.run("pc.remoteDescription && pc.remoteDescription.sdp"),
+      aRisposta: A.run("pc.remoteDescription && pc.remoteDescription.sdp"),
+      aStato: A.run('pc.signalingState'),
+    };
+    A.stop(); B.stop();
+    assert.strictEqual(letto.bOfferta, SDP_VIDEO + 'a=offerta\r\n', 'l offerta deve arrivare, e identica: prima il relay la rifiutava perche troppo grande');
+    assert.strictEqual(letto.aRisposta, SDP_VIDEO + 'a=risposta\r\n', 'e la risposta deve tornare indietro, identica anche lei');
+    assert.strictEqual(letto.aStato, 'stable', 'chi propone chiude la trattativa');
+  });
+
+  test('una descrizione piccola viaggia IN CHIARO come prima: una versione vecchia la legge ancora', async () => {
+    const A = loadApp();
+    const piccola = await A.run("sdpPerBusta('v=0\\r\\nm=application 9\\r\\n')");
+    const grande = await A.run('sdpPerBusta(' + JSON.stringify(SDP_VIDEO) + ')');
+    const tornata = await A.run('sdpDaBusta(' + JSON.stringify(grande) + ')');
+    A.stop();
+    assert.strictEqual(typeof piccola.sdp, 'string', 'sotto la soglia non si comprime: e cosi che una 4.59 continua a capire');
+    assert.strictEqual(piccola.z, undefined);
+    assert.strictEqual(typeof grande.z, 'string', 'sopra la soglia si comprime');
+    assert.strictEqual(tornata, SDP_VIDEO, 'e si decomprime identica');
+  });
+
+  test('una busta che si gonfia oltre misura non viene aperta: niente bombe di compressione', async () => {
+    const A = loadApp();
+    /* 200.000 caratteri uguali: compressi sono pochi byte, espansi il triplo del tetto */
+    const bomba = await A.run("(async function(){ var s = new Array(200001).join('a'); var z = await leggiFlusso(new Blob([s]).stream().pipeThrough(new CompressionStream('deflate-raw')), 1e9); return ab2b64(z); })()");
+    const aperta = await A.run('sdpDaBusta({ z: ' + JSON.stringify(bomba) + ' })');
+    A.stop();
+    assert.ok(bomba.length < 2000, 'la bomba e piccola da spedire');
+    assert.strictEqual(aperta, null, 'e oltre SDP_ESPANSA_MAX non si espande: si butta');
+  });
+
+  test('UN OFFERTA CHE IL RELAY RIFIUTA SI RITIRA SUBITO: niente «verde da una parte, bloccato dall altra»', async () => {
+    /* Misurato il 26 set: con l'offerta applicata e mai consegnata, questo lato
+       cambia il proprio nome ICE e l'altro no; i controlli di questo lato
+       riescono ancora, quelli dell'altro no. Qui 'connected' per un minuto,
+       di la' «sto riprendendo» — e qui, credendosi collegato, si smetteva di
+       riprovare. Si torna indietro subito. */
+    const A = loadApp();
+    A.run(PONTE + `
+      mailboxPut = async function(){ window.__scritture++; return false; };   /* il relay dice no */
+      pc = window.__mkpc2('relay'); pc.connectionState = 'failed';
+      repairBase = { text: 'x', offerer: true }; REPAIR_ROUND_MS = 5000; REPAIR_RIFIUTATA_MS = 1500;
+    `);
+    const giro = A.run('repairAsOfferer(pc, 1)');
+    await A.run('new Promise(function(r){ setTimeout(r, 300); })');
+    /* si legge MENTRE il giro sta ancora aspettando di riprovare */
+    const durante = { ritirata: A.run("pc.log.indexOf('setLocal:rollback') !== -1"), stato: A.run('pc.signalingState') };
+    const esito = await giro;
+    A.stop();
+    assert.ok(durante.ritirata, 'l offerta non consegnata va ritirata SUBITO, non alla fine dell attesa');
+    assert.strictEqual(durante.stato, 'stable', 'e durante l attesa la connessione e gia tornata com era');
+    assert.strictEqual(esito, 'rifiutata', 'e chi ha chiamato lo sa');
+  });
+
+  test('UN RIFIUTO DEL RELAY NON BRUCIA I TENTATIVI: si aspetta, e non conta come giro', async () => {
+    /* Misurato lo stesso giorno: il relay ha rifiutato tre offerte di fila (una
+       finestra di troppe richieste, che passa in un minuto). Ritirandosi subito
+       e riprovando dopo tre secondi, i tre giri finivano in otto secondi e la
+       chiamata si chiudeva per un rifiuto che sarebbe passato da solo. */
+    const A = loadApp();
+    A.run(PONTE + `
+      mailboxPut = async function(){ window.__scritture++; return false; };
+      myFingerprintHex = async function(){ return 'aaaa'; };
+      repairNonce = '1'.repeat(32);
+      pc = window.__mkpc2('relay'); pc.connectionState = 'failed';
+      REPAIR_ROUND_MS = 5000; REPAIR_RIFIUTATA_MS = 400;
+    `);
+    await A.run("armRepair('bbbb', '2'.repeat(32))");
+    const t0 = Date.now();
+    await A.run('startRepair(pc)');
+    const ms = Date.now() - t0;
+    const letto = { giri: A.run('pc.__repairRounds'), totale: A.run('pc.__repairTotal'), arresa: A.run('pc.__gaveUp === true') };
+    A.run('stopRepairRetries(pc)');
+    A.stop();
+    assert.ok(ms >= 380, 'prima di riprovare si aspetta REPAIR_RIFIUTATA_MS: aspettati ' + ms + ' ms');
+    assert.strictEqual(letto.giri, 0, 'un offerta mai partita non consuma un giro dell incidente');
+    assert.strictEqual(letto.totale, 1, 'ma resta contata nel tetto dell intera conversazione');
+    assert.ok(!letto.arresa, 'e non fa arrendere niente');
+  });
+
+  test('SE IL RELAY NON DA CREDENZIALI, IL PONTE NON SI TOGLIE: quelle vecchie restano', async () => {
+    /* Quando il relay non risponde, loadIceServersNow ripiega sul solo STUN.
+       Applicato a una connessione che vive sul ponte, toglieva il ponte proprio
+       mentre si cercava di ripararlo. */
+    const A = loadApp();
+    A.run(PONTE + `
+      loadIceServersNow = async function(){ return ICE_STUN_ONLY.iceServers; };
+      fetchIceServers = loadIceServersNow;
+      pc = window.__mkpc2('relay'); pc.connectionState = 'failed';
+    `);
+    const r1 = await A.run('refreshIceConfigFresh(pc)');
+    const r2 = await A.run('refreshIceConfig(pc)');
+    const applicate = A.run('pc.configs.length');
+    A.stop();
+    assert.strictEqual(r1, false);
+    assert.strictEqual(r2, false);
+    assert.strictEqual(applicate, 0, 'una configurazione senza ponte non si applica a una connessione sul ponte');
+  });
+
+  test('IL PRIMO GIRO SPEDISCE I SUOI INDIRIZZI anche se parte da una connessione gia fallita', async () => {
+    /* Misurato il 26 set sulle due schede: chi offre parte sempre da 'failed',
+       e il controllo che ritira la pompa degli indirizzi, alla prima occhiata,
+       trovava 'failed' e la fermava appena nata. Il primo giro non poteva
+       riuscire; ci voleva il secondo, e il vuoto durava un giro in piu. */
+    const A = loadApp();
+    const relay = new Map();
+    A.sandbox.__relay = relay;
+    A.run(PONTE + RELAY_VERO + `pc = window.__mkpc2('relay'); pc.connectionState = 'failed';
+      repairBase = { text: 'x', offerer: true }; REPAIR_ROUND_MS = 4000;`);
+    const giro = A.run('repairAsOfferer(pc, 1)');
+    await A.run('new Promise(function(r){ setTimeout(r, 150); })');
+    const primaDegliIndirizzi = A.run('window.__scritture');
+    /* il browser trova un indirizzo nuovo sul ponte, come dopo ogni restartIce */
+    A.run("pc.__emetti('icecandidate', { candidate: { candidate: 'candidate:1 1 udp 1 104.30.0.1 5000 typ relay', sdpMid: '0', sdpMLineIndex: 0 } })");
+    /* la pompa raggruppa per 350 ms e poi sigilla: sotto il carico della suite
+       intera puo' metterci di piu'. Si aspetta la scrittura, fino a tre secondi */
+    await A.run('new Promise(function(r){ var t0 = Date.now(); (function g(){ if (window.__scritture >= 2 || Date.now() - t0 > 3000) r(); else setTimeout(g, 50); })(); })');
+    const dopo = A.run('window.__scritture');
+    await giro;
+    A.stop();
+    assert.strictEqual(primaDegliIndirizzi, 1, 'prima c e solo l offerta');
+    assert.strictEqual(dopo, 2, 'e l indirizzo nuovo deve partire anche lui: senza, l altro lato non sa dove cercare');
+  });
+
+  test('UN OFFERTA GIA USATA NON SI USA DUE VOLTE: due cadute a un minuto l una dall altra', async () => {
+    /* La lettura non toglie piu la busta (13 set 2026, il gettone) e la casella
+       tiene due minuti. Misurato il 24 set: cadute a 11:35 e a 12:36. Chi
+       ascolta la seconda volta ritrovava l'offerta della prima, e applicare la
+       descrizione di un incidente chiuso sopra una connessione viva la rompe.
+       Qui il relay la rimette nella casella dopo il primo uso, come farebbe un
+       relay che non cancella: non deve cambiare niente. */
+    const A = loadApp(), B = loadApp();
+    const relay = new Map();
+    A.sandbox.__relay = relay; B.sandbox.__relay = relay;
+    A.run(PONTE + RELAY_VERO + `pc = window.__mkpc2('relay'); pc.connectionState = 'failed';
+      repairBase = { text: 'x', offerer: true }; REPAIR_ROUND_MS = 3000;`);
+    B.run(PONTE + RELAY_VERO + `pc = window.__mkpc2('relay'); pc.connectionState = 'disconnected';
+      repairBase = { text: 'x', offerer: false }; REPAIR_ROUND_MS = 600;
+      mailboxDelete = async function(k, tok){ return false; };   /* un relay che non cancella */`);
+    await Promise.all([B.run('repairAsAnswerer(pc)'), A.run('repairAsOfferer(pc, 1)')]);
+    const primaVolta = B.run("pc.log.filter(function(x){ return x === 'setRemote:offer'; }).length");
+    /* seconda caduta: stessa casella, stessa busta ancora li' */
+    B.run("pc.connectionState = 'disconnected'; pc.signalingState = 'stable';");
+    await B.run('repairAsAnswerer(pc)');
+    const secondaVolta = B.run("pc.log.filter(function(x){ return x === 'setRemote:offer'; }).length");
+    A.stop(); B.stop();
+    assert.strictEqual(primaVolta, 1, 'la prima volta l offerta si applica');
+    assert.strictEqual(secondaVolta, 1, 'la seconda volta la stessa offerta NON si riapplica');
   });
 
   /* ⚠️ QUI C'ERANO SEI CONTROLLI SUL RINNOVO PERIODICO DEL LASCIAPASSARE,
@@ -8598,23 +8825,179 @@ test.describe('il lasciapassare del ponte', () => {
     assert.strictEqual(letto.aStato, 'stable', 'e la connessione torna stabile, pronta per il giro dopo');
   });
 
-  test('UNO SOLO DEI DUE PROPONE: chi non e l offerente non manda niente', async () => {
+  /* ⚠️ 26 SET 2026 — IL RINNOVO RIFATTO DOPO AVERLO MISURATO su due Logos vere.
+     Riacceso nel browser, proposta e risposta passavano in meno di un secondo,
+     ma senza un solo indirizzo nuovo: `waitIceComplete` tornava in 0 ms perche'
+     dopo restartIce lo stato della raccolta e' ancora quello vecchio. Un lato
+     e' rimasto sulla sua allocazione vecchia ed e' caduto quando doveva.
+     Questi guardano le tre regole nuove, sempre con due app collegate. */
+  const DUE_COLLEGATE = (A, B, extraA, extraB) => {
+    A.sandbox.__consegna = function(s){ B.sandbox.onDcMessage({ data: s }); };
+    B.sandbox.__consegna = function(s){ A.sandbox.onDcMessage({ data: s }); };
+    for (const [app, offre, extra] of [[A, true, extraA || ''], [B, false, extraB || '']]){
+      app.run(PONTE + `
+        pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';
+        repairBase = { text: 'x', offerer: ` + offre + ` };
+        dc = { readyState: 'open', send: function(s){ window.__inviati.push(JSON.parse(s)); __consegna(s); } };
+        pc.addIceCandidate = function(c){ this.log.push('cand:' + c.candidate); return Promise.resolve(); };
+      ` + extra);
+    }
+  };
+  const CAND = (ip) => `{ candidate: { candidate: 'candidate:1 1 udp 1 ${ip} 5000 typ relay', sdpMid: '0', sdpMLineIndex: 0, usernameFragment: 'nuovo' } }`;
+
+  test('GLI INDIRIZZI NUOVI DEL RINNOVO ARRIVANO DALL ALTRA PARTE, sul canale e senza il relay', async () => {
+    const A = loadApp(), B = loadApp();
+    DUE_COLLEGATE(A, B);
+    await A.run('runIceRenewal(pc)');
+    A.run('stopIceRenewal()');
+    await A.run('new Promise(function(r){ setTimeout(r, 60); })');
+    /* il browser trova gli indirizzi nuovi DOPO setLocalDescription, come dopo ogni restartIce */
+    A.run("pc.__emetti('icecandidate', " + CAND('104.30.0.1') + ")");
+    B.run("pc.__emetti('icecandidate', " + CAND('104.30.0.2') + ")");
+    await A.run('new Promise(function(r){ setTimeout(r, 60); })');
+    const letto = {
+      bHa: B.run("pc.log.indexOf('cand:candidate:1 1 udp 1 104.30.0.1 5000 typ relay') !== -1"),
+      aHa: A.run("pc.log.indexOf('cand:candidate:1 1 udp 1 104.30.0.2 5000 typ relay') !== -1"),
+      scritture: A.run('window.__scritture') + B.run('window.__scritture'),
+    };
+    A.stop(); B.stop();
+    assert.ok(letto.bHa, 'l indirizzo nuovo di chi propone deve arrivare a chi risponde: senza, resta sulla sua allocazione vecchia');
+    assert.ok(letto.aHa, 'e quello di chi risponde deve tornare indietro');
+    assert.strictEqual(letto.scritture, 0, 'e nemmeno uno passa dal relay: il canale e aperto');
+  });
+
+  test('un indirizzo arrivato PRIMA della descrizione non si perde: si tiene e si applica dopo', async () => {
+    /* Chi risponde sta ancora chiedendo le credenziali quando i primi indirizzi
+       di chi propone arrivano: il browser li rifiuta, perche non conosce ancora
+       la sessione nuova. Buttarli vorrebbe dire rinnovare senza indirizzi. */
+    const B = loadApp();
+    B.run(PONTE + `pc = window.__mkpc2('relay'); callState = 'active';
+      pc.addIceCandidate = function(c){
+        if (!this.remoteDescription) return Promise.reject(new Error('sessione sconosciuta'));
+        this.log.push('cand:' + c.candidate); return Promise.resolve();
+      };`);
+    await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-cand', c: ` + CAND('104.30.0.9').replace(/^\{ candidate: /, '').replace(/ \}$/, '') + ` }) })`);
+    await B.run('new Promise(function(r){ setTimeout(r, 20); })');
+    const primaTenuti = B.run('(pc.__renewTenuti || []).length');
+    await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-offer', sdp: 'v=0\\r\\no=OFF\\r\\n' }) })`);
+    await B.run('new Promise(function(r){ setTimeout(r, 60); })');
+    const applicato = B.run("pc.log.indexOf('cand:candidate:1 1 udp 1 104.30.0.9 5000 typ relay') !== -1");
+    B.stop();
+    assert.strictEqual(primaTenuti, 1, 'arrivato troppo presto: tenuto da parte');
+    assert.ok(applicato, 'e applicato appena la descrizione nuova c e');
+  });
+
+  test('CHI RISPONDE IN RITARDO NON RISPONDE: i due lati non finiscono su due sessioni diverse', async () => {
+    /* L ipotesi del 25 set, resa impossibile: una risposta che arriva dopo che
+       chi propone si e gia ritirato lascerebbe un lato sulla sessione nuova e
+       l altro sulla vecchia. Chi risponde misura da quando l offerta e
+       arrivata, e oltre ICE_RENEW_RISPOSTA_MAX_MS lascia perdere PRIMA di
+       applicarla. */
+    const B = loadApp();
+    B.run(PONTE + `pc = window.__mkpc2('relay'); callState = 'active';
+      ICE_RENEW_RISPOSTA_MAX_MS = 80;
+      loadIceServersNow = async function(){ await new Promise(function(r){ setTimeout(r, 200); }); return [{ urls: 'turn:lento' }]; };`);
+    await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-offer', sdp: 'v=0\\r\\no=OFF\\r\\n' }) })`);
+    await B.run('new Promise(function(r){ setTimeout(r, 350); })');
+    const letto = {
+      applicata: B.run("pc.log.indexOf('setRemote:offer') !== -1"),
+      risposte: B.run("window.__inviati.filter(function(m){ return m.type === 'call-ice-renew-answer'; }).length"),
+    };
+    B.stop();
+    assert.ok(!letto.applicata, 'un offerta a cui si risponderebbe in ritardo non si applica nemmeno');
+    assert.strictEqual(letto.risposte, 0, 'e non si manda nessuna risposta');
+  });
+
+  test('la pazienza di chi risponde e piu corta di quella di chi propone', async () => {
+    /* E la meta dell invariante che rende impossibili le due sessioni diverse:
+       se chi risponde potesse aspettare piu di quanto chi propone aspetta prima
+       di ritirarsi, una risposta applicata potrebbe arrivare a un offerta
+       ritirata. Il margine copre il viaggio sul canale. */
+    const A = loadApp();
+    const risposta = A.run('ICE_RENEW_RISPOSTA_MAX_MS'), ritiro = A.run('ICE_RENEW_ROLLBACK_MS');
+    A.stop();
+    assert.ok(risposta + 5000 <= ritiro, 'risposta ' + risposta + ' ms, ritiro ' + ritiro + ' ms: servono almeno 5 s di margine');
+  });
+
+  test('SI RINNOVA SECONDO L ETA DELLA CARTA: giovane no, vecchia si, e chi la chiede la ottiene', async () => {
+    /* appena rinnovata: una richiesta arrivata adesso e' gia' soddisfatta,
+       perche' il rinnovo appena fatto ha rinfrescato anche la carta dell'altro */
+    const fresca = loadApp();
+    fresca.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';
+      pc.__credAt = Date.now();`);
+    await fresca.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-ask' }) })`);
+    await fresca.run('runIceRenewal(pc)'); fresca.run('stopIceRenewal()');
+    const suRichiestaVecchia = fresca.run("window.__inviati.filter(function(m){ return m.type === 'call-ice-renew-offer'; }).length");
+    fresca.stop();
+    /* giovane ma non appena nata: la propria carta non basta a rinnovare */
+    const giovane = loadApp();
+    giovane.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';
+      pc.__credAt = Date.now() - 2 * ICE_RENEW_MS - 1000;`);
+    await giovane.run('runIceRenewal(pc)'); giovane.run('stopIceRenewal()');
+    const conGiovane = giovane.run("window.__inviati.filter(function(m){ return m.type === 'call-ice-renew-offer'; }).length");
+    /* l altro chiede: la sua carta e vecchia anche se questa no */
+    await giovane.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-ask' }) })`);
+    await giovane.run('runIceRenewal(pc)'); giovane.run('stopIceRenewal()');
+    const suRichiesta = giovane.run("window.__inviati.filter(function(m){ return m.type === 'call-ice-renew-offer'; }).length");
+    giovane.stop();
+    const vecchia = loadApp();
+    vecchia.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; repairBase = { text: 'x', offerer: true }; callState = 'active';
+      pc.__credAt = Date.now() - ICE_RENEW_ETA_MS - 1000;`);
+    await vecchia.run('runIceRenewal(pc)'); vecchia.run('stopIceRenewal()');
+    const conVecchia = vecchia.run("window.__inviati.filter(function(m){ return m.type === 'call-ice-renew-offer'; }).length");
+    vecchia.stop();
+    assert.strictEqual(suRichiestaVecchia, 0, 'una richiesta arrivata a rinnovo appena fatto e gia soddisfatta: niente secondo rinnovo');
+    assert.strictEqual(conGiovane, 0, 'una carta appena presa non si rinnova: ogni rinnovo e un restartIce, non si fa per niente');
+    assert.strictEqual(suRichiesta, 1, 'ma se l altro lato chiede, si rinnova: e la SUA carta che sta per scadere');
+    assert.strictEqual(conVecchia, 1, 'e una carta vecchia si rinnova da sola');
+  });
+
+  test('una connessione nasce con l eta della carta che la cache le ha dato, non con zero', async () => {
+    /* La cache tiene le credenziali fino a ICE_REUSE_MS: una chiamata che nasce
+       con una carta di sei minuti ne ha davanti cinque, non undici. */
+    const A = loadApp();
+    A.run(`cachedIceServers = [{ urls: 'turn:x' }]; iceServersAt = Date.now() - 6 * 60 * 1000; iceServersUntil = Date.now() + 60000;
+           myIdentity = async function(){ return null; };`);
+    const eta = await A.run('newPeerConnection().then(function(c){ return etaLasciapassare(c); })');
+    A.stop();
+    assert.ok(eta >= 6 * 60 * 1000 - 50, 'l eta deve partire da quando la carta e stata chiesta: letta ' + eta + ' ms');
+  });
+
+  test('un indirizzo ostile non entra: troppo lungo, senza linea, o a valanga', async () => {
+    const B = loadApp();
+    B.run(PONTE + `pc = window.__mkpc2('relay'); callState = 'active';
+      pc.addIceCandidate = function(c){ return Promise.reject(new Error('mai')); };`);
+    await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-cand', c: { candidate: 'x'.repeat(5000), sdpMid: '0' } }) })`);
+    await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-cand', c: { candidate: 'candidate:1' } }) })`);
+    for (let i = 0; i < 100; i++) await B.run(`onDcMessage({ data: JSON.stringify({ type: 'call-ice-renew-cand', c: { candidate: 'candidate:` + i + `', sdpMid: '0' } }) })`);
+    await B.run('new Promise(function(r){ setTimeout(r, 50); })');
+    const tenuti = B.run('(pc.__renewTenuti || []).length');
+    const lunghi = B.run("(pc.__renewTenuti || []).filter(function(c){ return c.candidate.length > 512; }).length");
+    B.stop();
+    assert.strictEqual(lunghi, 0, 'un indirizzo lungo cinquemila caratteri non viene nemmeno tenuto');
+    assert.strictEqual(tenuti, 40, 'e da parte se ne tengono al massimo ICE_RENEW_CAND_MAX (40)');
+  });
+
+  test('UNO SOLO DEI DUE PROPONE: chi non e l offerente al massimo CHIEDE', async () => {
     /* Senza questa regola offrono tutti e due quasi insieme, ciascuno trova
        l altro gia impegnato e ignora l offerta ricevuta: glare, e il rinnovo
-       non riesce mai. La 4.57 l aveva persa nella riscrittura. */
+       non riesce mai. La 4.57 l aveva persa nella riscrittura.
+       Dal 26 set chi non guida, se e la SUA carta a invecchiare, lo chiede
+       (`call-ice-renew-ask`): ma non propone mai, e non tocca la connessione. */
     const B = loadApp();
     B.run(PONTE + `pc = window.__mkpc2('relay'); peerCanRenew = true; callState = 'active';
                    repairBase = { text: 'x', offerer: false };`);
     await B.run('runIceRenewal(pc)');
     B.run('stopIceRenewal()');
-    const inviati = B.run('window.__inviati.length');
+    const tipi = B.run('window.__inviati.map(function(m){ return m.type; })');
     const toccata = B.run("pc.log.indexOf('restartIce') !== -1");
     B.stop();
-    assert.strictEqual(inviati, 0, 'chi non guida non propone: risponde e basta');
+    assert.strictEqual(tipi.indexOf('call-ice-renew-offer'), -1, 'chi non guida non propone');
+    assert.strictEqual(JSON.stringify(tipi), '["call-ice-renew-ask"]', 'con la carta vecchia chiede a chi guida, e basta');
     assert.ok(!toccata, 'e non tocca la connessione');
   });
 
-  test('una 4.57 non viene riconosciuta come capace: serve ren 2 nel saluto', async () => {
+  test('solo chi dichiara ren 3 rinnova: la 4.57 (1) e la 4.58 (2) no', async () => {
     /* La 4.57 dichiara `ren: 1` ma non sa rispondere: i suoi messaggi avevano
        il nome sbagliato. Trattarla da capace vorrebbe dire offrirle rinnovi che
        butta — o rispondere a offerte sue che poi lei scarta alla risposta,
@@ -8632,24 +9015,24 @@ test.describe('il lasciapassare del ponte', () => {
       return A.run('peerCanRenew');
     };
     const vecchia = await saluta({ fp: 'aa'.repeat(32), ren: 1 });
-    const nuova   = await saluta({ fp: 'bb'.repeat(32), ren: 2 });
+    const q58     = await saluta({ fp: 'dd'.repeat(32), ren: 2 });
+    const nuova   = await saluta({ fp: 'bb'.repeat(32), ren: 3 });
     const antica  = await saluta({ fp: 'cc'.repeat(32) });
     A.stop();
     assert.strictEqual(vecchia, false, 'una 4.57 dichiara ren 1 ma non sa rispondere: con lei non si rinnova');
-    assert.strictEqual(nuova, true, 'una versione con il rinnovo che funziona dichiara ren 2');
+    assert.strictEqual(q58, false, 'una 4.58 dichiara ren 2 ma il suo rinnovo manda descrizioni senza indirizzi');
+    assert.strictEqual(nuova, true, 'il rinnovo con gli indirizzi sul canale dichiara ren 3');
     assert.strictEqual(antica, false, 'e una versione ancora piu vecchia non dichiara niente');
   });
 
 
-  test('IL RINNOVO E SPENTO: la chiamata non lo arma e il saluto non si dichiara capace', async () => {
-    /* ⚠️ Spento il 25 set 2026: nella prima prova vera il rinnovo e partito e
-       la chiamata si e bloccata a 10:46 senza piu riprendersi. Meglio i buchi
-       da 5-20 secondi della sola ripresa. Da spento deve valere tutto e due:
-       non si propone, e nel saluto non si dice ren 2 — altrimenti una versione
-       che il rinnovo lo ha acceso ci proverebbe con questa. Il saluto qui e
-       quello vero, mandato dal canale dati all apertura, non ricostruito. */
+  /* Il saluto e il cronometro VERI, non ricostruiti: il saluto parte dal canale
+     dati all apertura, il rinnovo si arma da startCallTimer. Acceso e spento
+     devono dire la stessa cosa nei due posti, o una versione ci proverebbe con
+     una che non risponde. */
+  const salutoECronometro = async (acceso) => {
     const A = loadApp();
-    A.run(`window.__mandati = []; pc = new RTCPeerConnection(); callState = 'active';
+    A.run(`ICE_RENEW_ATTIVO = ` + acceso + `; window.__mandati = []; pc = new RTCPeerConnection(); callState = 'active';
            var ch = { readyState: 'open', send: function(x){ window.__mandati.push(x); }, addEventListener: function(){}, close: function(){} };
            wireDataChannel(ch, pc); ch.onopen && ch.onopen();`);
     await A.run('new Promise(function(r){ setTimeout(r, 1200); })');
@@ -8658,8 +9041,18 @@ test.describe('il lasciapassare del ponte', () => {
     A.run('stopCallTimer()');
     const saluti = A.run("window.__mandati.map(function(x){ try{ return JSON.parse(x); }catch(e){ return null; } }).filter(function(o){ return o && o.type === 'hello'; })");
     A.stop();
+    return { armato, saluti };
+  };
+  test('IL RINNOVO E ACCESO: la chiamata lo arma e il saluto dichiara ren 3', async () => {
+    const { armato, saluti } = await salutoECronometro(true);
+    assert.strictEqual(saluti.length >= 1, true, 'il saluto deve essere partito, o il test non sta guardando niente');
+    assert.strictEqual(saluti[0].ren, 3, 'acceso, il saluto dichiara il rinnovo che funziona');
+    assert.strictEqual(armato, true, 'e una chiamata che comincia arma il rinnovo');
+  });
+  test('e se un giorno si rispegne, spento vuol dire spento dai due lati', async () => {
+    const { armato, saluti } = await salutoECronometro(false);
     assert.ok(saluti.length >= 1, 'il saluto deve essere partito, o il test non sta guardando niente');
-    assert.notStrictEqual(saluti[0].ren, 2, 'da spento il saluto NON dichiara di saper rinnovare');
+    assert.strictEqual(saluti[0].ren, 0, 'da spento il saluto NON dichiara di saper rinnovare');
     assert.strictEqual(armato, false, 'e una chiamata che comincia non arma nessun rinnovo');
   });
 

@@ -3270,6 +3270,9 @@ const ICE_STUN_ONLY = { iceServers: [ { urls: 'stun:stun.cloudflare.com:3478' } 
 
 let cachedIceServers = null;
 let iceServersUntil = 0;
+/* quando sono state chieste quelle in mano: e' da qui che si conta l'eta'
+   del lasciapassare di una connessione (vedi etaLasciapassare) */
+let iceServersAt = 0;
 
 /* Quanto ci si fida di credenziali gia' in mano prima di richiederle.
 
@@ -3335,7 +3338,8 @@ function loadIceServersNow(){
       const data = await esito.res.json();
       if (!Array.isArray(data.iceServers) || !data.iceServers.length) throw new Error('no iceServers in response');
       cachedIceServers = data.iceServers;
-      iceServersUntil = Date.now() + ICE_REUSE_MS;
+      iceServersAt = Date.now();
+      iceServersUntil = iceServersAt + ICE_REUSE_MS;
       return cachedIceServers;
     }catch(e){
       return ICE_STUN_ONLY.iceServers;
@@ -3386,11 +3390,38 @@ async function refreshIceConfig(conn){
   if (typeof conn.setConfiguration !== 'function') return false;   /* browser che non lo espone: si prosegue con quelle che si hanno */
   let fresh = null;
   try{ fresh = await fetchIceServers(); }catch(_){ return false; }
-  if (!Array.isArray(fresh) || !fresh.length) return false;
+  if (!conPonte(fresh)) return false;
   /* la chiamata puo' essere finita, o essere stata sostituita, mentre si aspettava il relay */
   if (conn !== pc || conn.connectionState === 'closed') return false;
-  try{ conn.setConfiguration({ iceServers: fresh }); return true; }
+  try{ conn.setConfiguration(configConCredenziali(conn, fresh)); conn.__credAt = iceServersAt || Date.now(); return true; }
   catch(e){ return false; }   /* mai far saltare una ripresa per questo: meglio ritentare con le vecchie che non ritentare */
+}
+/* ⚠️ MISURATO IL 26 SET 2026, su due Logos vere collegate dal ponte: fino a
+   questo giorno le credenziali nuove NON SONO MAI ENTRATE in nessuna
+   connessione, su Chrome e sul telefono Android. `setConfiguration` sostituisce
+   la configurazione INTERA, non solo il pezzo che gli si passa: dargli solo
+   `{ iceServers }` vuol dire chiedergli di togliere il certificato con cui la
+   connessione e' nata (`newPeerConnection` lo mette sempre, e' la nostra
+   identita'), e Chrome lo rifiuta con InvalidModificationError. Il catch qui
+   sopra lo inghiottiva in silenzio, e la ripresa ripresentava al ponte la
+   carta vecchia — cioe' la correzione del 23 set non aveva mai fatto niente.
+   La suite era verde perche' il finto accettava qualunque cosa: adesso rifiuta
+   come Chrome. Si parte dalla configurazione viva e si cambia solo iceServers. */
+function configConCredenziali(conn, fresh){
+  let viva = null;
+  try{ viva = typeof conn.getConfiguration === 'function' ? conn.getConfiguration() : null; }catch(_){}
+  return Object.assign({}, viva || {}, { iceServers: fresh });
+}
+/* ⚠️ MISURATO IL 26 SET 2026, un'ora dopo la correzione qui sopra: quando il
+   relay non risponde, loadIceServersNow ripiega su ICE_STUN_ONLY — che per
+   una connessione NUOVA va benissimo (si prova la strada diretta), ma
+   applicato a una connessione che vive SUL PONTE toglie il ponte proprio
+   mentre si cerca di ripararlo. Finche' setConfiguration veniva rifiutato non
+   succedeva mai; corretto quello, e' successo alla prima occhiata del relay.
+   Si applicano solo credenziali che il ponte lo contengono: altrimenti si
+   tengono quelle che ci sono, che forse valgono ancora. */
+function conPonte(servers){
+  return Array.isArray(servers) && servers.some(s => s && [].concat(s.urls || []).some(u => /^turns?:/i.test(String(u))));
 }
 
 /* ---------------- rinnovare il lasciapassare DENTRO una chiamata ----------------
@@ -3448,26 +3479,47 @@ async function refreshIceConfig(conn){
    La suite era verde perche' i test chiamavano `onIceRenewOffer` a mano,
    saltando la porta d'ingresso. Adesso passano da `onDcMessage`, come un
    messaggio vero. */
-/* ⚠️ SPENTO IL 25 SET 2026, dopo la prima prova in cui il rinnovo e' girato
-   davvero su due dispositivi. Il rinnovo e' partito, e a 10:46 la chiamata si
-   e' bloccata e non si e' piu' ripresa: il telefono si credeva collegato
-   (verde), il PC restava su «sto riprendendo». E' peggio di quello che fa la
-   ripresa da sola (buchi da 5-20 secondi, ma si riprende sempre).
-   Ipotesi, NON misurata: chi offre si ritira dopo ICE_RENEW_ROLLBACK_MS (8 s),
-   ma chi risponde prima chiede credenziali fresche al relay e poi raccoglie gli
-   indirizzi (`waitIceComplete`, fino a ~21 s). La risposta arriva dopo il
-   ritiro e viene scartata: un lato resta sulla sessione ICE vecchia, l'altro
-   passa alla nuova. Quando il vecchio lasciapassare scade cade un lato solo, e
-   l'altro, credendosi collegato, non partecipa alla ripresa.
-   Chi lo riaccende: prima di tutto un registro delle fasi su tutti e due i lati
-   per MISURARE quanto ci mette la risposta; poi un'attesa del ritiro piu' lunga
-   del caso peggiore dell'altro lato, e una risposta arrivata tardi che non si
-   butta. Poi una prova vera di venti minuti. Da spento non si propone e non si
-   dichiara capace nel saluto: nessuna versione ci prova con questa. */
-let ICE_RENEW_ATTIVO = false;          /* `let`: i test lo accendono per provare il codice che resta */
-let ICE_RENEW_FIRST_MS = 90 * 1000;    /* passata la fase in cui la chiamata si sta alzando */
-let ICE_RENEW_MS = 4 * 60 * 1000;      /* comodamente dentro i dieci minuti della credenziale */
-let ICE_RENEW_ROLLBACK_MS = 8000;      /* `let` come gli altri: un test deve poter vedere un ritiro senza aspettare */
+/* ⚠️ SPENTO IL 25 SET 2026 E RIACCESO IL 26, dopo averlo MISURATO su due Logos
+   vere collegate dal ponte, nel browser, con un registro delle fasi dai due
+   lati. Il 25 la chiamata si era bloccata a 10:46 (telefono verde, PC su «sto
+   riprendendo») e la colpa era stata data al rinnovo. Misurato, il rinnovo non
+   era mai partito: `setConfiguration` veniva rifiutato da Chrome (vedi
+   configConCredenziali) e renewIceNow tornava indietro in silenzio. Il blocco
+   era della RIPRESA — la sua offerta, in videochiamata, era troppo grande per
+   il relay (vedi sdpPerBusta). Tutto questo e' corretto altrove.
+   Riacceso, il rinnovo e' andato: proposta e risposta in meno di un secondo,
+   nessun vuoto. Ma con un difetto suo, visto nello stesso registro:
+   `waitIceComplete` tornava in 0 ms, perche' dopo restartIce lo stato della
+   raccolta e' ancora 'complete' — quello della raccolta VECCHIA. Proposta e
+   risposta partivano senza un solo indirizzo nuovo, e un lato restava sulla
+   sua allocazione vecchia, che e' morta esattamente quando doveva (11,5
+   minuti dopo le sue credenziali). Da qui le tre regole di adesso:
+   1. GLI INDIRIZZI NUOVI VIAGGIANO SUL CANALE DATI, uno per uno appena ci
+      sono (`call-ice-renew-cand`): niente attese, niente descrizioni vuote, e
+      nemmeno una scrittura sul relay.
+   2. CHI RISPONDE IN RITARDO NON RISPONDE: oltre ICE_RENEW_RISPOSTA_MAX_MS
+      dall'arrivo dell'offerta lascia perdere, prima di applicarla. Chi offre
+      si ritira dopo ICE_RENEW_ROLLBACK_MS, che e' piu' lungo: una risposta
+      non puo' piu' arrivare a un'offerta gia' ritirata, cioe' i due lati non
+      possono finire su due sessioni diverse — l'ipotesi del 25 set.
+   3. SI RINNOVA IN BASE ALL'ETA' DEL LASCIAPASSARE (`conn.__credAt`), non a un
+      orologio fisso: una chiamata che comincia su una conversazione aperta da
+      dieci minuti ha la carta quasi scaduta, e va rinnovata subito. Chi non
+      guida, se e' la SUA carta a invecchiare, lo chiede (`call-ice-renew-ask`):
+      propone sempre uno solo, e il glare resta impossibile.
+   Il saluto dice `ren: 3`: la 4.58 diceva 2 con il rinnovo rotto, e con lei
+   non si prova. */
+let ICE_RENEW_ATTIVO = true;           /* `let`: i test lo spengono per provare che spento non fa niente */
+let ICE_RENEW_FIRST_MS = 20 * 1000;    /* la prima occhiata: passata la trattativa che alza la chiamata */
+let ICE_RENEW_MS = 30 * 1000;          /* poi ogni mezzo minuto si guarda l'eta' del lasciapassare */
+/* Oltre quest'eta' si rinnova. Misurato il 26 set: una connessione sul ponte
+   muore ~11,5 minuti dopo che le sue credenziali sono state chieste, e il
+   relay puo' consegnarne di vecchie fino a due minuti. Quattro piu' due fa
+   sei: resta piu' di un giro di margine prima degli undici. */
+let ICE_RENEW_ETA_MS = 4 * 60 * 1000;
+let ICE_RENEW_ROLLBACK_MS = 15000;     /* chi offre: oltre, si ritira */
+let ICE_RENEW_RISPOSTA_MAX_MS = 6000;  /* chi risponde: oltre, lascia perdere. DEVE restare sotto il ritiro */
+const ICE_RENEW_CAND_MAX = 40;         /* indirizzi arrivati prima della descrizione: un tetto, da un altro telefono */
 let iceRenewTimer = null;
 let peerCanRenew = false;              /* lo dichiara il saluto dell'altro lato */
 
@@ -3481,24 +3533,87 @@ function scheduleIceRenewal(primo){
   if (!conn) return;
   iceRenewTimer = setTimeout(() => { runIceRenewal(conn); }, primo ? ICE_RENEW_FIRST_MS : ICE_RENEW_MS);
 }
+/* Quanto e' vecchia la carta con cui questa connessione ha aperto il ponte.
+   Una connessione senza data (un finto nei test, un browser strano) conta come
+   vecchia: meglio un rinnovo in piu' che una chiamata che cade. */
+function etaLasciapassare(conn){ return Date.now() - (conn.__credAt || 0); }
 async function runIceRenewal(conn){
   iceRenewTimer = null;
   if (pc !== conn || conn.connectionState === 'closed') return;
   if (callState !== 'active') return;                  /* chiamata finita: il rinnovo finisce con lei */
   try{
-    /* ⚠️ UNO SOLO dei due propone: lo stesso che guida la ripresa
-       (`repairBase.offerer`, deciso dall'ordine delle impronte). I due timer
-       partono con la chiamata, a meno di un secondo l'uno dall'altro: senza
-       questa regola offrono tutti e due, ciascuno trova l'altro gia' in
-       'have-local-offer', ignora l'offerta ricevuta, e dopo otto secondi si
-       ritirano entrambi. La 4.57 l'aveva persa nella riscrittura. */
-    if (peerCanRenew && repairBase && repairBase.offerer && conn.connectionState === 'connected'){
-      /* solo chi passa dal ponte ha qualcosa che scade: una diretta non si tocca */
-      const route = await connectionRoute();
-      if (pc === conn && route === 'relay' && callState === 'active') await renewIceNow(conn);
+    if (peerCanRenew && repairBase && conn.connectionState === 'connected'){
+      /* Una richiesta arrivata mentre si stava gia' rinnovando e' gia'
+         soddisfatta: il rinnovo rinfresca anche la carta di chi l'ha chiesta
+         (onIceRenewOffer). Visto sulle due schede il 26 set: i due controlli
+         cadono nello stesso secondo, uno rinnova e l'altro chiede, e mezzo
+         minuto dopo partiva un secondo rinnovo per niente. */
+      if (conn.__renewChiesto && etaLasciapassare(conn) < ICE_RENEW_MS * 2) conn.__renewChiesto = false;
+      const chiesto = conn.__renewChiesto === true;
+      const vecchia = etaLasciapassare(conn) > ICE_RENEW_ETA_MS;
+      if (chiesto || vecchia){
+        /* solo chi passa dal ponte ha qualcosa che scade: una diretta non si tocca */
+        const route = await connectionRoute();
+        if (pc === conn && route === 'relay' && callState === 'active'){
+          /* ⚠️ UNO SOLO dei due propone: lo stesso che guida la ripresa
+             (`repairBase.offerer`, deciso dall'ordine delle impronte). Senza
+             questa regola offrono tutti e due, ciascuno trova l'altro gia' in
+             'have-local-offer' e ignora l'offerta ricevuta. La 4.57 l'aveva
+             persa nella riscrittura. L'altro, se e' la sua carta a
+             invecchiare, lo chiede e basta. */
+          if (repairBase.offerer){ conn.__renewChiesto = false; await renewIceNow(conn); }
+          else if (vecchia) sig({ type: 'call-ice-renew-ask' });
+        }
+      }
     }
   }catch(e){ /* un rinnovo fallito non tocca la chiamata: si riprova al giro dopo */ }
   if (pc === conn && callState === 'active' && conn.connectionState !== 'closed') scheduleIceRenewal(false);
+}
+/* Chi guida, quando l'altro chiede: al prossimo giro, non subito — cosi' passa
+   dalle stesse guardie (chiamata attiva, ponte, connessione su) di ogni altro. */
+function onIceRenewAsk(){
+  if (pc) pc.__renewChiesto = true;
+}
+/* Gli indirizzi nuovi, uno per uno, sul canale che e' ancora aperto. Si
+   aggancia PRIMA di setLocalDescription, che e' quando la raccolta comincia,
+   e si stacca a raccolta finita o dopo mezzo minuto. */
+function trickleRinnovo(conn){
+  if (typeof conn.addEventListener !== 'function') return;
+  if (conn.__renewTrickle){ try{ conn.removeEventListener('icecandidate', conn.__renewTrickle); }catch(_){} }
+  const f = ev => {
+    if (pc !== conn || conn.__renewTrickle !== f) return;
+    if (!ev || !ev.candidate){ try{ conn.removeEventListener('icecandidate', f); }catch(_){} conn.__renewTrickle = null; return; }
+    const c = ev.candidate;
+    sig({ type: 'call-ice-renew-cand', c: { candidate: c.candidate, sdpMid: c.sdpMid, sdpMLineIndex: c.sdpMLineIndex, usernameFragment: c.usernameFragment } });
+  };
+  conn.__renewTrickle = f;
+  conn.addEventListener('icecandidate', f);
+  setTimeout(() => { if (conn.__renewTrickle === f){ try{ conn.removeEventListener('icecandidate', f); }catch(_){} conn.__renewTrickle = null; } }, 30000);
+}
+/* Un indirizzo dell'altro lato. Puo' arrivare prima che la sua descrizione sia
+   applicata (chi risponde sta ancora chiedendo le credenziali): allora si
+   tiene da parte e si riprova dopo. Arriva da un altro telefono, quindi si
+   controlla forma e misura come tutto il resto. */
+async function onIceRenewCand(c){
+  const conn = pc;
+  if (!conn || !c || typeof c !== 'object' || typeof c.candidate !== 'string' || c.candidate.length > 512) return;
+  const cand = {
+    candidate: c.candidate,
+    sdpMid: typeof c.sdpMid === 'string' ? c.sdpMid.slice(0, 32) : null,
+    sdpMLineIndex: Number.isInteger(c.sdpMLineIndex) ? c.sdpMLineIndex : null,
+    usernameFragment: typeof c.usernameFragment === 'string' ? c.usernameFragment.slice(0, 64) : null,
+  };
+  if (cand.sdpMid === null && cand.sdpMLineIndex === null) return;
+  try{ await conn.addIceCandidate(cand); }
+  catch(e){
+    conn.__renewTenuti = conn.__renewTenuti || [];
+    if (conn.__renewTenuti.length < ICE_RENEW_CAND_MAX) conn.__renewTenuti.push(cand);
+  }
+}
+async function riprovaTenuti(conn){
+  const tenuti = conn.__renewTenuti || [];
+  conn.__renewTenuti = [];
+  for (const c of tenuti){ try{ await conn.addIceCandidate(c); }catch(_){} }
 }
 async function renewIceNow(conn){
   /* credenziali VERAMENTE nuove: fetchIceServers() restituirebbe quelle in
@@ -3506,15 +3621,17 @@ async function renewIceNow(conn){
   let fresh = null;
   try{ fresh = await loadIceServersNow(); }catch(_){ return; }
   if (pc !== conn || callState !== 'active' || conn.connectionState !== 'connected') return;
-  if (!Array.isArray(fresh) || !fresh.length) return;
+  if (!conPonte(fresh)) return;
   if (typeof conn.setConfiguration !== 'function' || typeof conn.restartIce !== 'function') return;
   if (conn.signalingState !== 'stable') return;        /* mai una trattativa sopra un'altra */
-  try{ conn.setConfiguration({ iceServers: fresh }); }catch(e){ return; }
+  try{ conn.setConfiguration(configConCredenziali(conn, fresh)); }catch(e){ return; }
+  conn.__credAt = iceServersAt || Date.now();
+  conn.__renewTenuti = [];
   conn.restartIce();
   const offer = await conn.createOffer();
   if (pc !== conn) return;
+  trickleRinnovo(conn);
   await conn.setLocalDescription({ type: 'offer', sdp: ensureOpusFec(offer.sdp) });
-  await waitIceComplete(conn);
   if (pc !== conn || conn.signalingState !== 'have-local-offer') return;
   sig({ type: 'call-ice-renew-offer', sdp: conn.localDescription.sdp });
   /* La cicatrice del 12 set 2026: un'offerta applicata e mai risposta lascia
@@ -3535,14 +3652,20 @@ async function onIceRenewOffer(sdp){
   const conn = pc;
   if (!conn || typeof sdp !== 'string') return;
   if (conn.signalingState !== 'stable') return;
+  const arrivata = Date.now();
   try{
     await refreshIceConfigFresh(conn);
     if (pc !== conn) return;
+    /* regola 2 qui sopra: una risposta tardiva troverebbe l'offerta gia'
+       ritirata, e i due lati finirebbero su due sessioni diverse */
+    if (Date.now() - arrivata > ICE_RENEW_RISPOSTA_MAX_MS) return;
     await conn.setRemoteDescription({ type: 'offer', sdp });
     if (pc !== conn) return;
+    await riprovaTenuti(conn);
     const answer = await conn.createAnswer();
+    if (pc !== conn) return;
+    trickleRinnovo(conn);
     await conn.setLocalDescription({ type: 'answer', sdp: ensureOpusFec(answer.sdp) });
-    await waitIceComplete(conn);
     if (pc !== conn) return;
     sig({ type: 'call-ice-renew-answer', sdp: conn.localDescription.sdp });
     await ritocca(conn);
@@ -3554,6 +3677,7 @@ async function onIceRenewAnswer(sdp){
   if (conn.__renewRollback){ clearTimeout(conn.__renewRollback); conn.__renewRollback = null; }
   if (conn.signalingState !== 'have-local-offer') return;
   try{ await conn.setRemoteDescription({ type: 'answer', sdp }); }catch(e){ return; }
+  await riprovaTenuti(conn);
   await ritocca(conn);
 }
 /* ⚠️ IL PUNTO DA CUI DEVE PASSARE CHIUNQUE RINEGOZI UNA CHIAMATA VIVA.
@@ -3573,9 +3697,9 @@ async function refreshIceConfigFresh(conn){
   if (typeof conn.setConfiguration !== 'function') return false;
   let fresh = null;
   try{ fresh = await loadIceServersNow(); }catch(_){ return false; }
-  if (!Array.isArray(fresh) || !fresh.length) return false;
+  if (!conPonte(fresh)) return false;
   if (conn !== pc || conn.connectionState === 'closed') return false;
-  try{ conn.setConfiguration({ iceServers: fresh }); return true; }
+  try{ conn.setConfiguration(configConCredenziali(conn, fresh)); conn.__credAt = iceServersAt || Date.now(); return true; }
   catch(e){ return false; }
 }
 
@@ -3634,6 +3758,57 @@ function normPass(s){ return (s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,
 
 function ab2b64(buf){ const b = new Uint8Array(buf); let s = ''; for (let i=0;i<b.length;i++) s += String.fromCharCode(b[i]); return btoa(s); }
 function b642ab(s){ const bin = atob(s); const b = new Uint8Array(bin.length); for (let i=0;i<bin.length;i++) b[i] = bin.charCodeAt(i); return b; }
+
+/* ---------------- una descrizione che entri nella busta ----------------
+   ⚠️ MISURATO IL 26 SET 2026, su due Logos vere collegate dal ponte: durante
+   una VIDEOCHIAMATA la ripresa non poteva riuscire, mai. La descrizione di una
+   connessione con audio e video e' di ~7.900 caratteri; sigillata e in base64
+   fa 11.271 byte, e il relay accetta al massimo 8.192 byte per busta
+   (MAX_BODY_BYTES nel Worker). La scrittura tornava 400, nessuno lo diceva, e
+   l'altro lato ascoltava una casella vuota per minuti. Senza video la stessa
+   descrizione sta sotto il limite: per questo le prove sulle chiamate audio e
+   sulle conversazioni scritte non se ne erano mai accorte.
+   Compressa (deflate, del browser: niente di nostro) scende a ~1.950 byte, e
+   sigillata a 3.643. Si comprime SOLO quando serve: una descrizione che entra
+   gia' viaggia in chiaro come prima, cosi' una versione piu' vecchia
+   dall'altra parte continua a leggerla. Una compressa, una versione vecchia
+   non la legge — ma quella busta, prima, non partiva proprio.
+   Si comprime PRIMA di sigillare: il relay vede solo la lunghezza, come
+   sempre, e dentro la busta non c'e' niente che l'altro lato non si aspetti. */
+const SDP_IN_CHIARO_MAX = 4000;     /* sigillata in chiaro sta ancora comoda sotto gli 8.192 byte */
+const SDP_ESPANSA_MAX = 65536;      /* una busta che si gonfia oltre non e' una descrizione: e' un attacco */
+async function leggiFlusso(flusso, max){
+  const r = flusso.getReader(), pezzi = [];
+  let n = 0;
+  for (;;){
+    const { done, value } = await r.read();
+    if (done) break;
+    n += value.length;
+    if (n > max){ try{ r.cancel(); }catch(_){} return null; }
+    pezzi.push(value);
+  }
+  const out = new Uint8Array(n);
+  let o = 0;
+  for (const p of pezzi){ out.set(p, o); o += p.length; }
+  return out;
+}
+async function sdpPerBusta(sdp){
+  if (typeof sdp !== 'string' || sdp.length <= SDP_IN_CHIARO_MAX || typeof CompressionStream !== 'function') return { sdp };
+  try{
+    const z = await leggiFlusso(new Blob([sdp]).stream().pipeThrough(new CompressionStream('deflate-raw')), SDP_ESPANSA_MAX);
+    return z ? { z: ab2b64(z) } : { sdp };
+  }catch(_){ return { sdp }; }   /* meglio una busta che il relay forse rifiuta che nessuna busta */
+}
+function bustaHaSdp(msg){ return !!msg && typeof msg === 'object' && (typeof msg.sdp === 'string' || typeof msg.z === 'string'); }
+async function sdpDaBusta(msg){
+  if (!bustaHaSdp(msg)) return null;
+  if (typeof msg.sdp === 'string') return msg.sdp;
+  if (typeof DecompressionStream !== 'function') return null;
+  try{
+    const b = await leggiFlusso(new Blob([b642ab(msg.z)]).stream().pipeThrough(new DecompressionStream('deflate-raw')), SDP_ESPANSA_MAX);
+    return b ? new TextDecoder().decode(b) : null;
+  }catch(_){ return null; }
+}
 
 async function lockKey(pass, salt){
   const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
@@ -3977,7 +4152,7 @@ function wireDataChannel(channel, ownerPc){
        chiavi, non con le impronte (vedi contactDialSecrets). Una versione
        vecchia la ignora e non ne manda una sua: si resta al sigillo di prima. */
     const pub = await myPubB64();
-    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: ICE_RENEW_ATTIVO ? 2 : 0 });
+    const salutoVero = JSON.stringify({ type: 'hello', nick: myNick(), fp, push, addr, rn: repairNonce, pub, ren: ICE_RENEW_ATTIVO ? 3 : 0 });
     const provaSaluto = (ancora) => {
       try{
         if (dc.readyState !== 'open') throw new Error('canale non aperto');
@@ -4365,6 +4540,9 @@ async function newPeerConnection(){
   const config = { iceServers };
   if (cert) config.certificates = [cert];
   const conn = new RTCPeerConnection(config);
+  /* l'eta' della carta del ponte con cui nasce: la cache puo' averla tenuta
+     fino a ICE_REUSE_MS, e il rinnovo deve saperlo (vedi etaLasciapassare) */
+  conn.__credAt = iceServersAt || Date.now();
   /* il numero casuale che questa sessione mettera' nel saluto, per la ripresa:
      nato qui, dove nasce la connessione, cosi' esiste prima di qualunque saluto */
   freshRepairNonce();
@@ -4548,8 +4726,12 @@ async function startRepair(conn){
        scadute proprio mentre la conversazione era in piedi — ed e' la causa
        piu' probabile di tutte quando una chiamata lunga cade da sola, senza
        che la rete sia cambiata. Costa una lettura al relay, che e' la risorsa
-       abbondante; saltarla rende inutile tutto cio' che viene dopo. */
-    await refreshIceConfig(conn);
+       abbondante; saltarla rende inutile tutto cio' che viene dopo.
+       FRESCHE davvero, non quelle tenute da parte (ICE_REUSE_MS, fino a sette
+       minuti): con una carta gia' vecchia di sette minuti la conversazione
+       ripresa ricadrebbe dopo tre. Il relay le tiene comunque due minuti per
+       tutti, quindi chiederle qui non moltiplica niente. */
+    await refreshIceConfigFresh(conn);
     if (pc !== conn) return;
     if (repairBase.offerer){
       /* il tetto conta le OFFERTE, cioe' le scritture: oltre, e' la rete che non c'e' */
@@ -4570,7 +4752,10 @@ async function startRepair(conn){
          incidente: e' una rete che non c'e', e insistere non la fa tornare. */
       conn.__repairTotal = (conn.__repairTotal || 0) + 1;
       if (conn.__repairTotal > REPAIR_MAX_TOTAL){ giveUpOnConnection(conn); return; }
-      if (conn.__repairRounds <= REPAIR_MAX_ROUNDS) await repairAsOfferer(conn, conn.__repairRounds);
+      if (conn.__repairRounds <= REPAIR_MAX_ROUNDS){
+        const esito = await repairAsOfferer(conn, conn.__repairRounds);
+        if (esito === 'rifiutata') conn.__repairRounds--;   /* vedi il rifiuto in repairAsOfferer */
+      }
     } else {
       /* chi risponde non scrive finche' non ha un'offerta in mano: mettersi
          in ascolto non consuma il tetto delle offerte, che appartiene
@@ -4607,6 +4792,7 @@ async function startRepair(conn){
    quest'ultimo caso lo DICE, invece di lasciare una chiamata morta che sembra
    viva. */
 let REPAIR_RETRY_GAP_MS = 3000;   /* `let`: i test lo accorciano */
+let REPAIR_RIFIUTATA_MS = 10000;  /* dopo un'offerta che il relay non ha preso: vedi repairAsOfferer */
 function scheduleNextRepair(conn){
   if (pc !== conn || !repairBase) return;
   if (conn.connectionState === 'connected' || conn.connectionState === 'closed') return;
@@ -4659,9 +4845,21 @@ function giveUpOnConnection(conn){
 /* Ferma la pompa quando ha finito di servire: appena la connessione e'
    tornata su, piu' una tolleranza per gli indirizzi in ritardo; oppure alla
    scadenza del giro. Mai lasciarla orfana — e' la lezione della v3 sul relay. */
+/* ⚠️ MISURATO IL 26 SET 2026 sulle due schede: il primo giro di ogni ripresa
+   non poteva riuscire, e il vuoto durava un giro in piu'. Chi offre parte da
+   'failed' — e' proprio quello che lo fa partire — e questo controllo, alla
+   sua prima occhiata, trovava 'failed' e fermava la pompa nell'istante in cui
+   nasceva: gli indirizzi nuovi non partivano mai, e la risposta arrivava a una
+   connessione che non sapeva dove cercare l'altro. Lo stesso a chi risponde,
+   se l'offerta gli arrivava quando era gia' 'failed'. Si ricominciava al
+   secondo giro, che partiva da 'disconnected' e quindi funzionava.
+   'failed' ferma la pompa solo se ci si arriva DOPO: cioe' se e' il giro
+   stesso a fallire, non lo stato da cui e' partito. */
 function retirePumpWhenSettled(conn, pump, deadline){
+  let ripartita = conn.connectionState !== 'failed';
   const check = () => {
-    if (pc !== conn || conn.connectionState === 'closed' || conn.connectionState === 'failed'){ pump.stop(); return; }
+    if (conn.connectionState !== 'failed') ripartita = true;
+    if (pc !== conn || conn.connectionState === 'closed' || (conn.connectionState === 'failed' && ripartita)){ pump.stop(); return; }
     if (conn.connectionState === 'connected'){ setTimeout(() => pump.stop(), REPAIR_PUMP_GRACE_MS); return; }
     if (Date.now() > deadline){ pump.stop(); return; }
     setTimeout(check, 1000);
@@ -4674,10 +4872,13 @@ async function repairAsOfferer(conn, round){
   const rs = await repairSecFor(round);
   const offerSlot = await repairOfferSlot();
   const answerSlot = await slotId(rs.seed, 'repair-answer');
-  /* un'offerta di un giro precedente rimasta nella casella va tolta prima,
-     o l'altro lato la legge e risponde alla cosa sbagliata; ritirare e'
-     rileggersela — la casella e' a lettura unica */
-  try{ await mailboxGet(offerSlot); }catch(_){}
+  /* Un'offerta di un giro precedente rimasta nella casella va tolta prima, o
+     l'altro lato la legge e risponde alla cosa sbagliata. ⚠️ Rileggerla non la
+     toglie piu' dal 13 set 2026 (le letture non consumano, vedi il gettone):
+     si ritira col gettone con cui la si e' scritta. Due cadute a un minuto
+     l'una dall'altra succedono davvero — misurato il 24 set, 11:35 e 12:36 —
+     e la casella tiene due minuti. */
+  try{ const tok = ownTokens.get(offerSlot); if (tok) await mailboxDelete(offerSlot, tok); }catch(_){}
   if (pc !== conn) return;
   /* un'altra negoziazione e' a meta' (una chiamata che sta partendo): non si
      mette un'offerta sopra un'offerta — si aspetta il prossimo stato */
@@ -4688,15 +4889,42 @@ async function repairAsOfferer(conn, round){
   await conn.setLocalDescription(offer);
   const pump = candidatePump(conn, rs, 'ra', 'rb');
   retirePumpWhenSettled(conn, pump, deadline);
-  await mailboxPutSealed(offerSlot, rs, { kind: 'offer', round, sdp: conn.localDescription.sdp });
+  const partita = await mailboxPutSealed(offerSlot, rs, Object.assign({ kind: 'offer', round }, await sdpPerBusta(conn.localDescription.sdp)));
+  /* ⚠️ MISURATO IL 26 SET 2026: un'offerta che il relay non ha preso non
+     arrivera' mai, e aspettarne la risposta per un minuto non e' innocuo.
+     Con l'offerta applicata e mai consegnata, questo lato cambia il proprio
+     nome ICE e l'altro no: i controlli di QUESTO lato riescono ancora (l'altro
+     riconosce il suo nome vecchio e risponde), quelli dell'altro no. Risultato
+     visto sulle due schede: qui 'connected', di la' «sto riprendendo» — e
+     proprio perche' qui si crede collegato, smette di riprovare. E' il «verde
+     da una parte, bloccato dall'altra» della prova del 25 set. Si torna
+     indietro subito, e il giro dopo ci riprova. */
+  if (!partita){
+    pump.stop();
+    if (pc === conn && conn.signalingState === 'have-local-offer'){
+      try{ await conn.setLocalDescription({ type: 'rollback' }); }catch(_){}
+    }
+    /* ⚠️ MA NON SUBITO DI NUOVO, misurato lo stesso giorno: il relay rifiuta
+       anche per troppe richieste (429, una finestra di un minuto), e tre
+       giri a tre secondi l'uno bruciavano ogni tentativo in otto secondi — la
+       chiamata si chiudeva per un rifiuto che sarebbe passato da solo.
+       Un'offerta che non e' partita non e' un tentativo: startRepair non la
+       conta nei giri (resta nel tetto dell'intera conversazione), e prima di
+       riprovare si aspetta. */
+    await new Promise(r => setTimeout(r, Math.max(0, Math.min(REPAIR_RIFIUTATA_MS, deadline - Date.now()))));
+    return 'rifiutata';
+  }
   while (Date.now() < deadline){
     if (pc !== conn || conn.connectionState === 'closed') return;
     const msg = await mailboxGetSealed(answerSlot, rs);
-    if (msg && typeof msg.sdp === 'string' && bustaFresca(msg) && bustaDelVerso(msg, 'answer')){
+    if (bustaHaSdp(msg) && bustaFresca(msg) && bustaDelVerso(msg, 'answer')){
+      const sdp = await sdpDaBusta(msg);
       if (pc !== conn) return;
-      await conn.setRemoteDescription({ type: 'answer', sdp: msg.sdp });
-      await pump.remoteReady();
-      return;
+      if (sdp){
+        await conn.setRemoteDescription({ type: 'answer', sdp });
+        await pump.remoteReady();
+        return;
+      }
     }
     await new Promise(r => setTimeout(r, pollGap(started, 1200)));
   }
@@ -4728,19 +4956,29 @@ async function repairAsAnswerer(conn){
       for (let r = 1; r <= REPAIR_MAX_ROUNDS && !msg; r++){
         const cand = await repairSecFor(r);
         const got = await openFrom(cand.key, env);
-        if (got && typeof got.sdp === 'string' && got.round === r && bustaFresca(got) && bustaDelVerso(got, 'offer')){ msg = got; rs = cand; }
+        if (bustaHaSdp(got) && got.round === r && bustaFresca(got) && bustaDelVerso(got, 'offer')){ msg = got; rs = cand; }
       }
-      if (msg){
+      /* Un'offerta gia' usata non si usa due volte: la lettura non la toglie
+         (vedi il gettone), e applicare la descrizione di un incidente chiuso
+         sopra una connessione viva la rompe. Si ricorda il suo gettone e la
+         si toglie col gettone stesso, che chi l'ha aperta possiede. */
+      if (msg && TOKEN_RE.test(msg.tok || '')){
+        conn.__offerteUsate = conn.__offerteUsate || new Set();
+        if (conn.__offerteUsate.has(msg.tok)) msg = null;
+        else { conn.__offerteUsate.add(msg.tok); try{ await mailboxDelete(offerSlot, msg.tok); }catch(_){} }
+      }
+      const sdp = msg ? await sdpDaBusta(msg) : null;
+      if (sdp){
         if (pc !== conn) return;
         conn.__repairRounds = Math.max(mine, msg.round);
-        await conn.setRemoteDescription({ type: 'offer', sdp: msg.sdp });
+        await conn.setRemoteDescription({ type: 'offer', sdp });
         const pump = candidatePump(conn, rs, 'rb', 'ra');
         retirePumpWhenSettled(conn, pump, deadline);
         const answer = await conn.createAnswer();
         if (pc !== conn) return;
         await conn.setLocalDescription(answer);
         await pump.remoteReady();
-        await mailboxPutSealed(await slotId(rs.seed, 'repair-answer'), rs, { kind: 'answer', sdp: conn.localDescription.sdp });
+        await mailboxPutSealed(await slotId(rs.seed, 'repair-answer'), rs, Object.assign({ kind: 'answer' }, await sdpPerBusta(conn.localDescription.sdp)));
         return;
       }
     }
@@ -8813,7 +9051,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.59';
+const APP_VERSION = 'logos-modifica-4.60';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -11114,8 +11352,13 @@ function onDcMessage(ev){
          capace vorrebbe dire offrirle rinnovi che ignora — o peggio, rispondere
          a offerte sue che poi lei stessa scarta alla risposta, lasciando i due
          lati con due trattative diverse. Con `=== 2` una 4.57 e una versione
-         nuova non rinnovano fra loro, e restano esattamente come oggi. */
-      peerCanRenew = (msg.ren === 2);
+         nuova non rinnovano fra loro, e restano esattamente come oggi.
+         ⚠️ E 3, non 2, dal 26 set 2026: la 4.58 dichiarava 2 con un rinnovo
+         che non poteva partire (setConfiguration rifiutato) e che, partito,
+         avrebbe mandato descrizioni senza indirizzi. Il rinnovo che funziona
+         e' quello con gli indirizzi sul canale (`call-ice-renew-cand`), e si
+         fa solo fra chi lo sa fare. */
+      peerCanRenew = (msg.ren === 3);
       if (peerNick){
         paintConnDot();
         $('peerNameLbl').textContent = peerNick;
@@ -11698,6 +11941,8 @@ function handleCallSignal(msg){
      sopra `scheduleIceRenewal`. */
   } else if (msg.type === 'call-ice-renew-offer'){ onIceRenewOffer(msg.sdp);
   } else if (msg.type === 'call-ice-renew-answer'){ onIceRenewAnswer(msg.sdp);
+  } else if (msg.type === 'call-ice-renew-cand'){ onIceRenewCand(msg.c);
+  } else if (msg.type === 'call-ice-renew-ask'){ onIceRenewAsk();
   }
 }
 $('btnAcceptCall').addEventListener('click', async () => {

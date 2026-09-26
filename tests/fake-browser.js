@@ -236,7 +236,22 @@ function buildSandbox(options = {}){
     /* enough of a peer connection to be created and inspected; the tests never
        carry a real handshake, they ask the app what it *thinks* about one */
     RTCPeerConnection: class {
-      constructor(){ this.connectionState = 'new'; this.signalingState = 'stable'; this.iceConnectionState = 'new'; }
+      constructor(config){ this.connectionState = 'new'; this.signalingState = 'stable'; this.iceConnectionState = 'new'; this.__config = Object.assign({}, config || {}); }
+      /* ⚠️ QUINTA BUGIA DEL BANCO, trovata il 26 set 2026 su due Logos vere:
+         `setConfiguration` qui non esisteva, e nei finti dei test accettava
+         qualunque cosa. Chrome invece sostituisce la configurazione INTERA e
+         rifiuta quella che toglie il certificato con cui la connessione e'
+         nata. Cosi' la suite era verde mentre, nel browser, le credenziali
+         nuove del ponte non entravano mai. Adesso rifiuta come Chrome. */
+      getConfiguration(){ return Object.assign({}, this.__config); }
+      setConfiguration(c){
+        const prima = this.__config.certificates || [], dopo = (c && c.certificates) || [];
+        if (prima.length !== dopo.length || prima.some((x, i) => x !== dopo[i])){
+          const e = new Error('Attempted to modify the PeerConnection\'s configuration in an unsupported way.');
+          e.name = 'InvalidModificationError'; throw e;
+        }
+        this.__config = Object.assign({}, c);
+      }
       createDataChannel(){ return { readyState: 'connecting', send(){}, close(){}, addEventListener(){} }; }
       createOffer(){ return Promise.resolve({ type: 'offer', sdp: 'v=0\r\n' }); }
       createAnswer(){ return Promise.resolve({ type: 'answer', sdp: 'v=0\r\n' }); }
@@ -286,6 +301,10 @@ function buildSandbox(options = {}){
        runs inside this sandbox, so it needs a Blob that URL recognises as
        one — until media persistence needed to test that path end to end. */
     Blob: globalThis.Blob,
+    /* quelle vere di Node, che sono le stesse del browser: la ripresa comprime
+       la descrizione di una videochiamata, o il relay la rifiuta (26 set 2026) */
+    CompressionStream: globalThis.CompressionStream,
+    DecompressionStream: globalThis.DecompressionStream,
     File: globalThis.File,
     FileReader: class { readAsDataURL(){} },
     URL: globalThis.URL,

@@ -164,6 +164,20 @@ succeed: the call died and never came back. `refreshIceConfig` fixes that
 half — fresh credentials before every repair — and it is safe because it
 only ever runs on a connection that has already failed.
 
+⚠️ **Until 26 Sep 2026 that fix had never done anything, in Chrome or on
+Android.** `setConfiguration` replaces the *whole* configuration, and the one
+passed was `{ iceServers }` alone — i.e. "drop the certificate this
+connection was born with" — which Chrome refuses with
+`InvalidModificationError`. The catch swallowed it. Every path now goes
+through `configConCredenziali` (the live configuration, with only
+`iceServers` changed), and only credentials that contain a TURN server are
+applied (`conPonte`): the STUN-only fallback of a failed fetch, applied to a
+connection living on the bridge, removed the bridge mid-repair. The fakes in
+the tests now refuse like Chrome does. Measured on two real Logos wired
+through the bridge in the browser pane (method in the comments): a bridge
+connection dies **~11.5 minutes after its credentials were issued**, every
+time, not at 10.
+
 **The repair now actually retries** (24 Sep 2026), and until it did, none of
 the above mattered. `REPAIR_MAX_ROUNDS` says three; exactly **one** was ever
 spent. `startRepair` only ever ran from `onConnectionStateChange` — from a
@@ -187,20 +201,45 @@ What does **not** reset is `REPAIR_MAX_TOTAL`, because every offer is a relay
 *write* and writes are the scarce quota; past that it is not an incident, it
 is a network that is not there, and insisting does not bring it back.
 
-**Renewing the pass in flight exists in the code and is SWITCHED OFF**
-(`ICE_RENEW_ATTIVO = false`, 25 Sep 2026). Read the comment above it before
-turning it back on. The first time it really ran on two devices, the call
-froze at 10:46 and never came back — one side green, the other stuck on
-«sto riprendendo» — which is worse than the repair alone, whose gaps always
-end. Switched off, it neither offers nor announces itself in the `hello`
-(`ren: 0`), so no other version tries it with this one; the tests switch it on
-to keep watching the code that remains. The leading suspicion, **not
-measured**: the offerer rolls back after `ICE_RENEW_ROLLBACK_MS` (8 s) while
-the answerer is still fetching fresh credentials and gathering (up to ~21 s),
-so a late answer is discarded and the two sides end up on different ICE
-sessions. Whoever turns it on measures that first, on both sides, then makes
-the wait longer than the answerer's worst case and stops throwing late answers
-away — then a twenty-minute two-network call.
+**Four defects in the repair, all measured on 26 Sep 2026** on two Logos
+wired through the bridge, with a phase log on both sides:
+- in a **video** call the repair offer, sealed, is ~11,300 bytes and the relay
+  takes 8,192 (`MAX_BODY_BYTES`): the `PUT` answered 400, nobody said so, and
+  a video call could never be repaired. The description now travels
+  compressed when large (`sdpPerBusta`/`sdpDaBusta`, deflate from the
+  browser, capped on expansion) — plain when small, so older versions still
+  read it;
+- an offer the relay refused left its side having changed its ICE ufrag
+  while the other had not: that side's checks still succeeded, so it showed
+  **connected** while the other stayed on «sto riprendendo», and stopped
+  retrying. This is the «one green, one stuck» of the 25 Sep test — it was
+  the repair, not the renewal. A refused offer now rolls back at once, does
+  not count as a round, and waits `REPAIR_RIFIUTATA_MS` before retrying (a
+  429 window must not burn three rounds in eight seconds);
+- `retirePumpWhenSettled` stopped the candidate pump the instant it was born,
+  because the offerer always starts from `failed`: round one could never
+  succeed. `failed` now stops it only if reached *after* the round started;
+- reads no longer consume a mailbox (the token), so a second drop within two
+  minutes could re-read the previous incident's offer. The answerer deletes
+  it with its token and never accepts a token twice.
+
+**Renewing the pass in flight is ON again** (`ICE_RENEW_ATTIVO = true`,
+`ren: 3`, 26 Sep 2026). Measured before turning it on: in 4.58 it had never
+left the ground (the `setConfiguration` refusal above), and once it did, its
+descriptions carried **no candidates** — `waitIceComplete` returns in 0 ms
+after `restartIce` because the gathering state is still the *old* one — so
+one side stayed on its old allocation and died on schedule. Now: candidates
+travel one by one over the data channel (`call-ice-renew-cand`, held if they
+arrive before the description); the answerer gives up *before applying* an
+offer it could only answer late (`ICE_RENEW_RISPOSTA_MAX_MS` 6 s, well under
+the offerer's 15 s rollback — a test holds the margin), which makes the two
+sides ending on different ICE sessions impossible; and it renews on the
+**age of the pass** (`conn.__credAt`, `ICE_RENEW_ETA_MS` 4 min, checked every
+30 s), not on a fixed clock — the non-leading side asks
+(`call-ice-renew-ask`) when its own pass is the old one. Result on the bench:
+**39-minute video call on the bridge, 10 renewals, 0 gaps, 0 drops, 0 repairs,
+2 relay writes in total.** Still needs a long call on two real phones on two
+networks before it goes to everyone.
 
 What follows describes how it is built. Read the comment above
 `scheduleIceRenewal` before touching it: the
@@ -212,7 +251,7 @@ in `have-local-offer`, a window in which **a new call cannot be placed at
 all** — one side rings, the other receives nothing. Hence the three
 conditions, all load-bearing: it runs **only while `callState === 'active'`**
 (inside a call there is no new call to block), only toward a peer that
-announced `ren: 2` in its `hello`, and only on a `relay` route — and only
+announced `ren: 3` in its `hello`, and only on a `relay` route — and only
 **one** side offers, the same `repairBase.offerer` that leads the repair. It
 is armed and disarmed by `startCallTimer`/`stopCallTimer`, the one place a
 call really begins and ends, so it cannot outlive its call. Do not instead
@@ -231,8 +270,9 @@ and ignored each other. The tests were green because they called
 `onIceRenewOffer` by hand, skipping the door. **Test through `onDcMessage`,
 with two apps wired together** — a function that is correct and never
 reached is the same as no function. The messages are now `call-ice-renew-…`,
-and the `hello` says `ren: 2` when switched on, because a 4.57 says `ren: 1`
-and cannot answer.
+and the `hello` says `ren: 3` when switched on, because a 4.57 says `ren: 1`
+and cannot answer, and a 4.58 says `ren: 2` with a renewal that sends no
+candidates.
 
 ⚠️ **In the test copy, «una parte dell'app è ancora vecchia» used to be a
 false alarm, always.** `tools/prova.js` renames the service worker's cache to
@@ -289,8 +329,12 @@ ever feels intrusive, the answer is to take the copy down, not to soften it.
 node --test
 ```
 
-Node 22. Node finds the files itself. 544 tests, 84 suites, about three
-and a half minutes, and it exits on its own (measured 25 Sep 2026). They also run on every push. (That count is measured, and goes stale —
+Node 22 — check `node --version` first: a shell that picks up Node 18 fails
+dozens of tests on a missing `crypto` global, which looks like a regression
+and is not one. Node finds the files itself. 561 tests, 84 suites, about
+four minutes, and it exits on its own (measured 26 Sep 2026). Do not run it
+while a browser is encoding video on the same machine: under that load it
+has stalled twice, and the same suite finished clean with the machine idle. They also run on every push. (That count is measured, and goes stale —
 rule 6 applies to this line too: re-run before quoting it.)
 
 **No flags, and two flags that must not come back — both learned the hard way.**

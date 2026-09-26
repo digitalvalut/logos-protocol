@@ -67,6 +67,10 @@ const DA_COPIARE = [
   /* le icone: la suite controlla che la cache offline citi solo file che
      esistono davvero, e senza queste quel controllo e' rosso comunque */
   'modifica-icon-192.png', 'modifica-icon-512.png', 'modifica-apple-touch-icon.png',
+  /* ⚠️ mancava, trovato il 26 set 2026: checks.test.js la legge, e senza di
+     lei la controprova era rossa e il giro si annullava prima di cominciare —
+     cioe' questo grilletto non sparava piu' da quando esiste quel controllo */
+  'privacy.html',
 ];
 const CARTELLE = ['tests', 'turn-worker', 'tools'];
 
