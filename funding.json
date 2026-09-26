@@ -1,0 +1,65 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.1.0",
+  "entity": {
+    "type": "organisation",
+    "role": "owner",
+    "name": "Associazione di Promozione Sociale DigitalValut (ETS)",
+    "email": "burbeng78@gmail.com",
+    "phone": "",
+    "description": "An Italian registered non-profit (Associazione di Promozione Sociale, Ente del Terzo Settore, C.F. 90036980846), run by two volunteers with no revenue. It develops and publishes Logos, a free and open source end-to-end encrypted messenger.",
+    "webpageUrl": {
+      "url": "https://digitalvalut.github.io/logos-protocol/",
+      "wellKnown": "https://digitalvalut.github.io/logos-protocol/.well-known/funding-manifest-urls"
+    }
+  },
+  "projects": [
+    {
+      "guid": "logos",
+      "name": "DigitalValut Logos",
+      "description": "An end-to-end encrypted messenger with no account, no phone number and no server that stores messages. Two devices negotiate a WebRTC connection and talk directly; a small relay only helps them find each other. It runs in any browser and as an Android app, in 13 languages, with text, voice and video calls and file transfer. The whole application is one HTML file with zero third-party dependencies; the signalling protocol is modelled in Tamarin and ProVerif, and the Android package is reproducible byte for byte.",
+      "webpageUrl": {
+        "url": "https://digitalvalut.github.io/logos-protocol/",
+        "wellKnown": "https://digitalvalut.github.io/logos-protocol/.well-known/funding-manifest-urls"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/digitalvalut/logos-protocol",
+        "wellKnown": ""
+      },
+      "licenses": ["spdx:Apache-2.0"],
+      "tags": ["privacy", "encryption", "messaging", "webrtc", "peer-to-peer", "security", "censorship-resistance", "android"]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "bank-transfer",
+        "type": "bank",
+        "address": "",
+        "description": "Bank transfer to the association's account. Details are sent on request by email."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "security-and-independence",
+        "status": "active",
+        "name": "Independent security review and relay independence",
+        "description": "One-time support for an independent security review of the client and relay, testing devices we lack (Logos has never been tested on an iPhone), and moving the signalling relay off the free hosting tier, whose daily write limit is today the main availability weakness.",
+        "amount": 25000,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": ["bank-transfer"]
+      }
+    ],
+    "history": [
+      {
+        "year": 2026,
+        "income": 0,
+        "expenses": 0,
+        "taxes": 0,
+        "currency": "EUR",
+        "description": "Built entirely by volunteers since August 2026, without any funding."
+      }
+    ]
+  }
+}
