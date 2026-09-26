@@ -1,0 +1,5 @@
+Video calls no longer stall, even when the network forces them through the relay bridge.
+
+When two phones cannot reach each other directly — different carriers, office or hotel networks — the call goes through a bridge that uses a time-limited pass. Logos now renews it on its own while you talk, without a second of silence. Tested on two phones on two networks: thirty minutes of video call, no stalls.
+
+And if the network really drops, automatic recovery now works in video calls too.

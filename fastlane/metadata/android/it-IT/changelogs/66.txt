@@ -1,0 +1,5 @@
+Le videochiamate non si interrompono più, anche quando la rete le costringe a passare dal ponte.
+
+Quando i due telefoni non riescono a parlarsi direttamente — operatori diversi, reti d'ufficio o d'albergo — la chiamata passa da un ponte con un lasciapassare a tempo. Adesso Logos lo rinnova da solo mentre parlate. Provata su due telefoni su due reti: trenta minuti di videochiamata, nessun blocco.
+
+Se la rete cade davvero, la ripresa ora funziona anche in video.
