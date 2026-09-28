@@ -47,7 +47,33 @@ function loadApp(options){
   /* la pulizia d'avvio non deve lasciare la sandbox muta per il test: i timer
      si riaprono, e si chiudono per sempre solo con stop() — vedi fake-browser */
   sandbox.__resumeTimers();
-  return { sandbox, run, stop: () => sandbox.__stopAllTimers() };
+  const app = { sandbox, run, stop: () => { app.stopped = true; sandbox.__stopAllTimers(); }, stopped: false };
+  appsOfThisTest.push(app);
+  return app;
+}
+
+/* ⚠️ Nessuna app sopravvive al suo test, nemmeno a uno rosso (28 set 2026).
+   Ogni test chiama `stop()` alla fine — ma un test che fallisce esce PRIMA
+   di arrivarci, e la sua app resta accesa con i suoi giri che si riarmano da
+   soli (il controllo della casella, ogni 20 s). Il file allora non termina
+   mai, e la suite non dice «rosso»: resta appesa. Misurato: un test ballerino
+   fallito ha tenuto fermo `node --test` per piu' di dieci minuti, con un solo
+   timer vivo, `giro` di startInboxPolling. Qui si spegne tutto cio' che il
+   test ha acceso, qualunque sia il suo esito. */
+const appsOfThisTest = [];
+test.afterEach(() => {
+  for (const app of appsOfThisTest.splice(0)) if (!app.stopped) app.stop();
+});
+
+/* Aspettare che una cosa succeda, non un tempo fisso: su una macchina carica
+   30 ms non bastano, e un test che dipende dal carico e' un test ballerino. */
+async function finche(app, expr, ms = 3000){
+  const t0 = Date.now();
+  while (Date.now() - t0 < ms){
+    if (app.run(expr)) return true;
+    await new Promise(r => setTimeout(r, 10));
+  }
+  return !!app.run(expr);
 }
 
 test('the whole app loads without throwing', () => {
@@ -6353,14 +6379,16 @@ test.describe('la ripresa quando la rete cambia', () => {
       window.__ch = { binaryType: '', readyState: 'open', send: function(s){ window.__sent.push(JSON.parse(s)); }, close(){}, addEventListener(){} };
       wireDataChannel(__ch);
     `);
-    /* il saluto in USCITA: e' quello che l altro lato usera' per fare lo stesso conto */
-    await app.run('new Promise(r => setTimeout(r, 30))');
+    /* il saluto in USCITA: e' quello che l altro lato usera' per fare lo stesso conto.
+       Si aspetta che parta, non 30 ms fissi: su una macchina carica il 28 set
+       2026 non bastavano, e il test cadeva con l'app perfettamente sana. */
+    await finche(app, "window.__sent.some(function(m){ return m.type === 'hello'; })");
     const hello = app.run('window.__sent').find(m => m.type === 'hello');
     assert.ok(hello, 'un canale gia aperto deve produrre il saluto');
     assert.strictEqual(hello.rn, 'abcdefabcdefabcdefabcdefabcdefab', 'senza il numero nel saluto l altro lato non puo armare la ripresa');
     /* il saluto in ARRIVO dall altro lato */
     app.run("onDcMessage({ data: JSON.stringify({ type: 'hello', nick: 'B', fp: 'bbbb', rn: '00000000000000000000000000000000' }) })");
-    await app.run('new Promise(r => setTimeout(r, 30))');
+    await finche(app, 'repairArmed()');
     assert.strictEqual(app.run('repairArmed()'), true, 'il saluto dell altro deve armare la ripresa');
     app.stop();
   });

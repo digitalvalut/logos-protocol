@@ -335,7 +335,15 @@ and is not one. Node finds the files itself. 570 tests, 85 suites, about
 four minutes, and it exits on its own (measured 26 Sep 2026). Do not run it
 while a browser is encoding video on the same machine: under that load it
 has stalled twice, and the same suite finished clean with the machine idle. They also run on every push. (That count is measured, and goes stale —
-rule 6 applies to this line too: re-run before quoting it.)
+rule 6 applies to this line too: re-run before quoting it.) Since 28 Sep 2026 the
+push checks it for you: `tools/controlla-numeri.js` compares the test count in this
+line and in the README with the run that just happened, and stays red until they
+agree. Add a test, update both numbers in the same commit.
+
+Line coverage — how much of `modifica.js` the suite actually executes — is measured
+with `node tools/copertura-righe.js` (85.7% on 28 Sep 2026). Not with
+`--experimental-test-coverage`: the app runs inside a vm sandbox, and Node's built-in
+report prints an empty table with "100%" for it.
 
 **No flags, and two flags that must not come back — both learned the hard way.**
 

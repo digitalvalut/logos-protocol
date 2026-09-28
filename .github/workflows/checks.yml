@@ -51,7 +51,20 @@ jobs:
         # amazzati tutti e due. Il risultato era `fail 0` ma `cancelled 2`,
         # cioe' rosso senza un solo test sbagliato — e per due giorni
         # l'operatore ha ricevuto email di fallimento per una suite sana.
-        run: node --test
+        #
+        # Due destinazioni per lo stesso resoconto: una a schermo, come prima,
+        # e una su file, che il passo dopo usa per controllare i numeri.
+        run: >-
+          node --test
+          --test-reporter=tap --test-reporter-destination=stdout
+          --test-reporter=tap --test-reporter-destination=suite.tap
+
+      - name: I numeri scritti nei documenti sono quelli veri
+        # Il 28 set 2026 il README diceva ancora 473 test, un numero del
+        # 14 set, mentre erano 570: l'ha visto un lettore esterno prima di
+        # noi. Da qui in avanti un test in piu' tiene rossa la pubblicazione
+        # finche' README e CLAUDE.md non dicono il numero giusto.
+        run: node tools/controlla-numeri.js suite.tap
 
       - name: Il file unico si costruisce ancora
         # also the guard that refuses to build while the two version
