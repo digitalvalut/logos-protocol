@@ -1,6 +1,6 @@
 # La prova formale del protocollo: si lancia A MANO (Actions -> prova formale),
 # non a ogni push — dura fino a un'ora e non ha niente da dire su un commit
-# qualunque. Vedi prova-formale/README.md. Tamarin, Maude e ProVerif vengono
+# qualunque. Vedi prova-formale/README.md. Tamarin, Maude, ProVerif e TLA+ vengono
 # dai loro rilasci ufficiali (GitHub e INRIA); niente di tutto questo entra
 # nell'app.
 name: prova formale
@@ -97,3 +97,20 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with: { name: risultati-tamarin, path: risultati }
+  tla:
+    # Il tempo, non l'avversario: il rinnovo del lasciapassare e la ripresa,
+    # insieme. Il modello della 4.61 DEVE fallire, quello della 4.62 DEVE
+    # passare (prova-formale/tla/controlla.sh). Pochi secondi in tutto.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: TLA+ Tools v1.7.4 (rilascio ufficiale, impronta controllata)
+        run: |
+          curl -sSLO https://github.com/tlaplus/tlaplus/releases/download/v1.7.4/tla2tools.jar
+          echo "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88  tla2tools.jar" | sha256sum -c
+      - name: ogni modello contro l'esito ATTESO
+        run: prova-formale/tla/controlla.sh "$PWD/tla2tools.jar"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with: { name: risultati-tla, path: prova-formale/tla/*.log }

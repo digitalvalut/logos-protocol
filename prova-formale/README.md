@@ -9,6 +9,10 @@ cui quel protocollo è stato passato a due strumenti di verifica formale:
 - **Tamarin** (`tamarin/*.spthy`) — lo strumento usato per analizzare 5G,
   WPA2, Signal
 - **ProVerif** (`proverif/*.pv`) — lo strumento usato per TLS 1.3 e Signal
+- **TLA+** (`tla/*.tla`, dal 28 settembre 2026) — lo strumento che Amazon e
+  Microsoft usano per i sistemi dove conta l'ordine degli eventi. Qui non
+  guarda l'avversario ma il **tempo**: il rinnovo del lasciapassare e la
+  ripresa delle chiamate, insieme. Vedi [`tla/README.md`](tla/README.md).
 
 Un test controlla che, *in quella situazione*, l'app faccia la cosa giusta.
 Questi strumenti ragionano su **tutte** le sequenze possibili di messaggi che
@@ -30,6 +34,8 @@ proprietà vale sempre, o mostrano la sequenza che la rompe.
 | chiamata all'indirizzo | segretezza in avanti | ❌ falsa dopo la rivelazione della privata — **per costruzione**, dichiarato nel codice | ProVerif |
 | contatti in rubrica, fino alla 4.37 | segreta contro chi conosce le impronte | ❌ **attacco trovato** → riparato nella 4.38 | Tamarin |
 | contatti in rubrica, dalla 4.38 | segretezza, autenticazione, offerta davvero da A — con le impronte pubbliche | ✅ dimostrata ×4 | ProVerif |
+| rinnovo + ripresa, fino alla 4.61 | mai arrendersi senza aver offerto; mai due sessioni diverse | ❌ **due controesempi** → corretti nella 4.62 | TLA+ |
+| rinnovo + ripresa, dalla 4.62 | le stesse, più il tetto delle scritture | ✅ verificata (fino all'orizzonte del modello) | TLA+ |
 
 Tre cose sono uscite da questo lavoro e sono state corrette nella 4.38:
 la chiave del ricollegamento fra contatti (derivava dalle impronte, che ogni

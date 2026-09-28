@@ -201,7 +201,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-570 automated tests (measured 28 Sep 2026), each verified by deliberately reintroducing
+572 automated tests (measured 28 Sep 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root
@@ -223,7 +223,10 @@ GitHub Actions workflow to re-run them are in [`prova-formale/`](prova-formale/)
 address handshake is proven secret and authenticated against a relay adversary; the
 analysis also found the defects fixed in 4.38 (see the folder). The models were written
 by the project and have **not** been independently reviewed — that is the next step, and
-the reason they are published. If you are that reviewer, start from
+the reason they are published. Since 28 Sep 2026 a **TLA+** model covers what those tools
+cannot see — timing: how a live call renews its TURN credentials and recovers from a
+dropped network, together. It found two defects in 4.61, fixed in 4.62
+([`prova-formale/tla/`](prova-formale/tla/)). If you are that reviewer, start from
 [`prova-formale/PER-IL-REVISORE.md`](prova-formale/PER-IL-REVISORE.md): every promise
 Logos makes, mapped to the code, the lemma, the test, and how to check it yourself.
 

@@ -3517,7 +3517,15 @@ let ICE_RENEW_MS = 30 * 1000;          /* poi ogni mezzo minuto si guarda l'eta'
    relay puo' consegnarne di vecchie fino a due minuti. Quattro piu' due fa
    sei: resta piu' di un giro di margine prima degli undici. */
 let ICE_RENEW_ETA_MS = 4 * 60 * 1000;
-let ICE_RENEW_ROLLBACK_MS = 15000;     /* chi offre: oltre, si ritira */
+/* ⚠️ 30 s, non piu' 15 (28 set 2026). Il margine fra i due numeri deve coprire
+   DUE viaggi sul canale dati — l'offerta che va e la risposta che torna — piu'
+   il tempo di chi risponde. Con 15 il modello TLA+ del rinnovo (tenuto con le
+   correzioni che ha fatto nascere) trovava il caso: offerta in ritardo di 4 s,
+   credenziali di chi risponde in 6 s (il limite, quindi accettata), risposta in
+   5 s — arrivava nel secondo esatto del ritiro, e i due lati finivano su due
+   sessioni diverse. Il ritiro piu' lungo non costa niente: il rinnovo gira solo
+   dentro una chiamata attiva, dove una chiamata nuova non puo' comunque partire. */
+let ICE_RENEW_ROLLBACK_MS = 30000;     /* chi offre: oltre, si ritira */
 let ICE_RENEW_RISPOSTA_MAX_MS = 6000;  /* chi risponde: oltre, lascia perdere. DEVE restare sotto il ritiro */
 const ICE_RENEW_CAND_MAX = 40;         /* indirizzi arrivati prima della descrizione: un tetto, da un altro telefono */
 let iceRenewTimer = null;
@@ -4755,8 +4763,24 @@ async function startRepair(conn){
       conn.__repairTotal = (conn.__repairTotal || 0) + 1;
       if (conn.__repairTotal > REPAIR_MAX_TOTAL){ giveUpOnConnection(conn); return; }
       if (conn.__repairRounds <= REPAIR_MAX_ROUNDS){
+        /* ⚠️ UN RINNOVO A META' SU UNA CONNESSIONE CADUTA NON SERVE PIU' (28 set
+           2026). Se la rete cade mentre il rinnovo aspetta la sua risposta, la
+           connessione resta in 'have-local-offer' fino al ritiro — e ogni giro
+           qui sotto la trovava «occupata», non offriva niente, ma contava lo
+           stesso: tre giri in sette-nove secondi e la chiamata veniva chiusa con
+           ZERO tentativi veri. Trovato dal modello TLA+ del rinnovo e della
+           ripresa, confermato sul codice. La risposta a quel rinnovo non puo'
+           piu' arrivare (viaggiava sul canale dati, morto con la rete): lo si
+           ritira adesso, e la ripresa parte subito. */
+        if (conn.__renewRollback && conn.signalingState === 'have-local-offer'){
+          clearTimeout(conn.__renewRollback); conn.__renewRollback = null;
+          try{ await conn.setLocalDescription({ type: 'rollback' }); }catch(_){}
+          if (pc !== conn) return;
+        }
         const esito = await repairAsOfferer(conn, conn.__repairRounds);
-        if (esito === 'rifiutata') conn.__repairRounds--;   /* vedi il rifiuto in repairAsOfferer */
+        /* un giro che non ha potuto offrire niente — rifiutato dal relay, o una
+           trattativa gia' in corso — non e' un tentativo: non consuma la dote */
+        if (esito === 'rifiutata' || esito === 'occupata') conn.__repairRounds--;
       }
     } else {
       /* chi risponde non scrive finche' non ha un'offerta in mano: mettersi
@@ -4884,7 +4908,7 @@ async function repairAsOfferer(conn, round){
   if (pc !== conn) return;
   /* un'altra negoziazione e' a meta' (una chiamata che sta partendo): non si
      mette un'offerta sopra un'offerta — si aspetta il prossimo stato */
-  if (conn.signalingState && conn.signalingState !== 'stable') return;
+  if (conn.signalingState && conn.signalingState !== 'stable') return 'occupata';
   if (typeof conn.restartIce === 'function') conn.restartIce();
   const offer = await conn.createOffer(typeof conn.restartIce === 'function' ? undefined : { iceRestart: true });
   if (pc !== conn) return;
@@ -9113,7 +9137,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.61';
+const APP_VERSION = 'logos-modifica-4.62';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell

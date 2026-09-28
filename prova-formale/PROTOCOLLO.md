@@ -213,6 +213,13 @@ misurate su due Logos vere collegate dal ponte:
   (`call-ice-renew-*`) viaggia tutto sul canale dati, dentro DTLS: non tocca
   il relay e resta fuori da questo modello, come ogni altro messaggio della
   conversazione (§7).
+- **Rinnovo e ripresa nel TEMPO** (28 set 2026): quello che i modelli
+  crittografici non vedono — l'ordine e la durata degli eventi — è in
+  `tla/` (TLA+). Ha trovato due difetti della 4.61, corretti nella 4.62:
+  un rinnovo a metà quando la rete cade faceva contare giri di ripresa che
+  non offrivano niente (resa senza tentativi), e il ritiro del rinnovo (15 s)
+  non lasciava margine per il viaggio dei messaggi (ora 30 s). Dalla 4.62 il
+  giro di ripresa ritira il rinnovo pendente, e un giro «occupato» non conta.
 
 ## 6. Cosa è emerso scrivendo questo, e cosa ne è stato
 
@@ -313,7 +320,9 @@ Actions, a mano) o in locale con gli stessi comandi.
 | C contatto (fino alla 4.37) | C2 segreta con impronte note | ❌ **attacco trovato** (7) → §6.1, riparato nella 4.38 | Tamarin |
 | C contatto (fino alla 4.37) | C3 offerta autentica | ✅ dimostrata (33), dopo l'etichetta di direzione | Tamarin |
 | **C contatto v45** (4.38, chiavi) | segretezza offerta e risposta, autenticazione iniettiva, offerta da A — **con le impronte pubbliche** | ✅ **true ×4** (14 set) | ProVerif (`proverif/logos-contatto-v45.pv`); Tamarin `logos-contatto-v45.spthy` non termina (equazione DH) |
-| D ripresa | — | non ancora modellato | — |
+| D ripresa (segretezza) | — | non ancora modellato | — |
+| D ripresa + rinnovo (tempo), fino alla 4.61 | mai arrendersi senza offrire; mai due sessioni diverse | ❌ **due controesempi** (28 set) → corretti nella 4.62 | TLA+ (`tla/RinnovoERipresa.tla`) |
+| D ripresa + rinnovo (tempo), dalla 4.62 | le stesse, più il tetto delle scritture | ✅ verificata fino all'orizzonte del modello | TLA+ (`tla/RinnovoERipresaCorretto.tla`) |
 
 **Cosa ha insegnato il processo, oltre ai risultati:**
 - La prima stesura senza etichetta `'offer'/'answer'` dentro la busta è stata

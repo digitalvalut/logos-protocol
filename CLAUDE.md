@@ -137,6 +137,19 @@ declared limit or an expected attack trace: if it ever passes, something moved.
 An unfixed defect a model finds goes to `memory/` first (rule 5); the model
 is published with the fix.
 
+**Timing has its own model** (TLA+, `prova-formale/tla/`, 28 Sep 2026). Tamarin
+and ProVerif check what an attacker learns; they cannot see *when* things happen.
+The TLA+ model puts the in-call credential renewal and the repair together, with
+the app's real timeouts, and found two defects in 4.61: a renewal left pending
+when the network dropped made every repair round find the connection busy, write
+nothing, and still count — three rounds and the call closed with zero attempts;
+and the renewal's 15 s rollback left no room for the messages' travel time. 4.62:
+`startRepair` withdraws a pending renewal first, a round that could not offer
+returns `'occupata'` and does not count, and `ICE_RENEW_ROLLBACK_MS` is 30 s (a
+test keeps at least 20 s over `ICE_RENEW_RISPOSTA_MAX_MS`). Change the renewal or
+the repair, change `RinnovoERipresaCorretto.tla` in the same commit, and run
+`prova-formale/tla/controlla.sh` — seconds, not an hour.
+
 **The open wire** (v50 / 4.42 Android, 16 Sep 2026; live version `061af837` since v56). A phone with the app closed used
 to poll its mailbox every 5/45/90 s (`RingService`). It can now hold one
 WebSocket per watched key to a Durable Object (`Ascolto`, one per mailbox key,
@@ -232,8 +245,9 @@ one side stayed on its old allocation and died on schedule. Now: candidates
 travel one by one over the data channel (`call-ice-renew-cand`, held if they
 arrive before the description); the answerer gives up *before applying* an
 offer it could only answer late (`ICE_RENEW_RISPOSTA_MAX_MS` 6 s, well under
-the offerer's 15 s rollback — a test holds the margin), which makes the two
-sides ending on different ICE sessions impossible; and it renews on the
+the offerer's rollback — 30 s since 4.62, because 15 s did NOT cover the
+messages' travel time, as the TLA+ model showed; a test holds a 20 s margin),
+so the two sides do not end on different ICE sessions; and it renews on the
 **age of the pass** (`conn.__credAt`, `ICE_RENEW_ETA_MS` 4 min, checked every
 30 s), not on a fixed clock — the non-leading side asks
 (`call-ice-renew-ask`) when its own pass is the old one. Result on the bench:
@@ -331,7 +345,7 @@ node --test
 
 Node 22 — check `node --version` first: a shell that picks up Node 18 fails
 dozens of tests on a missing `crypto` global, which looks like a regression
-and is not one. Node finds the files itself. 570 tests, 85 suites, about
+and is not one. Node finds the files itself. 572 tests, 86 suites, about
 four minutes, and it exits on its own (measured 26 Sep 2026). Do not run it
 while a browser is encoding video on the same machine: under that load it
 has stalled twice, and the same suite finished clean with the machine idle. They also run on every push. (That count is measured, and goes stale —

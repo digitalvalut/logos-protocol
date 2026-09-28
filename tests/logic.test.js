@@ -8944,7 +8944,11 @@ test.describe('il lasciapassare del ponte', () => {
     const A = loadApp();
     const risposta = A.run('ICE_RENEW_RISPOSTA_MAX_MS'), ritiro = A.run('ICE_RENEW_ROLLBACK_MS');
     A.stop();
-    assert.ok(risposta + 5000 <= ritiro, 'risposta ' + risposta + ' ms, ritiro ' + ritiro + ' ms: servono almeno 5 s di margine');
+    /* 28 set 2026: il modello TLA+ del rinnovo ha trovato che 5 s non bastano —
+       il margine deve coprire DUE viaggi sul canale (offerta e risposta) oltre
+       al tempo di chi risponde. Con un'offerta in ritardo di 4 s e una risposta
+       di 5 s, sul margine di 9 s la risposta arrivava nell'istante del ritiro. */
+    assert.ok(risposta + 20000 <= ritiro, 'risposta ' + risposta + ' ms, ritiro ' + ritiro + ' ms: servono almeno 20 s di margine, due viaggi sul canale');
   });
 
   test('SI RINNOVA SECONDO L ETA DELLA CARTA: giovane no, vecchia si, e chi la chiede la ottiene', async () => {
@@ -9231,5 +9235,71 @@ test.describe('chi e rimasto indietro', () => {
     const link = A.run('siteBase()');
     A.stop();
     assert.strictEqual(link, 'https://digitalvalut.github.io/logos-protocol/', '/prova/ non ha una pagina d ingresso: era un 404');
+  });
+});
+
+
+/* ========================================================================
+   La ripresa e il rinnovo, insieme (28 set 2026).
+
+   Trovato dal modello TLA+ che descrive le due cose insieme — perche' e'
+   insieme che si pestavano i piedi — e confermato qui sul codice vero: se la
+   rete cadeva mentre un rinnovo del lasciapassare aspettava la sua risposta,
+   la connessione restava in 'have-local-offer', ogni giro di ripresa la
+   trovava «occupata» e non offriva niente, ma il giro contava lo stesso. Tre
+   giri, sette-nove secondi, e la chiamata veniva chiusa senza un solo
+   tentativo vero.
+   ======================================================================== */
+test.describe('la ripresa e il rinnovo insieme', () => {
+
+  const GIRO_FINTO = `
+    window.__offerte = 0; window.__rese = 0;
+    REPAIR_RETRY_GAP_MS = 40; REPAIR_ROUND_MS = 300;
+    repairBase = { text: 'x', offerer: true };
+    refreshIceConfigFresh = async function(){ return true; };
+    mailboxDelete = async function(){ return true; };
+    mailboxPutSealed = async function(){ window.__offerte++; return true; };
+    mailboxGetSealed = async function(){ return null; };
+    candidatePump = function(){ return { stop(){}, remoteReady: async function(){} }; };
+    retirePumpWhenSettled = function(){};
+    sdpPerBusta = async function(sdp){ return { sdp: sdp }; };
+    giveUpOnConnection = function(conn){ window.__rese++; conn.__gaveUp = true; };
+    window.__pcInTrattativa = function(){
+      return { connectionState: 'connected', signalingState: 'have-local-offer',
+        addEventListener(){}, removeEventListener(){}, close(){}, restartIce(){},
+        createOffer: async function(){ return { type: 'offer', sdp: 'v=0' }; },
+        setLocalDescription: async function(d){
+          if (d.type === 'rollback'){ this.signalingState = 'stable'; return; }
+          this.localDescription = d; this.signalingState = 'have-local-offer';
+        } };
+    };
+  `;
+
+  test('una caduta durante un rinnovo: il rinnovo si ritira e la ripresa parte davvero', async () => {
+    const app = loadApp();
+    app.run(GIRO_FINTO + `
+      pc = window.__pcInTrattativa();
+      pc.__renewRollback = setTimeout(function(){}, 60000);   /* il rinnovo aspetta la sua risposta */
+      pc.connectionState = 'failed';
+      onConnectionStateChange(pc);
+    `);
+    await finche(app, 'window.__offerte > 0');
+    assert.ok(app.run('window.__offerte') > 0, 'la ripresa deve scrivere almeno un offerta: prima non ne partiva nessuna e la chiamata si chiudeva');
+    assert.strictEqual(app.run('pc.__renewRollback'), null, 'il rinnovo a meta va ritirato: la sua risposta viaggiava sul canale, morto con la rete');
+    app.stop();
+  });
+
+  test('un giro che trova una trattativa in corso non consuma i tentativi', async () => {
+    const app = loadApp();
+    app.run(GIRO_FINTO + `
+      REPAIR_MAX_TOTAL = 1000;                /* qui si guarda la dote per incidente, non il tetto */
+      pc = window.__pcInTrattativa();         /* una trattativa che non e' un rinnovo: non si tocca */
+      pc.connectionState = 'failed';
+      onConnectionStateChange(pc);
+    `);
+    await new Promise(r => setTimeout(r, 500));   /* una decina di giri */
+    assert.strictEqual(app.run('window.__offerte'), 0, 'una trattativa altrui non si scavalca');
+    assert.strictEqual(app.run('window.__rese'), 0, 'e aspettarla non deve chiudere la chiamata: prima, tre giri a vuoto e resa');
+    app.stop();
   });
 });
