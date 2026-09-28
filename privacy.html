@@ -37,13 +37,13 @@
 <main class="legal">
 
 <h1>Privacy Policy</h1>
-<p class="legal-date">In force since 8 September 2026. This is the whole of it — there is no longer version.</p>
+<p class="legal-date">In force since 28 September 2026 (first published 8 September 2026). This is the whole of it — there is no longer version.</p>
 
 <p><strong>Logos collects nothing about you.</strong> There is no account, no
 registration, no phone number, no email. We — the people who make Logos —
-cannot read your messages, cannot see your contacts, and cannot see who you
-talk to or when. The rest of this page explains why that is true rather than
-merely stated.</p>
+cannot read your messages and cannot see your contacts, and we keep no record
+of who you talk to or when. The rest of this page explains why that is true
+rather than merely stated.</p>
 
 <h2>What stays on your device and never leaves it</h2>
 <p>Everything Logos remembers is stored locally — in your browser's storage, or
@@ -65,14 +65,14 @@ read it, as with most messengers.</p>
 <p>To help two devices find each other at the start of a conversation, Logos
 uses a small relay — a Cloudflare Worker we operate. Once the two devices are
 connected the relay is out of the picture, and nothing either side says passes
-through it.</p>
+through it. No server we run can read anything you say, at any point.</p>
 <p>While it is involved, the relay handles:</p>
 <ul>
   <li><strong>Sealed envelopes</strong> — encrypted with AES-256-GCM before
-      they reach the relay. The relay holds no key and cannot read them. They
-      are deleted the moment they are read, and in any case expire within two
-      minutes (a call being set up) or seven days (a letter left for someone who
-      did not answer).</li>
+      they reach the relay. The relay holds no key and cannot read them. The
+      recipient deletes each one once it has read it, and in any case they
+      expire within two minutes (a call being set up) or seven days (a letter
+      left for someone who did not answer).</li>
   <li><strong>Public keys</strong> — published so someone can dial your address.
       These are public by design. They expire after one year.</li>
   <li><strong>Wake-up subscriptions</strong> — encrypted. They expire after 24
@@ -82,6 +82,11 @@ through it.</p>
       discarded when the process recycles. We do not log it and it is not
       linked to anything.</li>
 </ul>
+<p><strong>On networks that block direct connections</strong> — some offices,
+some mobile operators — the two devices cannot reach each other directly, and
+the conversation goes through Cloudflare's TURN service instead. It forwards
+the connection still end-to-end encrypted: it cannot read it, but like any
+network service it sees the two network addresses it connects.</p>
 
 <h2>Other companies involved</h2>
 <ul>
@@ -100,8 +105,12 @@ through it.</p>
       and rings by reading its own encrypted mailbox directly.</li>
 </ul>
 <p>There are no analytics, no telemetry, no crash reporting, no advertising
-identifiers and no tracking code anywhere in Logos — in the app or on the
-website. No third-party script or library is loaded at any point.</p>
+identifiers and no tracking code anywhere in Logos. The app, and these pages on
+digitalvalut.github.io, load no third-party script or library at any point.</p>
+<p>The promotional site digitalvalut-logos.org is a separate page, built with an
+external site builder (ChatLLM, by Abacus.AI). As of 28 September 2026 it loads
+a script from abacus.ai, the builder's own editing helper, in which we found no
+tracking; we are having it removed. The app never depends on that site.</p>
 
 <h2>Photos</h2>
 <p>Before a JPEG or PNG is sent, Logos removes its embedded location, device
@@ -132,12 +141,13 @@ no mailing list to notify you through, because we do not have your email.</p>
 <hr>
 
 <h1 lang="it">Informativa sulla privacy</h1>
-<p class="legal-date" lang="it">In vigore dall'8 settembre 2026. Questo è tutto — non esiste una versione più lunga.</p>
+<p class="legal-date" lang="it">In vigore dal 28 settembre 2026 (prima pubblicazione: 8 settembre 2026). Questo è tutto — non esiste una versione più lunga.</p>
 
 <p lang="it"><strong>Logos non raccoglie nulla su di te.</strong> Non c'è un
 account, non c'è registrazione, non c'è numero di telefono, non c'è email.
 Noi — le persone che fanno Logos — non possiamo leggere i tuoi messaggi, non
-possiamo vedere i tuoi contatti, non possiamo sapere con chi parli né quando.
+possiamo vedere i tuoi contatti, e non teniamo traccia di con chi parli né
+di quando.
 Il resto di questa pagina spiega perché è vero, non solo dichiarato.</p>
 
 <h2 lang="it">Cosa resta sul tuo dispositivo e non lo lascia mai</h2>
@@ -162,12 +172,13 @@ telefono sbloccato può leggerla, come nella maggior parte dei messenger.</p>
 <p lang="it">Per aiutare due dispositivi a trovarsi all'inizio di una
 conversazione, Logos usa un piccolo relay — un Cloudflare Worker che gestiamo
 noi. Appena i due dispositivi sono connessi, il relay esce di scena e niente di
-ciò che le due parti si dicono passa da lì.</p>
+ciò che le due parti si dicono passa da lì. Nessun server che gestiamo può
+leggere niente di ciò che dici, in nessun momento.</p>
 <p lang="it">Finché è coinvolto, il relay gestisce:</p>
 <ul lang="it">
   <li><strong>Buste sigillate</strong> — cifrate con AES-256-GCM prima di
       arrivare al relay. Il relay non ha nessuna chiave e non può leggerle.
-      Vengono cancellate nel momento in cui sono lette e comunque scadono entro
+      Chi le riceve le cancella appena le ha lette, e comunque scadono entro
       due minuti (una chiamata in fase di apertura) o sette giorni (una lettera
       lasciata a chi non ha risposto).</li>
   <li><strong>Chiavi pubbliche</strong> — pubblicate perché qualcuno possa
@@ -180,6 +191,11 @@ ciò che le due parti si dicono passa da lì.</p>
       scartato quando il processo si ricicla. Non lo registriamo e non è
       collegato a nulla.</li>
 </ul>
+<p lang="it"><strong>Sulle reti che bloccano i collegamenti diretti</strong> —
+alcuni uffici, alcuni operatori mobili — i due dispositivi non riescono a
+raggiungersi, e la conversazione passa invece dal servizio TURN di Cloudflare.
+Lo inoltra ancora cifrato da capo a capo: non può leggerlo, ma come ogni
+servizio di rete vede i due indirizzi di rete che mette in contatto.</p>
 
 <h2 lang="it">Altre aziende coinvolte</h2>
 <ul lang="it">
@@ -199,8 +215,13 @@ ciò che le due parti si dicono passa da lì.</p>
 </ul>
 <p lang="it">Non ci sono analytics, né telemetria, né segnalazione di crash, né
 identificatori pubblicitari, né codice di tracciamento da nessuna parte in
-Logos — nell'app o sul sito. Nessuno script o libreria di terze parti viene
-mai caricato.</p>
+Logos. L'app, e queste pagine su digitalvalut.github.io, non caricano mai
+nessuno script o libreria di terze parti.</p>
+<p lang="it">Il sito promozionale digitalvalut-logos.org è una pagina a parte,
+costruita con uno strumento esterno (ChatLLM, di Abacus.AI). Al 28 settembre
+2026 carica uno script da abacus.ai, l'aiuto alla modifica dello strumento
+stesso, in cui non abbiamo trovato tracciamento; stiamo facendo in modo che
+venga tolto. L'app non dipende mai da quel sito.</p>
 
 <h2 lang="it">Foto</h2>
 <p lang="it">Prima che un JPEG o un PNG venga inviato, Logos rimuove sul tuo

@@ -276,7 +276,7 @@ DigitalValut Logos è una chat criptata da persona a persona (peer-to-peer), che
 interamente nel browser: nessun account, nessun numero di telefono, nessuna azienda in mezzo
 tra te e chi parli con te. I due browser si collegano direttamente tramite **WebRTC**: una
 volta stabilita la connessione, messaggi, chiamate, foto e file viaggiano direttamente da un
-dispositivo all'altro, senza passare da nessun server che potrebbe leggerli o conservarli.
+dispositivo all'altro, e nessun server può leggerli.
 
 L'indirizzo permanente (`DV-XXXX-XXXX-XXXX`) è l'impronta di una coppia di chiavi ECDH su
 curva P-256, generata sul dispositivo: chi chiama verifica che la chiave ricevuta corrisponda

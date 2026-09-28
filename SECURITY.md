@@ -17,9 +17,9 @@ simply using the app on a real phone and saying "this looks wrong".
 
 ## What to expect
 
-DigitalValut is a small Italian nonprofit association (APS/ETS). There is no
-company, no revenue and no security team behind this — reports are read by the
-maintainer, so please allow a few days rather than a few hours.
+Logos is published by DigitalValut, an Italian non-profit association (APS/ETS).
+Reports are read personally by the project lead, Dr. Giuseppe Falsone; please
+allow a few days rather than a few hours.
 
 - **Acknowledgement:** within 7 days.
 - **An honest assessment:** whether we can reproduce it, how serious we think it
@@ -36,8 +36,8 @@ We ask for a **90-day** window before public disclosure, and we will usually be
 much faster than that. If a fix is going to take longer, we will tell you why
 and agree a date with you rather than let the deadline pass in silence.
 
-**There is no bug bounty.** DigitalValut has no budget for one; what we can
-offer is a fast, honest answer and public credit.
+**There is no bug bounty at present.** What we offer is a fast, honest answer
+and public credit.
 
 **Good-faith research is welcome.** If you look for weaknesses in Logos in good
 faith — without harming other people's conversations, without degrading the
@@ -79,9 +79,9 @@ Being straight about this saves your time:
   verification, which the formal model shows to detect an interception. Before
   4.39 the six digits alone opened the envelope.
 - **A direct call is direct.** Like every peer-to-peer call, it goes from one
-  device's network address to the other's. Logos works over a VPN, and on
-  Android over Tor via Orbot (tried on real phones, 15 Sep 2026: calls connect,
-  a few seconds slower). Use one if you do not want the other side, or your
+  device's network address to the other's. Logos works over a VPN, on Android
+  over Tor via Orbot (tried on real phones, 15 Sep 2026: calls connect, a few
+  seconds slower), and on a computer inside Tor Browser (tried 28 Sep 2026). Use one if you do not want the other side, or your
   network, to see where you connect from.
 - **The local history is stored unencrypted** on the device. Whoever can read the
   device's storage can read past messages — and the address book, and the
@@ -103,8 +103,11 @@ results and known limits in [`prova-formale/`](prova-formale/)). Those models
 were written by the project itself and have not been reviewed by anyone else:
 they are a starting point for a reviewer, not a certificate.
 
-It has **not** been audited independently. An external review was received in
-August 2026 and its findings are being worked through; until an independent audit
-exists, please treat this as software written carefully by very few people rather
-than as software that has been proven safe. If your safety depends on it, use
-something that has been audited.
+It has **not** been audited independently. In August 2026 the project ran its
+own adversarial review of the app and the relay — a fuzzer, race campaigns, and
+historical defects deliberately put back to check they are caught (`tests/`).
+That review was done with the same AI assistant that helps write the code, so it
+is not independent and we do not count it as an audit. Until an independent audit
+exists, please treat this as carefully engineered software that has not yet been
+proven safe by anyone outside the project. If your safety depends on it, use
+something that has been audited, or help us get this one audited.

@@ -16,6 +16,15 @@ chiedere consigli sul progetto.
 >
 > **Non contiene chiavi né password**: si può incollare ovunque senza rischi.
 
+> ## ⚠️ Fotografia dell'8 settembre 2026, superata in più punti
+>
+> Questo dossier descrive la 4.32 e non viene aggiornato a ogni versione. Da
+> allora sono cambiate cose che contano: per esempio le buste sul relay non si
+> cancellano più alla lettura (le cancella chi le riceve, con un gettone), e
+> righe, test e funzioni sono cresciuti. Per lo stato attuale valgono
+> [`README.md`](README.md), [`SECURITY.md`](SECURITY.md) e
+> [`FAQ-TECNICA.md`](FAQ-TECNICA.md); in caso di differenza, ha ragione loro.
+
 *Versione descritta: `logos-modifica-4.32` — 8 settembre 2026.*
 *App Android: `versionCode 39`, che contiene la 4.31.*
 
