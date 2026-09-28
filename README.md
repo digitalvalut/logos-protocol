@@ -250,10 +250,12 @@ via [www.digitalvalut.it](https://www.digitalvalut.it).
 
 ## Brand
 
-"DigitalValut" and "Logos", and their associated logos, are the exclusive property of the
-Associazione di Promozione Sociale DigitalValut. The license above governs the source
-code; it does not grant rights to use the DigitalValut or Logos names, or their logos, to
-identify or endorse a derivative product without separate written permission.
+"DigitalValut", "DigitalValut Logos" and their logos are the names and signs of the
+Associazione di Promozione Sociale DigitalValut. As Section 6 of the Apache License 2.0
+states, the license covers the source code and does not grant permission to use these
+names or logos, except as reasonably needed to describe where the work comes from. A
+modified version must not present itself as DigitalValut Logos or suggest that
+DigitalValut endorses it without written permission.
 
 ## About
 
