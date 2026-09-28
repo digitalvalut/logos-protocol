@@ -3,7 +3,9 @@
 Questo foglio esiste perché il 23 settembre 2026 un membro del direttivo di
 Italian Linux Society ha letto Logos con attenzione vera e ha fatto sei
 domande. Due erano sbagliate, una riguardava una frase imprecisa sul sito
-(corretta), le altre sono scelte deliberate spiegate qui. Il foglio raccoglie
+(il 28 settembre abbiamo ricontrollato: le frasi imprecise sul sito vetrina
+erano più di una, e la correzione è in corso), le altre sono scelte
+deliberate spiegate qui. Il foglio raccoglie
 le risposte una volta sola, con i numeri misurati quel giorno — così la
 prossima persona che guarda con la stessa attenzione le trova già scritte,
 invece di doverle scoprire lei e farcelo notare in pubblico.
@@ -15,22 +17,30 @@ recente: altrimenti segnalate la discrepanza, è un errore nostro da correggere.
 ## «Quanto è coperto dai test, per davvero?»
 
 Il numero dei test (vedi CLAUDE.md) non dice la copertura: un test esegue
-molte righe, non una. La copertura vera si misura con lo strumento nativo di
-Node (`NODE_V8_COVERAGE`, nessuna libreria in più — coerente con la regola
-del progetto), guardando quali funzioni di `modifica.js` vengono davvero
-invocate durante `node --test`.
+molte righe, non una. La copertura vera si misura con i dati grezzi del
+motore V8 (`NODE_V8_COVERAGE`, nessuna libreria in più — coerente con la
+regola del progetto).
 
-**Misurato il 23 settembre 2026: 494 funzioni chiamate su 698 dichiarate —
-70,8%.** Non è un numero eccellente, e lo diciamo così com'è. Riguarda la
-sola suite automatica: non include i due test che girano solo in un browser
-vero (`tests/aspetto.js`, misure di leggibilità; `tests/isolamento.js`,
-separazione fra l'app vera e la copia di prova) né i test di mutazione
-(`tests/mutanti.js`, rimettono difetti storici per verificare che vengano
-ricatturati), che si eseguono a mano.
+**Per righe, misurato il 28 settembre 2026: 6.772 righe di codice eseguite su
+7.901 — 85,7%** (righe vuote e di solo commento escluse). Si rifà con un
+comando solo, `node tools/copertura-righe.js`, che fa girare l'intera suite e
+conta le righe; il commento in testa al file spiega la regola usata e perché
+il rapporto di copertura integrato in Node qui non funziona (i test caricano
+`modifica.js` in una sandbox, e quel rapporto la ignora: misurato, stampa una
+tabella vuota con «100%»). Le 1.129 righe non raggiunte sono sparse; i gruppi
+più grandi sono il rapporto di salute mostrato all'utente, la creazione
+dell'invito e la cronologia locale.
 
-Per rifare la misura: `NODE_V8_COVERAGE=/tmp/cov node --test`, poi un piccolo
-script che somma le funzioni con `count > 0` nei profili V8 di ogni processo
-(un file di test = un processo = un profilo separato).
+**Per funzioni, misurato il 23 settembre 2026: 494 chiamate su 698 dichiarate
+— 70,8%.** È una misura diversa (quante funzioni, non quante righe), presa
+cinque giorni prima: le due cifre non vanno confrontate come se fossero la
+stessa cosa.
+
+Entrambe riguardano la sola suite automatica: non includono i due test che
+girano solo in un browser vero (`tests/aspetto.js`, misure di leggibilità;
+`tests/isolamento.js`, separazione fra l'app vera e la copia di prova) né i
+test di mutazione (`tests/mutanti.js`, rimettono difetti storici per
+verificare che vengano ricatturati), che si eseguono a mano.
 
 ## «Il codice è minificato?»
 

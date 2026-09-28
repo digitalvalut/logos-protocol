@@ -201,10 +201,20 @@ itself will refuse to run it.
 
 ## Quality signal
 
-473 automated tests (measured 14 Sep 2026), each verified by deliberately reintroducing
+570 automated tests (measured 28 Sep 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
-keeping with the zero-runtime-dependency rule. `node --test` from the repository root.
+keeping with the zero-runtime-dependency rule. `node --test` from the repository root
+(Node 22).
+
+**Line coverage: 85.7%** of the app's code lines are executed by the suite — 6,772 of
+7,901, blank lines and comments excluded (measured 28 Sep 2026). The number is taken
+from V8's own coverage data (`NODE_V8_COVERAGE`), because the tests load `modifica.js`
+into a sandbox where Node's built-in coverage report cannot see it; the script that turns
+the raw data into lines is [`tools/copertura-righe.js`](tools/copertura-righe.js). The
+1,129 lines the suite does not reach are spread across the app; the largest groups are
+the health report shown to the user, invite creation, and local history. Closing those
+gaps is ongoing work, and this number will be re-measured, not rounded up.
 
 **Formal analysis.** The signalling protocol — how two devices find each other through
 the relay — is written out in full and modelled in **Tamarin** and **ProVerif**, the
@@ -216,6 +226,17 @@ by the project and have **not** been independently reviewed — that is the next
 the reason they are published. If you are that reviewer, start from
 [`prova-formale/PER-IL-REVISORE.md`](prova-formale/PER-IL-REVISORE.md): every promise
 Logos makes, mapped to the code, the lemma, the test, and how to check it yourself.
+
+## How this code is written
+
+Logos is developed by the DigitalValut team, under the direction of **Dr. Giuseppe
+Falsone**, also with the help of an AI coding assistant (Claude, by Anthropic). The rules
+the assistant works by are published with the code, in [`CLAUDE.md`](CLAUDE.md).
+
+That is exactly why nothing here asks to be taken on trust: every test is kept only after
+it has been made to fail against the defect it guards, the signalling protocol is modelled
+in Tamarin and ProVerif, the Android package can be rebuilt byte for byte by anyone, and
+the whole app is one file a single reader can follow ([how to read it](READING-THE-CODE.md)).
 
 ## License
 
@@ -288,6 +309,14 @@ inquadrare il codice sullo schermo di chi hai davanti è un canale che nessuno p
 intercettare, e l'app lo riconosce senza chiedervi altro. C'è una **modalità semplice** con
 due soli pulsanti giganti e le istruzioni lette ad alta voce, per chi non vede bene o non
 legge. E tutta l'app sta in **un unico file** che chiunque può caricare ovunque.
+
+**Come è scritto il codice.** Logos è sviluppato dal team DigitalValut, sotto la
+direzione del Dott. Giuseppe Falsone, anche con l'aiuto di un assistente di programmazione
+AI (Claude, di Anthropic). Per questo nulla va preso sulla fiducia: ogni test deve aver
+fallito prima di essere accettato, il protocollo è verificato con modelli formali, e il
+pacchetto Android è ricostruibile identico da chiunque. I test fanno girare l'85,7% delle
+righe di codice dell'app (misurato il 28 set 2026). Per orientarsi nel codice:
+[`READING-THE-CODE.md`](READING-THE-CODE.md).
 
 Ideato dal **Dott. Giuseppe Falsone**, Presidente di **DigitalValut**, realizzato con il
 Team DigitalValut.
