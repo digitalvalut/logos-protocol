@@ -1,0 +1,3 @@
+New: "Hide where you are". A switch in the settings (More) always sends calls and messages through the encrypted bridge: the person you talk to never sees your internet address.
+
+Long calls over the bridge also recover more reliably when the network changes.

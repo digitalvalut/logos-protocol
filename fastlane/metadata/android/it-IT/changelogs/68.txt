@@ -1,0 +1,3 @@
+Nuovo: «Nascondi dove sei». Un interruttore nelle impostazioni (Altro) fa passare chiamate e messaggi sempre dal ponte cifrato: la persona con cui parli non vede il tuo indirizzo internet.
+
+E le chiamate lunghe sul ponte si riprendono in modo più affidabile quando la rete cambia.

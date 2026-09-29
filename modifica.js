@@ -6595,7 +6595,7 @@ const ANDROID_APP_URL = 'https://github.com/digitalvalut/logos-protocol/releases
    android/app/build.gradle: un test lo pretende, perche' un pacchetto che
    dichiarasse il numero sbagliato manderebbe gli altri a scaricare un file
    che non esiste. */
-const ANDROID_VERSION_CODE = 67;
+const ANDROID_VERSION_CODE = 68;
 const IN_APK = (typeof location !== 'undefined' && location.origin === APP_PACKAGE_ORIGIN);
 /* Il file col NUMERO nel nome, non quello fisso: col nome fisso Android
    chiama il nuovo «DigitalValut-Logos (1).apk» accanto al vecchio rimasto
@@ -9159,7 +9159,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.63';
+const APP_VERSION = 'logos-modifica-4.64';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
