@@ -9303,3 +9303,50 @@ test.describe('la ripresa e il rinnovo insieme', () => {
     app.stop();
   });
 });
+
+/* ========================================================================
+   «Nascondi dove sei» (4.63, 29 set 2026): ogni connessione nuova passa
+   solo dal ponte, cosi' nessuno — l'altra persona compresa — vede l'indirizzo
+   internet di chi l'ha acceso. Tre cose da non rompere mai: la regola arriva
+   davvero al browser, sopravvive al rinnovo delle credenziali, e spento
+   non cambia niente.
+   ======================================================================== */
+test.describe('nascondi dove sei', () => {
+
+  const CONNESSIONE_FINTA = `
+    myIdentity = async function(){ return null; };
+    fetchIceServers = async function(){ return [{ urls: 'turn:ponte.example:3478', username: 'u', credential: 'c' }]; };
+  `;
+
+  test('acceso: la connessione nasce «solo dal ponte», e il rinnovo delle credenziali non la toglie', async () => {
+    const app = loadApp();
+    app.run(CONNESSIONE_FINTA + "MEM.setItem('dvlogos-nascondi-ip', '1'); newPeerConnection().then(function(c){ window.__c = c; });");
+    await finche(app, '!!window.__c');
+    assert.strictEqual(app.run('window.__c.getConfiguration().iceTransportPolicy'), 'relay',
+      'senza questa regola il browser raccoglie gli indirizzi diretti e li mostra all altra persona');
+    const fresh = "[{ urls: 'turn:ponte.example:3478', username: 'u2', credential: 'c2' }]";
+    assert.strictEqual(app.run('configConCredenziali(window.__c, ' + fresh + ').iceTransportPolicy'), 'relay',
+      'le credenziali nuove del ponte (ripresa e rinnovo) non devono riaprire la strada diretta');
+    app.stop();
+  });
+
+  test('spento, com e di base: nessuna regola in piu, la strada diretta resta possibile', async () => {
+    const app = loadApp();
+    app.run(CONNESSIONE_FINTA + "newPeerConnection().then(function(c){ window.__c = c; });");
+    await finche(app, '!!window.__c');
+    assert.strictEqual(app.run('window.__c.getConfiguration().iceTransportPolicy'), undefined);
+    assert.ok(!app.run("$('hideIpRow').classList.contains('on')"), 'parte spento');
+    app.stop();
+  });
+
+  test('l interruttore ricorda la scelta, e si vede ovunque: browser e APK', () => {
+    const app = loadApp();
+    assert.ok(!app.run("$('hideIpRow').classList.contains('hide')"), 'non e una cosa solo del telefono: serve anche nel browser');
+    app.run("$('hideIpRow').click()");
+    assert.strictEqual(app.run("MEM.getItem('dvlogos-nascondi-ip')"), '1');
+    assert.ok(app.run("$('hideIpRow').classList.contains('on')"));
+    app.run("$('hideIpRow').click()");
+    assert.strictEqual(app.run("MEM.getItem('dvlogos-nascondi-ip')"), '0');
+    app.stop();
+  });
+});

@@ -79,7 +79,11 @@ Being straight about this saves your time:
   verification, which the formal model shows to detect an interception. Before
   4.39 the six digits alone opened the envelope.
 - **A direct call is direct.** Like every peer-to-peer call, it goes from one
-  device's network address to the other's. Logos works over a VPN, on Android
+  device's network address to the other's — unless you switch on **Hide where you
+  are** (settings, since 4.63): then every new conversation goes only through the
+  TURN bridge, and the other side sees the bridge's address, never yours (checked
+  on 29 Sep 2026 between two real Logos: only relay candidates reached the other
+  side). Cloudflare, as the bridge operator, still sees it. Logos works over a VPN, on Android
   over Tor via Orbot (tried on real phones, 15 Sep 2026: calls connect, a few
   seconds slower), and on a computer inside Tor Browser (tried 28 Sep 2026). Use one if you do not want the other side, or your
   network, to see where you connect from.

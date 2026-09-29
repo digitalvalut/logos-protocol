@@ -80,6 +80,11 @@ read your conversation, log it, or hand it over to anyone.
 - Audio and video calls, direct between the two browsers, with **screen sharing** —
   swaps the camera track for the screen mid-call, on any browser that supports it, no
   new server and no extra cost involved.
+- **Hide where you are** (a switch in the settings, off by default): every new
+  conversation and call goes only through the encrypted TURN bridge, so the other
+  person never sees your internet address — the same idea as Signal's "always relay
+  calls". A little slower, and if the bridge cannot be reached it does not connect,
+  rather than fall back to showing where you are.
 - **Share straight into it from any other app** (Android): pick "DigitalValut Logos" from
   the system Share menu in Photos, Gmail, anywhere — the file arrives waiting to be sent,
   even before you've connected to anyone.
@@ -201,7 +206,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-572 automated tests (measured 28 Sep 2026), each verified by deliberately reintroducing
+575 automated tests (measured 29 Sep 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root
@@ -301,7 +306,8 @@ e il modello del telefono** prima di partire, senza perdere un pixel di qualità
 **8 indirizzi usa e getta**, una **rubrica** che richiama un indirizzo salvato con un
 tocco solo, autodistruzione dei messaggi, **pulizia automatica** opzionale (spenta di
 base), un "colpetto" push discreto per farsi sentire senza tenere l'app aperta, codice QR
-o link per collegarsi, e tutta l'interfaccia in **13 lingue**. Si installa su iPhone,
+o link per collegarsi, l'interruttore **«Nascondi dove sei»** (l'altra persona non vede il
+tuo indirizzo internet: tutto passa dal ponte cifrato), e tutta l'interfaccia in **13 lingue**. Si installa su iPhone,
 Android, Windows, Mac e Linux senza alcun account né pagamento. Su Android c'è anche un
 **pacchetto APK firmato** ([ultima versione](https://github.com/digitalvalut/logos-protocol/releases/latest)),
 aggiornabile in automatico con [Obtainium](https://github.com/ImranR98/Obtainium) senza
