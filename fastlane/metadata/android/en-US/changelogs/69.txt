@@ -1,0 +1,5 @@
+Easier to use: every button in the chat says what it does (Call, Video, Tools, Close chat), and during a call "End call" ends only the call.
+
+Messages left for you read in order like a chat, consecutive messages are grouped, "Today" and "Yesterday" appear above them, and newcomers get two simple steps to start.
+
+After an update the phone rings again right away, without opening the app.

@@ -477,6 +477,14 @@ test.describe('what the audit found', () => {
          alla conversazione successiva */
       $('menuPanel').classList.remove('hide');
     `);
+    /* Due tocchi dal 1 ottobre 2026: il primo chiede conferma e non chiude niente
+       — un tasto ben visibile si tocca anche per sbaglio. */
+    app.run("$('btnEndChat').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenChat').classList.contains('hide')"), false,
+      'un tocco solo ha chiuso la chat: un tocco per sbaglio chiude la conversazione');
+    assert.notStrictEqual(app.run('pc'), null, 'un tocco solo ha chiuso la connessione');
+    assert.strictEqual(app.run("$('btnEndChat').classList.contains('conferma')"), true,
+      'il primo tocco deve chiedere conferma');
     app.run("$('btnEndChat').listeners.click[0]();");
     assert.strictEqual(app.run("$('screenChat').classList.contains('hide')"), true,
       'il tasto non ha chiuso la schermata della chat');
@@ -488,6 +496,44 @@ test.describe('what the audit found', () => {
       'il canale dei messaggi e\' rimasto aperto');
     assert.strictEqual(app.run("$('menuPanel').classList.contains('hide')"), true,
       'il pannello degli strumenti resta aperto e ricompare sulla conversazione dopo');
+    app.stop();
+  });
+
+  test('«Chiudi chat» toccato una volta sola torna com\'era da solo', () => {
+    const app = loadApp();
+    app.run(`showScreen('screenChat'); pc = { close(){} }; dc = { close(){}, readyState: 'open' };`);
+    app.run("$('btnEndChat').listeners.click[0]();");
+    /* la scritta «Tocca ancora» vive nello span .cap, che il finto non ricava
+       dall'HTML: qui si guarda lo stato, la scritta la guarda checks.test.js */
+    assert.strictEqual(app.run("$('btnEndChat').classList.contains('conferma')"), true,
+      'al primo tocco il tasto deve chiedere conferma');
+    /* il tempo che passa: lo fa scadere la sua funzione, come farebbe il timer */
+    app.run('disarmaChiudi()');
+    assert.strictEqual(app.run("$('btnEndChat').classList.contains('conferma')"), false);
+    app.run("$('btnEndChat').listeners.click[0]();");
+    assert.strictEqual(app.run("$('screenChat').classList.contains('hide')"), false,
+      'dopo la scadenza un tocco nuovo e\' di nuovo il PRIMO: non deve chiudere');
+    app.stop();
+  });
+
+  test('i messaggi riaperti dalla cronologia hanno sopra il loro giorno', () => {
+    /* «Oggi», «Ieri», la data: dall'orologio di questo telefono e dal `t` che
+       la cronologia salva gia'. Una voce vecchia senza `t` non riceve un giorno
+       inventato. */
+    const app = loadApp();
+    const ora = Date.now(), ieri = ora - 24 * 3600 * 1000;
+    app.run(`MEM.setItem(historyKeyNow('Ada'), JSON.stringify([
+      { html: 'vecchia', mine: false },
+      { html: 'a', mine: false, t: ${ieri} }, { html: 'b', mine: true, t: ${ieri + 1000} },
+      { html: 'c', mine: false, t: ${ora} } ]));
+      loadHistoryFor('Ada');`);
+    const segni = JSON.parse(app.run(`JSON.stringify($('msgs').children
+      .filter(c => c.__giorno).map(c => c.textContent))`));
+    assert.deepStrictEqual(segni, [app.run("t('chat.yesterday')"), app.run("t('chat.today')")],
+      'un segno per giorno, nell\'ordine, e nessuno ripetuto fra due messaggi dello stesso giorno');
+    /* un messaggio nuovo oggi non ripete «Oggi» */
+    app.run("renderMsg('d', true, false); segnaGiorno(Date.now());");
+    assert.strictEqual(app.run("$('msgs').children.filter(c => c.__giorno).length"), 2);
     app.stop();
   });
 
@@ -971,7 +1017,8 @@ test.describe('what the audit found', () => {
        semplificazione dichiarata), quindi `textContent` qui e' sempre vuoto e
        un'asserzione su di esso passerebbe SEMPRE — per il motivo sbagliato.
        Il primo tentativo di questo test faceva esattamente quello. */
-    const primaBolla = app.run("$('msgs').children[0].children[0].innerHTML");
+    /* la prima RIGA, non il primo figlio: sopra c'e' il segno del giorno (1 ott 2026) */
+    const primaBolla = app.run("$('msgs').children.find(c => /\\brow\\b/.test(c.className)).children[0].innerHTML");
     assert.ok(primaBolla.length < 40000,
       'un testo di 60.000 caratteri non deve finire tutto a schermo, invece la bolla e lunga ' + primaBolla.length);
     assert.ok(/troppo lungo|too long/i.test(primaBolla),
@@ -7386,11 +7433,70 @@ test.describe('v45: il bigliettino delle lettere e il tasto Rispondi', () => {
     app.run("window.__bottoni().find(b => /Rispondi/.test(b.textContent)).listeners.click[0]()");
     assert.strictEqual(app.run("$('leaveLetter').classList.contains('hide')"), false, 'la scheda della lettera si apre');
     assert.strictEqual(app.run('letterTarget'), 'DVAAAABBBBCC', 'gia indirizzata a chi ha scritto');
-    assert.strictEqual(app.run('storedLetters().length'), 1, 'la lettera resta finche non si tocca Fatto');
+    assert.strictEqual(app.run('storedLetters().length'), 1, 'la lettera resta finche non si tocca Cancella');
     /* senza mittente, niente tasto: non c e nessuno a cui rispondere */
     /* il DOM finto non svuota i figli su innerHTML = '': si svuota a mano, come farebbe il browser */
     app.run(`$('lettersList').children = []; saveLetters([{ id: 'x2', tok: null, nick: 'Anon', text: 'ciao', from: null, slot: 0, at: Date.now() }]); renderLetters();`);
     assert.ok(!app.run("window.__bottoni().some(b => /Rispondi/.test(b.textContent))"));
+    app.stop();
+  });
+});
+
+test.describe('le lettere in fila, come una chat (1 ottobre 2026)', () => {
+  /* L'operatore: «non si puo' fare in sequenza, tipo WhatsApp, senza essere
+     staccato?». Una persona = una conversazione: le sue righe e le tue
+     risposte, in ordine. Raggruppate per INDIRIZZO, mai per nome. */
+  const fila = `JSON.stringify($('lettersList').children.map(r => ({
+      nome: r.children[0].children[0].textContent,
+      righe: r.children[1].children.map(b => (/\\bme\\b/.test(b.className) ? 'io:' : 'lei:') + b.children[0].textContent) })))`;
+
+  test('le righe di una persona e le tue risposte stanno in una sola conversazione, in ordine', () => {
+    const app = loadApp();
+    const t0 = Date.now() - 60000;
+    app.run(`
+      saveLetters([
+        { id: 'a1', tok: null, nick: 'Anna', text: 'ciao', from: 'DVAAAABBBBCC', slot: 0, at: ${t0} },
+        { id: 'b1', tok: null, nick: 'Anna', text: 'sono un\\'altra Anna', from: 'DVZZZZYYYYXX', slot: 0, at: ${t0 + 1000} },
+        { id: 'a2', tok: null, nick: 'Anna', text: 'ci sei?', from: 'DVAAAABBBBCC', slot: 0, at: ${t0 + 3000} } ]);
+      saveSentLetters([{ to: 'DVAAAABBBBCC', text: 'eccomi', at: ${t0 + 2000} },
+                       { to: 'DVQQQQWWWWEE', text: 'a chi non mi ha mai scritto', at: ${t0 + 2500} }]);
+      renderLetters();`);
+    const conv = JSON.parse(app.run(fila));
+    assert.strictEqual(conv.length, 2, 'due indirizzi, due conversazioni — anche se il nome e\' lo stesso');
+    assert.deepStrictEqual(conv[0].righe, ['lei:ciao', 'io:eccomi', 'lei:ci sei?'],
+      'in ordine di tempo, le sue e le tue mescolate come in una chat');
+    assert.deepStrictEqual(conv[1].righe, ['lei:sono un\'altra Anna']);
+    app.stop();
+  });
+
+  test('richiamare non cancella la conversazione; cancellare chiede due tocchi e porta via anche le tue risposte', () => {
+    const app = loadApp();
+    app.run(`
+      window.__bottoni = () => { const out = []; const giu = el => { for (const c of (el.children || [])){ if (c.tagName === 'BUTTON') out.push(c); giu(c); } }; giu($('lettersList')); return out; };
+      showKnockCard = () => {};
+      saveLetters([{ id: 'a1', tok: null, nick: 'Anna', text: 'ciao', from: 'DVAAAABBBBCC', slot: 0, at: Date.now() }]);
+      saveSentLetters([{ to: 'DVAAAABBBBCC', text: 'eccomi', at: Date.now() }]);
+      renderLetters();`);
+    app.run("window.__bottoni().find(b => b.textContent === t('letter.callBack')).listeners.click[0]()");
+    assert.strictEqual(app.run('storedLetters().length'), 1, 'richiamare buttava via la lettera: ora resta');
+    const canc = "window.__bottoni().find(b => b.textContent === t('letter.clear') || b.textContent === t('chat.endConfirm'))";
+    app.run(canc + '.listeners.click[0]()');
+    assert.strictEqual(app.run('storedLetters().length'), 1, 'un tocco solo non cancella');
+    app.run(canc + '.listeners.click[0]()');
+    assert.strictEqual(app.run('storedLetters().length'), 0);
+    assert.strictEqual(app.run('sentLetters().length'), 0, 'via anche le tue risposte a quella persona');
+    app.stop();
+  });
+
+  test('una risposta lasciata con successo entra nella conversazione', async () => {
+    const app = loadApp();
+    app.run(`
+      letterPut = async () => 'ok';
+      saveLetters([{ id: 'a1', tok: null, nick: 'Anna', text: 'ciao', from: 'DVAAAABBBBCC', slot: 0, at: Date.now() - 1000 }]);
+      renderLetters(); offerToLeaveLetter('DVAAAABBBBCC', true); $('letterText').value = 'eccomi';`);
+    await app.run("$('btnLeaveLetter').listeners.click[0]()");
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(sentLetters().map(s => [s.to, s.text]))')),
+      [['DVAAAABBBBCC', 'eccomi']]);
     app.stop();
   });
 });

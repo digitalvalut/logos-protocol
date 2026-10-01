@@ -1,0 +1,5 @@
+Più facile da usare: ogni tasto della chat dice cosa fa (Chiama, Video, Strumenti, Chiudi chat), e durante una chiamata «Termina chiamata» chiude solo la chiamata.
+
+I messaggi lasciati sono in fila come in una chat, i messaggi di seguito stanno uniti, sopra compaiono «Oggi» e «Ieri», e chi comincia trova i due passi per partire.
+
+Dopo un aggiornamento il telefono torna subito a squillare, senza bisogno di aprire l'app.

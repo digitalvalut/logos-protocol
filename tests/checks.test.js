@@ -748,6 +748,10 @@ const PASSAGGIO = [
   'wipe.done',            /* «fatto»: sostituito dalla schermata che si chiude */
   'health.checking',      /* «controllo...»: sovrascritto appena arriva l'esito */
   'destruct.countdown',   /* si riscrive ogni secondo da solo */
+  /* «Oggi»/«Ieri» sopra i messaggi: fanno parte della conversazione, come le
+     bolle; registrarli in ORIGINALS (una Map) terrebbe vivi i segni tolti */
+  'chat.today',
+  'chat.yesterday',
 ];
 
 test('un testo che resta a schermo passa da setT, cosi il cambio lingua lo ritrova', () => {
@@ -770,4 +774,68 @@ test('setT registra la chiave, altrimenti non ridipinge niente', () => {
     'setT() scrive il testo ma non lo registra in ORIGINALS: applyLang() non sapra\' che esiste');
   assert.ok(/prev\.key\s*=\s*key/.test(corpo),
     'setT() non memorizza la chiave: al cambio lingua non c\'e\' niente da cui ridipingere');
+});
+
+/* ========================================================================
+   Ogni tasto dice cosa fa (1 ottobre 2026). L'operatore: la cornetta rossa
+   in alto chiude TUTTA la chat, «Chiudi» dentro la chiamata chiude solo la
+   chiamata — due tasti che sembravano lo stesso. E i tre puntini non si
+   notavano. Solo aspetto: i tasti fanno le stesse cose di prima.
+   ======================================================================== */
+test('ogni tasto della barra della chat ha la sua scritta, e l\'icona non la cancella', () => {
+  const barra = SEZIONI.screenChat.match(/<div class="chatheader">([\s\S]*?)<div id="callBox"/)[1];
+  for (const [id, chiave] of [['btnCallAudio', 'chat.capCall'], ['btnCallVideo', 'chat.capVideo'],
+                              ['btnMenu', 'chat.capTools'], ['btnEndChat', 'menu.endChat']]){
+    const tasto = barra.slice(barra.indexOf('id="' + id + '"'));
+    const fine = tasto.indexOf('</button>');
+    assert.ok(fine > 0, id + ' non trovato nella barra');
+    assert.match(tasto.slice(0, fine), new RegExp('class="cap" data-i18n="' + chiave.replace('.', '\\.') + '"'),
+      id + ' deve avere la scritta visibile ' + chiave);
+  }
+  /* setIcon scrive l'innerHTML di cio' che riceve: puntato sul tasto, si
+     mangerebbe la scritta. Deve puntare al figlio .ic */
+  for (const id of ['btnCallAudio', 'btnCallVideo', 'btnMenu']){
+    assert.ok(!JS.includes("setIcon('" + id + "',"), 'setIcon su ' + id + ' cancellerebbe la scritta: va su ' + id + 'Ic');
+    assert.ok(JS.includes("setIcon('" + id + "Ic',"), 'l\'icona di ' + id + ' deve andare nel figlio ' + id + 'Ic');
+  }
+});
+
+test('dentro la chiamata il tasto dice «Termina chiamata» e che la chat resta aperta', () => {
+  const tag = HTML.match(/<button class="hangup" id="btnHangup"[^>]*>([\s\S]*?)<\/button>/);
+  assert.ok(tag, 'il tasto della chiamata non c\'e\'');
+  /* la traduzione riscrive l'interno dell'elemento che porta data-i18n: sul
+     tasto stesso cancellerebbe la seconda riga */
+  assert.doesNotMatch(tag[0].slice(0, tag[0].indexOf('>')), /data-i18n/, 'data-i18n va sulle due righe, non sul tasto');
+  assert.match(tag[1], /data-i18n="call\.hangup"/);
+  assert.match(tag[1], /data-i18n="call\.hangupSub"/, 'senza «la chat resta aperta» i due tasti rossi tornano a confondersi');
+});
+
+test('chi comincia vede i due passi, chi ha gia\' un contatto no', () => {
+  const home = SEZIONI.screenHome;
+  assert.ok(home.indexOf('id="startGuide"') > 0 && home.indexOf('id="startGuide"') < home.indexOf('<div class="tiles">'),
+    'la guida dei 2 passi deve stare sopra i tasti della home');
+  assert.ok(CSS.includes('#startGuide{display:none}'), 'di base e\' nascosta');
+  assert.ok(CSS.includes('body.hasname:not(.hascontacts) #startGuide{display:block}'),
+    'si mostra solo a chi ha un nome e nessun contatto: poi sparisce da sola');
+});
+
+test('i messaggi di seguito della stessa persona stanno attaccati', () => {
+  assert.match(CSS, /#msgs \.row\.me \+ \.row\.me, #msgs \.row\.them \+ \.row\.them\{margin-top:0\}/,
+    'senza questa regola la conversazione torna a leggersi a tratti');
+});
+
+test('la chat vuota dice cosa fare, e sparisce al primo messaggio', () => {
+  const area = HTML.slice(HTML.indexOf('<div id="chatArea">'), HTML.indexOf('<div id="composer">'));
+  assert.match(area, /<div id="chatEmpty" data-i18n="chat\.emptyHint">/, 'la frase deve stare nella chat');
+  assert.ok(CSS.includes('#chatEmpty{display:none}'), 'di base non si vede');
+  assert.ok(CSS.includes('#chatArea:not(:has(#msgs .row)) #chatEmpty{display:block'),
+    'si vede solo finche\' non c\'e\' neanche un messaggio');
+  assert.match(CSS, /#chatArea:not\(:has\(#msgs \.row\)\) #chatEmpty\{[^}]*pointer-events:none/,
+    'non deve rubare il tocco a niente');
+});
+
+test('«Chiudi chat» chiede conferma scrivendolo nella sua scritta', () => {
+  /* «Tocca ancora» va scritto nello span della scritta, non sul tasto: sul
+     tasto cancellerebbe l'icona */
+  assert.match(JS, /querySelector\('\.cap'\);\s*\n\s*setT\(cap, 'chat\.endConfirm'/);
 });

@@ -29,6 +29,14 @@ import android.os.Build;
  *
  * Only ever starts the watch back up if it was on. It reads one boolean out of
  * this app's own storage and does nothing else.
+ *
+ * The same is true after an UPDATE (1 Oct 2026). Installing a new version
+ * stops every service the app had running, the ring watch included, and until
+ * this day nothing started it again: the phone stayed silent until somebody
+ * happened to open the app. With automatic updates (Obtainium, F-Droid) that
+ * is a phone that stops ringing overnight without telling anyone. Android
+ * sends MY_PACKAGE_REPLACED to the updated app itself, and it is handled
+ * exactly like a reboot.
  */
 public class BootReceiver extends BroadcastReceiver {
 
@@ -36,7 +44,8 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String a = intent == null ? "" : String.valueOf(intent.getAction());
         if (!Intent.ACTION_BOOT_COMPLETED.equals(a)
-            && !"android.intent.action.QUICKBOOT_POWERON".equals(a)) return;
+            && !"android.intent.action.QUICKBOOT_POWERON".equals(a)
+            && !Intent.ACTION_MY_PACKAGE_REPLACED.equals(a)) return;
 
         if (!RingService.prefs(context).getBoolean(RingService.EXTRA_WATCHING, false)) return;
         if (RingService.prefs(context).getString(RingService.EXTRA_KEYS, "").isEmpty()) return;

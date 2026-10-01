@@ -177,15 +177,19 @@
             android:exported="false"
             android:foregroundServiceType="microphone|camera" />
 
-        <!-- Dopo un riavvio l'ascolto riparte da solo. Senza questo il telefono
-             resterebbe muto senza dirlo a nessuno, che è il modo peggiore in cui
-             una funzione può smettere di funzionare. -->
+        <!-- Dopo un riavvio, e dopo un aggiornamento dell'app, l'ascolto riparte
+             da solo. Senza questo il telefono resterebbe muto senza dirlo a
+             nessuno, che è il modo peggiore in cui una funzione può smettere di
+             funzionare. L'aggiornamento (MY_PACKAGE_REPLACED) è arrivato il 1 ott
+             2026: fino ad allora, dopo ogni aggiornamento, il telefono non
+             squillava finché non si riapriva l'app. -->
         <receiver
             android:name=".BootReceiver"
             android:exported="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
 

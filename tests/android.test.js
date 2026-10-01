@@ -321,3 +321,24 @@ test.describe('v58: Android 5-8 non si chiudono da soli (Android Lint)', () => {
     assert.ok((regole.match(/<exclude domain="root"/g) || []).length === 2, 'root escluso in tutte e due le sezioni');
   });
 });
+
+/* Dopo un aggiornamento il telefono deve tornare a squillare da solo (1 ott
+   2026). Installare una versione nuova spegne l'ascolto, e fino a quel giorno
+   lo riaccendeva solo riaprire l'app: con gli aggiornamenti automatici era un
+   telefono muto senza che nessuno lo sapesse. */
+test.describe('dopo un aggiornamento il telefono torna a squillare', () => {
+  const BOOT = read(J + 'BootReceiver.java');
+  test('il manifest consegna MY_PACKAGE_REPLACED allo stesso ricevitore del riavvio', () => {
+    const rec = MANIFEST.slice(MANIFEST.indexOf('android:name=".BootReceiver"'));
+    const filtro = rec.slice(0, rec.indexOf('</receiver>'));
+    assert.ok(filtro.includes('android.intent.action.BOOT_COMPLETED'), 'il riavvio deve restare');
+    assert.ok(filtro.includes('android.intent.action.MY_PACKAGE_REPLACED'),
+      'senza questo, dopo ogni aggiornamento il telefono resta muto finche non si apre l app');
+  });
+  test('il ricevitore accetta l aggiornamento, e riparte solo se l ascolto era acceso', () => {
+    assert.ok(/ACTION_MY_PACKAGE_REPLACED\.equals\(a\)/.test(BOOT),
+      'il ricevitore scarterebbe l aggiornamento come un evento sconosciuto');
+    assert.ok(/getBoolean\(RingService\.EXTRA_WATCHING, false\)\) return;/.test(BOOT),
+      'deve ripartire SOLO se l utente l aveva acceso: mai accendere qualcosa che era spento');
+  });
+});
