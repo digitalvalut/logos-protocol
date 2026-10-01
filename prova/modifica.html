@@ -298,10 +298,23 @@
          cose — e l'arancione del marchio sull'azione principale.
          Sotto la griglia, una riga piccola per il caso raro: un indirizzo
          scritto su un foglietto (di solito arriva come link e si apre da solo). -->
+    <!-- Per chi comincia (1 ott 2026): un principiante non sapeva che il primo
+         passo e' mandare il proprio indirizzo. Si vede solo finche' non c'e'
+         nessun contatto (body.hasname:not(.hascontacts)), poi sparisce da sola.
+         Solo testo e un link: nessun comportamento nuovo. -->
+    <div class="card startguide" id="startGuide">
+      <h3 data-i18n="home.guideTitle">Come si comincia: 2 passi</h3>
+      <ol>
+        <li><b data-i18n="home.guide1t">Manda il tuo indirizzo</b> <span data-i18n="home.guide1s">con il pulsante arancione qui sotto. È come dare il tuo numero di telefono.</span></li>
+        <li><b data-i18n="home.guide2t">Quando lo apre, siete collegati</b> <span data-i18n="home.guide2s">e potete scrivervi, chiamarvi e fare videochiamate.</span></li>
+      </ol>
+      <a class="guidevideo" href="https://digitalvalut.github.io/logos-protocol/media/logos-in-un-minuto.mp4" target="_blank" rel="noopener" data-i18n="home.guideVideo">Guarda come funziona (1 minuto)</a>
+    </div>
     <div class="tiles">
       <button class="tile t-mine" id="btnHomeShare">
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M28 4 14 18"/><path d="M28 4 19.5 28l-5.5-10L4 12.5z"/></svg></span>
         <span class="t" data-i18n="home.cardShare">Manda il mio indirizzo</span>
+        <span class="s" data-i18n="home.cardShareSub">È come dare il tuo numero</span>
       </button>
       <button class="tile t-people" id="goContacts">
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11" r="4.5"/><path d="M4 26c1.5-5 4.5-7.5 8-7.5s6.5 2.5 8 7.5"/><circle cx="23" cy="12" r="3.5"/><path d="M22 18.5c3 .3 5.3 2.4 6.5 6"/></svg></span>
@@ -840,9 +853,13 @@
            guessed. -->
       <div class="who"><b id="peerNameLbl" data-i18n="chat.someone">Qualcuno</b><span class="cdot" id="connDot" role="img"></span><span id="connState" data-i18n="chat.connected">connessa</span>
         · <button id="btnVerify" class="linkbtn">verifica</button></div>
-      <button class="iconbtn" id="btnCallAudio" title="Chiamata"></button>
-      <button class="iconbtn" id="btnCallVideo" title="Videochiamata"></button>
-      <button class="iconbtn" id="btnMenu" title="Altro"></button>
+      <!-- Ogni tasto dice cosa fa (1 ott 2026): l'operatore confondeva la cornetta
+           rossa qui (chiude TUTTA la chat) con «Chiudi» dentro la chiamata (chiude
+           solo la chiamata), e i tre puntini non si notavano. Icona in un figlio
+           .ic, scritta in un figlio .cap: setIcon scrive solo l'icona. -->
+      <button class="iconbtn" id="btnCallAudio" title="Chiamata"><span class="ic" id="btnCallAudioIc"></span><span class="cap" data-i18n="chat.capCall">Chiama</span></button>
+      <button class="iconbtn" id="btnCallVideo" title="Videochiamata"><span class="ic" id="btnCallVideoIc"></span><span class="cap" data-i18n="chat.capVideo">Video</span></button>
+      <button class="iconbtn" id="btnMenu" title="Altro"><span class="ic" id="btnMenuIc"></span><span class="cap" data-i18n="chat.capTools">Strumenti</span></button>
       <!-- ⚠️ AGGIUNTO IL 7 SET 2026, segnalato dall'operatore: «quando una
            persona è collegata non c'è un tasto riattacca per terminare, deve
            cliccare i tre pallini e poi Termina chat». Aveva ragione: chiudere
@@ -860,7 +877,7 @@
            l'innerHTML del pulsante. -->
       <button class="iconbtn end" id="btnEndChat">
         <span class="ic" id="btnEndChatIc"></span>
-        <span class="filehide" data-i18n="menu.endChat">Termina chat</span>
+        <span class="cap" data-i18n="menu.endChat">Chiudi chat</span>
       </button>
     </div>
 
@@ -887,7 +904,7 @@
              asking would just fail. -->
         <button id="btnScreenShare" class="hide" title="Condividi schermo"></button>
         <button id="btnSpeakerCall" class="hide" title="Altoparlante"></button>
-        <button class="hangup" id="btnHangup" data-i18n="call.hangup">Chiudi</button>
+        <button class="hangup" id="btnHangup"><span data-i18n="call.hangup">Termina chiamata</span><small data-i18n="call.hangupSub">la chat resta aperta</small></button>
       </div>
     </div>
 
@@ -980,7 +997,7 @@
       </div>
       <div class="toolsrow">
         <button class="btn" id="btnClearHistory"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15"/><path d="M9.5 7V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v2"/><path d="M6.5 7l1 12.2A2 2 0 0 0 9.5 21h5a2 2 0 0 0 2-1.8L17.5 7"/><path d="M10.2 11v6M13.8 11v6"/></svg></span><span data-i18n="menu.clearHistory">Svuota cronologia</span></button>
-        <button class="btn danger" id="btnNewSession"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span data-i18n="menu.endChat">Termina chat</span></button>
+        <button class="btn danger" id="btnNewSession"><span class="ic"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span data-i18n="menu.endChat">Chiudi chat</span></button>
       </div>
       <div class="lead mt12" data-i18n="menu.historyNote">La cronologia resta solo su questo dispositivo,
         legata al nome della persona con cui parli. Nessun server la conserva.</div>
