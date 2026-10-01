@@ -149,7 +149,7 @@
   /* la conversazione delle lettere: stessi colori delle bolle della chat */
   .lettermsgs{display:flex;flex-direction:column;gap:4px;margin:4px 0 12px}
   .lmsg{max-width:82%;padding:8px 12px;border-radius:14px;overflow-wrap:anywhere}
-  .lmsg p{margin:0;font-size:0.9375rem;line-height:1.45}
+  .lmsg p{margin:0;font-size:0.9375rem;line-height:1.45;color:inherit}
   .lmsg time{display:block;font-size:0.6875rem;opacity:.72;margin-top:2px;text-align:end}
   .lmsg.them{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);color:var(--ink)}
   .lmsg.me{align-self:flex-end;background:linear-gradient(135deg,var(--accent),#ff7a2e);color:var(--accent-ink);font-weight:500}
