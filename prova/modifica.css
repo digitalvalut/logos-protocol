@@ -28,7 +28,6 @@
   /* All text scales from the root, so "bigger text" is one change here and
      everything follows — including anyone whose phone is already set larger. */
   html{font-size:16px}
-  html.scritte-grandi{font-size:19px}
   html.ts-l{font-size:18.5px}
   html.ts-xl{font-size:21px}
   html,body{margin:0;padding:0}
