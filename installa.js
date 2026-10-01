@@ -57,9 +57,7 @@
     'l2.ios2': 'Tap <strong>Connect</strong>: Orbot protects the whole device, Safari included.',
     'l2.ios3': 'Open Logos from the Home Screen as usual.',
     'l2.pc': 'Computer',
-    'l2.pc1': 'Download <strong>Tor Browser</strong> from <a href="https://www.torproject.org/download/">torproject.org</a> (Windows, Mac, Linux).',
-    'l2.pc2': 'Open it and go to <code>digitalvalut.github.io/logos-protocol/modifica.html</code>',
-    'l2.pc3': 'Use Logos inside Tor Browser. For calls, allow the microphone when asked.',
+    'l2.pcNote': "We have not tried this on a computer yet, so for now we do not recommend it: Tor Browser normally blocks WebRTC, the technology Logos connects with. The tried route is a phone with Orbot.",
 
     'l3.t': 'Level 3 — The phone',
     'l3.p1': 'An app is worth as much as the phone it runs on. People who mean it use <a href="https://grapheneos.org/">GrapheneOS</a> on a Google Pixel: an Android without Google, with immediate updates and separate profiles. Logos runs on it with no compromise at all, because it depends on no Google service — by construction.',

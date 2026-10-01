@@ -85,8 +85,10 @@ Being straight about this saves your time:
   on 29 Sep 2026 between two real Logos: only relay candidates reached the other
   side). Cloudflare, as the bridge operator, still sees it. Logos works over a VPN, on Android
   over Tor via Orbot (tried on real phones, 15 Sep 2026: calls connect, a few
-  seconds slower), and on a computer inside Tor Browser (tried 28 Sep 2026). Use one if you do not want the other side, or your
-  network, to see where you connect from.
+  seconds slower; tried again between two phones on 30 Sep 2026). On a computer it
+  is not tested: Tor Browser normally blocks WebRTC, which Logos needs. Use one of
+  these if you do not want the other side, or your network, to see where you
+  connect from.
 - **The local history is stored unencrypted** on the device. Whoever can read the
   device's storage can read past messages — and the address book, and the
   secret of an invite that is still open (kept for up to 24 hours so that the
