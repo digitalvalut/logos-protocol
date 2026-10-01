@@ -569,6 +569,14 @@
         </div>
         <div class="sw" aria-hidden="true"></div>
       </div>
+      <div class="switchrow" id="bigTextRow" role="button" tabindex="0" aria-pressed="false">
+        <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 19 8 5l5.5 14M4.6 14h6.8"/><path d="M14.5 19l3.2-8 3.3 8M15.6 16.3h4.2"/></svg></span>
+        <div class="txt">
+          <b data-i18n="big.title">Scritte grandi</b>
+          <span data-i18n="big.sub">Ingrandisce tutte le scritte dell'app. Per chi fa fatica a leggere quelle piccole.</span>
+        </div>
+        <div class="sw" aria-hidden="true"></div>
+      </div>
       <div class="switchrow" id="secureRow" role="button" tabindex="0" aria-pressed="false">
         <span class="ic" aria-hidden="true"><svg class="btnicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 9.5C8 19.2 5 15.5 5 11V6l7-3z"/><path d="M9.5 12.2l1.8 1.8 3.4-3.6"/></svg></span>
         <div class="txt">
@@ -964,6 +972,9 @@
 
     <div id="chatArea">
       <div id="msgs"></div>
+      <!-- Solo finche' la conversazione non ha neanche un messaggio: dice a chi
+           e' appena arrivato cosa fare. Non si tocca (pointer-events:none). -->
+      <div id="chatEmpty" data-i18n="chat.emptyHint">🔒 Quello che vi scrivete qui lo leggete solo voi due. Scrivi qui sotto, oppure tocca Chiama.</div>
       <!-- Desktop only in practice — a touch device has no drag gesture to
            catch — shown only while something is actually being dragged over
            the chat, never sitting there as a hint nobody asked for. -->

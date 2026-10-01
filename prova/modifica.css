@@ -28,6 +28,7 @@
   /* All text scales from the root, so "bigger text" is one change here and
      everything follows — including anyone whose phone is already set larger. */
   html{font-size:16px}
+  html.scritte-grandi{font-size:19px}
   html.ts-l{font-size:18.5px}
   html.ts-xl{font-size:21px}
   html,body{margin:0;padding:0}
@@ -737,6 +738,10 @@
   .daymark{align-self:center;color:var(--faint);font-size:0.6562rem;background:var(--panel2);
     padding:3px 12px;border-radius:99px;margin:10px 0 6px}
   .row{display:flex;margin-top:6px}
+  #chatEmpty{display:none}
+  #chatArea:not(:has(#msgs .row)) #chatEmpty{display:block;position:absolute;left:28px;right:28px;top:30%;
+    text-align:center;color:var(--dim);font-size:0.9375rem;line-height:1.5;pointer-events:none}
+  .chatheader .iconbtn.end.conferma .ic{background:var(--bad);color:#fff;border-color:var(--bad)}
   /* Botta e risposta (1 ott 2026): i messaggi di seguito della stessa persona
      stanno attaccati, piu' spazio solo quando cambia chi parla; la «coda» della
      bolla resta solo sull'ultima del gruppo. Solo aspetto. */
@@ -753,7 +758,7 @@
   .bub .who{font-size:0.6562rem;font-weight:700;opacity:.65;margin-bottom:2px;display:block}
   .bub img,.bub video{max-width:100%;border-radius:10px;display:block;margin-top:5px}
   .bub audio{margin-top:4px;max-width:220px}
-  .bub .meta{font-size:0.5938rem;opacity:.55;margin-top:3px;text-align:right}
+  .bub .meta{font-size:0.6875rem;opacity:.72;margin-top:3px;text-align:right}
   .sysline{align-self:center;color:var(--faint);font-size:0.7188rem;margin:8px 0;text-align:center}
   .sysline .syslineBtn{display:block;margin:8px auto 0;padding:9px 20px;border:none;border-radius:99px;
     background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:0.8125rem;
