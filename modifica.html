@@ -902,7 +902,10 @@
              asking would just fail. -->
         <button id="btnScreenShare" class="hide" title="Condividi schermo"></button>
         <button id="btnSpeakerCall" class="hide" title="Altoparlante"></button>
-        <button class="hangup" id="btnHangup"><span data-i18n="call.hangup">Termina chiamata</span><small data-i18n="call.hangupSub">la chat resta aperta</small></button>
+        <!-- Una riga sola e un'altezza fissa (2 ott 2026): su due righe, con le
+             scritte di sistema ingrandite dei telefoni vecchi, copriva un quinto
+             dello schermo. «la chat resta aperta» resta per chi ascolta lo schermo. -->
+        <button class="hangup" id="btnHangup"><span class="ic" id="btnHangupIc" aria-hidden="true"></span><span data-i18n="call.hangupShort">Termina</span><span class="filehide" data-i18n="call.hangupSub">la chat resta aperta</span></button>
       </div>
     </div>
 

@@ -800,14 +800,23 @@ test('ogni tasto della barra della chat ha la sua scritta, e l\'icona non la can
   }
 });
 
-test('dentro la chiamata il tasto dice «Termina chiamata» e che la chat resta aperta', () => {
+test('il tasto rosso della chiamata e\' piccolo: una riga, altezza fissa, e dice ancora che la chat resta aperta', () => {
+  /* 2 ott 2026: su due righe, nei telefoni vecchi con le scritte ingrandite,
+     copriva un quinto dello schermo */
   const tag = HTML.match(/<button class="hangup" id="btnHangup"[^>]*>([\s\S]*?)<\/button>/);
   assert.ok(tag, 'il tasto della chiamata non c\'e\'');
   /* la traduzione riscrive l'interno dell'elemento che porta data-i18n: sul
-     tasto stesso cancellerebbe la seconda riga */
-  assert.doesNotMatch(tag[0].slice(0, tag[0].indexOf('>')), /data-i18n/, 'data-i18n va sulle due righe, non sul tasto');
-  assert.match(tag[1], /data-i18n="call\.hangup"/);
-  assert.match(tag[1], /data-i18n="call\.hangupSub"/, 'senza «la chat resta aperta» i due tasti rossi tornano a confondersi');
+     tasto stesso cancellerebbe l'icona */
+  assert.doesNotMatch(tag[0].slice(0, tag[0].indexOf('>')), /data-i18n/, 'data-i18n va sulle parti, non sul tasto');
+  assert.match(tag[1], /id="btnHangupIc"/, 'la cornetta disegnata');
+  assert.match(tag[1], /data-i18n="call\.hangupShort"/, 'la parola breve, visibile');
+  assert.match(tag[1], /<span class="filehide" data-i18n="call\.hangupSub">/,
+    '«la chat resta aperta» resta per chi ascolta lo schermo, ma non occupa spazio');
+  assert.doesNotMatch(tag[1], /<small/, 'una seconda riga visibile fa crescere il tasto');
+  const regola = (CSS.match(/\.callctrl button#btnHangup\{[^}]*\}/) || [''])[0];
+  assert.match(regola, /height:44px/, 'altezza fissa, non «auto»');
+  assert.match(regola, /white-space:nowrap/, 'una riga sola anche con le scritte grandi');
+  assert.ok(JS.includes("setIcon('btnHangupIc','hangup')"));
 });
 
 test('chi comincia vede i due passi, chi ha gia\' un contatto no', () => {

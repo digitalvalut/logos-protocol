@@ -1,0 +1,3 @@
+During a call the red button to hang up is smaller: a handset and "End", on a single line. On phones with enlarged text it no longer covers the screen.
+
+And in video calls on narrow phones, all the buttons stay inside the call window.

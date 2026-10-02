@@ -695,15 +695,22 @@
     border:2px solid rgba(255,255,255,.25);box-shadow:0 4px 16px rgba(0,0,0,.5)}
   #callStatus{position:absolute;top:12px;left:12px;color:#fff;font-size:0.75rem;background:rgba(0,0,0,.55);
     padding:5px 12px;border-radius:99px;backdrop-filter:blur(6px)}
-  .callctrl{position:absolute;bottom:12px;left:12px;display:flex;gap:8px}
+  /* right e flex-wrap: sui telefoni stretti, con tutti i tasti accesi e le
+     scritte grandi, la fila non usciva dal riquadro solo per caso */
+  .callctrl{position:absolute;bottom:12px;left:12px;right:12px;display:flex;flex-wrap:wrap;gap:8px}
   .callctrl button{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.14);
     color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px);
     display:flex;align-items:center;justify-content:center}
   .callctrl button.hangup{width:auto;border-radius:99px;padding:0 18px;background:var(--bad);font-weight:700;font-size:0.8125rem}
-  /* «Termina chiamata» + «la chat resta aperta» su due righe */
-  .callctrl button#btnHangup{height:auto;min-height:44px;padding:5px 16px;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;line-height:1.15}
-  .callctrl button#btnHangup small{font-weight:500;font-size:0.6562rem;opacity:.85}
+  /* La cornetta rossa e «Termina», su UNA riga e ad altezza FISSA (2 ott 2026).
+     Su due righe, nei telefoni vecchi con le scritte di sistema ingrandite (la
+     WebView le segue), il tasto arrivava a coprire un quinto dello schermo:
+     cosi' la scritta puo' crescere, il tasto no. */
+  .callctrl button#btnHangup{height:44px;min-height:0;padding:0 16px 0 12px;gap:6px;flex-direction:row;
+    white-space:nowrap;line-height:1;overflow:hidden}
+  .callctrl button#btnHangup .ic{display:inline-flex;width:20px;height:20px;flex:none}
+  .callctrl button#btnHangup .ic .btnicon{width:20px;height:20px}
+  #callBox.voice .callctrl button#btnHangup{height:52px;min-width:0}
 
   /* ---------------- a voice call is not a video with the picture off ----------------
      The controls sit at the bottom of the picture, which works only while there
