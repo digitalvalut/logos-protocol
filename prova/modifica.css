@@ -700,10 +700,15 @@
     color:#fff;font-size:1.0625rem;cursor:pointer;backdrop-filter:blur(6px);
     display:flex;align-items:center;justify-content:center}
   .callctrl button.hangup{width:auto;border-radius:99px;padding:0 18px;background:var(--bad);font-weight:700;font-size:0.8125rem}
-  /* «Termina chiamata» + «la chat resta aperta» su due righe */
-  .callctrl button#btnHangup{height:auto;min-height:44px;padding:5px 16px;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;line-height:1.15}
-  .callctrl button#btnHangup small{font-weight:500;font-size:0.6562rem;opacity:.85}
+  /* La cornetta rossa e «Termina», su UNA riga e ad altezza FISSA (2 ott 2026).
+     Su due righe, nei telefoni vecchi con le scritte di sistema ingrandite (la
+     WebView le segue), il tasto arrivava a coprire un quinto dello schermo:
+     cosi' la scritta puo' crescere, il tasto no. */
+  .callctrl button#btnHangup{height:44px;min-height:0;padding:0 16px 0 12px;gap:6px;flex-direction:row;
+    white-space:nowrap;line-height:1;overflow:hidden}
+  .callctrl button#btnHangup .ic{display:inline-flex;width:20px;height:20px;flex:none}
+  .callctrl button#btnHangup .ic .btnicon{width:20px;height:20px}
+  #callBox.voice .callctrl button#btnHangup{height:52px;min-width:0}
 
   /* ---------------- a voice call is not a video with the picture off ----------------
      The controls sit at the bottom of the picture, which works only while there
