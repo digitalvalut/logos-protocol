@@ -260,8 +260,11 @@ l'elenco di dove colpire. Chi trova qualcosa scriva a quanto indicato in
   rinegoziazione: è un intervento ad alto rischio sul protocollo di segnalazione,
   per recuperare qualcosa che dopo un cambio di rete vero è spesso irrecuperabile
   comunque (i candidati della vecchia rete non esistono più).
-- **iOS non è mai stato collaudato su un dispositivo reale.** Nessun iPhone
-  disponibile. Non si dichiara funzionante ciò che nessuno ha provato.
+- **iOS: provato a mano su un iPhone, non collaudato in modo sistematico.**
+  Il 3 ottobre 2026 l'operatore ha provato chiamate e videochiamate su un
+  iPhone e hanno funzionato. Modello e versione di iOS non sono stati
+  registrati, e non esiste un elenco di prove ripetibile come per Android.
+  Non si dichiara funzionante ciò che nessuno ha provato.
 - **Nessun audit indipendente esterno.** Due candidature a finanziamenti pubblici
   aperte, una respinta.
 - **La cronologia dei messaggi è salvata in chiaro sul dispositivo.** Dichiarato
