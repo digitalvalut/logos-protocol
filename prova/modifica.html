@@ -886,6 +886,9 @@
            rossa qui (chiude TUTTA la chat) con «Chiudi» dentro la chiamata (chiude
            solo la chiamata), e i tre puntini non si notavano. Icona in un figlio
            .ic, scritta in un figlio .cap: setIcon scrive solo l'icona. -->
+      <!-- I quattro tasti come UN gruppo (3 ott 2026): quando non c'e' spazio
+           scendono tutti insieme sotto il nome, non due sopra e due sotto -->
+      <div class="chatbtns">
       <button class="iconbtn" id="btnCallAudio" title="Chiamata"><span class="ic" id="btnCallAudioIc"></span><span class="cap" data-i18n="chat.capCall">Chiama</span></button>
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata"><span class="ic" id="btnCallVideoIc"></span><span class="cap" data-i18n="chat.capVideo">Video</span></button>
       <button class="iconbtn" id="btnMenu" title="Altro"><span class="ic" id="btnMenuIc"></span><span class="cap" data-i18n="chat.capTools">Strumenti</span></button>
@@ -908,6 +911,7 @@
         <span class="ic" id="btnEndChatIc"></span>
         <span class="cap" data-i18n="menu.endChat">Chiudi chat</span>
       </button>
+      </div>
     </div>
 
     <div id="callBox" class="hide">
