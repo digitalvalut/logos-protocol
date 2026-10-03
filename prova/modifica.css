@@ -594,7 +594,7 @@
      tasti scendono da soli appena il nome non ci sta; in rem, cosi' con le
      scritte grandi scendono prima. */
   .chatheader{display:flex;align-items:center;gap:8px;padding:10px 4px 14px;flex-wrap:wrap;row-gap:6px}
-  .chatheader .chatbtns{display:flex;gap:8px;margin-inline-start:auto;flex-wrap:wrap;justify-content:flex-end}
+  .chatheader .chatbtns{display:flex;gap:8px;margin-inline-start:auto;flex-wrap:wrap;justify-content:flex-end;flex:0 0 auto;max-width:100%}
   .chatheader .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff5f6d);
     display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#1a0e05;flex-shrink:0}
   .chatheader .who{flex:1 1 11rem;min-width:11rem}
