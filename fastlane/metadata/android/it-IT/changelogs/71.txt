@@ -1,0 +1,3 @@
+Nuovo: il lettore di codici QR dentro l'app. Inquadri il QR di un altro telefono o del computer e la chiamata parte subito, in pochi secondi, senza altre app.
+
+«Manda il mio indirizzo» ora chiede come vuoi darlo: fallo inquadrare dallo schermo, mandalo con un'app o salva l'immagine. E nella chat nome e tasti non si sovrappongono più con le scritte grandi.

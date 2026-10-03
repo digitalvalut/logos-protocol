@@ -7501,6 +7501,75 @@ test.describe('le lettere in fila, come una chat (1 ottobre 2026)', () => {
   });
 });
 
+test.describe('il lettore QR dentro l\'app (3 ottobre 2026)', () => {
+  /* Il browser legge il QR da solo (BarcodeDetector); qui un lettore finto
+     restituisce, un giro dopo l'altro, quello che il test gli mette in fila. */
+  const FINTO = `
+    window.__tracce = []; window.__letture = [];
+    navigator.mediaDevices.getUserMedia = async () => {
+      const tr = { fermata: false, stop(){ this.fermata = true; } };
+      __tracce.push(tr); return { getTracks: () => [tr] };
+    };
+    BarcodeDetector = class { async detect(){ return __letture.length ? [{ rawValue: __letture.shift() }] : []; } };
+    globalThis.__quick = false; globalThis.__bussa = null;
+    tryQuickConnect = () => { globalThis.__quick = true; };
+    showKnockCard = (a) => { globalThis.__bussa = a; };
+  `;
+  const aspetta = async (app, cond) => {
+    for (let i = 0; i < 40 && !app.run(cond); i++) await new Promise(r => setTimeout(r, 100));
+  };
+
+  test('il tasto compare solo dove il browser sa leggere i QR', async () => {
+    const senza = loadApp();
+    await new Promise(r => setTimeout(r, 30));
+    assert.ok(senza.run("$('btnScanQr').classList.contains('hide')"), 'senza lettore il tasto non deve promettere niente');
+    senza.stop();
+    const con = loadApp({ globals: { BarcodeDetector: class { static async getSupportedFormats(){ return ['qr_code']; } } } });
+    await aspetta(con, "!$('btnScanQr').classList.contains('hide')");
+    assert.ok(!con.run("$('btnScanQr').classList.contains('hide')"), 'con il lettore il tasto c\'e\'');
+    con.stop();
+  });
+
+  test('un invito di Logos inquadrato si apre, un QR di altri no, e la fotocamera si spegne', async () => {
+    const app = loadApp();
+    app.run(FINTO + `__letture.push(
+      'https://altrosito.example/modifica.html#q=123456&s=SEGRETO',
+      'https://digitalvalut.github.io/logos-protocol/modifica.html#q=654321&s=SEGRETO');`.replace(/SEGRETO/g, 'S'.repeat(22)));
+    await app.run('apriLettoreQr()');
+    await aspetta(app, 'globalThis.__quick');
+    assert.strictEqual(app.run('globalThis.__quick'), true, 'l\'invito di Logos deve partire');
+    assert.strictEqual(app.run("$('quickCodeIn').value"), '654321', 'e deve essere quello giusto, non quello dell\'altro sito');
+    assert.strictEqual(app.run('__tracce[0].fermata'), true, 'la fotocamera deve spegnersi appena letto');
+    assert.ok(app.run("$('qrScan').classList.contains('hide')"));
+    app.stop();
+  });
+
+  test('un indirizzo scritto nel QR fa bussare a quell\'indirizzo', async () => {
+    const app = loadApp();
+    app.run(FINTO + `__letture.push('AAAA-BBBB-CCCC');`);
+    await app.run('apriLettoreQr()');
+    await aspetta(app, 'globalThis.__bussa');
+    assert.strictEqual(app.run('globalThis.__bussa'), 'AAAABBBBCCCC');
+    assert.strictEqual(app.run('__tracce[0].fermata'), true);
+    app.stop();
+  });
+
+  test('«Chiudi» spegne la fotocamera; si accettano solo link https di Logos', async () => {
+    const app = loadApp();
+    app.run(FINTO);
+    await app.run('apriLettoreQr()');
+    app.run("$('btnQrClose').listeners.click[0]()");
+    assert.strictEqual(app.run('__tracce[0].fermata'), true, 'chiuso il lettore, la spia della fotocamera deve spegnersi');
+    assert.ok(app.run("$('qrScan').classList.contains('hide')"));
+    for (const no of ['http://digitalvalut.github.io/logos-protocol/modifica.html#q=123456',
+                      'https://digitalvalut.github.io/logos-protocol/modifica.html',
+                      'javascript:alert(1)', 'ciao', '']){
+      assert.strictEqual(app.run('invitoDaQr(' + JSON.stringify(no) + ')'), null, 'accettato per sbaglio: ' + no);
+    }
+    app.stop();
+  });
+});
+
 /* =========================================================================
    v46 (14 settembre 2026): l'invito viaggia solo come link o QR, e il segreto
    lungo entra nel sigillo. Chiude H-01 (deciso dall'operatore: «togli la
@@ -7979,13 +8048,20 @@ test.describe('4.50: la griglia — quattro riquadri, un tocco ciascuno', () => 
     assert.strictEqual(app.run("$('welcomeCard').classList.contains('hide')"), true);
   }));
 
-  test('«Manda il mio indirizzo»: un tocco, la tendina; se l\'indirizzo era spento, lo accende prima', () => conApp(async app => {
+  test('«Manda il mio indirizzo»: un tocco, «Come vuoi darlo?»; se l\'indirizzo era spento, lo accende prima', () => conApp(async app => {
     await attendi(30);
     app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(false); handOverWatchToAndroid = () => {};");
     app.run(`window.__mandati = []; navigator.share = async (o) => { window.__mandati.push(o.text); };`);
     await app.run("$('btnHomeShare').listeners.click[0]()");
     await attendi(30);
     assert.strictEqual(app.run('addrOn()'), true, 'acceso da solo: chi manda il suo indirizzo vuole essere trovato');
+    /* dal 3 ott 2026 prima le tre strade, poi la tendina delle app */
+    assert.strictEqual(app.run("$('sendSheet').classList.contains('hide')"), false, 'si apre «Come vuoi darlo?»');
+    const mio = await app.run('(async () => formatAddress(await myAddress(0)))()');
+    assert.strictEqual(app.run("$('sendSheetAddr').textContent"), mio, 'e porta il TUO indirizzo');
+    app.run("$('btnSendApp').listeners.click[0]()");
+    await attendi(30);
+    assert.strictEqual(app.run("$('sendSheet').classList.contains('hide')"), true);
     const m = app.run('window.__mandati');
     assert.strictEqual(m.length, 1);
     assert.match(m[0], /#a=[A-Z0-9]{12}/, 'e il link porta l\'indirizzo');
@@ -8000,6 +8076,8 @@ test.describe('4.50: la griglia — quattro riquadri, un tocco ciascuno', () => 
     app.run(`window.__mandati = []; navigator.share = async (o) => { window.__mandati.push(o.text); };`);
     await app.run("$('btnBurnerQuick').listeners.click[0]()");
     await attendi(30);
+    app.run("$('btnSendApp').listeners.click[0]()");
+    await attendi(30);
     assert.strictEqual(app.run('burners().length'), 1, 'creato');
     assert.strictEqual(app.run('burners()[0].name'), app.run("fill(t('burn.quickName'), { n: 1 })"), 'nome automatico');
     const mio = app.run("(async () => formatAddress(await myAddress(0)))()");
@@ -8007,8 +8085,44 @@ test.describe('4.50: la griglia — quattro riquadri, un tocco ciascuno', () => 
     const [mioA, suoA] = await Promise.all([mio, suo]);
     assert.notStrictEqual(mioA, suoA, 'e\' un altro indirizzo, non il tuo');
     assert.ok(app.run('window.__mandati')[0].includes(suoA), 'la tendina porta l\'usa e getta, non il tuo vero');
+    assert.strictEqual(app.run("$('sendSheetAddr').textContent"), suoA, 'e anche il foglio mostra l\'usa e getta');
     await app.run("$('btnBurnerQuick').listeners.click[0]()");
     assert.strictEqual(app.run('burners().length'), 2, 'un secondo tocco, un secondo indirizzo («Usa e getta 2»)');
+  }));
+
+  test('«Fallo inquadrare»: il QR grande, e finche\' e\' sullo schermo l\'app ascolta svelta (3 ott 2026)', () => conApp(async app => {
+    await attendi(30);
+    app.run("MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna'; setAddrOn(true); handOverWatchToAndroid = () => {};");
+    await app.run("$('btnHomeShare').listeners.click[0]()");
+    await attendi(30);
+    app.run("$('btnSendQr').listeners.click[0]()");
+    assert.strictEqual(app.run("$('qrBig').classList.contains('hide')"), false, 'il QR grande e\' sullo schermo');
+    const mio = await app.run('(async () => formatAddress(await myAddress(0)))()');
+    assert.strictEqual(app.run("$('qrBigAddr').textContent"), mio);
+    /* nessuno tocca lo schermo da un'ora: senza il QR si ascolterebbe piano */
+    app.run('addrAwakeSince = Date.now() - 3600000');
+    assert.strictEqual(app.run('addrGap()'), app.run('ADDR_FAST_MS'), 'col QR in vista si guarda ogni 2 secondi');
+    app.run('qrMioDal = Date.now() - QR_MIO_VELOCE_MS - 1000');
+    assert.notStrictEqual(app.run('addrGap()'), app.run('ADDR_FAST_MS'), 'ma non per sempre: un QR dimenticato aperto torna al passo lento');
+    app.run('segnaQrMostrato(); addrAwakeSince = Date.now() - 3600000');
+    app.run("$('btnQrBigDone').listeners.click[0]()");
+    assert.strictEqual(app.run("$('qrBig').classList.contains('hide')"), true);
+    assert.notStrictEqual(app.run('addrGap()'), app.run('ADDR_FAST_MS'), 'chiuso il QR, si torna al passo di prima');
+  }));
+
+  test('un indirizzo inquadrato dall\'app chiama subito, senza il riquadro «chi sei»', () => conApp(async app => {
+    await attendi(30);
+    app.run(`MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna';
+             globalThis.__chiamato = null; dialAddress = async (a) => { globalThis.__chiamato = a; };
+             globalThis.__bussa = null; showKnockCard = (a) => { globalThis.__bussa = a; };`);
+    app.run("apriInvitoDaQr({ addr: 'AAAABBBBCCCC' })");
+    assert.strictEqual(app.run('globalThis.__chiamato'), 'AAAABBBBCCCC', 'la chiamata parte subito');
+    assert.strictEqual(app.run('globalThis.__bussa'), null, 'senza il riquadro in mezzo');
+    /* senza un nome, invece, il riquadro serve: e' li' che lo si scrive */
+    app.run(`$('nickInput').value = ''; globalThis.__chiamato = null;`);
+    app.run("apriInvitoDaQr({ addr: 'AAAABBBBCCCC' })");
+    assert.strictEqual(app.run('globalThis.__chiamato'), null);
+    assert.strictEqual(app.run('globalThis.__bussa'), 'AAAABBBBCCCC');
   }));
 
   test('la riga sotto la griglia apre il campo dell\'indirizzo e lo richiude', () => conApp(async app => {

@@ -848,3 +848,20 @@ test('«Chiudi chat» chiede conferma scrivendolo nella sua scritta', () => {
      tasto cancellerebbe l'icona */
   assert.match(JS, /querySelector\('\.cap'\);\s*\n\s*setT\(cap, 'chat\.endConfirm'/);
 });
+
+test('la chiamata in arrivo non resta sotto il QR grande o il foglio «Come vuoi darlo?»', () => {
+  assert.match(JS, /chiudiQrGrande\(\); chiudiFoglioIndirizzo\(\);\s*\n\s*\$\('addrIncoming'\)\.classList\.remove\('hide'\)/,
+    'prima di mostrare la chiamata vanno tolti i due riquadri che stanno sopra');
+});
+
+test('la testata della chat manda i tasti a capo appena il nome non ci sta (3 ott 2026)', () => {
+  /* a ~450 px con le scritte grandi nome e stato finivano sotto le scritte dei tasti */
+  assert.match(CSS, /  \.chatheader\{[^}]*flex-wrap:wrap/, 'su qualunque schermo, non solo sotto i 430 px');
+  assert.match(CSS, /  \.chatheader \.who\{flex:1 1 11rem;min-width:11rem\}/, 'il nome ha un minimo in rem: con le scritte grandi i tasti scendono prima');
+  /* e scendono TUTTI INSIEME: sciolti, due restavano accanto al nome e due sotto */
+  const barra = SEZIONI.screenChat.match(/<div class="chatheader">([\s\S]*?)<div id="callBox"/)[1];
+  const gruppo = barra.slice(barra.indexOf('<div class="chatbtns">'));
+  assert.ok(barra.indexOf('<div class="chatbtns">') > 0, 'i quattro tasti in un gruppo');
+  for (const id of ['btnCallAudio', 'btnCallVideo', 'btnMenu', 'btnEndChat'])
+    assert.ok(gruppo.indexOf('id="' + id + '"') > 0, id + ' fuori dal gruppo');
+});

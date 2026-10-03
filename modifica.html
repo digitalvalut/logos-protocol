@@ -202,6 +202,33 @@
   <!-- Someone is calling the public address. Nothing is answered until this
        is answered, because an address anyone may hold is an address anyone
        may ring. -->
+  <!-- Il lettore QR: a tutto schermo, la fotocamera si spegne appena si chiude -->
+  <div class="qrscan hide" id="qrScan" role="dialog" aria-modal="true">
+    <video id="qrVideo" autoplay playsinline muted></video>
+    <p class="qrhint" data-i18n="qr.hint">Inquadra il codice sull'altro telefono o sul computer.</p>
+    <div class="status" id="qrScanStatus"></div>
+    <button class="btn" id="btnQrClose" data-i18n="qr.close">Chiudi</button>
+  </div>
+
+  <!-- «Come vuoi darlo?»: le tre strade per dare il proprio indirizzo -->
+  <div class="qrscan hide" id="sendSheet" role="dialog" aria-modal="true">
+    <div class="sheetcard">
+      <b data-i18n="send.title">Come vuoi darlo?</b>
+      <code class="sheetaddr" id="sendSheetAddr">DV-····-····-····</code>
+      <button class="btn primary sheetbtn" id="btnSendQr"><span data-i18n="send.qr">Fallo inquadrare</span><small data-i18n="send.qrSub">Per chi ti è vicino o per il computer</small></button>
+      <button class="btn sheetbtn" id="btnSendApp"><span data-i18n="send.app">Mandalo con un'app</span><small data-i18n="send.appSub">WhatsApp, email, Signal e le altre</small></button>
+      <button class="btn sheetbtn" id="btnSendSave"><span data-i18n="send.save">Salva l'immagine</span><small data-i18n="send.saveSub">Il QR come foto, da stampare o tenere</small></button>
+      <button class="btn ghost" id="btnSendClose" data-i18n="qr.close">Chiudi</button>
+    </div>
+  </div>
+  <!-- Il proprio QR a tutto schermo: finche' e' qui, l'app ascolta svelta -->
+  <div class="qrscan hide" id="qrBig" role="dialog" aria-modal="true">
+    <canvas id="qrBigCanvas" aria-label="QR"></canvas>
+    <div class="qrbigaddr" id="qrBigAddr"></div>
+    <p class="qrhint" data-i18n="qrbig.hint">Appena ti chiama, la chiamata compare qui.</p>
+    <button class="btn primary" id="btnQrBigDone" data-i18n="qrbig.done">Fatto</button>
+  </div>
+
   <div class="card hide" id="addrIncoming">
     <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
     <span class="whichaddr hide" id="addrIncomingWhich"></span>
@@ -329,6 +356,8 @@
     </div>
     <div class="smalllinks">
       <button class="btn ghost linkbtn" id="showAddrDial" aria-expanded="false" data-i18n="home.addrLine">Ti hanno dato un indirizzo scritto? Scrivilo qui</button>
+      <!-- compare solo dove il browser sa leggere i QR da solo (vedi apriLettoreQr) -->
+      <button class="btn ghost linkbtn hide" id="btnScanQr" data-i18n="qr.scan">Inquadra un codice QR</button>
     </div>
 
     <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026. Prima era nascosto solo a chi
@@ -855,6 +884,9 @@
            rossa qui (chiude TUTTA la chat) con «Chiudi» dentro la chiamata (chiude
            solo la chiamata), e i tre puntini non si notavano. Icona in un figlio
            .ic, scritta in un figlio .cap: setIcon scrive solo l'icona. -->
+      <!-- I quattro tasti come UN gruppo (3 ott 2026): quando non c'e' spazio
+           scendono tutti insieme sotto il nome, non due sopra e due sotto -->
+      <div class="chatbtns">
       <button class="iconbtn" id="btnCallAudio" title="Chiamata"><span class="ic" id="btnCallAudioIc"></span><span class="cap" data-i18n="chat.capCall">Chiama</span></button>
       <button class="iconbtn" id="btnCallVideo" title="Videochiamata"><span class="ic" id="btnCallVideoIc"></span><span class="cap" data-i18n="chat.capVideo">Video</span></button>
       <button class="iconbtn" id="btnMenu" title="Altro"><span class="ic" id="btnMenuIc"></span><span class="cap" data-i18n="chat.capTools">Strumenti</span></button>
@@ -877,6 +909,7 @@
         <span class="ic" id="btnEndChatIc"></span>
         <span class="cap" data-i18n="menu.endChat">Chiudi chat</span>
       </button>
+      </div>
     </div>
 
     <div id="callBox" class="hide">

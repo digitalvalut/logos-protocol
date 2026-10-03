@@ -206,7 +206,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-588 automated tests (measured 1 Oct 2026), each verified by deliberately reintroducing
+596 automated tests (measured 3 Oct 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root
