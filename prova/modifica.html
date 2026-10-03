@@ -204,6 +204,14 @@
   <!-- Someone is calling the public address. Nothing is answered until this
        is answered, because an address anyone may hold is an address anyone
        may ring. -->
+  <!-- Il lettore QR: a tutto schermo, la fotocamera si spegne appena si chiude -->
+  <div class="qrscan hide" id="qrScan" role="dialog" aria-modal="true">
+    <video id="qrVideo" autoplay playsinline muted></video>
+    <p class="qrhint" data-i18n="qr.hint">Inquadra il codice sull'altro telefono o sul computer.</p>
+    <div class="status" id="qrScanStatus"></div>
+    <button class="btn" id="btnQrClose" data-i18n="qr.close">Chiudi</button>
+  </div>
+
   <div class="card hide" id="addrIncoming">
     <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
     <span class="whichaddr hide" id="addrIncomingWhich"></span>
@@ -331,6 +339,8 @@
     </div>
     <div class="smalllinks">
       <button class="btn ghost linkbtn" id="showAddrDial" aria-expanded="false" data-i18n="home.addrLine">Ti hanno dato un indirizzo scritto? Scrivilo qui</button>
+      <!-- compare solo dove il browser sa leggere i QR da solo (vedi apriLettoreQr) -->
+      <button class="btn ghost linkbtn hide" id="btnScanQr" data-i18n="qr.scan">Inquadra un codice QR</button>
     </div>
 
     <!-- ⚠️ RICHIUSO PER TUTTI dal 7 set 2026. Prima era nascosto solo a chi

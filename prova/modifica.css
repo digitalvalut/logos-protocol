@@ -748,6 +748,11 @@
     color:var(--accent2);font-weight:700;font-size:1.0625rem;backdrop-filter:blur(2px)}
   #dropOverlay .ic{width:38px;height:38px}
   #dropOverlay .ic .btnicon{width:100%;height:100%}
+  /* il lettore QR (3 ott 2026) */
+  .qrscan{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.94);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:14px;padding:16px}
+  #qrVideo{width:min(86vw,420px);aspect-ratio:1;object-fit:cover;border-radius:18px;border:3px solid var(--accent);background:#000}
+  .qrhint{color:#fff;text-align:center;font-size:0.9375rem;line-height:1.5;margin:0;max-width:420px}
   .daymark{align-self:center;color:var(--faint);font-size:0.6562rem;background:var(--panel2);
     padding:3px 12px;border-radius:99px;margin:10px 0 6px}
   .row{display:flex;margin-top:6px}
