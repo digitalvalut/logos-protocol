@@ -8,6 +8,11 @@ una rete particolarmente chiusa lo impone, a inoltrare traffico già cifrato di
 cui non possiede la chiave. Non esiste nessun database, da nessuna parte, che
 conservi le conversazioni.
 
+Il ponte è un Cloudflare Worker del progetto
+(digitalvalut-turn.burbeng78.workers.dev); STUN e TURN sono di Cloudflare.
+L'indirizzo del ponte è fisso nell'app; il suo codice è in turn-worker/, ma
+per usarne un altro bisogna ricompilare l'app.
+
 <b>Come ci si fa raggiungere</b>
 
 L'indirizzo permanente (DV-XXXX-XXXX-XXXX) è l'impronta SHA-256 di una coppia di
@@ -17,8 +22,8 @@ chiamato, e solo allora si fida. Una chiave sostituita produce un indirizzo
 diverso e viene rifiutata. Accanto a quello permanente si possono tenere fino a
 otto indirizzi usa e getta, ognuno cancellabile per conto suo.
 
-Ci si può collegare anche con un codice di sei cifre, un link d'invito o
-inquadrando un codice QR di persona.
+Ci si può collegare anche con un link d'invito o inquadrando un codice QR di
+persona.
 
 <b>Sapere davvero con chi si sta parlando</b>
 
@@ -39,9 +44,8 @@ all'impronta crittografica della persona, non al nome che si è scelta.
   servizio dell'app legge la propria casella cifrata, e la domanda che pone ha
   come unica risposta possibile sì o no. Non possiede nessuna chiave e non può
   leggere niente; chi ti cerca e cosa ti scrive li legge l'app quando la apri.
-  Il prezzo, detto subito: una chiamata può metterci fino a 45 secondi ad
-  arrivare, e consuma più batteria di una notifica push. Si accende quando vuoi
-  tu, ed è spento finché non lo accendi
+  Consuma più batteria di una notifica push, ed è spento finché non lo
+  accendi
 • Una lettera sigillata per chi non risponde, conservata fino a 7 giorni e
   apribile solo da chi possiede quell'indirizzo
 • Messaggi che si autodistruggono e pulizia automatica opzionale delle
@@ -56,7 +60,7 @@ il prezzo del non avere un server, ed è una scelta di architettura, non un
 difetto.
 
 Il tuo indirizzo IP è visibile alla persona con cui ti colleghi, come in
-qualunque connessione diretta fra due dispositivi.
+qualunque connessione diretta, a meno che non accendi «Nascondi dove sei».
 
 <b>Su questo pacchetto</b>
 
@@ -65,12 +69,10 @@ sito: l'app viene aperta dalla memoria del pacchetto stesso, quindi cio che gira
 sul tuo telefono e cio che e stato costruito dal codice di questo repository, e
 continua a funzionare anche quando il sito non e raggiungibile.
 
-Non c'e nessun servizio di notifiche push da nessuna parte: niente Play
-Services di Google, niente Firebase, nessun account. L'unico servizio in
-secondo piano e quello dell'applicazione stessa, descritto qui sopra, e non
-parla con nient'altro che lo stesso relay che l'app usa gia. Ogni primitiva
-crittografica arriva dalle API Web Crypto del sistema. Nessuno script, libreria
-o risorsa di terze parti viene mai caricato.
+Niente notifiche push: niente Play Services di Google, niente Firebase, nessun
+account. L'unico servizio in secondo piano è quello dell'app, descritto qui
+sopra, e parla solo con lo stesso ponte. La crittografia è quella Web Crypto
+del sistema; nessuno script o libreria di terze parti viene mai caricato.
 
 Realizzata dall'Associazione di Promozione Sociale DigitalValut, ente del terzo
 settore italiano. Gratis per sempre, senza account e senza nulla da comprare.

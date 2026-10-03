@@ -8,6 +8,12 @@ unusually strict network requires it, forwards traffic that is already
 encrypted and which it has no key to read. There is no database anywhere
 holding conversations.
 
+The relay is a Cloudflare Worker run by the project
+(digitalvalut-turn.burbeng78.workers.dev); the connection helpers (STUN/TURN)
+are Cloudflare's (stun.cloudflare.com, turn.cloudflare.com). The relay address
+is fixed in the app. Its source is in the same repository (turn-worker/), so
+anyone can run their own, but using it means rebuilding the app.
+
 <b>How you reach someone</b>
 
 A permanent address (DV-XXXX-XXXX-XXXX) is the SHA-256 hash of a key pair
@@ -17,8 +23,8 @@ only then trusts it. A substituted key produces a different address and is
 rejected. Up to eight throwaway addresses can be held alongside the permanent
 one, each revocable on its own.
 
-You can also connect by a short 6-digit code, a tappable invite link, or by
-scanning a QR code in person.
+You can also connect by a tappable invite link, or by scanning a QR code in
+person.
 
 <b>Knowing who you are really talking to</b>
 
@@ -39,9 +45,8 @@ person's cryptographic fingerprint, not to a display name.
   a service belonging to the app reads its own encrypted mailbox, and the
   question it asks has only yes or no for an answer. It holds no key and can
   read nothing; who is calling, and what they wrote, are read by the app when
-  you open it. The cost, said up front: a call can take up to 45 seconds to
-  ring, and it uses more battery than a push notification would. You turn it
-  on yourself, and it is off until you do
+  you open it. It uses more battery than a push notification would, and it is
+  off until you turn it on
 • A sealed letter for someone who does not answer, held up to 7 days, openable
   only by the address owner
 • Self-destructing messages and optional automatic cleanup of old conversations
@@ -53,7 +58,7 @@ Both people need to be online at the same time for a live conversation. That is
 the price of having no server, and it is architectural, not a bug.
 
 Your IP address is visible to the person you connect to, as it is in any direct
-peer-to-peer connection.
+peer-to-peer connection, unless you switch on "Hide where you are".
 
 <b>About this package</b>
 

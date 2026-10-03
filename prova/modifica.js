@@ -6598,7 +6598,7 @@ const ANDROID_APP_URL = 'https://github.com/digitalvalut/logos-protocol/releases
    android/app/build.gradle: un test lo pretende, perche' un pacchetto che
    dichiarasse il numero sbagliato manderebbe gli altri a scaricare un file
    che non esiste. */
-const ANDROID_VERSION_CODE = 71;
+const ANDROID_VERSION_CODE = 72;
 const IN_APK = (typeof location !== 'undefined' && location.origin === APP_PACKAGE_ORIGIN);
 /* Il file col NUMERO nel nome, non quello fisso: col nome fisso Android
    chiama il nuovo «DigitalValut-Logos (1).apk» accanto al vecchio rimasto

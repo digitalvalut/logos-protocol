@@ -1,0 +1,1 @@
+Manutenzione: la compilazione usa le fonti aggiornate e la descrizione dice chiaramente che il ponte gira su Cloudflare. Nell'app non cambia niente.
