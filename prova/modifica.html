@@ -212,6 +212,25 @@
     <button class="btn" id="btnQrClose" data-i18n="qr.close">Chiudi</button>
   </div>
 
+  <!-- «Come vuoi darlo?»: le tre strade per dare il proprio indirizzo -->
+  <div class="qrscan hide" id="sendSheet" role="dialog" aria-modal="true">
+    <div class="sheetcard">
+      <b data-i18n="send.title">Come vuoi darlo?</b>
+      <code class="sheetaddr" id="sendSheetAddr">DV-····-····-····</code>
+      <button class="btn primary sheetbtn" id="btnSendQr"><span data-i18n="send.qr">Fallo inquadrare</span><small data-i18n="send.qrSub">Per chi ti è vicino o per il computer</small></button>
+      <button class="btn sheetbtn" id="btnSendApp"><span data-i18n="send.app">Mandalo con un'app</span><small data-i18n="send.appSub">WhatsApp, email, Signal e le altre</small></button>
+      <button class="btn sheetbtn" id="btnSendSave"><span data-i18n="send.save">Salva l'immagine</span><small data-i18n="send.saveSub">Il QR come foto, da stampare o tenere</small></button>
+      <button class="btn ghost" id="btnSendClose" data-i18n="qr.close">Chiudi</button>
+    </div>
+  </div>
+  <!-- Il proprio QR a tutto schermo: finche' e' qui, l'app ascolta svelta -->
+  <div class="qrscan hide" id="qrBig" role="dialog" aria-modal="true">
+    <canvas id="qrBigCanvas" aria-label="QR"></canvas>
+    <div class="qrbigaddr" id="qrBigAddr"></div>
+    <p class="qrhint" data-i18n="qrbig.hint">Appena ti chiama, la chiamata compare qui.</p>
+    <button class="btn primary" id="btnQrBigDone" data-i18n="qrbig.done">Fatto</button>
+  </div>
+
   <div class="card hide" id="addrIncoming">
     <b data-i18n="addr.incomingTitle">Qualcuno ti sta cercando</b>
     <span class="whichaddr hide" id="addrIncomingWhich"></span>
