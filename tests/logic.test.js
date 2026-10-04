@@ -5549,6 +5549,23 @@ test.describe('un invito mandato dall\'app si apre anche altrove', () => {
 
 test.describe('la pompa dei candidati sopravvive alla stretta di mano', () => {
 
+  test('una pompa ferma non raccoglie piu\' candidati e non riarma il timer', () => {
+    const app = loadApp();
+    app.run(`
+      window.__pc = new RTCPeerConnection();
+      window.__p = candidatePump(window.__pc, { seed:'s', key:{} }, 'a', 'b');
+      window.__p.stop();
+      window.__armati = 0;
+      const vero = setTimeout;
+      setTimeout = (fn, ms, ...resto) => { if (ms === 350) window.__armati++; return vero(fn, ms, ...resto); };
+      for (const fn of window.__pc.__ls.icecandidate)
+        fn({ candidate: { candidate: 'candidate:1 1 udp 1 192.0.2.1 5000 typ host', sdpMid: '0', sdpMLineIndex: 0 } });
+    `);
+    assert.strictEqual(app.run('window.__armati'), 0,
+      'dopo lo stop la pompa continua ad accumulare candidati e a riarmare il timer per spedirli');
+    app.stop();
+  });
+
   test('mentre la connessione sale, la pompa resta viva', () => {
     const app = loadApp();
     app.run(`

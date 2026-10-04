@@ -10316,6 +10316,10 @@ function candidatePump(pcObj, sec, mine, theirs){
   };
   pcObj.addEventListener('icecandidate', ev => {
     if (!ev.candidate) return; /* end of gathering: nothing left to send */
+    /* una pompa ferma non raccoglie piu': prima l'ascoltatore restava attaccato
+       e continuava a riempire `batch` e a riarmare il timer dopo lo stop
+       (trovato nella revisione del 2 set 2026, rimasto aperto fino al 4 ott) */
+    if (stopped) return;
     batch.push({ candidate: ev.candidate.candidate, sdpMid: ev.candidate.sdpMid, sdpMLineIndex: ev.candidate.sdpMLineIndex });
     clearTimeout(flushTimer);
     flushTimer = setTimeout(flush, 350); /* group the burst that always arrives together */
