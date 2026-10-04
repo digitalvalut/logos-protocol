@@ -4096,13 +4096,18 @@ function watchHandshakeProgress(pcObj, statusEl, diagEl, pump, onSettle){
     if (onSettle) onSettle(false);
   }, 60000);
 }
-function toast(msg){
+/* `ms`: per i pochi avvisi che dicono una strada da seguire — in 2,2 secondi
+   si legge «fatto», non «rotellina › Altro › Persone bloccate». La larghezza:
+   senza `max-content` un avviso lungo andava a capo a meta' schermo (left:50%),
+   in una colonna stretta e alta. */
+function toast(msg, ms){
   const el = document.createElement('div');
   el.textContent = msg;
   el.style.cssText = 'position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);'+
-    'color:#0b0d10;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:700;z-index:50;box-shadow:var(--shadow)';
+    'color:#0b0d10;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:700;z-index:50;box-shadow:var(--shadow);'+
+    'width:max-content;max-width:calc(100vw - 32px);text-align:center';
   document.body.appendChild(el);
-  setTimeout(()=>el.remove(), 2200);
+  setTimeout(()=>el.remove(), ms || 2200);
 }
 
 let peerNick = '';
@@ -7771,7 +7776,7 @@ function segnaTentativoBloccato(fp, rid){
   /* l'elenco e il rapporto stanno dentro «Altro», chiuso di partenza: il
      4 ott l'operatore non trovava «Sblocca» proprio per questo. L'avviso dice
      la strada, e «Altro» si fa trovare gia' aperto. */
-  toast(fill(t('block.triedToast'), { altro: t('set.grpAdv'), titolo: t('block.title') }));
+  toast(fill(t('block.triedToast'), { altro: t('set.grpAdv'), titolo: t('block.title') }), 9000);
   try{ const adv = document.querySelector('details.advbox'); if (adv) adv.open = true; }catch(e){}
   renderBlocked();
 }
