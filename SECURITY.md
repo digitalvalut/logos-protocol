@@ -100,6 +100,9 @@ Being straight about this saves your time:
 
 ## What this project promises, and what it does not
 
+The full threat model — every adversary, what each can and cannot do, and how to
+check it yourself — is in [`THREAT-MODEL.md`](THREAT-MODEL.md).
+
 Conversations are end-to-end encrypted and travel directly between the two
 devices. The relay exists so that two devices can find each other, and it cannot
 read anything that passes through it.

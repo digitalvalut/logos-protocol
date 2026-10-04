@@ -11,7 +11,9 @@ Source code: **https://github.com/digitalvalut/logos-protocol** · Apache 2.0 li
 
 Examining the code? [`FAQ-TECNICA.md`](FAQ-TECNICA.md) answers, with numbers measured
 rather than guessed, the questions a careful reader tends to ask first — test coverage,
-what the relay does and doesn't see, why the app is one file.
+what the relay does and doesn't see, why the app is one file. Trying to break it?
+[`THREAT-MODEL.md`](THREAT-MODEL.md) says who Logos defends against and who it does
+not, with the evidence for each claim and the tests anyone can repeat.
 
 ---
 
@@ -206,7 +208,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-596 automated tests (measured 3 Oct 2026), each verified by deliberately reintroducing
+599 automated tests (measured 4 Oct 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root
