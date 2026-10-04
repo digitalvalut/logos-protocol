@@ -345,7 +345,7 @@ node --test
 
 Node 22 — check `node --version` first: a shell that picks up Node 18 fails
 dozens of tests on a missing `crypto` global, which looks like a regression
-and is not one. Node finds the files itself. 599 tests, 91 suites, about
+and is not one. Node finds the files itself. 603 tests, 91 suites, about
 four minutes, and it exits on its own (measured 4 Oct 2026). Do not run it
 while a browser is encoding video on the same machine: under that load it
 has stalled twice, and the same suite finished clean with the machine idle. They also run on every push. (That count is measured, and goes stale —
