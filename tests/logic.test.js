@@ -766,6 +766,58 @@ test.describe('what the audit found', () => {
     app.stop();
   });
 
+  test('una persona bloccata non squilla, ma chi l\'ha bloccata lo viene a sapere', async () => {
+    /* 4 ott 2026, di nuovo sul PC dell'operatore (vedi il test qui sopra: la
+       prima volta fu nella v37). Il suo telefono era bloccato sul Mac da una
+       prova di giorni prima: il Mac leggeva ogni chiamata e la scartava in
+       silenzio, il telefono diceva «non risponde nessuno», e «Come sta l'app»
+       diceva «Ti puo' chiamare adesso». Un pomeriggio a cercare un guasto di
+       rete. Si passa dalla porta vera: addrCheckOnce con una busta in arrivo. */
+    const app = loadApp();
+    const rapporto = () => app.run('(async () => { await runHealth(); return healthReport(); })()');
+    assert.ok(!/Persone bloccate/.test(await rapporto()), 'senza bloccati la riga non deve esserci');
+    /* bloccato PRIMA che arrivi qualsiasi busta: il giro automatico dell'app
+       puo' passare in qualunque momento, e deve trovarlo gia' bloccato */
+    app.run("blockFp('aabbccdd'); renderBlocked();");
+    const dopo = await rapporto();
+    assert.ok(/Persone bloccate — 1: non ti fanno squillare/.test(dopo),
+      '«Ti puo\' chiamare adesso» da solo era falso per chi e\' bloccato: ' + dopo);
+
+    app.run(`
+      globalThis.__toast = [];
+      toast = (m, ms) => { globalThis.__toast.push(m); globalThis.__toastMs = ms; };
+      activeSlots = () => [0];
+      myAddress = async () => 'DV-AAAA-BBBB-CCCC';
+      addrSlotSeed = async () => 'semenza';
+      slotId = async (seed, nome) => nome;
+      mailboxGet = async () => ({ busta: 1 });
+      addrOpenIncoming = async () => ({
+        obj: { sdp: 'v=0', rid: 'RID-1', nick: 'Telefono', fp: 'aabbccdd' },
+        sec: { seed: 'semenza', slot: 0 }
+      });
+    `);
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run("$('addrIncoming').classList.contains('hide')"), true,
+      'il blocco resta un blocco: non deve squillare');
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(globalThis.__toast)')), [app.run("fill(t('block.triedToast'), { altro: t('set.grpAdv'), titolo: t('block.title') })")],
+      'ma non deve piu\' essere muto: chi ha bloccato deve saperlo');
+    /* la stessa chiamata si rilegge ogni 2 secondi: un avviso solo */
+    await app.run('addrCheckOnce()');
+    assert.strictEqual(app.run('globalThis.__toast.length'), 1, 'un avviso per chiamata, non uno ogni due secondi');
+    assert.ok(/rotellina › Altro › «Persone bloccate»/.test(app.run('globalThis.__toast[0]')),
+      'l\'avviso deve dire dove si sblocca: l\'elenco sta dentro «Altro», chiuso');
+    assert.ok(app.run('globalThis.__toastMs') >= 6000, 'una strada da seguire non si legge in 2 secondi');
+
+    /* il finto browser non somma il testo dei figli: si cammina l'albero */
+    const testoElenco = app.run(`(function giu(n){ return (n.textContent || '') + (n.children || []).map(giu).join(' '); })($('blockedList'))`);
+    assert.ok(/Ha provato a chiamarti alle/.test(testoElenco),
+      'accanto al nome bloccato deve comparire quando ha provato');
+    const r = await rapporto();
+    assert.ok(/\[warn\] Persone bloccate — 1, e una ha provato a chiamarti alle/.test(r),
+      '«Come sta l\'app» deve dire che una persona bloccata ha appena chiamato: ' + r);
+    app.stop();
+  });
+
   test('chi rinuncia a chiamare si ritira anche dalla casella dell\'altro', async () => {
     /* L'invito resta nella casella finche' non scade, e finche' c'e' fa
        squillare. Chi rinunciava spariva dal proprio schermo e restava li':
@@ -7551,6 +7603,28 @@ test.describe('il lettore QR dentro l\'app (3 ottobre 2026)', () => {
     await aspetta(app, 'globalThis.__bussa');
     assert.strictEqual(app.run('globalThis.__bussa'), 'AAAABBBBCCCC');
     assert.strictEqual(app.run('__tracce[0].fermata'), true);
+    app.stop();
+  });
+
+  test('il QR dell\'indirizzo che l\'app disegna (un link, non l\'indirizzo nudo) chiama subito', async () => {
+    /* 4 ott 2026: il test qui sotto nel describe dell'interfaccia passava
+       `{ addr }` a mano; il QR vero porta `addrLink(...)`, e da li' si finiva
+       nel riquadro «chi sei». Qui si passa dalla porta vera: il lettore, con il
+       testo che l'app stessa mette nel QR. */
+    const app = loadApp();
+    app.run(FINTO + `MEM.setItem('logos-modifica-nick','Anna'); $('nickInput').value = 'Anna';
+      globalThis.__chiamato = null; dialAddress = async (a) => { globalThis.__chiamato = a; };
+      __letture.push(addrLink('AAAABBBBCCCC'));`);
+    await app.run('apriLettoreQr()');
+    await aspetta(app, 'globalThis.__chiamato || globalThis.__bussa');
+    assert.strictEqual(app.run('globalThis.__chiamato'), 'AAAABBBBCCCC', 'dal QR vero la chiamata deve partire subito');
+    assert.strictEqual(app.run('globalThis.__bussa'), null, 'senza il riquadro «chi sei» in mezzo');
+    /* un invito che porta anche l'indirizzo di riserva resta un invito */
+    app.run(`globalThis.__chiamato = null; __letture.push(location.origin + location.pathname + '#q=654321&s=${'S'.repeat(22)}&a=AAAABBBBCCCC');`);
+    await app.run('apriLettoreQr()');
+    await aspetta(app, 'globalThis.__quick');
+    assert.strictEqual(app.run('globalThis.__quick'), true, 'l\'invito deve partire come invito');
+    assert.strictEqual(app.run('globalThis.__chiamato'), null, 'non come chiamata all\'indirizzo di riserva');
     app.stop();
   });
 
