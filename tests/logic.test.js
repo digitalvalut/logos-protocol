@@ -8216,6 +8216,18 @@ test.describe('4.50: la griglia — quattro riquadri, un tocco ciascuno', () => 
     assert.strictEqual(app.run('globalThis.__bussa'), 'AAAABBBBCCCC');
   }));
 
+  test('sul computer senza «condividi», l\'indirizzo copiato dice di incollarlo; un codice resta «Codice copiato»', () => conApp(async app => {
+    await attendi(30);
+    app.run(`navigator.share = undefined; delete window.AndroidShare;
+             robustCopy = async () => true; globalThis.__toast = []; toast = m => { globalThis.__toast.push(m); };`);
+    await app.run('(async () => mandaIndirizzo(await myAddress(0), null))()');
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(globalThis.__toast)')), [app.run("t('toast.pasteIt')")],
+      'copiato l\'indirizzo, la persona deve sapere che va incollato in un\'email o in un messaggio');
+    app.run('globalThis.__toast = []');
+    await app.run("copyOrSelect('123456', null)");
+    assert.deepStrictEqual(JSON.parse(app.run('JSON.stringify(globalThis.__toast)')), [app.run("t('toast.sealCopied')")], 'per un codice non cambia niente');
+  }));
+
   test('la riga sotto la griglia apre il campo dell\'indirizzo e lo richiude', () => conApp(async app => {
     app.run("$('showAddrDial').listeners.click[0]();");
     assert.strictEqual(app.run("$('addrDial').classList.contains('hide')"), false);
