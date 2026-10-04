@@ -129,6 +129,7 @@
   .burnerrow .who{flex:1;min-width:0}
   .burnerrow .who b{display:block;color:var(--ink);font-size:0.9375rem;font-weight:650;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .burnerrow .who small{display:block;font-size:0.8125rem;color:var(--warn);margin-top:2px}
   .burnerrow .who code{display:block;font-family:var(--mono);font-size:0.8125rem;color:var(--accent2);
     letter-spacing:.03em;margin-top:2px;-webkit-user-select:all;user-select:all}
   .burnerrow button{flex:none;background:none;border:1px solid var(--line);border-radius:99px;
