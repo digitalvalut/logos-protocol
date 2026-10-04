@@ -12969,6 +12969,18 @@ function invitoDaQr(testo){
   try{ pubblico = new URL(PUBLIC_APP_URL).host; }catch(e){}
   if (u.host !== pubblico && u.host !== location.host) return null;
   if (!/[#&][qia]=/.test(u.hash)) return null;
+  /* ⚠️ Il QR di un indirizzo che quest'app disegna e' un LINK (`addrLink`),
+     mai l'indirizzo nudo. Nella 4.67 «inquadrato con l'app, chiama subito»
+     valeva solo per l'indirizzo nudo, cioe' per un QR che nessun Logos
+     produce: dal QR vero si tornava al riquadro «chi sei» e la chiamata
+     aspettava un tocco che nessuno sapeva di dover dare (4 ott 2026, Mac →
+     telefono). Stessa precedenza di autoFillFromHash: un invito (`q=`)
+     viene prima dell'indirizzo che porta come riserva. */
+  if (!/[#&]q=\d{6}\b/.test(u.hash)){
+    const ind = u.hash.match(/[#&]a=([0-9A-Za-z]{12})\b/);
+    const a = ind && parseAddress(ind[1]);
+    if (a) return { addr: a };
+  }
   return { hash: u.hash };
 }
 function apriInvitoDaQr(inv){
