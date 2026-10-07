@@ -237,6 +237,15 @@ dropped network, together. It found two defects in 4.61, fixed in 4.62
 [`prova-formale/PER-IL-REVISORE.md`](prova-formale/PER-IL-REVISORE.md): every promise
 Logos makes, mapped to the code, the lemma, the test, and how to check it yourself.
 
+**University internships.** DigitalValut is an approved internship host of the
+University of Catania (agreement accepted by the Rector on 23 September 2026); computer
+science students can do their internship on the security verification of Logos. The
+acceptance letter, digitally signed by the Rector, is published as it was received:
+[`documenti/unict-accettazione-convenzione-2026-09-23.pdf`](documenti/unict-accettazione-convenzione-2026-09-23.pdf)
+— any digital-signature verifier shows who signed it and that it has not been altered.
+The agreement covers internships: it is not a review or an endorsement of Logos by the
+University.
+
 ## How this code is written
 
 Logos is developed by the DigitalValut team, under the direction of **Dr. Giuseppe
@@ -330,6 +339,15 @@ fallito prima di essere accettato, il protocollo è verificato con modelli forma
 pacchetto Android è ricostruibile identico da chiunque. I test fanno girare l'85,7% delle
 righe di codice dell'app (misurato il 28 set 2026). Per orientarsi nel codice:
 [`READING-THE-CODE.md`](READING-THE-CODE.md).
+
+**Tirocini universitari.** DigitalValut APS ETS è ente convenzionato con l'Università degli
+Studi di Catania per i tirocini curriculari (convenzione accettata dal Rettore il 23
+settembre 2026). Gli studenti di Informatica possono svolgere da noi il tirocinio sulla
+verifica di sicurezza di Logos. La lettera di accettazione, firmata digitalmente dal
+Rettore, è pubblicata così come è arrivata:
+[`documenti/unict-accettazione-convenzione-2026-09-23.pdf`](documenti/unict-accettazione-convenzione-2026-09-23.pdf).
+La convenzione riguarda i tirocini: non è una revisione né una raccomandazione di Logos da
+parte dell'Università.
 
 Ideato dal **Dott. Giuseppe Falsone**, Presidente di **DigitalValut**, realizzato con il
 Team DigitalValut.
