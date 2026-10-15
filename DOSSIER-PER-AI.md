@@ -153,8 +153,6 @@ JPEG e PNG; WebP e HEIC non ancora.
 ### Interfaccia e accessibilità
 - **13 lingue** complete (it, en, ar, bn, de, es, fr, hi, id, pt, ru, ur, zh),
   con RTL per arabo e urdu
-- **Modalità semplice**: due pulsanti giganti, ora offerta da sola alla prima
-  apertura invece di restare nascosta nelle impostazioni
 - **Lettura vocale** delle istruzioni
 - **Tre dimensioni di testo**
 - **Condivisione nativa** (Web Share API) in 6 punti ✅ *già esistente*

@@ -703,6 +703,67 @@ for (const [label, html] of [['the front door', HOME_HTML], ['the privacy page',
   });
 }
 
+/* ---- le guide «come fare senza il numero» (15 ott 2026) ----
+   Pagine scritte per chi arriva da una ricerca e non sa niente di Logos. Il
+   loro scopo e' essere trovate, e per questo sono le pagine dove la tentazione
+   di promettere troppo e' piu' forte: una guida che dice «anonimo» o «il piu'
+   sicuro» a chi cerca un modo di non dare il numero e' la peggiore che si
+   possa scrivere. Quindi: stessa disciplina delle altre pagine (niente da
+   fuori, niente script, niente stile dentro), i limiti scritti in chiaro, e
+   nessuna delle parole che il progetto ha deciso di non usare MAI. */
+const GUIDE_FILES = ['chiamare-senza-numero.html', 'whatsapp-senza-numero.html', 'vendere-senza-dare-il-numero.html'];
+const SITE_URL = 'https://digitalvalut.github.io/logos-protocol/';
+const PAROLE_VIETATE = [/inviolabil/i, /inattaccabil/i, /il pi[uù]\s+sicur/i, /a prova di/i, /livello militare/i,
+  /\banonim/i, /non ha (un )?server/i, /senza server/i, /100\s?%/];
+
+for (const f of GUIDE_FILES){
+  const html = read(f);
+  test(`guida ${f}: titolo, descrizione e indirizzo canonico, uno solo ciascuno`, () => {
+    assert.strictEqual((html.match(/<title>[^<]{20,70}<\/title>/g) || []).length, 1, 'titolo mancante, doppio o fuori misura');
+    assert.strictEqual((html.match(/<meta name="description" content="[^"]{80,165}">/g) || []).length, 1, 'descrizione mancante, doppia o fuori misura');
+    assert.ok(html.includes(`<link rel="canonical" href="${SITE_URL}${f}">`), 'indirizzo canonico mancante o sbagliato');
+    assert.strictEqual((html.match(/<h1>/g) || []).length, 1, 'ci vuole un solo titolo di pagina');
+  });
+  test(`guida ${f}: niente da fuori, niente script, niente stile dentro la pagina`, () => {
+    assert.deepStrictEqual(loadsFromElsewhere(html), []);
+    assert.deepStrictEqual([...html.matchAll(/\sstyle="[^"]*"/g)].map(m => m[0].trim()), []);
+    assert.ok(!/<style[\s>]/i.test(html), 'uno <style> dentro la pagina sarebbe bloccato dalla sua stessa policy');
+    assert.ok(!/<script/i.test(html), 'una guida non ha bisogno di nessuno script');
+    const csp = (html.match(/Content-Security-Policy"\s*content="([\s\S]*?)"/) || [, ''])[1];
+    assert.match(csp, /default-src 'self'/);
+    assert.match(csp, /script-src 'self'/);
+    assert.ok(!/frame-ancestors/.test(csp), 'frame-ancestors in un <meta> viene ignorato dal browser');
+  });
+  test(`guida ${f}: dice i limiti e porta all'app, senza le parole che non usiamo mai`, () => {
+    const testo = html.replace(/<!--[\s\S]*?-->/g, '');
+    assert.ok(/id="limiti"/.test(testo) && /Cosa Logos non fa/.test(testo), 'i limiti devono stare scritti, in una sezione che si trova');
+    assert.ok(/revisione di sicurezza indipendente/.test(testo), 'va detto che non c\'e\' ancora una revisione indipendente');
+    assert.ok(/href="modifica\.html"/.test(testo), 'la guida deve portare all\'app');
+    assert.ok(/href="index\.html"/.test(testo), 'la guida deve riportare alla pagina d\'ingresso');
+    const trovate = PAROLE_VIETATE.filter(re => re.test(testo.replace(/<[^>]+>/g, ' '))).map(String);
+    assert.deepStrictEqual(trovate, [], 'parole che una promessa a vuoto userebbe: ' + trovate.join(', '));
+  });
+  test(`guida ${f}: e' nella mappa del sito e i suoi link interni esistono`, () => {
+    assert.ok(read('sitemap.xml').includes(`<loc>${SITE_URL}${f}</loc>`), 'manca in sitemap.xml: Google non la trova');
+    for (const m of html.matchAll(/href="([a-z0-9-]+\.html)(?:#[^"]*)?"/g)){
+      assert.ok(fs.existsSync(path.join(ROOT, m[1])), `link interno rotto: ${m[1]}`);
+    }
+  });
+}
+
+test('sitemap.xml: ben formata, solo pagine che esistono, e mai la copia di prova', () => {
+  const sm = read('sitemap.xml');
+  assert.match(sm, /^<\?xml version="1\.0" encoding="UTF-8"\?>\n<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
+  const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+  assert.ok(locs.length >= GUIDE_FILES.length + 1);
+  for (const u of locs){
+    assert.ok(u.startsWith(SITE_URL), `fuori dal nostro sito: ${u}`);
+    assert.ok(!/\/prova\//.test(u), `la copia di prova non deve finire nei motori di ricerca: ${u}`);
+    const rel = u.slice(SITE_URL.length) || 'index.html';
+    assert.ok(fs.existsSync(path.join(ROOT, rel)), `nella mappa ma non esiste: ${rel}`);
+  }
+});
+
 test('no page claims protection a <meta> policy cannot give', () => {
   /* frame-ancestors is silently ignored when the policy comes from a meta tag.
      Leaving it in looks like a defence and is only a console warning. */

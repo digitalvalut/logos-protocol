@@ -130,7 +130,6 @@ Serve **solo la prima volta** con quella persona. Dopo, l'app se lo ricorda.
 
 Nelle impostazioni:
 
-- **Modalità semplice** — solo due pulsanti giganti e nient'altro attorno.
 - **Dillo ad alta voce** — l'app legge le istruzioni a voce, nella tua lingua.
 - **Dimensione del testo** — tre misure.
 - **13 lingue**: italiano, inglese, arabo, bengalese, tedesco, spagnolo,

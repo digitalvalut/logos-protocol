@@ -103,8 +103,8 @@ read your conversation, log it, or hand it over to anyone.
   redo, even if you never actually chatted before that first call.
 - **A letter for someone who doesn't answer.** Call an address and nobody's there? Leave a
   message, held for up to 7 days, sealed so only the address's owner can open it.
-- **A simple mode**: two very large buttons and nothing else on screen, with the
-  instructions read out loud in your own language. Both off unless you switch them on.
+- **Instructions read out loud** in your own language (off until you switch it on) and
+  **three text sizes**, for people who find the screen hard to read.
 - A self-destruct timer for messages, when you want a conversation to leave no trace at all.
 - **Automatic cleanup**, entirely opt-in and off by default: turn it on and the app quietly
   deletes conversations older than the number of days you choose (7, 30, 90 or 365), so
@@ -136,6 +136,11 @@ asks for, stores or shows anybody's location.
   or just keep it open as a normal browser tab — no installation is required to use it.
 
 No app store, no account, nothing to buy.
+
+**Plain-language guides (Italian):**
+[call someone without giving your phone number](https://digitalvalut.github.io/logos-protocol/chiamare-senza-numero.html) ·
+[WhatsApp without a phone number: what actually works](https://digitalvalut.github.io/logos-protocol/whatsapp-senza-numero.html) ·
+[sell online without giving your number](https://digitalvalut.github.io/logos-protocol/vendere-senza-dare-il-numero.html)
 
 ### Android, as a signed APK
 
@@ -208,7 +213,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-603 automated tests (measured 4 Oct 2026), each verified by deliberately reintroducing
+616 automated tests (measured 15 Oct 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root
@@ -328,9 +333,9 @@ sito, lo porta dentro di sé — quindi funziona anche dove il sito è bloccato.
 **L'invito aspetta:** mandalo e chiudi pure l'app — chi lo apre, anche il giorno dopo, ti
 fa squillare il telefono, e appena riapri siete connessi. **Il QR si verifica da solo:**
 inquadrare il codice sullo schermo di chi hai davanti è un canale che nessuno può
-intercettare, e l'app lo riconosce senza chiedervi altro. C'è una **modalità semplice** con
-due soli pulsanti giganti e le istruzioni lette ad alta voce, per chi non vede bene o non
-legge. E tutta l'app sta in **un unico file** che chiunque può caricare ovunque.
+intercettare, e l'app lo riconosce senza chiedervi altro. Le istruzioni si possono far
+leggere **ad alta voce** e il testo ha **tre misure**, per chi non vede bene o fa fatica a
+leggere. E tutta l'app sta in **un unico file** che chiunque può caricare ovunque.
 
 **Come è scritto il codice.** Logos è sviluppato dal team DigitalValut, sotto la
 direzione del Dott. Giuseppe Falsone, anche con l'aiuto di un assistente di programmazione
