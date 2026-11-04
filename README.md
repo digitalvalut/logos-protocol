@@ -265,8 +265,10 @@ the whole app is one file a single reader can follow ([how to read it](READING-T
 ## License
 
 DigitalValut Logos is released under the **Apache License, Version 2.0** — see
-[`LICENSE`](LICENSE) for the full text. You may use, modify, and redistribute this
-software, including in closed-source or commercial products, under its terms.
+[`LICENSE`](LICENSE) for the full text, unmodified, and [`NOTICE`](NOTICE) for the
+copyright and attribution notice that the license asks redistributors to keep. You may
+use, modify, and redistribute this software, including in closed-source or commercial
+products, under its terms.
 
 For arrangements outside the terms of the Apache License 2.0 — custom support, warranty
 commitments, or other terms not covered by the license as published — contact DigitalValut
