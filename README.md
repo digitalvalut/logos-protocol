@@ -7,6 +7,7 @@
 [![controlli](https://github.com/digitalvalut/logos-protocol/actions/workflows/checks.yml/badge.svg)](https://github.com/digitalvalut/logos-protocol/actions/workflows/checks.yml)
 
 Web app: **https://digitalvalut.github.io/logos-protocol/**
+Android: **[F-Droid](https://f-droid.org/packages/io.github.digitalvalut.logos/)** or the [signed APK](#android-as-a-signed-apk)
 Source code: **https://github.com/digitalvalut/logos-protocol** · Apache 2.0 license
 
 Examining the code? [`FAQ-TECNICA.md`](FAQ-TECNICA.md) answers, with numbers measured
@@ -146,6 +147,13 @@ No app store, no account, nothing to buy.
 
 There is also a signed Android package, if you would rather have a real app icon than a
 web-app shortcut: **[download the latest APK](https://github.com/digitalvalut/logos-protocol/releases/latest)**.
+
+It is also on **[F-Droid](https://f-droid.org/packages/io.github.digitalvalut.logos/)**
+(since 4 Nov 2026, version 72). F-Droid builds the package from this repository and
+checks that it matches ours (signature aside) before publishing it, so what you install from
+there is verifiably this source code, and the F-Droid client keeps it up to date. F-Droid
+lists one anti-feature, *Tethered Network Service*: the app needs this project's relay to
+find the other person. That is true and is explained under [Architecture](#architecture).
 
 To get updates automatically without any app store, use
 **[Obtainium](https://github.com/ImranR98/Obtainium)** — it installs and updates apps

@@ -18,7 +18,8 @@
     'and.2': 'Open the file and tap <strong>Install</strong>. If the phone asks to allow "this source", allow it: that is the normal confirmation for any app that does not come from the Play Store.',
     'and.3': 'Open Logos, type your name, tap <strong>Start</strong>. Your address is ready.',
     'and.cta': 'Download for Android',
-    'and.obt': 'Want it to update by itself? Install <a href="https://github.com/ImranR98/Obtainium">Obtainium</a> and add <code>https://github.com/digitalvalut/logos-protocol</code>: every new version arrives without you doing anything.',
+    'and.fdroid': 'Use <a href="https://f-droid.org/">F-Droid</a>? Logos is there: <a href="https://f-droid.org/packages/io.github.digitalvalut.logos/">search for "DigitalValut Logos"</a>. F-Droid rebuilds it from the public code, checks that it matches ours, and keeps it up to date.',
+    'and.obt':'Want it to update by itself? Install <a href="https://github.com/ImranR98/Obtainium">Obtainium</a> and add <code>https://github.com/digitalvalut/logos-protocol</code>: every new version arrives without you doing anything.',
     'and.sig': 'Want to be certain it is the genuine app? Every version is signed with the same key, whose fingerprint is published in the <a href="https://github.com/digitalvalut/logos-protocol#android-as-a-signed-apk">README</a>, and every version is rebuilt and checked by an independent computer before it is declared reproducible.',
 
     'ios.t': 'iPhone and iPad',
