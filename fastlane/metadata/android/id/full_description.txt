@@ -1,0 +1,39 @@
+Obrolan terenkripsi, panggilan suara dan video, serta berbagi berkas — langsung di antara dua perangkat, tanpa akun, tanpa nomor telepon dan tanpa server yang pernah melihat pesan.
+
+Dua peramban menyepakati koneksi WebRTC pribadi lalu berbicara langsung. Sebuah relay kecil hanya membantu keduanya saling menemukan dan, bila jaringan yang sangat ketat mengharuskannya, meneruskan lalu lintas yang sudah terenkripsi dan kuncinya tidak ia miliki. Tidak ada basis data yang menyimpan percakapan.
+
+Relay itu adalah Cloudflare Worker yang dijalankan proyek ini (digitalvalut-turn.burbeng78.workers.dev); server bantu koneksi (STUN/TURN) milik Cloudflare (stun.cloudflare.com, turn.cloudflare.com). Alamat relay tertanam di aplikasi. Kode sumbernya ada di repositori yang sama (turn-worker/), jadi siapa pun bisa menjalankan miliknya sendiri, tetapi untuk memakainya aplikasi harus dibangun ulang.
+
+<b>Cara menghubungi seseorang</b>
+
+Alamat permanen (DV-XXXX-XXXX-XXXX) adalah hash SHA-256 dari pasangan kunci yang dibuat di perangkat, sehingga ia memverifikasi dirinya sendiri: yang menghubunginya mengambil kunci yang dipublikasikan, memeriksa bahwa kunci itu benar-benar cocok dengan alamat yang dituju, dan baru setelah itu memercayainya. Kunci yang ditukar menghasilkan alamat lain dan ditolak. Di samping alamat permanen, kamu bisa memegang hingga delapan alamat sekali pakai, masing-masing bisa dicabut sendiri.
+
+Kamu juga bisa terhubung lewat tautan undangan, atau dengan memindai kode QR secara langsung.
+
+<b>Tahu dengan siapa kamu benar-benar bicara</b>
+
+Saat pertama kali terhubung, kedua pihak melihat kode keamanan tiga kata yang sama, diturunkan dari jabat tangan kriptografis yang sebenarnya. Bacakan sekali dengan suara keras: jika kata-katanya cocok, tidak ada yang menyusup di tengah. Pemeriksaan ini terikat pada sidik jari kriptografis orang tersebut, bukan pada nama tampilan.
+
+<b>Yang bisa dilakukan</b>
+
+• Teks, emoji, pesan suara, foto, video, dan berkas hingga 512 MB, dikirim tanpa kompresi dalam kualitas asli
+• Lokasi GPS, model perangkat, dan metadata perangkat lunak dihapus dari foto di perangkat sebelum dikirim, tanpa mengodekan ulang gambar
+• Panggilan audio dan video dengan berbagi layar
+• Ponsel berdering meski aplikasi ditutup, tanpa Google dan tanpa Firebase: layanan milik aplikasi membaca kotak suratnya sendiri yang terenkripsi, dan pertanyaannya hanya punya jawaban ya atau tidak. Ia tidak memegang kunci dan tidak bisa membaca apa pun; siapa yang memanggil dan apa yang ditulis dibaca oleh aplikasi saat kamu membukanya. Ia lebih boros baterai daripada notifikasi push, dan mati sampai kamu menyalakannya
+• Surat tersegel untuk orang yang tidak menjawab, disimpan hingga 7 hari, hanya bisa dibuka pemilik alamat
+• Pesan yang menghapus diri dan pembersihan otomatis opsional untuk percakapan lama
+• Antarmuka dalam 13 bahasa, dengan tata letak kanan-ke-kiri untuk bahasa Arab dan Urdu
+
+<b>Batasan, terus terang</b>
+
+Untuk percakapan langsung, kedua orang harus daring pada saat yang sama. Itulah harga dari tidak adanya server — soal arsitektur, bukan bug.
+
+Alamat IP-mu terlihat oleh orang yang terhubung denganmu, kecuali kamu menyalakan «Sembunyikan lokasimu».
+
+<b>Tentang paket ini</b>
+
+Seluruh aplikasi ada di dalam paket ini. Ia tidak membuka situs web: yang berjalan di ponselmu persis yang dibangun dari kode sumber repositori ini, dan tetap berfungsi meski situsnya tidak bisa diakses.
+
+Tidak ada layanan notifikasi push di dalamnya — tanpa layanan Google Play, tanpa Firebase, tanpa akun. Satu-satunya layanan latar belakang adalah milik aplikasi sendiri dan ia hanya berbicara dengan relay yang sama yang sudah dipakai aplikasi. Semua primitif kriptografi berasal dari implementasi Web Crypto milik sistem. Tidak ada yang dimuat dari pihak ketiga: tanpa skrip, pustaka, atau CDN.
+
+Dibuat oleh Associazione di Promozione Sociale DigitalValut, organisasi nirlaba Italia. Gratis selamanya, tanpa akun dan tanpa ada yang perlu dibeli.

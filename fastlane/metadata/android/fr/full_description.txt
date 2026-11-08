@@ -1,0 +1,39 @@
+Messagerie chiffrée de pair à pair, appels audio et vidéo et envoi de fichiers — directement entre deux appareils, sans compte, sans numéro de téléphone et sans aucun serveur qui voie un message.
+
+Deux navigateurs négocient une connexion WebRTC privée et se parlent directement. Un petit relais les aide seulement à se trouver et, quand un réseau particulièrement strict l'exige, transmet un trafic déjà chiffré dont il n'a pas la clé. Aucune base de données ne conserve les conversations.
+
+Le relais est un Cloudflare Worker géré par le projet (digitalvalut-turn.burbeng78.workers.dev) ; les aides à la connexion (STUN/TURN) sont celles de Cloudflare (stun.cloudflare.com, turn.cloudflare.com). L'adresse du relais est fixée dans l'app. Son code source est dans le même dépôt (turn-worker/) : chacun peut faire tourner le sien, mais il faut alors recompiler l'app.
+
+<b>Comment joindre quelqu'un</b>
+
+Une adresse permanente (DV-XXXX-XXXX-XXXX) est le hachage SHA-256 d'une paire de clés créée sur l'appareil : elle se vérifie donc elle-même. Celui qui la compose récupère la clé publiée, vérifie qu'elle correspond bien à l'adresse composée, et seulement alors lui fait confiance. Une clé substituée donne une autre adresse et est refusée. Jusqu'à huit adresses jetables peuvent s'ajouter à l'adresse permanente, chacune révocable séparément.
+
+Vous pouvez aussi vous connecter par un lien d'invitation à toucher, ou en scannant un QR code en personne.
+
+<b>Savoir à qui vous parlez vraiment</b>
+
+À la première connexion, les deux côtés voient le même code de sécurité de trois mots, tiré de l'échange cryptographique réel. Lisez-le une fois à voix haute : si les mots concordent, personne ne s'est glissé au milieu. Cette vérification est liée à l'empreinte cryptographique de l'autre personne, pas à un nom affiché.
+
+<b>Ce que fait l'app</b>
+
+• Texte, emoji, messages vocaux, photos, vidéos et fichiers jusqu'à 512 Mo, envoyés sans compression, en qualité d'origine
+• Les photos perdent sur l'appareil, avant l'envoi, leur position GPS, le modèle de l'appareil et les métadonnées logicielles, sans réencoder l'image
+• Appels audio et vidéo avec partage d'écran
+• Le téléphone sonne même app fermée, sans Google ni Firebase : un service de l'app lit sa propre boîte chiffrée, et sa question n'a que oui ou non pour réponse. Il n'a aucune clé et ne peut rien lire ; qui appelle et ce qui a été écrit, c'est l'app qui le lit à l'ouverture. Il consomme plus de batterie qu'une notification push, et reste éteint tant que vous ne l'activez pas
+• Une lettre scellée pour quelqu'un qui ne répond pas, conservée jusqu'à 7 jours, que seul le titulaire de l'adresse peut ouvrir
+• Messages éphémères et nettoyage automatique facultatif des anciennes conversations
+• Interface en 13 langues, avec mise en page de droite à gauche pour l'arabe et l'ourdou
+
+<b>Limites, honnêtement</b>
+
+Pour une conversation en direct, les deux personnes doivent être en ligne en même temps. C'est le prix de l'absence de serveur : une question d'architecture, pas un bug.
+
+Votre adresse IP est visible par la personne à qui vous vous connectez, sauf si vous activez « Cacher où vous êtes ».
+
+<b>À propos de ce paquet</b>
+
+Toute l'application est dans ce paquet. Elle n'ouvre pas un site web : ce qui tourne sur votre téléphone est exactement ce qui a été compilé à partir du code source de ce dépôt, et cela fonctionne même si le site est injoignable.
+
+Il n'y a aucun service de notifications push — ni services Google Play, ni Firebase, ni compte. Le seul service en arrière-plan est celui de l'app, décrit plus haut, et il ne parle qu'au relais que l'app utilise déjà. Toutes les primitives cryptographiques viennent de l'implémentation Web Crypto du système. Rien de tiers n'est chargé : ni script, ni bibliothèque, ni CDN.
+
+Réalisé par l'Associazione di Promozione Sociale DigitalValut, une association italienne à but non lucratif. Gratuit pour toujours, sans compte et sans rien à acheter.

@@ -926,3 +926,28 @@ test('la testata della chat manda i tasti a capo appena il nome non ci sta (3 ot
   for (const id of ['btnCallAudio', 'btnCallVideo', 'btnMenu', 'btnEndChat'])
     assert.ok(gruppo.indexOf('id="' + id + '"') > 0, id + ' fuori dal gruppo');
 });
+
+/* The F-Droid listing comes from fastlane/metadata/android/<locale>/, read from
+   the commit of each release. Two ways to get it silently wrong: a text over
+   F-Droid's limits (80 characters for the short line, 4000 for the long one)
+   is cut or refused, and an app language with no listing shows people a page
+   in a language the app itself would never have used with them. Added 8 Nov
+   2026 with the eleven listings that were missing. */
+test('the F-Droid listing exists in every app language, within F-Droid\'s limits', () => {
+  const dir = path.join(ROOT, 'fastlane', 'metadata', 'android');
+  const locales = fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d)).isDirectory());
+  const src = fs.readFileSync(path.join(ROOT, 'modifica.js'), 'utf8');
+  const langs = [...src.match(/const I18N = \{([^;]*)\};/)[1].matchAll(/(\w+):\s*\{\}/g)].map(m => m[1]);
+  assert.ok(langs.length >= 13, 'could not read the app languages from I18N');
+  for (const l of langs) {
+    assert.ok(locales.some(loc => loc === l || loc.startsWith(l + '-')),
+      'no F-Droid listing for app language "' + l + '"');
+  }
+  const len = s => [...s.replace(/\n+$/, '')].length;
+  for (const loc of locales) {
+    const read = f => fs.readFileSync(path.join(dir, loc, f), 'utf8');
+    assert.ok(len(read('title.txt')) <= 50, loc + ': title over 50 characters');
+    assert.ok(len(read('short_description.txt')) <= 80, loc + ': short description over 80 characters');
+    assert.ok(len(read('full_description.txt')) <= 4000, loc + ': full description over 4000 characters');
+  }
+});
