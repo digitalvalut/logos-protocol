@@ -137,6 +137,8 @@ footer{max-width:940px;margin:44px auto 0;padding:26px 20px 44px;
   border-top:1px solid var(--line);color:var(--faint);font-size:0.8125rem}
 footer p{margin:0 0 8px}
 footer a{color:var(--accent2)}
+footer .donate code{word-break:break-all}
+footer .donate img{display:block;max-width:160px;height:auto;border-radius:12px;background:#fff}
 
 @media(prefers-reduced-motion:reduce){
   .cta{transition:none}

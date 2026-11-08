@@ -37,6 +37,12 @@
         "type": "bank",
         "address": "",
         "description": "Bank transfer to the association's account. Details are sent on request by email."
+      },
+      {
+        "guid": "bitcoin",
+        "type": "other",
+        "address": "bc1q38m5j6qe7p0xq67vmmwuuxaytaes4yv7u388d9",
+        "description": "Bitcoin donations to the association's address (native SegWit). Donations are public on the blockchain."
       }
     ],
     "plans": [
@@ -48,7 +54,7 @@
         "amount": 25000,
         "currency": "USD",
         "frequency": "one-time",
-        "channels": ["bank-transfer"]
+        "channels": ["bank-transfer", "bitcoin"]
       }
     ],
     "history": [
