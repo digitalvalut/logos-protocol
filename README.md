@@ -221,7 +221,7 @@ itself will refuse to run it.
 
 ## Quality signal
 
-617 automated tests (measured 8 Nov 2026), each verified by deliberately reintroducing
+618 automated tests (measured 8 Nov 2026), each verified by deliberately reintroducing
 the bug it guards against and confirming it fails red before the fix — not just written
 to pass. They run in a ~150-line hand-written browser sandbox, not a framework, in
 keeping with the zero-runtime-dependency rule. `node --test` from the repository root
@@ -269,6 +269,19 @@ That is exactly why nothing here asks to be taken on trust: every test is kept o
 it has been made to fail against the defect it guards, the signalling protocol is modelled
 in Tamarin and ProVerif, the Android package can be rebuilt byte for byte by anyone, and
 the whole app is one file a single reader can follow ([how to read it](READING-THE-CODE.md)).
+
+## Support Logos
+
+Logos is free, has no ads and sells nothing. It is built by a volunteer-run Italian
+nonprofit. If you want to help keep it going, you can donate in Bitcoin to the
+association's address:
+
+<img src="media/dona-bitcoin.png" width="160" height="160" alt="Bitcoin donation QR code">
+
+`bc1q38m5j6qe7p0xq67vmmwuuxaytaes4yv7u388d9`
+
+Donations to a bitcoin address are public on the blockchain, as for any Bitcoin
+payment. Funding bodies can also read [`funding.json`](funding.json).
 
 ## License
 

@@ -951,3 +951,37 @@ test('the F-Droid listing exists in every app language, within F-Droid\'s limits
     assert.ok(len(read('full_description.txt')) <= 4000, loc + ': full description over 4000 characters');
   }
 });
+
+/* The donation address is the one string in this repository where a typo does
+   not break anything visible: it just sends people's money somewhere nobody
+   can ever spend it. So every copy must be the same address, and that address
+   must pass its own bech32 checksum (BIP 173), which catches any single wrong
+   character. Added 8 Nov 2026 with the Bitcoin donation channel. */
+test('the Bitcoin donation address is the same everywhere and passes its checksum', () => {
+  const CH = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+  const polymod = v => {
+    const G = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+    let c = 1;
+    for (const x of v) {
+      const b = c >>> 25;
+      c = ((c & 0x1ffffff) << 5) ^ x;
+      for (let i = 0; i < 5; i++) if ((b >>> i) & 1) c ^= G[i];
+    }
+    return c >>> 0;
+  };
+  const valid = a => {
+    const i = a.lastIndexOf('1');
+    const hrp = a.slice(0, i), data = [...a.slice(i + 1)].map(ch => CH.indexOf(ch));
+    if (data.some(d => d < 0)) return false;
+    const ex = [...hrp].map(ch => ch.charCodeAt(0) >> 5).concat([0], [...hrp].map(ch => ch.charCodeAt(0) & 31));
+    return polymod(ex.concat(data)) === 1;
+  };
+  const found = new Set();
+  for (const f of ['index.html', 'README.md', 'funding.json']) {
+    const hits = fs.readFileSync(path.join(ROOT, f), 'utf8').match(/\bbc1[a-z0-9]{8,87}\b/g) || [];
+    assert.ok(hits.length > 0, f + ' has no Bitcoin address');
+    hits.forEach(h => found.add(h));
+  }
+  assert.strictEqual(found.size, 1, 'different Bitcoin addresses in different files: ' + [...found].join(', '));
+  assert.ok(valid([...found][0]), 'the Bitcoin address fails its bech32 checksum: ' + [...found][0]);
+});
