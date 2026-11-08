@@ -1,0 +1,39 @@
+Chat cifrado ponto a ponto, chamadas de voz e vídeo e envio de ficheiros — diretamente entre dois dispositivos, sem conta, sem número de telefone e sem nenhum servidor que veja uma mensagem.
+
+Dois navegadores negociam uma ligação WebRTC privada e falam diretamente um com o outro. Um pequeno relé só os ajuda a encontrarem-se e, quando uma rede invulgarmente restrita o exige, reencaminha tráfego que já está cifrado e cuja chave não tem. Não existe nenhuma base de dados com conversas.
+
+O relé é um Cloudflare Worker gerido pelo projeto (digitalvalut-turn.burbeng78.workers.dev); os auxiliares de ligação (STUN/TURN) são os da Cloudflare (stun.cloudflare.com, turn.cloudflare.com). O endereço do relé está fixado na app. O seu código está no mesmo repositório (turn-worker/), por isso qualquer pessoa pode ter o seu, mas para o usar é preciso recompilar a app.
+
+<b>Como contactar alguém</b>
+
+Um endereço permanente (DV-XXXX-XXXX-XXXX) é o hash SHA-256 de um par de chaves gerado no dispositivo, por isso verifica-se sozinho: quem o marca obtém a chave publicada, confirma que corresponde mesmo ao endereço marcado e só então confia nela. Uma chave trocada dá outro endereço e é recusada. Além do permanente, podes ter até oito endereços descartáveis, cada um revogável à parte.
+
+Também te podes ligar por um link de convite, ou lendo um código QR pessoalmente.
+
+<b>Saber com quem estás mesmo a falar</b>
+
+Na primeira ligação, os dois lados veem o mesmo código de segurança de três palavras, derivado da troca criptográfica real. Leiam-no em voz alta uma vez: se as palavras coincidem, ninguém está no meio. Essa verificação fica ligada à impressão digital criptográfica da outra pessoa, não a um nome visível.
+
+<b>O que faz</b>
+
+• Texto, emoji, mensagens de voz, fotos, vídeos e ficheiros até 512 MB, sem compressão, na qualidade original
+• As fotos perdem no dispositivo, antes do envio, a localização GPS, o modelo do aparelho e os metadados de software, sem recodificar a imagem
+• Chamadas de áudio e vídeo com partilha de ecrã
+• O telefone toca mesmo com a app fechada, sem Google nem Firebase: um serviço da própria app lê a sua caixa cifrada, e a pergunta que faz só tem sim ou não como resposta. Não tem nenhuma chave e não consegue ler nada; quem liga e o que escreveu é lido pela app quando a abres. Gasta mais bateria do que uma notificação push e está desligado até o ativares
+• Uma carta selada para quem não responde, guardada até 7 dias, que só o dono do endereço pode abrir
+• Mensagens que se autodestroem e limpeza automática opcional de conversas antigas
+• Interface em 13 línguas, com disposição da direita para a esquerda para árabe e urdu
+
+<b>Limites, com honestidade</b>
+
+Para uma conversa ao vivo, as duas pessoas têm de estar online ao mesmo tempo. É o preço de não haver servidor: uma questão de arquitetura, não um erro.
+
+O teu endereço IP é visível para a pessoa com quem te ligas, a menos que atives «Esconder onde estás».
+
+<b>Sobre este pacote</b>
+
+A aplicação inteira está dentro deste pacote. Não abre um site: o que corre no teu telefone é exatamente o que foi compilado a partir do código deste repositório, e continua a funcionar mesmo que o site não esteja acessível.
+
+Não há nenhum serviço de notificações push — nem serviços do Google Play, nem Firebase, nem conta. O único serviço em segundo plano é o da própria app, descrito acima, e só fala com o mesmo relé que a app já usa. Todas as primitivas criptográficas vêm da implementação Web Crypto do sistema. Nada de terceiros é carregado: nem scripts, nem bibliotecas, nem CDN.
+
+Criada pela Associazione di Promozione Sociale DigitalValut, uma associação italiana sem fins lucrativos. Gratuita para sempre, sem conta e sem nada para comprar.

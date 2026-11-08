@@ -1,0 +1,1 @@
+Chat et appels chiffrés de pair à pair. Sans compte, sans serveur, sans numéro.
