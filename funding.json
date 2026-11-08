@@ -50,7 +50,7 @@
         "guid": "security-and-independence",
         "status": "active",
         "name": "Independent security review and relay independence",
-        "description": "One-time support for an independent security review of the client and relay, testing devices we lack (Logos has never been tested on an iPhone), and moving the signalling relay off the free hosting tier, whose daily write limit is today the main availability weakness.",
+        "description": "One-time support for an independent security review of the client and relay, testing devices we lack (Logos has never been tested on an iPhone), and the signalling relay's hosting, which moved to a paid plan in November 2026 when real users arrived after the F-Droid release, and is paid out of pocket today.",
         "amount": 25000,
         "currency": "USD",
         "frequency": "one-time",
