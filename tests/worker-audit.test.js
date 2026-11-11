@@ -430,6 +430,23 @@ test.describe('worker: nessuno puo svuotare la quota del giorno da solo', () => 
       'cambiare IP aggira ogni limite');
   });
 
+  test('chi e gia fermo sul proprio tetto non riempie il secchio di tutti', async () => {
+    /* 11 nov 2026: il secchio veniva consultato PRIMA del limite per
+       indirizzo, quindi anche le richieste che quel limite avrebbe respinto
+       lo riempivano. Un solo indirizzo che insisteva bloccava, per il resto
+       del minuto, la prima scrittura e la prima lettura di chiunque altro. */
+    const w = W.caricaWorker();
+    for (let i = 0; i < 60; i++) await w.chiama('PUT', '/mailbox/' + 'b'.repeat(64), { body: 'x', ip: '198.51.100.1' });
+    const scrive = await w.chiama('PUT', '/mailbox/' + 'a'.repeat(64), { body: 'offerta', ip: '192.0.2.50' });
+    assert.notStrictEqual(scrive.status, 429, 'la prima scrittura di un altro indirizzo deve passare');
+    for (let i = 0; i < 3100; i++) await w.chiama('GET', '/mailbox/' + 'c'.repeat(64) + '?peek=1', { ip: '198.51.100.1' });
+    const legge = await w.chiama('GET', '/mailbox/' + 'a'.repeat(64) + '?peek=1', { ip: '192.0.2.51' });
+    assert.notStrictEqual(legge.status, 429, 'e anche la sua prima lettura');
+    /* il tetto per indirizzo resta: chi insiste e' ancora fermo */
+    const ancora = await w.chiama('PUT', '/mailbox/' + 'b'.repeat(64), { body: 'x', ip: '198.51.100.1' });
+    assert.strictEqual(ancora.status, 429);
+  });
+
   test('E IL LATO DA NON ROMPERE: il PC e il telefono di casa devono passare', async () => {
     /* ⚠️ IL PERICOLO VERO DI QUESTA CORREZIONE, piu dell'attacco che ferma:
        stringere tanto da spegnere l'app a chi la usa bene. Il caso da
