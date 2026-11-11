@@ -4400,6 +4400,34 @@ function remoteFpHex(){
   const fp = extractFingerprint(pc && pc.remoteDescription && pc.remoteDescription.sdp);
   return fp ? fp.replace(/:/g, '').toLowerCase() : null;
 }
+/* ⚠️ L'IMPRONTA CHE CONTA E' QUELLA PROVATA, NON QUELLA SCRITTA (11 nov 2026).
+   Il saluto e l'offerta portano un campo `fp`: lo scrive l'altro, quindi puo'
+   scriverci quello che vuole — anche l'impronta di una terza persona, che ogni
+   suo contatto conosce. Fino a qui quel campo veniva preso per buono in tre
+   posti, e in tutti e tre costava qualcosa:
+   - in rubrica: chi si presentava col nome E l'impronta di un contatto gia'
+     salvato ne riscriveva l'indirizzo e il colpetto push con i propri, senza
+     nessun «(2)» e senza nessun allarme — la volta dopo, toccando quel nome,
+     si chiamava lui. La nota D-13 contava su «l'impronta non torna e scatta
+     "contatto cambiato"»: non scattava, perche' l'impronta salvata restava
+     quella dichiarata e nessuno la confrontava con quella vera;
+   - nel blocco: bastava dichiararne un'altra per non essere piu' bloccati;
+   - e, peggio, nel bloccare: rifiutando e bloccando una chiamata che
+     dichiarava l'impronta di un amico, si bloccava L'AMICO.
+   La descrizione SDP porta l'impronta del certificato con cui la stretta DTLS
+   verra' fatta (o e' stata fatta): quella non si puo' scrivere a piacere,
+   perche' con un certificato diverso il canale non si apre. Quando le due non
+   coincidono vince quella della descrizione.
+   Chi non dichiara niente resta senza impronta, come prima: e' il caso di un
+   browser che non riesce a conservare l'identita', e dargli per impronta un
+   certificato che cambia a ogni sessione lo farebbe sembrare ogni volta una
+   persona nuova. */
+function improntaVera(dichiarata, sdp){
+  const d = typeof dichiarata === 'string' && dichiarata ? dichiarata.toLowerCase() : null;
+  const f = extractFingerprint(typeof sdp === 'string' ? sdp : '');
+  const p = f ? f.replace(/:/g, '').toLowerCase() : null;
+  return (d && p && d !== p) ? p : d;
+}
 /* ---------- a lasting identity, so verification can outlive one session ----------
    By default a browser mints a throwaway certificate for every connection, so the
    safety code would differ every time and "it changed" would mean nothing. Keeping
@@ -8042,7 +8070,9 @@ async function addrCheckOnce(){
     if (!bustaFresca(msg)) continue;
     /* a caller already turned away stays turned away — it does not ring. But
        it is no longer SILENT: see segnaTentativoBloccato */
-    if (isBlockedFp(msg.fp)){ segnaTentativoBloccato(msg.fp, msg.rid); continue; }
+    /* sull'impronta della descrizione, non su quella scritta nella busta: vedi improntaVera */
+    const fpChi = improntaVera(msg.fp, msg.sdp);
+    if (isBlockedFp(fpChi)){ segnaTentativoBloccato(fpChi, msg.rid); continue; }
     /* e nemmeno questa singola chiamata, a cui si e' gia' risposto di no */
     if (refusedRids.has(msg.rid)) continue;
     /* e nemmeno una a cui si e' GIA' risposto: la casella la serve ancora per
@@ -9263,7 +9293,9 @@ $('btnAddrIgnore').addEventListener('click', () => {
      su un pulsante che dice cosa fa — e si disfa dalle impostazioni. */
   stopListenRing();
   const pend = addrPending;
-  refusedFp = (pend && pend.msg && typeof pend.msg.fp === 'string') ? pend.msg.fp : null;
+  /* cio' che si potra' bloccare e' chi ha chiamato davvero, non chi ha detto
+     di essere: vedi improntaVera */
+  refusedFp = (pend && pend.msg) ? improntaVera(pend.msg.fp, pend.msg.sdp) : null;
   addrPending = null;
   $('addrIncoming').classList.add('hide');
   /* niente impronta, niente da bloccare: non si offre un pulsante che non
@@ -9313,7 +9345,7 @@ $('btnAddrBlock').addEventListener('click', () => {
    check here is measured, never assumed — and where it genuinely cannot be
    known (a microphone nobody has asked for yet) it says that instead of
    guessing. */
-const APP_VERSION = 'logos-modifica-4.68';
+const APP_VERSION = 'logos-modifica-4.69';
 
 /* what is *actually* running, not what this file thinks should be: the page is
    fetched network-first so the code is always current, but the cached shell
@@ -11652,7 +11684,9 @@ function onDcMessage(ev){
       /* Someone turned away at the public address stays turned away. Checked
          against the fingerprint the handshake itself proved, not the name or
          the address they chose to claim — those are theirs to write. */
-      if (typeof msg.fp === 'string' && isBlockedFp(msg.fp)){
+      /* da qui in giu' `fpVera`, mai `msg.fp`: vedi improntaVera */
+      const fpVera = improntaVera(msg.fp, pc && pc.remoteDescription && pc.remoteDescription.sdp);
+      if (isBlockedFp(fpVera)){
         try{ dc.close(); }catch(e){}
         try{ pc.close(); }catch(e){}
         pc = null; dc = null;
@@ -11671,7 +11705,7 @@ function onDcMessage(ev){
       peerNick = (typeof msg.nick === 'string' ? msg.nick : '').trim().slice(0, 60);
       /* la ripresa si arma qui, con le due impronte e i due numeri casuali
          — e non dipende dal nome, che l'altro puo' anche non mandare */
-      armRepair(msg.fp, msg.rn).catch(() => { repairBase = null; });
+      armRepair(fpVera, msg.rn).catch(() => { repairBase = null; });
       /* Se l'altro lato non lo dichiara e' una versione piu' vecchia: non gli
          si offre nessun rinnovo, cosi' non resta mai un'offerta appesa in
          attesa di una risposta che non puo' arrivare.
@@ -11712,7 +11746,7 @@ function onDcMessage(ev){
            scritta a mano dall'altro sarebbe legarla a niente. */
         const fpProvata = remoteFpHex();
         const pubLegata = pubValida(msg.pub) && (!fpProvata || fpProvata === msg.fp) ? msg.pub : null;
-        touchContact(peerNick, typeof msg.fp === 'string' ? msg.fp : null, sanitizePushSub(msg.push),
+        touchContact(peerNick, fpVera, sanitizePushSub(msg.push),
                      dialedAddress || (typeof msg.addr === 'string' ? parseAddress(msg.addr) : null),
                      pubLegata);
         sysLine(peerNick + ' ' + t('call.joined'));

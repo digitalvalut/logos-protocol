@@ -9673,3 +9673,79 @@ test.describe('nascondi dove sei', () => {
     app.stop();
   });
 });
+
+/* ⚠️ 11 nov 2026. Il campo `fp` del saluto e dell'offerta lo scrive l'altro:
+   puo' metterci l'impronta di chiunque, e ogni contatto di una persona la
+   conosce. Era preso per buono in rubrica, nel blocco e nel bloccare. Queste
+   prove passano dalla porta vera (`onDcMessage`, il tasto «Ignora»), con una
+   descrizione SDP che porta un'impronta e un saluto che ne dichiara un'altra. */
+test.describe('l impronta che conta e quella provata dal canale, non quella dichiarata', () => {
+  const FP_ALICE = 'aa'.repeat(32), FP_MALLORY = 'bb'.repeat(32);
+  const sdpDi = fp => 'v=0\r\na=fingerprint:sha-256 ' + fp.match(/../g).join(':').toUpperCase() + '\r\n';
+  function appConCanale(fpProvata){
+    const app = loadApp();
+    app.run(`
+      pc = { remoteDescription: { sdp: ${JSON.stringify(sdpDi(fpProvata))} }, connectionState: 'connected', close(){} };
+      dc = { close(){}, send(){}, readyState: 'open' };
+      dialedAddress = null;
+      showConnectedFlash = async () => {}; checkSafetyFor = async () => {}; confrontaVersioni = () => {};
+    `);
+    return app;
+  }
+  const saluto = o => `onDcMessage({ data: ${JSON.stringify(JSON.stringify(Object.assign({ type: 'hello', rn: 'cd'.repeat(16) }, o)))} })`;
+
+  test('chi si presenta col nome e l impronta di un contatto NON ne riscrive indirizzo e push', () => {
+    const app = appConCanale(FP_MALLORY);
+    app.run(`touchContact('Alice', ${JSON.stringify(FP_ALICE)}, { endpoint: 'https://fcm.googleapis.com/ALICE' }, 'AAAAAAAAAAAA', null)`);
+    app.run(saluto({ nick: 'Alice', fp: FP_ALICE, addr: 'MMMM-MMMM-MMMM', push: { endpoint: 'https://fcm.googleapis.com/MALLORY' } }));
+    const lista = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    const alice = lista.find(c => c.fp === FP_ALICE);
+    assert.ok(alice, 'il contatto vero deve restare in rubrica');
+    assert.strictEqual(alice.nick, 'Alice');
+    assert.strictEqual(alice.addr, 'AAAAAAAAAAAA', 'toccando «Alice» si deve chiamare ancora Alice, non chi ne ha preso il nome');
+    assert.strictEqual(alice.push.endpoint, 'https://fcm.googleapis.com/ALICE', 'e il colpetto push deve restare il suo');
+    const altro = lista.find(c => c.fp === FP_MALLORY);
+    assert.ok(altro, 'chi si e collegato va in rubrica con l impronta che il canale ha provato');
+    assert.notStrictEqual(altro.nick, 'Alice', 'e con un nome che lo distingue (il «(2)»), non sopra quello vero');
+    app.stop();
+  });
+
+  test('un saluto onesto (dichiarata = provata) aggiorna il contatto come sempre', () => {
+    const app = appConCanale(FP_ALICE);
+    app.run(`touchContact('Alice', ${JSON.stringify(FP_ALICE)}, null, 'AAAAAAAAAAAA', null)`);
+    app.run(saluto({ nick: 'Alice', fp: FP_ALICE, addr: 'BBBB-BBBB-BBBB', push: { endpoint: 'https://fcm.googleapis.com/NUOVA' } }));
+    const lista = JSON.parse(app.run('JSON.stringify(loadContacts())'));
+    assert.strictEqual(lista.length, 1, 'nessun doppione per chi dice il vero');
+    assert.strictEqual(lista[0].push.endpoint, 'https://fcm.googleapis.com/NUOVA', 'la push nuova di un contatto vero si impara, come prima');
+    app.stop();
+  });
+
+  test('chi non dichiara un impronta resta senza: non gli si attacca il certificato di una sessione', () => {
+    const app = appConCanale(FP_MALLORY);
+    app.run(saluto({ nick: 'Bruno' }));
+    assert.strictEqual(app.run("loadContacts().find(c => c.nick === 'Bruno').fp"), null,
+      'un browser che non conserva l identita cambierebbe impronta a ogni sessione, e sembrerebbe ogni volta un altro');
+    app.stop();
+  });
+
+  test('rifiutare e bloccare una chiamata che dichiara l impronta di un amico blocca chi chiama, non l amico', () => {
+    const app = loadApp();
+    app.run(`
+      addrPending = { msg: { fp: ${JSON.stringify(FP_ALICE)}, sdp: ${JSON.stringify(sdpDi(FP_MALLORY))} } };
+      $('btnAddrIgnore').listeners.click[0]();
+      $('btnAddrBlock').listeners.click[0]();
+    `);
+    assert.strictEqual(app.run(`isBlockedFp(${JSON.stringify(FP_ALICE)})`), false, 'l amico di cui e stata scritta l impronta non deve finire bloccato');
+    assert.strictEqual(app.run(`isBlockedFp(${JSON.stringify(FP_MALLORY)})`), true, 'bloccato deve essere chi ha chiamato davvero');
+    app.stop();
+  });
+
+  test('e un bloccato non rientra dal saluto dichiarando un altra impronta', () => {
+    const app = appConCanale(FP_MALLORY);
+    app.run(`blockFp(${JSON.stringify(FP_MALLORY)}); window.__chiuso = 0; dc.close = () => { window.__chiuso++; };`);
+    app.run(saluto({ nick: 'Qualcuno', fp: FP_ALICE }));
+    assert.strictEqual(app.run('window.__chiuso'), 1, 'il canale va chiuso: il blocco guarda l impronta provata');
+    assert.strictEqual(app.run("loadContacts().length"), 0, 'e non entra in rubrica');
+    app.stop();
+  });
+});
