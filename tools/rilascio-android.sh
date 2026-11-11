@@ -79,27 +79,96 @@ BT="$SDK/build-tools/35.0.0"
 [ -x "$BT/apksigner" ] || { echo "Strumenti Android non pronti in $SDK: fermo."; exit 1; }
 echo "== Strumenti Android: $SDK"
 
-# ---- La chiave: si cerca da sola. Prima quella dentro LOGOS-DA-SALVARE.
+# ---- La chiave e la sua password, trovate da sole (scelta del titolare,
+# 11 nov 2026: «la password si mette da sola, io faccio solo ok»).
+# Si cercano sul disco i file della chiave e, negli appunti privati del
+# progetto (MEMORIA-PROGETTO-PRIVATA.md e i testi in LOGOS-DA-SALVARE), le
+# parole che potrebbero essere la password; un piccolo programma Java le prova
+# una per una SUL POSTO, aprendo davvero la chiave. Niente viene stampato,
+# scritto su file o mandato in rete: la password passa da un tubo a una
+# variabile d'ambiente, e da li' ad apksigner. Se non si trova, si torna a
+# chiederla a mano.
 CHIAVI=()
 while IFS= read -r f; do [ -n "$f" ] && CHIAVI+=("$f"); done < <(
-  find "$HOME" -maxdepth 6 -type f \( -name '*.jks' -o -name '*.keystore' \) \
+  find "$HOME" -maxdepth 7 -type f \( -name '*.jks' -o -name '*.keystore' -o -name '*.p12' -o -name '*.pfx' \) \
        -not -path '*/Library/*' -not -path '*/.*' -not -path "$RADICE/*" 2>/dev/null \
   | awk '{print (index($0,"LOGOS-DA-SALVARE")?0:1) "\t" $0}' | sort | cut -f2- || true)
-KS=""
-if [ "${#CHIAVI[@]}" -eq 1 ]; then
-  KS="${CHIAVI[0]}"
-elif [ "${#CHIAVI[@]}" -gt 1 ] && [[ "${CHIAVI[0]}" == *LOGOS-DA-SALVARE* ]]; then
-  KS="${CHIAVI[0]}"
-elif [ "${#CHIAVI[@]}" -gt 1 ]; then
-  echo "== Ho trovato piu' chiavi. Scrivi il numero di quella di Logos e premi Invio:"
-  select k in "${CHIAVI[@]}"; do if [ -n "$k" ]; then KS="$k"; break; fi; done
+APPUNTI=()
+while IFS= read -r f; do [ -n "$f" ] && APPUNTI+=("$f"); done < <(
+  { find "$HOME" -maxdepth 7 -type f -name 'MEMORIA-PROGETTO-PRIVATA*' -not -path '*/Library/*' 2>/dev/null
+    find "$HOME" -maxdepth 7 -type d -name 'LOGOS-DA-SALVARE' -not -path '*/Library/*' 2>/dev/null \
+      | while IFS= read -r d; do find "$d" -maxdepth 3 -type f \( -name '*.md' -o -name '*.txt' -o -name '*.rtf' \) -size -2M 2>/dev/null; done
+  } | sort -u || true)
+echo "== Chiavi trovate: ${#CHIAVI[@]}   appunti trovati: ${#APPUNTI[@]}"
+
+PROVA="$(mktemp -d)"
+cat > "$PROVA/Prova.java" <<'JAVA'
+import java.io.*; import java.nio.file.*; import java.security.*; import java.util.*;
+public class Prova {
+  static KeyStore apri(byte[] d, String p){
+    for (String t : new String[]{"PKCS12","JKS"}) {
+      try { KeyStore k = KeyStore.getInstance(t); k.load(new ByteArrayInputStream(d), p.toCharArray()); return k; }
+      catch (Exception e) {}
+    }
+    return null;
+  }
+  public static void main(String[] a) throws Exception {
+    BufferedReader r = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+    LinkedHashSet<String> c = new LinkedHashSet<>(); String s;
+    while ((s = r.readLine()) != null) if (!s.isEmpty()) c.add(s);
+    for (int i = 0; i < a.length; i++) {
+      byte[] d; try { d = Files.readAllBytes(Path.of(a[i])); } catch (Exception e) { continue; }
+      for (String p : c) {
+        KeyStore k = apri(d, p);
+        if (k == null || !k.containsAlias("logos")) continue;
+        for (String q : c) {
+          try { if (k.getKey("logos", q.toCharArray()) != null) { System.out.println(i + "\t" + p + "\t" + q); return; } }
+          catch (Exception e) {}
+        }
+      }
+    }
+    System.exit(3);
+  }
+}
+JAVA
+cat > "$PROVA/parole.py" <<'PY'
+import sys, re
+visti = set()
+def out(w):
+    w = w.strip().strip('`"\'*_,;.()[]<>')
+    if 4 <= len(w) <= 128 and w not in visti:
+        visti.add(w); sys.stdout.write(w + "\n")
+for f in sys.argv[1:]:
+    try: t = open(f, encoding="utf-8", errors="ignore").read()
+    except Exception: continue
+    for riga in t.splitlines():
+        for w in riga.split():
+            out(w)
+            for parte in re.split(r'[:=]', w): out(parte)
+        out(riga)
+PY
+KS=""; KSPASS=""; KEYPASS=""
+if [ "${#CHIAVI[@]}" -gt 0 ] && [ "${#APPUNTI[@]}" -gt 0 ]; then
+  echo "== Cerco la password negli appunti (resta sul Mac, non viene mostrata)..."
+  RIS="$(python3 "$PROVA/parole.py" "${APPUNTI[@]}" | "$JAVA_HOME/bin/java" "$PROVA/Prova.java" "${CHIAVI[@]}" 2>/dev/null || true)"
+  if [ -n "$RIS" ]; then
+    KS="${CHIAVI[$(printf '%s' "$RIS" | cut -f1)]}"
+    KSPASS="$(printf '%s' "$RIS" | cut -f2)"; KEYPASS="$(printf '%s' "$RIS" | cut -f3)"
+  fi
+  unset RIS
 fi
-if [ -z "$KS" ]; then
-  echo "== Non trovo la chiave da solo: trascina qui il file della chiave e premi Invio"
-  read -e KS; KS="${KS%\"}"; KS="${KS#\"}"; KS="${KS%\'}"; KS="${KS#\'}"; KS="${KS% }"
+rm -rf "$PROVA"
+if [ -n "$KS" ]; then
+  echo "== Trovate da solo: la chiave di Logos e la sua password."
+  echo "== Chiave: $KS"
+else
+  echo "== Non sono riuscito a trovare da solo chiave e password."
+  if [ "${#CHIAVI[@]}" -ge 1 ]; then KS="${CHIAVI[0]}"; else
+    echo "== Trascina qui il file della chiave e premi Invio"
+    read -e KS; KS="${KS%\"}"; KS="${KS#\"}"; KS="${KS%\'}"; KS="${KS#\'}"; KS="${KS% }"
+  fi
 fi
 [ -f "$KS" ] || { echo "File della chiave non trovato: $KS"; exit 1; }
-echo "== Chiave: $KS"
 
 # ---- Compilare due volte e confrontare (passo 3).
 LAVORO="$(mktemp -d)"
@@ -112,28 +181,26 @@ A2="$(shasum -a 256 "$LAVORO/secondo.apk" | cut -d' ' -f1)"
 [ "$A1" = "$A2" ] || { echo "Le due compilazioni NON coincidono: non si pubblica."; exit 1; }
 echo "== Riproducibile: $A1"
 
-# ---- Firmare (passo 4). La password la scrive una persona, qui sotto.
-APPUNTI="$(find "$HOME" -maxdepth 6 -type f -name 'MEMORIA-PROGETTO-PRIVATA.md' -not -path '*/Library/*' 2>/dev/null | head -1 || true)"
-echo
-echo "================================================================"
-echo " Adesso serve la PASSWORD DELLA CHIAVE (non quella del Mac)."
-if [ -n "$APPUNTI" ]; then
-  echo " Ti apro gli appunti privati del progetto: e' scritta li'."
-  open -e "$APPUNTI" || true
-else
-  echo " E' scritta negli appunti privati, nella cartella LOGOS-DA-SALVARE."
-fi
-echo " Scrivila a mano (mentre scrivi non si vede niente) e premi Invio."
-echo " Non incollarla mai in una chat."
-echo "================================================================"
+# ---- Firmare (passo 4).
 FIRMATO="$LAVORO/DigitalValut-Logos-v$N.apk"
-tentativi=0
-until "$BT/apksigner" sign --alignment-preserved --ks "$KS" --ks-key-alias logos \
-        --out "$FIRMATO" "$LAVORO/primo.apk"; do
-  tentativi=$((tentativi+1))
-  [ "$tentativi" -lt 3 ] || { echo "Password sbagliata tre volte: fermo. Nessun danno, si puo' rilanciare."; exit 1; }
-  echo "Password non accettata, riprova."
-done
+if [ -n "$KSPASS" ]; then
+  printf '\n== Tutto pronto. Firmo e preparo la pubblicazione? Scrivi y e premi Invio: '
+  read -r OK
+  [ "$OK" = "y" ] || [ "$OK" = "Y" ] || { echo "Fermo, come chiesto."; exit 1; }
+  LOGOS_KS="$KSPASS" LOGOS_KEY="$KEYPASS" "$BT/apksigner" sign --alignment-preserved \
+    --ks "$KS" --ks-key-alias logos --ks-pass env:LOGOS_KS --key-pass env:LOGOS_KEY \
+    --out "$FIRMATO" "$LAVORO/primo.apk"
+  unset KSPASS KEYPASS
+else
+  echo " Serve la PASSWORD DELLA CHIAVE (non quella del Mac). Scrivila e premi Invio."
+  tentativi=0
+  until "$BT/apksigner" sign --alignment-preserved --ks "$KS" --ks-key-alias logos \
+          --out "$FIRMATO" "$LAVORO/primo.apk"; do
+    tentativi=$((tentativi+1))
+    [ "$tentativi" -lt 3 ] || { echo "Password sbagliata tre volte: fermo. Nessun danno, si puo' rilanciare."; exit 1; }
+    echo "Password non accettata, riprova."
+  done
+fi
 
 "$BT/apksigner" verify --print-certs "$FIRMATO" | grep -qi "SHA-256 digest: $IMPRONTA" \
   || { echo "La firma NON e' della chiave di Logos: fermo, non pubblicare."; exit 1; }
