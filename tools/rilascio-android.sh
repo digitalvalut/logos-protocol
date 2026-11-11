@@ -57,7 +57,7 @@ echo "== Java 21: $JAVA_HOME"
 
 # ---- Strumenti Android: build-tools 35.0.0 esatti, come F-Droid.
 SDK=""
-for c in "${ANDROID_HOME:-}" "$HOME/Library/Android/sdk" "$HOME/android-sdk"; do
+for c in "${ANDROID_HOME:-}" "$HOME/tools/android-sdk" "$HOME/Library/Android/sdk" "$HOME/android-sdk"; do
   if [ -n "$c" ] && [ -x "$c/build-tools/35.0.0/apksigner" ]; then SDK="$c"; break; fi
 done
 if [ -z "$SDK" ]; then
