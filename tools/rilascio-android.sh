@@ -28,15 +28,33 @@ done
 echo "== Versione $N"
 
 # JDK 21 esatta. NON java_home -v 21: vuol dire «21 o piu'» (incidente v65).
-JAVA_HOME="${JAVA_HOME_21:-$(/usr/libexec/java_home -V 2>&1 | awk '$1 ~ /^21\./ {print $NF; exit}')}"
-[ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ] \
-  || { echo "JDK 21 non trovata. Installare Temurin 21, oppure: JAVA_HOME_21=/percorso bash $0"; exit 1; }
-"$JAVA_HOME/bin/java" -version 2>&1 | head -1 | grep -q '"21\.' \
-  || { echo "La JDK trovata non e' una 21: fermo."; exit 1; }
+# Si cerca in tutti i posti dove una JDK finisce su un Mac (Temurin, Homebrew,
+# quella dentro Android Studio) e si tiene la prima che SI DICHIARA 21.
+e21(){ [ -x "$1/bin/java" ] && "$1/bin/java" -version 2>&1 | head -1 | grep -q '"21\.'; }
+JAVA_HOME=""
+for c in "${JAVA_HOME_21:-}" \
+         $(/usr/libexec/java_home -V 2>&1 | awk '$1 ~ /^21\./ {print $NF}') \
+         /Library/Java/JavaVirtualMachines/*/Contents/Home \
+         "$HOME"/Library/Java/JavaVirtualMachines/*/Contents/Home \
+         /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home \
+         /usr/local/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home \
+         "/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
+         "$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"; do
+  if [ -n "$c" ] && e21 "$c"; then JAVA_HOME="$c"; break; fi
+done
+if [ -z "$JAVA_HOME" ]; then
+  echo "JDK 21 non trovata. Su questo Mac ci sono queste Java:"
+  /usr/libexec/java_home -V 2>&1 | sed 's/^/   /'
+  for c in "/Applications/Android Studio.app/Contents/jbr/Contents/Home" /opt/homebrew/opt/openjdk*/libexec/openjdk.jdk/Contents/Home; do
+    [ -x "$c/bin/java" ] && echo "   $c: $("$c/bin/java" -version 2>&1 | head -1)"
+  done
+  echo "Copia questo messaggio a chi ti aiuta."
+  exit 1
+fi
 export JAVA_HOME
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 BT="$ANDROID_HOME/build-tools/35.0.0"
-[ -x "$BT/apksigner" ] || { echo "build-tools 35.0.0 non trovati in $ANDROID_HOME"; exit 1; }
+[ -x "$BT/apksigner" ] || { echo "build-tools 35.0.0 non trovati in $ANDROID_HOME. Ci sono:"; ls "$ANDROID_HOME/build-tools" 2>&1 | sed 's/^/   /'; exit 1; }
 export ANDROID_HOME
 echo "== JDK: $JAVA_HOME"
 
