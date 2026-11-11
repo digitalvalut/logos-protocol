@@ -1,0 +1,1 @@
+Security: your contact list and your blocked list now trust only the identity proven by the encrypted connection, never the one a caller declares. Also: the store listing is now in all 13 languages of the app.

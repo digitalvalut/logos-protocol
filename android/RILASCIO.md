@@ -13,6 +13,30 @@ sono qui, perché questo file è pubblico. Stanno in `LOGOS-DA-SALVARE/`.
 
 ---
 
+## Il modo normale: una riga, poi `y` (dall'11 nov 2026)
+
+Sul Mac che tiene la chiave, nel Terminale, si incolla questa riga (con il
+ramo da pubblicare al posto di `main`, se non è ancora unito):
+
+```
+cd ~ && rm -rf logos-deploy && git clone -q -b main https://github.com/digitalvalut/logos-protocol.git logos-deploy && bash logos-deploy/tools/rilascio-android.sh
+```
+
+`tools/rilascio-android.sh` fa da solo i passi 2–5 qui sotto: trova o scarica
+la JDK 21 esatta e gli strumenti Android, compila due volte e confronta,
+trova la chiave e la sua password negli appunti privati **sul Mac stesso**
+(non le mostra, non le scrive, non le manda a nessuno), chiede solo `y`,
+firma, controlla impronta e contenuto, mette i due file sulla Scrivania e
+apre la pagina del rilascio. Restano tre gesti nel browser: `Cmd+V` nella
+descrizione, trascinare i due file, «Publish release».
+
+Chi pubblica non deve cercare, installare né digitare niente altro: è una
+scelta del titolare, presa dopo un pomeriggio passato a inseguire percorsi
+e password. Il resto di questa pagina spiega che cosa fa lo script e perché,
+per chi deve correggerlo.
+
+---
+
 ## L'ordine è obbligato
 
 ```

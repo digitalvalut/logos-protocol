@@ -1,0 +1,1 @@
+Sicurezza: la rubrica e l'elenco dei bloccati si fidano solo dell'identità provata dalla connessione cifrata, mai di quella che chi chiama dichiara. Inoltre: la scheda dello store è ora in tutte le 13 lingue dell'app.
