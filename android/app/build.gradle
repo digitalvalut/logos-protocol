@@ -53,7 +53,7 @@ dependencies {
        distinction is the whole build — a file:// page is not a secure context,
        and a browser switches off Web Crypto and WebRTC there, which between
        them are all of this app. */
-    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation 'androidx.webkit:webkit:1.18.0'
 
     /* Deliberately the only one. androidx.core was here for a moment, for the
        window insets, and was taken back out: it injects a permission of its own
