@@ -61,7 +61,7 @@ for c in "${ANDROID_HOME:-}" "$HOME/tools/android-sdk" "$HOME/Library/Android/sd
   if [ -n "$c" ] && [ -x "$c/build-tools/35.0.0/apksigner" ]; then SDK="$c"; break; fi
 done
 if [ -z "$SDK" ]; then
-  T="$(find "$HOME" -maxdepth 7 -type f -path '*/build-tools/35.0.0/apksigner' 2>/dev/null | head -1 || true)"
+  T="$(find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type f -path '*/build-tools/35.0.0/apksigner' -print 2>/dev/null | head -1 || true)"
   if [ -n "$T" ]; then SDK="$(dirname "$(dirname "$(dirname "$T")")")"; fi
 fi
 if [ -z "$SDK" ]; then
@@ -79,6 +79,7 @@ BT="$SDK/build-tools/35.0.0"
 [ -x "$BT/apksigner" ] || { echo "Strumenti Android non pronti in $SDK: fermo."; exit 1; }
 echo "== Strumenti Android: $SDK"
 
+echo "== Cerco la chiave e gli appunti sul disco (un minuto)..."
 # ---- La chiave e la sua password, trovate da sole (scelta del titolare,
 # 11 nov 2026: «la password si mette da sola, io faccio solo ok»).
 # Si cercano sul disco i file della chiave e, negli appunti privati del
@@ -90,13 +91,13 @@ echo "== Strumenti Android: $SDK"
 # chiederla a mano.
 CHIAVI=()
 while IFS= read -r f; do [ -n "$f" ] && CHIAVI+=("$f"); done < <(
-  find "$HOME" -maxdepth 7 -type f \( -name '*.jks' -o -name '*.keystore' -o -name '*.p12' -o -name '*.pfx' \) \
-       -not -path '*/Library/*' -not -path '*/.*' -not -path "$RADICE/*" 2>/dev/null \
+  find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type f \( -name '*.jks' -o -name '*.keystore' -o -name '*.p12' -o -name '*.pfx' \) \
+       -not -path "$RADICE/*" -print 2>/dev/null \
   | awk '{print (index($0,"LOGOS-DA-SALVARE")?0:1) "\t" $0}' | sort | cut -f2- || true)
 APPUNTI=()
 while IFS= read -r f; do [ -n "$f" ] && APPUNTI+=("$f"); done < <(
-  { find "$HOME" -maxdepth 7 -type f -name 'MEMORIA-PROGETTO-PRIVATA*' -not -path '*/Library/*' 2>/dev/null
-    find "$HOME" -maxdepth 7 -type d -name 'LOGOS-DA-SALVARE' -not -path '*/Library/*' 2>/dev/null \
+  { find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type f -name 'MEMORIA-PROGETTO-PRIVATA*' -print 2>/dev/null
+    find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type d -name 'LOGOS-DA-SALVARE' -print 2>/dev/null \
       | while IFS= read -r d; do find "$d" -maxdepth 3 -type f \( -name '*.md' -o -name '*.txt' -o -name '*.rtf' \) -size -2M 2>/dev/null; done
   } | sort -u || true)
 echo "== Chiavi trovate: ${#CHIAVI[@]}   appunti trovati: ${#APPUNTI[@]}"
