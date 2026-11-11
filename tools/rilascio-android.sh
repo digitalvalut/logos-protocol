@@ -79,6 +79,14 @@ BT="$SDK/build-tools/35.0.0"
 [ -x "$BT/apksigner" ] || { echo "Strumenti Android non pronti in $SDK: fermo."; exit 1; }
 echo "== Strumenti Android: $SDK"
 
+# Dove stanno chiave e appunti, ricordato dall'ultima volta che e' riuscita
+# (solo i PERCORSI, mai la password): cosi' dalla seconda volta non si cerca.
+RICORDO="$HOME/.logos-rilascio"
+R_KS=""; R_NOTE=""
+if [ -f "$RICORDO" ]; then
+  R_KS="$(sed -n 's/^chiave=//p' "$RICORDO" | head -1)"
+  R_NOTE="$(sed -n 's/^appunti=//p' "$RICORDO" | head -1)"
+fi
 echo "== Cerco la chiave e gli appunti sul disco (un minuto)..."
 # ---- La chiave e la sua password, trovate da sole (scelta del titolare,
 # 11 nov 2026: «la password si mette da sola, io faccio solo ok»).
@@ -89,17 +97,19 @@ echo "== Cerco la chiave e gli appunti sul disco (un minuto)..."
 # scritto su file o mandato in rete: la password passa da un tubo a una
 # variabile d'ambiente, e da li' ad apksigner. Se non si trova, si torna a
 # chiederla a mano.
-CHIAVI=()
+CHIAVI=(); APPUNTI=()
+if ! { [ -f "$R_KS" ] && [ -f "$R_NOTE" ]; }; then
 while IFS= read -r f; do [ -n "$f" ] && CHIAVI+=("$f"); done < <(
   find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type f \( -name '*.jks' -o -name '*.keystore' -o -name '*.p12' -o -name '*.pfx' \) \
        -not -path "$RADICE/*" -print 2>/dev/null \
   | awk '{print (index($0,"LOGOS-DA-SALVARE")?0:1) "\t" $0}' | sort | cut -f2- || true)
-APPUNTI=()
 while IFS= read -r f; do [ -n "$f" ] && APPUNTI+=("$f"); done < <(
   { find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type f -name 'MEMORIA-PROGETTO-PRIVATA*' -print 2>/dev/null
     find "$HOME" -maxdepth 7 \( -name Library -o -name '.*' -o -name node_modules -o -name Photos\ Library.photoslibrary \) -prune -o -type d -name 'LOGOS-DA-SALVARE' -print 2>/dev/null \
       | while IFS= read -r d; do find "$d" -maxdepth 3 -type f \( -name '*.md' -o -name '*.txt' -o -name '*.rtf' \) -size -2M 2>/dev/null; done
   } | sort -u || true)
+fi
+if [ -f "$R_KS" ] && [ -f "$R_NOTE" ]; then CHIAVI=("$R_KS"); APPUNTI=("$R_NOTE"); fi
 echo "== Chiavi trovate: ${#CHIAVI[@]}   appunti trovati: ${#APPUNTI[@]}"
 
 PROVA="$(mktemp -d)"
@@ -115,15 +125,16 @@ public class Prova {
   }
   public static void main(String[] a) throws Exception {
     BufferedReader r = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
-    LinkedHashSet<String> c = new LinkedHashSet<>(); String s;
-    while ((s = r.readLine()) != null) if (!s.isEmpty()) c.add(s);
+    LinkedHashMap<String,String> da = new LinkedHashMap<>(); String s;
+    while ((s = r.readLine()) != null) { int t = s.indexOf('\t'); if (t > 0 && t < s.length()-1) da.putIfAbsent(s.substring(t+1), s.substring(0,t)); }
+    Set<String> c = da.keySet();
     for (int i = 0; i < a.length; i++) {
       byte[] d; try { d = Files.readAllBytes(Path.of(a[i])); } catch (Exception e) { continue; }
       for (String p : c) {
         KeyStore k = apri(d, p);
         if (k == null || !k.containsAlias("logos")) continue;
         for (String q : c) {
-          try { if (k.getKey("logos", q.toCharArray()) != null) { System.out.println(i + "\t" + p + "\t" + q); return; } }
+          try { if (k.getKey("logos", q.toCharArray()) != null) { System.out.println(i + "\t" + da.get(p) + "\t" + p + "\t" + q); return; } }
           catch (Exception e) {}
         }
       }
@@ -135,11 +146,12 @@ JAVA
 cat > "$PROVA/parole.py" <<'PY'
 import sys, re
 visti = set()
+n = 0
 def out(w):
     w = w.strip().strip('`"\'*_,;.()[]<>')
-    if 4 <= len(w) <= 128 and w not in visti:
-        visti.add(w); sys.stdout.write(w + "\n")
-for f in sys.argv[1:]:
+    if 4 <= len(w) <= 128 and "\t" not in w and w not in visti:
+        visti.add(w); sys.stdout.write("%d\t%s\n" % (n, w))
+for n, f in enumerate(sys.argv[1:]):
     try: t = open(f, encoding="utf-8", errors="ignore").read()
     except Exception: continue
     for riga in t.splitlines():
@@ -148,13 +160,14 @@ for f in sys.argv[1:]:
             for parte in re.split(r'[:=]', w): out(parte)
         out(riga)
 PY
-KS=""; KSPASS=""; KEYPASS=""
+KS=""; KSPASS=""; KEYPASS=""; NOTA=""
 if [ "${#CHIAVI[@]}" -gt 0 ] && [ "${#APPUNTI[@]}" -gt 0 ]; then
   echo "== Cerco la password negli appunti (resta sul Mac, non viene mostrata)..."
   RIS="$(python3 "$PROVA/parole.py" "${APPUNTI[@]}" | "$JAVA_HOME/bin/java" "$PROVA/Prova.java" "${CHIAVI[@]}" 2>/dev/null || true)"
   if [ -n "$RIS" ]; then
     KS="${CHIAVI[$(printf '%s' "$RIS" | cut -f1)]}"
-    KSPASS="$(printf '%s' "$RIS" | cut -f2)"; KEYPASS="$(printf '%s' "$RIS" | cut -f3)"
+    NOTA="${APPUNTI[$(printf '%s' "$RIS" | cut -f2)]}"
+    KSPASS="$(printf '%s' "$RIS" | cut -f3)"; KEYPASS="$(printf '%s' "$RIS" | cut -f4)"
   fi
   unset RIS
 fi
@@ -192,6 +205,7 @@ if [ -n "$KSPASS" ]; then
     --ks "$KS" --ks-key-alias logos --ks-pass env:LOGOS_KS --key-pass env:LOGOS_KEY \
     --out "$FIRMATO" "$LAVORO/primo.apk"
   unset KSPASS KEYPASS
+  printf 'chiave=%s\nappunti=%s\n' "$KS" "$NOTA" > "$RICORDO"   # solo percorsi
 else
   echo " Serve la PASSWORD DELLA CHIAVE (non quella del Mac). Scrivila e premi Invio."
   tentativi=0
