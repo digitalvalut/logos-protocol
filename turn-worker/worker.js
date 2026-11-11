@@ -373,13 +373,21 @@ function overLimit(request, bucket, max, cost){
    quanto sta per spendere; chi non lo dichiara paga 1, che è il minimo vero.
    Il fondo del secchio viene consultato SEMPRE, anche per una richiesta senza
    indirizzo: è l'unica difesa che regge quando l'indirizzo manca o cambia. */
+/* ⚠️ PRIMA IL LIMITE DELL'INDIRIZZO, POI IL SECCHIO (11 nov 2026). Nell'ordine
+   inverso ogni richiesta pagava il secchio comune ANCHE QUANDO il suo
+   indirizzo l'avrebbe respinta subito dopo: un solo indirizzo che insisteva,
+   gia' fermo da tempo sul proprio tetto, continuava a riempire il secchio di
+   tutti, e per il resto del minuto venivano respinte anche le richieste di
+   chiunque altro su quell'isolate. Il tetto per indirizzo esiste proprio per
+   tenere una persona lontana dal secchio: una richiesta che lui rifiuta non
+   deve contare li' dentro. */
 function overReadLimit(request, cost){
-  if (overGlobal('r', cost === undefined ? 1 : cost)) return true;
-  return overLimit(request, 'mail', RL_MAX_READS, cost);
+  if (overLimit(request, 'mail', RL_MAX_READS, cost)) return true;
+  return overGlobal('r', cost === undefined ? 1 : cost);
 }
 function overWriteLimit(request, cost){
-  if (overGlobal('w', cost === undefined ? 1 : cost)) return true;
-  return overLimit(request, 'write', RL_MAX_WRITES, cost);
+  if (overLimit(request, 'write', RL_MAX_WRITES, cost)) return true;
+  return overGlobal('w', cost === undefined ? 1 : cost);
 }
 /* Nome storico, tenuto perché lo usano rotte che leggono soltanto. */
 function overRateLimit(request){ return overReadLimit(request, 1); }
