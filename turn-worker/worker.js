@@ -770,6 +770,9 @@ async function handleMailbox(request, env, cors, key){
     await env.MAILBOX.put(key, body, tok
       ? { expirationTtl: MAILBOX_TTL_SECONDS, metadata: { t: tok } }
       : { expirationTtl: MAILBOX_TTL_SECONDS });
+    /* la corsia veloce (12 nov 2026): la stessa busta anche nell'oggetto
+       della cassetta. Vedi «LA CORSIA VELOCE» piu' sotto. */
+    await corsiaPut(env, key, body, tok);
     /* la busta e' nella cassetta: adesso, e solo adesso, si tira il filo.
        Quanti fili c'erano lo si dice a chi ha scritto (v56, 17 set 2026):
        cosi' la sua app scrive «Sta squillando…» solo quando un telefono ha
@@ -785,10 +788,10 @@ async function handleMailbox(request, env, cors, key){
     if (overWriteLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
     const tok = tokenOf(request);
     if (!tok) return json({ error: 'token required' }, 403, cors);
-    const rec = await env.MAILBOX.getWithMetadata(key);
+    const rec = await leggiCassetta(env, key);
     if (rec.value === null) return json({ empty: true }, 404, cors);
     if (!rec.metadata || !sameToken(rec.metadata.t, tok)) return json({ error: 'wrong token' }, 403, cors);
-    await env.MAILBOX.delete(key);
+    await svuotaCassetta(env, key);
     return json({ ok: true }, 200, cors);
   }
 
@@ -805,7 +808,7 @@ async function handleMailbox(request, env, cors, key){
        no envelope attached. It is metered exactly like every other read. */
     if (new URL(request.url).searchParams.get('peek') === '1'){
       if (overReadLimit(request, 1)) return json({ error: 'too many attempts' }, 429, cors);
-      const there = await env.MAILBOX.get(key);
+      const there = (await leggiCassetta(env, key)).value;
       return there === null
         ? json({ empty: true }, 404, cors)
         : json({ waiting: true }, 200, cors);
@@ -817,14 +820,14 @@ async function handleMailbox(request, env, cors, key){
        più battuta di tutte. */
     if (overReadLimit(request, 2)) return json({ error: 'too many attempts' }, 429, cors);
 
-    const rec = await env.MAILBOX.getWithMetadata(key);
+    const rec = await leggiCassetta(env, key);
     if (rec.value === null) return json({ empty: true }, 404, cors);
     /* Una busta col gettone resta: la toglie solo chi lo presenta (DELETE).
        Una busta senza — scritta da un'app vecchia — si cancella leggendola,
        come sempre, a meno che chi legge non chieda `keep=1`: un'app nuova che
        legge una busta vecchia la lascia li' e la riconosce al giro dopo. */
     const tokened = !!(rec.metadata && rec.metadata.t);
-    if (!tokened && !wantsKeep(request)) await env.MAILBOX.delete(key);
+    if (!tokened && !wantsKeep(request)) await svuotaCassetta(env, key);
     return new Response(rec.value, { status: 200, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
   }
 
@@ -865,9 +868,11 @@ function isKvThrottle(e){
    nell'istante in cui una busta arriva. Lo squillo passa da «entro un minuto e
    mezzo» a «entro un paio di secondi», senza Google, senza app di terzi.
 
-   Cosa ricorda l'oggetto: SOLO i fili aperti per la sua cassetta, e li
-   dimentica appena cadono. Niente su disco, niente sull'identita' di chi
-   ascolta, niente sul contenuto (che e' sigillato come sempre). Sapere che
+   Cosa ricorda l'oggetto: i fili aperti per la sua cassetta, che dimentica
+   appena cadono, e — dal 12 nov 2026 — una copia della busta in attesa, la
+   stessa busta SIGILLATA che il KV tiene gia', per non piu' di
+   MAILBOX_TTL_SECONDS (vedi «LA CORSIA VELOCE»). Niente sull'identita' di
+   chi ascolta, niente in chiaro: il contenuto e' sigillato come sempre. Sapere che
    «qualcuno ascolta alla cassetta X» e' cio' che il relay sa GIA' oggi ogni
    90 secondi, quando quel qualcuno bussa: qui lo sa in continuo invece che a
    scatti. Non e' un'informazione nuova, ed e' scritto nel documento del
@@ -909,7 +914,34 @@ export class Ascolto {
       }
       return new Response(JSON.stringify({ svegliati }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
+    /* la corsia veloce: la copia della busta (vedi «LA CORSIA VELOCE») */
+    if (url.pathname === '/busta'){
+      const ora = Date.now();
+      let rec = await this.state.storage.get('busta');
+      if (rec && rec.scade <= ora){ await this.state.storage.delete('busta'); rec = null; }
+      if (request.method === 'PUT'){
+        const { v, t } = await request.json();
+        const scade = ora + MAILBOX_TTL_SECONDS * 1e3;
+        await this.state.storage.put('busta', { v, t: t || null, scade });
+        await this.state.storage.setAlarm(scade);
+        return new Response('{}');
+      }
+      if (request.method === 'DELETE'){
+        await this.state.storage.delete('busta');
+        return new Response('{}');
+      }
+      return new Response(JSON.stringify(rec ? { v: rec.v, t: rec.t } : null));
+    }
     return new Response('not found', { status: 404 });
+  }
+
+  /* la sveglia di scadenza: nessuna copia sopravvive ai suoi due minuti,
+     nemmeno se nessuno torna mai a leggerla */
+  async alarm(){
+    const rec = await this.state.storage.get('busta');
+    if (!rec) return;
+    if (rec.scade <= Date.now()) await this.state.storage.delete('busta');
+    else await this.state.storage.setAlarm(rec.scade);
   }
 
   /* dal telefono non deve arrivare niente: un messaggio qualunque si ignora */
@@ -931,6 +963,51 @@ async function tiraIlFilo(env, key){
     const j = await r.json();
     return (j && j.svegliati) | 0;
   }catch(e){ return 0; }
+}
+
+/* ============================== LA CORSIA VELOCE =============================
+   12 nov 2026. Il filo suonava in un paio di secondi, ma il telefono svegliato
+   andava poi a LEGGERE la busta nel KV — e il KV e' «finalmente coerente»: una
+   scrittura puo' metterci fino a un minuto per farsi vedere da un altro data
+   center, e una lettura a vuoto fatta poco prima (il peek di sicurezza) puo'
+   restare in cache per lo stesso tempo. Risultato misurato: telefoni che si
+   trovavano dopo 20-40 secondi, e quasi nove richieste su dieci al relay
+   rispondevano 404 «cassetta vuota».
+
+   Rimedio: la busta va ANCHE nell'oggetto della sua cassetta, che e' uno solo
+   al mondo per quella chiave, quindi chi legge vede subito cio' che e' stato
+   scritto. Le regole restano tutte:
+   · il KV resta la copia di sicurezza, scritta PRIMA del filo come sempre;
+     se l'oggetto manca o si guasta, scrittura e lettura vanno come prima;
+   · la busta e' la stessa, sigillata: l'oggetto non vede niente di piu' del KV;
+   · la copia scade con la busta (MAILBOX_TTL_SECONDS, sveglia di scadenza)
+     e se ne va con lei quando la si cancella;
+   · sul filo non viaggia niente di nuovo: sempre e solo {"busta":1}.
+   Il gettone resta metadato, mai restituito nel corpo di una risposta. */
+function corsiaStub(env, key){
+  return env.ASCOLTO.get(env.ASCOLTO.idFromName(key));
+}
+async function corsiaPut(env, key, body, tok){
+  try{
+    if (!env.ASCOLTO) return;
+    await corsiaStub(env, key).fetch('https://ascolto/busta', { method: 'PUT', body: JSON.stringify({ v: body, t: tok || null }) });
+  }catch(e){ /* best effort: la busta e' gia' al sicuro nel KV */ }
+}
+async function leggiCassetta(env, key){
+  try{
+    if (env.ASCOLTO){
+      const r = await corsiaStub(env, key).fetch('https://ascolto/busta');
+      const rec = await r.json();
+      if (rec) return { value: rec.v, metadata: rec.t ? { t: rec.t } : null };
+    }
+  }catch(e){ /* l'oggetto non risponde: si legge il KV, come prima */ }
+  return env.MAILBOX.getWithMetadata(key);
+}
+async function svuotaCassetta(env, key){
+  try{
+    if (env.ASCOLTO) await corsiaStub(env, key).fetch('https://ascolto/busta', { method: 'DELETE' });
+  }catch(e){}
+  await env.MAILBOX.delete(key);
 }
 
 export default {
