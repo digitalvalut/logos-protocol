@@ -57,6 +57,12 @@ SHA-256(seme + '/' + etichetta)` (6149). Il relay non sa cosa sia un seme.
   un'informazione nuova — la stessa cosa la vedeva già a ogni bussata — ma
   è continua invece che a scatti: chi osserva il relay vede *quando* una
   cassetta ha un ascoltatore. Contenuti e chiavi: come prima, mai.
+- **Dal 12 nov 2026 (corsia veloce)** l'oggetto della cassetta tiene anche
+  una copia della busta in attesa — gli stessi byte sigillati che il KV
+  tiene già, con la stessa scadenza — perché chi legge la veda subito. Non
+  cambia niente di ciò che il relay vede o può fare (sopra): stesse buste,
+  stesso gettone come metadato, stessi messaggi sul filo. Il rito non
+  cambia, quindi i modelli non cambiano.
 - Il modello dell'avversario per la prova: **il relay è l'avversario**
   (Dolev-Yao sul canale verso il relay), più eventuali contatti disonesti.
 
