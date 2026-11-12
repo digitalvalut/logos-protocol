@@ -970,9 +970,13 @@ async function tiraIlFilo(env, key){
    andava poi a LEGGERE la busta nel KV — e il KV e' «finalmente coerente»: una
    scrittura puo' metterci fino a un minuto per farsi vedere da un altro data
    center, e una lettura a vuoto fatta poco prima (il peek di sicurezza) puo'
-   restare in cache per lo stesso tempo. Risultato misurato: telefoni che si
-   trovavano dopo 20-40 secondi, e quasi nove richieste su dieci al relay
-   rispondevano 404 «cassetta vuota».
+   restare in cache per lo stesso tempo. Risultato osservato dall'operatore
+   su chiamate vere (non misurato: il relay non tiene log): telefoni che si
+   trovavano dopo anche 40 secondi circa.
+   ⚠️ La quota di risposte 404 «cassetta vuota» (circa 85%) NON e' un sintomo
+   di questo: e' rimasta uguale prima e dopo la correzione (metriche orarie
+   di Cloudflare, 12 nov 2026). E' la risposta normale ai telefoni che
+   guardano una cassetta vuota, e non dice niente sul ritardo.
 
    Rimedio: la busta va ANCHE nell'oggetto della sua cassetta, che e' uno solo
    al mondo per quella chiave, quindi chi legge vede subito cio' che e' stato
