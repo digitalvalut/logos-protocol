@@ -154,9 +154,10 @@ the repair, change `RinnovoERipresaCorretto.tla` in the same commit, and run
 to poll its mailbox every 5/45/90 s (`RingService`). It can now hold one
 WebSocket per watched key to a Durable Object (`Ascolto`, one per mailbox key,
 hibernated: idle costs nothing) and the relay pulls the wire the instant a
-`PUT /mailbox/:key` lands (`tiraIlFilo`). The object remembers only its open
-sockets, never touches storage, and the only message on the wire is
-`{"busta":1}` — "go and look". The phone still polls, rarely, as a safety net,
+`PUT /mailbox/:key` lands (`tiraIlFilo`). The object remembers its open
+sockets and — since 12 Nov 2026, see *the fast lane* below — one sealed copy
+of the waiting envelope, under one storage key; the only message on the wire
+is still `{"busta":1}` — "go and look". The phone still polls, rarely, as a safety net,
 and falls back to the three-speed polling whenever the wire is down or the
 relay answers 404 to `/ascolta`. `Filo.java` is a hand-written RFC 6455
 client: no library, and it verifies `Sec-WebSocket-Accept`. Durable Objects
@@ -166,6 +167,21 @@ answers `{ok, svegliati}` — how many wires were pulled — so the caller's
 page can say «Sta squillando…» only when a phone really got the wake, and a
 ringback tone plays on the caller's side meanwhile (`startRingback`). A relay
 without the object answers `svegliati: 0` and the page promises nothing.
+
+**The fast lane** (12 Nov 2026, live version `4c306dae` and its successor). The wire rang in
+a couple of seconds, but the woken phone then read the envelope from KV, and
+KV is eventually consistent: a write can take up to a minute to show in
+another data centre, and an empty read just before (the safety-net peek) can
+stay cached as long. Measured: phones finding each other after 20–40 s, and
+nearly nine relay answers in ten a 404 "empty". Now `PUT /mailbox/:key`
+writes KV first, exactly as before, then the same sealed envelope into the
+cassette's object (`corsiaPut`), then pulls the wire. Reads and deletes go
+to the object first (`leggiCassetta`, `svuotaCassetta`) and fall back to KV.
+What must not move: KV stays the safety copy written before the wire; a
+missing or broken object changes nothing; the copy is the same sealed bytes,
+expires with the envelope (`alarm()`), leaves with it on `DELETE`, and the
+token stays metadata, never in a body. A test pins the object's storage to
+the single key `busta`.
 
 **The bridge pass expires under a live conversation** (23 Sep 2026). A
 `RTCPeerConnection` keeps for life the configuration it was born with,
@@ -345,7 +361,7 @@ node --test
 
 Node 22 — check `node --version` first: a shell that picks up Node 18 fails
 dozens of tests on a missing `crypto` global, which looks like a regression
-and is not one. Node finds the files itself. 624 tests, 92 suites, about
+and is not one. Node finds the files itself. 625 tests, 92 suites, about
 four minutes, and it exits on its own (measured 11 Nov 2026). Do not run it
 while a browser is encoding video on the same machine: under that load it
 has stalled twice, and the same suite finished clean with the machine idle. They also run on every push. (That count is measured, and goes stale —
