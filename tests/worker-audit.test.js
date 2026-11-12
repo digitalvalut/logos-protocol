@@ -756,10 +756,20 @@ test.describe('worker: il filo aperto', () => {
   /* un namespace finto: ricorda gli id chiesti e le fetch fatte agli stub */
   function ascoltoFinto(){
     const chiamate = [];
+    const buste = new Map();   /* la corsia veloce: cio' che l'oggetto di ogni cassetta tiene */
     return {
-      chiamate,
+      chiamate, buste,
       idFromName: name => ({ name }),
-      get: id => ({ fetch: async (url, init) => { chiamate.push({ name: id.name, url: String(url), method: init && init.method, upgrade: init && init.headers && init.headers.get && init.headers.get('Upgrade') }); return new Response(JSON.stringify({ svegliati: 1 }), { status: 200 }); } }),
+      get: id => ({ fetch: async (url, init) => {
+        const metodo = (init && init.method) || 'GET';
+        chiamate.push({ name: id.name, url: String(url), method: init && init.method, upgrade: init && init.headers && init.headers.get && init.headers.get('Upgrade') });
+        if (/\/busta$/.test(String(url))){
+          if (metodo === 'PUT'){ buste.set(id.name, JSON.parse(init.body)); return new Response('{}'); }
+          if (metodo === 'DELETE'){ buste.delete(id.name); return new Response('{}'); }
+          return new Response(JSON.stringify(buste.get(id.name) || null));
+        }
+        return new Response(JSON.stringify({ svegliati: 1 }), { status: 200 });
+      } }),
     };
   }
 
@@ -768,10 +778,12 @@ test.describe('worker: il filo aperto', () => {
     const w = W.caricaWorker({ env: { ASCOLTO: A } });
     const r = await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}', headers: { 'X-Logos-Token': 'f'.repeat(32) } });
     assert.strictEqual(r.status, 200);
-    assert.strictEqual(A.chiamate.length, 1, 'una sveglia per una busta');
-    assert.strictEqual(A.chiamate[0].name, K, 'il filo della cassetta giusta, non di un\'altra');
-    assert.match(A.chiamate[0].url, /\/sveglia$/);
+    const sveglie = A.chiamate.filter(c => /\/sveglia$/.test(c.url));
+    assert.strictEqual(sveglie.length, 1, 'una sveglia per una busta');
+    assert.strictEqual(sveglie[0].name, K, 'il filo della cassetta giusta, non di un\'altra');
+    assert.match(A.chiamate[A.chiamate.length - 1].url, /\/sveglia$/, 'il filo si tira per ULTIMO: KV e corsia veloce sono gia\' scritti');
     assert.strictEqual(await w.env.MAILBOX.get(K), '{"i":"x","c":"y"}', 'e la busta e\' gia\' nella cassetta quando il filo viene tirato');
+    assert.strictEqual(A.buste.get(K).v, '{"i":"x","c":"y"}', 'e anche nella corsia veloce della stessa cassetta');
     /* v56 (17 set 2026): chi ha scritto la busta sa se un filo c'era. E' cio'
        che permette alla pagina di dire «Sta squillando…» solo quando e' vero. */
     assert.strictEqual(r.corpo.svegliati, 1, 'la risposta al PUT dice quanti fili sono stati tirati');
@@ -839,11 +851,59 @@ test.describe('worker: il filo aperto', () => {
     const s2 = await A.fetch(new sb.Request('https://ascolto/sveglia', { method: 'POST' }));
     assert.deepStrictEqual(JSON.parse(await s2.text()), { svegliati: 1 });
     assert.strictEqual(prese[0].closed, true, 'e viene chiuso');
-    /* niente su disco: l'oggetto non tocca mai lo storage */
-    assert.ok(!/state\.storage|this\.storage|ctx\.storage/.test(String(sb.Ascolto.toString()) + fs.readFileSync(path.join(__dirname, '..', 'turn-worker', 'worker.js'), 'utf8').slice(0, 0)), 'l\'oggetto non scrive niente su disco');
+    /* su disco: dal 12 nov 2026 l'oggetto tiene UNA cosa sola, la copia
+       sigillata della busta in attesa (la corsia veloce), sotto un'unica
+       chiave. Qualunque altra chiave di storage e' un ricordo in piu' che il
+       progetto non ha deciso di avere. */
     const sorgente = fs.readFileSync(path.join(__dirname, '..', 'turn-worker', 'worker.js'), 'utf8');
     const classe = sorgente.slice(sorgente.indexOf('export class Ascolto'), sorgente.indexOf('async function tiraIlFilo'));
-    assert.ok(!/storage/.test(classe), 'l\'oggetto ricorda solo i fili, e solo in memoria');
+    const chiavi = new Set([...classe.matchAll(/storage\.(?:get|put|delete)\(\s*'([^']*)'/g)].map(m => m[1]));
+    assert.deepStrictEqual([...chiavi], ['busta'], 'l\'oggetto ricorda i fili in memoria e, su disco, solo la busta in attesa');
+    assert.ok(!/storage\.(?:list|deleteAll|sql)|storage\.(?:get|put|delete)\(\s*[^'\s]/.test(classe), 'nessuna chiave calcolata, nessun elenco: una busta, una chiave');
+  });
+
+  test('la corsia veloce: chi legge trova subito la busta anche se il KV non l\'ha ancora vista; la copia scade e se ne va con la busta', async () => {
+    /* il KV «in ritardo»: accetta le scritture ma per ora non le mostra a chi
+       legge da un altro data center. E' il difetto misurato il 12 nov 2026. */
+    const A = ascoltoFinto();
+    const w = W.caricaWorker({ env: { ASCOLTO: A } });
+    const getVero = w.env.MAILBOX.getWithMetadata.bind(w.env.MAILBOX);
+    w.env.MAILBOX.getWithMetadata = async (k) => { await getVero(k); return { value: null, metadata: null }; };
+    w.env.MAILBOX.get = async () => null;
+    const T = 'f'.repeat(32);
+    await w.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}', headers: { 'X-Logos-Token': T } });
+    const peek = await w.chiama('GET', '/mailbox/' + K + '?peek=1', { origin: ORIGINE });
+    assert.strictEqual(peek.status, 200, 'il peek vede la busta subito, senza aspettare il KV');
+    const letta = await w.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE });
+    assert.strictEqual(letta.status, 200);
+    assert.ok(!/ffff/.test(JSON.stringify(letta.corpo)), 'il gettone resta metadato: mai nel corpo della risposta');
+    /* una busta col gettone non la toglie nessuna lettura, nemmeno dalla corsia */
+    await w.chiama('GET', '/mailbox/' + K, { origin: ORIGINE });
+    assert.ok(A.buste.has(K), 'leggere non svuota una busta col gettone');
+    assert.strictEqual((await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': 'a'.repeat(32) } })).status, 403, 'gettone sbagliato: niente');
+    assert.strictEqual((await w.chiama('DELETE', '/mailbox/' + K, { origin: ORIGINE, headers: { 'X-Logos-Token': T } })).status, 200);
+    assert.ok(!A.buste.has(K), 'cancellata la busta, se ne va anche la copia');
+
+    /* l'oggetto vero: la copia scade con la busta, e la sveglia la toglie */
+    const sb = w.sandbox;
+    const disco = new Map(); let sveglia = null;
+    const state = { acceptWebSocket(){}, getWebSockets: () => [], setWebSocketAutoResponse(){},
+      storage: { get: async k => disco.get(k), put: async (k, v) => { disco.set(k, v); }, delete: async k => { disco.delete(k); }, setAlarm: async t => { sveglia = t; } } };
+    const O = new sb.Ascolto(state, {});
+    await O.fetch(new sb.Request('https://ascolto/busta', { method: 'PUT', body: JSON.stringify({ v: 'sigillata', t: null }) }));
+    assert.ok(sveglia !== null, 'ogni copia ha la sua sveglia di scadenza');
+    assert.strictEqual(sveglia - w.orologio.t, 120 * 1000, 'e scade quando scade la busta nel KV: due minuti');
+    assert.deepStrictEqual(JSON.parse(await (await O.fetch(new sb.Request('https://ascolto/busta'))).text()), { v: 'sigillata', t: null });
+    w.orologio.t += 120 * 1000;
+    await O.alarm();
+    assert.strictEqual(disco.size, 0, 'scaduta: sul disco dell\'oggetto non resta niente');
+    assert.strictEqual(JSON.parse(await (await O.fetch(new sb.Request('https://ascolto/busta'))).text()), null);
+
+    /* oggetto guasto: tutto come prima, dal KV */
+    const rotto = { idFromName: n => ({ n }), get: () => ({ fetch: async () => { throw new Error('oggetto morto'); } }) };
+    const w2 = W.caricaWorker({ env: { ASCOLTO: rotto } });
+    assert.strictEqual((await w2.chiama('PUT', '/mailbox/' + K, { origin: ORIGINE, body: '{"i":"x","c":"y"}' })).status, 200, 'la scrittura va');
+    assert.strictEqual((await w2.chiama('GET', '/mailbox/' + K + '?keep=1', { origin: ORIGINE })).status, 200, 'e la lettura la trova nel KV, come prima');
   });
 
   test('wrangler.toml dichiara l\'oggetto, con la migrazione che il piano gratuito accetta', () => {
