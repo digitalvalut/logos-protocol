@@ -540,7 +540,7 @@ test('looking into a mailbox without emptying it really does not empty it', () =
      esecuzione mostrerebbe — ma deve guardare il CODICE, e un commento non
      cancella niente. */
   const senzaCommenti = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
-  const ANCORA = 'const rec = await env.MAILBOX.getWithMetadata(key)';
+  const ANCORA = 'const rec = await leggiCassetta(env, key)';
   const ordinaryAt = body.indexOf(ANCORA, peekAt);
   assert.ok(ordinaryAt > peekAt, 'the ordinary read is gone from the Worker, or its anchor line changed');
   const branch = senzaCommenti(body.slice(peekAt, ordinaryAt));
@@ -556,9 +556,9 @@ test('looking into a mailbox without emptying it really does not empty it', () =
      condition and anyone holding an address can empty the box again; drop
      the delete and every old app re-announces the same call for two minutes. */
   const ordinary = senzaCommenti(body.slice(ordinaryAt));
-  assert.match(ordinary, /if \(!tokened && !wantsKeep\(request\)\) await env\.MAILBOX\.delete\(key\);/,
+  assert.match(ordinary, /if \(!tokened && !wantsKeep\(request\)\) await svuotaCassetta\(env, key\);/,
     'the ordinary read must delete exactly the untokened, not-kept envelope — nothing more, nothing less');
-  assert.ok(!/^\s*await env\.MAILBOX\.delete\(key\);/m.test(ordinary),
+  assert.ok(!/^\s*await (?:env\.MAILBOX\.delete|svuotaCassetta)\(/m.test(ordinary),
     'an unconditional delete on read is the very thing that let anyone empty the box');
 });
 
