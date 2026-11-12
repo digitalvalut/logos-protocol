@@ -172,8 +172,12 @@ without the object answers `svegliati: 0` and the page promises nothing.
 a couple of seconds, but the woken phone then read the envelope from KV, and
 KV is eventually consistent: a write can take up to a minute to show in
 another data centre, and an empty read just before (the safety-net peek) can
-stay cached as long. Measured: phones finding each other after 20–40 s, and
-nearly nine relay answers in ten a 404 "empty". Now `PUT /mailbox/:key`
+stay cached as long. Seen by the operator on real calls: up to about 40 s
+before two phones found each other (not measured: the relay keeps no logs).
+⚠️ The ~85% of relay answers that are a 404 "empty" is NOT a symptom of this:
+the share was the same before and after the fix (hourly Cloudflare metrics,
+12 Nov 2026). It is the normal answer to phones checking an empty mailbox,
+and says nothing about delay. Now `PUT /mailbox/:key`
 writes KV first, exactly as before, then the same sealed envelope into the
 cassette's object (`corsiaPut`), then pulls the wire. Reads and deletes go
 to the object first (`leggiCassetta`, `svuotaCassetta`) and fall back to KV.
