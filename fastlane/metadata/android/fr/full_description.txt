@@ -26,7 +26,7 @@ Vous pouvez aussi vous connecter par un lien d'invitation à toucher, ou en scan
 
 <b>Limites, honnêtement</b>
 
-Pour une conversation en direct, les deux personnes doivent être en ligne en même temps. C'est le prix de l'absence de serveur : une question d'architecture, pas un bug.
+Pour parler en direct, il faut être connectés tous les deux, mais pas l'appli ouverte : le téléphone sonne même appli fermée, et s'il est éteint, une lettre scellée l'attend.
 
 Votre adresse IP est visible par la personne à qui vous vous connectez, sauf si vous activez « Cacher où vous êtes ».
 

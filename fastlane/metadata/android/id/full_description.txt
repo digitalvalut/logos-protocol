@@ -26,7 +26,7 @@ Saat pertama kali terhubung, kedua pihak melihat kode keamanan tiga kata yang sa
 
 <b>Batasan, terus terang</b>
 
-Untuk percakapan langsung, kedua orang harus daring pada saat yang sama. Itulah harga dari tidak adanya server — soal arsitektur, bukan bug.
+Bicara langsung butuh keduanya terhubung, tapi aplikasi tak perlu terbuka: ponsel tetap berdering, dan jika mati, surat tersegel menunggunya.
 
 Alamat IP-mu terlihat oleh orang yang terhubung denganmu, kecuali kamu menyalakan «Sembunyikan lokasimu».
 

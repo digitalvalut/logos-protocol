@@ -26,7 +26,7 @@ Na primeira ligação, os dois lados veem o mesmo código de segurança de três
 
 <b>Limites, com honestidade</b>
 
-Para uma conversa ao vivo, as duas pessoas têm de estar online ao mesmo tempo. É o preço de não haver servidor: uma questão de arquitetura, não um erro.
+Para falar ao vivo é preciso estarem ligados os dois, mas não com a app aberta: o telemóvel toca mesmo com a app fechada, e se estiver desligado, espera-o uma carta selada.
 
 O teu endereço IP é visível para a pessoa com quem te ligas, a menos que atives «Esconder onde estás».
 

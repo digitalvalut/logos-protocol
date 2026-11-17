@@ -54,8 +54,9 @@ person's cryptographic fingerprint, not to a display name.
 
 <b>Honest limits</b>
 
-Both people need to be online at the same time for a live conversation. That is
-the price of having no server, and it is architectural, not a bug.
+A live conversation needs both people connected, but not with the app open:
+their phone rings even when it is closed, and if it is off, a sealed letter
+waits for them.
 
 Your IP address is visible to the person you connect to, as it is in any direct
 peer-to-peer connection, unless you switch on "Hide where you are".

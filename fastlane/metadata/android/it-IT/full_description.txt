@@ -55,9 +55,9 @@ all'impronta crittografica della persona, non al nome che si è scelta.
 
 <b>I limiti, detti chiaramente</b>
 
-Per una conversazione dal vivo servono entrambi online nello stesso momento. È
-il prezzo del non avere un server, ed è una scelta di architettura, non un
-difetto.
+Per parlare dal vivo dovete essere collegati tutti e due, ma non con l'app
+aperta: il suo telefono squilla anche ad app chiusa, e se è spento una lettera
+sigillata lo aspetta.
 
 Il tuo indirizzo IP è visibile alla persona con cui ti colleghi, come in
 qualunque connessione diretta, a meno che non accendi «Nascondi dove sei».

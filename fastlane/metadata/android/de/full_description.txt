@@ -26,7 +26,7 @@ Beim ersten Verbinden sehen beide Seiten denselben Sicherheitscode aus drei Wör
 
 <b>Ehrliche Grenzen</b>
 
-Für ein Live-Gespräch müssen beide gleichzeitig online sein. Das ist der Preis dafür, dass es keinen Server gibt – eine Frage der Architektur, kein Fehler.
+Für ein Live-Gespräch müssen beide verbunden sein, aber nicht mit offener App: das Telefon klingelt auch bei geschlossener App, und ist es aus, wartet ein versiegelter Brief.
 
 Deine IP-Adresse ist für die Person sichtbar, mit der du dich verbindest, außer du schaltest „Verbergen, wo du bist" ein.
 

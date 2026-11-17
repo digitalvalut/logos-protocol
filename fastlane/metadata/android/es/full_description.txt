@@ -26,7 +26,7 @@ La primera vez que conectas con alguien, los dos veis el mismo código de seguri
 
 <b>Límites, con honestidad</b>
 
-Para una conversación en directo, las dos personas tienen que estar conectadas a la vez. Es el precio de no tener servidor: una cuestión de arquitectura, no un error.
+Para hablar en directo hay que estar conectados los dos, pero no con la app abierta: el teléfono suena aunque esté cerrada, y si está apagado, le espera una carta sellada.
 
 Tu dirección IP es visible para la persona con quien conectas, salvo que actives «Ocultar dónde estás».
 
