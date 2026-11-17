@@ -1,78 +1,67 @@
-Peer-to-peer encrypted chat, voice and video calls, and file sharing — directly
-between two devices, with no account, no phone number, and no server that ever
-sees a message.
+Private chat, voice and video calls and file sharing, directly between two
+devices: no account, no phone number, no server that ever sees a message.
 
-Two browsers negotiate a private WebRTC connection and talk to each other
-directly. A small relay only ever helps them find each other and, when an
-unusually strict network requires it, forwards traffic that is already
-encrypted and which it has no key to read. There is no database anywhere
-holding conversations.
-
-The relay is a Cloudflare Worker run by the project
-(digitalvalut-turn.burbeng78.workers.dev); the connection helpers (STUN/TURN)
-are Cloudflare's (stun.cloudflare.com, turn.cloudflare.com). The relay address
-is fixed in the app. Its source is in the same repository (turn-worker/), so
-anyone can run their own, but using it means rebuilding the app.
+Two devices open a private WebRTC connection and talk directly, end-to-end
+encrypted. A small relay only helps them find each other and, on very strict
+networks, forwards traffic that is already encrypted and that it cannot read.
+No database anywhere holds conversations. The relay is a Cloudflare Worker run
+by the project (digitalvalut-turn.burbeng78.workers.dev); its source is in the
+same repository (turn-worker/).
 
 <b>How you reach someone</b>
 
-A permanent address (DV-XXXX-XXXX-XXXX) is the SHA-256 hash of a key pair
-generated on the device, so it verifies itself: whoever dials it fetches the
-published key, checks that it really hashes back to the address dialled, and
-only then trusts it. A substituted key produces a different address and is
-rejected. Up to eight throwaway addresses can be held alongside the permanent
-one, each revocable on its own.
+• A permanent address (DV-XXXX-XXXX-XXXX) that checks itself: it is the hash of
+  a key made on your device, so a swapped key is rejected
+• Up to eight throwaway addresses, each one revocable on its own
+• An invite link or a QR code, optionally locked with a passphrase you say out
+  loud
+• Their phone rings even with the app closed, with no Google and no Firebase
+  (off until switched on)
+• A sealed letter for someone who cannot answer, kept up to 7 days
 
-You can also connect by a tappable invite link, or by scanning a QR code in
-person.
+<b>Knowing who you are talking to</b>
 
-<b>Knowing who you are really talking to</b>
-
-The first time you connect to someone, both sides see the same three-word
-security code, derived from the actual cryptographic handshake — the same
-principle used by ZRTP-based secure calling. Read them aloud once; if they
-match, nobody is sitting in the middle. That check is bound to the other
-person's cryptographic fingerprint, not to a display name.
+The first time you connect, both sides see the same three-word security code,
+taken from the real cryptographic handshake: if the words match, nobody is in
+the middle. Contacts and blocking trust only the identity the encrypted
+connection proves, never a name someone declares.
 
 <b>What it does</b>
 
-• Text, emoji, voice messages, photos, video and files up to 512 MB, sent
-  uncompressed at original quality
-• Photos have their embedded GPS location, device model and software metadata
-  stripped on-device before sending, without re-encoding the image
-• Audio and video calls with screen sharing
-• The phone rings even with the app closed, without Google and without Firebase:
-  a service belonging to the app reads its own encrypted mailbox, and the
-  question it asks has only yes or no for an answer. It holds no key and can
-  read nothing; who is calling, and what they wrote, are read by the app when
-  you open it. It uses more battery than a push notification would, and it is
-  off until you turn it on
-• A sealed letter for someone who does not answer, held up to 7 days, openable
-  only by the address owner
-• Self-destructing messages and optional automatic cleanup of old conversations
-• Interface in 13 languages, with right-to-left layout for Arabic and Urdu
+• Text, emoji, voice messages, photos, video and files up to 512 MB, at
+  original quality
+• Photos lose their GPS location and device data on the phone before sending,
+  without being re-encoded
+• Audio and video calls, with screen sharing
+• Share into Logos straight from any other app
+• Self-destructing messages and optional automatic cleanup
+• 13 languages, right-to-left for Arabic and Urdu, instructions read aloud and
+  three text sizes
+
+<b>Extra protection, off until you want it</b>
+
+• Protected screen: no screenshots and a black preview among open apps, against
+  spyware and prying eyes
+• Hide where you are: everything goes through the encrypted bridge, and the
+  other person never sees your IP address
+• A list of blocked people
+
+<b>Built to be checked, not trusted</b>
+
+• Its connection protocol is written out and checked with formal tools
+  (Tamarin, ProVerif, TLA+), which found real attacks that were then closed
+• Reproducible: F-Droid rebuilds it from source and gets the same package
+• No third-party library, script or CDN; all cryptography is the system's own
+  Web Crypto
+• The whole app is inside the package, not a website in a frame: it keeps
+  working when the website cannot be reached
 
 <b>Honest limits</b>
 
 A live conversation needs both people connected, but not with the app open:
 their phone rings even when it is closed, and if it is off, a sealed letter
-waits for them.
-
-Your IP address is visible to the person you connect to, as it is in any direct
-peer-to-peer connection, unless you switch on "Hide where you are".
-
-<b>About this package</b>
-
-The entire application is inside this package. It is not a wrapper that opens a
-website: the app is served from the package's own storage, so what runs on your
-phone is what was built from the source in this repository, and it keeps working
-when the website cannot be reached at all.
-
-There is no push notification service anywhere in it — no Google Play Services,
-no Firebase, no account. The only background service is the app's own, described
-above, and it talks to nothing but the same relay the app already uses. Every
-cryptographic primitive comes from the system's own Web Crypto implementation.
-No third-party script, library or CDN resource is loaded at any point.
+waits for them. Without "Hide where you are", your IP address is visible to the
+person you connect to, as in any direct connection.
 
 Built by Associazione di Promozione Sociale DigitalValut, an Italian nonprofit.
 Free forever, with no account and nothing to buy.
