@@ -1,39 +1,43 @@
-Verschlüsselter Peer-to-Peer-Chat, Sprach- und Videoanrufe und Dateiversand – direkt zwischen zwei Geräten, ohne Konto, ohne Telefonnummer und ohne Server, der je eine Nachricht sieht.
+Privater Chat, Sprach- und Videoanrufe und Dateiversand, direkt zwischen zwei Geräten: kein Konto, keine Telefonnummer, kein Server, der jemals eine Nachricht sieht.
 
-Zwei Browser handeln eine private WebRTC-Verbindung aus und sprechen direkt miteinander. Ein kleines Relay hilft ihnen nur, sich zu finden, und leitet – wenn ein ungewöhnlich strenges Netz es verlangt – Datenverkehr weiter, der bereits verschlüsselt ist und für den es keinen Schlüssel hat. Es gibt nirgends eine Datenbank mit Gesprächen.
-
-Das Relay ist ein Cloudflare Worker des Projekts (digitalvalut-turn.burbeng78.workers.dev); die Verbindungshelfer (STUN/TURN) sind die von Cloudflare (stun.cloudflare.com, turn.cloudflare.com). Die Relay-Adresse ist in der App festgelegt. Sein Quellcode liegt im selben Repository (turn-worker/), jeder kann also ein eigenes betreiben, muss dafür aber die App neu bauen.
+Zwei Geräte öffnen eine private WebRTC-Verbindung und sprechen direkt miteinander, Ende-zu-Ende-verschlüsselt. Ein kleines Relay hilft ihnen nur, sich zu finden, und leitet in sehr strengen Netzen bereits verschlüsselten Verkehr weiter, den es nicht lesen kann. Keine Datenbank irgendwo speichert Gespräche. Das Relay ist ein vom Projekt betriebener Cloudflare Worker (digitalvalut-turn.burbeng78.workers.dev); sein Quellcode liegt im selben Repository (turn-worker/).
 
 <b>Wie du jemanden erreichst</b>
 
-Eine dauerhafte Adresse (DV-XXXX-XXXX-XXXX) ist der SHA-256-Hash eines auf dem Gerät erzeugten Schlüsselpaars und prüft sich daher selbst: Wer sie wählt, lädt den veröffentlichten Schlüssel, prüft, dass er wirklich zur gewählten Adresse passt, und vertraut ihm erst dann. Ein untergeschobener Schlüssel ergibt eine andere Adresse und wird abgelehnt. Neben der dauerhaften Adresse sind bis zu acht Wegwerfadressen möglich, jede einzeln widerrufbar.
+• Eine feste Adresse (DV-XXXX-XXXX-XXXX), die sich selbst prüft: Sie ist der Hash eines auf deinem Gerät erzeugten Schlüssels, ein ausgetauschter Schlüssel wird abgelehnt
+• Bis zu acht Wegwerf-Adressen, jede einzeln widerrufbar
+• Ein Einladungslink oder QR-Code, auf Wunsch mit einem laut gesagten Passwort gesichert
+• Das Telefon klingelt auch bei geschlossener App, ohne Google und ohne Firebase (aus, bis du es einschaltest)
+• Ein versiegelter Brief für alle, die nicht antworten können, bis zu 7 Tage aufbewahrt
 
-Du kannst dich auch über einen antippbaren Einladungslink verbinden oder persönlich einen QR-Code scannen.
+<b>Wissen, mit wem du sprichst</b>
 
-<b>Wissen, mit wem du wirklich sprichst</b>
+Beim ersten Verbinden sehen beide denselben Sicherheitscode aus drei Wörtern, abgeleitet aus dem echten kryptografischen Handshake: Stimmen die Wörter überein, sitzt niemand dazwischen. Kontakte und Sperren vertrauen nur der Identität, die die verschlüsselte Verbindung beweist, nie einem angegebenen Namen.
 
-Beim ersten Verbinden sehen beide Seiten denselben Sicherheitscode aus drei Wörtern, abgeleitet aus dem tatsächlichen kryptografischen Handshake. Lest ihn einmal laut vor; stimmen die Wörter überein, sitzt niemand dazwischen. Die Prüfung ist an den kryptografischen Fingerabdruck der anderen Person gebunden, nicht an einen Anzeigenamen.
+<b>Was es kann</b>
 
-<b>Was die App kann</b>
+• Text, Emoji, Sprachnachrichten, Fotos, Videos und Dateien bis 512 MB in Originalqualität
+• Fotos verlieren GPS-Standort und Gerätedaten noch auf dem Telefon, ohne neu komprimiert zu werden
+• Sprach- und Videoanrufe mit Bildschirmfreigabe
+• Direkt aus jeder anderen App an Logos teilen
+• Selbstlöschende Nachrichten und optionale automatische Bereinigung
+• 13 Sprachen, rechts-nach-links für Arabisch und Urdu, vorgelesene Anleitungen und drei Schriftgrößen
 
-• Text, Emoji, Sprachnachrichten, Fotos, Videos und Dateien bis 512 MB, unkomprimiert in Originalqualität
-• Bei Fotos werden GPS-Standort, Gerätemodell und Software-Metadaten vor dem Senden auf dem Gerät entfernt, ohne das Bild neu zu kodieren
-• Audio- und Videoanrufe mit Bildschirmfreigabe
-• Das Telefon klingelt auch bei geschlossener App, ohne Google und ohne Firebase: Ein Dienst der App liest ihr eigenes verschlüsseltes Postfach, und seine Frage kennt nur Ja oder Nein als Antwort. Er hat keinen Schlüssel und kann nichts lesen; wer anruft und was geschrieben wurde, liest die App beim Öffnen. Er braucht mehr Akku als eine Push-Benachrichtigung und ist aus, bis du ihn einschaltest
-• Ein versiegelter Brief für jemanden, der nicht antwortet, bis zu 7 Tage aufbewahrt und nur vom Inhaber der Adresse zu öffnen
-• Selbstlöschende Nachrichten und optionales automatisches Aufräumen alter Gespräche
-• Oberfläche in 13 Sprachen, mit Rechts-nach-links-Layout für Arabisch und Urdu
+<b>Zusätzlicher Schutz, aus, bis du ihn willst</b>
+
+• Geschützter Bildschirm: keine Screenshots und schwarze Vorschau in der App-Übersicht, gegen Spyware und neugierige Blicke
+• Verbergen, wo du bist: Alles läuft über die verschlüsselte Brücke, die andere Person sieht nie deine IP-Adresse
+• Eine Liste gesperrter Personen
+
+<b>Gemacht, um geprüft zu werden, nicht um ihm zu glauben</b>
+
+• Das Verbindungsprotokoll ist aufgeschrieben und mit formalen Werkzeugen geprüft (Tamarin, ProVerif, TLA+), die echte Angriffe fanden, die dann geschlossen wurden
+• Reproduzierbar: F-Droid baut es aus dem Quellcode neu und erhält dasselbe Paket
+• Keine Bibliothek, kein Skript, kein CDN von Dritten; alle Kryptografie ist die des Systems (Web Crypto)
+• Die ganze App steckt im Paket, keine Website im Rahmen: Sie funktioniert auch, wenn die Website nicht erreichbar ist
 
 <b>Ehrliche Grenzen</b>
 
-Für ein Live-Gespräch müssen beide gleichzeitig online sein. Das ist der Preis dafür, dass es keinen Server gibt – eine Frage der Architektur, kein Fehler.
-
-Deine IP-Adresse ist für die Person sichtbar, mit der du dich verbindest, außer du schaltest „Verbergen, wo du bist" ein.
-
-<b>Über dieses Paket</b>
-
-Die gesamte App steckt in diesem Paket. Sie öffnet keine Website: Auf deinem Telefon läuft genau das, was aus dem Quellcode dieses Repositorys gebaut wurde, auch wenn die Website nicht erreichbar ist.
-
-Es gibt darin keinen Push-Dienst – keine Google Play-Dienste, kein Firebase, kein Konto. Der einzige Hintergrunddienst ist der oben beschriebene eigene, und er spricht nur mit demselben Relay, das die App ohnehin nutzt. Jede kryptografische Funktion stammt aus der Web-Crypto-Implementierung des Systems. Nichts von Dritten wird geladen: kein Skript, keine Bibliothek, kein CDN.
+Für ein Live-Gespräch müssen beide verbunden sein, aber nicht mit offener App: Das Telefon klingelt auch bei geschlossener App, und ist es aus, wartet ein versiegelter Brief. Ohne „Verbergen, wo du bist" ist deine IP-Adresse für die Person sichtbar, mit der du dich verbindest, wie bei jeder direkten Verbindung.
 
 Entwickelt von der Associazione di Promozione Sociale DigitalValut, einem italienischen gemeinnützigen Verein. Für immer kostenlos, ohne Konto und ohne etwas zu kaufen.

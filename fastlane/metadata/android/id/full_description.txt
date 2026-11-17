@@ -1,39 +1,43 @@
-Obrolan terenkripsi, panggilan suara dan video, serta berbagi berkas — langsung di antara dua perangkat, tanpa akun, tanpa nomor telepon dan tanpa server yang pernah melihat pesan.
+Obrolan pribadi, panggilan suara dan video, serta kirim file, langsung antara dua perangkat: tanpa akun, tanpa nomor telepon, tanpa server yang pernah melihat satu pesan pun.
 
-Dua peramban menyepakati koneksi WebRTC pribadi lalu berbicara langsung. Sebuah relay kecil hanya membantu keduanya saling menemukan dan, bila jaringan yang sangat ketat mengharuskannya, meneruskan lalu lintas yang sudah terenkripsi dan kuncinya tidak ia miliki. Tidak ada basis data yang menyimpan percakapan.
-
-Relay itu adalah Cloudflare Worker yang dijalankan proyek ini (digitalvalut-turn.burbeng78.workers.dev); server bantu koneksi (STUN/TURN) milik Cloudflare (stun.cloudflare.com, turn.cloudflare.com). Alamat relay tertanam di aplikasi. Kode sumbernya ada di repositori yang sama (turn-worker/), jadi siapa pun bisa menjalankan miliknya sendiri, tetapi untuk memakainya aplikasi harus dibangun ulang.
+Dua perangkat membuka koneksi WebRTC pribadi dan berbicara langsung, terenkripsi ujung ke ujung. Sebuah relay kecil hanya membantu mereka saling menemukan dan, di jaringan yang sangat ketat, meneruskan lalu lintas yang sudah terenkripsi dan tidak bisa dibacanya. Tidak ada basis data di mana pun yang menyimpan percakapan. Relay-nya adalah Cloudflare Worker milik proyek ini (digitalvalut-turn.burbeng78.workers.dev); kodenya ada di repositori yang sama (turn-worker/).
 
 <b>Cara menghubungi seseorang</b>
 
-Alamat permanen (DV-XXXX-XXXX-XXXX) adalah hash SHA-256 dari pasangan kunci yang dibuat di perangkat, sehingga ia memverifikasi dirinya sendiri: yang menghubunginya mengambil kunci yang dipublikasikan, memeriksa bahwa kunci itu benar-benar cocok dengan alamat yang dituju, dan baru setelah itu memercayainya. Kunci yang ditukar menghasilkan alamat lain dan ditolak. Di samping alamat permanen, kamu bisa memegang hingga delapan alamat sekali pakai, masing-masing bisa dicabut sendiri.
+• Alamat permanen (DV-XXXX-XXXX-XXXX) yang memeriksa dirinya sendiri: ia adalah hash dari kunci yang dibuat di perangkatmu, jadi kunci pengganti ditolak
+• Hingga delapan alamat sekali pakai, masing-masing bisa dicabut sendiri-sendiri
+• Tautan undangan atau kode QR, yang juga bisa dikunci dengan kata sandi yang diucapkan
+• Ponselnya berdering meski aplikasi tertutup, tanpa Google dan tanpa Firebase (mati sampai kamu menyalakannya)
+• Surat tersegel untuk orang yang tidak bisa menjawab, disimpan hingga 7 hari
 
-Kamu juga bisa terhubung lewat tautan undangan, atau dengan memindai kode QR secara langsung.
+<b>Tahu dengan siapa kamu bicara</b>
 
-<b>Tahu dengan siapa kamu benar-benar bicara</b>
+Saat pertama terhubung, kedua pihak melihat kode keamanan tiga kata yang sama, diambil dari jabat tangan kriptografi yang sebenarnya: jika katanya cocok, tidak ada orang di tengah. Kontak dan pemblokiran hanya memercayai identitas yang dibuktikan koneksi terenkripsi, bukan nama yang diakui.
 
-Saat pertama kali terhubung, kedua pihak melihat kode keamanan tiga kata yang sama, diturunkan dari jabat tangan kriptografis yang sebenarnya. Bacakan sekali dengan suara keras: jika kata-katanya cocok, tidak ada yang menyusup di tengah. Pemeriksaan ini terikat pada sidik jari kriptografis orang tersebut, bukan pada nama tampilan.
+<b>Apa yang bisa dilakukan</b>
 
-<b>Yang bisa dilakukan</b>
+• Teks, emoji, pesan suara, foto, video, dan file hingga 512 MB, dengan kualitas asli
+• Foto kehilangan lokasi GPS dan data perangkat sebelum dikirim, tanpa dikompres ulang
+• Panggilan suara dan video, dengan berbagi layar
+• Bagikan ke Logos langsung dari aplikasi lain mana pun
+• Pesan yang menghancurkan diri dan pembersihan otomatis opsional
+• 13 bahasa, kanan ke kiri untuk Arab dan Urdu, petunjuk dibacakan, dan tiga ukuran teks
 
-• Teks, emoji, pesan suara, foto, video, dan berkas hingga 512 MB, dikirim tanpa kompresi dalam kualitas asli
-• Lokasi GPS, model perangkat, dan metadata perangkat lunak dihapus dari foto di perangkat sebelum dikirim, tanpa mengodekan ulang gambar
-• Panggilan audio dan video dengan berbagi layar
-• Ponsel berdering meski aplikasi ditutup, tanpa Google dan tanpa Firebase: layanan milik aplikasi membaca kotak suratnya sendiri yang terenkripsi, dan pertanyaannya hanya punya jawaban ya atau tidak. Ia tidak memegang kunci dan tidak bisa membaca apa pun; siapa yang memanggil dan apa yang ditulis dibaca oleh aplikasi saat kamu membukanya. Ia lebih boros baterai daripada notifikasi push, dan mati sampai kamu menyalakannya
-• Surat tersegel untuk orang yang tidak menjawab, disimpan hingga 7 hari, hanya bisa dibuka pemilik alamat
-• Pesan yang menghapus diri dan pembersihan otomatis opsional untuk percakapan lama
-• Antarmuka dalam 13 bahasa, dengan tata letak kanan-ke-kiri untuk bahasa Arab dan Urdu
+<b>Perlindungan ekstra, mati sampai kamu mau</b>
 
-<b>Batasan, terus terang</b>
+• Layar terlindungi: tanpa tangkapan layar dan pratinjau hitam di daftar aplikasi terbuka, melawan aplikasi mata-mata dan orang yang mengintip
+• Sembunyikan lokasimu: semua lewat jembatan terenkripsi, dan orang lain tidak pernah melihat alamat IP-mu
+• Daftar orang yang diblokir
 
-Untuk percakapan langsung, kedua orang harus daring pada saat yang sama. Itulah harga dari tidak adanya server — soal arsitektur, bukan bug.
+<b>Dibuat untuk diperiksa, bukan dipercaya begitu saja</b>
 
-Alamat IP-mu terlihat oleh orang yang terhubung denganmu, kecuali kamu menyalakan «Sembunyikan lokasimu».
+• Protokol koneksinya ditulis dan diverifikasi dengan alat formal (Tamarin, ProVerif, TLA+), yang menemukan serangan nyata yang kemudian ditutup
+• Dapat direproduksi: F-Droid membangunnya ulang dari kode sumber dan mendapatkan paket yang sama
+• Tanpa pustaka, skrip, atau CDN pihak ketiga; semua kriptografi milik sistem sendiri (Web Crypto)
+• Seluruh aplikasi ada di dalam paket, bukan situs dalam bingkai: tetap berfungsi saat situs tidak bisa diakses
 
-<b>Tentang paket ini</b>
+<b>Batasan yang jujur</b>
 
-Seluruh aplikasi ada di dalam paket ini. Ia tidak membuka situs web: yang berjalan di ponselmu persis yang dibangun dari kode sumber repositori ini, dan tetap berfungsi meski situsnya tidak bisa diakses.
-
-Tidak ada layanan notifikasi push di dalamnya — tanpa layanan Google Play, tanpa Firebase, tanpa akun. Satu-satunya layanan latar belakang adalah milik aplikasi sendiri dan ia hanya berbicara dengan relay yang sama yang sudah dipakai aplikasi. Semua primitif kriptografi berasal dari implementasi Web Crypto milik sistem. Tidak ada yang dimuat dari pihak ketiga: tanpa skrip, pustaka, atau CDN.
+Bicara langsung butuh keduanya terhubung, tapi aplikasi tak perlu terbuka: ponsel tetap berdering, dan jika mati, surat tersegel menunggunya. Tanpa «Sembunyikan lokasimu», alamat IP-mu terlihat oleh orang yang terhubung denganmu, seperti di koneksi langsung mana pun.
 
 Dibuat oleh Associazione di Promozione Sociale DigitalValut, organisasi nirlaba Italia. Gratis selamanya, tanpa akun dan tanpa ada yang perlu dibeli.

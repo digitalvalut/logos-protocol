@@ -1,78 +1,71 @@
-Chat cifrata da persona a persona, con chiamate audio e video e invio di file —
-direttamente fra due dispositivi, senza account, senza numero di telefono e
-senza nessun server che veda mai un messaggio.
+Chat privata, chiamate audio e video e invio di file, direttamente tra due
+dispositivi: niente account, niente numero di telefono, nessun server che veda
+mai un messaggio.
 
-I due browser stabiliscono una connessione WebRTC privata e si parlano
-direttamente. Un piccolo ponte serve solo a farli incontrare all'inizio e, dove
-una rete particolarmente chiusa lo impone, a inoltrare traffico già cifrato di
-cui non possiede la chiave. Non esiste nessun database, da nessuna parte, che
-conservi le conversazioni.
+Due dispositivi aprono una connessione WebRTC privata e si parlano
+direttamente, con cifratura da un capo all'altro. Un piccolo relay li aiuta
+solo a trovarsi e, sulle reti molto restrittive, inoltra traffico già cifrato
+che non può leggere. Nessun database da nessuna parte conserva le
+conversazioni. Il relay è un Cloudflare Worker gestito dal progetto
+(digitalvalut-turn.burbeng78.workers.dev); il suo codice è nello stesso
+repository (turn-worker/).
 
-Il ponte è un Cloudflare Worker del progetto
-(digitalvalut-turn.burbeng78.workers.dev); STUN e TURN sono di Cloudflare.
-L'indirizzo del ponte è fisso nell'app; il suo codice è in turn-worker/, ma
-per usarne un altro bisogna ricompilare l'app.
+<b>Come raggiungi qualcuno</b>
 
-<b>Come ci si fa raggiungere</b>
+• Un indirizzo permanente (DV-XXXX-XXXX-XXXX) che si verifica da solo: è
+  l'impronta di una chiave creata sul tuo dispositivo, quindi una chiave
+  sostituita viene rifiutata
+• Fino a otto indirizzi usa e getta, ciascuno revocabile da solo
+• Un link d'invito o un codice QR, che puoi anche chiudere con una parola
+  d'ordine da dire a voce
+• Il suo telefono squilla anche ad app chiusa, senza Google e senza Firebase
+  (spento finché non lo accendi)
+• Una lettera sigillata per chi non può rispondere, conservata fino a 7 giorni
 
-L'indirizzo permanente (DV-XXXX-XXXX-XXXX) è l'impronta SHA-256 di una coppia di
-chiavi generata sul dispositivo, quindi si verifica da solo: chi lo compone
-scarica la chiave pubblicata, controlla che corrisponda davvero all'indirizzo
-chiamato, e solo allora si fida. Una chiave sostituita produce un indirizzo
-diverso e viene rifiutata. Accanto a quello permanente si possono tenere fino a
-otto indirizzi usa e getta, ognuno cancellabile per conto suo.
+<b>Sapere con chi stai parlando</b>
 
-Ci si può collegare anche con un link d'invito o inquadrando un codice QR di
-persona.
-
-<b>Sapere davvero con chi si sta parlando</b>
-
-Alla prima connessione con qualcuno, entrambi vedete lo stesso codice di
-sicurezza di tre parole, generato dalla connessione crittografica reale — lo
-stesso principio delle chiamate sicure basate su ZRTP. Ditevele a voce una
-volta: se coincidono, nessuno si è messo in mezzo. Quella conferma resta legata
-all'impronta crittografica della persona, non al nome che si è scelta.
+La prima volta che vi collegate, tutti e due vedete lo stesso codice di
+sicurezza di tre parole, ricavato dallo scambio crittografico vero: se le
+parole coincidono, in mezzo non c'è nessuno. Rubrica e blocco si fidano solo
+dell'identità che la connessione cifrata dimostra, mai di un nome dichiarato.
 
 <b>Cosa fa</b>
 
-• Testo, emoji, messaggi vocali, foto, video e file fino a 512 MB, mandati non
-  compressi nella qualità originale
-• Le foto vengono ripulite sul dispositivo da posizione GPS, modello del
-  telefono e software prima di partire, senza ricomprimere l'immagine
-• Chiamate audio e video con condivisione dello schermo
-• Il telefono squilla anche con l'app chiusa, senza Google e senza Firebase: un
-  servizio dell'app legge la propria casella cifrata, e la domanda che pone ha
-  come unica risposta possibile sì o no. Non possiede nessuna chiave e non può
-  leggere niente; chi ti cerca e cosa ti scrive li legge l'app quando la apri.
-  Consuma più batteria di una notifica push, ed è spento finché non lo
-  accendi
-• Una lettera sigillata per chi non risponde, conservata fino a 7 giorni e
-  apribile solo da chi possiede quell'indirizzo
-• Messaggi che si autodistruggono e pulizia automatica opzionale delle
-  conversazioni vecchie
-• Interfaccia in 13 lingue, con impaginazione da destra a sinistra per arabo e
-  urdu
+• Testo, emoji, messaggi vocali, foto, video e file fino a 512 MB, alla
+  qualità originale
+• Le foto perdono posizione GPS e dati del telefono prima di partire, senza
+  essere ricompresse
+• Chiamate audio e video, con condivisione dello schermo
+• Condividi verso Logos direttamente da qualunque altra app
+• Messaggi che si autodistruggono e pulizia automatica facoltativa
+• 13 lingue, da destra a sinistra per arabo e urdu, istruzioni lette ad alta
+  voce e tre grandezze del testo
 
-<b>I limiti, detti chiaramente</b>
+<b>Protezioni in più, spente finché non le vuoi</b>
 
-Per una conversazione dal vivo servono entrambi online nello stesso momento. È
-il prezzo del non avere un server, ed è una scelta di architettura, non un
-difetto.
+• Schermo protetto: niente screenshot e anteprima nera tra le app aperte,
+  contro app spia e occhi indiscreti
+• Nascondi dove sei: tutto passa dal ponte cifrato e l'altra persona non vede
+  mai il tuo indirizzo IP
+• Un elenco delle persone bloccate
 
-Il tuo indirizzo IP è visibile alla persona con cui ti colleghi, come in
-qualunque connessione diretta, a meno che non accendi «Nascondi dove sei».
+<b>Fatta per essere controllata, non creduta</b>
 
-<b>Su questo pacchetto</b>
+• Il suo protocollo di collegamento è scritto e verificato con strumenti
+  formali (Tamarin, ProVerif, TLA+), che hanno trovato attacchi veri, poi
+  chiusi
+• Riproducibile: F-Droid la ricompila dal codice e ottiene lo stesso pacchetto
+• Nessuna libreria, script o CDN di terzi; tutta la crittografia è quella del
+  sistema (Web Crypto)
+• L'intera app è dentro il pacchetto, non un sito in una cornice: funziona
+  anche quando il sito non è raggiungibile
 
-L'intera applicazione sta dentro questo pacchetto. Non e un involucro che apre un
-sito: l'app viene aperta dalla memoria del pacchetto stesso, quindi cio che gira
-sul tuo telefono e cio che e stato costruito dal codice di questo repository, e
-continua a funzionare anche quando il sito non e raggiungibile.
+<b>Limiti onesti</b>
 
-Niente notifiche push: niente Play Services di Google, niente Firebase, nessun
-account. L'unico servizio in secondo piano è quello dell'app, descritto qui
-sopra, e parla solo con lo stesso ponte. La crittografia è quella Web Crypto
-del sistema; nessuno script o libreria di terze parti viene mai caricato.
+Per parlare dal vivo dovete essere collegati tutti e due, ma non con l'app
+aperta: il suo telefono squilla anche ad app chiusa, e se è spento una lettera
+sigillata lo aspetta. Senza «Nascondi dove sei», il tuo indirizzo IP è visibile
+alla persona con cui ti colleghi, come in qualunque connessione diretta.
 
-Realizzata dall'Associazione di Promozione Sociale DigitalValut, ente del terzo
-settore italiano. Gratis per sempre, senza account e senza nulla da comprare.
+Realizzata dall'Associazione di Promozione Sociale DigitalValut, un ente non
+profit italiano. Gratis per sempre, senza account e senza niente da comprare.

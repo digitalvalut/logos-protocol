@@ -1,39 +1,43 @@
-Messagerie chiffrée de pair à pair, appels audio et vidéo et envoi de fichiers — directement entre deux appareils, sans compte, sans numéro de téléphone et sans aucun serveur qui voie un message.
+Messagerie privée, appels audio et vidéo et envoi de fichiers, directement entre deux appareils : pas de compte, pas de numéro de téléphone, aucun serveur qui voie jamais un message.
 
-Deux navigateurs négocient une connexion WebRTC privée et se parlent directement. Un petit relais les aide seulement à se trouver et, quand un réseau particulièrement strict l'exige, transmet un trafic déjà chiffré dont il n'a pas la clé. Aucune base de données ne conserve les conversations.
-
-Le relais est un Cloudflare Worker géré par le projet (digitalvalut-turn.burbeng78.workers.dev) ; les aides à la connexion (STUN/TURN) sont celles de Cloudflare (stun.cloudflare.com, turn.cloudflare.com). L'adresse du relais est fixée dans l'app. Son code source est dans le même dépôt (turn-worker/) : chacun peut faire tourner le sien, mais il faut alors recompiler l'app.
+Deux appareils ouvrent une connexion WebRTC privée et se parlent directement, chiffrés de bout en bout. Un petit relais les aide seulement à se trouver et, sur les réseaux très stricts, transmet un trafic déjà chiffré qu'il ne peut pas lire. Aucune base de données ne conserve les conversations. Le relais est un Cloudflare Worker géré par le projet (digitalvalut-turn.burbeng78.workers.dev) ; son code est dans le même dépôt (turn-worker/).
 
 <b>Comment joindre quelqu'un</b>
 
-Une adresse permanente (DV-XXXX-XXXX-XXXX) est le hachage SHA-256 d'une paire de clés créée sur l'appareil : elle se vérifie donc elle-même. Celui qui la compose récupère la clé publiée, vérifie qu'elle correspond bien à l'adresse composée, et seulement alors lui fait confiance. Une clé substituée donne une autre adresse et est refusée. Jusqu'à huit adresses jetables peuvent s'ajouter à l'adresse permanente, chacune révocable séparément.
+• Une adresse permanente (DV-XXXX-XXXX-XXXX) qui se vérifie toute seule : c'est l'empreinte d'une clé créée sur votre appareil, une clé substituée est donc refusée
+• Jusqu'à huit adresses jetables, chacune révocable séparément
+• Un lien d'invitation ou un code QR, que vous pouvez aussi verrouiller avec une phrase dite à voix haute
+• Son téléphone sonne même application fermée, sans Google ni Firebase (désactivé tant que vous ne l'activez pas)
+• Une lettre scellée pour qui ne peut pas répondre, gardée jusqu'à 7 jours
 
-Vous pouvez aussi vous connecter par un lien d'invitation à toucher, ou en scannant un QR code en personne.
+<b>Savoir à qui vous parlez</b>
 
-<b>Savoir à qui vous parlez vraiment</b>
+À la première connexion, les deux côtés voient le même code de sécurité de trois mots, tiré du véritable échange cryptographique : si les mots concordent, personne n'est au milieu. Les contacts et le blocage ne font confiance qu'à l'identité prouvée par la connexion chiffrée, jamais à un nom déclaré.
 
-À la première connexion, les deux côtés voient le même code de sécurité de trois mots, tiré de l'échange cryptographique réel. Lisez-le une fois à voix haute : si les mots concordent, personne ne s'est glissé au milieu. Cette vérification est liée à l'empreinte cryptographique de l'autre personne, pas à un nom affiché.
+<b>Ce qu'elle fait</b>
 
-<b>Ce que fait l'app</b>
+• Texte, emoji, messages vocaux, photos, vidéos et fichiers jusqu'à 512 Mo, en qualité d'origine
+• Les photos perdent leur position GPS et les données de l'appareil avant l'envoi, sans être recompressées
+• Appels audio et vidéo, avec partage d'écran
+• Partager vers Logos directement depuis n'importe quelle autre application
+• Messages éphémères et nettoyage automatique facultatif
+• 13 langues, de droite à gauche pour l'arabe et l'ourdou, instructions lues à voix haute et trois tailles de texte
 
-• Texte, emoji, messages vocaux, photos, vidéos et fichiers jusqu'à 512 Mo, envoyés sans compression, en qualité d'origine
-• Les photos perdent sur l'appareil, avant l'envoi, leur position GPS, le modèle de l'appareil et les métadonnées logicielles, sans réencoder l'image
-• Appels audio et vidéo avec partage d'écran
-• Le téléphone sonne même app fermée, sans Google ni Firebase : un service de l'app lit sa propre boîte chiffrée, et sa question n'a que oui ou non pour réponse. Il n'a aucune clé et ne peut rien lire ; qui appelle et ce qui a été écrit, c'est l'app qui le lit à l'ouverture. Il consomme plus de batterie qu'une notification push, et reste éteint tant que vous ne l'activez pas
-• Une lettre scellée pour quelqu'un qui ne répond pas, conservée jusqu'à 7 jours, que seul le titulaire de l'adresse peut ouvrir
-• Messages éphémères et nettoyage automatique facultatif des anciennes conversations
-• Interface en 13 langues, avec mise en page de droite à gauche pour l'arabe et l'ourdou
+<b>Protections en plus, désactivées tant que vous n'en voulez pas</b>
 
-<b>Limites, honnêtement</b>
+• Écran protégé : pas de captures d'écran et un aperçu noir parmi les applications ouvertes, contre les logiciels espions et les regards indiscrets
+• Cacher où vous êtes : tout passe par le pont chiffré et l'autre personne ne voit jamais votre adresse IP
+• Une liste des personnes bloquées
 
-Pour une conversation en direct, les deux personnes doivent être en ligne en même temps. C'est le prix de l'absence de serveur : une question d'architecture, pas un bug.
+<b>Faite pour être vérifiée, pas crue sur parole</b>
 
-Votre adresse IP est visible par la personne à qui vous vous connectez, sauf si vous activez « Cacher où vous êtes ».
+• Son protocole de connexion est écrit et vérifié avec des outils formels (Tamarin, ProVerif, TLA+), qui ont trouvé de vraies attaques, ensuite corrigées
+• Reproductible : F-Droid la recompile depuis le code source et obtient le même paquet
+• Aucune bibliothèque, aucun script ni CDN tiers ; toute la cryptographie est celle du système (Web Crypto)
+• Toute l'application est dans le paquet, ce n'est pas un site dans un cadre : elle fonctionne même quand le site est inaccessible
 
-<b>À propos de ce paquet</b>
+<b>Limites honnêtes</b>
 
-Toute l'application est dans ce paquet. Elle n'ouvre pas un site web : ce qui tourne sur votre téléphone est exactement ce qui a été compilé à partir du code source de ce dépôt, et cela fonctionne même si le site est injoignable.
+Pour parler en direct, il faut être connectés tous les deux, mais pas l'appli ouverte : le téléphone sonne même appli fermée, et s'il est éteint, une lettre scellée l'attend. Sans « Cacher où vous êtes », votre adresse IP est visible par la personne à qui vous vous connectez, comme dans toute connexion directe.
 
-Il n'y a aucun service de notifications push — ni services Google Play, ni Firebase, ni compte. Le seul service en arrière-plan est celui de l'app, décrit plus haut, et il ne parle qu'au relais que l'app utilise déjà. Toutes les primitives cryptographiques viennent de l'implémentation Web Crypto du système. Rien de tiers n'est chargé : ni script, ni bibliothèque, ni CDN.
-
-Réalisé par l'Associazione di Promozione Sociale DigitalValut, une association italienne à but non lucratif. Gratuit pour toujours, sans compte et sans rien à acheter.
+Réalisée par l'Associazione di Promozione Sociale DigitalValut, une association italienne à but non lucratif. Gratuite pour toujours, sans compte et sans rien à acheter.
